@@ -4,7 +4,7 @@
 
 
 ;;;### (autoloads (pastie-browse pastie-get pastie-buffer pastie-region)
-;;;;;;  "pastie" "pastie.el" (19289 32986))
+;;;;;;  "pastie" "pastie.el" (19436 19794))
 ;;; Generated autoloads from pastie.el
 
 (autoload 'pastie-region "pastie" "\
@@ -37,7 +37,7 @@ Not documented
 
 ;;;***
 
-;;;### (autoloads nil nil ("pastie-pkg.el") (19289 32986 88726))
+;;;### (autoloads nil nil ("pastie-pkg.el") (19436 19794 69547))
 
 ;;;***
 

@@ -17,6 +17,13 @@
 ; Site wide directory
 (setq load-path (cons (expand-file-name "/usr/share/emacs/site-lisp") load-path))
 
+; Default frame properties
+;; frame position, color, etc
+(setq default-frame-alist
+      '((cursor-type . (bar . 1))
+        (cursor-color . "LightGreen")
+))
+
 ;; move files to the trash instead of rm
 (setq delete-by-moving-to-trash t)
  
@@ -35,16 +42,14 @@
  next-line-add-newlines nil
  kill-whole-line t
  column-number-mode t
+ truncate-lines t
 )
 
-;; By default truncate long lines
-(set-default 'truncate-lines t)
-
 ;; Full utf-8 support
-(set-terminal-coding-system 'utf-8)
-(set-keyboard-coding-system 'utf-8)
-(prefer-coding-system 'utf-8)
-(setq current-language-environment "UTF-8")
+;(set-terminal-coding-system 'utf-8)
+;(set-keyboard-coding-system 'utf-8)
+;(prefer-coding-system 'utf-8)
+;(setq current-language-environment "UTF-8")
 
 (global-visual-line-mode 1)
 
@@ -56,5 +61,9 @@
 
 ;; Only require to type 'y' or 'n' instead of 'yes' or 'no' when prompted
 (fset 'yes-or-no-p 'y-or-n-p)
+
+; Aliases
+; TODO: move this to a more logical place
+(defalias 'at 'ansi-term)
 
 (provide 'global)

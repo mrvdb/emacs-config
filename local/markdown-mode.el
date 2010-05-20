@@ -1059,7 +1059,7 @@ Arguments BEG and END specify the beginning and end of the region."
 	;; Indentation
 	(define-key markdown-mode-map "\C-m" 'markdown-enter-key)
     ;; Visibility cycling
-    (define-key markdown-mode-map (kbd "<tab>") 'markdown-cycle)
+    ;(define-key markdown-mode-map (kbd "<tab>") 'markdown-cycle)
     (define-key markdown-mode-map (kbd "<S-iso-lefttab>") 'markdown-shifttab)
     ;; Markdown functions
     (define-key markdown-mode-map "\C-c\C-cm" 'markdown)
