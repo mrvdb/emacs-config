@@ -24,8 +24,9 @@
 (require 'buffers)
 (require 'modes)
 (require 'sudo-save)
+
 (require 'zenburn)
-(zenburn)
+(color-theme-zenburn)
 
 (require 'cursor-chg)  ; Load this library
 (change-cursor-mode 0) ; On for overwrite/read-only/input mode
