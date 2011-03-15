@@ -10,6 +10,7 @@
       '((:name zenburn)
 	(:name smex)
 	(:name rainbow-mode)
+	(:name gnuplot-mode)
 ))
 (el-get)
 
