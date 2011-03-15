@@ -11,6 +11,7 @@
 	(:name smex)
 	(:name rainbow-mode)
 	(:name gnuplot-mode)
+	(:name markdown-mode)
 ))
 (el-get)
 
