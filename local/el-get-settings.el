@@ -9,6 +9,7 @@
 (setq el-get-sources
       '((:name zenburn)
 	(:name smex)
+	(:name rainbow-mode)
 ))
 (el-get)
 
