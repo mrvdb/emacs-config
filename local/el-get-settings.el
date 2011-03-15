@@ -12,6 +12,7 @@
 	(:name rainbow-mode)
 	(:name gnuplot-mode)
 	(:name markdown-mode)
+	(:name cursor-chg)
 ))
 (el-get)
 
