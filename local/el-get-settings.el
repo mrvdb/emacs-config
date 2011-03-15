@@ -13,6 +13,7 @@
 	(:name gnuplot-mode)
 	(:name markdown-mode)
 	(:name cursor-chg)
+	(:name sudo-save)
 ))
 (el-get)
 
