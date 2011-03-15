@@ -15,6 +15,7 @@
 	markdown-mode
 	cursor-chg
 	sudo-save
+	erc-highlight-nicknames
 	(:name php-mode-improved)         ; Just to have example for other syntax
 ))
 (el-get)

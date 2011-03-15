@@ -1,10 +1,6 @@
-;; no splash screen
-(setq inhibit-startup-screen  t)
-(setq inhibit-startup-message t)
-
-;; Screen organisation
-(menu-bar-mode -1) ;; No menu 
-
+;;
+;; Global settings
+;;
 ;; disable auto-save files (#foo#)
 (setq auto-save-default nil)
  
@@ -13,22 +9,6 @@
  
 ;; disable auto-save-list/.saves
 (setq auto-save-list-file-prefix nil)
-
-;
-; Additional load paths
-;
-; Site wide directory
-(setq load-path (cons (expand-file-name "/usr/share/emacs/site-lisp") load-path))
-
-; Default frame properties
-;; frame position, color, etc
-(setq default-frame-alist
-      '((cursor-type . (bar . 1))
-        (cursor-color . "LightGreen")
-	(height . 60)
-	(width . 100)
-))
-
 
 ;; move files to the trash instead of rm
 (setq delete-by-moving-to-trash t)

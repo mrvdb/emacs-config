@@ -1,42 +1,31 @@
-;;
-;; Emacs initialisation starting point
-;; 
+;
+; Emacs initialisation starting point
+; 
+(add-to-list 'load-path "~/.emacs.d")
 
-;; Make sure we load from the directory of this file
-;; which should be .emacs.d and add to our path
-(setq dotfiles-dir (file-name-directory
-    (or (buffer-file-name) load-file-name)))
-(add-to-list 'load-path dotfiles-dir)
-
-;; All the rest we get from a local packages dir
-(add-to-list 'load-path (concat dotfiles-dir "mrb/"))
-(setq custom-file (concat dotfiles-dir "mrb/custom.el"))
-
-;; Other setttings related to loading settings
-(setq autoload-file (concat dotfiles-dir "loaddefs.el"))
-
-; Main sections of configuation
-(require 'cl)
-(require 'loaddefs)
-(require 'el-get-settings)
-(require 'global)
-(require 'bindings)
-(require 'buffers)
-(require 'modes)
-(require 'sudo-save)
-
-(defvar zenburn-bg "#303030")
-(require 'zenburn)
-(color-theme-zenburn)
-
-(require 'cursor-chg)  ; Load this library
-(change-cursor-mode 0) ; On for overwrite/read-only/input mode
-(toggle-cursor-type-when-idle 1) ; On when idle
-
-
-; Now load the customisations we've added through another way, so we
-; make sure they overide the settings.
+; Define where customization should be stored
+; anything done in custom.el can be overridden in explicit files
+(setq custom-file (concat "~/.emacs.d/mrb/custom.el"))
 (load custom-file 'noerror)
+
+;; TEMPORARILY
+;;(add-to-list 'load-path (concat dotfiles-dir "mrb/"))
+
+; Load all my configuration files
+(load "mrb/el-get-settings")
+(load "mrb/global")
+(load "mrb/visual")
+(load "mrb/bindings")
+(load "mrb/buffers")
+(load "mrb/modes")
+(load "mrb/org-settings")
+(load "mrb/statusnet")
+(load "mrb/google-map-settings")
+(load "mrb/jabber-settings")
+(load "mrb/openscad")
+
+; External packages
+(require 'sudo-save)
 
 ;;
 ;; Specials
@@ -76,26 +65,9 @@
 (setq password-cache t)            ; default is true, so no need to set this actually
 (setq password-cache-expiry 28800) ; default is 16 seconds
 
-;; Org-mode settings
-(require 'org-settings)
-
-;; Statusnet mode
-(require 'statusnet)
-
-;; Google map settings
-(require 'google-map-settings)
-
-;; Jabber 
-(require 'jabber-settings)
-
-;; GIT related
-;;(require 'magit-settings)
 
 ;; Tramp
 (setq tramp-default-method "ssh")
-
-;; Open SCAD files
-(require 'openscad)
 
 ; LDAP integration
 (require 'ldap)

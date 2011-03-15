@@ -5,7 +5,6 @@
   ;; Your init file should contain only one such instance.
   ;; If there is more than one, they won't work right.
  '(*pastie-restricted* nil)
- '(blink-cursor-mode nil)
  '(column-number-mode t)
  '(curchg-default-cursor-color "LightGreen")
  '(curchg-default-cursor-type (quote bar\ \.\ 1))
@@ -22,6 +21,7 @@
  '(large-file-warning-threshold nil)
  '(ldap-host-parameters-alist (quote (("hawking.hsdev.com" base "ou=addressbook, dc=hsdev, dc=com") ("ldap.hsdev.com" base "ou=addressbook,dc=hsdev,dc=com"))))
  '(markdown-css-path "/home/mrb/.markdown.css")
+ '(menu-bar-mode t)
  '(org-agenda-custom-commands (quote (("w" "Waiting For list" tags "+waiting-inactive" ((org-agenda-overriding-header "WAITING FOR-list") (org-agenda-view-columns-initially t) (org-agenda-overriding-columns-format "%65ITEM %25Responsible %SCHEDULED %TAGS") (org-agenda-dim-blocked-tasks t))) ("b" "Buying list" tags "+buy-inactive-waiting+TODO=\"TODO\"" ((org-agenda-overriding-header "Buying list") (org-agenda-dim-blocked-tasks t))) ("p" "Active project list" tags "-inactive/PROJ" ((org-agenda-overriding-header "Active project list"))) ("r" "To Review" ((stuck "" ((org-agenda-overriding-header "STUCK projects"))) (tags-todo "SCHEDULED=\"\"+DEADLINE=\"\"-{.}-BLOCKED=\"t\"/TODO" ((org-agenda-overriding-header "Untagged items"))) (tags-todo "-inactive+SCHEDULED=\"\"+DEADLINE=\"\"-BLOCKED=\"t\"+TODO=\"TODO\"+{.}" ((org-agenda-overriding-header "Unscheduled active items")))) nil) ("S" "Someday/Maybe List" ((tags "+inactive/PROJ" ((org-agenda-overriding-header "Inactive projects"))) (tags-todo "+inactive-BLOCKED=\"t\"/TODO" ((org-agenda-overriding-header "Inactive TODO items")))) nil nil) ("c" "Scheduled overview" tags "SCHEDULED<>\"\"|DEADLINE<>\"\"/TODO" ((org-agenda-overriding-header "SCHEDULED") (org-agenda-view-columns-initially t) (org-agenda-overriding-columns-format "%65ITEM %25Responsible %SCHEDULED %DEADLINE %TAGS") (org-agenda-dim-blocked-tasks t))) ("l" "Blocked projects and tasks" ((tags-todo "+BLOCKED=\"t\"/PROJ" ((org-agenda-overriding-header "Blocked projects") (org-agend-dim-blocked-tasks t))) (tags-todo "+BLOCKED=\"t\"/TODO" ((org-agenda-overriding-header "Blocked tasks") (org-agend-dim-blocked-tasks t)))) nil nil) ("n" "Next Action List [hides blocked/inactive/waiting/INBOX-ed]" tags-todo "+SCHEDULED=\"\"+DEADLINE=\"\"-BLOCKED=\"t\"-inactive-waiting" ((org-agenda-overriding-header "Next Action List"))) ("g" "AGENDA" agenda "" ((org-agenda-filter-preset (quote ("-inactive" "-waiting"))) (org-agenda-skip-function (quote (org-agenda-skip-entry-if (quote regexp) "CANCELLED"))))))))
  '(org-agenda-dim-blocked-tasks t)
  '(org-agenda-files (quote ("~/.outlet/GTD.org")))
@@ -34,7 +34,7 @@
  '(org-agenda-todo-ignore-scheduled (quote all))
  '(org-babel-interpreters (quote ("emacs-lisp" "python" "ditaa" "sql" "sh" "R")))
  '(org-blank-before-new-entry (quote ((heading) (plain-list-item))))
- '(org-export-htmlize-output-type (quote css))
+ '(org-export-htmlize-output-type (quote css) t)
  '(org-fast-tag-selection-single-key (quote expert))
  '(org-file-apps (quote ((auto-mode . emacs) ("\\.mm\\'" . default) ("\\.x?html?\\'" . "google-chrome %s") ("\\.pdf\\'" . default))))
  '(org-fontify-done-headline t)
