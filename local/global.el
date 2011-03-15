@@ -2,6 +2,9 @@
 (setq inhibit-startup-screen  t)
 (setq inhibit-startup-message t)
 
+;; Screen organisation
+(menu-bar-mode -1) ;; No menu 
+
 ;; disable auto-save files (#foo#)
 (setq auto-save-default nil)
  
@@ -22,7 +25,10 @@
 (setq default-frame-alist
       '((cursor-type . (bar . 1))
         (cursor-color . "LightGreen")
+	(height . 60)
+	(width . 100)
 ))
+
 
 ;; move files to the trash instead of rm
 (setq delete-by-moving-to-trash t)
@@ -43,13 +49,14 @@
  kill-whole-line t
  column-number-mode t
  truncate-lines t
+ 
 )
 
 ;; Full utf-8 support
-;(set-terminal-coding-system 'utf-8)
-;(set-keyboard-coding-system 'utf-8)
-;(prefer-coding-system 'utf-8)
-;(setq current-language-environment "UTF-8")
+(set-terminal-coding-system 'utf-8)
+(set-keyboard-coding-system 'utf-8)
+(prefer-coding-system 'utf-8)
+(setq current-language-environment "UTF-8")
 
 (global-visual-line-mode 1)
 
@@ -57,7 +64,7 @@
 ;; unset does not work
 ;; nil works, but doesn't return the process
 ;; t seems to work best
-(setq process-connection-type t)
+;;(setq process-connection-type t)
 
 ;; Only require to type 'y' or 'n' instead of 'yes' or 'no' when prompted
 (fset 'yes-or-no-p 'y-or-n-p)

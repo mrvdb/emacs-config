@@ -1,6 +1,4 @@
-;
 ; Org mode specific settings
-; TODO make this literate by using org-mode + org-babel
 
 ; Directly tie into the GIT repository on this machine
 (add-to-list 'load-path "~/dev/emacs/packages/org-mode/lisp/")
@@ -8,37 +6,48 @@
 (add-to-list 'load-path "~/dev/emacs/packages/org-icons/lisp/")
 
 ; bootstrap
-; FIXME: how do we know this does load the development tree instead of the builtin one?
 (require 'org-install)
 (require 'org-mouse)
+(require 'org-agenda)
+(require 'org-special-blocks)
 
-;
-; Org based extensions load as soon as possible 
-(require 'org-babel-init)
-; Languages we use
-(require 'org-babel-emacs-lisp)
-(require 'org-babel-sql)
-(require 'org-babel-python)
-(require 'org-babel-sh)
-(require 'org-icons)
-(require 'org-babel-ditaa)
-(require 'org-babel-R)  ;; Could not get R to work properly
-(org-babel-load-library-of-babel)
+;; active Babel languages
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((R . t)
+   (ditaa . t)
+   (sql . t)
+   (sh . t)
+))
+
+(setq org-use-fast-todo-selection t)
+
+; Define common tags here, so they function in all org files
+
+; Make sure actions are distinguishable
+(setq org-todo-keyword-faces '(
+  ("WAITING"   . (:foreground "dark salmon" :weight bold))
+  ("CANCELLED" . (:foreground "dim gray" :weight bold))
+))
+
+; Make sure we keep a clean tag slate when changing tag state
+(setq org-todo-state-tags-triggers 
+      (quote (
+	      ("TODO"      ("inactive") ) ; remove inactive tags if moved to TODO
+	      ("DONE"      ("inactive") ) ; remove inactive tags if moved to DONE
+	      )))
 
 ; Having the verbs is a bit disturbing
 ;(require 'org-action-verbs)
 (setq org-action-todo-verbs
- '(
-    (("TODO" "NEXT") . 
-     ( "Assemble" "Build" "Buy" "Call" "Cancel" "Change" "Check" "Clean" "Collect" "Combine" "Configure" "Construct" "Create"
-       "Decide" "Disassemble" "Document" "Exchange" "Find" "Finish" "Fix" "Improve" "Insert" "Install" "Learn" "Look"
-       "Mail" "Measure"
-       "Pay" "Paint" "Process" "Read" "Remove" "Rename" "Research" "Repair" "Replace" "Resolve" "Review" "Rewrite"
-       "Schedule" "Sell" "Summarize" "Translate" "Try" "Update" "Upgrade" "Use" "Watch" "Write"
-     )
-    )
- )
-)
+      '(
+	(("TODO" "NEXT") . 
+	 ( "Assemble" "Build" "Buy" "Call" "Cancel" "Change" "Check" "Clean" "Collect" "Combine" "Configure" "Construct" "Create"
+	   "Decide" "Disassemble" "Document" "Exchange" "Find" "Finish" "Fix" "Improve" "Insert" "Install" "Learn" "Look"
+	   "Mail" "Measure"
+	   "Pay" "Paint" "Process" "Read" "Remove" "Rename" "Research" "Repair" "Replace" "Resolve" "Review" "Rewrite"
+	   "Schedule" "Sell" "Summarize" "Translate" "Try" "Update" "Upgrade" "Use" "Watch" "Write"
+	   ))))
 
 ; Keybindings we want to have available all the time
 ; even when not in org mode.
@@ -76,28 +85,29 @@
  org-hide-emphasis-markers t
 
  ; Which string signals that an outline is collapsed
- org-ellipsis "…"
+ org-ellipsis "..."
 
  org-log-done (quote time)
 
  ; We support task dependencies
  org-enforce-todo-dependencies t
- 
+ ; but relax checkbox constraints
+ org-enforce-todo-checkbox-dependencies nil
+
  ; We dont do priorities
  org-enable-priority-commands nil
 
  ; Tags
- org-tags-exclude-from-inheritance (quote ("prj"))
+ org-tags-exclude-from-inheritance (quote ("next" "prj" "waiting"))
  org-tags-column 90
  org-agenda-tags-column 90
 
  ; Hide / and * markers when doing /italic/ and *bold* markup
  org-hide-emphasis-markers t
 
- ; Also in checkboxes
- org-enforce-todo-checkbox-dependencies t
-
  org-mobile-force-id-on-agenda-items nil
+ org-mobile-use-encryption t
+ org-mobile-encryption-password "PASSWORDHERE"
 
  ; Indent properly, in such a way that if we view the file without
  ; orgmode, it looks proper too.
@@ -114,22 +124,27 @@
  org-habit-graph-column 100
  org-habit-show-habits-only-for-today nil
 
- ; Autolinks can be entered like [[keyword:parameter]]
- org-link-abbrev-alist
- '(("wiki" . "http://en.wikipedia.org/wiki/Search?search=")
-   ("math" . "http://mathworld.wolfram.com/%s.html")
-   ("google"   . "http://www.google.com/search?q="))
-
  ; Pressing enter on a link should activate it
  org-return-follows-link t
  org-support-shift-select (quote always)
  org-special-ctrl-k t
 
- ; Refiling only the agenda files and projects
- ;org-refile-targets (quote ((org-agenda-files :tag . "prj")))
- ;org-fast-tag-selection-include-todo t
 )
 
+; Custom icons for the categories
+(setq org-agenda-category-icon-alist 
+      '(
+	("Afspraak" "~/.outlet/images/stock_new-meeting.png" nil nil :ascent center)
+	("Blogging" "~/.outlet/images/edit.png" nil nil :ascent center)
+	("Cobra" "~/.outlet/images/car.png" nil nil :ascent center)
+	("DVD" "~/.outlet/images/media-cdrom.png" nil nil :ascent center)
+	("Emacs" "~/.outlet/images/emacs.png" nil nil :ascent center)
+	("Habit" "~/.outlet/images/stock_task-recurring.png" nil nil :ascent center)
+	("Task" "~/.outlet/images/stock_todo.png" nil nil :ascent center)
+	("Org" "~/.outlet/images/org-mode-unicorn.png" nil nil :ascent center)
+	("Statusnet" "~/.outlet/images/statusnet.png" nil nil :ascent center)
+	("Wordpress" "~/.outlet/images/wordpress.png" nil nil :ascent center)
+))
 ;
 ; Dynamic behaviour
 (defun gtd()
@@ -138,12 +153,47 @@
   (find-file org-default-notes-file)
 )
 
-; Check if an entry needs to be a project 
-; Definition: 
-; A project is defined by having more than one TODO child entries. If
-; the entry is itself marked as a TODO entry, this is included in the
-; count. A project is identified by a :prj: tag.
-;
+(defun bh/is-project-p ()
+  "Any task with a todo keyword subtask"
+  (let ((has-subtask)
+        (subtree-end (save-excursion (org-end-of-subtree t))))
+    (save-excursion
+      (forward-line 1)
+      (while (and (not has-subtask)
+                  (< (point) subtree-end)
+                  (re-search-forward "^\*+ " subtree-end t))
+        (when (member (org-get-todo-state) org-todo-keywords-1)
+          (setq has-subtask t))))
+    has-subtask
+    )
+)
+
+; FIXME: testing for tag presence should be easier than a re-search forward
+(defun bh/skip-non-stuck-projects ()
+  "Skip trees that are not stuck projects"
+  (let* ((subtree-end (save-excursion (org-end-of-subtree t)))
+         (has-next (save-excursion
+                     (forward-line 1)
+                     (and (< (point) subtree-end)
+                          (re-search-forward "* TODO" subtree-end t)))))
+    (if (and (bh/is-project-p) (not has-next))
+        nil ; a stuck project, has subtasks but no next task
+      subtree-end)))
+
+(defun bh/skip-non-projects ()
+  "Skip trees that are not projects"
+  (let* ((subtree-end (save-excursion (org-end-of-subtree t))))
+    (if (bh/is-project-p)
+        nil
+      subtree-end)))
+
+(defun bh/skip-projects ()
+  "Skip trees that are projects"
+  (let* ((subtree-end (save-excursion (org-end-of-subtree t))))
+    (if (bh/is-project-p)
+        subtree-end
+      nil)))
+
 ; It gets this tag in one of two ways:
 ; 1. Manually assigned by user;
 ; 2. Automatically if it has > 1 children which are TODO's
@@ -170,20 +220,26 @@
 ;	(org-toggle-tag "prj" (if two-not-done 'on 'off))))))
 ;(add-hook 'org-after-todo-state-change-hook 'ensure-prj-tag)
 
+(defun save-containing-org-file()
+  (org-save-all-org-buffers) ;; bit over the top, no?
+)
+(add-hook 'org-after-todo-state-change-hook 'save-containing-org-file)
+
 ;(defun ensure-project-tag (n-done n-not-done)
 ;  "Switch entry to DONE when all subentries are done, to TODO otherwise."
 ;  (org-toggle-tag "prj" (if (> (+ n-done n-not-done) 1) 'on 'off)))
    
 ;(add-hook 'org-todo-statistics-hook 'ensure-project-tag)
 
-; Make sure we play nice with yasnippet.el
-(add-hook 'org-mode-hook
-	  (lambda ()
-	    (org-set-local 'yas/trigger-key [tab])
-	    (define-key yas/keymap [tab] 'yas/next-field-group)
-	    (auto-fill-mode 1)
-	    )
-)
+; Custom sort function for scheduled property
+;; (defun org-cmp-scheduled(a b)
+;;   "Compare the scheduled time of two agenda items and return according to their values:
+;;      - if a.SCHEDULED is before    b.SCHEDULED return 1
+;;      - if a.SCHEDULED is after     b.SCHEDULED return 0
+;;      - if a.SCHEDULED is equial to b.SCHEDULED return nil"
+;; ; Not sure if this works like this, but what is above is what I want
+;; )
+;(setq org-agenda-cmp-user-defined 'org-cmp-scheduled)
 
 ; When in agenda mode, show the line we're working on.
 (add-hook 'org-agenda-mode-hook '(lambda () (hl-line-mode 1)))
@@ -191,18 +247,18 @@
 ;
 ; Capturing with Remember
 ;
-; We capture with C-S-spc which is an OSX shortcut, not an emacs one
+; We capture with C-S-spc which is an OS shortcut, not an emacs one
 ; This calls a shell script calling out to emacsclient in batch mode
 ; and runs the make-remember-frame() function below.
 (org-remember-insinuate)
 
 (defadvice remember-finalize (after delete-remember-frame activate)
-  "Advise remember-finalize to close the frame if it is the remember frame"
+  "Advise org-capture-finalize to close the frame if it is the remember frame"
   (if (equal "remember" (frame-parameter nil 'name))
       (delete-frame)))
 
 (defadvice remember-destroy (after delete-remember-frame activate)
-  "Advise remember-destroy to close the frame if it is the rememeber frame"
+  "Advise remember-destroy to close the frame if it is the remember frame"
   (if (equal "remember" (frame-parameter nil 'name))
       (delete-frame)))
 
@@ -224,28 +280,52 @@
         )
 )
 
+; IN PROGRESS, rewriting the org-remember stufff for org-capture
+; Capturing with org-capture
+(setq org-capture-templates
+      '(("t" "Todo" entry
+	 (file "~/.outlet/GTD.org")
+	 "* TODO %?" :prepend t ))
+)
+
+(defun make-capture-frame ()
+  "Create a new frame and run org-capture."
+  (interactive)
+  (make-frame '((name . "capture") (width . 80) (height . 15)))
+  (select-frame-by-name "capture")
+  (org-capture))
+; 
+(add-hook 'org-capture-mode-hook 'delete-other-windows)
+
+(defadvice org-capture-finalize (after delete-capture-frame activate)
+  "Advise org-capture-finalize to close the frame if it is the remember frame"
+  (if (equal "capture" (frame-parameter nil 'name))
+      (delete-frame)))
+
 ;
 ; Keep an automatic history of saves with git 
 ; 
-; TODO: make adds/deletes work too?
+; FIXME: make adds/deletes work too?
 (defun git-commit ()
+  ; This could be applied to other modes easily, so consider using a
+  ; list of modes and defining the hook definition in a more common place.
   (when (eq major-mode 'org-mode)
     (shell-command "git commit -a -m 'Auto commit.'")))
 (add-hook 'after-save-hook 'git-commit)
 
 ;
-; When a tag change adds the waiting that, make sure it gets scheduled
+; When a tag change adds the waiting tag, make sure it gets scheduled
 ; 1 week from now if it is not already.
 ;
-;(defun autoschedule-waiting()
-;  ; variable 'tags' contains the values of the tag-string
-;  ; If tags has the tag :waiting:, schedule this 
-;  (if includes tags "waiting")
-;  (message "Running my own hook")
-;  (message tags)
-;  ;(org-schedule nil (org-timestring-to-seconds "+1w"))
-;)
-
+(defun autoschedule-waiting()
+  ; variable 'tags' contains the values of the tag-string
+  ; If tags has the tag :waiting:, schedule this 
+  (if includes tags "waiting")
+  (message "Running my own hook")
+  (message tags)
+  (org-schedule nil (org-timestring-to-seconds "+1w"))
+)
+; Activate it
 ;(add-hook 'org-after-tags-change-hook 'autoschedule-waiting)
 
 ;
@@ -260,10 +340,132 @@
 (defun org-export-body-as-html ()
   (interactive)
   (org-export-as-html 3 nil nil "blog-entry" t))
+
 ; Make sure we export in css mode, meaning no inline css crap
 (setq org-export-htmlize-output-type 'css)
 (define-key org-mode-map "\C-c\C-e" 'org-export-body-as-html)
 
+(defun org-export-body-as-html-batch ()
+  "Call `org-export-as-html', may be used in batch processing as
+emacs   --batch
+        --load=$HOME/lib/emacs/org.el
+        --eval \"(setq org-export-headline-levels 2)\"
+        --visit=MyFile --funcall org-export-body as-html-batch"
+  (interactive)
+  (org-export-as-html 3 nil nil nil t))
+
+; Remove empty property drawers
+(defun mrb/org-remove-empty-propert-drawers ()
+  "*Remove all empty property drawers in current file."
+  (interactive)
+  (unless (eq major-mode 'org-mode)
+    (error "You need to turn on Org mode for this function."))
+  (save-excursion
+    (goto-char (point-min))
+    (while (re-search-forward ":PROPERTIES:" nil t)
+      (save-excursion
+        (org-remove-empty-drawer-at "PROPERTIES" (match-beginning 0))))))
+
+(defun mrb/org-remove-redundant-tags ()
+  "Remove redundant tags of headlines in current buffer.
+
+A tag is considered redundant if it is local to a headline and
+inherited by a parent headline."
+  (interactive)
+  (when (eq major-mode 'org-mode)
+    (save-excursion
+      (org-map-entries
+       '(lambda ()
+          (let ((alltags (split-string (or (org-entry-get (point) "ALLTAGS") "") ":"))
+                local inherited tag)
+            (dolist (tag alltags)
+              (if (get-text-property 0 'inherited tag)
+                  (push tag inherited) (push tag local)))
+            (dolist (tag local)
+              (if (member tag inherited) (org-toggle-tag tag 'off)))))
+       t nil))))
+
+
+(defvar org-agenda-group-by-property nil
+  "Set this in org-mode agenda views to group tasks by property")
+
+(defun org-group-bucket-items (prop items)
+  (let ((buckets ()))
+    (dolist (item items)
+      (let* ((marker (get-text-property 0 'org-marker item))
+             (pvalue (org-entry-get marker prop t))
+             (cell (assoc pvalue buckets)))
+        (if cell
+            (setcdr cell (cons item (cdr cell)))
+          (setq buckets (cons (cons pvalue (list item))
+                              buckets)))))
+    (setq buckets (mapcar (lambda (bucket)
+                            (cons (car bucket)
+                                  (reverse (cdr bucket))))
+                          buckets))
+    (sort buckets (lambda (i1 i2)
+                    (string< (car i1) (car i2))))))
+
+(defadvice org-finalize-agenda-entries (around org-group-agenda-finalize
+                                               (list &optional nosort))
+  "Prepare bucketed agenda entry lists"
+  (if org-agenda-group-by-property
+      ;; bucketed, handle appropriately
+      (let ((text ""))
+        (dolist (bucket (org-group-bucket-items
+                         org-agenda-group-by-property
+                         list))
+          (let ((header (concat "Property "
+                                org-agenda-group-by-property
+                                " is "
+                                (or (car bucket) "<nil>") ":\n")))
+            (add-text-properties 0 (1- (length header))
+                                 (list 'face 'org-agenda-structure)
+                                 header)
+            (setq text
+                  (concat text header
+                          ;; recursively process
+                          (let ((org-agenda-group-by-property nil))
+                            (org-finalize-agenda-entries
+                             (cdr bucket) nosort))
+                          "\n\n"))))
+        (setq ad-return-value text))
+    ad-do-it))
+(ad-activate 'org-finalize-agenda-entries)
+
+; Directly tie into the GIT org2blog repository
+(add-to-list 'load-path "~/dev/emacs/packages/org2blog/")
+(add-to-list 'load-path "~/dev/emacs/packages/xml-rpc-el/")
+(require 'org2blog)
+
+(setq
+ org2blog-server-weblog-id ""
+ org2blog-default-title "<Untitled>"
+ org2blog-default-categories ""
+ org2blog-confirm-post t
+ org2blog-track-posts (list (concat org-directory "/blogs/org2blog-track.org") "To be filed properly")
+)
+
+; Per blog configuration
+(setq org2blog/wp-blog-alist
+      '(
+	("mrblog"
+	 :url "http://mrblog.nl/xmlrpc.php"
+	 :username "mrb"   
+	 :track-posts ("blogs.org" "mrblog.nl")
+	 )
+	("cobra"             
+	 :url "http://cobra.mrblog.nl/xmlrpc.php"
+	 :username "mrb"
+	 :track-posts ("blogs.org" "cobra.mrblog.nl")
+	 )
+	("hsd"
+	 :url "http://test.hsdev.com/xmlrpc.php"
+	 :username "mrb"
+	 :track-posts ("blogs.org" "hsdev.com")
+	)
+      )
+)
 
 (provide 'org-settings)
 

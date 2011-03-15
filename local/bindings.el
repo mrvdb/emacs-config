@@ -12,11 +12,11 @@
 
 ;
 ; Setup function keys the way I like it.
-;
+
 (global-set-key [f1] 'help-command)
 (global-set-key [f2] 'save-buffer)
 (global-set-key [f3] 'find-file)
-(global-set-key [f12] 'todo-show)   ; this does not work, interferes with global OSX dashboard key
+(global-set-key [XF86MenuKB] 'accelerate-menu)
 
 ; Font scaling, like in chrome
 (global-set-key [(super =)] 'text-scale-increase)
@@ -25,16 +25,17 @@
 (global-set-key [(control +)] 'text-scale-increase)
 (global-set-key [(control -)] 'text-scale-decrease)
 
+; Line handling functions
+(global-set-key [(?\s-\§)] 'toggle-truncate-lines)
 
 ; Moving back and forth in frames, disregarding frames
-(define-key global-map [?\s-\'] 'next-multiframe-window)
-(define-key global-map [?\s-\"] 'previous-multiframe-window)
+(define-key global-map [(super \')] 'next-multiframe-window)
+(define-key global-map [(super \")] 'previous-multiframe-window)
 (global-set-key (kbd "M-s-<left>") 'previous-buffer)
 (global-set-key (kbd "M-s-<right>") 'next-buffer)
 (define-key global-map [?\s-~] 'ns-prev-frame)
 (global-set-key [(control tab)] 'switch-to-other-buffer)
 (global-set-key [(super k)] 'kill-this-buffer)
-
 
 ; cut, copy and paste with cmd-key (like on osx). 
 (global-set-key [(super z)] 'undo)

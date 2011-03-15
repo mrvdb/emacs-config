@@ -13,13 +13,12 @@
 
 ;; Other setttings related to loading settings
 (setq autoload-file (concat dotfiles-dir "loaddefs.el"))
-(setq package-user-dir (concat dotfiles-dir "elpa"))
-(setq custom-file (concat dotfiles-dir "custom.el"))
+(setq custom-file (concat dotfiles-dir "local/custom.el"))
 
 ; Main sections of configuation
 (require 'cl)
-(require 'elpa)
 (require 'loaddefs)
+(require 'el-get-settings)
 (require 'global)
 (require 'bindings)
 (require 'buffers)
@@ -32,6 +31,7 @@
 (change-cursor-mode 0) ; On for overwrite/read-only/input mode
 (toggle-cursor-type-when-idle 1) ; On when idle
 
+
 ; Now load the customisations we've added through another way, so we
 ; make sure they overide the settings.
 (load custom-file 'noerror)
@@ -40,14 +40,6 @@
 ;; Specials
 ;;
 (if window-system  (normal-erase-is-backspace-mode t))
-
-;; Make sure we have a reasonably sized frame to work with initially.
-;(require 'maxframe)
-;(setq 
-; mf-max-width 1000
-; mf-offset-x 80
-;)
-;(add-hook 'window-setup-hook 'maximize-frame t)
 
 ;; Mail and News
 (setq 
@@ -70,7 +62,7 @@
   send-mail-function 'smtpmail-send-it                 ; This is for mail
   message-send-mail-function 'message-smtpmail-send-it ; This is for gnus
 
- ; Always put one in the Sent folder on sending
+  ; Always put one in the Sent folder on sending
   message-default-mail-headers "Bcc: mrb+Sent@hsdev.com\n"
   mail-yank-prefix ">> "
 )
@@ -88,16 +80,20 @@
 ;; Statusnet mode
 (require 'statusnet)
 
+;; Google map settings
+(require 'google-map-settings)
+
 ;; Jabber 
-;;(require 'jabber-settings)
+(require 'jabber-settings)
 
 ;; GIT related
 ;;(require 'magit-settings)
 
-
 ;; Tramp
 (setq tramp-default-method "ssh")
 
+;; Open SCAD files
+(require 'openscad)
 
 ; LDAP integration
 (require 'ldap)
@@ -121,17 +117,17 @@
             (error nil))
     (backward-delete-char-untabify 1))
   )
-;; (eval-after-load "message"
-;;   '(define-key message-mode-map (kbd "TAB") 'enz-eudc-expand-inline))
-;; (eval-after-load "sendmail"
-;;   '(define-key mail-mode-map (kbd "TAB") 'enz-eudc-expand-inline))
-;; (eval-after-load "post"
-;;   '(define-key post-mode-map (kbd "TAB") 'enz-eudc-expand-inline))
+(eval-after-load "message"
+  '(define-key message-mode-map (kbd "TAB") 'enz-eudc-expand-inline))
+(eval-after-load "sendmail"
+  '(define-key mail-mode-map (kbd "TAB") 'enz-eudc-expand-inline))
+(eval-after-load "post"
+  '(define-key post-mode-map (kbd "TAB") 'enz-eudc-expand-inline))
 
 
 ;; Default browswer is chromium, why does emacs not find that automatically?
 (setq browse-url-browser-function (quote browse-url-generic))
-(setq browse-url-generic-program "google-chrome")
+(setq browse-url-generic-program "chromium-browser")
 
 ; Make gnome compliant
 (defun switch-full-screen ()
@@ -140,8 +136,65 @@
 
 (global-set-key [f11] 'switch-full-screen)
 
-;; Finally, start a server (if not already)
-;;(server-start)
-; ^- not needed anymore now the default editor is emacslclient, which does it for me
+; Interactively do things
+(require 'ido)
+(ido-mode t)
+(setq ido-enable-flex-matching t) ;; enable fuzzy matching
+(ido-everywhere)
 
-(provide 'init)
+; Commands are a plenty, smex is a one
+(global-set-key (kbd "M-x") 'smex)
+(global-set-key (kbd "M-X") 'smex-major-mode-commands)
+;; ;; This is your old M-x.
+(global-set-key (kbd "C-c C-c M-x") 'execute-extended-command)
+
+
+(require 'tabbar)
+ ;; add a buffer modification state indicator in the tab label,
+ ;; and place a space around the label to make it looks less crowd
+ (defadvice tabbar-buffer-tab-label (after fixup_tab_label_space_and_flag activate)
+   (setq ad-return-value
+		(if (and (buffer-modified-p (tabbar-tab-value tab))
+				 (buffer-file-name (tabbar-tab-value tab)))
+			(concat " + " (concat ad-return-value " "))
+			(concat " " (concat ad-return-value " ")))))
+ ;; called each time the modification state of the buffer changed
+ (defun ztl-modification-state-change ()
+   (tabbar-set-template tabbar-current-tabset nil)
+   (tabbar-display-update))
+ ;; first-change-hook is called BEFORE the change is made
+ (defun ztl-on-buffer-modification ()
+   (set-buffer-modified-p t)
+   (ztl-modification-state-change))
+ (add-hook 'after-save-hook 'ztl-modification-state-change)
+ ;; this doesn't work for revert, I don't know
+ ;;(add-hook 'after-revert-hook 'ztl-modification-state-change)
+ (add-hook 'first-change-hook 'ztl-on-buffer-modification)
+
+(set-face-attribute
+ 'tabbar-default nil
+ :background "gray60")
+(set-face-attribute
+ 'tabbar-unselected nil
+ :background "gray85"
+ :foreground "gray30"
+ :box nil)
+(set-face-attribute
+ 'tabbar-selected nil
+ :background "#f2f2f6"
+ :foreground "black"
+ :box nil)
+(set-face-attribute
+ 'tabbar-button nil
+ :box '(:line-width 1 :color "gray72" :style released-button))
+(set-face-attribute
+ 'tabbar-separator nil
+ :height 0.7)
+
+; erc
+(and
+     (require 'erc-highlight-nicknames)
+     (add-to-list 'erc-modules 'highlight-nicknames)
+     (erc-update-modules))
+
+
