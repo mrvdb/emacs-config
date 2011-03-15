@@ -20,6 +20,7 @@
 	(:name markdown-mode)
 	(:name cursor-chg)
 	(:name sudo-save)
+	(:name php-mode-improved)
 ))
 (el-get)
 
