@@ -9,11 +9,11 @@
 (add-to-list 'load-path dotfiles-dir)
 
 ;; All the rest we get from a local packages dir
-(add-to-list 'load-path (concat dotfiles-dir "local/"))
+(add-to-list 'load-path (concat dotfiles-dir "mrb/"))
+(setq custom-file (concat dotfiles-dir "mrb/custom.el"))
 
 ;; Other setttings related to loading settings
 (setq autoload-file (concat dotfiles-dir "loaddefs.el"))
-(setq custom-file (concat dotfiles-dir "local/custom.el"))
 
 ; Main sections of configuation
 (require 'cl)
@@ -25,6 +25,7 @@
 (require 'modes)
 (require 'sudo-save)
 
+(defvar zenburn-bg "#303030")
 (require 'zenburn)
 (color-theme-zenburn)
 
