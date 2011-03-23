@@ -5,11 +5,16 @@
 ;; no splash screen
 (setq inhibit-startup-screen  t)
 (setq inhibit-startup-message t)
+(setq initial-scratch-message nil)
 
 ;; Screen organisation
-(menu-bar-mode -1)   ;; No menu-bar 
-(scroll-bar-mode -1) ;; No scroll-bar
-;
+(menu-bar-mode -1)     ;; No menu-bar
+(when window-system 
+  (scroll-bar-mode -1) ;; No scroll-bar
+  (tool-bar-mode -1)   ;; No tool-bar
+)
+(setq column-number-mode t)
+
 ; Zenburn theme with a slightly darker background, the default looks too misty for my
 (defvar zenburn-bg "#303030")
 (require 'zenburn)
@@ -20,7 +25,9 @@
 (require 'cursor-chg)  ; Load this library
 (change-cursor-mode 0) ; On for overwrite/read-only/input mode
 (toggle-cursor-type-when-idle 1) ; On when idle
-
+(setq curchg-default-cursor-color "LightGreen")
+(setq curchg-default-cursor-type (quote bar\ \.\ 1))
+ 
 ; Default frame properties frame position, color, etc
 (setq default-frame-alist
       '((cursor-type . (bar . 1))

@@ -10,12 +10,14 @@
 (setq el-get-sources
       '(color-theme color-theme-zenburn
 	smex
-	rainbow-mode
+	apache-mode
 	gnuplot-mode
 	markdown-mode
+	rainbow-mode
 	cursor-chg
 	sudo-save
 	erc-highlight-nicknames
+	edit-server
 	(:name php-mode-improved)         ; Just to have example for other syntax
 ))
 (el-get)

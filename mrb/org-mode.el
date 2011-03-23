@@ -75,6 +75,14 @@
  org-archive-location (concat org-metadir "archive.org::* %s")  ; Default archive location
 
  org-default-notes-file (concat org-directory "GTD.org")
+ org-agenda-files (quote (
+   "~/.outlet/GTD.org" 
+   "~/.outlet/orgmode.org" 
+   "~/.outlet/cobra.org" 
+   "~/.outlet/habits.org" 
+   "~/.outlet/meetings.org" 
+   "~/.outlet/blogs.org"))
+
  diary-file (concat org-metadir "DIARY")
  org-mobile-inbox-for-pull (concat org-metadir "from-mobile.org")
 
@@ -127,8 +135,39 @@
  ; Pressing enter on a link should activate it
  org-return-follows-link t
  org-support-shift-select (quote always)
- org-special-ctrl-k t
 
+ ; Refiling
+ org-reverse-note-order nil    ; File at the bottom of an entry
+ org-refile-allow-creating-parent-nodes (quote confirm)
+ org-refile-targets (quote ((org-agenda-files :maxlevel . 10)))
+ org-refile-use-outline-path t
+
+ org-agenda-dim-blocked-tasks t
+ org-agenda-log-mode-items (quote (closed clock state))
+ org-agenda-skip-deadline-if-done t
+ org-agenda-skip-deadline-prewarning-if-scheduled t
+ org-agenda-skip-scheduled-if-done t
+ org-agenda-start-with-log-mode t
+ org-agenda-text-search-extra-files (quote (agenda-archives))
+ org-agenda-todo-ignore-scheduled (quote all)
+ org-babel-interpreters (quote ("emacs-lisp" "python" "ditaa" "sql" "sh" "R"))
+ org-blank-before-new-entry (quote ((heading) (plain-list-item)))
+ org-export-htmlize-output-type (quote css)
+ org-fast-tag-selection-single-key (quote expert)
+ org-file-apps (quote ((auto-mode . emacs) ("\\.mm\\'" . default) ("\\.x?html?\\'" . "google-chrome %s") ("\\.pdf\\'" . default)))
+ org-fontify-done-headline t
+ org-goto-interface (quote outline-path-completion)
+ org-hierarchical-todo-statistics nil
+ org-log-into-drawer t
+ org-log-redeadline (quote note)
+ org-log-reschedule (quote time)
+ ;org-mobile-force-id-on-agenda-items nil t
+ org-modules (quote (org-info org-jsinfo org-habit org-inlinetask org-irc org-toc org-mac-iCal org-mouse))
+ org-remember-default-headline ""
+ org-special-ctrl-a/e t
+ org-stuck-projects (quote ("-inactive/TODO" ("TODO" "WAITING") nil ""))
+ org-todo-state-tags-triggers (quote ((done ("waiting"))))
+ org-track-ordered-property-with-tag nil
 )
 
 ; Custom icons for the categories

@@ -16,6 +16,12 @@
 (global-set-key [f1] 'help-command)
 (global-set-key [f2] 'save-buffer)
 (global-set-key [f3] 'find-file)
+
+; Make gnome compliant
+(defun switch-full-screen ()
+  (interactive)
+  (shell-command "wmctrl -r :ACTIVE: -btoggle,fullscreen"))
+(global-set-key [f11] 'switch-full-screen)
 (global-set-key [XF86MenuKB] 'accelerate-menu)
 
 ; Font scaling, like in chrome
@@ -73,5 +79,11 @@
 ;; status to offer save
 ;; This custome kill buffer is close-current-buffer.
 (global-set-key [(super n)] 'new-empty-buffer)
+
+; Commands are a plenty, smex is a one
+(global-set-key (kbd "M-x") 'smex)
+(global-set-key (kbd "M-X") 'smex-major-mode-commands)
+; This is your old M-x.
+(global-set-key (kbd "C-c C-c M-x") 'execute-extended-command)
 
 (provide 'bindings)

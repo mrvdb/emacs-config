@@ -8,21 +8,20 @@
 (setq custom-file (concat "~/.emacs.d/mrb/custom.el"))
 (load custom-file 'noerror)
 
-;; TEMPORARILY
-;;(add-to-list 'load-path (concat dotfiles-dir "mrb/"))
-
 ; Load all my configuration files
-(load "mrb/el-get-settings")
-(load "mrb/global")
-(load "mrb/visual")
-(load "mrb/bindings")
-(load "mrb/buffers")
-(load "mrb/modes")
-(load "mrb/org-settings")
-(load "mrb/statusnet")
-(load "mrb/google-map-settings")
-(load "mrb/jabber-settings")
-(load "mrb/openscad")
+(load "mrb/el-get")                ; Package handling, do this first.
+(load "mrb/global")                ; Generic settings
+(load "mrb/visual")                ; Make things look the way I want them 
+(load "mrb/bindings")              ; Keyboard control
+(load "mrb/buffers")               ;
+(load "mrb/modes")                 ; Setting about modes in general, not specific to one mode 
+(load "mrb/org-mode")              ; Orgmode configuration
+(load "mrb/statusnet")             ; Statusnet configuration
+(load "mrb/google-map")            ; 
+(load "mrb/xmpp")                  ;
+(load "mrb/openscad")              ; OpenSCAD mode
+(load "mrb/ldap")                  ; LDAP integration
+
 
 ; External packages
 (require 'sudo-save)
@@ -57,7 +56,7 @@
   message-default-mail-headers "Bcc: mrb+Sent@hsdev.com\n"
   mail-yank-prefix ">> "
 )
-(load-library "smtpmail")
+(require 'smtpmail)
 
 ; S/MIME signing always and automatically
 ; TODO: where can I toggle this on/off while composing?
@@ -69,46 +68,11 @@
 ;; Tramp
 (setq tramp-default-method "ssh")
 
-; LDAP integration
-(require 'ldap)
-(require 'eudc)
-
-(setq 
-   eudc-default-return-attributes nil
-   eudc-strict-return-matches nil
-   ldap-ldapsearch-args (quote ("-tt" "-LLL" "-x"))
-   eudc-inline-query-format '((name)
-                                 (firstname)
-                                 (firstname name)
-                                 (email)
-                                  ))
-(defun enz-eudc-expand-inline()
-  (interactive)
-  (move-end-of-line 1)
-  (insert "*")
-  (unless (condition-case nil
-              (eudc-expand-inline)
-            (error nil))
-    (backward-delete-char-untabify 1))
-  )
-(eval-after-load "message"
-  '(define-key message-mode-map (kbd "TAB") 'enz-eudc-expand-inline))
-(eval-after-load "sendmail"
-  '(define-key mail-mode-map (kbd "TAB") 'enz-eudc-expand-inline))
-(eval-after-load "post"
-  '(define-key post-mode-map (kbd "TAB") 'enz-eudc-expand-inline))
 
 
 ;; Default browswer is chromium, why does emacs not find that automatically?
 (setq browse-url-browser-function (quote browse-url-generic))
 (setq browse-url-generic-program "chromium-browser")
-
-; Make gnome compliant
-(defun switch-full-screen ()
-  (interactive)
-  (shell-command "wmctrl -r :ACTIVE: -btoggle,fullscreen"))
-
-(global-set-key [f11] 'switch-full-screen)
 
 ; Interactively do things
 (require 'ido)
@@ -116,17 +80,12 @@
 (setq ido-enable-flex-matching t) ;; enable fuzzy matching
 (ido-everywhere)
 
-; Commands are a plenty, smex is a one
-(global-set-key (kbd "M-x") 'smex)
-(global-set-key (kbd "M-X") 'smex-major-mode-commands)
-;; ;; This is your old M-x.
-(global-set-key (kbd "C-c C-c M-x") 'execute-extended-command)
-
-
 ; erc
 (and
      (require 'erc-highlight-nicknames)
      (add-to-list 'erc-modules 'highlight-nicknames)
      (erc-update-modules))
 
-
+(require 'edit-server)
+(setq edit-server-new-frame nil)
+(edit-server-start)
