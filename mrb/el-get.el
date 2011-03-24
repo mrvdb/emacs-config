@@ -18,6 +18,7 @@
 	sudo-save
 	erc-highlight-nicknames
 	edit-server
+	magit
 	(:name php-mode-improved)         ; Just to have example for other syntax
 ))
 (el-get)
