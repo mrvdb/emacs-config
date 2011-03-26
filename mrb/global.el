@@ -48,6 +48,11 @@
 ;; Only require to type 'y' or 'n' instead of 'yes' or 'no' when prompted
 (fset 'yes-or-no-p 'y-or-n-p)
 
+; Use auto revert mode globally 
+; This is save because emacs tracks if the file is saved in the editting buffer
+; and if so, it will not revert to the saved file.
+(global-auto-revert-mode t)
+
 ; Aliases
 ; TODO: move this to a more logical place
 (defalias 'at 'ansi-term)
