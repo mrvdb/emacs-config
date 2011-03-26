@@ -15,8 +15,13 @@
 )
 (setq column-number-mode t)
 
-; Zenburn theme with a slightly darker background, the default looks too misty for my
+; Zenburn theme with a slightly darker background, the default looks too misty for me
 (defvar zenburn-bg "#303030")
+; Also change the bg-1 background 
+; TODO: this it probably not the way
+; to do this, but i could not customize the org-hide face to stick,
+; while this method did.
+(defvar zenburn-bg-1 "#303030")
 (require 'zenburn)
 (color-theme-zenburn)
 
