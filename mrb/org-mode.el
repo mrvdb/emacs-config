@@ -6,10 +6,26 @@
 (add-to-list 'load-path "~/dev/emacs/packages/org-icons/lisp/")
 
 ; bootstrap
-(require 'org-install)
-(require 'org-mouse)
-(require 'org-agenda)
-(require 'org-special-blocks)
+(require 'org-install)           ;; This is required, see installation docs
+(require 'org-mouse)             ;; Enable menu on right mouse button and other mouse functions
+(require 'org-agenda)            ;; Enable the agenda functions, isn't this the case automatically then?
+(require 'org-special-blocks)    ;; Generalizes the #+begin_foo and #+end_foo blocks, useful on latex (export) 
+
+;
+; Allows automatically handing of created/expired meta data.
+; 
+(require 'org-expiry)
+;; Configure it a bit to my liking
+(setq
+  org-expiry-created-property-name "CREATED" ; Name of property when an item is created
+  org-expiry-expiry-property-name  "EXPIRY"  ; Name of property to hold expiry date
+  org-expiry-keyword               "EXPIRED" ; Name of property to hold date when it expired (which can differ from expiry)
+)
+(org-expiry-insinuate)           ;; Use hooks to insert created property
+; Add a created property also when capturing an item with remember
+; obviously this should be in org-expiry, make a patch!!
+(add-hook 'org-remember-before-finalize-hook 'org-expiry-insert-created)
+(add-hook 'org-capture-before-finalize-hook 'org-expiry-insert-created)
 
 ;; active Babel languages
 (org-babel-do-load-languages
@@ -27,7 +43,7 @@
 ; Make sure actions are distinguishable
 (setq org-todo-keyword-faces '(
   ("WAITING"   . (:foreground "dark salmon" :weight bold))
-  ("CANCELLED" . (:foreground "dim gray" :weight bold))
+  ("CANCELLED" . (:foreground "dim gray"    :weight bold))
 ))
 
 ; Make sure we keep a clean tag slate when changing tag state
@@ -95,8 +111,6 @@
  ; Which string signals that an outline is collapsed
  org-ellipsis "..."
 
- org-log-done (quote time)
-
  ; We support task dependencies
  org-enforce-todo-dependencies t
  ; but relax checkbox constraints
@@ -106,7 +120,6 @@
  org-enable-priority-commands nil
 
  ; Tags
- org-tags-exclude-from-inheritance (quote ("next" "prj" "waiting"))
  org-tags-column 90
  org-agenda-tags-column 90
 
@@ -116,12 +129,6 @@
  org-mobile-force-id-on-agenda-items nil
  org-mobile-use-encryption t
  org-mobile-encryption-password "PASSWORDHERE"
-
- ; Indent properly, in such a way that if we view the file without
- ; orgmode, it looks proper too.
- ; - use stars for level indication
- ; - make it look better by indent-mode having do its thing
- org-startup-indented t
 
  ; Agenda settings
  org-agenda-include-diary t
@@ -319,7 +326,7 @@
         )
 )
 
-; IN PROGRESS, rewriting the org-remember stufff for org-capture
+; IN PROGRESS, rewriting the org-remember stuff for org-capture
 ; Capturing with org-capture
 (setq org-capture-templates
       '(("t" "Todo" entry
@@ -332,7 +339,7 @@
   (interactive)
   (make-frame '((name . "capture") (width . 80) (height . 15)))
   (select-frame-by-name "capture")
-  (org-capture))
+  (org-capture nil "t"))
 ; 
 (add-hook 'org-capture-mode-hook 'delete-other-windows)
 
