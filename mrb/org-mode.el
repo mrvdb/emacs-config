@@ -20,6 +20,7 @@
   org-expiry-created-property-name "CREATED" ; Name of property when an item is created
   org-expiry-expiry-property-name  "EXPIRY"  ; Name of property to hold expiry date
   org-expiry-keyword               "EXPIRED" ; Name of property to hold date when it expired (which can differ from expiry)
+  org-expiry-inactive-timestamps   t
 )
 (org-expiry-insinuate)           ;; Use hooks to insert created property
 ; Add a created property also when capturing an item with remember
@@ -175,6 +176,8 @@
  org-stuck-projects (quote ("-inactive/TODO" ("TODO" "WAITING") nil ""))
  org-todo-state-tags-triggers (quote ((done ("waiting"))))
  org-track-ordered-property-with-tag nil
+ ; fontify source blocks too, that's the whole idea
+ org-src-fontify-natively t
 )
 
 ; Custom icons for the categories
