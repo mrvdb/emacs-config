@@ -35,6 +35,8 @@
    (ditaa . t)
    (sql . t)
    (sh . t)
+   (emacs-lisp t)
+   (lisp t)
 ))
 
 (setq org-use-fast-todo-selection t)
@@ -177,7 +179,8 @@
  org-todo-state-tags-triggers (quote ((done ("waiting"))))
  org-track-ordered-property-with-tag nil
  ; fontify source blocks too, that's the whole idea
- org-src-fontify-natively t
+ ; BUT IT HAS A SERIOUS BUG, so we set it to nil
+ org-src-fontify-natively nil
 )
 
 ; Custom icons for the categories
@@ -202,7 +205,7 @@
   (find-file org-default-notes-file)
 )
 
-(defun bh/is-project-p ()
+(defun mrb/is-project-p ()
   "Any task with a todo keyword subtask"
   (let ((has-subtask)
         (subtree-end (save-excursion (org-end-of-subtree t))))
@@ -218,28 +221,28 @@
 )
 
 ; FIXME: testing for tag presence should be easier than a re-search forward
-(defun bh/skip-non-stuck-projects ()
+(defun mrb/skip-non-stuck-projects ()
   "Skip trees that are not stuck projects"
   (let* ((subtree-end (save-excursion (org-end-of-subtree t)))
          (has-next (save-excursion
                      (forward-line 1)
                      (and (< (point) subtree-end)
                           (re-search-forward "* TODO" subtree-end t)))))
-    (if (and (bh/is-project-p) (not has-next))
+    (if (and (mrb/is-project-p) (not has-next))
         nil ; a stuck project, has subtasks but no next task
       subtree-end)))
 
-(defun bh/skip-non-projects ()
+(defun mrb/skip-non-projects ()
   "Skip trees that are not projects"
   (let* ((subtree-end (save-excursion (org-end-of-subtree t))))
-    (if (bh/is-project-p)
+    (if (mrb/is-project-p)
         nil
       subtree-end)))
 
-(defun bh/skip-projects ()
+(defun mrb/skip-projects ()
   "Skip trees that are projects"
   (let* ((subtree-end (save-excursion (org-end-of-subtree t))))
-    (if (bh/is-project-p)
+    (if (mrb/is-project-p)
         subtree-end
       nil)))
 
