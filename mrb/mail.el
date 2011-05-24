@@ -1,6 +1,4 @@
 ;; Mail and News configuration
-(require 'smtpmail)
-
 (setq 
  ; User agent style is message mode (gnus, but independent of it)
   mail-user-agent 'message-user-agent
@@ -25,4 +23,5 @@
   message-default-mail-headers "Bcc: mrb+Sent@hsdev.com\n"
   mail-yank-prefix ">> "
 )
+(require 'smtpmail)
 

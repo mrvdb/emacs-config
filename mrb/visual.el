@@ -21,8 +21,10 @@
 ; to do this, but i could not customize the org-hide face to stick,
 ; while this method did.
 (defvar zenburn-bg-1 "#303030")
+
 (require 'zenburn)
 (color-theme-zenburn)
+(set-face-background  'mode-line zenburn-blue-4)
 
 ;
 ; When I am not typing, the cursor should become more visible, so I

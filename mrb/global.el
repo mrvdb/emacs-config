@@ -39,12 +39,6 @@
 
 (global-visual-line-mode 1)
 
-;; fix a mac-specific problem with ptys?
-;; unset does not work
-;; nil works, but doesn't return the process
-;; t seems to work best
-;;(setq process-connection-type t)
-
 ;; Only require to type 'y' or 'n' instead of 'yes' or 'no' when prompted
 (fset 'yes-or-no-p 'y-or-n-p)
 

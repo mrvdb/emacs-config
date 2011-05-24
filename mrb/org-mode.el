@@ -11,9 +11,10 @@
 (require 'org-agenda)            ;; Enable the agenda functions, isn't this the case automatically then?
 (require 'org-special-blocks)    ;; Generalizes the #+begin_foo and #+end_foo blocks, useful on latex (export) 
 
-;
-; Allows automatically handing of created/expired meta data.
-; 
+; Autofill is nice when writing larger pieces of text, which I do a lot in org
+(add-hook 'org-mode-hook 'turn-on-auto-fill)
+
+; Allow automatically handing of created/expired meta data.
 (require 'org-expiry)
 ;; Configure it a bit to my liking
 (setq
@@ -28,15 +29,10 @@
 (add-hook 'org-remember-before-finalize-hook 'org-expiry-insert-created)
 (add-hook 'org-capture-before-finalize-hook 'org-expiry-insert-created)
 
-;; active Babel languages
+; Activate Babel languages
 (org-babel-do-load-languages
  'org-babel-load-languages
- '((R . t)
-   (ditaa . t)
-   (sql . t)
-   (sh . t)
-   (emacs-lisp t)
-   (lisp t)
+ '((R . t) (ditaa . t) (sql . t) (sh . t) (emacs-lisp t) (lisp t)
 ))
 
 (setq org-use-fast-todo-selection t)
@@ -77,14 +73,13 @@
 
 ; Keybindings which only make sense when having an orgmode file
 (define-key org-mode-map "\C-ce" 'org-export)
-
-; Map some keys to be the same as in Things.app
 (define-key org-mode-map [(super .)] 'org-todo)
 (define-key org-agenda-mode-map [(super .)] 'org-agenda-todo)
-
 ; Map ⌘t to schedule in both task and agenda-view
 (define-key org-mode-map [(super t)] 'org-schedule)
 (define-key org-agenda-mode-map [(super t)] 'org-agenda-schedule)
+(define-key org-mode-map [(meta p)] 'org-set-property)
+(define-key org-agenda-mode-map [(meta p)] 'org-set-property)
 
 (setq
  ; Files and directories
@@ -95,13 +90,13 @@
 
  org-default-notes-file (concat org-directory "GTD.org")
  org-agenda-files (quote (
-   "~/.outlet/GTD.org" 
-   "~/.outlet/orgmode.org" 
-   "~/.outlet/cobra.org" 
-   "~/.outlet/habits.org" 
-   "~/.outlet/meetings.org" 
-   "~/.outlet/blogs.org"))
-
+			  "~/.outlet/GTD.org"
+			  "~/.outlet/orgmode.org"
+			  "~/.outlet/cobra.org"
+			  "~/.outlet/habits.org"
+			  "~/.outlet/meetings.org"
+			  "~/.outlet/blogs.org"))
+ 	 
  diary-file (concat org-metadir "DIARY")
  org-mobile-inbox-for-pull (concat org-metadir "from-mobile.org")
 
@@ -178,8 +173,8 @@
  org-stuck-projects (quote ("-inactive/TODO" ("TODO" "WAITING") nil ""))
  org-todo-state-tags-triggers (quote ((done ("waiting"))))
  org-track-ordered-property-with-tag nil
- ; fontify source blocks too, that's the whole idea
- ; BUT IT HAS A SERIOUS BUG, so we set it to nil
+ ; fontify source blocks too, that's the whole idea BUT IT HAS A
+ ; SERIOUS BUG which makes it very, very slow, so we set it to nil
  org-src-fontify-natively nil
 )
 
@@ -297,63 +292,53 @@
 (add-hook 'org-agenda-mode-hook '(lambda () (hl-line-mode 1)))
 
 ;
-; Capturing with Remember
-;
-; We capture with C-S-spc which is an OS shortcut, not an emacs one
-; This calls a shell script calling out to emacsclient in batch mode
-; and runs the make-remember-frame() function below.
-(org-remember-insinuate)
-
-(defadvice remember-finalize (after delete-remember-frame activate)
-  "Advise org-capture-finalize to close the frame if it is the remember frame"
-  (if (equal "remember" (frame-parameter nil 'name))
-      (delete-frame)))
-
-(defadvice remember-destroy (after delete-remember-frame activate)
-  "Advise remember-destroy to close the frame if it is the remember frame"
-  (if (equal "remember" (frame-parameter nil 'name))
-      (delete-frame)))
-
-;; make the frame contain a single window. by default org-remember
-;; splits the window.
-(add-hook 'remember-mode-hook 'delete-other-windows)
-
-; We call this from the outside
-(defun make-remember-frame ()
-  "Create a new frame and run org-remember."
-  (interactive)
-  (make-frame '((name . "remember") (width . 80) (height . 15)))
-  (select-frame-by-name "remember")
-  (org-remember))
-
-; Capturing with org-remember
-(setq org-remember-templates
-      '(("Todo" ?t "* TODO %?\n  %i\n ")
-        )
-)
-
-; IN PROGRESS, rewriting the org-remember stuff for org-capture
 ; Capturing with org-capture
+; IN PROGRESS, rewriting the org-remember stuff for org-capture
+;
+
+; Define the templates
 (setq org-capture-templates
-      '(("t" "Todo" entry
-	 (file "~/.outlet/GTD.org")
-	 "* TODO %?" :prepend t ))
+      (quote (
+	      ("t" "Todo" 
+	       entry (file          (concat org-directory "GTD.org")) "* TODO %?" :prepend t)
+	      ("j" "Journal" 
+	       plain (file+datetree (concat org-directory "journal.org")) 
+	       "___________________________________________________________ *%U* ___\n%?\n" )))
 )
 
+	     
+      
 (defun make-capture-frame ()
   "Create a new frame and run org-capture."
   (interactive)
-  (make-frame '((name . "capture") (width . 80) (height . 15)))
+  (make-frame '((name . "capture") 
+		(width . 80) (height . 15)
+		(menu-bar-lines . 0) (tool-bar-lines . 0)))
   (select-frame-by-name "capture")
-  (org-capture nil "t"))
-; 
-(add-hook 'org-capture-mode-hook 'delete-other-windows)
+  (org-capture nil "t")
+)
 
-(defadvice org-capture-finalize (after delete-capture-frame activate)
-  "Advise org-capture-finalize to close the frame if it is the remember frame"
+(defun make-journal-entry ()
+  "Create a journal entry"
+  (interactive)
+  (org-capture nil "j")
+)
+(global-set-key "\C-cj" 'make-journal-entry)
+
+(defadvice org-capture-finalize 
+  (after delete-capture-frame activate)
+  "Advise org-capture-finalize to close the frame if it is the capture frame"
   (if (equal "capture" (frame-parameter nil 'name))
       (delete-frame)))
 
+(defadvice org-capture-destroy
+  (after delete-capture-frame activate)
+  "Advise org-capture-destroy to close the frame if it is the capture frame"
+  (if (equal "capture" (frame-parameter nil 'name))
+      (delete-frame)))
+
+; org-capture by default splits the window, we don't want that
+(add-hook 'org-capture-mode-hook 'delete-other-windows)
 ;
 ; Keep an automatic history of saves with git 
 ; 
@@ -491,11 +476,11 @@ inherited by a parent headline."
 (require 'org2blog)
 
 (setq
- org2blog-server-weblog-id ""
- org2blog-default-title "<Untitled>"
- org2blog-default-categories ""
- org2blog-confirm-post t
- org2blog-track-posts (list (concat org-directory "/blogs/org2blog-track.org") "To be filed properly")
+ org2blog/wp-server-weblog-id ""
+ org2blog/wp-default-title "<Untitled>"
+ org2blog/wp-default-categories ""
+ org2blog/wp-confirm-post t
+ org2blog/wp-track-posts (list (concat org-directory "/blogs/org2blog-track.org") "To be filed properly")
 )
 
 ; Per blog configuration
