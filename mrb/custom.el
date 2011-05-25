@@ -31,7 +31,7 @@
  '(org-agenda-date ((t (:inherit org-agenda-structure :height 1.2))) t)
  '(org-agenda-date-today ((t (:foreground "white" :slant italic :weight bold :height 1.2))))
  '(org-column ((t (:strike-through nil :underline nil :slant normal :weight normal :height 98 :family "Consolas"))))
- '(org-date ((t (:height 0.85 :underline nil))))
+ '(org-date ((t (:height 0.85 :underline nil :foreground "light blue"))))
  '(org-document-info ((((class color) (background light)) (:inherit org-date))))
  '(org-document-title ((((class color) (background light)) (:foreground "light blue" :weight bold :height 1.44))))
  '(org-property-value ((t (:height 0.85))) t)

@@ -69,7 +69,6 @@
 (global-set-key "\C-ca" 'org-agenda)
 (global-set-key "\C-cb" 'org-iswitchb)
 (global-set-key "\C-cl" 'org-store-link)
-(global-set-key "\C-cr" 'make-remember-frame)
 
 ; Keybindings which only make sense when having an orgmode file
 (define-key org-mode-map "\C-ce" 'org-export)
@@ -306,8 +305,6 @@
 	       "___________________________________________________________ *%U* ___\n%?\n" )))
 )
 
-	     
-      
 (defun make-capture-frame ()
   "Create a new frame and run org-capture."
   (interactive)
@@ -317,6 +314,7 @@
   (select-frame-by-name "capture")
   (org-capture nil "t")
 )
+(global-set-key "\C-cc" 'make-capture-frame)
 
 (defun make-journal-entry ()
   "Create a journal entry"
