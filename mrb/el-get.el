@@ -8,7 +8,12 @@
 
 (require 'el-get)
 (setq el-get-sources
-      '(color-theme color-theme-zenburn
+      '(
+	(:name el-get
+	       :type git
+	       :url "git://github.com/dimitri/el-get.git"
+	       :features "el-get")
+	color-theme color-theme-zenburn
 	smex
 	apache-mode
 	gnuplot-mode
@@ -20,7 +25,12 @@
 	edit-server
 	magit
 	(:name php-mode-improved)         ; Just to have example for other syntax
-))
+	(:name gisthub
+	       :type git
+	       :url  "git://github.com/defunkt/gist.el.git"
+	       :features gist)
+	
+))g
 (el-get)
 
 (provide 'el-get-settings)
