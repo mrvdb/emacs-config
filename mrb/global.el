@@ -47,6 +47,10 @@
 ; and if so, it will not revert to the saved file.
 (global-auto-revert-mode t)
 
+;; Turn on auto-fill minor mode for all text buffers
+(add-hook 'text-mode-hook 'turn-on-auto-fill)
+
+
 ; Aliases
 ; TODO: move this to a more logical place
 (defalias 'at 'ansi-term)

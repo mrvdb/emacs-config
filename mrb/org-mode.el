@@ -197,6 +197,8 @@
   "Start my GTD system"
   (interactive)
   (find-file org-default-notes-file)
+  ;; This should not be needed, but autofill does not come on automatically
+  (turn-on-auto-fill)
 )
 
 (defun mrb/is-project-p ()
@@ -302,7 +304,7 @@
 	       entry (file          (concat org-directory "GTD.org")) "* TODO %?" :prepend t)
 	      ("j" "Journal" 
 	       plain (file+datetree (concat org-directory "journal.org")) 
-	       "___________________________________________________________ *%U* ___\n%?\n" )))
+	       "___________________________________________________________ *%U* ___\n\n%?\n" )))
 )
 
 (defun make-capture-frame ()

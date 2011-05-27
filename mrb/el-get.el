@@ -29,8 +29,9 @@
 	       :type git
 	       :url  "git://github.com/defunkt/gist.el.git"
 	       :features gist)
-	
-))g
+	auto-complete
+	rainbow-delimiters
+))
 (el-get)
 
 (provide 'el-get-settings)
