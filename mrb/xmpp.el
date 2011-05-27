@@ -13,6 +13,7 @@
  jabber-default-priority 30
  jabber-account-list (quote (("marcel@hsdev.com/Emacs" (:password . "PASSWORDHERE") (:connection-type . ssl))))
  jabber-alert-message-hooks (quote (jabber-message-libnotify jabber-message-echo jabber-message-scroll))
+ jabber-message-alert-same-buffer nil
 )
 
 ;; TODO is this still needed with the config above?
