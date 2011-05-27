@@ -3,3 +3,6 @@ auto-save-list
 el-get
 /url/cookies
 eshell
+session.*
+abbrev_defs
+ac-comphist.dat
