@@ -32,7 +32,10 @@
 (global-set-key [(control -)] 'text-scale-decrease)
 
 ; Line handling functions
+;; For external keyboard
 (global-set-key [(?\s-\§)] 'toggle-truncate-lines)
+;; For t510 keyboard (the same place)
+(global-set-key [(super \`)] 'toggle-truncate-lines)
 
 ; Moving back and forth in frames, disregarding frames
 (define-key global-map [(super \')] 'next-multiframe-window)
