@@ -120,8 +120,10 @@
  org-tags-column 90
  org-agenda-tags-column 90
 
- ; Hide / and * markers when doing /italic/ and *bold* markup
+ ;; Hide / and * markers when doing /italic/ and *bold* markup
  org-hide-emphasis-markers t
+ ;; But show fancy entries
+ org-pretty-entities 1
 
  org-mobile-force-id-on-agenda-items nil
  org-mobile-use-encryption t
