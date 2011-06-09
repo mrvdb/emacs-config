@@ -29,6 +29,10 @@
 	       :type git
 	       :url  "git://github.com/defunkt/gist.el.git"
 	       :features gist)
+	(:name newlua-mode
+	       :type git 
+	       :url "git://github.com/immerrr/lua-mode.git"
+	       :features lua-mode)
 	auto-complete
 	rainbow-delimiters
 ))
