@@ -506,5 +506,38 @@ inherited by a parent headline."
       )
 )
 
+;; Shorten url at point
+;; This is a stripped down version of the code in identica-mode
+
+(defun mrb/ur1ca-get (api longurl)
+  "Shortens url through ur1.ca free service 'as in freedom'"
+  (let* ((url-request-method "POST")
+	(url-request-extra-headers
+	 '(("Content-Type" . "application/x-www-form-urlencoded")))
+	(url-request-data (concat "longurl=" (url-hexify-string longurl)))
+	(buffer (url-retrieve-synchronously api)))
+    (with-current-buffer buffer
+      (goto-char (point-min))
+      (prog1
+	  (setq ur1short
+		(if (search-forward-regexp "Your .* is: .*>\\(http://ur1.ca/[0-9A-Za-z].*\\)</a>" nil t)
+		    (match-string-no-properties 1)
+		  (error "URL shortening service failed: %s" longurl)))
+	    (kill-buffer buffer)))))
+
+(defun mrb/shortenurl-replace-at-point ()
+  "Replace the url at point with a tiny version."
+  (interactive)
+  (let ((url-bounds (bounds-of-thing-at-point 'url)))
+    (when url-bounds
+      (let ((url (mrb/ur1ca-get "http://ur1.ca" (thing-at-point 'url))))
+	(when url
+	  (save-restriction
+	    (narrow-to-region (car url-bounds) (cdr url-bounds))
+	    (delete-region (point-min) (point-max))
+	    (insert url)))))))
+
+(define-key org-mode-map "\C-cs" 'mrb/shortenurl-replace-at-point)
+
 (provide 'org-settings)
 
