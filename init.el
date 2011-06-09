@@ -56,11 +56,13 @@
 (setq ido-enable-flex-matching t) ;; enable fuzzy matching
 (ido-everywhere)
 
-; erc
+;; erc
+;; Probably move this to a file of its own
 (and
      (require 'erc-highlight-nicknames)
      (add-to-list 'erc-modules 'highlight-nicknames)
      (erc-update-modules))
+(setq erc-hide-list '("JOIN" "PART" "QUIT"))
 
 (require 'edit-server)
 (setq edit-server-new-frame nil)
