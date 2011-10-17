@@ -35,6 +35,11 @@
 	       :features lua-mode)
 	auto-complete
 	rainbow-delimiters
+	xlicense
+	typopunct
+	(:name oauth
+	       :type git
+	       :url "https://github.com/psanford/emacs-oauth.git")
 ))
 (el-get)
 
