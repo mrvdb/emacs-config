@@ -32,7 +32,8 @@
 (global-set-key [(control -)] 'text-scale-decrease)
 
 ; Line handling functions
-;; For external keyboard
+;; For external keyboard FIXME: these bindings contain dead characters
+;; if such a keyboard is used, which can be confusing.
 (global-set-key [(?\s-\§)] 'toggle-truncate-lines)
 ;; For t510 keyboard (the same place)
 (global-set-key [(super \`)] 'toggle-truncate-lines)
@@ -45,6 +46,58 @@
 (define-key global-map [?\s-~] 'ns-prev-frame)
 (global-set-key [(control tab)] 'switch-to-other-buffer)
 (global-set-key [(super k)] 'kill-this-buffer)
+
+;; Resizing windows
+;; Introduce a bit of intelligence so the shrink and enlarge know what window I'm in.
+(defun xor (b1 b2)
+  "Exclusive or between arguments"
+  (or (and b1 b2)
+      (and (not b1) (not b2))))
+
+(defun move-border-left-or-right (arg dir)
+  "General function covering move-border-left and move-border-right. If DIR is
+  t, then move left, otherwise move right."
+  (interactive)
+  (if (null arg) (setq arg 5))
+  (let ((left-edge (nth 0 (window-edges))))
+    (if (xor (= left-edge 0) dir)
+	(shrink-window arg t)
+      (enlarge-window arg t)))
+  )
+
+(defun move-border-left (arg)
+  (interactive "P")
+  (move-border-left-or-right arg t))
+
+(defun move-border-right (arg)
+  (interactive "P")
+  (move-border-left-or-right arg nil))
+
+;; Same for up and down
+(defun move-border-up-or-down (arg dir)
+  "General function covering move-border-up and move-border-down. If DIR is
+  t, then move up, otherwise move down."
+  (interactive)
+  (if (null arg) (setq arg 5))
+  (let ((top-edge (nth 1 (window-edges))))
+    (if (xor (= top-edge 0) dir)
+	(shrink-window arg nil)
+      (enlarge-window arg nil))))
+
+(defun move-border-up (arg)
+  (interactive "P")
+  (move-border-up-or-down arg t))
+
+(defun move-border-down (arg)
+  (interactive "P")
+  (move-border-up-or-down arg nil))
+
+;; Use Super + Arrows to steer the borders
+(global-set-key [(super right)] 'move-border-right)
+(global-set-key [(super left)]  'move-border-left)
+(global-set-key [(super up)] 'move-border-up)
+(global-set-key [(super down)] 'move-border-down)
+
 
 ; cut, copy and paste with cmd-key (like on osx). 
 (global-set-key [(super z)] 'undo)
