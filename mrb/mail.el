@@ -23,5 +23,11 @@
   message-default-mail-headers "Bcc: mrb+Sent@hsdev.com\n"
   mail-yank-prefix ">> "
 )
+;; Automatically sign outgoing messages, be part of the solution here,
+;; not the problem
+(setq smime-keys (quote (("marcel@hsdev.com" "~/keys/usertrust-marcel@hsdev.com-2011-06-11.pem" nil))))
+(add-hook 'message-send-hook 'mml-secure-message-sign-smime)
 (require 'smtpmail)
 
+(add-hook 'message-mode-hook 'orgstruct++-mode 'append)
+(add-hook 'message-mode-hook 'turn-on-auto-fill 'append)

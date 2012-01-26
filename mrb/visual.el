@@ -14,23 +14,21 @@
 
 ; Zenburn theme with a slightly darker background, the default looks too misty for me
 (defvar zenburn-bg "#303030")
-; Also change the bg-1 background 
-; TODO: this it probably not the way
-; to do this, but i could not customize the org-hide face to stick,
-; while this method did.
 (defvar zenburn-bg-1 "#303030")
-
-(require 'zenburn)
-(color-theme-zenburn)
+(load-theme 'zenburn)
 
 ;
 ; Zenburn corrections
 ;
 ; The default zenburn colors for the modeline, esp. the active one
 ; confuses me to no end, make it stand out more
-(set-face-background  'mode-line zenburn-blue-4)
+(set-face-background  'mode-line "#4c7073")
 ; Zenburn underlines date face in org, no go
 (set-face-attribute 'org-date nil :underline nil)
+
+(custom-theme-set-faces 'zenburn
+)
+
 
 ;
 ; When I am not typing, the cursor should become more visible, so I

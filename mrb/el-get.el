@@ -13,7 +13,9 @@
 	       :type git
 	       :url "git://github.com/dimitri/el-get.git"
 	       :features "el-get")
-	color-theme color-theme-zenburn
+	(:name zenburn-emacs
+	       :type git 
+	       :url "https://github.com/bbatsov/zenburn-emacs.git")
 	smex
 	apache-mode
 	gnuplot-mode
@@ -40,7 +42,20 @@
 	(:name oauth
 	       :type git
 	       :url "https://github.com/psanford/emacs-oauth.git")
-))
-(el-get)
+	scratch
+	highlight-parentheses
+	(:name sauron
+	       :type git
+	       :url "https://github.com/djcb/sauron.git")
+
+	(:name calfw
+	       :type git
+	       :url "https://github.com/kiwanami/emacs-calfw.git")
+
+	(:name expand-region 
+	       :type git 
+	       :url "https://github.com/magnars/expand-region.el.git")
+	))
+(el-get 'wait)
 
 (provide 'el-get-settings)

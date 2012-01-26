@@ -67,3 +67,17 @@
 (require 'edit-server)
 (setq edit-server-new-frame nil)
 (edit-server-start)
+
+;; Enable highlight parentheses for all buffers
+;; FIXME: this needs one more color than actually used. The last one does not get highlighted!
+(setq hl-paren-colors (quote ("firebrick" "lightgreen" "orange" "cyan" "yellow" "blue")))
+
+(define-globalized-minor-mode global-highlight-parentheses-mode
+  highlight-parentheses-mode
+  (lambda ()
+    (highlight-parentheses-mode t)))
+(global-highlight-parentheses-mode t)
+
+;;; Expand region global key, move to bindings later
+;;; packge should have been loaded by elpa
+(require 'expand-region)

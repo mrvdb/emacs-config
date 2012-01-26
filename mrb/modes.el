@@ -15,10 +15,16 @@
 
 ;; Second, specify the extension to function mappings
 (add-to-list 'auto-mode-alist '("\\.org\\'"      . org-mode))
+(add-to-list 'auto-mode-alist '("\\.txt\\'"      . org-mode))
 (add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
 (add-to-list 'auto-mode-alist '("\\.gp\\'"       . gnuplot-mode))
 (add-to-list 'auto-mode-alist '("\\.php\\'"      . php-mode))
 (add-to-list 'auto-mode-alist '("\\.css$"        . css-mode))
 (add-to-list 'auto-mode-alist '("\\.js$"         . javascript-mode))
 (add-to-list 'auto-mode-alist '("\\.htaccess"    . apache-mode))
+(add-to-list 'auto-mode-alist '("\\.patch"       . diff-mode))
+
+;; Open scratch buffer by default in the mode we are in at the moment
+;; with C-u prefix a mode will be asked to use
+(require 'scratch)
 (provide 'modes)

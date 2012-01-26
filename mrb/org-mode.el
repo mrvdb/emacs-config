@@ -1,6 +1,7 @@
 ; Org mode specific settings
 
 ; Directly tie into the GIT repository on this machine
+(add-to-list 'load-path "~/dev/emacs/packages/org-mode/")
 (add-to-list 'load-path "~/dev/emacs/packages/org-mode/lisp/")
 (add-to-list 'load-path "~/dev/emacs/packages/org-mode/contrib/lisp/")
 (add-to-list 'load-path "~/dev/emacs/packages/org-icons/lisp/")
@@ -11,8 +12,20 @@
 (require 'org-agenda)            ;; Enable the agenda functions, isn't this the case automatically then?
 (require 'org-special-blocks)    ;; Generalizes the #+begin_foo and #+end_foo blocks, useful on latex (export) 
 
-; Autofill is nice when writing larger pieces of text, which I do a lot in org
-(add-hook 'org-mode-hook 'turn-on-auto-fill)
+(add-hook 'org-mode-hook 'my-org-init)
+
+(defun my-org-init ()
+  ;; Autofill is nice when writing larger pieces of text, which I do a lot in org
+  (turn-on-auto-fill)
+
+  ;; Do proper quotes which look nicer. English
+  (require 'typopunct)
+  (typopunct-change-language 'english)
+  (typopunct-mode 1)
+
+  ;; Enable org2blog minor mode by default, can't hurt
+  (org2blog/wp-mode 1)
+)
 
 ; Allow automatically handing of created/expired meta data.
 (require 'org-expiry)
@@ -32,7 +45,11 @@
 ; Activate Babel languages
 (org-babel-do-load-languages
  'org-babel-load-languages
- '((R . t) (ditaa . t) (sql . t) (sh . t) (emacs-lisp t) (lisp t)
+ '((R . t) (ditaa . t) (sql . t) 
+   (sh . t) (emacs-lisp t) (lisp t) 
+   (css t) (awk t) (js t) (lisp t)
+   (org t)
+   (plantuml t)
 ))
 
 (setq org-use-fast-todo-selection t)
@@ -41,6 +58,7 @@
 
 ; Make sure actions are distinguishable
 (setq org-todo-keyword-faces '(
+  ("DONE"   .    (:foreground "#afd8af"     :weight bold)) ;; This one didn't work as of [2011-10-24], had to customize manually
   ("WAITING"   . (:foreground "dark salmon" :weight bold))
   ("CANCELLED" . (:foreground "dim gray"    :weight bold))
 ))
@@ -49,7 +67,7 @@
 (setq org-todo-state-tags-triggers 
       (quote (
 	      ("TODO"      ("inactive") ) ; remove inactive tags if moved to TODO
-	      ("DONE"      ("inactive") ) ; remove inactive tags if moved to DONE
+	      ("DONE"      ("inactive") ("fork") ) ; remove inactive tags if moved to DONE
 	      )))
 
 ; Having the verbs is a bit disturbing
@@ -73,12 +91,19 @@
 ; Keybindings which only make sense when having an orgmode file
 (define-key org-mode-map "\C-ce" 'org-export)
 (define-key org-mode-map [(super .)] 'org-todo)
+(defun force-org-todo()
+  (interactive)
+  (org-todo "DONE")
+)
+(define-key org-mode-map [(control super .)] 'force-org-todo)
+
 (define-key org-agenda-mode-map [(super .)] 'org-agenda-todo)
 ; Map ⌘t to schedule in both task and agenda-view
 (define-key org-mode-map [(super t)] 'org-schedule)
 (define-key org-agenda-mode-map [(super t)] 'org-agenda-schedule)
 (define-key org-mode-map [(meta p)] 'org-set-property)
 (define-key org-agenda-mode-map [(meta p)] 'org-set-property)
+(define-key org-mode-map [(control super s)] 'org-save-all-org-buffers)
 
 (setq
  ; Files and directories
@@ -94,7 +119,8 @@
 			  "~/.outlet/cobra.org"
 			  "~/.outlet/habits.org"
 			  "~/.outlet/meetings.org"
-			  "~/.outlet/blogs.org"))
+			  "~/.outlet/blogs.org"
+			  "~/.outlet/keuken.org"))
  	 
  diary-file (concat org-metadir "DIARY")
  org-mobile-inbox-for-pull (concat org-metadir "from-mobile.org")
@@ -126,8 +152,8 @@
  org-pretty-entities 1
 
  org-mobile-force-id-on-agenda-items nil
- org-mobile-use-encryption t
- org-mobile-encryption-password "PASSWORDHERE"
+ org-mobile-use-encryption nil
+;; org-mobile-encryption-password "PASSWORDHERE"
 
  ; Agenda settings
  org-agenda-include-diary t
@@ -145,7 +171,7 @@
  ; Refiling
  org-reverse-note-order nil    ; File at the bottom of an entry
  org-refile-allow-creating-parent-nodes (quote confirm)
- org-refile-targets (quote ((org-agenda-files :maxlevel . 10)))
+ org-refile-targets (quote ((org-agenda-files :maxlevel . 10 )))
  org-refile-use-outline-path t
 
  org-agenda-dim-blocked-tasks t
@@ -172,26 +198,29 @@
  org-remember-default-headline ""
  org-special-ctrl-a/e t
  org-stuck-projects (quote ("-inactive/TODO" ("TODO" "WAITING") nil ""))
- org-todo-state-tags-triggers (quote ((done ("waiting"))))
  org-track-ordered-property-with-tag nil
- ; fontify source blocks too, that's the whole idea BUT IT HAS A
- ; SERIOUS BUG which makes it very, very slow, so we set it to nil
- org-src-fontify-natively nil
+ ;; This had a serious bug in the past making it very slow, seems better now.
+ org-src-fontify-natively t
 )
 
 ; Custom icons for the categories
 (setq org-agenda-category-icon-alist 
       '(
-	("Afspraak" "~/.outlet/images/stock_new-meeting.png" nil nil :ascent center)
-	("Blogging" "~/.outlet/images/edit.png" nil nil :ascent center)
-	("Cobra" "~/.outlet/images/car.png" nil nil :ascent center)
-	("DVD" "~/.outlet/images/media-cdrom.png" nil nil :ascent center)
-	("Emacs" "~/.outlet/images/emacs.png" nil nil :ascent center)
-	("Habit" "~/.outlet/images/stock_task-recurring.png" nil nil :ascent center)
-	("Task" "~/.outlet/images/stock_todo.png" nil nil :ascent center)
-	("Org" "~/.outlet/images/org-mode-unicorn.png" nil nil :ascent center)
-	("Statusnet" "~/.outlet/images/statusnet.png" nil nil :ascent center)
-	("Wordpress" "~/.outlet/images/wordpress.png" nil nil :ascent center)
+	("Afspraak"      "~/.outlet/images/stock_new-meeting.png" nil nil :ascent center)
+	("Blogging"      "~/.outlet/images/edit.png" nil nil :ascent center)
+	("Cobra"         "~/.outlet/images/car.png" nil nil :ascent center)
+	("DVD"           "~/.outlet/images/media-cdrom.png" nil nil :ascent center)
+	("Emacs"         "~/.outlet/images/emacs.png" nil nil :ascent center)
+	("Finance"       "~/.outlet/images/finance.png" nil nil :ascent center)
+	("Habitat"       "~/.outlet/images/house.png" nil nil :ascent center)
+	("Habit"         "~/.outlet/images/stock_task-recurring.png" nil nil :ascent center)
+	("Hobbies"       "~/.outlet/images/hobbies.png" nil nil :ascent center)
+	("Partners"      "~/.outlet/images/partners.png" nil nil :ascent center)
+	("Task"          "~/.outlet/images/stock_todo.png" nil nil :ascent center)
+	("Org"           "~/.outlet/images/org-mode-unicorn.png" nil nil :ascent center)
+	("Statusnet"     "~/.outlet/images/statusnet.png" nil nil :ascent center)
+	("Systeem"       "~/.outlet/images/systeembeheer.png" nil nil :ascent center)
+	("Wordpress"     "~/.outlet/images/wordpress.png" nil nil :ascent center)
 ))
 ;
 ; Dynamic behaviour
@@ -202,11 +231,18 @@
   ;; This should not be needed, but autofill does not come on automatically
   (turn-on-auto-fill)
 )
+(global-set-key [(control c) (g)] 'gtd)
+
 
 (defun mrb/is-project-p ()
-  "Any task with a todo keyword subtask"
-  (let ((has-subtask)
-        (subtree-end (save-excursion (org-end-of-subtree t))))
+  "This function returns true if the entry is considered a project.
+   A project is defined to be:
+   - having a TODO keyword itself;
+   - having at least one todo entry, regardless of their state."
+  (let ((has-todokeyword)
+	(has-subtask)
+        (subtree-end (save-excursion (org-end-of-subtree t)))
+	(is-a-task (member (nth 2 (org-heading-components)) org-todo-keywords-1)))
     (save-excursion
       (forward-line 1)
       (while (and (not has-subtask)
@@ -214,7 +250,8 @@
                   (re-search-forward "^\*+ " subtree-end t))
         (when (member (org-get-todo-state) org-todo-keywords-1)
           (setq has-subtask t))))
-    has-subtask
+    ;; both subtasks and a keyword on the container need to be present.
+    (and is-a-task has-subtask)
     )
 )
 
@@ -225,7 +262,7 @@
          (has-next (save-excursion
                      (forward-line 1)
                      (and (< (point) subtree-end)
-                          (re-search-forward "* TODO" subtree-end t)))))
+                          (re-search-forward "^*+ \\(TODO\\|WAITING\\)" subtree-end t)))))
     (if (and (mrb/is-project-p) (not has-next))
         nil ; a stuck project, has subtasks but no next task
       subtree-end)))
@@ -275,6 +312,22 @@
 )
 (add-hook 'org-after-todo-state-change-hook 'save-containing-org-file)
 
+
+;;
+;; Encryption settings
+;;
+(require 'org-crypt)
+;; Encrypt all entries before saving
+(org-crypt-use-before-save-magic)
+;;
+;; Exclude some tags from trickling down to their children: - encrypt:
+;; why was this again?  - area: the tag is only valid for the parent,
+;; within an area there are tasks and projects (do I still use this?)
+;; - fix: the tag is typically used on the smallest units. If it is
+;; used on the parent, that does not directly mean that the children
+;; also are fixing tasks.
+(setq org-tags-exclude-from-inheritangce (quote ("area" "fix" "encrypt")))
+
 ;(defun ensure-project-tag (n-done n-not-done)
 ;  "Switch entry to DONE when all subentries are done, to TODO otherwise."
 ;  (org-toggle-tag "prj" (if (> (+ n-done n-not-done) 1) 'on 'off)))
@@ -296,14 +349,13 @@
 
 ;
 ; Capturing with org-capture
-; IN PROGRESS, rewriting the org-remember stuff for org-capture
 ;
 
 ; Define the templates
 (setq org-capture-templates
       (quote (
 	      ("t" "Todo" 
-	       entry (file          (concat org-directory "GTD.org")) "* TODO %?" :prepend t)
+	       entry (id "new-todo-receiver") "* TODO %?" :prepend t)
 	      ("j" "Journal" 
 	       plain (file+datetree (concat org-directory "journal.org")) 
 	       "___________________________________________________________ *%U* ___\n\n%?\n" )))
@@ -312,13 +364,27 @@
 (defun make-capture-frame ()
   "Create a new frame and run org-capture."
   (interactive)
-  (make-frame '((name . "capture") 
+  ;; Create and select the frame
+  (select-frame (make-frame '((name . "capture") 
 		(width . 80) (height . 15)
-		(menu-bar-lines . 0) (tool-bar-lines . 0)))
-  (select-frame-by-name "capture")
+		(menu-bar-lines . 0) (tool-bar-lines . 0))))
+  ;; Capture a Todo entry
   (org-capture nil "t")
 )
 (global-set-key "\C-cc" 'make-capture-frame)
+
+(defadvice org-capture-finalize (after delete-capture-frame activate)
+  "Advise org-capture-finalize to close the frame if it is the capture frame"
+  (if (equal "capture" (frame-parameter nil 'name))
+      (delete-frame)))
+
+(defadvice org-capture-destroy (after delete-capture-frame activate)
+  "Advise org-capture-destroy to close the frame if it is the capture frame"
+  (if (equal "capture" (frame-parameter nil 'name))
+      (delete-frame)))
+
+; org-capture by default splits the window, we don't want that
+(add-hook 'org-capture-mode-hook 'delete-other-windows)
 
 (defun make-journal-entry ()
   "Create a journal entry"
@@ -327,20 +393,7 @@
 )
 (global-set-key "\C-cj" 'make-journal-entry)
 
-(defadvice org-capture-finalize 
-  (after delete-capture-frame activate)
-  "Advise org-capture-finalize to close the frame if it is the capture frame"
-  (if (equal "capture" (frame-parameter nil 'name))
-      (delete-frame)))
 
-(defadvice org-capture-destroy
-  (after delete-capture-frame activate)
-  "Advise org-capture-destroy to close the frame if it is the capture frame"
-  (if (equal "capture" (frame-parameter nil 'name))
-      (delete-frame)))
-
-; org-capture by default splits the window, we don't want that
-(add-hook 'org-capture-mode-hook 'delete-other-windows)
 ;
 ; Keep an automatic history of saves with git 
 ; 
@@ -475,7 +528,7 @@ inherited by a parent headline."
 ; Directly tie into the GIT org2blog repository
 (add-to-list 'load-path "~/dev/emacs/packages/org2blog/")
 (add-to-list 'load-path "~/dev/emacs/packages/xml-rpc-el/")
-(require 'org2blog)
+(require 'org2blog-autoloads)
 
 (setq
  org2blog/wp-server-weblog-id ""
@@ -484,6 +537,7 @@ inherited by a parent headline."
  org2blog/wp-confirm-post t
  org2blog/wp-track-posts (list (concat org-directory "/blogs/org2blog-track.org") "To be filed properly")
 )
+
 
 ; Per blog configuration
 (setq org2blog/wp-blog-alist
@@ -508,7 +562,6 @@ inherited by a parent headline."
 
 ;; Shorten url at point
 ;; This is a stripped down version of the code in identica-mode
-
 (defun mrb/ur1ca-get (api longurl)
   "Shortens url through ur1.ca free service 'as in freedom'"
   (let* ((url-request-method "POST")
@@ -537,7 +590,59 @@ inherited by a parent headline."
 	    (delete-region (point-min) (point-max))
 	    (insert url)))))))
 
+
+(defvar mrb/org-my-archive-expiry-days 365
+  "The number of days after which a completed task should be auto-archived.
+This can be 0 for immediate, or a floating point value.")
+
+(defun mrb/org-my-archive-done-tasks ()
+  (interactive)
+  (save-excursion
+    (goto-char (point-min))
+    (let ((done-regexp
+           (concat "\\* \\(" (regexp-opt org-done-keywords) "\\) "))
+          (state-regexp
+           (concat "- State \"\\(" (regexp-opt org-done-keywords)
+                   "\\)\"\\s-*\\[\\([^]\n]+\\)\\]")))
+      (while (re-search-forward done-regexp nil t)
+        (let ((end (save-excursion
+                     (outline-next-heading)
+                     (point)))
+              begin)
+          (goto-char (line-beginning-position))
+          (setq begin (point))
+          (when (re-search-forward state-regexp end t)
+            (let* ((time-string (match-string 2))
+                   (when-closed (org-parse-time-string time-string)))
+              (if (>= (time-to-number-of-days
+                       (time-subtract (current-time)
+                                      (apply #'encode-time when-closed)))
+                      org-my-archive-expiry-days)
+                  (org-archive-subtree)))))))))
+
+(defalias 'archive-done-tasks 'mrb/org-my-archive-done-tasks)
+
+
+;; Map it to Ctrl-C S in orgmode (consider a global key assignment?
 (define-key org-mode-map "\C-cs" 'mrb/shortenurl-replace-at-point)
+;; END shorten url functionality
+
+(add-to-list 'load-path "~/dev/emacs/packages/org-bom/")
+(require 'org-bom)
+
+(add-to-list 'load-path "~/dev/emacs/packages/org-toodledo")
+(require 'org-toodledo)
+(setq org-toodledo-userid "td4f031ad301856")
+(setq org-toodledo-password "PASSWORDHERE")
+;; Useful key bindings for org-mode
+(add-hook 'org-mode-hook
+	  (lambda ()
+	    (local-unset-key "\C-o")
+	    (local-set-key "\C-od" 'org-toodledo-mark-task-deleted)
+	    (local-set-key "\C-os" 'org-toodledo-sync)
+	    )
+	  )
+(setq org-toodledo-debug 1)
 
 (provide 'org-settings)
 
