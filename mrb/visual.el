@@ -1,7 +1,7 @@
 ;; 
 ;; Visual customizations, make it look the way I want to
 ;;
-;; We use a dark backgroun
+;; We use a dark background
 (setq-default frame-background-mode 'dark)
 
 ;; no splash screen
@@ -25,10 +25,6 @@
 (set-face-background  'mode-line "#4c7073")
 ; Zenburn underlines date face in org, no go
 (set-face-attribute 'org-date nil :underline nil)
-
-(custom-theme-set-faces 'zenburn
-)
-
 
 ;
 ; When I am not typing, the cursor should become more visible, so I
@@ -61,11 +57,13 @@
 ;; opened. By adding these settings to the 'server-visit-hook' we can
 ;; still seemingly painless apply these settings.
 (defun run-client-settings()
+  (interactive)  
   ;; When making a selection, keep all font-locking too, but make it
   ;; stand out from the matching background
   (set-face-attribute 'region nil :inherit nil :background "#242424" :foreground nil)
   (tool-bar-mode -1)   ;; No tool-bar
   (scroll-bar-mode -1) ;; No scroll-bar
+  (menu-bar-mode -1)   ;; No menu-bar
 )
 ;; This seems to work if we start up emacs using filename on cli and
 ;; server was not running yet. It does however not work if we just

@@ -45,10 +45,9 @@
 (setq tramp-default-method "ssh")
 
 
-
-;; Default browswer is chromium, why does emacs not find that automatically?
+;; Default browswer 
 (setq browse-url-browser-function (quote browse-url-generic))
-(setq browse-url-generic-program "google-chrome")
+(setq browse-url-generic-program "chromium-browser")
 
 ; Interactively do things
 (require 'ido)

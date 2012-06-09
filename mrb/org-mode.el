@@ -1,19 +1,22 @@
-; Org mode specific settings
+;;
+;; Org mode specific settings
+;;
 
-; Directly tie into the GIT repository on this machine
-(add-to-list 'load-path "~/dev/emacs/packages/org-mode/")
+;; Directly tie into the GIT repository on this machine
+;;(add-to-list 'load-path "~/dev/emacs/packages/org-mode/")
 (add-to-list 'load-path "~/dev/emacs/packages/org-mode/lisp/")
 (add-to-list 'load-path "~/dev/emacs/packages/org-mode/contrib/lisp/")
-(add-to-list 'load-path "~/dev/emacs/packages/org-icons/lisp/")
 
-; bootstrap
+;; bootstrap
 (require 'org-install)           ;; This is required, see installation docs
+(require 'org-clock)             ;; Should not be needed, but otherwise links don't work
 (require 'org-mouse)             ;; Enable menu on right mouse button and other mouse functions
-(require 'org-agenda)            ;; Enable the agenda functions, isn't this the case automatically then?
 (require 'org-special-blocks)    ;; Generalizes the #+begin_foo and #+end_foo blocks, useful on latex (export) 
-
+(require 'org-datetree)          ;; Allows for archiving and refiling in a date organised tree
 (add-hook 'org-mode-hook 'my-org-init)
 
+;;
+;; Grouped initialisation 
 (defun my-org-init ()
   ;; Autofill is nice when writing larger pieces of text, which I do a lot in org
   (turn-on-auto-fill)
@@ -22,105 +25,18 @@
   (require 'typopunct)
   (typopunct-change-language 'english)
   (typopunct-mode 1)
-
-  ;; Enable org2blog minor mode by default, can't hurt
-  (org2blog/wp-mode 1)
 )
 
-; Allow automatically handing of created/expired meta data.
-(require 'org-expiry)
-;; Configure it a bit to my liking
-(setq
-  org-expiry-created-property-name "CREATED" ; Name of property when an item is created
-  org-expiry-expiry-property-name  "EXPIRY"  ; Name of property to hold expiry date
-  org-expiry-keyword               "EXPIRED" ; Name of property to hold date when it expired (which can differ from expiry)
-  org-expiry-inactive-timestamps   t
-)
-(org-expiry-insinuate)           ;; Use hooks to insert created property
-; Add a created property also when capturing an item with remember
-; obviously this should be in org-expiry, make a patch!!
-(add-hook 'org-remember-before-finalize-hook 'org-expiry-insert-created)
-(add-hook 'org-capture-before-finalize-hook 'org-expiry-insert-created)
-
-; Activate Babel languages
-(org-babel-do-load-languages
- 'org-babel-load-languages
- '((R . t) (ditaa . t) (sql . t) 
-   (sh . t) (emacs-lisp t) (lisp t) 
-   (css t) (awk t) (js t) (lisp t)
-   (org t)
-   (plantuml t)
-))
-
-(setq org-use-fast-todo-selection t)
-
-; Define common tags here, so they function in all org files
-
-; Make sure actions are distinguishable
-(setq org-todo-keyword-faces '(
-  ("DONE"   .    (:foreground "#afd8af"     :weight bold)) ;; This one didn't work as of [2011-10-24], had to customize manually
-  ("WAITING"   . (:foreground "dark salmon" :weight bold))
-  ("CANCELLED" . (:foreground "dim gray"    :weight bold))
-))
-
-; Make sure we keep a clean tag slate when changing tag state
-(setq org-todo-state-tags-triggers 
-      (quote (
-	      ("TODO"      ("inactive") ) ; remove inactive tags if moved to TODO
-	      ("DONE"      ("inactive") ("fork") ) ; remove inactive tags if moved to DONE
-	      )))
-
-; Having the verbs is a bit disturbing
-;(require 'org-action-verbs)
-(setq org-action-todo-verbs
-      '(
-	(("TODO" "NEXT") . 
-	 ( "Assemble" "Build" "Buy" "Call" "Cancel" "Change" "Check" "Clean" "Collect" "Combine" "Configure" "Construct" "Create"
-	   "Decide" "Disassemble" "Document" "Exchange" "Find" "Finish" "Fix" "Improve" "Insert" "Install" "Learn" "Look"
-	   "Mail" "Measure"
-	   "Pay" "Paint" "Process" "Read" "Remove" "Rename" "Research" "Repair" "Replace" "Resolve" "Review" "Rewrite"
-	   "Schedule" "Sell" "Summarize" "Translate" "Try" "Update" "Upgrade" "Use" "Watch" "Write"
-	   ))))
-
-; Keybindings we want to have available all the time
-; even when not in org mode.
-(global-set-key "\C-ca" 'org-agenda)
-(global-set-key "\C-cb" 'org-iswitchb)
-(global-set-key "\C-cl" 'org-store-link)
-
-; Keybindings which only make sense when having an orgmode file
-(define-key org-mode-map "\C-ce" 'org-export)
-(define-key org-mode-map [(super .)] 'org-todo)
-(defun force-org-todo()
-  (interactive)
-  (org-todo "DONE")
-)
-(define-key org-mode-map [(control super .)] 'force-org-todo)
-
-(define-key org-agenda-mode-map [(super .)] 'org-agenda-todo)
-; Map ⌘t to schedule in both task and agenda-view
-(define-key org-mode-map [(super t)] 'org-schedule)
-(define-key org-agenda-mode-map [(super t)] 'org-agenda-schedule)
-(define-key org-mode-map [(meta p)] 'org-set-property)
-(define-key org-agenda-mode-map [(meta p)] 'org-set-property)
-(define-key org-mode-map [(control super s)] 'org-save-all-org-buffers)
-
+;;
+;; General settings
 (setq
  ; Files and directories
- org-directory "~/.outlet/"                                     ; Main dir
- org-metadir (concat org-directory "_orgmeta/")                 ; Org system files go here
- org-mobile-directory "/plato:/var/dav/mrb/"                    ; Remote org dir
- org-archive-location (concat org-metadir "archive.org::* %s")  ; Default archive location
+ org-directory "~/.outlet/"                                          ; Main dir
+ org-metadir (concat org-directory "_orgmeta/")                      ; Org system files go here
+ org-mobile-directory "/plato:/home/mrb/data/mobileorg"              ; Remote org dir
+ org-archive-location (concat org-metadir "archive.org::date-tree")  ; Default archive location
 
  org-default-notes-file (concat org-directory "GTD.org")
- org-agenda-files (quote (
-			  "~/.outlet/GTD.org"
-			  "~/.outlet/orgmode.org"
-			  "~/.outlet/cobra.org"
-			  "~/.outlet/habits.org"
-			  "~/.outlet/meetings.org"
-			  "~/.outlet/blogs.org"
-			  "~/.outlet/keuken.org"))
  	 
  diary-file (concat org-metadir "DIARY")
  org-mobile-inbox-for-pull (concat org-metadir "from-mobile.org")
@@ -134,6 +50,8 @@
  ; Which string signals that an outline is collapsed
  org-ellipsis "..."
 
+ org-use-fast-todo-selection t
+
  ; We support task dependencies
  org-enforce-todo-dependencies t
  ; but relax checkbox constraints
@@ -143,8 +61,8 @@
  org-enable-priority-commands nil
 
  ; Tags
- org-tags-column 90
- org-agenda-tags-column 90
+ org-tags-column -110
+ org-agenda-tags-column -110
 
  ;; Hide / and * markers when doing /italic/ and *bold* markup
  org-hide-emphasis-markers t
@@ -153,7 +71,6 @@
 
  org-mobile-force-id-on-agenda-items nil
  org-mobile-use-encryption nil
-;; org-mobile-encryption-password "PASSWORDHERE"
 
  ; Agenda settings
  org-agenda-include-diary t
@@ -189,7 +106,8 @@
  org-file-apps (quote ((auto-mode . emacs) ("\\.mm\\'" . default) ("\\.x?html?\\'" . "google-chrome %s") ("\\.pdf\\'" . default)))
  org-fontify-done-headline t
  org-goto-interface (quote outline-path-completion)
- org-hierarchical-todo-statistics nil
+ org-hierarchical-todo-statistics t
+ org-provide-todo-statistics nil
  org-log-into-drawer t
  org-log-redeadline (quote note)
  org-log-reschedule (quote time)
@@ -202,6 +120,92 @@
  ;; This had a serious bug in the past making it very slow, seems better now.
  org-src-fontify-natively t
 )
+
+;;
+;; Allow automatically handing of created/expired meta data.
+;;
+(require 'org-expiry)
+;; Configure it a bit to my liking
+(setq
+  org-expiry-created-property-name "CREATED" ; Name of property when an item is created
+  org-expiry-inactive-timestamps   t         ; Don't have everything in the agenda view
+)
+
+(defun mrb/insert-created-timestamp()
+  "Insert a CREATED property using org-expiry.el for TODO entries"
+  (org-expiry-insert-created)
+  (org-back-to-heading)
+  (org-end-of-line)
+  (insert " ")
+)
+  
+;; Whenever a TODO entry is created, I want a timestamp
+;; Advice org-insert-todo-heading to insert a created timestamp using org-expiry
+(defadvice org-insert-todo-heading (after mrb/created-timestamp-advice activate)
+  "Insert a CREATED property using org-expiry.el for TODO entries"
+  (mrb/insert-created-timestamp)
+)
+;; Make it active
+(ad-activate 'org-insert-todo-heading)
+
+(defadvice org-capture (after mrb/created-timestamp-advice activate)
+  "Insert a CREATED property using org-expiry.el for TODO entries"
+  (mrb/insert-created-timestamp)
+)
+(ad-activate 'org-capture)
+
+
+;; Activate Babel languages
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((R . t) (ditaa . t) (sql . t) (sh . t) (emacs-lisp t) (lisp t) 
+   (css t) (awk t) (js t) (lisp t) (org t) (plantuml t)))
+
+
+; Define common tags here, so they function in all org files
+; Make sure actions are distinguishable
+(setq org-todo-keyword-faces '(
+  ("DONE"   .    (:foreground "#afd8af"     :weight bold))
+  ("WAITING"   . (:foreground "dark salmon" :weight bold))
+  ("CANCELLED" . (:foreground "dim gray"    :weight bold))
+  ("BUY      " . (:foreground "goldenrod"   :weight bold))
+))
+
+; Make sure we keep a clean tag slate when changing tag state
+; Note: caputuring does not honour this, i.e. when creating a new item.
+(setq org-todo-state-tags-triggers 
+      (quote (
+	      ('todo ("inactive"))          ; remove inactive tags if moved to any active state
+	      ('done ("inactive") ("fork")) ; remove tags from any inactive state
+	      ("BUY"  ("buy" . t)))))        ; add buy tag when this is a buying action 
+
+
+; Keybindings we want to have available all the time
+; even when not in org mode.
+(global-set-key "\C-ca" 'org-agenda)
+(global-set-key "\C-cb" 'org-iswitchb)
+(global-set-key "\C-cl" 'org-store-link)
+
+; Keybindings which only make sense when having an orgmode file
+(define-key org-mode-map "\C-ct" 'org-set-tags)
+(define-key org-mode-map "\C-ce" 'org-export)
+(define-key org-mode-map [(super .)] 'org-todo)
+(defun force-org-todo()
+  (interactive)
+  (let ((current-prefix-arg '(64)))  ;; Triple C-u (4^3)
+    (call-interactively 'org-todo))
+)
+(define-key org-mode-map [(control super .)] 'force-org-todo)
+(define-key org-agenda-mode-map [(control super .)] 'force-org-todo)
+
+(define-key org-agenda-mode-map [(super .)] 'org-agenda-todo)
+; Map ⌘t to schedule in both task and agenda-view
+(define-key org-mode-map [(super t)] 'org-schedule)
+(define-key org-agenda-mode-map [(super t)] 'org-agenda-schedule)
+(define-key org-mode-map [(meta p)] 'org-set-property)
+(define-key org-agenda-mode-map [(meta p)] 'org-set-property)
+(define-key org-mode-map [(control super s)] 'org-save-all-org-buffers)
+
 
 ; Custom icons for the categories
 (setq org-agenda-category-icon-alist 
@@ -253,16 +257,17 @@
     ;; both subtasks and a keyword on the container need to be present.
     (and is-a-task has-subtask)
     )
-)
+  )
 
 ; FIXME: testing for tag presence should be easier than a re-search forward
+; FIXNE: are we not searching for all 'incomplete' type keywords here?, there must be an org function for that
 (defun mrb/skip-non-stuck-projects ()
   "Skip trees that are not stuck projects"
   (let* ((subtree-end (save-excursion (org-end-of-subtree t)))
          (has-next (save-excursion
                      (forward-line 1)
                      (and (< (point) subtree-end)
-                          (re-search-forward "^*+ \\(TODO\\|WAITING\\)" subtree-end t)))))
+                          (re-search-forward "^*+ \\(TODO\\|BUY\\|WAITING\\)" subtree-end t)))))
     (if (and (mrb/is-project-p) (not has-next))
         nil ; a stuck project, has subtasks but no next task
       subtree-end)))
@@ -281,34 +286,8 @@
         subtree-end
       nil)))
 
-; It gets this tag in one of two ways:
-; 1. Manually assigned by user;
-; 2. Automatically if it has > 1 children which are TODO's
-;(defun ensure-project-tags()
-;  "Ensure a header gets a project tag if there is more than 1 TODO child"
-;  (interactive)
-;  (org-toggle-tag "prj"
-;    (if (> (length (org-map-entries t "/+TODO|DONE|CANCELLED" 'tree)) 1) 'on 'off)
-;    )
-;)
-
-;(defun ensure-prj-tag ()
-;  (save-excursion
-;    (when (org-up-heading-safe)
-;      (let ((beg (point))
-;	    (end (org-end-of-subtree t t))
-;	    two-not-done)
-;	(goto-char beg)
-;	(goto-char (point-at-eol))
-;	(setq two-not-done
-;	      (and (re-search-forward org-not-done-heading-regexp end t)
-;		   (re-search-forward org-not-done-heading-regexp end t)))
-;	(goto-char beg)
-;	(org-toggle-tag "prj" (if two-not-done 'on 'off))))))
-;(add-hook 'org-after-todo-state-change-hook 'ensure-prj-tag)
-
 (defun save-containing-org-file()
-  (org-save-all-org-buffers) ;; bit over the top, no?
+  (org-save-all-org-buffers) ;; FIXME: bit over the top, no?  
 )
 (add-hook 'org-after-todo-state-change-hook 'save-containing-org-file)
 
@@ -320,40 +299,26 @@
 ;; Encrypt all entries before saving
 (org-crypt-use-before-save-magic)
 ;;
-;; Exclude some tags from trickling down to their children: - encrypt:
-;; why was this again?  - area: the tag is only valid for the parent,
-;; within an area there are tasks and projects (do I still use this?)
-;; - fix: the tag is typically used on the smallest units. If it is
-;; used on the parent, that does not directly mean that the children
-;; also are fixing tasks.
-(setq org-tags-exclude-from-inheritangce (quote ("area" "fix" "encrypt")))
-
-;(defun ensure-project-tag (n-done n-not-done)
-;  "Switch entry to DONE when all subentries are done, to TODO otherwise."
-;  (org-toggle-tag "prj" (if (> (+ n-done n-not-done) 1) 'on 'off)))
-   
-;(add-hook 'org-todo-statistics-hook 'ensure-project-tag)
-
-; Custom sort function for scheduled property
-;; (defun org-cmp-scheduled(a b)
-;;   "Compare the scheduled time of two agenda items and return according to their values:
-;;      - if a.SCHEDULED is before    b.SCHEDULED return 1
-;;      - if a.SCHEDULED is after     b.SCHEDULED return 0
-;;      - if a.SCHEDULED is equial to b.SCHEDULED return nil"
-;; ; Not sure if this works like this, but what is above is what I want
-;; )
-;(setq org-agenda-cmp-user-defined 'org-cmp-scheduled)
+;; Exclude some tags from trickling down to their children: 
+;;   - encrypt: why was this again?  
+;;   - area: the tag is only valid for the parent, within an area there are tasks and projects (do I still use this?)
+;;   - fix: the tag is typically used on the smallest units. If it is
+;;          used on the parent, that does not directly mean that the children
+;;          also are fixing tasks.
+(setq org-tags-exclude-from-inheritance (quote ("area" "fix" "encrypt")))
 
 ; When in agenda mode, show the line we're working on.
 (add-hook 'org-agenda-mode-hook '(lambda () (hl-line-mode 1)))
 
-;
-; Capturing with org-capture
-;
+;;
+;; Capturing with org-capture
+;; TODO: probably split this off into its own file
 
 ; Define the templates
 (setq org-capture-templates
       (quote (
+	      ("b" "Buy" 
+	       entry (id "new-todo-receiver") "* BUY %? :buy:\n" :prepend t)
 	      ("t" "Todo" 
 	       entry (id "new-todo-receiver") "* TODO %?" :prepend t)
 	      ("j" "Journal" 
@@ -362,16 +327,30 @@
 )
 
 (defun make-capture-frame ()
-  "Create a new frame and run org-capture."
-  (interactive)
-  ;; Create and select the frame
+  "Create a new frame for org-capture to use."
+  ;; Create and select the frame FIXME: the frame needs to be at least
+  ;; 95 to be able to display the tag on the same line. Perhaps we
+  ;; should temporarily set the tag column to something less, so we
+  ;; can keep the capture window small.
   (select-frame (make-frame '((name . "capture") 
-		(width . 80) (height . 15)
+		(width . 115) (height . 15)
 		(menu-bar-lines . 0) (tool-bar-lines . 0))))
-  ;; Capture a Todo entry
+)
+
+(defun capture-todo ()
+  "Capture a TODO item"
+  (interactive)
+  (make-capture-frame)
   (org-capture nil "t")
 )
-(global-set-key "\C-cc" 'make-capture-frame)
+
+(defun capture-buy ()
+  "Capture a BUY item"
+  (interactive)
+  (make-capture-frame)
+  (org-capture nil "b")
+)
+
 
 (defadvice org-capture-finalize (after delete-capture-frame activate)
   "Advise org-capture-finalize to close the frame if it is the capture frame"
@@ -545,17 +524,17 @@ inherited by a parent headline."
 	("mrblog"
 	 :url "http://mrblog.nl/xmlrpc.php"
 	 :username "mrb"   
-	 :track-posts ("blogs.org" "mrblog.nl")
+	 :track-posts ("blogs/blogs.org" "mrblog.nl")
 	 )
 	("cobra"             
 	 :url "http://cobra.mrblog.nl/xmlrpc.php"
 	 :username "mrb"
-	 :track-posts ("blogs.org" "cobra.mrblog.nl")
+	 :track-posts ("blogs/blogs.org" "cobra.mrblog.nl")
 	 )
 	("hsd"
 	 :url "http://test.hsdev.com/xmlrpc.php"
 	 :username "mrb"
-	 :track-posts ("blogs.org" "hsdev.com")
+	 :track-posts ("blog/blogs.org" "hsdev.com")
 	)
       )
 )
@@ -617,7 +596,7 @@ This can be 0 for immediate, or a floating point value.")
               (if (>= (time-to-number-of-days
                        (time-subtract (current-time)
                                       (apply #'encode-time when-closed)))
-                      org-my-archive-expiry-days)
+                      mrb/org-my-archive-expiry-days)
                   (org-archive-subtree)))))))))
 
 (defalias 'archive-done-tasks 'mrb/org-my-archive-done-tasks)
@@ -643,6 +622,38 @@ This can be 0 for immediate, or a floating point value.")
 	    )
 	  )
 (setq org-toodledo-debug 1)
+
+;; archive entries into a date-tree
+;; (setq org-archive-location "%s_archive::date-tree")
+(defadvice org-archive-subtree
+  (around org-archive-subtree-to-data-tree activate)
+  "org-archive-subtree to date-tree"
+  (if
+      (string= "date-tree"
+               (org-extract-archive-heading
+                (org-get-local-archive-location)))
+      (let* ((dct (decode-time (org-current-time)))
+             (y (nth 5 dct))
+             (m (nth 4 dct))
+             (d (nth 3 dct))
+             (this-buffer (current-buffer))
+             (location (org-get-local-archive-location))
+             (afile (org-extract-archive-file location))
+             (org-archive-location
+              (format "%s::*** %04d-%02d-%02d %s" afile y m d
+                      (format-time-string "%A" (encode-time 0 0 0 d m y)))))
+        (message "afile=%s" afile)
+        (unless afile
+          (error "Invalid `org-archive-location'"))
+        (save-excursion
+          (switch-to-buffer (find-file-noselect afile))
+          (org-datetree-find-year-create y)
+          (org-datetree-find-month-create y m)
+          (org-datetree-find-day-create y m d)
+          (widen)
+          (switch-to-buffer this-buffer))
+        ad-do-it)
+    ad-do-it))
 
 (provide 'org-settings)
 
