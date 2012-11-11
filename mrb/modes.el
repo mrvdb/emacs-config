@@ -27,4 +27,12 @@
 ;; Open scratch buffer by default in the mode we are in at the moment
 ;; with C-u prefix a mode will be asked to use
 (require 'scratch)
+
+;; Turn on eldoc for modes which support it
+(add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
+(add-hook 'lisp-interaction-mode-hook 'turn-on-eldoc-mode)
+(add-hook 'ielm-mode-hook 'turn-on-eldoc-mode)
+(add-hook 'python-mode 'turn-on-eldoc-mode)
+
+
 (provide 'modes)

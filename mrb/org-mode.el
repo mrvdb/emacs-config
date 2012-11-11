@@ -6,17 +6,18 @@
 ;;(add-to-list 'load-path "~/dev/emacs/packages/org-mode/")
 (add-to-list 'load-path "~/dev/emacs/packages/org-mode/lisp/")
 (add-to-list 'load-path "~/dev/emacs/packages/org-mode/contrib/lisp/")
+(add-to-list 'load-path "~/dev/emacs/packages/org-mode/contrib/babel/langs/")
 
 ;; bootstrap
-(require 'org-install)           ;; This is required, see installation docs
+;; CHECKME: is this still the proper installation method, it has changed a lot lately
+(require 'org)           ;; This is required, see installation docs
 (require 'org-clock)             ;; Should not be needed, but otherwise links don't work
 (require 'org-mouse)             ;; Enable menu on right mouse button and other mouse functions
 (require 'org-special-blocks)    ;; Generalizes the #+begin_foo and #+end_foo blocks, useful on latex (export) 
 (require 'org-datetree)          ;; Allows for archiving and refiling in a date organised tree
-(add-hook 'org-mode-hook 'my-org-init)
+(require 'org-mobile)            ;; Only org-mobile-push and pull get autoloaded and we neede the file list before that.
 
-;;
-;; Grouped initialisation 
+;; When going into org-mode, do this.
 (defun my-org-init ()
   ;; Autofill is nice when writing larger pieces of text, which I do a lot in org
   (turn-on-auto-fill)
@@ -26,6 +27,7 @@
   (typopunct-change-language 'english)
   (typopunct-mode 1)
 )
+(add-hook 'org-mode-hook 'my-org-init)
 
 ;;
 ;; General settings
@@ -33,14 +35,11 @@
  ; Files and directories
  org-directory "~/.outlet/"                                          ; Main dir
  org-metadir (concat org-directory "_orgmeta/")                      ; Org system files go here
- org-mobile-directory "/plato:/home/mrb/data/mobileorg"              ; Remote org dir
  org-archive-location (concat org-metadir "archive.org::date-tree")  ; Default archive location
 
  org-default-notes-file (concat org-directory "GTD.org")
  	 
  diary-file (concat org-metadir "DIARY")
- org-mobile-inbox-for-pull (concat org-metadir "from-mobile.org")
-
 
  ; I want to hide the leading stars, and do it *exactly* in the
  ; background-color
@@ -68,9 +67,7 @@
  org-hide-emphasis-markers t
  ;; But show fancy entries
  org-pretty-entities 1
-
- org-mobile-force-id-on-agenda-items nil
- org-mobile-use-encryption nil
+ org-pretty-entities-include-sub-superscripts nil
 
  ; Agenda settings
  org-agenda-include-diary t
@@ -107,11 +104,10 @@
  org-fontify-done-headline t
  org-goto-interface (quote outline-path-completion)
  org-hierarchical-todo-statistics t
- org-provide-todo-statistics nil
+ org-provide-todo-statistics t
  org-log-into-drawer t
  org-log-redeadline (quote note)
  org-log-reschedule (quote time)
- ;org-mobile-force-id-on-agenda-items nil t
  org-modules (quote (org-info org-jsinfo org-habit org-inlinetask org-irc org-toc org-mac-iCal org-mouse))
  org-remember-default-headline ""
  org-special-ctrl-a/e t
@@ -148,18 +144,34 @@
 ;; Make it active
 (ad-activate 'org-insert-todo-heading)
 
+(require 'org-capture)
+
 (defadvice org-capture (after mrb/created-timestamp-advice activate)
   "Insert a CREATED property using org-expiry.el for TODO entries"
-  (mrb/insert-created-timestamp)
-)
+  ; Test if the captured entry is a TODO, if so insert the created
+  ; timestamp property, otherwise ignore
+  (when (member (org-get-todo-state) org-todo-keywords-1)
+    (mrb/insert-created-timestamp)))
 (ad-activate 'org-capture)
+
+;; Add feature to allow easy adding of tags in a capture window
+(defun mrb/add-tags-in-capture()
+  (interactive)
+  "Insert tags in a capture window without losing the point"
+  (save-excursion
+    (org-back-to-heading)
+    (org-set-tags)))
+;; Bind this to a reasonable key
+(define-key org-capture-mode-map "\C-c\C-t" 'mrb/add-tags-in-capture)
 
 
 ;; Activate Babel languages
+(require 'ob-gnuplot)
+(require 'ob-mathomatic)
 (org-babel-do-load-languages
  'org-babel-load-languages
  '((R . t) (ditaa . t) (sql . t) (sh . t) (emacs-lisp t) (lisp t) 
-   (css t) (awk t) (js t) (lisp t) (org t) (plantuml t)))
+   (css t) (awk t) (js t) (lisp t) (org t) (plantuml t) (gnuplot . t)))
 
 
 ; Define common tags here, so they function in all org files
@@ -177,7 +189,7 @@
       (quote (
 	      ('todo ("inactive"))          ; remove inactive tags if moved to any active state
 	      ('done ("inactive") ("fork")) ; remove tags from any inactive state
-	      ("BUY"  ("buy" . t)))))        ; add buy tag when this is a buying action 
+	      ("BUY"  ("buy" . t)))))       ; add buy tag when this is a buying action 
 
 
 ; Keybindings we want to have available all the time
@@ -298,6 +310,7 @@
 (require 'org-crypt)
 ;; Encrypt all entries before saving
 (org-crypt-use-before-save-magic)
+(setq org-crypt-key nil)
 ;;
 ;; Exclude some tags from trickling down to their children: 
 ;;   - encrypt: why was this again?  
@@ -305,7 +318,7 @@
 ;;   - fix: the tag is typically used on the smallest units. If it is
 ;;          used on the parent, that does not directly mean that the children
 ;;          also are fixing tasks.
-(setq org-tags-exclude-from-inheritance (quote ("area" "fix" "encrypt")))
+(setq org-tags-exclude-from-inheritance (quote ("area" "fix" "encrypt" "crypt" "sell")))
 
 ; When in agenda mode, show the line we're working on.
 (add-hook 'org-agenda-mode-hook '(lambda () (hl-line-mode 1)))
@@ -322,8 +335,8 @@
 	      ("t" "Todo" 
 	       entry (id "new-todo-receiver") "* TODO %?" :prepend t)
 	      ("j" "Journal" 
-	       plain (file+datetree (concat org-directory "journal.org")) 
-	       "___________________________________________________________ *%U* ___\n\n%?\n" )))
+	       entry (file+datetree (concat org-directory "journal.org")) 
+	       "* ___________________________________________________________ *%U* ___\n\n%?\n" )))
 )
 
 (defun make-capture-frame ()
@@ -477,7 +490,7 @@ inherited by a parent headline."
     (sort buckets (lambda (i1 i2)
                     (string< (car i1) (car i2))))))
 
-(defadvice org-finalize-agenda-entries (around org-group-agenda-finalize
+(defadvice org-agenda-finalize-entries (around org-group-agenda-finalize
                                                (list &optional nosort))
   "Prepare bucketed agenda entry lists"
   (if org-agenda-group-by-property
@@ -497,12 +510,12 @@ inherited by a parent headline."
                   (concat text header
                           ;; recursively process
                           (let ((org-agenda-group-by-property nil))
-                            (org-finalize-agenda-entries
+                            (org-agenda-finalize-entries
                              (cdr bucket) nosort))
                           "\n\n"))))
         (setq ad-return-value text))
     ad-do-it))
-(ad-activate 'org-finalize-agenda-entries)
+(ad-activate 'org-agenda-finalize-entries)
 
 ; Directly tie into the GIT org2blog repository
 (add-to-list 'load-path "~/dev/emacs/packages/org2blog/")
@@ -609,19 +622,19 @@ This can be 0 for immediate, or a floating point value.")
 (add-to-list 'load-path "~/dev/emacs/packages/org-bom/")
 (require 'org-bom)
 
-(add-to-list 'load-path "~/dev/emacs/packages/org-toodledo")
-(require 'org-toodledo)
-(setq org-toodledo-userid "td4f031ad301856")
-(setq org-toodledo-password "PASSWORDHERE")
-;; Useful key bindings for org-mode
-(add-hook 'org-mode-hook
-	  (lambda ()
-	    (local-unset-key "\C-o")
-	    (local-set-key "\C-od" 'org-toodledo-mark-task-deleted)
-	    (local-set-key "\C-os" 'org-toodledo-sync)
-	    )
-	  )
-(setq org-toodledo-debug 1)
+;; (add-to-list 'load-path "~/dev/emacs/packages/org-toodledo")
+;; (require 'org-toodledo)
+;; (setq org-toodledo-userid "td4f031ad301856")
+;; (setq org-toodledo-password "PASSWORDHERE")
+;; ;; Useful key bindings for org-mode
+;; (add-hook 'org-mode-hook
+;; 	  (lambda ()
+;; 	    (local-unset-key "\C-o")
+;; 	    (local-set-key "\C-od" 'org-toodledo-mark-task-deleted)
+;; 	    (local-set-key "\C-os" 'org-toodledo-sync)
+;; 	    )
+;; 	  )
+;; (setq org-toodledo-debug 1)
 
 ;; archive entries into a date-tree
 ;; (setq org-archive-location "%s_archive::date-tree")
@@ -655,5 +668,118 @@ This can be 0 for immediate, or a floating point value.")
         ad-do-it)
     ad-do-it))
 
+;;
+;; Org-mobile configuration
+(setq
+ org-mobile-directory "/plato.hsdev.com:/home/mrb/data/mobileorg"              ; Remote org dir
+ org-mobile-inbox-for-pull (concat org-metadir "from-mobile.org")    ; Where to place items which needs resolving
+ org-mobile-force-id-on-agenda-items nil                             ; No id yet, don't see the advatage yet
+ org-mobile-use-encryption nil                                       ; No encryption yet.
+ org-mobile-agendas (quote all)
+ org-mobile-files (quote ("~/.outlet/GTD.org" "~/.outlet/habits.org" "~/.outlet/_calendars/meetings.org"))
+ org-mobile-use-encryption nil
+)
+
+;; Define timer variables for pull and push operations
+(defvar org-mobile-push-timer nil)
+(defvar org-mobile-pull-timer nil)
+
+;; Define notificaters
+(require 'notifications)
+
+(defun org-mobile-notify (type result)
+  (notifications-notify
+   :title (concat type " complete:")
+   :body  (format (concat "Org-mobile-" type ": %s") result)))
+
+(defun notify-push (result) (org-mobile-notify "Push" result))
+(defun notify-pull (result) (org-mobile-notify "Pull" result))
+
+;; Fork the work of pushing to mobile
+(defun fork-org-mobile-push()
+  (async-start
+   ;; What to do in the child process
+   `(lambda ()
+      ,(async-inject-variables "org-\\(mobile-\\|directory\\)")
+      (org-mobile-push))
+   
+   ; What to do when it finishes
+   (lambda (result)
+     (notify-push result)
+     (message "Push of mobile org complete"))))
+
+;; Push to mobile when the idle timer runs out
+(defun org-mobile-push-with-delay (secs)
+  (when org-mobile-push-timer
+    (cancel-timer org-mobile-push-timer))
+  (setq org-mobile-push-timer
+        (run-with-idle-timer
+         (* 1 secs) nil 'fork-org-mobile-push)))
+
+;; After saving files, start a 30 seconds idle timer after which we
+;; are going to push
+;; (add-hook
+;;  'after-save-hook
+;;  (lambda () 
+;;    (when (eq major-mode 'org-mode)
+;;      (dolist (file (org-mobile-files-alist))
+;;        (if (string= (expand-file-name (car file)) (buffer-file-name))
+;; 	   (org-mobile-push-with-delay 30))))))
+
+;; Fork the work of pushing to mobile
+(defun fork-org-mobile-pull ()
+  (async-start
+   ;; What to do in the child process
+   `(lambda ()
+      ,(async-inject-variables "org-\\(mobile-\\|directory\\)")
+      (org-mobile-pull))
+   
+   ; What to do when it finishes
+   (lambda (result)
+     (notify-pull result)
+     (message "Pull of mobile org complete"))))
+
+;; Construct the name of the remote file
+(setq remote-org-mobile-file
+      (file-truename
+       (concat
+	(file-name-as-directory org-mobile-directory)
+	"mobileorg.org")))
+
+;; Pull by monitoring the file mobile-org writes to
+(defun install-monitor (file secs)
+  ;; Cancel an existing timer, if any
+  (when org-mobile-pull-timer
+    (cancel-timer org-mobile-pull-timer))
+  ;; And set up a new one
+  (setq org-mobile-pull-timer
+	(run-with-timer
+	 0 secs
+	 (lambda (f p)
+	   ;; If the remote file has been changed within out repeat
+	   ;; period, we need a new copy
+	   (unless (< p (second (time-since (elt (file-attributes f) 5))))
+	     (fork-org-mobile-pull)))
+	 file
+	 secs)))
+
+;; Install a monitor on the remote org file. Don't make the time too
+;; short, otherwise the file might nog get pulled in.
+;; (install-monitor remote-org-mobile-file 30)
+
+;; Mail facilities related to org-mode
+(require 'org-mime)
+(defun mrb/mail-subtree-from-org-agenda ()
+  (interactive)
+  (org-agenda-goto)
+  (org-mime-subtree))
+;; Bind it to a C-c m (similar to C-x m which opens an empty mail)
+(define-key org-mode-map [(control c) m] 'org-mime-subtree)
+;; This does not work
+;;(define-key org-agenda-mode-map [(control c) m] 'mrb/mail-subtree-from-org-agenda)
+;; This does
+(define-key org-agenda-mode-map "\C-cm" 'mrb/mail-subtree-from-org-agenda)
+
+;; TODO I want to have this in the agenda mode too
 (provide 'org-settings)
 

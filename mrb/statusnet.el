@@ -1,8 +1,12 @@
 ; Identica comes directly from its git repository
 (add-to-list 'load-path  "~/dev/emacs/packages/identica-mode")
 (load-library "identica-mode.el")
+(require 'longlines)
 (setq 
  statusnet-server "o.mrblog.nl"
+ statusnet-access-url "http://o.mrblog.nl/api/oauth/access_token"
+ statusnet-authorize-url "http://o.mrblog.nl/api/oauth/authorize"
+ statusnet-request-url "http://o.mrblog.nl/api/oauth/request_token"
  identica-username "mrb"
  identica-password "PASSWORDHERE" ;; .authinfo does not work for me
  identica-display-success-messages nil

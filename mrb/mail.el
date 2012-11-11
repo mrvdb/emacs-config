@@ -14,6 +14,7 @@
 
   ; Sending it
   smtpmail-default-smtp-server "localhost"
+  smtpmail-smtp-service 24
   smtpmail-local-domain "hsdev.com"
   smtpmail-sendto-domain "hsdev.com"
   send-mail-function 'smtpmail-send-it                 ; This is for mail
@@ -25,9 +26,13 @@
 )
 ;; Automatically sign outgoing messages, be part of the solution here,
 ;; not the problem
-(setq smime-keys (quote (("marcel@hsdev.com" "~/keys/usertrust-marcel@hsdev.com-2011-06-11.pem" nil))))
-(add-hook 'message-send-hook 'mml-secure-message-sign-smime)
+;; TODO: where can I toggle this on/off while composing?
+;;(setq smime-keys (quote (("marcel@hsdev.com" "~/keys/comodo-2012-06-12.pem" nil))))
+;;(add-hook 'message-send-hook 'mml-secure-message-sign-smime)
+(setq password-cache t)            ; default is true, so no need to set this actually
+(setq password-cache-expiry 28800) ; default is 16 seconds, which is ridiculously low
 (require 'smtpmail)
 
-(add-hook 'message-mode-hook 'orgstruct++-mode 'append)
+;;(add-hook 'message-mode-hook 'orgstruct++-mode 'append)
 (add-hook 'message-mode-hook 'turn-on-auto-fill 'append)
+

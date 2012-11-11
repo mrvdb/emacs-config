@@ -5,7 +5,7 @@
 (global-unset-key (kbd "<mouse-3>"))
 
 ;
-; Let marks be set when shift arrowing, everybode does this
+; Let marks be set when shift arrowing, everybody does this
 ;
 (setq shift-select-mode t)
 (delete-selection-mode 1)
@@ -40,14 +40,35 @@
 ;; For t510 keyboard (the same place)
 (global-set-key [(super \`)] 'toggle-truncate-lines)
 
+;; Most of the time I want return to be newline and indent
+;; Every mode can augment this at will obviously (org-mode does, for example)
+(global-set-key (kbd "RET") 'newline-and-indent)
+
+
 ; Moving back and forth in frames, disregarding frames
 (define-key global-map [(super \\)] 'next-multiframe-window)
 (define-key global-map [(super \|)] 'previous-multiframe-window)
+
+;; Alt-Cmd left-right arrows browse through buffers within the same frame
 (global-set-key (kbd "M-s-<left>") 'previous-buffer)
 (global-set-key (kbd "M-s-<right>") 'next-buffer)
+
+;; Ctrl Cmd moves buffers up and down in the tiling of emacs
+(global-set-key (kbd "<C-s-up>")     'buf-move-up)
+(global-set-key (kbd "<C-s-down>")   'buf-move-down)
+;; These would conflict with awesome bindings
+;; (global-set-key (kbd "<C-S-left>")   'buf-move-left)
+;; (global-set-key (kbd "<C-S-right>")  'buf-move-right)
+
+(global-set-key (kbd "M-s-<left>") 'previous-buffer)
+(global-set-key (kbd "M-s-<right>") 'next-buffer)
+
 (define-key global-map [?\s-~] 'ns-prev-frame)
+;; FIME: does not work anymore
 (global-set-key [(control tab)] 'switch-to-other-buffer)
-(global-set-key [(super k)] 'kill-this-buffer)
+
+(global-set-key [(super k)] 'ido-kill-buffer)
+
 
 ;; Resizing windows
 ;; Introduce a bit of intelligence so the shrink and enlarge know what window I'm in.
@@ -138,10 +159,20 @@
 ;; This custome kill buffer is close-current-buffer.
 (global-set-key [(super n)] 'new-empty-buffer)
 
-; Commands are a plenty, smex is a one
+;; Bit of experimenting with keys chords to minimize thumb bending.
+(require 'key-chord)
+(key-chord-mode 1)    ;; Turn it on
+
+(key-chord-define-global "df" 'smex)        ; Pressing d and f together does the exectute extended command, smex style
+(key-chord-define-global "()"     "()\C-b") ; Brackets go together when pressed together
+
+;; Rebind M-x.
+(global-set-key (kbd "C-c C-c M-x") 'execute-extended-command)
+
+;; Commands are a plenty, smex is a one
 (global-set-key (kbd "M-x") 'smex)
 (global-set-key (kbd "M-X") 'smex-major-mode-commands)
-; This is your old M-x.
-(global-set-key (kbd "C-c C-c M-x") 'execute-extended-command)
+
+
 
 (provide 'bindings)
