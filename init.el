@@ -4,7 +4,12 @@
 ;; FIXME: is .emacs.d not on the load path already, how else did we get here?
 (add-to-list 'load-path "~/.emacs.d")
 
-;; I am moving my configuration to an org-babel based system
+;; I am moving my configuration to an org-babel based system.
+;; For this we need:
+;; 1. the org version loaded which I want to use, which is trunk, not the included one
+;; 2. have some notion of load paths
+;; 3. delegate initialization control to an org file (which gets automatically tangled into an el file on load)
+
 (org-babel-load-file "mrb.org")
 		     
 ;; Define where customization should be stored
