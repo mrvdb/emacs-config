@@ -44,6 +44,9 @@
 ;; Every mode can augment this at will obviously (org-mode does, for example)
 (global-set-key (kbd "RET") 'newline-and-indent)
 
+(global-set-key [(super /)] 'comment-or-uncomment-region)
+(global-set-key [(super l)] 'goto-line)
+(global-set-key [(super s)] 'save-buffer)
 
 ; Moving back and forth in frames, disregarding frames
 (define-key global-map [(super \\)] 'next-multiframe-window)
@@ -135,12 +138,6 @@
 ; to type the latter by accident sometimes.)
 (define-key global-map [(control x) return] nil)
 
-;
-; Key bindings I am used to somehow
-;
-(global-set-key [(super /)] 'comment-or-uncomment-region)
-(global-set-key [(super l)] 'goto-line)
-(global-set-key [(super s)] 'save-buffer)
 
 (defun new-empty-buffer ()
   "Opens a new empty buffer."

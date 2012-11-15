@@ -111,6 +111,19 @@ I've found none applicable yet.
 (wrap-region-global-mode 1)
 ;; (add-to-list 'wrap-region-except-modes 'conflicting-mode)
 #+END_SRC
+** Key bindings
+*** Global
+I am running the emacs daemon and when I quit it, I want it to quit
+too. This sounds a bit counterintuitive, but as long as my emacs
+config is moving and I am not proficient enough in making sure I can
+apply the changed settings reliably from within emacsm, restarting
+emacs is just easier. This saves me from having to kill the emacs
+daemon from the terminal.
+#+BEGIN_SRC emacs-lisp
+(global-set-key [(control x) (control c)] 'save-buffers-kill-emacs)
+#+END_SRC
+
+
 ** Messaging and chatting
 *** ERC
 ERC is an irc implementation within emacs.

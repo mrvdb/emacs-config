@@ -26,25 +26,8 @@
 (setq browse-url-browser-function (quote browse-url-generic))
 (setq browse-url-generic-program "chromium-browser")
 
-;;; Expand region global key, move to bindings later
-;;; packge should have been loaded by elpa
-(require 'expand-region)
-
-;; Multiple cursors sounds interesting
-(require 'multiple-cursors)
-
 ;; I want to manage my own templates
 (require 'xlicense)
 (setq license-directory "~/.emacs.d/licenses")
 (add-to-list 'license-types '(agpl . "AGPL"))
-
-;; Wrap region mode to simplify quoting etc.
-;; For now, enable globally, use exceptions when we find problems
-(add-to-list 'load-path "~/dev/emacs/packages/wrap-region")
-
-;; Wrap region allows to delimit a region with quotes, comment chars
-;; or whatever is configured.
-(require 'wrap-region)
-(wrap-region-global-mode 1)
-;; (add-to-list 'wrap-region-except-modes 'conflicting-mode)
 
