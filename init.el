@@ -15,7 +15,7 @@
 ;; This is all there should be in this file, the rest is handled in org-mode.
 
 
-;; Everything below here must be mirgrated to mrb.org!!!!
+;; Everything below here must be migrated to mrb.org!!!!
 
 ;; Make sure erase works properly
 ;; (not sure I completely understand the rationale behind this)
@@ -33,9 +33,6 @@
 (ido-mode t)
 (setq ido-enable-flex-matching t) ;; enable fuzzy matching
 (ido-everywhere)
-
-
-
 
 ;; Enable highlight parentheses for all buffers
 ;; FIXME: this needs one more color than actually used. The last one does not get highlighted!
@@ -57,7 +54,7 @@
 (setq smart-tab-completion-functions-alist
       (quote (
 	      (emacs-lisp-mode . lisp-complete-symbol)
-	      (text-mode . dabbrev-completion)
+	      (text-mode . dabbrev-completion)n
 	      (erc-mode . pcomplete)))
       smart-tab-disabled-major-modes
       (quote (org-mode org-agenda-mode term-mode)))

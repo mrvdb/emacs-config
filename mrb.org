@@ -13,6 +13,33 @@ so add this to my loadpaths firs.t
 #+BEGIN_SRC emacs-lisp
 (add-to-list 'load-path "~/.emacs.d/")
 #+END_SRC
+** Visual 
+Many settings have to do with how the screen looks and behaves in a
+visual way. Thing like colors, highlighting etc. go fall into this
+category.
+
+I enable hightlighting matching parentheses in many levels
+globally. I do not know of a situation where not knowing which
+bracket or parenthesis goes with which is not a useful thing.
+
+Define the colors for the parentheses at different levels. One catch
+here is that the configuration needs one more color than is actually
+used. The last entry here does not get highlighted, so my config is
+valid for 5 levels, not 6.
+#+BEGIN_SRC emacs-lisp
+(setq hl-paren-colors (quote ("firebrick" "lightgreen" "orange" "cyan" "yellow" "blue")))
+#+END_SRC
+
+And enable the minor mode globally.
+#+BEGIN_SRC emacs-lisp
+(define-globalized-minor-mode global-highlight-parentheses-mode
+  highlight-parentheses-mode
+  (lambda ()
+    (highlight-parentheses-mode t)))
+(global-highlight-parentheses-mode t)
+#+END_SRC
+
+
 ** Messaging and chatting
 *** ERC
 ERC is an irc implementation within emacs.
