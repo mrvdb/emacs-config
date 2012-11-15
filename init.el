@@ -13,7 +13,7 @@
 ;; Load in the main org file which starts up configuration This will
 ;; lead to an mrb.el file automatically, so that can't exist in the
 ;; current directory for this to work.
-;;(org-babel-load-file "mrb.org")
+(org-babel-load-file "mrb.org")
 
 ;;
 ;; When we are completely migrated, this should be the end of the
@@ -25,8 +25,8 @@
 ;; anything done in custom.el can be overridden in explicit files
 ;; so we want to load our custom file first  and then the
 ;; crafted ones.
-(setq custom-file (concat "~/.emacs.d/mrb/custom.el"))
-(load custom-file)
+;; (setq custom-file (concat "~/.emacs.d/mrb/custom.el"))
+;; (load custom-file)
 
 ;; Load all my configuration files
 (load "mrb/packages")              ; Package handling, do this first, so we know how to load things
