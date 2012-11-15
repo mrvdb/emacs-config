@@ -4,10 +4,6 @@
 ;; I want to have as little in here as possible. The configuration is
 ;; org-babel based. This means the bootstrap here is to load a proper
 ;; (part of) org-mode and be on our way.
-
-;; To be able to use an org-babel based configuration, org-mode, or at
-;; least a part of it must be loaded. I use the trunk version, so I
-;; will need to make this happen first
 (add-to-list 'load-path "~/dev/emacs/packages/org-mode/lisp/")
 
 ;; Load in the main org file which starts up configuration This will
@@ -18,6 +14,8 @@
 ;; END init.el
 ;; This is all there should be in this file, the rest is handled in org-mode.
 
+
+;; Everything below here must be mirgrated to mrb.org!!!!
 
 ;; Make sure erase works properly
 ;; (not sure I completely understand the rationale behind this)
@@ -36,20 +34,6 @@
 (setq ido-enable-flex-matching t) ;; enable fuzzy matching
 (ido-everywhere)
 
-;; erc
-;; Probably move this to a file of its own once it gets longer
-;; TODO: prevent the continuous asking for username
-(require 'erc-services)
-(and
-     (require 'erc-highlight-nicknames)
-     (add-to-list 'erc-modules 'highlight-nicknames)
-     (erc-update-modules))
-(setq
-  erc-prompt-for-nickserv-password nil
-  erc-hide-list '("JOIN" "PART" "QUIT")
-  erc-nick '("Marcel|HSD" "Marcel||HSD")
-  erc-nickserv-passwords '((freenode (("Marcel|HSD" . "PASSWORDHERE"))))
-)
 
 
 

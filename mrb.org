@@ -1,0 +1,70 @@
+#+TITLE: Emacs configuration
+* Emacs configuration
+This is my emacs configuration file that is loaded with
+=org-babel-load-file= in the Emacs init file. The intent is to have as
+much of my Emacs configuration in here as possible. The system works
+as a literal programming system where with a tangle the elisp code
+that actually makes up my configuration is extracted automatically
+and loaded.
+
+** Generic provisions
+The base of the emacs configuration is in the =~/.emacs.d/= directory,
+so add this to my loadpaths firs.t
+#+BEGIN_SRC emacs-lisp
+(add-to-list 'load-path "~/.emacs.d/")
+#+END_SRC
+** Messaging and chatting
+*** ERC
+ERC is an irc implementation within emacs.
+#+BEGIN_SRC emacs-lisp
+(require 'erc-services)
+(and
+     (require 'erc-highlight-nicknames)
+     (add-to-list 'erc-modules 'highlight-nicknames)
+     (erc-update-modules))
+(setq
+  erc-prompt-for-nickserv-password nil
+  erc-hide-list '("JOIN" "PART" "QUIT")
+  erc-nick '("Marcel|HSD" "Marcel||HSD")
+  erc-nickserv-passwords '((freenode (("Marcel|HSD" . "PASSWORDHERE"))))
+)
+#+END_SRC
+
+** Customization file
+The first thing I want to take care of is to make customizations
+possible and stored in a place to my liking. I want to load this
+first so anything in the configuration I define explicitly overrides
+it. 
+#+BEGIN_SRC emacs-lisp
+(setq custom-file "~/.emacs.d/mrb/custom.el")
+(load custom-file)
+#+END_SRC
+** Packages
+Most of the Emacs configuration is stil configured using a set of
+elisp files in subdirectories. I envision these becoming sections in
+this configuration document, but for now I just load them
+#+BEGIN_SRC emacs-lisp
+;; Load all my configuration files
+(load "mrb/packages")              ; Package handling, do this first, so we know how to load things
+(load "mrb/global")                ; Generic settings
+(load "mrb/terminal")              ; character/encoding/commandline and emulation handling.
+(load "mrb/visual")                ; Make things look the way I want them 
+(load "mrb/bindings")              ; Keyboard control
+(load "mrb/buffers")               ; Buffer configuration
+(load "mrb/modes")                 ; Setting about modes in general, not specific to one mode 
+(load "mrb/org-mode")              ; Orgmode configuration
+(load "mrb/statusnet")             ; Statusnet configuration
+(load "mrb/google-map")            ; Google map integration for Emacs
+(load "mrb/xmpp")                  ; XMPP configuration
+(load "mrb/mail")                  ; Mail confguration
+(load "mrb/openscad")              ; OpenSCAD mode
+(load "mrb/ldap")                  ; LDAP integration
+(load "mrb/eshell")                ; Eshell configuration
+#+END_SRC
+* Self configuration
+I have the same config file for orgmode itself
+#+SETUPFILE: ~/.outlet/etc/org-config.org
+  
+If there is anything that needs to be configured specifically for this
+file, here is the place to do it. Other than those, nothing else
+should come below this point
