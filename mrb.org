@@ -113,7 +113,7 @@ LDAP integration, mostly for address book lookups
 #+BEGIN_SRC emacs-lisp
 (load "mrb/ldap")                  ; LDAP integration
 #+END_SRC
-*** E-Shell
+*** E-She-ll
 A terminal in Emacs, I would like to migrate to it for all terminal
 based activities, but it’s not there yet.
 #+BEGIN_SRC emacs-lisp
