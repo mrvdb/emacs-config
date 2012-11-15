@@ -21,29 +21,6 @@
 ;; based configuration above.
 
 
-;; Define where customization should be stored
-;; anything done in custom.el can be overridden in explicit files
-;; so we want to load our custom file first  and then the
-;; crafted ones.
-;; (setq custom-file (concat "~/.emacs.d/mrb/custom.el"))
-;; (load custom-file)
-
-;; Load all my configuration files
-(load "mrb/packages")              ; Package handling, do this first, so we know how to load things
-(load "mrb/global")                ; Generic settings
-(load "mrb/terminal")              ; character/encoding/commandline and emulation handling.
-(load "mrb/visual")                ; Make things look the way I want them 
-(load "mrb/bindings")              ; Keyboard control
-(load "mrb/buffers")               ; Buffer configuration
-(load "mrb/modes")                 ; Setting about modes in general, not specific to one mode 
-(load "mrb/org-mode")              ; Orgmode configuration
-(load "mrb/statusnet")             ; Statusnet configuration
-(load "mrb/google-map")            ; Google map integration for Emacs
-(load "mrb/xmpp")                  ; XMPP configuration
-(load "mrb/mail")                  ; Mail confguration
-(load "mrb/openscad")              ; OpenSCAD mode
-(load "mrb/ldap")                  ; LDAP integration
-(load "mrb/eshell")                ; Eshell configuration
 
 ;; Make sure erase works properly
 ;; (not sure I completely understand the rationale behind this)
