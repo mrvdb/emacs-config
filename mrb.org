@@ -128,6 +128,7 @@ etc.
   (keyfreq-mode 1)
   (keyfreq-autosave-mode 1)
 #+end_src
+
 * Self configuration
 I have the same config file for orgmode itself
 #+SETUPFILE: ~/.outlet/etc/org-config.org
