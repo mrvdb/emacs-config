@@ -124,11 +124,9 @@ emacs and how often I do that. This is usefull, or may be, for
 decisions with respect to keyboard choices, bindings configuration
 etc.
 #+begin_src emacs-lisp
-  (use-package keyfreq
-    :init
-    (progn
-      (keyfreq-mode 1)
-      (keyfreq-autosave-mode 1)))
+  (require 'keyfreq)
+  (keyfreq-mode 1)
+  (keyfreq-autosave-mode 1)
 #+end_src
 * Self configuration
 I have the same config file for orgmode itself
