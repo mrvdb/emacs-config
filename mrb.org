@@ -101,6 +101,16 @@ at all.
 (global-smart-tab-mode 1)
 #+END_SRC
 
+By selecting a piece of text, wrap-region can quote or otherwise
+delimit that region automatically. I enable this globally. There is
+an option to configure in exception, which I have commented out as
+I've found none applicable yet.
+#+BEGIN_SRC emacs-lisp
+(add-to-list 'load-path "~/dev/emacs/packages/wrap-region")
+(require 'wrap-region)
+(wrap-region-global-mode 1)
+;; (add-to-list 'wrap-region-except-modes 'conflicting-mode)
+#+END_SRC
 ** Messaging and chatting
 *** ERC
 ERC is an irc implementation within emacs.
