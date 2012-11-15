@@ -19,13 +19,6 @@
 ;; (not sure I completely understand the rationale behind this)
 (if window-system  (normal-erase-is-backspace-mode t))
 
-;; Tramp
-(setq tramp-default-method "ssh")
-
-;; Default browswer 
-(setq browse-url-browser-function (quote browse-url-generic))
-(setq browse-url-generic-program "chromium-browser")
-
 ;; I want to manage my own templates
 (require 'xlicense)
 (setq license-directory "~/.emacs.d/licenses")

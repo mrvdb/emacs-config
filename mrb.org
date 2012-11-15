@@ -172,6 +172,13 @@ Multiple cursors sounds interesting
 (require 'multiple-cursors)
 #+END_SRC
 
+License templates
+#+BEGIN_SRC emacs-lisp
+(require 'xlicense)
+(setq license-directory "~/.emacs.d/licenses")
+(add-to-list 'license-types '(agpl . "AGPL"))
+#+END_SRC
+
 * Self configuration
 I have the same config file for orgmode itself
 #+SETUPFILE: ~/.outlet/etc/org-config.org
