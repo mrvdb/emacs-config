@@ -1,4 +1,4 @@
-#+TITLE: Emacs c
+#+TITLE: Emacs configuration
 #+DESCRIPTION: An org-babel bases emacs configuration
 #+LANGUAGE:  en
 * Emacs configuration
@@ -37,27 +37,75 @@ a way to have them forcibly compiled.
 #+RESULTS:
 : mrb/compile-config
 
-** Packages
+** Subfiles
 Most of the Emacs configuration is stil configured using a set of
 elisp files in subdirectories. I envision these becoming sections in
-this configuration document, but for now I just load them
+this configuration document, but for now I just load them inline
+
+*** Packages
+Package handling, do this early so emacs knows where to find things.
 #+BEGIN_SRC emacs-lisp
-;; Load all my configuration files
-(load "mrb/packages")              ; Package handling, do this first, so we know how to load things
+(load "mrb/packages")
+#+END_SRC
+*** Global
+#+BEGIN_SRC emacs-lisp
 (load "mrb/global")                ; Generic settings
-(load "mrb/terminal")              ; character/encoding/commandline and emulation handling.
-(load "mrb/visual")                ; Make things look the way I want them 
+#+END_SRC
+*** Terminal
+#+BEGIN_SRC emacs-lisp
+(load "mrb/terminal")              ; character/encoding/commandline
+and emulation
+#+END_SRC handling.
+*** Visual
+#+BEGIN_SRC emacs-lisp
+(load "mrb/visual")                ; Make things look the way I want
+them 
+#+END_SRC
+*** Binding
+#+BEGIN_SRC emacs-lisp
 (load "mrb/bindings")              ; Keyboard control
+#+END_SRC
+*** Buffers
+#+BEGIN_SRC emacs-lisp
 (load "mrb/buffers")               ; Buffer configuration
-(load "mrb/modes")                 ; Setting about modes in general, not specific to one mode 
+#+END_SRC
+*** Modes
+#+BEGIN_SRC emacs-lisp
+(load "mrb/modes")                 ; Setting about modes in general,
+not specific
+#+END_SRC to one mode 
+*** Org-mode
+#+BEGIN_SRC emacs-lisp
 (load "mrb/org-mode")              ; Orgmode configuration
+#+END_SRC
+*** Statusnet
+#+BEGIN_SRC emacs-lisp
 (load "mrb/statusnet")             ; Statusnet configuration
+#+END_SRC
+*** Google-map
+#+BEGIN_SRC emacs-lisp
 (load "mrb/google-map")            ; Google map integration for Emacs
+#+END_SRC
+*** XMPP
+#+BEGIN_SRC emacs-lisp
 (load "mrb/xmpp")                  ; XMPP configuration
+#+END_SRC
+*** Mail
+#+BEGIN_SRC emacs-lisp
 (load "mrb/mail")                  ; Mail confguration
+#+END_SRC
+*** OpenSCAD
+#+BEGIN_SRC emacs-lisp
 (load "mrb/openscad")              ; OpenSCAD mode
+#+END_SRC
+*** LDAP
+#+BEGIN_SRC emacs-lisp
 (load "mrb/ldap")                  ; LDAP integration
+#+END_SRC
+*** E-Shell
+#+BEGIN_SRC emacs-lisp
 (load "mrb/eshell")                ; Eshell configuration
+#+END_SRC
 #+END_SRC
 ** Visual 
 Many settings have to do with how the screen looks and behaves in a
