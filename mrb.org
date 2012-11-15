@@ -124,6 +124,11 @@ daemon from the terminal.
 (global-set-key [(control x) (control q)] 'save-buffers-kill-emacs)
 #+END_SRC
 
+** Remote editing
+#+BEGIN_SRC emacs-lisp
+(setq tramp-default-method "ssh")
+#+END_SRC
+
 ** Browser integration
 My default browser, as set in the OS, is chromium. Yet, emacs needs
 an explicit mention, otherwise it will start firefox. Not sure why
