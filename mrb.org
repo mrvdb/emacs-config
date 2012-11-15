@@ -7,13 +7,13 @@ as a literal programming system where with a tangle the elisp code
 that actually makes up my configuration is extracted automatically
 and loaded.
 
+** Preparing for lift-off
 The base of the emacs configuration is in the =~/.emacs.d/= directory,
 so add this to my loadpaths firs.t
 #+BEGIN_SRC emacs-lisp
 (add-to-list 'load-path "~/.emacs.d/")
 #+END_SRC
 
-** Customization file
 The first thing I want to take care of is to make customizations
 possible and stored in a place to my liking. I want to load this
 first so anything in the configuration I define explicitly overrides

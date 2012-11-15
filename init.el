@@ -13,7 +13,6 @@
 
 ;; END init.el
 ;; This is all there should be in this file, the rest is handled in org-mode.
-;; Everything below here must be migrated to mrb.org!!!!
 
 
 
