@@ -1,33 +1,20 @@
 ;;
 ;; Emacs initialisation starting point
 ;;
-;; FIXME: is .emacs.d not on the load path already, how else did we get here?
 (add-to-list 'load-path "~/.emacs.d")
 
-;; I am moving my configuration to an org-babel based system.
-;; For this we need:
-;; 1. the org version loaded which I want to use, which is trunk, not the included one
-;; 2. have some notion of load paths
-;; 3. delegate initialization control to an org file (which gets automatically tangled into an el file on load)
-
-;; To be able to use an org-babel based configuration, org must be
-;; loaded. I use the trunk version, so I will need to make this happen
-;; first
+;; To be able to use an org-babel based configuration, org-mode, or at
+;; least a part of it must be loaded. I use the trunk version, so I
+;; will need to make this happen first
 (add-to-list 'load-path "~/dev/emacs/packages/org-mode/lisp/")
-
-;; (add-to-list 'load-path "~/dev/emacs/packages/org-mode/contrib/lisp/")
-;; (add-to-list 'load-path "~/dev/emacs/packages/org-mode/contrib/babel/langs/")
 
 ;; Load in the main org file which starts up configuration This will
 ;; lead to an mrb.el file automatically, so that can't exist in the
-;; current directory for this to work. This prefers
+;; current directory for this to work. 
 (org-babel-load-file "~/.emacs.d/mrb.org")
 
-;;
-;; When we are completely migrated, this should be the end of the
-;; init.el file and everything else should be loaded from the org
-;; based configuration above.
-
+;; END init.el
+;; This is all there should be in this file, the rest is handled in org-mode.
 
 
 ;; Make sure erase works properly
