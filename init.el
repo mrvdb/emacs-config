@@ -15,8 +15,5 @@
 ;; This is all there should be in this file, the rest is handled in org-mode.
 ;; Everything below here must be migrated to mrb.org!!!!
 
-;; Make sure erase works properly
-;; (not sure I completely understand the rationale behind this)
-(if window-system  (normal-erase-is-backspace-mode t))
 
 
