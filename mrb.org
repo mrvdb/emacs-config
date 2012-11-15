@@ -39,6 +39,32 @@ And enable the minor mode globally.
 (global-highlight-parentheses-mode t)
 #+END_SRC
 
+** Editting control
+I like to do thing interactively where I can:
+#+BEGIN_SRC emacs-lisp
+(require 'ido)
+(ido-mode t)
+(setq ido-enable-flex-matching t) ;; enable fuzzy matching
+(ido-everywhere)
+#+END_SRC
+
+Be smart with tabs and try to have the tab key do the sensible thing
+#+BEGIN_SRC emacs-lisp
+;; Do smart tabbing, this does mostly the right thing everywhere
+(require 'smart-tab)
+;; Make sure it does the right thing in some modes, notably erc
+(setq smart-tab-completion-functions-alist
+      (quote (
+	      (emacs-lisp-mode . lisp-complete-symbol)
+	      (text-mode . dabbrev-completion)n
+	      (erc-mode . pcomplete)))
+      smart-tab-disabled-major-modes
+      (quote (org-mode org-agenda-mode term-mode)))
+
+;; Enable everywhere
+(global-smart-tab-mode 1)
+#+END_SRC
+
 ** Messaging and chatting
 *** ERC
 ERC is an irc implementation within emacs.
