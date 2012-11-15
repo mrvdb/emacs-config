@@ -179,6 +179,11 @@ License templates
 (add-to-list 'license-types '(agpl . "AGPL"))
 #+END_SRC
 
+Make sure erase works properly, even though I don't understand this,
+apparently this is what I need.
+#+BEGIN_SRC emacs-lisp
+(if window-system  (normal-erase-is-backspace-mode t))
+#+END_SRC
 * Self configuration
 I have the same config file for orgmode itself
 #+SETUPFILE: ~/.outlet/etc/org-config.org

@@ -19,8 +19,4 @@
 ;; (not sure I completely understand the rationale behind this)
 (if window-system  (normal-erase-is-backspace-mode t))
 
-;; I want to manage my own templates
-(require 'xlicense)
-(setq license-directory "~/.emacs.d/licenses")
-(add-to-list 'license-types '(agpl . "AGPL"))
 
