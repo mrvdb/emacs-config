@@ -1,7 +1,9 @@
 ;;
 ;; Emacs initialisation starting point
 ;;
-(add-to-list 'load-path "~/.emacs.d")
+;; I want to have as little in here as possible. The configuration is
+;; org-babel based. This means the bootstrap here is to load a proper
+;; (part of) org-mode and be on our way.
 
 ;; To be able to use an org-babel based configuration, org-mode, or at
 ;; least a part of it must be loaded. I use the trunk version, so I
