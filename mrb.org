@@ -1,4 +1,5 @@
 #+TITLE: Emacs configuration
+#+LANGUAGE: en
 * Emacs configuration
 This is my emacs configuration file that is loaded with
 =org-babel-load-file= in the Emacs init file. The intent is to have as
