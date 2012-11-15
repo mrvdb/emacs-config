@@ -63,11 +63,11 @@ valid for 5 levels, not 6.
 
 And enable the minor mode globally.
 #+BEGIN_SRC emacs-lisp
-;;(define-globalized-minor-mode global-highlight-parentheses-mode
-;  highlight-parentheses-mode
-;  (lambda ()
-;    (highlight-parentheses-mode t)))
-;(global-highlight-parentheses-mode t)
+(define-globalized-minor-mode global-highlight-parentheses-mode
+  highlight-parentheses-mode
+  (lambda ()
+    (highlight-parentheses-mode t)))
+(global-highlight-parentheses-mode t)
 #+END_SRC
 
 ** Editing control
