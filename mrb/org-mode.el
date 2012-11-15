@@ -4,7 +4,7 @@
 
 ;; Directly tie into the GIT repository on this machine
 ;;(add-to-list 'load-path "~/dev/emacs/packages/org-mode/")
-(add-to-list 'load-path "~/dev/emacs/packages/org-mode/lisp/")
+;;(add-to-list 'load-path "~/dev/emacs/packages/org-mode/lisp/")
 (add-to-list 'load-path "~/dev/emacs/packages/org-mode/contrib/lisp/")
 (add-to-list 'load-path "~/dev/emacs/packages/org-mode/contrib/babel/langs/")
 

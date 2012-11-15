@@ -10,10 +10,18 @@
 ;; 2. have some notion of load paths
 ;; 3. delegate initialization control to an org file (which gets automatically tangled into an el file on load)
 
+;; To be able to use an org-babel based configuration, org must be
+;; loaded. I use the trunk version, so I will need to make this happen
+;; first
+(add-to-list 'load-path "~/dev/emacs/packages/org-mode/lisp/")
+
+;; (add-to-list 'load-path "~/dev/emacs/packages/org-mode/contrib/lisp/")
+;; (add-to-list 'load-path "~/dev/emacs/packages/org-mode/contrib/babel/langs/")
+
 ;; Load in the main org file which starts up configuration This will
 ;; lead to an mrb.el file automatically, so that can't exist in the
-;; current directory for this to work.
-(org-babel-load-file "mrb.org")
+;; current directory for this to work. This prefers
+(org-babel-load-file "~/.emacs.d/mrb.org")
 
 ;;
 ;; When we are completely migrated, this should be the end of the
