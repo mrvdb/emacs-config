@@ -7,11 +7,42 @@ as a literal programming system where with a tangle the elisp code
 that actually makes up my configuration is extracted automatically
 and loaded.
 
-** Generic provisions
 The base of the emacs configuration is in the =~/.emacs.d/= directory,
 so add this to my loadpaths firs.t
 #+BEGIN_SRC emacs-lisp
 (add-to-list 'load-path "~/.emacs.d/")
+#+END_SRC
+
+** Customization file
+The first thing I want to take care of is to make customizations
+possible and stored in a place to my liking. I want to load this
+first so anything in the configuration I define explicitly overrides
+it. 
+#+BEGIN_SRC emacs-lisp
+(setq custom-file "~/.emacs.d/mrb/custom.el")
+(load custom-file)
+#+END_SRC
+** Packages
+Most of the Emacs configuration is stil configured using a set of
+elisp files in subdirectories. I envision these becoming sections in
+this configuration document, but for now I just load them
+#+BEGIN_SRC emacs-lisp
+;; Load all my configuration files
+(load "mrb/packages")              ; Package handling, do this first, so we know how to load things
+(load "mrb/global")                ; Generic settings
+(load "mrb/terminal")              ; character/encoding/commandline and emulation handling.
+(load "mrb/visual")                ; Make things look the way I want them 
+(load "mrb/bindings")              ; Keyboard control
+(load "mrb/buffers")               ; Buffer configuration
+(load "mrb/modes")                 ; Setting about modes in general, not specific to one mode 
+(load "mrb/org-mode")              ; Orgmode configuration
+(load "mrb/statusnet")             ; Statusnet configuration
+(load "mrb/google-map")            ; Google map integration for Emacs
+(load "mrb/xmpp")                  ; XMPP configuration
+(load "mrb/mail")                  ; Mail confguration
+(load "mrb/openscad")              ; OpenSCAD mode
+(load "mrb/ldap")                  ; LDAP integration
+(load "mrb/eshell")                ; Eshell configuration
 #+END_SRC
 ** Visual 
 Many settings have to do with how the screen looks and behaves in a
@@ -32,11 +63,11 @@ valid for 5 levels, not 6.
 
 And enable the minor mode globally.
 #+BEGIN_SRC emacs-lisp
-(define-globalized-minor-mode global-highlight-parentheses-mode
-  highlight-parentheses-mode
-  (lambda ()
-    (highlight-parentheses-mode t)))
-(global-highlight-parentheses-mode t)
+;;(define-globalized-minor-mode global-highlight-parentheses-mode
+;  highlight-parentheses-mode
+;  (lambda ()
+;    (highlight-parentheses-mode t)))
+;(global-highlight-parentheses-mode t)
 #+END_SRC
 
 ** Editing control
@@ -85,38 +116,6 @@ ERC is an irc implementation within emacs.
   erc-nick '("Marcel|HSD" "Marcel||HSD")
   erc-nickserv-passwords '((freenode (("Marcel|HSD" . "PASSWORDHERE"))))
 )
-#+END_SRC
-
-** Customization file
-The first thing I want to take care of is to make customizations
-possible and stored in a place to my liking. I want to load this
-first so anything in the configuration I define explicitly overrides
-it. 
-#+BEGIN_SRC emacs-lisp
-(setq custom-file "~/.emacs.d/mrb/custom.el")
-(load custom-file)
-#+END_SRC
-** Packages
-Most of the Emacs configuration is stil configured using a set of
-elisp files in subdirectories. I envision these becoming sections in
-this configuration document, but for now I just load them
-#+BEGIN_SRC emacs-lisp
-;; Load all my configuration files
-(load "mrb/packages")              ; Package handling, do this first, so we know how to load things
-(load "mrb/global")                ; Generic settings
-(load "mrb/terminal")              ; character/encoding/commandline and emulation handling.
-(load "mrb/visual")                ; Make things look the way I want them 
-(load "mrb/bindings")              ; Keyboard control
-(load "mrb/buffers")               ; Buffer configuration
-(load "mrb/modes")                 ; Setting about modes in general, not specific to one mode 
-(load "mrb/org-mode")              ; Orgmode configuration
-(load "mrb/statusnet")             ; Statusnet configuration
-(load "mrb/google-map")            ; Google map integration for Emacs
-(load "mrb/xmpp")                  ; XMPP configuration
-(load "mrb/mail")                  ; Mail confguration
-(load "mrb/openscad")              ; OpenSCAD mode
-(load "mrb/ldap")                  ; LDAP integration
-(load "mrb/eshell")                ; Eshell configuration
 #+END_SRC
 ** Quantified Emacs!
 Taken from sacha’s configuration, this records which keys I press in

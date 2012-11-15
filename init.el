@@ -13,8 +13,6 @@
 
 ;; END init.el
 ;; This is all there should be in this file, the rest is handled in org-mode.
-
-
 ;; Everything below here must be migrated to mrb.org!!!!
 
 ;; Make sure erase works properly
@@ -27,7 +25,6 @@
 ;; Default browswer 
 (setq browse-url-browser-function (quote browse-url-generic))
 (setq browse-url-generic-program "chromium-browser")
-
 
 ;;; Expand region global key, move to bindings later
 ;;; packge should have been loaded by elpa
