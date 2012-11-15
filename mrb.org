@@ -48,7 +48,11 @@ I like to do thing interactively where I can:
 (ido-everywhere)
 #+END_SRC
 
-Be smart with tabs and try to have the tab key do the sensible thing
+Be smart with tabs and try to have the tab key do the sensible
+thing. The list contains things the tab key should do in certain
+modes if it does not already. The second part is the exclusion list
+where the sensible thing the =smart-tab= mode provides is not sensible
+at all.
 #+BEGIN_SRC emacs-lisp
 ;; Do smart tabbing, this does mostly the right thing everywhere
 (require 'smart-tab)

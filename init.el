@@ -28,30 +28,10 @@
 (setq browse-url-browser-function (quote browse-url-generic))
 (setq browse-url-generic-program "chromium-browser")
 
-;; Interactively do things
-(require 'ido)
-(ido-mode t)
-(setq ido-enable-flex-matching t) ;; enable fuzzy matching
-(ido-everywhere)
-
 
 ;;; Expand region global key, move to bindings later
 ;;; packge should have been loaded by elpa
 (require 'expand-region)
-
-;; Do smart tabbing, this does mostly the right thing everywhere
-(require 'smart-tab)
-;; Make sure it does the right thing in some modes, notably erc
-(setq smart-tab-completion-functions-alist
-      (quote (
-	      (emacs-lisp-mode . lisp-complete-symbol)
-	      (text-mode . dabbrev-completion)n
-	      (erc-mode . pcomplete)))
-      smart-tab-disabled-major-modes
-      (quote (org-mode org-agenda-mode term-mode)))
-
-;; Enable everywhere
-(global-smart-tab-mode 1)
 
 ;; Multiple cursors sounds interesting
 (require 'multiple-cursors)
