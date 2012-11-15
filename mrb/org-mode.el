@@ -164,7 +164,6 @@
 ;; Bind this to a reasonable key
 (define-key org-capture-mode-map "\C-c\C-t" 'mrb/add-tags-in-capture)
 
-
 ;; Activate Babel languages
 (require 'ob-gnuplot)
 (require 'ob-mathomatic)
@@ -779,6 +778,12 @@ This can be 0 for immediate, or a floating point value.")
 ;;(define-key org-agenda-mode-map [(control c) m] 'mrb/mail-subtree-from-org-agenda)
 ;; This does
 (define-key org-agenda-mode-map "\C-cm" 'mrb/mail-subtree-from-org-agenda)
+;;
+
+(require 'stripe-buffer)
+(defun mrb/enable-org-table-striping ()
+  (interactive)
+  (stripe-org-tables-enable))
 
 ;; TODO I want to have this in the agenda mode too
 (provide 'org-settings)

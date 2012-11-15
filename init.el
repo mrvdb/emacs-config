@@ -10,8 +10,17 @@
 ;; 2. have some notion of load paths
 ;; 3. delegate initialization control to an org file (which gets automatically tangled into an el file on load)
 
-(org-babel-load-file "mrb.org")
-		     
+;; Load in the main org file which starts up configuration This will
+;; lead to an mrb.el file automatically, so that can't exist in the
+;; current directory for this to work.
+;;(org-babel-load-file "mrb.org")
+
+;;
+;; When we are completely migrated, this should be the end of the
+;; init.el file and everything else should be loaded from the org
+;; based configuration above.
+
+
 ;; Define where customization should be stored
 ;; anything done in custom.el can be overridden in explicit files
 ;; so we want to load our custom file first  and then the
