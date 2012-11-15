@@ -197,7 +197,7 @@ apparently this is what I need.
 #+BEGIN_SRC emacs-lisp
 (if window-system  (normal-erase-is-backspace-mode t))
 #+END_SRC
-* Self configuration
+* Self configuration                                                                                 :exclude:
 I have the same config file for orgmode itself
 #+SETUPFILE: ~/.outlet/etc/org-config.org
   
