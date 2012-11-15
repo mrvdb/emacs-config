@@ -39,7 +39,7 @@ And enable the minor mode globally.
 (global-highlight-parentheses-mode t)
 #+END_SRC
 
-** Editting control
+** Editing control
 
 I like to do thing interactively where I can:
 #+BEGIN_SRC emacs-lisp
