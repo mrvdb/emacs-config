@@ -40,6 +40,7 @@ And enable the minor mode globally.
 #+END_SRC
 
 ** Editting control
+
 I like to do thing interactively where I can:
 #+BEGIN_SRC emacs-lisp
 (require 'ido)
@@ -117,6 +118,18 @@ this configuration document, but for now I just load them
 (load "mrb/ldap")                  ; LDAP integration
 (load "mrb/eshell")                ; Eshell configuration
 #+END_SRC
+** Quantified Emacs!
+Taken from sacha’s configuration, this records which keys I press in
+emacs and how often I do that. This is usefull, or may be, for
+decisions with respect to keyboard choices, bindings configuration
+etc.
+#+begin_src emacs-lisp
+  (use-package keyfreq
+    :init
+    (progn
+      (keyfreq-mode 1)
+      (keyfreq-autosave-mode 1)))
+#+end_src
 * Self configuration
 I have the same config file for orgmode itself
 #+SETUPFILE: ~/.outlet/etc/org-config.org
