@@ -48,63 +48,76 @@ Package handling, do this early so emacs knows where to find things.
 (load "mrb/packages")
 #+END_SRC
 *** Global
+Generic settings
 #+BEGIN_SRC emacs-lisp
-(load "mrb/global")                ; Generic settings
+(load "mrb/global")
 #+END_SRC
 *** Terminal
+Character encoding, commandline and emulation
 #+BEGIN_SRC emacs-lisp
-(load "mrb/terminal")              ; character/encoding/commandline
-and emulation
+(load "mrb/terminal")              
 #+END_SRC handling.
 *** Visual
+Make things look the way I want them
 #+BEGIN_SRC emacs-lisp
-(load "mrb/visual")                ; Make things look the way I want
-them 
+(load "mrb/visual") 
 #+END_SRC
 *** Binding
+Keyboard mappings
 #+BEGIN_SRC emacs-lisp
-(load "mrb/bindings")              ; Keyboard control
+(load "mrb/bindings")
 #+END_SRC
 *** Buffers
+How do I deal with all those buffers
 #+BEGIN_SRC emacs-lisp
-(load "mrb/buffers")               ; Buffer configuration
+(load "mrb/buffers")
 #+END_SRC
 *** Modes
+Settings about different modes in general. Not specific settings to
+one mode in particular.
 #+BEGIN_SRC emacs-lisp
-(load "mrb/modes")                 ; Setting about modes in general,
-not specific
-#+END_SRC to one mode 
+(load "mrb/modes")     
+#+END_SRC 
 *** Org-mode
+Orgmode configuraton
 #+BEGIN_SRC emacs-lisp
-(load "mrb/org-mode")              ; Orgmode configuration
+(load "mrb/org-mode")
 #+END_SRC
 *** Statusnet
+Statusnet, or perhaps microblog in general settings
 #+BEGIN_SRC emacs-lisp
 (load "mrb/statusnet")             ; Statusnet configuration
 #+END_SRC
 *** Google-map
+Google map integration for Emacs
 #+BEGIN_SRC emacs-lisp
-(load "mrb/google-map")            ; Google map integration for Emacs
+(load "mrb/google-map")
 #+END_SRC
 *** XMPP
+XMPP related settings, including interfacing it to other systems
 #+BEGIN_SRC emacs-lisp
-(load "mrb/xmpp")                  ; XMPP configuration
+(load "mrb/xmpp")
 #+END_SRC
 *** Mail
+Mail configuration. 
 #+BEGIN_SRC emacs-lisp
-(load "mrb/mail")                  ; Mail confguration
+(load "mrb/mail")
 #+END_SRC
 *** OpenSCAD
+OpenSCAP mode, it’s a mode that describes 3D-models
 #+BEGIN_SRC emacs-lisp
-(load "mrb/openscad")              ; OpenSCAD mode
+(load "mrb/openscad")
 #+END_SRC
 *** LDAP
+LDAP integration, mostly for address book lookups
 #+BEGIN_SRC emacs-lisp
 (load "mrb/ldap")                  ; LDAP integration
 #+END_SRC
 *** E-Shell
+A terminal in Emacs, I would like to migrate to it for all terminal
+based activities, but it’s not there yet.
 #+BEGIN_SRC emacs-lisp
-(load "mrb/eshell")                ; Eshell configuration
+(load "mrb/eshell")
 #+END_SRC
 #+END_SRC
 ** Visual 
