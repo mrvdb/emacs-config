@@ -119,10 +119,10 @@ config is moving and I am not proficient enough in making sure I can
 apply the changed settings reliably from within emacsm, restarting
 emacs is just easier. This saves me from having to kill the emacs
 daemon from the terminal.
-#+BEGIN_SRC emacs-lisp
-(global-set-key [(control x) (control c)] 'save-buffers-kill-emacs)
-#+END_SRC
 
+#+BEGIN_SRC emacs-lisp
+(global-set-key [(control x) (control q)] 'save-buffers-kill-emacs)
+#+END_SRC
 
 ** Messaging and chatting
 *** ERC
