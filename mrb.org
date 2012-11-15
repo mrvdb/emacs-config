@@ -22,6 +22,16 @@ it.
 (setq custom-file "~/.emacs.d/mrb/custom.el")
 (load custom-file)
 #+END_SRC
+
+Now that we have the locations of the configuration determined, I want
+a way to have them forcibly compiled. 
+#+BEGIN_SRC emacs-lisp
+defun mrb/compile-config ()
+  (interactive)
+  (byte
+)
+#+END_SRC
+
 ** Packages
 Most of the Emacs configuration is stil configured using a set of
 elisp files in subdirectories. I envision these becoming sections in
