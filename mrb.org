@@ -39,7 +39,6 @@ And enable the minor mode globally.
 (global-highlight-parentheses-mode t)
 #+END_SRC
 
-
 ** Messaging and chatting
 *** ERC
 ERC is an irc implementation within emacs.
