@@ -647,7 +647,7 @@ Orgmode configuraton
     ; If tags has the tag :waiting:, schedule this 
     ;(if includes tags "waiting")
     (message "Running my own hook")
-    (message tags)
+    ;(message tags)
     (org-schedule nil (org-timestring-to-seconds "+1w"))
   )
   ; Activate it
