@@ -44,7 +44,13 @@ this configuration document, but for now I just load them inline
 
 *** Packages
 Package handling, do this early so emacs knows where to find things.
+
+I want to manage my packages with el-get. This has grown over time,
+because el-get has worked well for me so far. I don’t think I have
+used the built-in package management of Emacs 24 much.
+
 #+BEGIN_SRC emacs-lisp
+(add-to-list 'load-path
 (load "mrb/packages")
 #+END_SRC
 *** Global
