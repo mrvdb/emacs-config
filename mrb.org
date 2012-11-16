@@ -1143,6 +1143,8 @@ XMPP related settings, including interfacing it to other systems
       (unless (minibuffer-prompt)
         (message "%s" msg))))
 #+END_SRC
+
+
 *** Mail
 Mail configuration. 
 #+BEGIN_SRC emacs-lisp
