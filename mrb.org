@@ -296,12 +296,7 @@ Character encoding, commandline and emulation
           ad-do-it
           (kill-buffer buffer))
       ad-do-it))
-  (ad-activate 'term-sentinel)
-  
-  
-  
-  (provide 'terminal)
-  
+  (ad-activate 'term-sentinel)  
 #+END_SRC handling.
 *** Visual
 Make things look the way I want them
