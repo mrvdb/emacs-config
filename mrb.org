@@ -1251,7 +1251,11 @@ LDAP integration, mostly for address book lookups
 A terminal in Emacs, I would like to migrate to it for all terminal
 based activities, but it’s not there yet.
 #+BEGIN_SRC emacs-lisp
-(load "mrb/eshell")
+  ;; Eshell configuration.
+  
+  (setq eshell-scroll-show-maximum-output t)
+  (setq eshell-scroll-to-bottom-on-output t)
+  
 #+END_SRC
 #+END_SRC
 ** Binding
