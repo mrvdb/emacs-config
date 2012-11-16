@@ -37,12 +37,7 @@ a way to have them forcibly compiled.
 #+RESULTS:
 : mrb/compile-config
 
-** Subfiles
-Most of the Emacs configuration is stil configured using a set of
-elisp files in subdirectories. I envision these becoming sections in
-this configuration document, but for now I just load them inline
-
-*** Packages
+** Packages
 Package handling, do this early so emacs knows where to find things.
 
 I want to manage my packages with el-get. This has grown over time,
@@ -55,6 +50,7 @@ The reason for this is that it provides one neat umbrella (in Emacs)
 to manage its packages.
 
 We manage everything with =el-get= so we start by loading that
+
 #+BEGIN_SRC emacs-lisp
   (add-to-list 'load-path "~/.emacs.d/el-get/el-get")
   
@@ -173,6 +169,11 @@ and run =el-get-install= with the package name.
   )
   (el-get)
 #+END_SRC
+** Subfiles
+Most of the Emacs configuration is stil configured using a set of
+elisp files in subdirectories. I envision these becoming sections in
+this configuration document, but for now I just load them inline
+
 *** Global
 Generic settings
 #+BEGIN_SRC emacs-lisp
