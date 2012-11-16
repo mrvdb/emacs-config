@@ -11,11 +11,13 @@ and loaded.
 
 ** Personal information
 Seems like a good idea to start configuratiion with some details
-about me.
+about me. Just name and email-address for now in public.
 #+BEGIN_SRC emacs-lisp
   (setq user-full-name "Marcel van der Boom")
   (setq user-mail-address "marcel@hsdev.com")  
 #+END_SRC
+
+
 
 ** Preparing for lift-off
 The base of the emacs configuration is in the =~/.emacs.d/= directory,
@@ -1147,15 +1149,6 @@ Mail configuration.
    ; User agent style is message mode (gnus, but independent of it)
     mail-user-agent 'message-user-agent
   
-   ; My properties
-    user-full-name "Marcel van der Boom"
-    ; I'd like to use mrb@hsdev.com, but s/mime certificate is bound to
-    ; marcel@hsdev.com although not all cleints are as picky as Mail.app
-    ; for example. Claws thought mail sent with From: set to
-    ; mrb@hsdev.com was OK.  
-    ; On the other hand, Claws was much more picky about                                  
-    user-mail-address "marcel@hsdev.com"
-  
     ; Sending it
     smtpmail-default-smtp-server "localhost"
     smtpmail-smtp-service 24
@@ -1178,9 +1171,7 @@ Mail configuration.
   (require 'smtpmail)
   
   ;;(add-hook 'message-mode-hook 'orgstruct++-mode 'append)
-  (add-hook 'message-mode-hook 'turn-on-auto-fill 'append)
-  
-  
+  (add-hook 'message-mode-hook 'turn-on-auto-fill 'append)  
 #+END_SRC
 ** OpenSCAD
 OpenSCAP mode, it’s a mode that describes 3D-models
