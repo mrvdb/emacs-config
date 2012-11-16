@@ -177,7 +177,21 @@ this configuration document, but for now I just load them inline
 *** Buffers
 How do I deal with all those buffers
 #+BEGIN_SRC emacs-lisp
-(load "mrb/buffers")
+  ;; nicer buffer names
+  (require 'uniquify)
+  (setq uniquify-buffer-name-style 'forward)
+  
+  ;; No scroll bar needed
+  (if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
+  
+  ;; Minibuffer prompt is a prompt, don't enter it as text.
+  (setq minibuffer-prompt-properties (quote (read-only t point-entered minibuffer-avoid-prompt face minibuffer-prompt)))
+  
+  ;; Save places in buffers between sessions
+  (setq-default save-place t)
+  (require 'saveplace)
+  
+  (provide 'buffers)
 #+END_SRC
 *** Modes
 Settings about different modes in general. Not specific settings to
@@ -220,7 +234,7 @@ LDAP integration, mostly for address book lookups
 #+BEGIN_SRC emacs-lisp
 (load "mrb/ldap")                  ; LDAP integration
 #+END_SRC
-*** E-She-ll
+*** E-Shell
 A terminal in Emacs, I would like to migrate to it for all terminal
 based activities, but it’s not there yet.
 #+BEGIN_SRC emacs-lisp
