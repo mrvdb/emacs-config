@@ -268,7 +268,8 @@ Orgmode configuraton
     ;; Do proper quotes which look nicer. English
     (require 'typopunct)
     (typopunct-change-language 'english)
-    (typopunct-mode 1)
+    ;; But do not enable by default
+    (typopunct-mode)
   )
   (add-hook 'org-mode-hook 'my-org-init)
   
