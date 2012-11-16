@@ -806,12 +806,10 @@ Orgmode configuraton
       (with-current-buffer buffer
         (goto-char (point-min))
         (prog1
-            (defvar ur1short)
-            (setq ur1short
-                  (if (search-forward-regexp "Your .* is: .*>\\(http://ur1.ca/[0-9A-Za-z].*\\)</a>" nil t)
-                      (match-string-no-properties 1)
-                    (error "URL shortening service failed: %s" longurl)))
-              (kill-buffer buffer)))))
+            (if (search-forward-regexp "Your .* is: .*>\\(http://ur1.ca/[0-9A-Za-z].*\\)</a>" nil t)
+                (match-string-no-properties 1)
+              (error "URL shortening service failed: %s" longurl))
+        (kill-buffer buffer)))))
   
   (defun mrb/shortenurl-replace-at-point ()
     "Replace the url at point with a tiny version."
