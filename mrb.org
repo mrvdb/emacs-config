@@ -30,6 +30,7 @@ a way to have them forcibly compiled.
 #+BEGIN_SRC emacs-lisp
   (defun mrb/compile-config ()
     (interactive)
+    (org-babel-load-file "~/.emacs.d/mrb.org)
     (byte-recompile-directory "~/.emacs.d" 0)
   )
 #+END_SRC
