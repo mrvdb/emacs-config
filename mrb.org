@@ -58,7 +58,7 @@ We manage everything with =el-get= so we start by loading that
 #+BEGIN_SRC emacs-lisp
   (add-to-list 'load-path "~/.emacs.d/el-get/el-get")
   
-  (unless  (require 'el-get nil t)
+  (unless  (require 'el-get nil 'noerror)
     (url-retrieve
      "https://github.com/dimitri/el-get.git/raw/master/el-get-install.el"
      (lambda (s)
