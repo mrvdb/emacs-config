@@ -8,5 +8,7 @@ abbrev_defs
 ac-comphist.dat
 mrb.pdf
 mrb.tex
+mrb.html
+mrb.el
 *.elc
 *.el~
