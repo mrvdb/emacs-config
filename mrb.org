@@ -9,6 +9,14 @@ as a literal programming system where with a tangle the elisp code
 that actually makes up my configuration is extracted automatically
 and loaded.
 
+** Personal information
+Seems like a good idea to start configuratiion with some details
+about me.
+#+BEGIN_SRC emacs-lisp
+  (setq user-full-name "Marcel van der Boom")
+  (setq user-mail-address "marcel@hsdev.com")  
+#+END_SRC
+
 ** Preparing for lift-off
 The base of the emacs configuration is in the =~/.emacs.d/= directory,
 so add this to my loadpaths firs.t
@@ -162,12 +170,7 @@ and run =el-get-install= with the package name.
   )
   (el-get)
 #+END_SRC
-** Subfiles
-Most of the Emacs configuration is stil configured using a set of
-elisp files in subdirectories. I envision these becoming sections in
-this configuration document, but for now I just load them inline
-
-*** Buffers
+** Buffers
 How do I deal with all those buffers
 #+BEGIN_SRC emacs-lisp
   ;; nicer buffer names
@@ -186,7 +189,7 @@ How do I deal with all those buffers
   
   (provide 'buffers)
 #+END_SRC
-*** Modes
+** Modes
 Settings about different modes in general. Not specific settings to
 one mode in particular.
 #+BEGIN_SRC emacs-lisp
@@ -230,7 +233,7 @@ one mode in particular.
   (provide 'modes)
   
 #+END_SRC 
-*** Org-mode
+** Org-mode
 Orgmode configuraton
 #+BEGIN_SRC emacs-lisp
   ;;
@@ -1025,7 +1028,7 @@ Orgmode configuraton
   
   
 #+END_SRC
-*** Statusnet
+** Statusnet
 Statusnet, or perhaps microblog in general settings
 #+BEGIN_SRC emacs-lisp
   ; Identica comes directly from its git repository
@@ -1087,7 +1090,7 @@ Statusnet, or perhaps microblog in general settings
   (provide 'statusnet)
   
 #+END_SRC
-*** Google-map
+** Google-map
 Google map integration for Emacs
 #+BEGIN_SRC emacs-lisp
   ; Directly tie into the GIT repository on this machine
@@ -1101,7 +1104,7 @@ Google map integration for Emacs
   (provide 'google-map-settings)
   
 #+END_SRC
-*** XMPP
+** XMPP
 XMPP related settings, including interfacing it to other systems
 #+BEGIN_SRC emacs-lisp
   ; Directly tie into the GIT repository on this machine if needed
@@ -1137,11 +1140,9 @@ XMPP related settings, including interfacing it to other systems
         (message "%s" msg))))
 #+END_SRC
 
-
-*** Mail
+** Mail
 Mail configuration. 
 #+BEGIN_SRC emacs-lisp
-  ;; Mail and News configuration
   (setq 
    ; User agent style is message mode (gnus, but independent of it)
     mail-user-agent 'message-user-agent
@@ -1181,7 +1182,7 @@ Mail configuration.
   
   
 #+END_SRC
-*** OpenSCAD
+** OpenSCAD
 OpenSCAP mode, it’s a mode that describes 3D-models
 #+BEGIN_SRC emacs-lisp
   ; OpenSCAD has git repository in my dev tree
@@ -1191,7 +1192,7 @@ OpenSCAP mode, it’s a mode that describes 3D-models
   (provide 'openscad)
   
 #+END_SRC
-*** LDAP
+** LDAP
 LDAP integration, mostly for address book lookups
 #+BEGIN_SRC emacs-lisp
   ; LDAP integration
@@ -1237,7 +1238,7 @@ LDAP integration, mostly for address book lookups
     '(define-key post-mode-map (kbd "TAB") 'enz-eudc-expand-inline))
   
 #+END_SRC
-*** E-Shell
+** E-Shell
 A terminal in Emacs, I would like to migrate to it for all terminal
 based activities, but it’s not there yet.
 #+BEGIN_SRC emacs-lisp
