@@ -117,11 +117,7 @@ and run =el-get-install= with the package name.
                  :type git
                  :url "https://github.com/djcb/sauron.git")
   
-          (:name calfw
-                 :type git
-                 :url "https://github.com/kiwanami/emacs-calfw.git")
-  
-          (:name expand-region 
+            (:name expand-region 
                  :type git 
                  :url "https://github.com/magnars/expand-region.el.git")
   
