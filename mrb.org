@@ -236,7 +236,72 @@ Generic settings
 *** Terminal
 Character encoding, commandline and emulation
 #+BEGIN_SRC emacs-lisp
-(load "mrb/terminal")              
+  ;; Full utf-8 support
+  (set-terminal-coding-system 'utf-8)
+  (set-keyboard-coding-system 'utf-8)
+  (prefer-coding-system 'utf-8)
+  (setq current-language-environment "UTF-8")
+  
+  (defun mrb/use-utf8 ()
+    (set-buffer-process-coding-system 'utf-8-unix 'utf-8-unix))
+  (add-hook 'term-exec-hook 'mrb/use-utf8)
+  
+  ;; Define terminal config, I prefer ansi-term
+  (require 'term)
+  (defun mrb/ansi-term (&optional new-buffer-name)
+    "Start a terminal-emulator in a new buffer."
+    (interactive) 
+  
+    (setq program "/bin/bash")
+  
+    ;; Pick the name of the new buffer.
+    (setq term-ansi-buffer-name
+          (if new-buffer-name
+              new-buffer-name
+            (if term-ansi-buffer-base-name
+                (if (eq term-ansi-buffer-base-name t)
+                    (file-name-nondirectory program)
+                  term-ansi-buffer-base-name)
+              "ansi-term")))
+  
+    (setq term-ansi-buffer-name (concat "*" term-ansi-buffer-name "*"))
+  
+    ;; In order to have more than one term active at a time
+    ;; I'd like to have the term names have the *term-ansi-term<?>* form,
+    ;; for now they have the *term-ansi-term*<?> form but we'll see...
+  
+    (setq term-ansi-buffer-name (generate-new-buffer-name term-ansi-buffer-name))
+    (setq term-ansi-buffer-name (term-ansi-make-term term-ansi-buffer-name program))
+  
+    (set-buffer term-ansi-buffer-name)
+    (term-mode)
+    (term-char-mode)
+  
+    ;; I wanna have find-file on C-x C-f -mm
+    ;; your mileage may definitely vary, maybe it's better to put this in your
+    ;; .emacs ...
+  
+    (term-set-escape-char ?\C-x)
+  
+    ;; Go there
+    (switch-to-buffer term-ansi-buffer-name))
+  
+  ; Aliases
+  (defalias 'at 'mrb/ansi-term)
+  
+  ;; When closing the ansi term window, close the useless buffer too
+  (defadvice term-sentinel (around mrb/advice-term-sentinel (proc msg))
+    (if (memq (process-status proc) '(signal exit))
+        (let ((buffer (process-buffer proc)))
+          ad-do-it
+          (kill-buffer buffer))
+      ad-do-it))
+  (ad-activate 'term-sentinel)
+  
+  
+  
+  (provide 'terminal)
+  
 #+END_SRC handling.
 *** Visual
 Make things look the way I want them
