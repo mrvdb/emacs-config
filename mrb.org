@@ -1194,7 +1194,12 @@ Mail configuration.
 *** OpenSCAD
 OpenSCAP mode, it’s a mode that describes 3D-models
 #+BEGIN_SRC emacs-lisp
-(load "mrb/openscad")
+  ; OpenSCAD has git repository in my dev tree
+  (add-to-list 'load-path "~/dev/reprapping/openscad/contrib")
+  (load "scad-mode")
+  
+  (provide 'openscad)
+  
 #+END_SRC
 *** LDAP
 LDAP integration, mostly for address book lookups
