@@ -62,7 +62,7 @@ We manage everything with =el-get= so we start by loading that
     (url-retrieve
      "https://github.com/dimitri/el-get.git/raw/master/el-get-install.el"
      (lambda (s)
-       (end-of-buffer)
+       (goto-char (point-max))
        (eval-print-last-sexp))))
 #+END_SRC
 
