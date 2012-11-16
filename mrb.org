@@ -9,16 +9,6 @@ as a literal programming system where with a tangle the elisp code
 that actually makes up my configuration is extracted automatically
 and loaded.
 
-** Personal information
-Seems like a good idea to start configuratiion with some details
-about me. Just name and email-address for now in public.
-#+BEGIN_SRC emacs-lisp
-  (setq user-full-name "Marcel van der Boom")
-  (setq user-mail-address "marcel@hsdev.com")  
-#+END_SRC
-
-
-
 ** Preparing for lift-off
 The base of the emacs configuration is in the =~/.emacs.d/= directory,
 so add this to my loadpaths firs.t
@@ -47,6 +37,14 @@ a way to have them forcibly compiled.
 
 #+RESULTS:
 : mrb/compile-config
+
+** Personal information
+Seems like a good idea to start configuratiion with some details
+about me. Just name and email-address for now in public.
+#+BEGIN_SRC emacs-lisp
+  (setq user-full-name "Marcel van der Boom")
+  (setq user-mail-address "marcel@hsdev.com")  
+#+END_SRC
 
 ** Packages
 Package handling, do this early so emacs knows where to find things.
@@ -1484,9 +1482,6 @@ Character encoding, commandline and emulation
 ** Global
 Generic settings
 #+BEGIN_SRC emacs-lisp
-  ;;
-  ;; Global settings
-  ;;
   ;; disable auto-save files (#foo#)
   (setq 
    auto-save-default nil
@@ -1516,8 +1511,7 @@ Generic settings
    kill-whole-line t
    truncate-lines t
   )
-  
-  
+    
   (global-visual-line-mode 1)
   
   ;; Only require to type 'y' or 'n' instead of 'yes' or 'no' when prompted
@@ -1530,7 +1524,6 @@ Generic settings
   
   ;; Turn on auto-fill minor mode for all text buffers
   (add-hook 'text-mode-hook 'turn-on-auto-fill)
-  
   
   ;; Should this be here?
   ;; Try to have urls and mailto links clickable everywhere
