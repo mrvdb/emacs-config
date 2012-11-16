@@ -21,7 +21,7 @@ possible and stored in a place to my liking. I want to load this
 first so anything in the configuration I define explicitly overrides
 it. 
 #+BEGIN_SRC emacs-lisp
-(setq custom-file "~/.emacs.d/mrb/custom.el")
+(setq custom-file "~/.emacs.d/custom.el")
 (load custom-file)
 #+END_SRC
 
