@@ -1111,9 +1111,6 @@ Google map integration for Emacs
 *** XMPP
 XMPP related settings, including interfacing it to other systems
 #+BEGIN_SRC emacs-lisp
-  ;
-  ; Jabber specific settings
-  ;
   ; Directly tie into the GIT repository on this machine if needed
   (add-to-list 'load-path "~/dev/emacs/packages/emacs-jabber/")
   (add-to-list 'load-path "~/dev/emacs/packages/emacs-jabber/compat/")
@@ -1145,8 +1142,6 @@ XMPP related settings, including interfacing it to other systems
     (lambda (msg)
       (unless (minibuffer-prompt)
         (message "%s" msg))))
-  
-  
 #+END_SRC
 *** Mail
 Mail configuration. 
