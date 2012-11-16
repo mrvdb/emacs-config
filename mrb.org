@@ -49,8 +49,129 @@ I want to manage my packages with el-get. This has grown over time,
 because el-get has worked well for me so far. I don’t think I have
 used the built-in package management of Emacs 24 much.
 
+The *important* bit here is that this section manages *ALL* my packages,
+including the ones gotten from apt-get, git and elpa.
+The reason for this is that it provides one neat umbrella (in Emacs)
+to manage its packages.
+
+We manage everything with =el-get= so we start by loading that
 #+BEGIN_SRC emacs-lisp
-(load "mrb/packages")
+  (add-to-list 'load-path "~/.emacs.d/el-get/el-get")
+  
+  (unless  (require 'el-get nil t)
+    (url-retrieve
+     "https://github.com/dimitri/el-get.git/raw/master/el-get-install.el"
+     (lambda (s)
+       (end-of-buffer)
+       (eval-print-last-sexp))))
+#+END_SRC
+
+Now, =el-get= is either require’d, and thus available, or loaded by the
+el-get installer, in which case it is also available.
+
+The rest is basically a long list of sources for el-get where to get
+the packages from and how to install and update them.
+When installing a new package, add a recipe in this list, eval it,
+and run =el-get-install= with the package name.
+
+#+BEGIN_SRC emacs-lisp
+  (setq el-get-sources
+        '(
+          ;; Obviously we need el-get itself, so we can run a self-update
+          ;; There is a recipe, but that is conservative, runs version 3.stable
+          (:name el-get
+                 :type git
+                 :url "git://github.com/dimitri/el-get.git"
+                 :features "el-get")
+          ;; Using a different source than the built-in recipe (why was this again?)
+          (:name zenburn-emacs
+                 :type git 
+                 :url "https://github.com/bbatsov/zenburn-emacs.git")
+          ;; Version from elpa does not work for me (init problem?)
+          smex
+          ace-jump-mode
+          apache-mode
+          (:name cursor-chg
+                 :type git
+                 :url  "https://github.com/emacsmirror/cursor-chg.git"
+                 :features cursor-chg)
+          gnuplot-mode
+          sudo-save
+          erc-highlight-nicknames
+          edit-server
+          magit
+          markdown-mode
+          (:name php-mode-improved)         ; Just to have example for other syntax
+          (:name newlua-mode
+                 :type git 
+                 :url "git://github.com/immerrr/lua-mode.git"
+                 :features lua-mode)
+          rainbow-delimiters
+          (:name typopunct
+                 :type git
+                 :url "https://github.com/emacsmirror/typopunct.git"
+                 :features typopunct)
+          (:name oauth
+                 :type git
+                 :url "https://github.com/psanford/emacs-oauth.git")
+          scratch
+          highlight-parentheses
+          (:name sauron
+                 :type git
+                 :url "https://github.com/djcb/sauron.git")
+  
+          (:name calfw
+                 :type git
+                 :url "https://github.com/kiwanami/emacs-calfw.git")
+  
+          (:name expand-region 
+                 :type git 
+                 :url "https://github.com/magnars/expand-region.el.git")
+  
+          (:name mark-multiple 
+                 :type git 
+                 :url "https://github.com/magnars/mark-multiple.el.git")
+  
+          (:name multiple-cursors 
+                 :type git 
+                 :url "https://github.com/magnars/multiple-cursors.el.git")
+  
+          (:name fixed-point-completion
+                 :type git
+                 :url "https://github.com/smithzvk/fixed-point-completion.git")
+  
+          (:name xlicense
+                 :type git
+                 :url "https://github.com/emacsmirror/xlicense.git")
+          (:name autosmiley
+                 :type git
+                 :url "https://github.com/emacsmirror/autosmiley.git")
+          (:name async
+                 :type git
+                 :url "https://github.com/jwiegley/emacs-async.git")
+          (:name pcache
+                 :type git 
+                 :url "https://github.com/sigma/pcache.git")
+          (:name logito
+                 :type git 
+                 :url "https://github.com/sigma/logito.git")
+          (:name gh
+                 :type git 
+                 :url "https://github.com/sigma/gh.el.git"
+                 :depends (pcache logito))
+          (:name gisthub
+                 :type git 
+                 :url  "https://github.com/defunkt/gist.el.git"
+                 :depends (gh))
+          (:name stripe-buffer
+                 :type git
+                 :url "https://github.com/sabof/stripe-buffer.git")
+          (:name keyfreq
+                 :type git
+                 :url "https://github.com/dacap/keyfreq.git")
+        )
+  )
+  (el-get)
 #+END_SRC
 *** Global
 Generic settings
