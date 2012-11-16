@@ -50,7 +50,6 @@ because el-get has worked well for me so far. I don’t think I have
 used the built-in package management of Emacs 24 much.
 
 #+BEGIN_SRC emacs-lisp
-(add-to-list 'load-path
 (load "mrb/packages")
 #+END_SRC
 *** Global
