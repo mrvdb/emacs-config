@@ -645,7 +645,7 @@ Orgmode configuraton
   (defun autoschedule-waiting()
     ; variable 'tags' contains the values of the tag-string
     ; If tags has the tag :waiting:, schedule this 
-    (if includes tags "waiting")
+    ;(if includes tags "waiting")
     (message "Running my own hook")
     (message tags)
     (org-schedule nil (org-timestring-to-seconds "+1w"))
