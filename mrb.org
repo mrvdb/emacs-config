@@ -62,6 +62,59 @@ it by accident some day
 (load-library "secrets.el.gpg")
 #+END_SRC
 
+** Global Generic settings
+#+BEGIN_SRC emacs-lisp
+  ;; disable auto-save files (#foo#)
+  (setq 
+   auto-save-default nil
+   
+   ; disable backup files (foo~)
+   backup-inhibited t
+   
+   ; disable auto-save-list/.saves
+   auto-save-list-file-prefix nil
+  
+   ; move files to the trash instead of rm
+   delete-by-moving-to-trash t
+   
+   ; use clipboard
+   x-select-enable-clipboard t
+  
+   display-warning-minimum-level 'error
+   large-file-warning-threshold nil
+   tab-width 4
+   find-file-use-truenames nil
+   find-file-compare-truenames t
+  
+   minibuffer-max-depth nil
+   minibuffer-confirm-incomplete t
+   complex-buffers-menu-p t
+   next-line-add-newlines nil
+   kill-whole-line t
+   truncate-lines t
+  )
+    
+  (global-visual-line-mode 1)
+  
+  ;; Only require to type 'y' or 'n' instead of 'yes' or 'no' when prompted
+  (fset 'yes-or-no-p 'y-or-n-p)
+  
+  ; Use auto revert mode globally 
+  ; This is save because emacs tracks if the file is saved in the editting buffer
+  ; and if so, it will not revert to the saved file.
+  (global-auto-revert-mode t)
+  
+  ;; Turn on auto-fill minor mode for all text buffers
+  (add-hook 'text-mode-hook 'turn-on-auto-fill)
+  
+  ;; Should this be here?
+  ;; Try to have urls and mailto links clickable everywhere
+  (define-global-minor-mode global-goto-address-mode
+    goto-address-mode
+    (lambda ()
+      (goto-address-mode 1)))
+  (global-goto-address-mode t)  
+#+END_SRC
 ** Packages
 Package handling, do this early so emacs knows where to find things.
 
@@ -1228,7 +1281,7 @@ based activities, but it’s not there yet.
 #+END_SRC
 #+END_SRC
 ** Binding
-Keyboard mappings
+Keyboard and mouse key bindings
 #+BEGIN_SRC emacs-lisp
   ; Unset some keys to let modes explicitly set them to their value (case in point: orgmode)
   ;
@@ -1403,6 +1456,19 @@ Keyboard mappings
   
   
 #+END_SRC
+*** Key bindings
+**** Global
+I am running the emacs daemon and when I quit it, I want it to quit
+too. This sounds a bit counterintuitive, but as long as my emacs
+config is moving and I am not proficient enough in making sure I can
+apply the changed settings reliably from within emacsm, restarting
+emacs is just easier. This saves me from having to kill the emacs
+daemon from the terminal.
+
+#+BEGIN_SRC emacs-lisp
+(global-set-key [(control x) (control q)] 'save-buffers-kill-emacs)
+#+END_SRC
+
 ** Terminal
 Character encoding, commandline and emulation
 #+BEGIN_SRC emacs-lisp
@@ -1468,60 +1534,6 @@ Character encoding, commandline and emulation
       ad-do-it))
   (ad-activate 'term-sentinel)  
 #+END_SRC handling.
-** Global
-Generic settings
-#+BEGIN_SRC emacs-lisp
-  ;; disable auto-save files (#foo#)
-  (setq 
-   auto-save-default nil
-   
-   ; disable backup files (foo~)
-   backup-inhibited t
-   
-   ; disable auto-save-list/.saves
-   auto-save-list-file-prefix nil
-  
-   ; move files to the trash instead of rm
-   delete-by-moving-to-trash t
-   
-   ; use clipboard
-   x-select-enable-clipboard t
-  
-   display-warning-minimum-level 'error
-   large-file-warning-threshold nil
-   tab-width 4
-   find-file-use-truenames nil
-   find-file-compare-truenames t
-  
-   minibuffer-max-depth nil
-   minibuffer-confirm-incomplete t
-   complex-buffers-menu-p t
-   next-line-add-newlines nil
-   kill-whole-line t
-   truncate-lines t
-  )
-    
-  (global-visual-line-mode 1)
-  
-  ;; Only require to type 'y' or 'n' instead of 'yes' or 'no' when prompted
-  (fset 'yes-or-no-p 'y-or-n-p)
-  
-  ; Use auto revert mode globally 
-  ; This is save because emacs tracks if the file is saved in the editting buffer
-  ; and if so, it will not revert to the saved file.
-  (global-auto-revert-mode t)
-  
-  ;; Turn on auto-fill minor mode for all text buffers
-  (add-hook 'text-mode-hook 'turn-on-auto-fill)
-  
-  ;; Should this be here?
-  ;; Try to have urls and mailto links clickable everywhere
-  (define-global-minor-mode global-goto-address-mode
-    goto-address-mode
-    (lambda ()
-      (goto-address-mode 1)))
-  (global-goto-address-mode t)  
-#+END_SRC
 ** Visual 
 Many settings have to do with how the screen looks and behaves in a
 visual way. Thing like colors, highlighting etc. go fall into this
@@ -1677,19 +1689,6 @@ I've found none applicable yet.
 (wrap-region-global-mode 1)
 ;; (add-to-list 'wrap-region-except-modes 'conflicting-mode)
 #+END_SRC
-** Key bindings
-*** Global
-I am running the emacs daemon and when I quit it, I want it to quit
-too. This sounds a bit counterintuitive, but as long as my emacs
-config is moving and I am not proficient enough in making sure I can
-apply the changed settings reliably from within emacsm, restarting
-emacs is just easier. This saves me from having to kill the emacs
-daemon from the terminal.
-
-#+BEGIN_SRC emacs-lisp
-(global-set-key [(control x) (control q)] 'save-buffers-kill-emacs)
-#+END_SRC
-
 ** Remote editing
 #+BEGIN_SRC emacs-lisp
 (setq tramp-default-method "ssh")
