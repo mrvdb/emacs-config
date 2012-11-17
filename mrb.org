@@ -1102,7 +1102,6 @@ XMPP related settings, including interfacing it to other systems
    jabber-show-offline-contacts nil
    jabber-default-priority 30
    ;; Get the password outa here
-   jabber-account-list (quote (("marcel@hsdev.com/Emacs" (:password . "PASSWORDHERE") (:connection-type . ssl))))
    jabber-alert-message-hooks (quote (jabber-message-libnotify jabber-message-echo jabber-message-scroll))
    jabber-message-alert-same-buffer nil
    jabber-roster-show-bindings nil
