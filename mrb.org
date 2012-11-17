@@ -11,7 +11,9 @@ and loaded.
 
 This file was created from many separate elisp files and has not been
 fully sanitized yet. Following the history of that may be interesting
-to some as well.
+to some as well. On top of that I have an auto commit hook on save
+running at the moment which does not produce the best hitory
+records. All that will change over time.
 
 ** Preparing for lift-off
 The base of the emacs configuration is in the =~/.emacs.d/= directory,
@@ -59,6 +61,7 @@ it by accident some day
 #+BEGIN_SRC emacs-lisp
 (load-library "secrets.el.gpg")
 #+END_SRC
+
 ** Packages
 Package handling, do this early so emacs knows where to find things.
 
