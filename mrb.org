@@ -46,6 +46,15 @@ about me. Just name and email-address for now in public.
   (setq user-mail-address "marcel@hsdev.com")  
 #+END_SRC
 
+I need a way to store some sensitive information without that being
+published, should I decide some day to push this config somewhere.
+
+One solution is to have all these in a separate file, and not publish
+that file. I’m also encrypting the file, as I’m sure I *will* publish
+it by accident some day
+#+BEGIN_SRC emacs-lisp
+(load-library 'secrets.el.gpg)
+#+END_SRC
 ** Packages
 Package handling, do this early so emacs knows where to find things.
 
@@ -259,12 +268,6 @@ Orgmode configuraton
   (defun my-org-init ()
     ;; Autofill is nice when writing larger pieces of text, which I do a lot in org
     (turn-on-auto-fill)
-  
-    ;; Do proper quotes which look nicer. English
-    (require 'typopunct)
-    (typopunct-change-language 'english)
-    ;; But do not enable by default
-    (typopunct-mode)
   )
   (add-hook 'org-mode-hook 'my-org-init)
   
