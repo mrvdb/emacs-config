@@ -1,5 +1,5 @@
 #+TITLE: Emacs configuration
-#+DESCRIPTION: An org-babel bases emacs configuration
+#+DESCRIPTION: An org-babel based emacs configuration
 #+LANGUAGE:  en
 * Emacs configuration
 This is my emacs configuration file that is loaded with
@@ -692,7 +692,7 @@ Orgmode configuraton
     ; list of modes and defining the hook definition in a more common place.
     (when (eq major-mode 'org-mode)
       (shell-command "git commit -a -m 'Auto commit.'")))
-  (add-hook 'after-save-hook 'git-commit)
+  ;;(add-hook 'after-save-hook 'git-commit)
   
   ;
   ; When a tag change adds the waiting tag, make sure it gets scheduled
