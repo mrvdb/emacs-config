@@ -1711,7 +1711,6 @@ ERC is an irc implementation within emacs.
   erc-prompt-for-nickserv-password nil
   erc-hide-list '("JOIN" "PART" "QUIT")
   erc-nick '("Marcel|HSD" "Marcel||HSD")
-  erc-nickserv-passwords '((freenode (("Marcel|HSD" . "PASSWORDHERE"))))
 )
 #+END_SRC
 ** Quantified Emacs!
