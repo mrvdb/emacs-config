@@ -858,20 +858,6 @@ Orgmode configuraton
   (add-to-list 'load-path "~/dev/emacs/packages/org-bom/")
   (require 'org-bom)
   
-  ;; (add-to-list 'load-path "~/dev/emacs/packages/org-toodledo")
-  ;; (require 'org-toodledo)
-  ;; (setq org-toodledo-userid "td4f031ad301856")
-  ;; (setq org-toodledo-password "PASSWORDHERE")
-  ;; ;; Useful key bindings for org-mode
-  ;; (add-hook 'org-mode-hook
-  ;;        (lambda ()
-  ;;          (local-unset-key "\C-o")
-  ;;          (local-set-key "\C-od" 'org-toodledo-mark-task-deleted)
-  ;;          (local-set-key "\C-os" 'org-toodledo-sync)
-  ;;          )
-  ;;        )
-  ;; (setq org-toodledo-debug 1)
-  
   ;; archive entries into a date-tree
   ;; (setq org-archive-location "%s_archive::date-tree")
   (defadvice org-archive-subtree
