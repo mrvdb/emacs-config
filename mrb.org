@@ -17,7 +17,7 @@ records. All that will change over time.
 
 ** Preparing for lift-off
 The base of the emacs configuration is in the =~/.emacs.d/= directory,
-so add this to my loadpaths firs.t
+so add this to my loadpaths first
 #+BEGIN_SRC emacs-lisp
 (add-to-list 'load-path "~/.emacs.d/")
 #+END_SRC
@@ -40,9 +40,6 @@ a way to have them forcibly compiled.
     (byte-recompile-directory "~/.emacs.d" 0)
   )
 #+END_SRC
-
-#+RESULTS:
-: mrb/compile-config
 
 ** Personal information
 Seems like a good idea to start configuratiion with some details
@@ -239,16 +236,132 @@ and run =el-get-install= with the package name.
   )
   (el-get)
 #+END_SRC
-** Buffers
-How do I deal with all those buffers
+** Visual 
+Many settings have to do with how the screen looks and behaves in a
+visual way. Thing like colors, highlighting etc. go fall into this
+category.
+
+I enable hightlighting matching parentheses in many levels
+globally. I do not know of a situation where not knowing which
+bracket or parenthesis goes with which is not a useful thing.
+
+Define the colors for the parentheses at different levels. One catch
+here is that the configuration needs one more color than is actually
+used. The last entry here does not get highlighted, so my config is
+valid for 5 levels, not 6.
+#+BEGIN_SRC emacs-lisp
+(setq hl-paren-colors (quote ("firebrick" "lightgreen" "orange" "cyan" "yellow" "blue")))
+#+END_SRC
+
+And enable the minor mode globally.
+#+BEGIN_SRC emacs-lisp
+  (define-globalized-minor-mode global-highlight-parentheses-mode
+    highlight-parentheses-mode
+    (lambda ()
+      (highlight-parentheses-mode t)))
+  (global-highlight-parentheses-mode t)
+  
+  ;; 
+  ;; Visual customizations, make it look the way I want to
+  ;;
+  ;; We use a dark background
+  (setq-default frame-background-mode 'dark)
+  
+  ;; no splash screen
+  (setq inhibit-startup-screen  t)
+  (setq inhibit-startup-message t)
+  (setq initial-scratch-message nil)
+  
+  ;; check speed consequences of this
+  (setq column-number-mode t)
+  
+  ; Zenburn theme with a slightly darker background, the default looks too misty for me
+  (defvar zenburn-bg "#303030")
+  (defvar zenburn-bg-1 "#303030")
+  (load-theme 'zenburn)
+  
+  ;;
+  ;; Zenburn corrections
+  ;;
+  ;; Adjust the faces for the modeline, mostly for powerline visibility
+  (set-face-attribute 'mode-line nil :foreground "white" :background "grey40" :box nil)
+  ;; This was the old color
+  ;; (set-face-attribute 'mode-line nil :foreground "#4c7073" :box nil)
+  (set-face-attribute 'mode-line-inactive nil :box nil)
+  ;; Zenburn underlines date face in org, no go
+  (set-face-attribute 'org-date nil :underline nil)
+  ;; The jabber status is tricky in combination with powerline
+  ;;(set-face-attribute 'jabber-roster-user-online nil :foreground "#f9f9f9" :bold t :background "#666666" :inverse-video nil)
+  ;; Sometimes the mode-line screws up, this resets it until I have
+  ;; found a better solution than a hard reset
+  (defun powerline()
+    (interactive)
+    (load-library "powerline")
+  )
+  
+  ;;
+  ;; When I am not typing, the cursor should become more visible, so I
+  ;; don't lose it.
+  (require 'cursor-chg)                   ; Load this library
+  (change-cursor-mode 0)                  ; On for overwrite/read-only/input mode
+  (toggle-cursor-type-when-idle 1)        ; On when idle
+  (setq curchg-default-cursor-color "LightGreen")
+  (setq curchg-default-cursor-type (quote bar\ \.\ 1))
+   
+  ;; Default frame properties frame position, color, etc
+  (setq default-frame-alist
+        '((cursor-type . (bar . 1))
+          (cursor-color . "LightGreen")
+          (height . 60)
+          (width . 100)
+  ))
+  
+  ;; Parenthesis matching
+  (show-paren-mode 1)
+  (setq show-paren-style (quote expression))
+  (setq show-paren-delay 0)
+  
+  ;; As we start emacs in daemon mode, certain (mostly visual) settings
+  ;; do not get applied. This is because starting the daemon does not
+  ;; open an X connection. This only happens when frames are being
+  ;; opened. By adding these settings to the 'server-visit-hook' we can
+  ;; still seemingly painless apply these settings.
+  (defun run-client-settings()
+    (interactive)  
+    ;; When making a selection, keep all font-locking too, but make it
+    ;; stand out from the matching background
+    (set-face-attribute 'region nil :inherit nil :background "gray31" :foreground nil)
+  
+    ;; Just change the background when matching the expression, leave
+    ;; other fontifying as is
+    (set-face-attribute 'show-paren-match nil :inherit nil :background "gray10" :foreground nil)
+  
+    (tool-bar-mode -1)   ;; No tool-bar
+    (scroll-bar-mode -1) ;; No scroll-bar
+    (menu-bar-mode -1)   ;; No menu-bar
+  )
+  ;; This seems to work if we start up emacs using filename on cli and
+  ;; server was not running yet. It does however not work if we just
+  ;; startup emacs (through my edit script) without a filename on the cli 
+  (add-hook 'server-visit-hook 'run-client-settings)
+  
+  ;; Make colorful balanced parentheses etc. in different modes
+  (add-hook 'lisp-mode 'rainbow-delimiters-mode)
+  
+#+END_SRC
+
+** Buffers and files
+How do I deal with all those buffers?
+
+For starters, make sure that they have unique buffer names so I don't
+get confused:
 #+BEGIN_SRC emacs-lisp
   ;; nicer buffer names
   (require 'uniquify)
   (setq uniquify-buffer-name-style 'forward)
-  
-  ;; No scroll bar needed
-  (if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
-  
+  #+END_SRC
+
+#+BEGIN_SRC emacs-lisp
   ;; Minibuffer prompt is a prompt, don't enter it as text.
   (setq minibuffer-prompt-properties (quote (read-only t point-entered minibuffer-avoid-prompt face minibuffer-prompt)))
   
@@ -298,8 +411,6 @@ one mode in particular.
   (add-hook 'ielm-mode-hook 'turn-on-eldoc-mode)
   (add-hook 'python-mode 'turn-on-eldoc-mode)
   
-  
-  (provide 'modes)
   
 #+END_SRC 
 ** Org-mode
@@ -710,7 +821,7 @@ Orgmode configuraton
   ;(add-hook 'org-after-tags-change-hook 'autoschedule-waiting)
   
   ;
-  ; Exporting and Publishing related settings.
+  ; Exporting and Publishing related settings
   ;
   
   ; Apart from the normal export menu, I need something that exports
@@ -1067,11 +1178,7 @@ Orgmode configuraton
   (defun mrb/enable-org-table-striping ()
     (interactive)
     (stripe-org-tables-enable))
-  
-  ;; TODO I want to have this in the agenda mode too
-  (provide 'org-settings)
-  
-  
+  ;; TODO I want to have this in the agenda mode to
 #+END_SRC
 ** Statusnet
 Statusnet, or perhaps microblog in general settings
@@ -1147,71 +1254,6 @@ Google map integration for Emacs
   
   (provide 'google-map-settings)
   
-#+END_SRC
-** XMPP
-XMPP related settings, including interfacing it to other systems
-#+BEGIN_SRC emacs-lisp
-  ; Directly tie into the GIT repository on this machine if needed
-  (add-to-list 'load-path "~/dev/emacs/packages/emacs-jabber/")
-  (add-to-list 'load-path "~/dev/emacs/packages/emacs-jabber/compat/")
-  ;;(require 'jabber-autoloads)
-  (require 'jabber)
-  
-  ; Configuration variables
-  (setq 
-   jabber-show-offline-contacts nil
-   jabber-default-priority 30
-   jabber-alert-message-hooks (quote (jabber-message-libnotify jabber-message-echo jabber-message-scroll))
-   jabber-message-alert-same-buffer nil
-   jabber-roster-show-bindings nil
-  )
-  
-  ;; Me wants the smileys too
-  ;; FIXME: I suspect this makes chats annoyingly slow to type in?
-  ;;(require 'autosmiley)
-  ;;(add-hook 'jabber-chat-mode-hook 'autosmiley-mode)
-  
-  ;; Show some info in the modeline
-  (jabber-mode-line-mode 1)
-  
-  ;; Do not steal my focus in the mini buffer
-  ;; Message alert hooks
-  (define-jabber-alert echo "Show a message in the echo area"
-    (lambda (msg)
-      (unless (minibuffer-prompt)
-        (message "%s" msg))))
-#+END_SRC
-
-** Mail
-Mail configuration. 
-#+BEGIN_SRC emacs-lisp
-  (setq 
-   ; User agent style is message mode (gnus, but independent of it)
-    mail-user-agent 'message-user-agent
-  
-    ; Sending it
-    smtpmail-default-smtp-server "localhost"
-    smtpmail-smtp-service 24
-    smtpmail-local-domain "hsdev.com"
-    smtpmail-sendto-domain "hsdev.com"
-    send-mail-function 'smtpmail-send-it                 ; This is for mail
-    message-send-mail-function 'message-smtpmail-send-it ; This is for gnus
-  
-    ; Always put one in the Sent folder on sending
-    message-default-mail-headers "Bcc: mrb+Sent@hsdev.com\n"
-    mail-yank-prefix ">> "
-  )
-  ;; Automatically sign outgoing messages, be part of the solution here,
-  ;; not the problem
-  ;; TODO: where can I toggle this on/off while composing?
-  ;;(setq smime-keys (quote (("marcel@hsdev.com" "~/keys/comodo-2012-06-12.pem" nil))))
-  ;;(add-hook 'message-send-hook 'mml-secure-message-sign-smime)
-  (setq password-cache t)            ; default is true, so no need to set this actually
-  (setq password-cache-expiry 28800) ; default is 16 seconds, which is ridiculously low
-  (require 'smtpmail)
-  
-  ;;(add-hook 'message-mode-hook 'orgstruct++-mode 'append)
-  (add-hook 'message-mode-hook 'turn-on-auto-fill 'append)  
 #+END_SRC
 ** OpenSCAD
 OpenSCAP mode, it’s a mode that describes 3D-models
@@ -1534,120 +1576,6 @@ Character encoding, commandline and emulation
       ad-do-it))
   (ad-activate 'term-sentinel)  
 #+END_SRC handling.
-** Visual 
-Many settings have to do with how the screen looks and behaves in a
-visual way. Thing like colors, highlighting etc. go fall into this
-category.
-
-I enable hightlighting matching parentheses in many levels
-globally. I do not know of a situation where not knowing which
-bracket or parenthesis goes with which is not a useful thing.
-
-Define the colors for the parentheses at different levels. One catch
-here is that the configuration needs one more color than is actually
-used. The last entry here does not get highlighted, so my config is
-valid for 5 levels, not 6.
-#+BEGIN_SRC emacs-lisp
-(setq hl-paren-colors (quote ("firebrick" "lightgreen" "orange" "cyan" "yellow" "blue")))
-#+END_SRC
-
-And enable the minor mode globally.
-#+BEGIN_SRC emacs-lisp
-  (define-globalized-minor-mode global-highlight-parentheses-mode
-    highlight-parentheses-mode
-    (lambda ()
-      (highlight-parentheses-mode t)))
-  (global-highlight-parentheses-mode t)
-  
-  ;; 
-  ;; Visual customizations, make it look the way I want to
-  ;;
-  ;; We use a dark background
-  (setq-default frame-background-mode 'dark)
-  
-  ;; no splash screen
-  (setq inhibit-startup-screen  t)
-  (setq inhibit-startup-message t)
-  (setq initial-scratch-message nil)
-  
-  ;; check speed consequences of this
-  (setq column-number-mode t)
-  
-  ; Zenburn theme with a slightly darker background, the default looks too misty for me
-  (defvar zenburn-bg "#303030")
-  (defvar zenburn-bg-1 "#303030")
-  (load-theme 'zenburn)
-  
-  ;;
-  ;; Zenburn corrections
-  ;;
-  ;; Adjust the faces for the modeline, mostly for powerline visibility
-  (set-face-attribute 'mode-line nil :foreground "white" :background "grey40" :box nil)
-  ;; This was the old color
-  ;; (set-face-attribute 'mode-line nil :foreground "#4c7073" :box nil)
-  (set-face-attribute 'mode-line-inactive nil :box nil)
-  ;; Zenburn underlines date face in org, no go
-  (set-face-attribute 'org-date nil :underline nil)
-  ;; The jabber status is tricky in combination with powerline
-  ;;(set-face-attribute 'jabber-roster-user-online nil :foreground "#f9f9f9" :bold t :background "#666666" :inverse-video nil)
-  ;; Sometimes the mode-line screws up, this resets it until I have
-  ;; found a better solution than a hard reset
-  (defun powerline()
-    (interactive)
-    (load-library "powerline")
-  )
-  
-  ;;
-  ;; When I am not typing, the cursor should become more visible, so I
-  ;; don't lose it.
-  (require 'cursor-chg)                   ; Load this library
-  (change-cursor-mode 0)                  ; On for overwrite/read-only/input mode
-  (toggle-cursor-type-when-idle 1)        ; On when idle
-  (setq curchg-default-cursor-color "LightGreen")
-  (setq curchg-default-cursor-type (quote bar\ \.\ 1))
-   
-  ;; Default frame properties frame position, color, etc
-  (setq default-frame-alist
-        '((cursor-type . (bar . 1))
-          (cursor-color . "LightGreen")
-          (height . 60)
-          (width . 100)
-  ))
-  
-  ;; Parenthesis matching
-  (show-paren-mode 1)
-  (setq show-paren-style (quote expression))
-  (setq show-paren-delay 0)
-  
-  ;; As we start emacs in daemon mode, certain (mostly visual) settings
-  ;; do not get applied. This is because starting the daemon does not
-  ;; open an X connection. This only happens when frames are being
-  ;; opened. By adding these settings to the 'server-visit-hook' we can
-  ;; still seemingly painless apply these settings.
-  (defun run-client-settings()
-    (interactive)  
-    ;; When making a selection, keep all font-locking too, but make it
-    ;; stand out from the matching background
-    (set-face-attribute 'region nil :inherit nil :background "gray31" :foreground nil)
-  
-    ;; Just change the background when matching the expression, leave
-    ;; other fontifying as is
-    (set-face-attribute 'show-paren-match nil :inherit nil :background "gray10" :foreground nil)
-  
-    (tool-bar-mode -1)   ;; No tool-bar
-    (scroll-bar-mode -1) ;; No scroll-bar
-    (menu-bar-mode -1)   ;; No menu-bar
-  )
-  ;; This seems to work if we start up emacs using filename on cli and
-  ;; server was not running yet. It does however not work if we just
-  ;; startup emacs (through my edit script) without a filename on the cli 
-  (add-hook 'server-visit-hook 'run-client-settings)
-  
-  ;; Make colorful balanced parentheses etc. in different modes
-  (add-hook 'lisp-mode 'rainbow-delimiters-mode)
-  
-#+END_SRC
-
 ** Editing control
 
 I like to do thing interactively where I can:
@@ -1717,6 +1645,71 @@ ERC is an irc implementation within emacs.
   erc-hide-list '("JOIN" "PART" "QUIT")
   erc-nick '("Marcel|HSD" "Marcel||HSD")
 )
+#+END_SRC
+*** XMPP
+XMPP related settings, including interfacing it to other systems
+#+BEGIN_SRC emacs-lisp
+  ; Directly tie into the GIT repository on this machine if needed
+  (add-to-list 'load-path "~/dev/emacs/packages/emacs-jabber/")
+  (add-to-list 'load-path "~/dev/emacs/packages/emacs-jabber/compat/")
+  ;;(require 'jabber-autoloads)
+  (require 'jabber)
+  
+  ; Configuration variables
+  (setq 
+   jabber-show-offline-contacts nil
+   jabber-default-priority 30
+   jabber-alert-message-hooks (quote (jabber-message-libnotify jabber-message-echo jabber-message-scroll))
+   jabber-message-alert-same-buffer nil
+   jabber-roster-show-bindings nil
+  )
+  
+  ;; Me wants the smileys too
+  ;; FIXME: I suspect this makes chats annoyingly slow to type in?
+  ;;(require 'autosmiley)
+  ;;(add-hook 'jabber-chat-mode-hook 'autosmiley-mode)
+  
+  ;; Show some info in the modeline
+  (jabber-mode-line-mode 1)
+  
+  ;; Do not steal my focus in the mini buffer
+  ;; Message alert hooks
+  (define-jabber-alert echo "Show a message in the echo area"
+    (lambda (msg)
+      (unless (minibuffer-prompt)
+        (message "%s" msg))))
+#+END_SRC
+
+*** Mail
+Mail configuration. 
+#+BEGIN_SRC emacs-lisp
+  (setq 
+   ; User agent style is message mode (gnus, but independent of it)
+    mail-user-agent 'message-user-agent
+  
+    ; Sending it
+    smtpmail-default-smtp-server "localhost"
+    smtpmail-smtp-service 24
+    smtpmail-local-domain "hsdev.com"
+    smtpmail-sendto-domain "hsdev.com"
+    send-mail-function 'smtpmail-send-it                 ; This is for mail
+    message-send-mail-function 'message-smtpmail-send-it ; This is for gnus
+  
+    ; Always put one in the Sent folder on sending
+    message-default-mail-headers "Bcc: mrb+Sent@hsdev.com\n"
+    mail-yank-prefix ">> "
+  )
+  ;; Automatically sign outgoing messages, be part of the solution here,
+  ;; not the problem
+  ;; TODO: where can I toggle this on/off while composing?
+  ;;(setq smime-keys (quote (("marcel@hsdev.com" "~/keys/comodo-2012-06-12.pem" nil))))
+  ;;(add-hook 'message-send-hook 'mml-secure-message-sign-smime)
+  (setq password-cache t)            ; default is true, so no need to set this actually
+  (setq password-cache-expiry 28800) ; default is 16 seconds, which is ridiculously low
+  (require 'smtpmail)
+  
+  ;;(add-hook 'message-mode-hook 'orgstruct++-mode 'append)
+  (add-hook 'message-mode-hook 'turn-on-auto-fill 'append)  
 #+END_SRC
 ** Quantified Emacs!
 Taken from sacha’s configuration, this records which keys I press in
