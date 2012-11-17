@@ -53,7 +53,7 @@ One solution is to have all these in a separate file, and not publish
 that file. I’m also encrypting the file, as I’m sure I *will* publish
 it by accident some day
 #+BEGIN_SRC emacs-lisp
-(load-library 'secrets.el.gpg)
+(load-library "secrets.el.gpg")
 #+END_SRC
 ** Packages
 Package handling, do this early so emacs knows where to find things.
