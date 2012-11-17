@@ -1026,7 +1026,6 @@ Statusnet, or perhaps microblog in general settings
    statusnet-authorize-url "http://o.mrblog.nl/api/oauth/authorize"
    statusnet-request-url "http://o.mrblog.nl/api/oauth/request_token"
    identica-username "mrb"
-   identica-password "PASSWORDHERE" ;; .authinfo does not work for me
    identica-display-success-messages nil
    identica-soft-wrap-status t
    identica-status-format "%i %s %r: %t"
