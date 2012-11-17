@@ -9,6 +9,10 @@ as a literal programming system where with a tangle the elisp code
 that actually makes up my configuration is extracted automatically
 and loaded.
 
+This file was created from many separate elisp files and has not been
+fully sanitized yet. Following the history of that may be interesting
+to some as well.
+
 ** Preparing for lift-off
 The base of the emacs configuration is in the =~/.emacs.d/= directory,
 so add this to my loadpaths firs.t
@@ -1101,7 +1105,6 @@ XMPP related settings, including interfacing it to other systems
   (setq 
    jabber-show-offline-contacts nil
    jabber-default-priority 30
-   ;; Get the password outa here
    jabber-alert-message-hooks (quote (jabber-message-libnotify jabber-message-echo jabber-message-scroll))
    jabber-message-alert-same-buffer nil
    jabber-roster-show-bindings nil
