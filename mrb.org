@@ -150,92 +150,47 @@ and run =el-get-install= with the package name.
         '(
           ;; Obviously we need el-get itself, so we can run a self-update
           ;; There is a recipe, but that is conservative, runs version 3.stable
-          (:name el-get
-                 :type git
-                 :url "git://github.com/dimitri/el-get.git"
-                 :features "el-get")
+          (:name el-get :type github :pkgname "dimitri/el-get" :features "el-get")
           ;; Using a different source than the built-in recipe (why was this again?)
-          (:name zenburn-emacs
-                 :type git 
-                 :url "https://github.com/bbatsov/zenburn-emacs.git")
+          (:name zenburn-emacs :type github :pkgname "bbatsov/zenburn-emacs")
           ;; Version from elpa does not work for me (init problem?)
           smex
           ace-jump-mode
           apache-mode
-          (:name cursor-chg
-                 :type git
-                 :url  "https://github.com/emacsmirror/cursor-chg.git"
-                 :features cursor-chg)
+          (:name cursor-chg :type github :pkgname  "emacsmirror/cursor-chg" :features cursor-chg)
           gnuplot-mode
           sudo-save
           erc-highlight-nicknames
           edit-server
           magit
           markdown-mode
-          (:name php-mode-improved)         ; Just to have example for other syntax
-          (:name newlua-mode
-                 :type git 
-                 :url "git://github.com/immerrr/lua-mode.git"
-                 :features lua-mode)
+          (:name php-mode-improved)    ; Just to have example for other syntax
+          (:name newlua-mode :type github :pkgname "immerrr/lua-mode" :features lua-mode)
           rainbow-delimiters
-          (:name typopunct
-                 :type git
-                 :url "https://github.com/emacsmirror/typopunct.git"
-                 :features typopunct)
-          (:name oauth
-                 :type git
-                 :url "https://github.com/psanford/emacs-oauth.git")
+          (:name typopunct :type github :pkgname "emacsmirror/typopunct" :features typopunct)
+          (:name oauth :type github :pkgname "psanford/emacs-oauth")
           scratch
           highlight-parentheses
-          (:name expand-region 
-                 :type git 
-                 :url "https://github.com/magnars/expand-region.el.git")
-          
-          (:name mark-multiple 
-                 :type git 
-                 :url "https://github.com/magnars/mark-multiple.el.git")
-  
-          (:name multiple-cursors 
-                 :type git 
-                 :url "https://github.com/magnars/multiple-cursors.el.git")
-  
-          (:name fixed-point-completion
-                 :type git
-                 :url "https://github.com/smithzvk/fixed-point-completion.git")
-  
-          (:name xlicense
-                 :type git
-                 :url "https://github.com/emacsmirror/xlicense.git")
-          (:name autosmiley
-                 :type git
-                 :url "https://github.com/emacsmirror/autosmiley.git")
-          (:name async
-                 :type git
-                 :url "https://github.com/jwiegley/emacs-async.git")
-          (:name pcache
-                 :type git 
-                 :url "https://github.com/sigma/pcache.git")
-          (:name logito
-                 :type git 
-                 :url "https://github.com/sigma/logito.git")
-          (:name gh
-                 :type git 
-                 :url "https://github.com/sigma/gh.el.git"
-                 :depends (pcache logito))
-          (:name gisthub
-                 :type git 
-                 :url  "https://github.com/defunkt/gist.el.git"
-                 :depends (gh))
-          (:name stripe-buffer
-                 :type git
-                 :url "https://github.com/sabof/stripe-buffer.git")
-          (:name keyfreq
-                 :type git
-                 :url "https://github.com/dacap/keyfreq.git")
+          (:name expand-region :type github :pkgname "magnars/expand-region.el")
+          (:name mark-multiple :type github :pkgname "magnars/mark-multiple.el")
+          (:name multiple-cursors :type github :pkgname "magnars/multiple-cursors")
+          (:name fixed-point-completion :type github :pkgname "smithzvk/fixed-point-completion")
+          (:name xlicense :type github :pkgname "emacsmirror/xlicense")
+          (:name autosmiley :type github :pkgname "emacsmirror/autosmiley")
+          (:name async :type github :pkgname "jwiegley/emacs-async")
+          (:name pcache :type github :pkgname "sigma/pcache")
+          (:name logito :type github :pkgname "sigma/logito")
+          (:name gh :type github :pkgname "sigma/gh.el" :depends (pcache logito))
+          (:name gisthub :type github :pkgname  "defunkt/gist.el" :depends (gh))
+          (:name stripe-buffer :type github :pkgname "sabof/stripe-buffer")
+          (:name keyfreq :type github :pkgname "dacap/keyfreq")
         )
   )
   (el-get)
 #+END_SRC
+
+#+RESULTS:
+
 ** Visual 
 Many settings have to do with how the screen looks and behaves in a
 visual way. Thing like colors, highlighting etc. go fall into this
@@ -476,6 +431,7 @@ Orgmode configuraton
    org-hide-emphasis-markers t
    ;; But show fancy entries
    org-pretty-entities 1
+   ;; But not the sub- and superscript, cos that is bloody annoying in filenames etc.
    org-pretty-entities-include-sub-superscripts nil
   
    ; Agenda settings
@@ -503,8 +459,6 @@ Orgmode configuraton
    org-agenda-skip-deadline-prewarning-if-scheduled t
    org-agenda-skip-scheduled-if-done t
    org-agenda-start-with-log-mode t
-   org-agenda-text-search-extra-files (quote (agenda-archives))
-   org-agenda-todo-ignore-scheduled (quote all)
    org-babel-interpreters (quote ("emacs-lisp" "python" "ditaa" "sql" "sh" "R"))
    org-blank-before-new-entry (quote ((heading) (plain-list-item)))
    org-export-htmlize-output-type (quote css)
@@ -943,9 +897,9 @@ Orgmode configuraton
   (setq org2blog/wp-blog-alist
         '(
           ("mrblog"
-           :url "http://mrblog.nl/xmlrpc.php"
-           :username "mrb"   
-           :track-posts ("blogs/blogs.org" "mrblog.nl")
+      :url "http://mrblog.nl/xmlrpc.php"
+      :username "mrb"   
+      :track-posts ("blogs/blogs.org" "mrblog.nl")
            )
           ("cobra"             
            :url "http://cobra.mrblog.nl/xmlrpc.php"
