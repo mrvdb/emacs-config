@@ -49,16 +49,21 @@ about me. Just name and email-address for now in public.
   (setq user-mail-address "marcel@hsdev.com")  
 #+END_SRC
 
+*** Encrypting information
 I need a way to store some sensitive information without that being
 published, should I decide some day to push this config somewhere.
 
 One solution is to have all these in a separate file, and not publish
 that file. I’m also encrypting the file, as I’m sure I *will* publish
-it by accident some day
+it by accident some day.
 #+BEGIN_SRC emacs-lisp
 (load-library "secrets.el.gpg")
 #+END_SRC
 
+Apart from this there is some inline content that is not suitable for
+storing in the secrets file. For org-mode for example, there is a way
+to encrypt sections separately. See [[Encrypting information in org-mode]]
+for the details on the settings for this.
 ** Global Generic settings
 #+BEGIN_SRC emacs-lisp
   ;; disable auto-save files (#foo#)
@@ -480,6 +485,10 @@ Orgmode configuraton
    org-src-fontify-natively t
   )
   
+  ;; Bit of a leftover from reorganising bits, do this later
+  (add-to-list 'org-tags-exclude-from-inheritance (quote "fix"))
+  (add-to-list 'org-tags-exclude-from-inheritance (quote "sell"))
+  
   ;;
   ;; Allow automatically handing of created/expired meta data.
   ;;
@@ -666,21 +675,6 @@ Orgmode configuraton
   (add-hook 'org-after-todo-state-change-hook 'save-containing-org-file)
   
   
-  ;;
-  ;; Encryption settings
-  ;;
-  (require 'org-crypt)
-  ;; Encrypt all entries before saving
-  (org-crypt-use-before-save-magic)
-  (setq org-crypt-key nil)
-  ;;
-  ;; Exclude some tags from trickling down to their children: 
-  ;;   - encrypt: why was this again?  
-  ;;   - area: the tag is only valid for the parent, within an area there are tasks and projects (do I still use this?)
-  ;;   - fix: the tag is typically used on the smallest units. If it is
-  ;;          used on the parent, that does not directly mean that the children
-  ;;          also are fixing tasks.
-  (setq org-tags-exclude-from-inheritance (quote ("area" "fix" "encrypt" "crypt" "sell")))
   
   ; When in agenda mode, show the line we're working on.
   (add-hook 'org-agenda-mode-hook '(lambda () (hl-line-mode 1)))
@@ -1134,6 +1128,40 @@ Orgmode configuraton
     (stripe-org-tables-enable))
   ;; TODO I want to have this in the agenda mode to
 #+END_SRC
+*** Encrypting information in org-mode
+I use the /encrypt/ tag for encrypting sections in org-mode (and
+sometimes my journal). The sections get encrypted and decrypted
+automatically on saving and opening. This uses the EasyPG library to
+get to my GPG key. 
+
+#+BEGIN_SRC emacs-lisp
+(require 'org-crypt)
+(org-crypt-use-before-save-magic)
+(setq org-crypt-tag-matcher "encrypt")
+(setq org-crypt-key "<marcel@hsdev.com>")
+#+END_SRC
+
+This is mostly used for storing things like backup keys for 2-step
+authenticationn services etc. This setting does not play very nice
+with =auto-save-default= having any other value than =nil=. This was
+already my setting, but it can't hurt to set it here too.
+
+#+BEGIN_SRC emacs-lisp
+(setq auto-save-default nil)
+
+#+END_SRC
+
+Furthermore, we do not want to inherit this tag automatically, as its
+behaviour is already subsection inclusive. When you encrypt a
+section, everything below it is considered content of that section
+and gets encrypted. I also add the value "crypt" as that is the org
+default, so it won't be inherited by mistake.
+
+#+BEGIN_SRC emacs-lisp
+(add-to-list 'org-tags-exclude-from-inheritance (quote "encrypt"))
+(add-to-list 'org-tags-exclude-from-inheritance (quote "crypt"))
+#+END_SRC
+
 ** Statusnet
 Statusnet, or perhaps microblog in general settings
 #+BEGIN_SRC emacs-lisp
