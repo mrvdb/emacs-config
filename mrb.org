@@ -178,7 +178,7 @@ and run =el-get-install= with the package name.
           highlight-parentheses
           (:name expand-region :type github :pkgname "magnars/expand-region.el")
           (:name mark-multiple :type github :pkgname "magnars/mark-multiple.el")
-          (:name multiple-cursors :type github :pkgname "magnars/multiple-cursors")
+          multiple-cursors
           (:name fixed-point-completion :type github :pkgname "smithzvk/fixed-point-completion")
           (:name xlicense :type github :pkgname "emacsmirror/xlicense")
           (:name autosmiley :type github :pkgname "emacsmirror/autosmiley")
