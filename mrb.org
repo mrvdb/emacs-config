@@ -189,12 +189,11 @@ and run =el-get-install= with the package name.
           (:name gisthub :type github :pkgname  "defunkt/gist.el" :depends (gh))
           (:name stripe-buffer :type github :pkgname "sabof/stripe-buffer")
           (:name keyfreq :type github :pkgname "dacap/keyfreq")
+          (:name git-auto-commit-mode :type github :pkgname "ryuslash/git-auto-commit-mode")
         )
   )
   (el-get)
 #+END_SRC
-
-#+RESULTS:
 
 ** Visual 
 Many settings have to do with how the screen looks and behaves in a
@@ -743,17 +742,6 @@ Orgmode configuraton
   
   
   ;
-  ; Keep an automatic history of saves with git 
-  ; 
-  ; FIXME: make adds/deletes work too?
-  (defun git-commit ()
-    ; This could be applied to other modes easily, so consider using a
-    ; list of modes and defining the hook definition in a more common place.
-    (when (eq major-mode 'org-mode)
-      (shell-command "git commit -a -m 'Auto commit.'")))
-  ;;(add-hook 'after-save-hook 'git-commit)
-  
-  ;
   ; When a tag change adds the waiting tag, make sure it gets scheduled
   ; 1 week from now if it is not already.
   ;
@@ -1162,6 +1150,20 @@ default, so it won't be inherited by mistake.
 (add-to-list 'org-tags-exclude-from-inheritance (quote "crypt"))
 #+END_SRC
 
+*** Commiting automatically
+I have lost a number of changes in the past because I reverted a
+file, made a mistake or whatever. Some of these mistakes can be
+reverted easily if saves are automatically committed 
+
+Rather than using an after save hook, there is a minor
+git-auto-commit mode package which does just what I need.
+
+There is not much to configure for the minor mode. There are a couple
+of ways to enable it:
+1. file-local variable (put it in the file to be autocommitted)
+2. directory-local variable (make a =.dir-locals.el= file); this
+   enables it for all files in the directory
+3. as a hook
 ** Statusnet
 Statusnet, or perhaps microblog in general settings
 #+BEGIN_SRC emacs-lisp
