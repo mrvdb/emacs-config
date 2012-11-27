@@ -1,0 +1,221 @@
+This file contains configuration items for my org-mode use. It is
+intended to be used by a =#+SETUPFILE:= directive in a normal org-file.
+
+The advantage of doing it this way, apart from the logical separation
+to make it easier to reuse, is that this configuration file is also
+just a normal orgmode file. That allows me to separate the
+configuration is different sections, publish the configuration in a
+variety of formats and generally describe the configuration in a clear
+way so I can remember what this was all about. This is not unlike
+literal programming. 
+
+* General configuration
+This section contains general settings. 
+
+#+STARTUP: overview
+#+STARTUP: indent
+#+STARTUP: hidestars
+
+Drawer definitions. We render drawers with a slightly smaller font, so
+it's important to define them, otherwise orgmode does not know they
+are supposed to be rendered differently.
+#+DRAWERS: PROPERTIES FEEDSTATUS LOGBOOK
+
+Standard category is things that fall withing GTD
+#+CATEGORY: Task
+* Tags
+Action tags make up the meat of task management. The reason we want
+these tags is that we want to produce a list of them, or filter with
+them. If that need does not exist for one of the tags below, remove
+them. The list requirement is valid in general for any tag btw.
+
+Things I do to physical objects:
+#+TAGS: { buy(b) sell(s) } build(u) fix(f) clean(n) 
+
+Administration like tags:
+#+TAGS: call(c) check(e) mail(m) read(r) write(w)  learn(l)
+
+Status like tags. The first is to make items fall from the radar
+completely by making them inactive (see the custom agenda commands
+which use this tag). The /fork/ tag is for projects I have started and
+need to finish before starting something new. The amount of forks is a
+good measure of how good I’m doing with organizing things. These tags
+are mutually exclusive.
+
+#+TAGS: { inactive(i) fork(k) }
+
+Product tags allow me to create lists which are related to one
+particular product. A product is defined vaguely; it is something we
+produce, sell, buy or use. The product shortcuts should all be
+capitals.
+#+TAGS: emacs(E) openobject(O) pcs(P) eSign(S) claws(C) 
+
+Other:
+- out : on the road, outside habitat, away from home etc.
+- paid: this is a task for which I get paid
+#+TAGS: out(o) paid(p)
+
+Specials, probably temporary in most cases
+#+TAGS: wintersport(W) idea(I)
+
+System tags, which define behaviour of orgmode itself. See also the
+=exclude= tag in the publishing and exporting section.
+
+Define a tag which gives orgmode the signal to encrypt the contents of
+a certain headline
+#+TAGS: encrypt(y)
+
+#+TAGS: security(t)
+
+* Workflow states
+The 'TODO' keyword signals something that I myself have to do. It is
+is either still TO-DO or it has been DONE. If I change my mind, it's
+CANCELLED. Other than the CANCELLED keyword, this is pretty much the
+default sequence. When cancelling I force myself to enter some reason
+for it.
+#+SEQ_TODO: TODO | DONE CANCELLED(@)
+
+Since buying stuff is abundant and warrants keeping track of,
+especially because I’m ordering lots of small things, I have defined a
+separate workflow for those type of activities. Initially I configure
+this as the same as doing a normal task, but I plan to introduce a
+couple of extra feature to this so it can be tracked when delivery
+will take place, add a tracking number to it in a smart way etc.
+
+#+SEQ_TODO: BUY WAITING | DONE CANCELLED(@)
+
+A second sequence of states is for tasks that have to be done by
+others, but still tracked. The initial state for these tasks is
+WAITING.
+I have defined a keybinding for (org-todo 'nextset) which switches the
+sequences for the entry involved.
+
+The 'WAITING' keyword signals a task that other people need to do and
+that I am waiting for them to complete them. Usually a property with
+the name 'Responsible' and the value of the person who needs to do the
+task is set. Tasks in the =WAITING= state are inactive for me, but I
+still want to produce a convenient list of those tasks so I can track
+progress on them. All this leads to the following state definitions:
+#+SEQ_TODO: WAITING TODO | DONE CANCELLED(@)
+
+
+When an item reaches a /DONE/ state, i.e. anything after the vertical
+bar, we can log this automatically, either by inserting a timestamp,
+or by requiring to log a note. We use the timestamp. 
+#+STARTUP: logdone
+
+Given a certain workflow with repeating tasks, tell the system to
+which state a repeating task must be reset if one of the instances has
+been completed. In our case just =TODO=
+#+REPEAT_TO_STATE: TODO
+
+* Publishing and exporting
+Getting the defaults right for publishing and exporting took some
+time, save them as defaults and code deviations in the sections to be
+published.
+
+#+TITLE:  Project notes
+#+AUTHOR: Marcel van der Boom
+#+EMAIL:  marcel@hsdev.com
+#+DESCRIPTION: description
+#+KEYWORDS: keyword
+#+LANGUAGE: nl
+#+OPTIONS:  h:5 toc:nil creator:t email:nil author:t timestamp:t tags:nil
+
+Define a tag which hides stuff from exported documents
+#+TAGS: exclude(x)
+
+and use it
+#+EXPORT_EXCLUDE_TAGS: exclude 
+ 
+** LateX specific configuration
+I have separated the latex (pdf exporting) from the rest because it is
+much more elaborate and took more time to get right.
+
+The default style of our exported documents will be based on the LaTeX
+article style.
+#+LaTeX_CLASS: article
+
+This option does not seem to work when not in the same file as
+exporting. I have added this in the customize interface directly now.
+#+LaTeX_CLASS_OPTIONS: [11pt,a4paper,twoside]
+
+Latex default configuration to produce a memo-style document.
+
+Our documents are mostly in dutch, so load that up by default, it's
+easy to override this on a subtree or file basis.
+#+LATEX_HEADER: \usepackage[dutch]{babel}
+
+I still like the sans family of computer modern
+#+LATEX_HEADER: \renewcommand{\familydefault}{\sfdefault}
+
+Use the geometry package to set our left and top margins, the width as
+last parameter defines the body text /rectangle/ 
+#+LATEX_HEADER: \usepackage[left=3cm,top=2cm,width=16cm]{geometry}
+
+Allow the landscape environment
+#+LATEX_HEADER: \usepackage{lscape}
+
+I want to have a '/page N of M/'-type footer, the lastpage package
+provides this functionality. One consequence of this is that the
+amount of TeX passes is minimally 2 to get all the references right.
+#+LATEX_HEADER: \usepackage{lastpage}
+
+Use the fancyhdr package to allow the customization of headers in an
+easy way. 
+#+LATEX_HEADER: \usepackage{fancyhdr}
+
+Both header and footer have a horizontal rule along the width of the
+entire text, thus clearlyt separating them from the content.
+#+LATEX_HEADER: \renewcommand{\headrulewidth}{0.4pt}
+#+LATEX_HEADER: \renewcommand{\footrulewidth}{0.4pt}
+
+Activate the fancy style, which is roughly a left, middle and right
+field for both header and footer. 
+#+LATEX_HEADER: \pagestyle{fancy}
+
+Clear the header and footer first, so we are sure they are empty.
+#+LATEX_HEADER: \fancyhead{}
+#+LATEX_HEADER: \fancyfoot{}
+
+Set the height of the header. The value was deduced by LaTeX itself
+and suggested in the command line run. The logo, see below, is
+probably the most limiting element for this.
+#+LATEX_HEADER: \setlength{\headheight}{53pt}
+
+First, make the @ character a letter, so we can use the @title,
+@author and @date variables.
+#+LATEX_HEADER: \makeatletter
+
+The header contains the title of the document on the left for odd
+pages and on the right for even pages.
+#+LATEX_HEADER: \fancyhead[LO,RE]{\Large{\bf{\@title}}}
+
+The logo is just displayed on odd pages, on the right.
+#+LATEX_HEADER: \fancyhead[RO]{\includegraphics[height=16mm]{//home/mrb/.outlet/images/hsd.pdf}}
+
+The footer contains page references N of M style and the author
+information. Here also, the position is alternating with odd and even pages.
+#+LATEX_HEADER: \fancyfoot[RO,LE]{\small{\bf{\thepage | \pageref{LastPage}}}}
+#+LATEX_HEADER: \fancyfoot[LO,RE]{\small{\bf{\@date{} | \@author}}}
+
+Reset the @ character back to what it was
+#+LATEX_HEADER: \makeatother
+
+Some spacing corrections to make things look a little bit better. No
+paragraph indenting as our paragraphs tend to be short. We allow a
+ragged page bottom (no vertical filling), so the spacing is more
+relaxing to look at. This is especially an issue when using
+screenshots or other larger pictures which interrupt the text flow aggressively.
+#+LATEX_HEADER: \parindent 0pt
+#+LATEX_HEADER: \raggedbottom
+* Links
+Autolinks which can be entered like [[keyword:parameter]] This is mostly
+here as an example, I don’t think I’ve ever used these in my org files
+#+LINK: wiki   http://en.wikipedia.org/wiki/Search?search=
+#+LINK: math   http://mathworld.wolfram.com/%s.html
+#+LINK: google http://www.google.com/search?q=
+#+LINK: gmap   http://maps.google.com/maps?q=%s
+#+LINK: omap   http://nominatim.openstreetmap.org/search?q=%s&polygon=1
+  
+

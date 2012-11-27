@@ -513,6 +513,41 @@ enter tags, so I define a shortcut to define tags while capturing.
 
 Capturing dents for status updates in statusnet are done the
 same. Their config is in the section [[Statusnet]]
+*** Workflow
+Orgmode used a couple of thing which enable you to steer the workflow
+for items. Item states are the most prominent ones. Org-mode uses
+keyword definitions to denote states on items. I keep an [[file:org-config.org][Orgmode
+configuration file]] (=org-config.org)= file which contains the
+description of the workflow in a formate suitable to include directly
+into orgmode files. The configuration of emacs itself is limited to
+dressing up this configuration with things less suitable to go into
+that config file. The configuration here and the org config file
+should be kept in sync.
+
+Adapt the colors of the states I use a bit:
+#+BEGIN_SRC emacs-lisp
+  (setq org-todo-keyword-faces '(
+    ("DONE"   .    (:foreground "#afd8af"     :weight bold))
+    ("WAITING"   . (:foreground "dark salmon" :weight bold))
+    ("CANCELLED" . (:foreground "dim gray"    :weight bold))
+    ("BUY      " . (:foreground "goldenrod"   :weight bold))
+  ))
+#+END_SRC
+
+Make sure we keep a clean tag slate when changing tag state. This
+means that when I move to an active state, remove inactive tags; if
+something is DONE, remove tags from it and automatically adding a
+'buy' tag when a BUY item is created.
+Note: capturing does not honour this, i.e. when creating a new item.
+#+BEGIN_SRC emacs-lisp
+  (setq org-todo-state-tags-triggers 
+        (quote (
+                ('todo ("inactive"))          ; remove inactive tags if moved to any active state
+                ('done ("inactive") ("fork")) ; remove tags from any inactive state
+                ("BUY"  ("buy" . t)))))       ; add buy tag when this is a buying action 
+#+END_SRC
+
+
 *** Old configuration
 Below is what was contained in the old configuration. I will slowly
 migrate this into more literal sections
@@ -647,23 +682,6 @@ migrate this into more literal sections
      (css t) (awk t) (js t) (lisp t) (org t) (plantuml t) (gnuplot . t)))
   
   
-  ; Define common tags here, so they function in all org files
-  ; Make sure actions are distinguishable
-  (setq org-todo-keyword-faces '(
-    ("DONE"   .    (:foreground "#afd8af"     :weight bold))
-    ("WAITING"   . (:foreground "dark salmon" :weight bold))
-    ("CANCELLED" . (:foreground "dim gray"    :weight bold))
-    ("BUY      " . (:foreground "goldenrod"   :weight bold))
-  ))
-  
-  ; Make sure we keep a clean tag slate when changing tag state
-  ; Note: caputuring does not honour this, i.e. when creating a new item.
-  (setq org-todo-state-tags-triggers 
-        (quote (
-                ('todo ("inactive"))          ; remove inactive tags if moved to any active state
-                ('done ("inactive") ("fork")) ; remove tags from any inactive state
-                ("BUY"  ("buy" . t)))))       ; add buy tag when this is a buying action 
-  
   
   ; Keybindings we want to have available all the time
   ; even when not in org mode.
@@ -780,11 +798,7 @@ migrate this into more literal sections
   
   ; When in agenda mode, show the line we're working on.
   (add-hook 'org-agenda-mode-hook '(lambda () (hl-line-mode 1)))
-  
- 
-  
-  
-  
+    
   ;
   ; When a tag change adds the waiting tag, make sure it gets scheduled
   ; 1 week from now if it is not already.
