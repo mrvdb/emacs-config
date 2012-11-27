@@ -547,6 +547,58 @@ Note: capturing does not honour this, i.e. when creating a new item.
                 ("BUY"  ("buy" . t)))))       ; add buy tag when this is a buying action 
 #+END_SRC
 
+*** Registering creation time of todo items
+Over time it gets a bit messy in my orgmode files. I can not remember
+when something was created and thus, by judging the time I didn't do
+anything with the item, decide if it is still important or not.
+
+So, to help with that I created a little glue to make sure each
+actionable item gets a =CREATED= property with the date in it on which
+that item was created. I use the contributed =org-expiry= for that and
+adjust it a bit.
+
+I want the property to be name 'CREATED' (I don't remeber what the
+org-expirty default name is, but it is different) and the timestamps
+inserted must not be active, otherwise they'll appear all over the
+place in the agenda.
+#+BEGIN_SRC emacs-lisp
+  (require 'org-expiry)
+  
+  (setq org-expiry-created-property-name "CREATED")
+  (setq org-expiry-inactive-timestamps   t)
+#+END_SRC
+
+So, to create the timestamp I need a little helper function which
+actually inserts it, using org-expiry. There is some additional
+cursor munging to make sure it is used comfortably during editing.
+#+BEGIN_SRC emacs-lisp                                          
+  (defun mrb/insert-created-timestamp()
+    "Insert a CREATED property using org-expiry.el for TODO entries"
+    (org-expiry-insert-created)
+    (org-back-to-heading)
+    (org-end-of-line)
+    (insert " ")
+  )
+#+END_SRC
+
+Now that function is used to insert the proprty when:
+1. creating a TODO heading, using an advice to =insert-todo-heading=
+2. capturing an item, but only when it is a TODO item (i.e. has a
+   defined keyword)
+#+BEGIN_SRC emacs-lisp
+  (defadvice org-insert-todo-heading (after mrb/created-timestamp-advice activate)
+    "Insert a CREATED property using org-expiry.el for TODO entries"
+    (mrb/insert-created-timestamp)
+  )
+  (ad-activate 'org-insert-todo-heading)
+  
+  (require 'org-capture)
+  (defadvice org-capture (after mrb/created-timestamp-advice activate)
+    "Insert a CREATED property using org-expiry.el for TODO entries"
+    (when (member (org-get-todo-state) org-todo-keywords-1)
+      (mrb/insert-created-timestamp)))
+  (ad-activate 'org-capture)
+#+END_SRC
 
 *** Old configuration
 Below is what was contained in the old configuration. I will slowly
@@ -635,42 +687,6 @@ migrate this into more literal sections
   (add-to-list 'org-tags-exclude-from-inheritance (quote "fix"))
   (add-to-list 'org-tags-exclude-from-inheritance (quote "sell"))
   
-  ;;
-  ;; Allow automatically handing of created/expired meta data.
-  ;;
-  (require 'org-expiry)
-  ;; Configure it a bit to my liking
-  (setq
-    org-expiry-created-property-name "CREATED" ; Name of property when an item is created
-    org-expiry-inactive-timestamps   t         ; Don't have everything in the agenda view
-  )
-  
-  (defun mrb/insert-created-timestamp()
-    "Insert a CREATED property using org-expiry.el for TODO entries"
-    (org-expiry-insert-created)
-    (org-back-to-heading)
-    (org-end-of-line)
-    (insert " ")
-  )
-    
-  ;; Whenever a TODO entry is created, I want a timestamp
-  ;; Advice org-insert-todo-heading to insert a created timestamp using org-expiry
-  (defadvice org-insert-todo-heading (after mrb/created-timestamp-advice activate)
-    "Insert a CREATED property using org-expiry.el for TODO entries"
-    (mrb/insert-created-timestamp)
-  )
-  ;; Make it active
-  (ad-activate 'org-insert-todo-heading)
-  
-  (require 'org-capture)
-  
-  (defadvice org-capture (after mrb/created-timestamp-advice activate)
-    "Insert a CREATED property using org-expiry.el for TODO entries"
-    ; Test if the captured entry is a TODO, if so insert the created
-    ; timestamp property, otherwise ignore
-    (when (member (org-get-todo-state) org-todo-keywords-1)
-      (mrb/insert-created-timestamp)))
-  (ad-activate 'org-capture)
   
   
   ;; Activate Babel languages
