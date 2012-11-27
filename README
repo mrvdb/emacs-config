@@ -1,0 +1,18 @@
+#+COMMENT: -*- mode: org -*-
+This repository contain the files I use for configuring my Emacs; the
+relevant files are:
+
+- init.el :: Entry point, just moves control to org-babel as quickly
+             as possible;
+- custom.el :: The file Emacs writes too when using
+               =customize=. Typically I move items in here to
+               =mrb.org=. When I reach my ideal configuration, this
+               file will be empty, meaning everything is documented
+               in =mrb.org=
+- org-config.org :: This is what I include in orgmode files to
+                    configure it. Basically contains a description of
+                    the global workflow, behaviour and tags.
+- mrb.org :: the main configuration document. This gets tangled into
+             a =mrb.el= file on emacs startup automatically. The =mrb.org=
+             file itself contains both documentation and code for the
+             complete Emacs configuration.
