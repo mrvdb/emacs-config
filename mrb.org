@@ -373,43 +373,52 @@ one mode in particular.
   
 #+END_SRC 
 ** Org-mode
-Orgmode configuraton
+Orgmode configuraton is probably the largest part of my Emacs
+configuration, because most of the time I spent in Emacs, when not
+coding, is spent in org-mode.
+*** Initialisation of Orgmode
+Basically where to find stuff and what to load.
+
+We do not have to load the main orgmode location, because we already
+did that on the main initialisation to get org-babel started.
+
 #+BEGIN_SRC emacs-lisp
-  ;; Directly tie into the GIT repository on this machine
-  ;;(add-to-list 'load-path "~/dev/emacs/packages/org-mode/")
-  ;;(add-to-list 'load-path "~/dev/emacs/packages/org-mode/lisp/")
-  (add-to-list 'load-path "~/dev/emacs/packages/org-mode/contrib/lisp/")
-  (add-to-list 'load-path "~/dev/emacs/packages/org-mode/contrib/babel/langs/")
-  
-  ;; bootstrap
-  ;; CHECKME: is this still the proper installation method, it has changed a lot lately
-  (require 'org)           ;; This is required, see installation docs
-  (require 'org-clock)             ;; Should not be needed, but otherwise links don't work
-  (require 'org-mouse)             ;; Enable menu on right mouse button and other mouse functions
-  (require 'org-special-blocks)    ;; Generalizes the #+begin_foo and #+end_foo blocks, useful on latex (export) 
-  (require 'org-datetree)          ;; Allows for archiving and refiling in a date organised tree
-  (require 'org-mobile)            ;; Only org-mobile-push and pull get autoloaded and we neede the file list before that.
-  
-  ;; When going into org-mode, do this.
-  (defun my-org-init ()
-    ;; Autofill is nice when writing larger pieces of text, which I do a lot in org
-    (turn-on-auto-fill)
-  )
-  (add-hook 'org-mode-hook 'my-org-init)
-  
+(add-to-list 'load-path "~/dev/emacs/packages/org-mode/contrib/lisp/")
+(add-to-list 'load-path "~/dev/emacs/packages/org-mode/contrib/babel/langs/")
+;; CHECKME: is this still the proper installation method, it has changed a lot lately
+(require 'org)                   ;; This is required, see installation docs
+(require 'org-clock)             ;; Should not be needed, but otherwise links don't work
+(require 'org-mouse)             ;; Enable menu on right mouse button and other mouse functions
+(require 'org-special-blocks)    ;; Generalizes the #+begin_foo and #+end_foo blocks, useful on latex (export) 
+(require 'org-datetree)          ;; Allows for archiving and refiling in a date organised tree
+(require 'org-mobile)            ;; Only org-mobile-push and pull get autoloaded and we neede the file list before that.
+#+END_SRC
+
+Most of work originates in capturing some task item in orgmode. Set
+up the location and files for that.
+
+#+BEGIN_SRC emacs-lisp
+(setq org-directory "~/.outlet/")
+(setq org-metadir (concat org-directory "_orgmeta/"))
+(setq org-archive-location (concat org-metadir "archive.org::date-tree"))
+(setq org-default-notes-file (concat org-directory "GTD.org"))
+(setq diary-file (concat org-metadir "DIARY"))
+#+END_SRC
+
+Finally, run some things when entering orgmode.
+#+BEGIN_SRC emacs-lisp
+(add-hook 'org-mode-hook 'turn-on-auto-fill)
+#+END_SRC
+
+*** Old configuration
+Below is what was contained in the old configuration. I will slowly
+migrate this into more literal sections
+
+#+BEGIN_SRC emacs-lisp
   ;;
   ;; General settings
   (setq
-   ; Files and directories
-   org-directory "~/.outlet/"                                          ; Main dir
-   org-metadir (concat org-directory "_orgmeta/")                      ; Org system files go here
-   org-archive-location (concat org-metadir "archive.org::date-tree")  ; Default archive location
-  
-   org-default-notes-file (concat org-directory "GTD.org")
-           
-   diary-file (concat org-metadir "DIARY")
-  
-   ; I want to hide the leading stars, and do it *exactly* in the
+    ; I want to hide the leading stars, and do it *exactly* in the
    ; background-color
    org-hide-leading-stars t
    org-hide-emphasis-markers t
@@ -1116,6 +1125,7 @@ Orgmode configuraton
     (stripe-org-tables-enable))
   ;; TODO I want to have this in the agenda mode to
 #+END_SRC
+ 
 *** Encrypting information in org-mode
 I use the /encrypt/ tag for encrypting sections in org-mode (and
 sometimes my journal). The sections get encrypted and decrypted
@@ -1158,12 +1168,20 @@ reverted easily if saves are automatically committed
 Rather than using an after save hook, there is a minor
 git-auto-commit mode package which does just what I need.
 
-There is not much to configure for the minor mode. There are a couple
+There is not much to configure for this minor mode. There are a couple
 of ways to enable it:
 1. file-local variable (put it in the file to be autocommitted)
 2. directory-local variable (make a =.dir-locals.el= file); this
    enables it for all files in the directory
 3. as a hook
+
+I'm using the first method on relevant file.
+
+I am considering using a generic hook again to enable the method and
+either using =git commit --amend= and commit squashing if working on
+more structured commits. For files that I really do not want
+autocommit to run I can use a file local variable to disable the hook
+(or the minor mode)
 ** Statusnet
 Statusnet, or perhaps microblog in general settings
 #+BEGIN_SRC emacs-lisp
