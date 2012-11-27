@@ -410,6 +410,109 @@ Finally, run some things when entering orgmode.
 (add-hook 'org-mode-hook 'turn-on-auto-fill)
 #+END_SRC
 
+*** Capturing information
+I guess 90% of the information I keep in the main orgmode files
+starts life originally as a captured item. I use it for:
+
+1. TODO items;
+2. BUY items;
+3. Journaling entries;
+4. Statusnet Updates;
+
+Make sure org-capture is available:
+#+BEGIN_SRC emacs-lisp
+(require 'org-capture)
+#+END_SRC
+
+Here are the templates used for them.
+#+BEGIN_SRC emacs-lisp
+  (setq org-capture-templates
+        (quote (
+                ("b" "Buy" 
+                 entry (id "new-todo-receiver") "* BUY %? :buy:\n" :prepend t)
+                ("t" "Todo" 
+                 entry (id "new-todo-receiver") "* TODO %?" :prepend t)
+                ("j" "Journal" 
+                 entry (file+datetree (concat org-directory "journal.org")) 
+                 "* ___________________________________________________________ *%U* ___\n\n%?\n" )
+                )
+               )
+        )
+#+END_SRC
+
+The concept I use for capturing is that a window is opened in the
+center of the screen, on top of all windows, on all workspaces, so it
+shows up whenever I press the shortcut key for it. The exception to
+this rule is journaling entries, which go into a regular Emacs frame.
+
+So, the first thing I need is a way to create a capturing frame and
+proper arrangement for finalising the capturing; the frame should be
+deleted. The frame should also be deleted if the capture is destroyed
+for some reason. The two =defadvice= snippets take care of this. Also,
+by default org-capture splits the screen; we do not need that as we
+have a dedicated frame for it, so on entering capture mode we just
+delete the other windows which may be in the frame.
+#+BEGIN_SRC emacs-lisp
+  (defun make-capture-frame ()
+    "Create a new frame for org-capture to use."
+    (select-frame (make-frame '((name . "capture") 
+                                (width . 115) (height . 15)
+                                (menu-bar-lines . 0) (tool-bar-lines . 0))))
+    )
+  
+  (defadvice org-capture-finalize (after delete-capture-frame activate)
+    "Advise org-capture-finalize to close the frame if it is the capture frame"
+    (if (equal "capture" (frame-parameter nil 'name))
+        (delete-frame)))
+  
+  (defadvice org-capture-destroy (after delete-capture-frame activate)
+    "Advise org-capture-destroy to close the frame if it is the capture frame"
+    (if (equal "capture" (frame-parameter nil 'name))
+        (delete-frame)))
+
+  (add-hook 'org-capture-mode-hook 'delete-other-windows)
+#+END_SRC
+
+Define functions for each piece of information captured, so they can
+be easily bound to keys.
+#+BEGIN_SRC emacs-lisp
+  (defun capture-todo ()
+    "Capture a TODO item"
+    (interactive)
+    (make-capture-frame)
+    (org-capture nil "t")
+    )
+  
+  (defun capture-buy ()
+    "Capture a BUY item"
+    (interactive)
+    (make-capture-frame)
+    (org-capture nil "b")
+    )
+  (defun make-journal-entry ()
+    "Create a journal entry"
+    (interactive)
+    (org-capture nil "j")
+  )
+  (global-set-key "\C-cj" 'make-journal-entry)
+#+END_SRC
+
+By default C-c C-c ends the capture, but is normally the shortcut to
+enter tags, so I define a shortcut to define tags while capturing.
+
+#+BEGIN_SRC emacs-lisp
+  (defun mrb/add-tags-in-capture()
+    (interactive)
+    "Insert tags in a capture window without losing the point"
+    (save-excursion
+      (org-back-to-heading)
+      (org-set-tags)))
+  
+  (define-key org-capture-mode-map "\C-c\C-t" 'mrb/add-tags-in-capture)
+#+END_SRC
+
+Capturing dents for status updates in statusnet are done the
+same. Their config is in the section [[Statusnet]]
 *** Old configuration
 Below is what was contained in the old configuration. I will slowly
 migrate this into more literal sections
@@ -534,15 +637,6 @@ migrate this into more literal sections
       (mrb/insert-created-timestamp)))
   (ad-activate 'org-capture)
   
-  ;; Add feature to allow easy adding of tags in a capture window
-  (defun mrb/add-tags-in-capture()
-    (interactive)
-    "Insert tags in a capture window without losing the point"
-    (save-excursion
-      (org-back-to-heading)
-      (org-set-tags)))
-  ;; Bind this to a reasonable key
-  (define-key org-capture-mode-map "\C-c\C-t" 'mrb/add-tags-in-capture)
   
   ;; Activate Babel languages
   (require 'ob-gnuplot)
@@ -687,67 +781,8 @@ migrate this into more literal sections
   ; When in agenda mode, show the line we're working on.
   (add-hook 'org-agenda-mode-hook '(lambda () (hl-line-mode 1)))
   
-  ;;
-  ;; Capturing with org-capture
-  ;; TODO: probably split this off into its own file
+ 
   
-  ; Define the templates
-  (setq org-capture-templates
-        (quote (
-                ("b" "Buy" 
-                 entry (id "new-todo-receiver") "* BUY %? :buy:\n" :prepend t)
-                ("t" "Todo" 
-                 entry (id "new-todo-receiver") "* TODO %?" :prepend t)
-                ("j" "Journal" 
-                 entry (file+datetree (concat org-directory "journal.org")) 
-                 "* ___________________________________________________________ *%U* ___\n\n%?\n" )))
-  )
-  
-  (defun make-capture-frame ()
-    "Create a new frame for org-capture to use."
-    ;; Create and select the frame FIXME: the frame needs to be at least
-    ;; 95 to be able to display the tag on the same line. Perhaps we
-    ;; should temporarily set the tag column to something less, so we
-    ;; can keep the capture window small.
-    (select-frame (make-frame '((name . "capture") 
-                  (width . 115) (height . 15)
-                  (menu-bar-lines . 0) (tool-bar-lines . 0))))
-  )
-  
-  (defun capture-todo ()
-    "Capture a TODO item"
-    (interactive)
-    (make-capture-frame)
-    (org-capture nil "t")
-  )
-  
-  (defun capture-buy ()
-    "Capture a BUY item"
-    (interactive)
-    (make-capture-frame)
-    (org-capture nil "b")
-  )
-  
-  
-  (defadvice org-capture-finalize (after delete-capture-frame activate)
-    "Advise org-capture-finalize to close the frame if it is the capture frame"
-    (if (equal "capture" (frame-parameter nil 'name))
-        (delete-frame)))
-  
-  (defadvice org-capture-destroy (after delete-capture-frame activate)
-    "Advise org-capture-destroy to close the frame if it is the capture frame"
-    (if (equal "capture" (frame-parameter nil 'name))
-        (delete-frame)))
-  
-  ; org-capture by default splits the window, we don't want that
-  (add-hook 'org-capture-mode-hook 'delete-other-windows)
-  
-  (defun make-journal-entry ()
-    "Create a journal entry"
-    (interactive)
-    (org-capture nil "j")
-  )
-  (global-set-key "\C-cj" 'make-journal-entry)
   
   
   ;
