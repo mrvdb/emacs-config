@@ -600,22 +600,96 @@ Now that function is used to insert the proprty when:
   (ad-activate 'org-capture)
 #+END_SRC
 
+*** Visual settings
+Having an attractive screen to look at becomes more important if you
+use the system all day long. /Attractive/ is rather subjective
+here. For me it mainly consists of functional things. Anyways, this
+section groups settings for the visual characteristics of orgmode.
+
+I want to hide the leading stars in the outliner, and do it *exactly*
+in the background color. This is redundant actually in my case, as it
+is also specified in the org config file that I include. Or rather,
+it is redundant there, because I want it always to be the case.
+#+BEGIN_SRC emacs-lisp
+(setq org-hide-leading-stars t)
+#+END_SRC
+
+For the collapsed items in the outline orgmode uses the variable
+=org-ellipsis= to determine what character-sequence should be used to
+show that the item can be expanded. The variable can contain a
+string, which will then be used instead of the standard 3 dots, or a
+face which will then be used to render the standard 3 dots.
+#+BEGIN_SRC emacs-lisp
+(setq org-ellipsis "...")
+#+END_SRC
+
+There are a couple of ways within org to emphasize text inline
+for *bold*, /italics/, _underlined_ etc. These are set in the text by
+enclosing regions with delimiters. I do not want to see these
+delimiters, but rather render the text. 
+#+BEGIN_SRC emacs-lisp
+(setq org-hide-emphasis-markers t)
+#+END_SRC
+  
+A similar thing can be done with pretty entity characters (like '\delta'
+for example). These characters can be added to the text by adding a
+'\' before a symbol name ('delta' in the example).  I make an
+exception for the sub- and superscript characters. This happens a lot
+in variable names etc. and I a big annoyance if those get rendered to
+subscript all the time.
+#+BEGIN_SRC emacs-lisp
+(setq org-pretty-entities 1)
+(setq org-pretty-entities-include-sub-superscripts nil)
+#+END_SRC
+
+For most of the source blocks I want Emacs to render those blocks in
+their native mode. This had a serious performance problem in the
+past, but I think it has been solved recently.
+#+BEGIN_SRC emacs-lisp
+(setq org-src-fontify-natively t)
+#+END_SRC
+
+A couple of settings to steer the column in which the tags and habits
+appear in the frame:
+#+BEGIN_SRC emacs-lisp
+(setq 
+   org-tags-column -110
+   org-agenda-tags-column -110
+   org-habit-graph-column 100
+)
+#+END_SRC
+
+The item lists can be made a whole lot more attractive by attaching
+some icons based on the category an items belongs to. The category
+assignment itself is done by setting the =CATEGORY= property explicitly
+on the item or on the file.
+#+BEGIN_SRC emacs-lisp
+  (setq org-agenda-category-icon-alist 
+        '(
+          ("Afspraak"      "~/.outlet/images/stock_new-meeting.png" nil nil :ascent center)
+          ("Blogging"      "~/.outlet/images/edit.png" nil nil :ascent center)
+          ("Cobra"         "~/.outlet/images/car.png" nil nil :ascent center)
+          ("DVD"           "~/.outlet/images/media-cdrom.png" nil nil :ascent center)
+          ("Emacs"         "~/.outlet/images/emacs.png" nil nil :ascent center)
+          ("Finance"       "~/.outlet/images/finance.png" nil nil :ascent center)
+          ("Habitat"       "~/.outlet/images/house.png" nil nil :ascent center)
+          ("Habit"         "~/.outlet/images/stock_task-recurring.png" nil nil :ascent center)
+          ("Hobbies"       "~/.outlet/images/hobbies.png" nil nil :ascent center)
+          ("Partners"      "~/.outlet/images/partners.png" nil nil :ascent center)
+          ("Task"          "~/.outlet/images/stock_todo.png" nil nil :ascent center)
+          ("Org"           "~/.outlet/images/org-mode-unicorn.png" nil nil :ascent center)
+          ("Statusnet"     "~/.outlet/images/statusnet.png" nil nil :ascent center)
+          ("Systeem"       "~/.outlet/images/systeembeheer.png" nil nil :ascent center)
+          ("Wordpress"     "~/.outlet/images/wordpress.png" nil nil :ascent center)
+  ))
+#+END_SRC
+
 *** Old configuration
 Below is what was contained in the old configuration. I will slowly
 migrate this into more literal sections
 
 #+BEGIN_SRC emacs-lisp
-  ;;
-  ;; General settings
   (setq
-    ; I want to hide the leading stars, and do it *exactly* in the
-   ; background-color
-   org-hide-leading-stars t
-   org-hide-emphasis-markers t
-  
-   ; Which string signals that an outline is collapsed
-   org-ellipsis "..."
-  
    org-use-fast-todo-selection t
   
    ; We support task dependencies
@@ -626,24 +700,12 @@ migrate this into more literal sections
    ; We dont do priorities
    org-enable-priority-commands nil
   
-   ; Tags
-   org-tags-column -110
-   org-agenda-tags-column -110
-  
-   ;; Hide / and * markers when doing /italic/ and *bold* markup
-   org-hide-emphasis-markers t
-   ;; But show fancy entries
-   org-pretty-entities 1
-   ;; But not the sub- and superscript, cos that is bloody annoying in filenames etc.
-   org-pretty-entities-include-sub-superscripts nil
-  
    ; Agenda settings
    org-agenda-include-diary t
    org-agenda-start-with-log-mode t
    org-agenda-todo-ignore-scheduled "future"
   
    ; Habits
-   org-habit-graph-column 100
    org-habit-show-habits-only-for-today nil
   
    ; Pressing enter on a link should activate it
@@ -679,25 +741,19 @@ migrate this into more literal sections
    org-special-ctrl-a/e t
    org-stuck-projects (quote ("-inactive/TODO" ("TODO" "WAITING") nil ""))
    org-track-ordered-property-with-tag nil
-   ;; This had a serious bug in the past making it very slow, seems better now.
-   org-src-fontify-natively t
   )
   
   ;; Bit of a leftover from reorganising bits, do this later
   (add-to-list 'org-tags-exclude-from-inheritance (quote "fix"))
   (add-to-list 'org-tags-exclude-from-inheritance (quote "sell"))
   
-  
-  
-  ;; Activate Babel languages
+    ;; Activate Babel languages
   (require 'ob-gnuplot)
   (require 'ob-mathomatic)
   (org-babel-do-load-languages
    'org-babel-load-languages
    '((R . t) (ditaa . t) (sql . t) (sh . t) (emacs-lisp t) (lisp t) 
      (css t) (awk t) (js t) (lisp t) (org t) (plantuml t) (gnuplot . t)))
-  
-  
   
   ; Keybindings we want to have available all the time
   ; even when not in org mode.
@@ -725,27 +781,6 @@ migrate this into more literal sections
   (define-key org-agenda-mode-map [(meta p)] 'org-set-property)
   (define-key org-mode-map [(control super s)] 'org-save-all-org-buffers)
   
-  
-  ; Custom icons for the categories
-  (setq org-agenda-category-icon-alist 
-        '(
-          ("Afspraak"      "~/.outlet/images/stock_new-meeting.png" nil nil :ascent center)
-          ("Blogging"      "~/.outlet/images/edit.png" nil nil :ascent center)
-          ("Cobra"         "~/.outlet/images/car.png" nil nil :ascent center)
-          ("DVD"           "~/.outlet/images/media-cdrom.png" nil nil :ascent center)
-          ("Emacs"         "~/.outlet/images/emacs.png" nil nil :ascent center)
-          ("Finance"       "~/.outlet/images/finance.png" nil nil :ascent center)
-          ("Habitat"       "~/.outlet/images/house.png" nil nil :ascent center)
-          ("Habit"         "~/.outlet/images/stock_task-recurring.png" nil nil :ascent center)
-          ("Hobbies"       "~/.outlet/images/hobbies.png" nil nil :ascent center)
-          ("Partners"      "~/.outlet/images/partners.png" nil nil :ascent center)
-          ("Task"          "~/.outlet/images/stock_todo.png" nil nil :ascent center)
-          ("Org"           "~/.outlet/images/org-mode-unicorn.png" nil nil :ascent center)
-          ("Statusnet"     "~/.outlet/images/statusnet.png" nil nil :ascent center)
-          ("Systeem"       "~/.outlet/images/systeembeheer.png" nil nil :ascent center)
-          ("Wordpress"     "~/.outlet/images/wordpress.png" nil nil :ascent center)
-  ))
-  ;
   ; Dynamic behaviour
   (defun gtd()
     "Start my GTD system"
@@ -810,16 +845,12 @@ migrate this into more literal sections
   )
   (add-hook 'org-after-todo-state-change-hook 'save-containing-org-file)
   
-  
-  
   ; When in agenda mode, show the line we're working on.
   (add-hook 'org-agenda-mode-hook '(lambda () (hl-line-mode 1)))
     
-  ;
-  ; When a tag change adds the waiting tag, make sure it gets scheduled
+    ; When a tag change adds the waiting tag, make sure it gets scheduled
   ; 1 week from now if it is not already.
-  ;
-  (defun autoschedule-waiting()
+    (defun autoschedule-waiting()
     ; variable 'tags' contains the values of the tag-string
     ; If tags has the tag :waiting:, schedule this 
     ;(if includes tags "waiting")
@@ -948,8 +979,7 @@ migrate this into more literal sections
    org2blog/wp-track-posts (list (concat org-directory "/blogs/org2blog-track.org") "To be filed properly")
   )
   
-  
-  ; Per blog configuration
+    ; Per blog configuration
   (setq org2blog/wp-blog-alist
         '(
           ("mrblog"
@@ -1030,7 +1060,6 @@ migrate this into more literal sections
                     (org-archive-subtree)))))))))
   
   (defalias 'archive-done-tasks 'mrb/org-my-archive-done-tasks)
-  
   
   ;; Map it to Ctrl-C S in orgmode (consider a global key assignment?
   (define-key org-mode-map "\C-cs" 'mrb/shortenurl-replace-at-point)
