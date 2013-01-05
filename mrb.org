@@ -1688,7 +1688,7 @@ registered as a command automatically.
   "Clears the shell buffer as in bashes clear"
   (interactive)
   ;; clear read-only of prompts
-  (let ((inhibit-reaqd-only t))
+  (let ((inhibit-read-only t))
 	(delete-region (point-min) (point-max))))
 #+END_SRC
 
