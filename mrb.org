@@ -17,9 +17,10 @@ records. All that will change over time.
 
 ** Preparing for lift-off
 The base of the emacs configuration is in the =~/.emacs.d/= directory,
-so add this to my loadpaths first
+so add this to my loadpaths first and give it a name.
 #+BEGIN_SRC emacs-lisp
-(add-to-list 'load-path "~/.emacs.d/")
+(setq emacs-directory "~/.emacs.d/")
+(add-to-list 'load-path emacs-directory)
 #+END_SRC
 
 The first thing I want to take care of is to make customizations
@@ -27,7 +28,7 @@ possible and stored in a place to my liking. I want to load this
 first so anything in the configuration I define explicitly overrides
 it. 
 #+BEGIN_SRC emacs-lisp
-(setq custom-file "~/.emacs.d/custom.el")
+(setq custom-file (concat emacs-directory "custom.el"))
 (load custom-file)
 #+END_SRC
 
@@ -36,8 +37,8 @@ a way to have them forcibly compiled.
 #+BEGIN_SRC emacs-lisp
   (defun mrb/compile-config ()
     (interactive)
-    (org-babel-load-file "~/.emacs.d/mrb.org")
-    (byte-recompile-directory "~/.emacs.d" 0)
+    (org-babel-load-file (concat emacs-directory "mrb.org"))
+    (byte-recompile-directory emacs-directory 0)
   )
 #+END_SRC
 
@@ -132,7 +133,7 @@ to manage its packages.
 We manage everything with =el-get= so we start by loading that
 
 #+BEGIN_SRC emacs-lisp
-  (add-to-list 'load-path "~/.emacs.d/el-get/el-get")
+  (add-to-list 'load-path (concat emacs-directory "/el-get/el-get"))
   
   (unless  (require 'el-get nil 'noerror)
     (url-retrieve
@@ -1346,20 +1347,6 @@ Statusnet, or perhaps microblog in general settings
   (provide 'statusnet)
   
 #+END_SRC
-** Google-map
-Google map integration for Emacs
-#+BEGIN_SRC emacs-lisp
-  ; Directly tie into the GIT repository on this machine
-  (add-to-list 'load-path "/home/mrb/dev/emacs/packages/jd-el/")
-  
-  (require 'google-maps)
-  
-  ; org-mode integration
-  (require 'org-location-google-maps)
-  
-  (provide 'google-map-settings)
-  
-#+END_SRC
 ** OpenSCAD
 OpenSCAP mode, it’s a mode that describes 3D-models
 #+BEGIN_SRC emacs-lisp
@@ -1416,7 +1403,7 @@ LDAP integration, mostly for address book lookups
     '(define-key post-mode-map (kbd "TAB") 'enz-eudc-expand-inline))
   
 #+END_SRC
-** Binding
+** Key and mouse bindings
 Keyboard and mouse key bindings
 #+BEGIN_SRC emacs-lisp
   ; Unset some keys to let modes explicitly set them to their value (case in point: orgmode)
@@ -1693,7 +1680,43 @@ similarly within Emacs 'C-c Enter' launches Eshell:
   (define-key global-map [(control c) return] 'eshell)
 #+END_SRC
 
+First thing I missed in eshell was a the =clear= function, as in
+bash. By defining a function in the "eshell namespace" it gets
+registered as a command automatically.
+#+BEGIN_SRC emacs-lisp
+(defun eshell/clear ()
+  "Clears the shell buffer as in bashes clear"
+  (interactive)
+  ;; clear read-only of prompts
+  (let ((inhibit-reaqd-only t))
+	(delete-region (point-min) (point-max))))
+#+END_SRC
+
+Set the main directory for eshell, I do not want in in the default
+place but below the .emacs.d directory where all other configuration
+of emacs stuff is.
+
 General configuration variables for Eshell:
+#+BEGIN_SRC emacs-lisp
+  (setq eshell-directory-name (concat emacs-directory "eshell/"))
+#+END_SRC
+
+A list of functions / filters through which interactive output is
+passed, most of this was copied from the default for adjustment
+here. I have not actually changed anything myself.
+#+BEGIN_SRC emacs-lisp
+  (setq eshell-output-filter-functions
+        (quote
+         (eshell-handle-ansi-color
+          eshell-handle-control-codes
+          eshell-watch-for-password-prompt
+          eshell-postoutput-scroll-to-bottom
+          eshell-handle-control-codes
+          eshell-handle-ansi-color
+          eshell-watch-for-password-prompt)))
+#+END_SRC
+
+Generic configuration settings:
 #+BEGIN_SRC emacs-lisp
   (setq eshell-scroll-show-maximum-output t)
   (setq eshell-scroll-to-bottom-on-output t)
@@ -1851,17 +1874,6 @@ configuration for that as well.
      mu4e-view-image-max-width 800
      mu4e-reply-to-address "marcel@hsdev.com")
 #+END_SRC
-** Quantified Emacs!
-Taken from sacha’s configuration, this records which keys I press in
-emacs and how often I do that. This is usefull, or may be, for
-decisions with respect to keyboard choices, bindings configuration
-etc.
-#+begin_src emacs-lisp
-  (require 'keyfreq)
-  (keyfreq-mode 1)
-  (keyfreq-autosave-mode 1)
-#+end_src
-
 ** To organize and properly configura
 Multiple cursors sounds interesting
 
@@ -1872,7 +1884,7 @@ Multiple cursors sounds interesting
 License templates
 #+BEGIN_SRC emacs-lisp
 (require 'xlicense)
-(setq license-directory "~/.emacs.d/licenses")
+(setq license-directory (concat emacs-directory "licenses"))
 (add-to-list 'license-types '(agpl . "AGPL"))
 #+END_SRC
 
@@ -1881,6 +1893,31 @@ apparently this is what I need.
 #+BEGIN_SRC emacs-lisp
 (if window-system  (normal-erase-is-backspace-mode t))
 #+END_SRC
+*** Google-map
+Google map integration for Emacs
+#+BEGIN_SRC emacs-lisp
+  ; Directly tie into the GIT repository on this machine
+  (add-to-list 'load-path "/home/mrb/dev/emacs/packages/jd-el/")
+  
+  (require 'google-maps)
+  
+  ; org-mode integration
+  (require 'org-location-google-maps)
+  
+  (provide 'google-map-settings)
+  
+#+END_SRC
+*** Quantified Emacs!
+Taken from sacha’s configuration, this records which keys I press in
+emacs and how often I do that. This is usefull, or may be, for
+decisions with respect to keyboard choices, bindings configuration
+etc.
+#+begin_src emacs-lisp
+  (require 'keyfreq)
+  (keyfreq-mode 1)
+  (keyfreq-autosave-mode 1)
+#+end_src
+
 * Self configuration                                                                                 :exclude:
 I have the same config file for orgmode itself
 #+SETUPFILE: ~/.outlet/etc/org-config.org
