@@ -1695,8 +1695,6 @@ registered as a command automatically.
 Set the main directory for eshell, I do not want in in the default
 place but below the .emacs.d directory where all other configuration
 of emacs stuff is.
-
-General configuration variables for Eshell:
 #+BEGIN_SRC emacs-lisp
   (setq eshell-directory-name (concat emacs-directory "eshell/"))
 #+END_SRC
@@ -1720,6 +1718,45 @@ Generic configuration settings:
 #+BEGIN_SRC emacs-lisp
   (setq eshell-scroll-show-maximum-output t)
   (setq eshell-scroll-to-bottom-on-output t)
+#+END_SRC
+
+Another step closer to a full terminal replacement is to be able to
+replace lxterminal (my terminal emulator in use now). This requires a
+number of parts:
+1. something to call from the commandline instead of lxterminal
+2. a lisp function which takes care of the passthrough to eshell,
+   creating the frame, etcetera.
+
+The calling part is simpel:
+#+BEGIN_SRC sh
+emacsclient -a "" -n -c -e '(server-eshell)'
+#+END_SRC
+
+The last bit of that command line is the function to evaluate, which
+was taken from http://ur1.ca/cf1m4 and sligthly adapted.
+#+BEGIN_SRC emacs-lisp
+  (require 'cl)
+  
+  (defun server-eshell ()
+    "Command to be called by emacs-client to start a new shell.
+  
+  A new eshell will be created. When the frame is closed, the buffer is deleted or the shell exits,
+  then hooks will take care that the other actions happen. For example, when the frame is closed,
+  then the buffer will be deleted and the client disconnected.
+  "
+    (lexical-let ((buf (eshell t))
+                  (client (first server-clients))
+                  (frame (selected-frame)))
+      (cl-labels ((close (&optional arg)
+                  (when (not (boundp 'cve/recurse))
+                    (let ((cve/recurse t))
+                      (delete-frame frame)
+                      (kill-buffer buf)
+                      (server-delete-client client)))))
+      (add-hook 'eshell-exit-hook #'close t t)
+      (add-hook 'delete-frame-functions #'close t t))
+      (delete-other-windows)
+      nil))  
 #+END_SRC
 
 ** Editing control
