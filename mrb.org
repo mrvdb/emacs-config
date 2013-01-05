@@ -251,6 +251,7 @@ And enable the minor mode globally.
   (set-face-attribute 'org-date nil :underline nil)
   ;; The jabber status is tricky in combination with powerline
   ;;(set-face-attribute 'jabber-roster-user-online nil :foreground "#f9f9f9" :bold t :background "#666666" :inverse-video nil)
+  
   ;; Sometimes the mode-line screws up, this resets it until I have
   ;; found a better solution than a hard reset
   (defun powerline()
@@ -300,6 +301,10 @@ And enable the minor mode globally.
     (menu-bar-mode -1)   ;; No menu-bar
     (tooltip-mode -1)    ;; No tooltips
   )
+
+  ;; Defer fontification a little bit, so we could gain a bit in scroll speed
+  (setq jit-lock-defer-time 0.03)
+
   ;; This seems to work if we start up emacs using filename on cli and
   ;; server was not running yet. It does however not work if we just
   ;; startup emacs (through my edit script) without a filename on the cli 
@@ -1104,7 +1109,7 @@ migrate this into more literal sections
   ;;
   ;; Org-mobile configuration
   (setq
-   org-mobile-directory "/plato.hsdev.com:/home/mrb/data/mobileorg"              ; Remote org dir
+   ;;org-mobile-directory "/plato.hsdev.com:/home/mrb/data/mobileorg"              ; Remote org dir
    org-mobile-inbox-for-pull (concat org-metadir "from-mobile.org")    ; Where to place items which needs resolving
    org-mobile-force-id-on-agenda-items nil                             ; No id yet, don't see the advatage yet
    org-mobile-use-encryption nil                                       ; No encryption yet.
@@ -1207,7 +1212,9 @@ migrate this into more literal sections
     (org-agenda-goto)
     (org-mime-subtree))
   ;; Bind it to a C-c m (similar to C-x m which opens an empty mail)
-  (define-key org-mode-map [(control c) m] 'org-mime-subtree)
+  ;;(define-key org-mode-map [(control c) m] 'org-mime-subtree)
+  (define-key org-mode-map "\C-cm" 'org-mime-subtree)
+
   ;; This does not work
   ;;(define-key org-agenda-mode-map [(control c) m] 'mrb/mail-subtree-from-org-agenda)
   ;; This does
@@ -1220,6 +1227,7 @@ migrate this into more literal sections
     (stripe-org-tables-enable))
   ;; TODO I want to have this in the agenda mode to
 #+END_SRC
+
  
 *** Encrypting information in org-mode
 I use the /encrypt/ tag for encrypting sections in org-mode (and
@@ -1407,17 +1415,6 @@ LDAP integration, mostly for address book lookups
   (eval-after-load "post"
     '(define-key post-mode-map (kbd "TAB") 'enz-eudc-expand-inline))
   
-#+END_SRC
-** E-Shell
-A terminal in Emacs, I would like to migrate to it for all terminal
-based activities, but it’s not there yet.
-#+BEGIN_SRC emacs-lisp
-  ;; Eshell configuration.
-  
-  (setq eshell-scroll-show-maximum-output t)
-  (setq eshell-scroll-to-bottom-on-output t)
-  
-#+END_SRC
 #+END_SRC
 ** Binding
 Keyboard and mouse key bindings
@@ -1608,8 +1605,19 @@ daemon from the terminal.
 (global-set-key [(control x) (control q)] 'save-buffers-kill-emacs)
 #+END_SRC
 
-** Terminal
-Character encoding, commandline and emulation
+** Terminals, Character encodings and emulation
+My policy is to use Emacs for as many things and use as little
+programs as necessary. All this within reason obvously. 
+
+This sections describes how terminals and shells are used from within
+Emacs. In an ideal situation I won't be needing any other terminal
+emulator program, other than the ones used directly from Emacs.
+
+At the momen I use two varieties:
+1. Ansi terminal; basically a front-end to =/bin/bash=
+2. Eshell; the all Emacs-Lisp based solution.
+
+*** Ansi term
 #+BEGIN_SRC emacs-lisp
   ;; Full utf-8 support
   (set-terminal-coding-system 'utf-8)
@@ -1673,6 +1681,24 @@ Character encoding, commandline and emulation
       ad-do-it))
   (ad-activate 'term-sentinel)  
 #+END_SRC handling.
+*** Eshell
+Eshell is theoretically the ideal shell; part of emacs, completely
+implemented in lisp and thus available regardless of the underlying
+hardware and operating system. In practice, many things won't work as
+expected. 
+
+In the window manager (awesome-wm) 'Cmd Enter' launches a terminal,
+similarly within Emacs 'C-c Enter' launches Eshell: 
+#+BEGIN_SRC emacs-lisp
+  (define-key global-map [(control c) return] 'eshell)
+#+END_SRC
+
+General configuration variables for Eshell:
+#+BEGIN_SRC emacs-lisp
+  (setq eshell-scroll-show-maximum-output t)
+  (setq eshell-scroll-to-bottom-on-output t)
+#+END_SRC
+
 ** Editing control
 
 I like to do thing interactively where I can:
