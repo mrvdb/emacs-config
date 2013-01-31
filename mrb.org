@@ -106,6 +106,8 @@ for the details on the settings for this.
   ; This is save because emacs tracks if the file is saved in the editting buffer
   ; and if so, it will not revert to the saved file.
   (global-auto-revert-mode t)
+  ;; Also for dired
+  (setq global-auto-revert-non-file-buffers t)
   
   ;; Turn on auto-fill minor mode for all text buffers
   (add-hook 'text-mode-hook 'turn-on-auto-fill)
@@ -1708,16 +1710,25 @@ here. I have not actually changed anything myself.
          (eshell-handle-ansi-color
           eshell-handle-control-codes
           eshell-watch-for-password-prompt
-          eshell-postoutput-scroll-to-bottom
           eshell-handle-control-codes
           eshell-handle-ansi-color
           eshell-watch-for-password-prompt)))
 #+END_SRC
 
-Generic configuration settings:
+As I am migrating from bash, I want eshell to behave as much like
+bash as possible. The next settings take care of some of the things
+to make that happen.
 #+BEGIN_SRC emacs-lisp
-  (setq eshell-scroll-show-maximum-output t)
-  (setq eshell-scroll-to-bottom-on-output t)
+;; Do completions, but don't cycle
+(setq eshell-cmpl-cycle-completions nil)
+
+;; Completion ignores case
+(setq eshell-cmpl-ignore-case t)
+
+;; scroll to the bottom
+(setq eshell-scroll-to-bottom-on-output t)
+(setq eshell-scroll-show-maximum-output t)
+(add-to-list 'eshell-output-filter-functions 'eshell-postoutput-scroll-to-bottom)
 #+END_SRC
 
 Another step closer to a full terminal replacement is to be able to
@@ -1816,19 +1827,63 @@ that is.
 
 ** Messaging and chatting
 *** ERC
-ERC is an irc implementation within emacs.
+ERC is an irc implementation within emacs. When I start erc I want to
+connect automatically the configured servers without having to enter
+nicks and passwords and stuff. 
+
+Start by configuring defaults
 #+BEGIN_SRC emacs-lisp
-(require 'erc-services)
-(and
-     (require 'erc-highlight-nicknames)
-     (add-to-list 'erc-modules 'highlight-nicknames)
-     (erc-update-modules))
-(setq
-  erc-prompt-for-nickserv-password nil
-  erc-hide-list '("JOIN" "PART" "QUIT")
-  erc-nick '("Marcel|HSD" "Marcel||HSD")
-)
+(setq erc-nick '("Marcel|HSD" "Marcel||HSD"))
 #+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (require 'erc)
+  (require 'erc-services)
+  (setq erc-modules (quote (
+    autojoin button completion fill
+    irccontrols keep-place list log
+    match menu move-to-prompt netsplit
+    networks noncommands notify readonly
+    replace ring smiley stamp track unmorse highlight-nicknames smiley)))
+  (setq erc-prompt-for-nickserv-password nil)
+#+END_SRC
+
+These are the channels I visit regularly, maintain a list of
+them. (Perhaps this should be outside of this config to be more
+flexible) The meaning here is that *when* I connect to a server which
+matches the expression in the first part of the list, it autojoins
+the channels in the rest of the list. This does not connect to a
+server by itself.
+#+BEGIN_SRC emacs-lisp
+  (setq erc-autojoin-channels-alist
+        '((".*\\.freenode.net" "#emacs" "#mediagoblin" "#openobject" "#claws")))
+#+END_SRC
+
+After joining, ERC keeps track of the channels, by putting notifiers
+in the modeline. I am not interested in some of the things happening
+in the channels. 
+#+BEGIN_SRC emacs-lisp 
+(erc-track-mode t)
+(setq erc-track-exclude-types '("JOIN" "NICK" "PART" "QUIT" "MODE"
+                                 "324" "329" "332" "333" "353" "477"))
+(setq erc-hide-list '("JOIN" "PART" "QUIT" "NICK"))
+#+END_SRC
+
+Log every channel in a simple =#channel-date.txt= file. 
+#+BEGIN_SRC emacs-lisp
+  (setq erc-generate-log-file-name-function (quote erc-generate-log-file-name-with-date))
+#+END_SRC
+
+Define a function to start erc, so I can start it the way I like it. 
+#+BEGIN_SRC emacs-lisp
+  (defun mrb/erc ()
+    "Wrapper to start erc in the way I want it"
+    (interactive)
+  
+    ;;I use freenode for most things
+    (erc-tls :server "irc.freenode.net" :port 7000))
+#+END_SRC
+
 *** XMPP
 XMPP related settings, including interfacing it to other systems
 #+BEGIN_SRC emacs-lisp
