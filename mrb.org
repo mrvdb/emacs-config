@@ -1,6 +1,7 @@
 #+TITLE: Emacs configuration
 #+DESCRIPTION: An org-babel based emacs configuration
 #+LANGUAGE:  en
+#+PROPERTY: results silent
 * Emacs configuration
 This is my emacs configuration file that is loaded with
 =org-babel-load-file= in the Emacs init file. The intent is to have as
@@ -685,6 +686,7 @@ on the item or on the file.
           ("Habit"         "~/.outlet/images/stock_task-recurring.png" nil nil :ascent center)
           ("Hobbies"       "~/.outlet/images/hobbies.png" nil nil :ascent center)
           ("Partners"      "~/.outlet/images/partners.png" nil nil :ascent center)
+          ("Personal"      "~/.outlet/images/personal.png" nil nil :ascent center)
           ("Task"          "~/.outlet/images/stock_todo.png" nil nil :ascent center)
           ("Org"           "~/.outlet/images/org-mode-unicorn.png" nil nil :ascent center)
           ("Statusnet"     "~/.outlet/images/statusnet.png" nil nil :ascent center)
@@ -692,6 +694,45 @@ on the item or on the file.
           ("Wordpress"     "~/.outlet/images/wordpress.png" nil nil :ascent center)
   ))
 #+END_SRC
+
+#+RESULTS:
+| Afspraak  | ~/.outlet/images/stock_new-meeting.png    | nil | nil | :ascent | center |
+| Blogging  | ~/.outlet/images/edit.png                 | nil | nil | :ascent | center |
+| Cobra     | ~/.outlet/images/car.png                  | nil | nil | :ascent | center |
+| DVD       | ~/.outlet/images/media-cdrom.png          | nil | nil | :ascent | center |
+| Emacs     | ~/.outlet/images/emacs.png                | nil | nil | :ascent | center |
+| Finance   | ~/.outlet/images/finance.png              | nil | nil | :ascent | center |
+| Habitat   | ~/.outlet/images/house.png                | nil | nil | :ascent | center |
+| Habit     | ~/.outlet/images/stock_task-recurring.png | nil | nil | :ascent | center |
+| Hobbies   | ~/.outlet/images/hobbies.png              | nil | nil | :ascent | center |
+| Partners  | ~/.outlet/images/partners.png             | nil | nil | :ascent | center |
+| Personal  | ~/.outlet/images/personal.png             | nil | nil | :ascent | center |
+| Task      | ~/.outlet/images/stock_todo.png           | nil | nil | :ascent | center |
+| Org       | ~/.outlet/images/org-mode-unicorn.png     | nil | nil | :ascent | center |
+| Statusnet | ~/.outlet/images/statusnet.png            | nil | nil | :ascent | center |
+| Systeem   | ~/.outlet/images/systeembeheer.png        | nil | nil | :ascent | center |
+| Wordpress | ~/.outlet/images/wordpress.png            | nil | nil | :ascent | center |
+
+*** Refiling
+A big part of organizing information and task is shuffling things
+around. The 'thing' to throw around is a heading and 'refiling' is
+the term org-mode uses for throwing.
+
+When filing, or capturing we want the items at the bottom of what we
+are filing it into. The main reason for this is that a large part of
+the sections that contain items are ordered. Should we file the item
+at the top, in many cases that would mean it is the most imminent
+thing to do, which is not the case.
+
+#+BEGIN_SRC emacs-lisp
+(setq
+   org-reverse-note-order nil    ; File at the bottom of an entry
+   org-refile-allow-creating-parent-nodes (quote confirm)
+   org-refile-targets (quote ((org-agenda-files :maxlevel . 10 )))
+   org-refile-use-outline-path 'file
+)
+#+END_SRC
+
 
 *** Old configuration
 Below is what was contained in the old configuration. I will slowly
@@ -721,12 +762,6 @@ migrate this into more literal sections
    org-return-follows-link t
    org-support-shift-select (quote always)
   
-   ; Refiling
-   org-reverse-note-order nil    ; File at the bottom of an entry
-   org-refile-allow-creating-parent-nodes (quote confirm)
-   org-refile-targets (quote ((org-agenda-files :maxlevel . 10 )))
-   org-refile-use-outline-path t
-  
    org-agenda-dim-blocked-tasks t
    org-agenda-log-mode-items (quote (closed clock state))
    org-agenda-skip-deadline-if-done t
@@ -755,6 +790,7 @@ migrate this into more literal sections
   ;; Bit of a leftover from reorganising bits, do this later
   (add-to-list 'org-tags-exclude-from-inheritance (quote "fix"))
   (add-to-list 'org-tags-exclude-from-inheritance (quote "sell"))
+  (add-to-list 'org-tags-exclude-from-inheritance (quote "build"))
   
     ;; Activate Babel languages
   (require 'ob-gnuplot)
@@ -1112,7 +1148,7 @@ migrate this into more literal sections
   ;;
   ;; Org-mobile configuration
   (setq
-   ;;org-mobile-directory "/plato.hsdev.com:/home/mrb/data/mobileorg"              ; Remote org dir
+   org-mobile-directory "/plato.hsdev.com:/home/mrb/data/mobileorg"              ; Remote org dir
    org-mobile-inbox-for-pull (concat org-metadir "from-mobile.org")    ; Where to place items which needs resolving
    org-mobile-force-id-on-agenda-items nil                             ; No id yet, don't see the advatage yet
    org-mobile-use-encryption nil                                       ; No encryption yet.
@@ -1230,6 +1266,9 @@ migrate this into more literal sections
     (stripe-org-tables-enable))
   ;; TODO I want to have this in the agenda mode to
 #+END_SRC
+
+#+RESULTS:
+: mrb/enable-org-table-striping
 
  
 *** Encrypting information in org-mode
@@ -1831,14 +1870,11 @@ ERC is an irc implementation within emacs. When I start erc I want to
 connect automatically the configured servers without having to enter
 nicks and passwords and stuff. 
 
-Start by configuring defaults
-#+BEGIN_SRC emacs-lisp
-(setq erc-nick '("Marcel|HSD" "Marcel||HSD"))
-#+END_SRC
-
+Start by configuring some basics.
 #+BEGIN_SRC emacs-lisp
   (require 'erc)
   (require 'erc-services)
+  (setq erc-nick '("Marcel|HSD" "Marcel||HSD"))
   (setq erc-modules (quote (
     autojoin button completion fill
     irccontrols keep-place list log
@@ -1883,7 +1919,6 @@ Define a function to start erc, so I can start it the way I like it.
     ;;I use freenode for most things
     (erc-tls :server "irc.freenode.net" :port 7000))
 #+END_SRC
-
 *** XMPP
 XMPP related settings, including interfacing it to other systems
 #+BEGIN_SRC emacs-lisp
