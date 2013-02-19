@@ -1657,7 +1657,7 @@ Keyboard and mouse key bindings
   (global-set-key (kbd "M-x") 'smex)
   (global-set-key (kbd "M-X") 'smex-major-mode-commands)
   
-  
+  (global-set-key [(control x) (m)] 'make-mailcompose-frame)
 #+END_SRC
 *** Key bindings
 **** Global
@@ -2040,7 +2040,74 @@ configuration for that as well.
      mu4e-view-image-max-width 800
      mu4e-reply-to-address "marcel@hsdev.com")
 #+END_SRC
-** To organize and properly configura
+
+Composing mail is often an /out of band/ activity, like creating a dent
+or a capture, so I would like to have roughly the same
+behaviour. This is provided by commpose-mail-other-frame, but I could
+not get awesome to properly place the windows because it's hard to
+match on the varying name that xprop delivers, so. we make our own here:
+
+#+BEGIN_SRC emacs-lisp
+  (defun make-mailcompose-frame ()
+      "Create a new frame and run mail-compose"
+      (interactive)
+      ;; Create and select the frame
+      (select-frame (make-frame '((name . "mailcompose") 
+                    (width . 100) (height . 50)
+                    (menu-bar-lines . 0) (tool-bar-lines . 0))))
+  
+      ;; Capture a Todo entry, force edit-window method
+      (compose-mail)
+    
+      ;; Once there, make sure we're the only one
+      (delete-other-windows)
+    )
+  
+    (defadvice message-kill-buffer (after delete-mailcompose-frame activate)
+      "Advise message-kill-buffer to close the frame if it is the capture frame"
+      (if (equal "mailcompose" (frame-parameter nil 'name))
+          (delete-frame)))
+    (defadvice message-send-and-exit (after delete-mailcompose-frame activate)
+      "Advise message-send-and-exit to close the frame if it is the capture frame"
+      (if (equal "mailcompose" (frame-parameter nil 'name))
+          (delete-frame)))
+#+END_SRC
+
+*** XMPP
+XMPP related settings, including interfacing it to other systems
+#+BEGIN_SRC emacs-lisp
+  ; Directly tie into the GIT repository on this machine if needed
+  (add-to-list 'load-path "~/dev/emacs/packages/emacs-jabber/")
+  (add-to-list 'load-path "~/dev/emacs/packages/emacs-jabber/compat/")
+  ;;(require 'jabber-autoloads)
+  (require 'jabber)
+  
+  ; Configuration variables
+  (setq 
+   jabber-show-offline-contacts nil
+   jabber-default-priority 30
+   jabber-alert-message-hooks (quote (jabber-message-libnotify jabber-message-echo jabber-message-scroll))
+   jabber-message-alert-same-buffer nil
+   jabber-roster-show-bindings nil
+  )
+  
+  ;; Me wants the smileys too
+  ;; FIXME: I suspect this makes chats annoyingly slow to type in?
+  ;;(require 'autosmiley)
+  ;;(add-hook 'jabber-chat-mode-hook 'autosmiley-mode)
+  
+  ;; Show some info in the modeline
+  (jabber-mode-line-mode 1)
+  
+  ;; Do not steal my focus in the mini buffer
+  ;; Message alert hooks
+  (define-jabber-alert echo "Show a message in the echo area"
+    (lambda (msg)
+      (unless (minibuffer-prompt)
+        (message "%s" msg))))
+#+END_SRC
+
+** To organize and properly configure
 Multiple cursors sounds interesting
 
 #+BEGIN_SRC emacs-lisp
