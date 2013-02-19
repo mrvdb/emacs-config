@@ -849,8 +849,13 @@ migrate this into more literal sections
     (let ((current-prefix-arg '(64)))  ;; Triple C-u (4^3)
       (call-interactively 'org-todo))
   )
+  (defun force-org-agenda-todo()
+    (interactive)
+    (let ((current-prefix-arg '(64)))  ;; Triple C-u (4^3)
+      (call-interactively 'org-agenda-todo))
+  )
   (define-key org-mode-map [(control super .)] 'force-org-todo)
-  (define-key org-agenda-mode-map [(control super .)] 'force-org-todo)
+  (define-key org-agenda-mode-map [(control super .)] 'force-org-agenda-todo)
   
   (define-key org-agenda-mode-map [(super .)] 'org-agenda-todo)
   ; Map ⌘t to schedule in both task and agenda-view
