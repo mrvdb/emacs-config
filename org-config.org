@@ -138,7 +138,7 @@ article style.
 
 This option does not seem to work when not in the same file as
 exporting. I have added this in the customize interface directly now.
-#+LaTeX_CLASS_OPTIONS: [11pt,a4paper,twoside]
+#+LaTeX_CLASS_OPTIONS: [10pt,a4paper,twoside]
 
 Latex default configuration to produce a memo-style document.
 
@@ -209,6 +209,7 @@ relaxing to look at. This is especially an issue when using
 screenshots or other larger pictures which interrupt the text flow aggressively.
 #+LATEX_HEADER: \parindent 0pt
 #+LATEX_HEADER: \raggedbottom
+#+LATEX_HEADER: \raggedright
 * Links
 Autolinks which can be entered like [[keyword:parameter]] This is mostly
 here as an example, I don’t think I’ve ever used these in my org files
