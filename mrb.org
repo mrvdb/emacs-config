@@ -258,12 +258,6 @@ And enable the minor mode globally.
       (highlight-parentheses-mode t)))
   (global-highlight-parentheses-mode t)
   
-  ;; 
-  ;; Visual customizations, make it look the way I want to
-  ;;
-  ;; We use a dark background
-  (setq-default frame-background-mode 'dark)
-  
   ;; no splash screen
   (setq inhibit-startup-screen  t)
   (setq inhibit-startup-message t)
@@ -271,33 +265,7 @@ And enable the minor mode globally.
   
   ;; check speed consequences of this
   (setq column-number-mode t)
-  
-  ; Zenburn theme with a slightly darker background, the default looks too misty for me
-  (defvar zenburn-bg "#303030")
-  (defvar zenburn-bg-1 "#303030")
-  (load-theme 'zenburn)
-  
-  ;;
-  ;; Zenburn corrections
-  ;;
-  ;; Adjust the faces for the modeline, mostly for powerline visibility
-  (set-face-attribute 'mode-line nil :foreground "white" :background "grey40" :box nil)
-  ;; This was the old color
-  ;; (set-face-attribute 'mode-line nil :foreground "#4c7073" :box nil)
-  (set-face-attribute 'mode-line-inactive nil :box nil)
-  ;; Zenburn underlines date face in org, no go
-  (set-face-attribute 'org-date nil :underline nil)
-  ;; The jabber status is tricky in combination with powerline
-  ;;(set-face-attribute 'jabber-roster-user-online nil :foreground "#f9f9f9" :bold t :background "#666666" :inverse-video nil)
-  
-  ;; Sometimes the mode-line screws up, this resets it until I have
-  ;; found a better solution than a hard reset
-  (defun powerline()
-    (interactive)
-    (load-library "powerline")
-  )
-  
-  ;;
+
   ;; When I am not typing, the cursor should become more visible, so I
   ;; don't lose it.
   (require 'cursor-chg)                   ; Load this library
@@ -326,31 +294,32 @@ And enable the minor mode globally.
   ;; still seemingly painless apply these settings.
   (defun run-client-settings()
     (interactive)  
-    ;; When making a selection, keep all font-locking too, but make it
-    ;; stand out from the matching background
-    (set-face-attribute 'region nil :inherit nil :background "gray31" :foreground nil)
-  
-    ;; Just change the background when matching the expression, leave
-    ;; other fontifying as is
-    (set-face-attribute 'show-paren-match nil :inherit nil :background "gray10" :foreground nil)
-  
+    
     (tool-bar-mode -1)   ;; No tool-bar
     (scroll-bar-mode -1) ;; No scroll-bar
     (menu-bar-mode -1)   ;; No menu-bar
     (tooltip-mode -1)    ;; No tooltips
+  
+    ;; When making a selection, keep all font-locking too, but make it
+    ;; stand out from the matching background, the key here is the nil in the
+    ;; foreground specification
+    (set-face-attribute 'region nil :inherit nil :background "gray31" :foreground nil)
+  
+    ;; Just change the background when matching the expression, leave
+    ;; other fontifying as is
+    (set-face-attribute 'show-paren-match nil :inherit nil :background "gray18" :foreground nil)
   )
-
+  
   ;; Defer fontification a little bit, so we could gain a bit in scroll speed
-  (setq jit-lock-defer-time 0.03)
-
+  (setq jit-lock-defer-time 0.02)
+  
   ;; This seems to work if we start up emacs using filename on cli and
   ;; server was not running yet. It does however not work if we just
   ;; startup emacs (through my edit script) without a filename on the cli 
   (add-hook 'server-visit-hook 'run-client-settings)
   
   ;; Make colorful balanced parentheses etc. in different modes
-  (add-hook 'lisp-mode 'rainbow-delimiters-mode)
-  
+  (add-hook 'lisp-mode 'rainbow-delimiters-mode)  
 #+END_SRC
 
 ** Buffers and files
@@ -362,7 +331,7 @@ get confused:
   ;; nicer buffer names
   (require 'uniquify)
   (setq uniquify-buffer-name-style 'forward)
-  #+END_SRC
+#+END_SRC
 
 #+BEGIN_SRC emacs-lisp
   ;; Minibuffer prompt is a prompt, don't enter it as text.
@@ -538,7 +507,7 @@ be easily bound to keys.
     (interactive)
     (org-capture nil "j")
   )
-  (global-set-key "\C-cj" 'make-journal-entry)
+  
 #+END_SRC
 
 By default C-c C-c ends the capture, but is normally the shortcut to
@@ -729,23 +698,33 @@ on the item or on the file.
   ))
 #+END_SRC
 
-#+RESULTS:
-| Afspraak  | ~/.outlet/images/stock_new-meeting.png    | nil | nil | :ascent | center |
-| Blogging  | ~/.outlet/images/edit.png                 | nil | nil | :ascent | center |
-| Cobra     | ~/.outlet/images/car.png                  | nil | nil | :ascent | center |
-| DVD       | ~/.outlet/images/media-cdrom.png          | nil | nil | :ascent | center |
-| Emacs     | ~/.outlet/images/emacs.png                | nil | nil | :ascent | center |
-| Finance   | ~/.outlet/images/finance.png              | nil | nil | :ascent | center |
-| Habitat   | ~/.outlet/images/house.png                | nil | nil | :ascent | center |
-| Habit     | ~/.outlet/images/stock_task-recurring.png | nil | nil | :ascent | center |
-| Hobbies   | ~/.outlet/images/hobbies.png              | nil | nil | :ascent | center |
-| Partners  | ~/.outlet/images/partners.png             | nil | nil | :ascent | center |
-| Personal  | ~/.outlet/images/personal.png             | nil | nil | :ascent | center |
-| Task      | ~/.outlet/images/stock_todo.png           | nil | nil | :ascent | center |
-| Org       | ~/.outlet/images/org-mode-unicorn.png     | nil | nil | :ascent | center |
-| Statusnet | ~/.outlet/images/statusnet.png            | nil | nil | :ascent | center |
-| Systeem   | ~/.outlet/images/systeembeheer.png        | nil | nil | :ascent | center |
-| Wordpress | ~/.outlet/images/wordpress.png            | nil | nil | :ascent | center |
+Showing items in the agenda views reacts to a number of settings. In
+my setup I want blocked tasks hidden, that is the reason for
+blocking. Hide tasks which are DONE already and a deadline is coming
+up, no use showing those; the same goes for tasks which are DONE and
+are scheduled. In short, anything that does not need my attention
+needs to be hidden. 
+#+BEGIN_SRC emacs-lisp
+(setq
+    org-agenda-dim-blocked-tasks t
+    org-agenda-skip-deadline-if-done t
+    org-agenda-skip-scheduled-if-done t
+)
+#+END_SRC
+
+*** Babel / Literate programming
+#+BEGIN_SRC emacs-lisp
+  (setq
+     org-babel-interpreters (quote ("emacs-lisp" "python" "ditaa" "sql" "sh" "R"))
+  )
+  ;; Activate Babel languages
+  (require 'ob-gnuplot)
+  ;;(require 'ob-mathomatic)
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '((R . t) (ditaa . t) (sql . t) (sh . t) (emacs-lisp t) (lisp t) 
+     (css t) (awk t) (js t) (lisp t) (org t) (plantuml t) (gnuplot . t)))
+#+END_SRC
 
 *** Refiling
 A big part of organizing information and task is shuffling things
@@ -766,7 +745,6 @@ thing to do, which is not the case.
    org-refile-use-outline-path 'file
 )
 #+END_SRC
-
 
 *** Old configuration
 Below is what was contained in the old configuration. I will slowly
@@ -796,13 +774,8 @@ migrate this into more literal sections
    org-return-follows-link t
    org-support-shift-select (quote always)
   
-   org-agenda-dim-blocked-tasks t
    org-agenda-log-mode-items (quote (closed clock state))
-   org-agenda-skip-deadline-if-done t
    org-agenda-skip-deadline-prewarning-if-scheduled t
-   org-agenda-skip-scheduled-if-done t
-   org-agenda-start-with-log-mode t
-   org-babel-interpreters (quote ("emacs-lisp" "python" "ditaa" "sql" "sh" "R"))
    org-blank-before-new-entry (quote ((heading) (plain-list-item)))
    org-export-htmlize-output-type (quote css)
    org-fast-tag-selection-single-key (quote expert)
@@ -826,19 +799,6 @@ migrate this into more literal sections
   (add-to-list 'org-tags-exclude-from-inheritance (quote "sell"))
   (add-to-list 'org-tags-exclude-from-inheritance (quote "build"))
   
-    ;; Activate Babel languages
-  (require 'ob-gnuplot)
-  (require 'ob-mathomatic)
-  (org-babel-do-load-languages
-   'org-babel-load-languages
-   '((R . t) (ditaa . t) (sql . t) (sh . t) (emacs-lisp t) (lisp t) 
-     (css t) (awk t) (js t) (lisp t) (org t) (plantuml t) (gnuplot . t)))
-  
-  ; Keybindings we want to have available all the time
-  ; even when not in org mode.
-  (global-set-key "\C-ca" 'org-agenda)
-  (global-set-key "\C-cb" 'org-iswitchb)
-  (global-set-key "\C-cl" 'org-store-link)
   
   ; Keybindings which only make sense when having an orgmode file
   (define-key org-mode-map "\C-ct" 'org-set-tags)
@@ -873,13 +833,12 @@ migrate this into more literal sections
     ;; This should not be needed, but autofill does not come on automatically
     (turn-on-auto-fill)
   )
-  (global-set-key [(control c) (g)] 'gtd)
   
   
   (defun mrb/is-project-p ()
     "This function returns true if the entry is considered a project.
      A project is defined to be:
-     - having a TODO keyword itself;
+     - having a TODO keyword itself (why was this again?);
      - having at least one todo entry, regardless of their state."
     (let ((has-todokeyword)
           (has-subtask)
@@ -1305,10 +1264,6 @@ migrate this into more literal sections
     (stripe-org-tables-enable))
   ;; TODO I want to have this in the agenda mode to
 #+END_SRC
-
-#+RESULTS:
-: mrb/enable-org-table-striping
-
  
 *** Encrypting information in org-mode
 I use the /encrypt/ tag for encrypting sections in org-mode (and
@@ -1392,9 +1347,6 @@ Statusnet, or perhaps microblog in general settings
   )
   
   
-  (global-set-key "\C-cip" 'identica-update-status-interactive)
-  (global-set-key "\C-cid" 'identica-direct-message-interactive)
-  (global-set-key "\C-cis" 'identica-shortenurl-replace-at-point)
   
   ;; I'm using a floating frame in awesome WM for dents
   (defun make-dent-frame ()
@@ -1422,7 +1374,6 @@ Statusnet, or perhaps microblog in general settings
     (if (equal "dent" (frame-parameter nil 'name))
         (delete-frame))
   )
-  (global-set-key "\C-cd" 'make-dent-frame)
   
   (provide 'statusnet)
   
@@ -1484,34 +1435,36 @@ LDAP integration, mostly for address book lookups
   
 #+END_SRC
 ** Key and mouse bindings
-Keyboard and mouse key bindings
+Keyboard binding are the primary way to interact for me. I have been
+struggling with consistent keyboard shorcuts and how to integrate
+them with the nother systems on my machine which capture
+shortcut keys. At this time the following applications capture
+shortcut keys:
+1. the awesome window manager captures keys;
+2. xbindkeys provides a number of key bindings for application
+   dependent operations;
+3. emacs (and obviously all other applications, but those are largely
+   irrelevant).
+4. the X-windows server has the kbd extension which has some keyboard
+   related things to configure.
+5. The linux kernel provides key mapping, so I have to look at that
+   place too (xmodmap)
+
+
 #+BEGIN_SRC emacs-lisp
   ; Unset some keys to let modes explicitly set them to their value (case in point: orgmode)
   ;
   ; Unset the standard right mouse click behaviour (it kills parts of regions)
   (global-unset-key (kbd "<mouse-3>"))
   
-  ;
   ; Let marks be set when shift arrowing, everybody does this
-  ;
   (setq shift-select-mode t)
   (delete-selection-mode 1)
   
-  ;
-  ; Setup function keys the way I like it.
-  
-  ; Menu key does M-x, if we have it.
-  (global-set-key (kbd "<apps>") 'execute-extended-command)
-  (global-set-key [f1] 'help-command)
-  (global-set-key [f2] 'save-buffer)
-  (global-set-key [f3] 'find-file)
-  
-  ; Make gnome compliant
+  ; Make gnome compliant, define a full-screen function and bind to F11
   (defun switch-full-screen ()
     (interactive)
     (shell-command "wmctrl -r :ACTIVE: -btoggle,fullscreen"))
-  (global-set-key [f11] 'switch-full-screen)
-  (global-set-key [XF86MenuKB] 'accelerate-menu)
   
   ; Font scaling, like in chrome
   (global-set-key [(super =)] 'text-scale-increase)
@@ -1553,12 +1506,7 @@ Keyboard and mouse key bindings
   (global-set-key (kbd "M-s-<left>") 'previous-buffer)
   (global-set-key (kbd "M-s-<right>") 'next-buffer)
   
-  (define-key global-map [?\s-~] 'ns-prev-frame)
-  ;; FIME: does not work anymore
-  (global-set-key [(control tab)] 'switch-to-other-buffer)
-  
   (global-set-key [(super k)] 'ido-kill-buffer)
-  
   
   ;; Resizing windows
   ;; Introduce a bit of intelligence so the shrink and enlarge know what window I'm in.
@@ -1606,13 +1554,11 @@ Keyboard and mouse key bindings
     (move-border-up-or-down arg nil))
   
   ;; Use Super + Arrows to steer the borders
-  (global-set-key [(super right)] 'move-border-right)
-  (global-set-key [(super left)]  'move-border-left)
   (global-set-key [(super up)] 'move-border-up)
   (global-set-key [(super down)] 'move-border-down)
   
-  
-  ; cut, copy and paste with cmd-key (like on osx). 
+  ;; cut, copy and paste with cmd-key (like on osx). 
+  ;; this kinds sucks now, because the rest of the OS does not do this
   (global-set-key [(super z)] 'undo)
   (global-set-key [(super x)] 'clipboard-kill-region)
   (global-set-key [(super c)] 'clipboard-kill-ring-save)
@@ -1670,6 +1616,37 @@ daemon from the terminal.
 
 #+BEGIN_SRC emacs-lisp
 (global-set-key [(control x) (control q)] 'save-buffers-kill-emacs)
+#+END_SRC
+
+***** Special keys
+For some special keys I have defined some commands
+#+BEGIN_SRC emacs-lisp
+  ;; Menu key does M-x, if we have it.
+  ;;(global-set-key (kbd "<apps>") 'execute-extended-command)
+  (global-set-key [f1] 'help-command)
+  (global-set-key [f2] 'save-buffer)
+  (global-set-key [f3] 'find-file)
+  (global-set-key [f11] 'switch-full-screen)
+  ;; Not sure what this is?
+  (global-set-key [XF86MenuKB] 'accelerate-menu)
+#+END_SRC
+
+**** Mode related
+***** Org-mode
+#+BEGIN_SRC emacs-lisp
+  (global-set-key [(control c) (g)] 'gtd)
+  (global-set-key [(control c) (a)] 'org-agenda)
+  (global-set-key [(control c) (b)] 'org-iswitchb)
+  (global-set-key [(control c) (l)] 'org-store-link)
+  (global-set-key [(control c) (j)] 'make-journal-entry)  
+#+END_SRC
+  
+***** Identica-mode
+#+BEGIN_SRC emacs-lisp
+  (global-set-key [(control c) (ip)] 'identica-update-status-interactive)
+  (global-set-key [(control c) (id)] 'identica-direct-message-interactive)
+  (global-set-key [(control c) (is)] 'identica-shortenurl-replace-at-point)
+  (global-set-key [(control c) (d)]  'make-dent-frame)
 #+END_SRC
 
 ** Terminals, Character encodings and emulation
@@ -1909,18 +1886,26 @@ ERC is an irc implementation within emacs. When I start erc I want to
 connect automatically the configured servers without having to enter
 nicks and passwords and stuff. 
 
-Start by configuring some basics.
+Start by configuring some basic settings
 #+BEGIN_SRC emacs-lisp
   (require 'erc)
-  (require 'erc-services)
-  (setq erc-nick '("Marcel|HSD" "Marcel||HSD"))
+ 
   (setq erc-modules (quote (
     autojoin button completion fill
     irccontrols keep-place list log
     match menu move-to-prompt netsplit
     networks noncommands notify readonly
     replace ring smiley stamp track unmorse highlight-nicknames smiley)))
+#+END_SRC
+
+Configure erc to use services and automatically identify my Nicks to
+Nickserv.
+#+BEGIN_SRC emacs-lisp
+  (require 'erc-services)
+  (setq erc-nick '("Marcel|HSD" "Marcel||HSD"))
+
   (setq erc-prompt-for-nickserv-password nil)
+  (erc-services-mode 1)
 #+END_SRC
 
 These are the channels I visit regularly, maintain a list of
@@ -1958,40 +1943,6 @@ Define a function to start erc, so I can start it the way I like it.
     ;;I use freenode for most things
     (erc-tls :server "irc.freenode.net" :port 7000))
 #+END_SRC
-*** XMPP
-XMPP related settings, including interfacing it to other systems
-#+BEGIN_SRC emacs-lisp
-  ; Directly tie into the GIT repository on this machine if needed
-  (add-to-list 'load-path "~/dev/emacs/packages/emacs-jabber/")
-  (add-to-list 'load-path "~/dev/emacs/packages/emacs-jabber/compat/")
-  ;;(require 'jabber-autoloads)
-  (require 'jabber)
-  
-  ; Configuration variables
-  (setq 
-   jabber-show-offline-contacts nil
-   jabber-default-priority 30
-   jabber-alert-message-hooks (quote (jabber-message-libnotify jabber-message-echo jabber-message-scroll))
-   jabber-message-alert-same-buffer nil
-   jabber-roster-show-bindings nil
-  )
-  
-  ;; Me wants the smileys too
-  ;; FIXME: I suspect this makes chats annoyingly slow to type in?
-  ;;(require 'autosmiley)
-  ;;(add-hook 'jabber-chat-mode-hook 'autosmiley-mode)
-  
-  ;; Show some info in the modeline
-  (jabber-mode-line-mode 1)
-  
-  ;; Do not steal my focus in the mini buffer
-  ;; Message alert hooks
-  (define-jabber-alert echo "Show a message in the echo area"
-    (lambda (msg)
-      (unless (minibuffer-prompt)
-        (message "%s" msg))))
-#+END_SRC
-
 *** Mail
 Mail configuration. 
 #+BEGIN_SRC emacs-lisp
