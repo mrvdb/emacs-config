@@ -194,6 +194,7 @@ and run =el-get-install= with the package name.
           (:name stripe-buffer :type github :pkgname "sabof/stripe-buffer")
           (:name keyfreq :type github :pkgname "dacap/keyfreq")
           (:name git-auto-commit-mode :type github :pkgname "ryuslash/git-auto-commit-mode")
+          (:name ujelly-theme :type elpa)
         )
   )
   (el-get)
@@ -203,6 +204,39 @@ and run =el-get-install= with the package name.
 Many settings have to do with how the screen looks and behaves in a
 visual way. Thing like colors, highlighting etc. go fall into this
 category.
+
+I generally use dark backgrounds, so let's tell Emacs that.
+#+BEGIN_SRC emacs-lisp
+(setq-default frame-background-mode 'dark)
+#+END_SRC
+
+Set the zenburn theme, slightly corrected for a darker
+background color. The default one is to light in daylight conditions.
+#+BEGIN_SRC emacs-lisp
+  ;; FIXME: this should be done in a different way
+  (defvar zenburn-bg "#252525")
+  (defvar zenburn-bg-1 "#252525")
+  (require 'zenburn-theme)
+  (load-theme 'zenburn)
+#+END_SRC
+
+The zenburn theme does not fit for everything so I have a number of
+correction, of which the most important one is loading the ujelly
+theme. I do it like this because zenburn is more complete than ujelly
+and otherwise I'd have a large set of faces defined in a wrong color.
+#+BEGIN_SRC emacs-lisp
+  ;; Adjust zenburn with the ujelly theme which makes is a bit more vibrant. 
+  ;; This is obviously not the way to do this, but it works for me
+  (require 'ujelly-theme)
+  (load-theme 'ujelly)
+
+  ;; Zenburn underlines date face in org, no go
+  (set-face-attribute 'org-date nil :underline nil)
+
+  ;; Adjust the faces for the modeline
+  (set-face-attribute 'mode-line nil :foreground "white" :background "grey40" :box nil)
+  (set-face-attribute 'mode-line-inactive nil :box nil :underline nil :overline "grey40")
+#+END_SRC
 
 I enable hightlighting matching parentheses in many levels
 globally. I do not know of a situation where not knowing which
