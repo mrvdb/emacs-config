@@ -941,8 +941,6 @@ migrate this into more literal sections
     "Start my GTD system"
     (interactive)
     (find-file org-default-notes-file)
-    ;; This should not be needed, but autofill does not come on automatically
-    (turn-on-auto-fill)
   )
   
   
