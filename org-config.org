@@ -138,13 +138,29 @@ article style.
 
 This option does not seem to work when not in the same file as
 exporting. I have added this in the customize interface directly now.
-#+LaTeX_CLASS_OPTIONS: [10pt,a4paper,twoside]
+#+LaTeX_CLASS_OPTIONS: [10pt,a4paper,twoside,microtype]
 
 Latex default configuration to produce a memo-style document.
 
 Our documents are mostly in dutch, so load that up by default, it's
 easy to override this on a subtree or file basis.
 #+LATEX_HEADER: \usepackage[dutch]{babel}
+
+Adjust the title of our documents
+#+LaTeX_HEADER: \usepackage{titling}
+#+LaTeX_HEADER: \renewcommand{\maketitlehooka}{\color{hsdpurple}}
+
+Make headers a bit more compact and more pleasing to look at
+#+LaTeX_HEADER: \usepackage[compact]{titlesec}
+
+Make our headers use the HSD purple color
+#+LaTeX_HEADER: \usepackage{sectsty}
+#+LaTeX_HEADER: \usepackage{color}
+#+LaTeX_HEADER: \definecolor{hsdpurple}{RGB}{102,102,153}
+#+LaTex_HEADER: \allsectionsfont{\color{hsdpurple}}
+
+Do the same for figure and table captions.
+#+LaTex_HEADER: \usepackage[labelfont={color=hsdpurple,bf}]{caption}
 
 I still like the sans family of computer modern
 #+LATEX_HEADER: \renewcommand{\familydefault}{\sfdefault}
@@ -189,7 +205,7 @@ First, make the @ character a letter, so we can use the @title,
 
 The header contains the title of the document on the left for odd
 pages and on the right for even pages.
-#+LATEX_HEADER: \fancyhead[LO,RE]{\Large{\bf{\@title}}}
+#+LATEX_HEADER: \fancyhead[LO,RE]{\color{hsdpurple}\LARGE{\bf{\@title}}}
 
 The logo is just displayed on odd pages, on the right.
 #+LATEX_HEADER: \fancyhead[RO]{\includegraphics[height=16mm]{//home/mrb/.outlet/images/hsd.pdf}}
@@ -197,7 +213,7 @@ The logo is just displayed on odd pages, on the right.
 The footer contains page references N of M style and the author
 information. Here also, the position is alternating with odd and even pages.
 #+LATEX_HEADER: \fancyfoot[RO,LE]{\small{\bf{\thepage | \pageref{LastPage}}}}
-#+LATEX_HEADER: \fancyfoot[LO,RE]{\small{\bf{\@date{} | \@author}}}
+#+LATEX_HEADER: \fancyfoot[LO,RE]{\small{\bf{\@date{} | \@author <\href{mailto:marcel@hsdev.com}{marcel@hsdev.com}>}}}
 
 Reset the @ character back to what it was
 #+LATEX_HEADER: \makeatother
@@ -210,6 +226,7 @@ screenshots or other larger pictures which interrupt the text flow aggressively.
 #+LATEX_HEADER: \parindent 0pt
 #+LATEX_HEADER: \raggedbottom
 #+LATEX_HEADER: \raggedright
+
 * Links
 Autolinks which can be entered like [[keyword:parameter]] This is mostly
 here as an example, I don’t think I’ve ever used these in my org files
