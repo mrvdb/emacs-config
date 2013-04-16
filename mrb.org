@@ -2192,7 +2192,7 @@ etc.
 
 * Self configuration                                                                                 :exclude:
 I have the same config file for orgmode itself
-#+SETUPFILE: ~/.outlet/etc/org-config.org
+#+SETUPFILE: "~/.outlet/etc/org-config.org"
   
 If there is anything that needs to be configured specifically for this
 file, here is the place to do it. Other than those, nothing else
