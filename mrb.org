@@ -1535,22 +1535,36 @@ shortcut keys:
 5. The linux kernel provides key mapping, so I have to look at that
    place too (xmodmap)
 
+Because I am daft, here is the notation for the modifiers:
+- C - :: control
+- s - :: super, meaning the (left) windows key in my configuration
+- M - :: meta, meaning the (left) alt key in my configuration
+- S - :: shift
+
+I like the explicit notation where the name of the key is spelled out
+better, and I'll move all configured keybindings to that eventually.
+
+The right alt and the right <menu> key should be the same as the left
+alt and the super key, but I haven't gotten around to configuring
+that yet.
+
+*** First, unsetting the keys I don't want.
+Let's begin with killing some bindings which are in my way, notably
+the standard right mouse click behaviour. This is because I want it
+to behave in org-mode, which apparently sets this. I should probably
+find out a better way for this.
 
 #+BEGIN_SRC emacs-lisp
-  ; Unset some keys to let modes explicitly set them to their value (case in point: orgmode)
-  ;
-  ; Unset the standard right mouse click behaviour (it kills parts of regions)
-  (global-unset-key (kbd "<mouse-3>"))
-  
+(global-unset-key (kbd "<mouse-3>"))
+#+END_SRC
+*** Setting keys
+This is the remnant of my old configuration. 
+#+BEGIN_SRC emacs-lisp
   ; Let marks be set when shift arrowing, everybody does this
+  ;; FIXME: this does not belong in keybindings, but somwhere global
   (setq shift-select-mode t)
   (delete-selection-mode 1)
-  
-  ; Make gnome compliant, define a full-screen function and bind to F11
-  (defun switch-full-screen ()
-    (interactive)
-    (shell-command "wmctrl -r :ACTIVE: -btoggle,fullscreen"))
-  
+    
   ; Font scaling, like in chrome
   (global-set-key [(super =)] 'text-scale-increase)
   (global-set-key [(super -)] 'text-scale-decrease)
@@ -1569,28 +1583,12 @@ shortcut keys:
   ;; Every mode can augment this at will obviously (org-mode does, for example)
   (global-set-key (kbd "RET") 'newline-and-indent)
   
+  ;; Comment code lines, command reacts based on the major mode.
   (global-set-key [(super /)] 'comment-or-uncomment-region)
-  (global-set-key [(super l)] 'goto-line)
+  
   (global-set-key [(super s)] 'save-buffer)
-  
-  ; Moving back and forth in frames, disregarding frames
-  (define-key global-map [(super \\)] 'next-multiframe-window)
-  (define-key global-map [(super \|)] 'previous-multiframe-window)
-  
-  ;; Alt-Cmd left-right arrows browse through buffers within the same frame
-  (global-set-key (kbd "M-s-<left>") 'previous-buffer)
-  (global-set-key (kbd "M-s-<right>") 'next-buffer)
-  
-  ;; Ctrl Cmd moves buffers up and down in the tiling of emacs
-  (global-set-key (kbd "<C-s-up>")     'buf-move-up)
-  (global-set-key (kbd "<C-s-down>")   'buf-move-down)
-  ;; These would conflict with awesome bindings
-  ;; (global-set-key (kbd "<C-S-left>")   'buf-move-left)
-  ;; (global-set-key (kbd "<C-S-right>")  'buf-move-right)
-  
-  (global-set-key (kbd "M-s-<left>") 'previous-buffer)
-  (global-set-key (kbd "M-s-<right>") 'next-buffer)
-  
+    
+  ;; Kill buffer, FIXME: asks for name, which I dont need
   (global-set-key [(super k)] 'ido-kill-buffer)
   
   ;; Resizing windows
@@ -1638,9 +1636,6 @@ shortcut keys:
     (interactive "P")
     (move-border-up-or-down arg nil))
   
-  ;; Use Super + Arrows to steer the borders
-  (global-set-key [(super up)] 'move-border-up)
-  (global-set-key [(super down)] 'move-border-down)
   
   ;; cut, copy and paste with cmd-key (like on osx). 
   ;; this kinds sucks now, because the rest of the OS does not do this
@@ -1650,13 +1645,14 @@ shortcut keys:
   (global-set-key [(super v)] 'yank)
   (global-set-key [(super a)] 'mark-whole-buffer)
   
+  ;; What is the kp- here?
   (global-set-key [(kp-delete)] 'delete-char)
   
-  ; Make `C-x C-m' and `C-x RET' be different (since I tend
-  ; to type the latter by accident sometimes.)
-  (define-key global-map [(control x) return] nil)
-  
-  
+  ;; Make `C-x C-m' and `C-x RET' be different (since I tend
+  ;; to type the latter by accident sometimes.)
+  ;; Should this not be an unset?
+  (global-set-key [(control x) return] nil)
+    
   (defun new-empty-buffer ()
     "Opens a new empty buffer."
     (interactive)
@@ -1674,20 +1670,7 @@ shortcut keys:
   ;; This custome kill buffer is close-current-buffer.
   (global-set-key [(super n)] 'new-empty-buffer)
   
-  ;; Bit of experimenting with keys chords to minimize thumb bending.
-  (require 'key-chord)
-  (key-chord-mode 1)    ;; Turn it on
-  
-  (key-chord-define-global "df" 'smex)        ; Pressing d and f together does the exectute extended command, smex style
-  (key-chord-define-global "()"     "()\C-b") ; Brackets go together when pressed together
-  
-  ;; Rebind M-x.
-  (global-set-key (kbd "C-c C-c M-x") 'execute-extended-command)
-  
-  ;; Commands are a plenty, smex is a one
-  (global-set-key (kbd "M-x") 'smex)
-  (global-set-key (kbd "M-X") 'smex-major-mode-commands)
-  
+  ;; Misc.
   (global-set-key [(control x) (m)] 'make-mailcompose-frame)
 #+END_SRC
 *** Key bindings
@@ -1700,30 +1683,82 @@ emacs is just easier. This saves me from having to kill the emacs
 daemon from the terminal.
 
 #+BEGIN_SRC emacs-lisp
-(global-set-key [(control x) (control q)] 'save-buffers-kill-emacs)
+  (global-set-key [(control x) (control q)] 'save-buffers-kill-emacs)
+#+END_SRC
+
+Probably the most important key is =M-x= (as set by default). That key
+gives access to other commands within emacs, so it better be
+effective. If I wasn't already used to it, I'd certainly not consider
+=M-x= as a first candidate. The main objection I have is that the two
+keys are close to eachother, making it hard to press in a typing flow.
+
+I like the incremental matching that smex does, so I am going to
+rebind the M-x keybinding to that, and rebind the original to have
+C-c as a prefix. Using the shift modifier with the M-x command also
+runs smex, but limits the commands to make sense for the current
+major mode only. 
+#+BEGIN_SRC emacs-lisp
+  (global-set-key [(control c)(meta x)] 'execute-extended-command)
+  (global-set-key [(meta x)] 'smex)
+  (global-set-key [(meta X)] 'smex-major-mode-commands)
 #+END_SRC
 
 ***** Special keys
-For some special keys I have defined some commands
+For some special keys I have defined some commands. Special keys are
+those keys that may not be on every keyboard, within reason. I
+consider the function keys also as special, although they do not fit
+the previous definition.
+
 #+BEGIN_SRC emacs-lisp
   ;; Menu key does M-x, if we have it.
   ;;(global-set-key (kbd "<apps>") 'execute-extended-command)
   (global-set-key [f1] 'help-command)
   (global-set-key [f2] 'save-buffer)
   (global-set-key [f3] 'find-file)
+  
+  ;; Make gnome compliant, define a full-screen function and bind to F11
+  (defun mrb/switch-full-screen ()
+    (interactive)
+    (shell-command "wmctrl -r :ACTIVE: -btoggle,fullscreen"))
   (global-set-key [f11] 'switch-full-screen)
-  ;; Not sure what this is?
+  
+  ;; Not sure what this is? It is not the menu key.
   (global-set-key [XF86MenuKB] 'accelerate-menu)
 #+END_SRC
 
-**** Mode related
+***** Resizing and swithcing windows and frames
+#+BEGIN_SRC emacs-lisp
+  ;; Moving back and forth in windows For now, I'm using the Fn Key +
+  ;; Arrows, seems consistent with the other window movements
+  (global-set-key [XF86AudioNext] 'next-multiframe-window)
+  (global-set-key [XF86AudioPrev] 'previous-multiframe-window)
+  
+  ;; Alt-Cmd left-right arrows browse through buffers within the same frame
+  (global-set-key [(meta super left)] 'previous-buffer)
+  (global-set-key [(meta super right)] 'next-buffer)
+
+  ;; Ctrl Cmd moves buffers up and down in the tiling of emacs
+  (global-set-key [(control super up)]   'buf-move-up)
+  (global-set-key [(control super down)] 'buf-move-down)
+
+  ;; These would conflict with awesome bindings, perhaps we should change those bindings
+  ;; (global-set-key (kbd "<C-S-left>")   'buf-move-left)
+  ;; (global-set-key (kbd "<C-S-right>")  'buf-move-right)
+  
+  ;; Use Super + Arrows to steer the borders
+  (global-set-key [(super up)] 'move-border-up)
+  (global-set-key [(super down)] 'move-border-down)
+#+END_SRC
+**** Mode specific
 ***** Org-mode
 #+BEGIN_SRC emacs-lisp
   (global-set-key [(control c) (g)] 'gtd)
   (global-set-key [(control c) (a)] 'org-agenda)
   (global-set-key [(control c) (b)] 'org-iswitchb)
   (global-set-key [(control c) (l)] 'org-store-link)
-  (global-set-key [(control c) (j)] 'make-journal-entry)  
+  (global-set-key [(control c) (j)] 'make-journal-entry) 
+
+  
 #+END_SRC
   
 ***** Identica-mode
