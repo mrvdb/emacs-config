@@ -391,6 +391,7 @@ one mode in particular.
   (add-hook 'ielm-mode-hook 'turn-on-eldoc-mode)
   (add-hook 'python-mode 'turn-on-eldoc-mode)
   
+
   
 #+END_SRC 
 ** Org-mode
@@ -720,6 +721,55 @@ needs to be hidden.
 )
 #+END_SRC
 
+*** Agenda customization
+#+BEGIN_SRC emacs-lisp
+  (require 'keywiz)
+  
+  ;; Helper function to build a set of functions and their 
+  (defun mrb/load-keybindings ()
+    "Since we don't want to have to pass through a keywiz game each time..."
+    (setq keywiz-cached-commands nil)
+    (do-all-symbols (sym)
+      (when (and (commandp sym)
+                 (not (memq sym '(self-insert-command
+                                  digit-argument undefined))))
+        (let ((keys (apply 'nconc (mapcar
+                                   (lambda (key)
+                                     (when (keywiz-key-press-event-p key)
+                                       (list key)))
+                                   (where-is-internal sym)))))
+          ;;  Politically incorrect, but clearer version of the above:
+          ;;    (let ((keys (delete-if-not 'keywiz-key-press-event-p
+          ;;                               (where-is-internal sym))))
+          (and keys
+               (push (list sym keys) keywiz-cached-commands))))))
+  
+  ;; Load em up
+  (mrb/load-keybindings)
+  
+  ;; Might be good to use this in org-agenda...
+  (defun mrb/random-keybinding ()
+    "Describe a random keybinding."
+    (interactive)
+    (let* ((command (keywiz-random keywiz-cached-commands))
+           (doc (and command (documentation (car command)))))
+        (if command
+            (concat (symbol-name (car command)) " "
+                    "(" (mapconcat 'key-description (cadr command) ", ") ")"
+                    (if doc
+                        (concat ": " (substring doc 0 (string-match "\n" doc)))
+                      ""))
+          "")))
+  
+  
+  ;; Call this function in a multipart agenda command.
+  (defun mrb/org-agenda-show-tip (arg)
+    (interactive)
+    (let ((inhibit-read-only t))
+      (insert "A random keybinding for inspiration:\n  ")
+      (insert (mrb/random-keybinding) "\n")))
+  
+#+END_SRC
 *** Babel / Literate programming
 #+BEGIN_SRC emacs-lisp
   (setq
