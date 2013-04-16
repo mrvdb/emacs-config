@@ -2297,7 +2297,7 @@ apparently this is what I need.
 Google map integration for Emacs
 #+BEGIN_SRC emacs-lisp
   ; Directly tie into the GIT repository on this machine
-  (add-to-list 'load-path "/home/mrb/dev/emacs/packages/jd-el/")
+  (add-to-list 'load-path "~/dev/emacs/packages/jd-el/")
   
   (require 'google-maps)
   
