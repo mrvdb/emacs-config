@@ -862,7 +862,14 @@ migrate this into more literal sections
   
   ; Keybindings which only make sense when having an orgmode file
   (define-key org-mode-map "\C-ct" 'org-set-tags)
-  (define-key org-mode-map "\C-ce" 'org-export)
+  
+  ;; After 7.9.4(?) the export menu is called by dispatch
+  (if
+      (version< "7.9.4" (org-version))
+      (define-key org-mode-map "\C-ce" 'org-export-dispatch)
+    (define-key org-mode-map "\C-ce" 'org-export)
+    )
+  
   (define-key org-mode-map [(super .)] 'org-todo)
   (defun force-org-todo()
     (interactive)
