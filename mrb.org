@@ -779,10 +779,12 @@ migrate this into more literal sections
    org-blank-before-new-entry (quote ((heading) (plain-list-item)))
    org-export-htmlize-output-type (quote css)
    org-fast-tag-selection-single-key (quote expert)
-   org-file-apps (quote ((auto-mode . emacs) ("\\.mm\\'" . default) ("\\.x?html?\\'" . "google-chrome %s") ("\\.pdf\\'" . default)))
+   org-file-apps (quote ((auto-mode . emacs) ("\\.dia\\'" . "dia %s") ("\\.mm\\'" . default) ("\\.pdf\\'" . default)))
    org-fontify-done-headline t
    org-goto-interface (quote outline-path-completion)
-   org-hierarchical-todo-statistics t
+   ;; non nil is just direct children, what an ODD name!!!!
+   org-hierarchical-todo-statistics nil
+
    org-provide-todo-statistics t
    org-log-into-drawer t
    org-log-redeadline (quote note)
