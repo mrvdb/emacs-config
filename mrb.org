@@ -112,7 +112,7 @@ for the details on the settings for this.
   
   ;; Turn on auto-fill minor mode for all text buffers
   (add-hook 'text-mode-hook 'turn-on-auto-fill)
-  
+
   ;; Should this be here?
   ;; Try to have urls and mailto links clickable everywhere
   (define-global-minor-mode global-goto-address-mode
@@ -195,6 +195,10 @@ and run =el-get-install= with the package name.
           (:name keyfreq :type github :pkgname "dacap/keyfreq")
           (:name git-auto-commit-mode :type github :pkgname "ryuslash/git-auto-commit-mode")
           (:name ujelly-theme :type elpa)
+          (:name erc-tweet :type github :pkgname "kidd/erc-tweet.el")
+          (:name erc-image :type github :pkgname "mrvdb/erc-image.el")
+          (:name flycheck :type github :pkgname "lunaryorn/flycheck")
+          (:name org-present :type github :pkgname "rlister/org-present") 
         )
   )
   (el-get)
