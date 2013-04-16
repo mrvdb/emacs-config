@@ -240,6 +240,10 @@ and otherwise I'd have a large set of faces defined in a wrong color.
   ;; Adjust the faces for the modeline
   (set-face-attribute 'mode-line nil :foreground "white" :background "grey40" :box nil)
   (set-face-attribute 'mode-line-inactive nil :box nil :underline nil :overline "grey40")
+
+  (set-face-attribute 'isearch nil :background "black" :foreground "tomato")
+  (set-face-attribute 'lazy-highlight nil :inherit isearch-lazy-highlight :background "sea green" :foreground "black")
+
 #+END_SRC
 
 I enable hightlighting matching parentheses in many levels
