@@ -2007,6 +2007,17 @@ Log every channel in a simple =#channel-date.txt= file.
   (setq erc-generate-log-file-name-function (quote erc-generate-log-file-name-with-date))
 #+END_SRC
 
+Within each channel, I like to change the prompt to the name of the
+channel; a quick google search turned out with this code:
+#+BEGIN_SRC emacs-lisp
+  (setq
+   erc-prompt (lambda ()
+                (if (and (boundp 'erc-default-recipients) (erc-default-target))
+                    (erc-propertize (concat (erc-default-target) ">") 'read-only t 'rear-nonsticky t 'front-nonsticky t)
+                  (erc-propertize (concat "ERC>") 'read-only t 'rear-nonsticky t 'front-nonsticky t))))
+  
+#+END_SRC
+
 Define a function to start erc, so I can start it the way I like it. 
 #+BEGIN_SRC emacs-lisp
   (defun mrb/erc ()
