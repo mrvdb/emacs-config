@@ -803,6 +803,50 @@ thing to do, which is not the case.
    org-refile-use-outline-path 'file
 )
 #+END_SRC
+*** Exporting to other formats
+Orgmode can export to a variety of formats, I mainly use LaTeX (PDF)
+and HTML as destination format
+
+#+BEGIN_SRC emacs-lisp
+(setq
+ org-export-latex-hyperref-format "\\ref{%s}:{%s}"
+ ;; old system
+ org-export-latex-title-command " "
+ ;; new system > 8.0
+ org-latex-title-command " "
+
+ org-export-docbook-xsl-fo-proc-command "fop %i %o"
+ org-export-docbook-xslt-proc-command "xsltproc --output %o %s %i"
+ org-export-htmlize-output-type (quote css)
+ org-export-htmlized-org-css-url "orgmode.css"
+)
+
+#+END_SRC
+#+BEGIN_SRC emacs-lisp
+  ; Exporting and Publishing related settings
+   
+  ; Apart from the normal export menu, I need something that exports
+  ; just the body, so the resulting html is suitable to be used inside a
+  ; blogging system like wordpress for example
+  
+  ; This puts the body inside a buffer called  blog-entry
+  (defun org-export-body-as-html ()
+    (interactive)
+    (org-export-as-html 3 nil nil "blog-entry" t))
+  
+  ; Make sure we export in css mode, meaning no inline css crap
+  (setq org-export-htmlize-output-type 'css)
+  (define-key org-mode-map "\C-c\C-e" 'org-export-body-as-html)
+  
+  (defun org-export-body-as-html-batch ()
+    "Call `org-export-as-html', may be used in batch processing as
+  emacs   --batch
+          --load=$HOME/lib/emacs/org.el
+          --eval \"(setq org-export-headline-levels 2)\"
+          --visit=MyFile --funcall org-export-body as-html-batch"
+    (interactive)
+    (org-export-as-html 3 nil nil nil t))
+#+END_SRC
 
 *** Old configuration
 Below is what was contained in the old configuration. I will slowly
@@ -971,31 +1015,7 @@ migrate this into more literal sections
   ; Activate it
   ;(add-hook 'org-after-tags-change-hook 'autoschedule-waiting)
   
-  ;
-  ; Exporting and Publishing related settings
-  ;
   
-  ; Apart from the normal export menu, I need something that exports
-  ; just the body, so the resulting html is suitable to be used inside a
-  ; blogging system like wordpress for example
-  
-  ; This puts the body inside a buffer called  blog-entry
-  (defun org-export-body-as-html ()
-    (interactive)
-    (org-export-as-html 3 nil nil "blog-entry" t))
-  
-  ; Make sure we export in css mode, meaning no inline css crap
-  (setq org-export-htmlize-output-type 'css)
-  (define-key org-mode-map "\C-c\C-e" 'org-export-body-as-html)
-  
-  (defun org-export-body-as-html-batch ()
-    "Call `org-export-as-html', may be used in batch processing as
-  emacs   --batch
-          --load=$HOME/lib/emacs/org.el
-          --eval \"(setq org-export-headline-levels 2)\"
-          --visit=MyFile --funcall org-export-body as-html-batch"
-    (interactive)
-    (org-export-as-html 3 nil nil nil t))
   
   ; Remove empty property drawers
   (defun mrb/org-remove-empty-propert-drawers ()
@@ -1318,7 +1338,7 @@ migrate this into more literal sections
   ;; Bind it to a C-c m (similar to C-x m which opens an empty mail)
   ;;(define-key org-mode-map [(control c) m] 'org-mime-subtree)
   (define-key org-mode-map "\C-cm" 'org-mime-subtree)
-
+  
   ;; This does not work
   ;;(define-key org-agenda-mode-map [(control c) m] 'mrb/mail-subtree-from-org-agenda)
   ;; This does
