@@ -1956,13 +1956,19 @@ nicks and passwords and stuff.
 Start by configuring some basic settings
 #+BEGIN_SRC emacs-lisp
   (require 'erc)
- 
-  (setq erc-modules (quote (
-    autojoin button completion fill
-    irccontrols keep-place list log
-    match menu move-to-prompt netsplit
-    networks noncommands notify readonly
-    replace ring smiley stamp track unmorse highlight-nicknames smiley)))
+  (require 'erc-tweet)
+  (require 'erc-image)
+  
+  (setq
+   erc-modules (quote (
+                       autojoin button completion fill
+                                irccontrols keep-place list log
+                                match menu move-to-prompt netsplit
+                                networks noncommands notify readonly
+                                replace ring smiley stamp track unmorse highlight-nicknames smiley
+                                tweet image))
+   erc-image-inline-fixed-size 150
+   )
 #+END_SRC
 
 Configure erc to use services and automatically identify my Nicks to
