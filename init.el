@@ -9,7 +9,7 @@
 ;; Load in the main org file which starts up configuration This will
 ;; lead to an mrb.el file automatically, so that can't exist in the
 ;; current directory for this to work. 
-(require 'ob-tangle)
+(require 'org)
 (org-babel-load-file "~/.emacs.d/mrb.org")
 
 ;; END init.el
