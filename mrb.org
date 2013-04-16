@@ -2124,6 +2124,8 @@ XMPP related settings, including interfacing it to other systems
    jabber-alert-message-hooks (quote (jabber-message-libnotify jabber-message-echo jabber-message-scroll))
    jabber-message-alert-same-buffer nil
    jabber-roster-show-bindings nil
+   jabber-auto-reconnect t
+   jabber-show-resources t
   )
   
   ;; Me wants the smileys too
