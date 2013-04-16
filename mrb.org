@@ -2156,6 +2156,8 @@ License templates
 (require 'xlicense)
 (setq license-directory (concat emacs-directory "licenses"))
 (add-to-list 'license-types '(agpl . "AGPL"))
+(setenv "ORGANIZATION" "HS-Development BV")
+(setq user-organization "HS-Development BV")
 #+END_SRC
 
 Make sure erase works properly, even though I don't understand this,
