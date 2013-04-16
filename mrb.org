@@ -1944,6 +1944,101 @@ was taken from http://ur1.ca/cf1m4 and sligthly adapted.
       (delete-other-windows)
       nil))  
 #+END_SRC
+** Completion
+I want completion to work as follows:
+
+1. completion functions are always bound to a keybinding involving the
+   TAB-key , with as little modifiers as possible;
+2. completion should *always* produce *something*, even if emacs has no
+   special semantic knowledge of the current mode, it should produce
+   /something/ which makes sense;
+3. for each mode, a specialization is ok, if that improves the
+   situation; I expect to have many specialisations to improve the
+   autocomplete quality;
+4. completion should be inline whenever possible. 
+5. if a completion window *must* be openened, do this at the same place
+   always and do not mess up other windows.
+6. Completion should behave somewhat like real-time systems. An
+   answer *must* be produced within a certain amount of time. If a
+   completion answer takes longer than the amount of type to type it
+   in full, the system has collapsed, so the time needs to be in the
+   order of one third of the typing time.
+
+The next secions deal with the above requirments
+*** Ad 1. Bind completion always involves TAB-key
+The package =smart-tab= seems to fit this bill.
+
+Once activated, the default behaviour, if not specified otherwise, is
+to call dabbrev-expand. A more elaborate function is hippie-expand,
+which tries various methods.
+#+BEGIN_SRC emacs-lisp
+  (require 'smart-tab)
+  (setq smart-tab-using-hippie-expand t)
+#+END_SRC
+*** Ad 2. Completion should always produce something
+This is just a matter of enabling smart-tab globally.
+
+#+BEGIN_SRC emacs-lisp
+  ;; Enable everywhere
+  (global-smart-tab-mode 1)
+#+END_SRC
+*** Ad 3. Mode specialisation
+Be smart with tabs and try to have the tab key do the sensible
+thing. The list below contains things the tab key should do in certain
+modes if it does not already. The second part is the exclusion list
+where the sensible thing the =smart-tab= mode provides is not sensible
+at all.
+
+#+BEGIN_SRC emacs-lisp
+  (require 'smart-tab)
+  ;; Make sure it does the right thing in some modes
+  (add-to-list 'smart-tab-completion-functions-alist '(emacs-lisp-mode . lisp-complete-symbol))
+  (add-to-list 'smart-tab-completion-functions-alist '(text-mode . dabbrev-completion))
+  (add-to-list 'smart-tab-completion-functions-alist '(erc-mode . pcomplete))
+  
+  ;; Disable it in org-mode, tab is heavily customized there (org-cycle)
+  (add-to-list 'smart-tab-disabled-major-modes 'org-mode)
+  (add-to-list 'smart-tab-disabled-major-modes 'org-agenda-mode)
+  
+  ;; eshell gets very confused if smart-tab is enabled
+  (add-to-list 'smart-tab-disabled-major-modes 'eshell-mode)
+  
+  ;; Similarly, term-mode doesn't like it either
+  (add-to-list 'smart-tab-disabled-major-modes 'term-mode)
+#+END_SRC
+*** Ad 4. Inline completion when possible
+What I want:
+- languages: lisp, python, ruby, bash, C/C++ roughtly in that order
+- for all languages, function/method signature shorthands
+- speed, slowness is killing here
+
+Candidates:
+- auto-complete :: http://cx4a.org/software/auto-complete/
+
+I have a feeling auto-complete will be slow and I will get annoyed by
+the window popping up on the screen, but let's see if configuration
+could be made such that it is usable for me.
+
+Starting with the default config, which should probably work for most
+situations. The good news is that smart-tab seems to be auto-complete
+aware so we should be good to go.
+#+BEGIN_SRC emacs-lisp
+(require 'auto-complete-config)
+(ac-config-default)
+#+END_SRC
+
+*** Ad 5. Open completion window predictably
+Completion normally opens a special window like **Completions** for
+example. The =popwin= package make this behaviour a bit more
+predictable by showing it in the same place and making sure I can get
+rid of it easily.
+
+#+BEGIN_SRC emacs-lisp
+(require 'popwin)
+(setq display-buffer-function 'popwin:display-buffer)
+#+END_SRC
+*** Ad 6. Guaranteed response-time
+I haven't found a solution for this yet.
 
 ** Editing control
 
@@ -1955,26 +2050,6 @@ I like to do thing interactively where I can:
 (ido-everywhere)
 #+END_SRC
 
-Be smart with tabs and try to have the tab key do the sensible
-thing. The list contains things the tab key should do in certain
-modes if it does not already. The second part is the exclusion list
-where the sensible thing the =smart-tab= mode provides is not sensible
-at all.
-#+BEGIN_SRC emacs-lisp
-;; Do smart tabbing, this does mostly the right thing everywhere
-(require 'smart-tab)
-;; Make sure it does the right thing in some modes, notably erc
-(setq smart-tab-completion-functions-alist
-      (quote (
-	      (emacs-lisp-mode . lisp-complete-symbol)
-	      (text-mode . dabbrev-completion)n
-	      (erc-mode . pcomplete)))
-      smart-tab-disabled-major-modes
-      (quote (org-mode org-agenda-mode term-mode)))
-
-;; Enable everywhere
-(global-smart-tab-mode 1)
-#+END_SRC
 
 By selecting a piece of text, wrap-region can quote or otherwise
 delimit that region automatically. I enable this globally. There is
