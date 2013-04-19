@@ -194,7 +194,7 @@ and run =el-get-install= with the package name.
           (:name stripe-buffer :type github :pkgname "sabof/stripe-buffer")
           (:name keyfreq :type github :pkgname "dacap/keyfreq")
           (:name git-auto-commit-mode :type github :pkgname "ryuslash/git-auto-commit-mode")
-          (:name ujelly-theme :type elpa)
+          (:name ujelly-theme :type github :pkgname "marktran/color-theme-ujelly")
           (:name erc-tweet :type github :pkgname "kidd/erc-tweet.el")
           (:name erc-image :type github :pkgname "mrvdb/erc-image.el")
           (:name flycheck :type github :pkgname "lunaryorn/flycheck")
@@ -308,14 +308,19 @@ And enable the minor mode globally.
     (menu-bar-mode -1)   ;; No menu-bar
     (tooltip-mode -1)    ;; No tooltips
   
+    ;; TODO: make all these in a list and loop over them
     ;; When making a selection, keep all font-locking too, but make it
     ;; stand out from the matching background, the key here is the nil in the
     ;; foreground specification
-    (set-face-attribute 'region nil :inherit nil :background "gray31" :foreground nil)
+    (set-face-attribute 'region nil :inherit nil :background "gray32" :foreground nil)
   
     ;; Just change the background when matching the expression, leave
     ;; other fontifying as is
-    (set-face-attribute 'show-paren-match nil :inherit nil :background "gray18" :foreground nil)
+    (set-face-attribute 'show-paren-match nil :inherit nil :background "gray32" :foreground nil)
+
+    ;; Similar for magit-highlight
+    (set-face-attribute 'magit-item-highlight nil :inherit nil :background "gray32" :foreground nil)
+
   )
   
   ;; Defer fontification a little bit, so we could gain a bit in scroll speed
