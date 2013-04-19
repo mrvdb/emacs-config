@@ -316,7 +316,7 @@ And enable the minor mode globally.
     ;; nil in the foreground attribute
     (dolist
         (the_face
-         (list 'region 'show-paren-match 'magit-item-hightlight))
+         (list 'region 'show-paren-match 'magit-item-highlight))
       (set-face-attribute the_face nil :inherit nil :foreground nil :background "gray32"))
   )
   
