@@ -1236,7 +1236,7 @@ migrate this into more literal sections
   ;;
   ;; Org-mobile configuration
   (setq
-   org-mobile-directory "/plato.hsdev.com:/home/mrb/data/mobileorg"              ; Remote org dir
+   ;;org-mobile-directory "/plato.hsdev.com:/home/mrb/data/mobileorg"              ; Remote org dir
    org-mobile-inbox-for-pull (concat org-metadir "from-mobile.org")    ; Where to place items which needs resolving
    org-mobile-force-id-on-agenda-items nil                             ; No id yet, don't see the advatage yet
    org-mobile-use-encryption nil                                       ; No encryption yet.
