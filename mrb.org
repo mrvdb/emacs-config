@@ -308,19 +308,14 @@ And enable the minor mode globally.
     (menu-bar-mode -1)   ;; No menu-bar
     (tooltip-mode -1)    ;; No tooltips
   
-    ;; TODO: make all these in a list and loop over them
-    ;; When making a selection, keep all font-locking too, but make it
-    ;; stand out from the matching background, the key here is the nil in the
-    ;; foreground specification
-    (set-face-attribute 'region nil :inherit nil :background "gray32" :foreground nil)
-  
-    ;; Just change the background when matching the expression, leave
-    ;; other fontifying as is
-    (set-face-attribute 'show-paren-match nil :inherit nil :background "gray32" :foreground nil)
-
-    ;; Similar for magit-highlight
-    (set-face-attribute 'magit-item-highlight nil :inherit nil :background "gray32" :foreground nil)
-
+    ;; When making a selection of in case of highlighting a region
+    ;; automatically, keep all font-locking in the region instead of
+    ;; just overwriting the whole section. The trick here is to specify
+    ;; nil in the foreground attribute
+    (dolist
+        (the_face
+         (list 'region 'show-paren-match 'magit-item-hightlight))
+      (set-face-attribute the_face nil :inherit nil :foreground nil :background "gray32"))
   )
   
   ;; Defer fontification a little bit, so we could gain a bit in scroll speed
