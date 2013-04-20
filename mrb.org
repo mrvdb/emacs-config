@@ -1336,19 +1336,28 @@ migrate this into more literal sections
 
   ;; Mail facilities related to org-mode
   (require 'org-mime)
-  (defun mrb/mail-subtree-from-org-agenda ()
-    (interactive)
-    (org-agenda-goto)
-    (org-mime-subtree))
-  ;; Bind it to a C-c m (similar to C-x m which opens an empty mail)
-  ;;(define-key org-mode-map [(control c) m] 'org-mime-subtree)
-  (define-key org-mode-map "\C-cm" 'org-mime-subtree)
 
-  ;; This does not work
-  ;;(define-key org-agenda-mode-map [(control c) m] 'mrb/mail-subtree-from-org-agenda)
-  ;; This does
-  (define-key org-agenda-mode-map "\C-cm" 'mrb/mail-subtree-from-org-agenda)
-  ;;
+  ;; Small bit to mail an org subtree
+  (defun mrb/mail-subtree-from-org ()
+    (interactive)
+    (if (equal major-mode 'org-agenda-mode)
+        (org-agenda-goto)
+      )
+    ;;TODO: make this also use the mailcompose frame
+    (org-mime-subtree))
+
+  ;; The entry point
+  (defun mrb/construct-mail (useOrgTree)
+    (interactive "P")
+    (if useOrgTree
+        (mrb/mail-subtree-from-org)
+      (make-mailcompose-frame)))
+  ;; Bind it to \C-xm in org-mode only
+  (define-key org-mode-map "\C-xm" 'mrb/construct-mail)
+  (define-key org-agenda-mode-map "\C-xm" 'mrb/construct-mail)
+  ;; But not for all others, because the org subtree will never be there
+  (global-set-key (kbd "\C-xm") 'make-mailcompose-frame)
+
 
   (require 'stripe-buffer)
   (defun mrb/enable-org-table-striping ()
@@ -1677,8 +1686,6 @@ This is the remnant of my old configuration.
   ;; This custome kill buffer is close-current-buffer.
   (global-set-key [(super n)] 'new-empty-buffer)
 
-  ;; Misc.
-  (global-set-key [(control x) (m)] 'make-mailcompose-frame)
 #+END_SRC
 *** Key bindings
 **** Global
@@ -1710,6 +1717,11 @@ major mode only.
   (global-set-key [(meta X)] 'smex-major-mode-commands)
 #+END_SRC
 
+I want to be able to call up magit from anywhere
+#+BEGIN_SRC emacs-lisp
+  (global-set-key [(control c) m] 'magit-status) ;; Does not work for some reason
+  (global-set-key (kbd "C-c m") 'magit-status)
+#+END_SRC
 ***** Special keys
 For some special keys I have defined some commands. Special keys are
 those keys that may not be on every keyboard, within reason. I
@@ -1764,8 +1776,6 @@ the previous definition.
   (global-set-key [(control c) (b)] 'org-iswitchb)
   (global-set-key [(control c) (l)] 'org-store-link)
   (global-set-key [(control c) (j)] 'make-journal-entry)
-
-
 #+END_SRC
 
 ***** Identica-mode
