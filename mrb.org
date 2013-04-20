@@ -201,6 +201,8 @@ and run =el-get-install= with the package name.
           (:name org-present :type github :pkgname "rlister/org-present")
           (:name popup :type github :pkgname "auto-complete/popup-el")
           (:name auto-complete :type github :pkgname "auto-complete/auto-complete")
+          (:name dash :type github :pkgname "magnars/dash.el")
+          wrap-region
         )
   )
   (el-get)
@@ -2061,7 +2063,7 @@ delimit that region automatically. I enable this globally. There is
 an option to configure in exception, which I have commented out as
 I've found none applicable yet.
 #+BEGIN_SRC emacs-lisp
-(add-to-list 'load-path "~/dev/emacs/packages/wrap-region")
+
 (require 'wrap-region)
 (wrap-region-global-mode 1)
 ;; (add-to-list 'wrap-region-except-modes 'conflicting-mode)
