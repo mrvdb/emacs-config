@@ -179,6 +179,7 @@ and run =el-get-install= with the package name.
           (:name typopunct :type github :pkgname "emacsmirror/typopunct" :features typopunct)
           (:name oauth :type github :pkgname "psanford/emacs-oauth")
           scratch
+          popwin
           highlight-parentheses
           (:name expand-region :type github :pkgname "magnars/expand-region.el")
           (:name mark-multiple :type github :pkgname "magnars/mark-multiple.el")
