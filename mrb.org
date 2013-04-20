@@ -2278,6 +2278,21 @@ XMPP related settings, including interfacing it to other systems
       (unless (minibuffer-prompt)
         (message "%s" msg))))
 #+END_SRC
+** Development settings
+Some settings which aid in development tasks.
+
+Trailing whitespace can sneak into files without knowing it. I could
+enable the display of trailing whitespace, but I find that annoying
+to look at. Instead I just remove it just before saving a file.
+
+#+BEGIN_SRC emacs-lisp
+(add-hook 'before-save-hook 'delete-trailing-whitespace)
+#+END_SRC
+
+I'm not sure if this can be set globally like this for all types of
+files, but I can't come up with an example where I would like to keep
+trailing whitespace, so let's keep this setting and adjust when
+needed.
 
 ** To organize and properly configure
 Multiple cursors sounds interesting
