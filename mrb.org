@@ -27,14 +27,14 @@ so add this to my loadpaths first and give it a name.
 The first thing I want to take care of is to make customizations
 possible and stored in a place to my liking. I want to load this
 first so anything in the configuration I define explicitly overrides
-it. 
+it.
 #+BEGIN_SRC emacs-lisp
 (setq custom-file (concat emacs-directory "custom.el"))
 (load custom-file)
 #+END_SRC
 
 Now that we have the locations of the configuration determined, I want
-a way to have them forcibly compiled. 
+a way to have them forcibly compiled.
 #+BEGIN_SRC emacs-lisp
   (defun mrb/compile-config ()
     (interactive)
@@ -48,7 +48,7 @@ Seems like a good idea to start configuratiion with some details
 about me. Just name and email-address for now in public.
 #+BEGIN_SRC emacs-lisp
   (setq user-full-name "Marcel van der Boom")
-  (setq user-mail-address "marcel@hsdev.com")  
+  (setq user-mail-address "marcel@hsdev.com")
 #+END_SRC
 
 *** Encrypting information
@@ -69,27 +69,27 @@ for the details on the settings for this.
 ** Global Generic settings
 #+BEGIN_SRC emacs-lisp
   ;; disable auto-save files (#foo#)
-  (setq 
+  (setq
    auto-save-default nil
-   
+
    ; disable backup files (foo~)
    backup-inhibited t
-   
+
    ; disable auto-save-list/.saves
    auto-save-list-file-prefix nil
-  
+
    ; move files to the trash instead of rm
    delete-by-moving-to-trash t
-   
+
    ; use clipboard
    x-select-enable-clipboard t
-  
+
    display-warning-minimum-level 'error
    large-file-warning-threshold nil
    tab-width 4
    find-file-use-truenames nil
    find-file-compare-truenames t
-  
+
    minibuffer-max-depth nil
    minibuffer-confirm-incomplete t
    complex-buffers-menu-p t
@@ -97,19 +97,19 @@ for the details on the settings for this.
    kill-whole-line t
    truncate-lines t
   )
-    
+
   (global-visual-line-mode 1)
-  
+
   ;; Only require to type 'y' or 'n' instead of 'yes' or 'no' when prompted
   (fset 'yes-or-no-p 'y-or-n-p)
-  
-  ; Use auto revert mode globally 
+
+  ; Use auto revert mode globally
   ; This is save because emacs tracks if the file is saved in the editting buffer
   ; and if so, it will not revert to the saved file.
   (global-auto-revert-mode t)
   ;; Also for dired
   (setq global-auto-revert-non-file-buffers t)
-  
+
   ;; Turn on auto-fill minor mode for all text buffers
   (add-hook 'text-mode-hook 'turn-on-auto-fill)
 
@@ -119,7 +119,7 @@ for the details on the settings for this.
     goto-address-mode
     (lambda ()
       (goto-address-mode 1)))
-  (global-goto-address-mode t)  
+  (global-goto-address-mode t)
 #+END_SRC
 ** Packages
 Package handling, do this early so emacs knows where to find things.
@@ -133,11 +133,11 @@ including the ones gotten from apt-get, git and elpa.
 The reason for this is that it provides one neat umbrella (in Emacs)
 to manage its packages.
 
-We manage everything with =el-get= so we start by loading that
-
+We manage everything with =el-get= so we start by loading that if we
+don't have it already.
 #+BEGIN_SRC emacs-lisp
   (add-to-list 'load-path (concat emacs-directory "/el-get/el-get"))
-  
+
   (unless  (require 'el-get nil 'noerror)
     (url-retrieve
      "https://github.com/dimitri/el-get.git/raw/master/el-get-install.el"
@@ -234,7 +234,7 @@ correction, of which the most important one is loading the ujelly
 theme. I do it like this because zenburn is more complete than ujelly
 and otherwise I'd have a large set of faces defined in a wrong color.
 #+BEGIN_SRC emacs-lisp
-  ;; Adjust zenburn with the ujelly theme which makes is a bit more vibrant. 
+  ;; Adjust zenburn with the ujelly theme which makes is a bit more vibrant.
   ;; This is obviously not the way to do this, but it works for me
   (require 'ujelly-theme)
   (load-theme 'ujelly)
@@ -265,80 +265,82 @@ valid for 5 levels, not 6.
 
 And enable the minor mode globally.
 #+BEGIN_SRC emacs-lisp
-  (define-globalized-minor-mode global-highlight-parentheses-mode
-    highlight-parentheses-mode
-    (lambda ()
-      (highlight-parentheses-mode t)))
-  (global-highlight-parentheses-mode t)
-  
-  ;; no splash screen
-  (setq inhibit-startup-screen  t)
-  (setq inhibit-startup-message t)
-  (setq initial-scratch-message nil)
-  
-  ;; check speed consequences of this
-  (setq column-number-mode t)
+    (define-globalized-minor-mode global-highlight-parentheses-mode
+      highlight-parentheses-mode
+      (lambda ()
+        (highlight-parentheses-mode t)))
+    (global-highlight-parentheses-mode t)
 
-  ;; When I am not typing, the cursor should become more visible, so I
-  ;; don't lose it.
-  (require 'cursor-chg)                   ; Load this library
-  (change-cursor-mode 0)                  ; On for overwrite/read-only/input mode
-  (toggle-cursor-type-when-idle 1)        ; On when idle
-  (setq curchg-default-cursor-color "LightGreen")
-  (setq curchg-default-cursor-type (quote bar\ \.\ 1))
-   
-  ;; Default frame properties frame position, color, etc
-  (setq default-frame-alist
-        '((cursor-type . (bar . 1))
-          (cursor-color . "LightGreen")
-          (height . 60)
-          (width . 100)
-  ))
-  
-  ;; Parenthesis matching
-  (show-paren-mode 1)
-  (setq show-paren-style (quote expression))
-  (setq show-paren-delay 0)
-  
-  ;; As we start emacs in daemon mode, certain (mostly visual) settings
-  ;; do not get applied. This is because starting the daemon does not
-  ;; open an X connection. This only happens when frames are being
-  ;; opened. By adding these settings to the 'server-visit-hook' we can
-  ;; still seemingly painless apply these settings.
-  (defun run-client-settings()
-    (interactive)  
-    
-    (tool-bar-mode -1)   ;; No tool-bar
-    (scroll-bar-mode -1) ;; No scroll-bar
-    (menu-bar-mode -1)   ;; No menu-bar
-    (tooltip-mode -1)    ;; No tooltips
-  
-    ;; When making a selection of in case of highlighting a region
-    ;; automatically, keep all font-locking in the region instead of
-    ;; just overwriting the whole section. The trick here is to specify
-    ;; nil in the foreground attribute
-    (setq mrb-bg-highlight "gray22")
-    
-    (dolist
-        (the_face
-         (list 'region 'show-paren-match))
-      (set-face-attribute the_face nil :inherit nil :foreground nil :background mrb-bg-highlight))
-  
-    ;; The above did not work for magit, let's try it after loading magit
-    (eval-after-load "magit"
-      '(set-face-attribute 'magit-item-highlight nil :inherit nil :foreground nil :background mrb-bg-highlight))
-  )
-  
-  ;; Defer fontification a little bit, so we could gain a bit in scroll speed
-  (setq jit-lock-defer-time 0.02)
-  
-  ;; This seems to work if we start up emacs using filename on cli and
-  ;; server was not running yet. It does however not work if we just
-  ;; startup emacs (through my edit script) without a filename on the cli 
-  (add-hook 'server-visit-hook 'run-client-settings)
-  
-  ;; Make colorful balanced parentheses etc. in different modes
-  (add-hook 'lisp-mode 'rainbow-delimiters-mode)  
+    ;; no splash screen
+    (setq inhibit-startup-screen  t)
+    (setq inhibit-startup-message t)
+    (setq initial-scratch-message nil)
+
+    ;; check speed consequences of this
+    (setq column-number-mode t)
+
+    ;; When I am not typing, the cursor should become more visible, so I
+    ;; don't lose it.
+    (require 'cursor-chg)                   ; Load this library
+    (change-cursor-mode 0)                  ; On for overwrite/read-only/input mode
+    (toggle-cursor-type-when-idle 1)        ; On when idle
+    (setq curchg-default-cursor-color "LightGreen")
+    (setq curchg-default-cursor-type (quote bar\ \.\ 1))
+
+    ;; Default frame properties frame position, color, etc
+    (setq default-frame-alist
+          '((cursor-type . (bar . 1))
+            (cursor-color . "LightGreen")
+            (height . 60)
+            (width . 100)
+    ))
+
+    ;; Parenthesis matching
+    (show-paren-mode 1)
+    (setq show-paren-style (quote expression))
+    (setq show-paren-delay 0)
+
+    ;; As we start emacs in daemon mode, certain (mostly visual) settings
+    ;; do not get applied. This is because starting the daemon does not
+    ;; open an X connection. This only happens when frames are being
+    ;; opened. By adding these settings to the 'server-visit-hook' we can
+    ;; still seemingly painless apply these settings.
+    (defun run-client-settings()
+      (interactive)
+
+      (tool-bar-mode -1)   ;; No tool-bar
+      (scroll-bar-mode -1) ;; No scroll-bar
+      (menu-bar-mode -1)   ;; No menu-bar
+      (tooltip-mode -1)    ;; No tooltips
+
+      ;; When making a selection of in case of highlighting a region
+      ;; automatically, keep all font-locking in the region instead of
+      ;; just overwriting the whole section. The trick here is to specify
+      ;; nil in the foreground attribute
+      (defvar mrb-bg-highlight "gray22")
+
+      (dolist
+          (the_face
+           (list 'region 'show-paren-match))
+        (set-face-attribute the_face nil :inherit nil :foreground nil :background mrb-bg-highlight))
+
+      ;; The above did not work for magit, let's try it after loading magit
+      (eval-after-load "magit"
+        '(set-face-attribute 'magit-item-highlight nil :inherit nil :foreground nil :background mrb-bg-highlight))
+      )
+
+    ;; Defer fontification a little bit, so we could gain a bit in scroll speed
+    (setq jit-lock-defer-time 0.02)
+
+    ;; This seems to work if we start up emacs using filename on cli and
+    ;; server was not running yet. It does however not work if we just
+    ;; startup emacs (through my edit script) without a filename on the cli
+    (add-hook 'server-visit-hook 'run-client-settings)
+    ;; But we also want to run it, regardless
+    (run-client-settings)
+
+    ;; Make colorful balanced parentheses etc. in different modes
+    (add-hook 'lisp-mode 'rainbow-delimiters-mode)
 #+END_SRC
 
 ** Buffers and files
@@ -369,18 +371,18 @@ one mode in particular.
   ;;
   ;; Extension mappings
   ;;
-  
+
   ;; First, specify which files to load when functions are called
   (autoload 'markdown-mode "markdown-mode" "Markdown." t)
   (autoload 'gnuplot-mode  "gnuplot"       "GNU-Plot" t)
   (autoload 'php-mode      "php-mode"      "PHP" t)
   (autoload 'css-mode      "css-mode"      "Mode for editing CSS file" t)
   (autoload 'apache-mode   "apache-mode"   "Apache config files" t)
-  
+
   (add-hook 'javascript-mode-hook 'javascript-custom-setup)
       (defun javascript-custom-setup ()
         (moz-minor-mode 1))
-  
+
   ;; Second, specify the extension to function mappings
   (add-to-list 'auto-mode-alist '("\\.org\\'"      . org-mode))
   (add-to-list 'auto-mode-alist '("\\.txt\\'"      . org-mode))
@@ -391,17 +393,17 @@ one mode in particular.
   (add-to-list 'auto-mode-alist '("\\.js$"         . javascript-mode))
   (add-to-list 'auto-mode-alist '("\\.htaccess"    . apache-mode))
   (add-to-list 'auto-mode-alist '("\\.patch"       . diff-mode))
-  
+
   ;; Open scratch buffer by default in the mode we are in at the moment
   ;; with C-u prefix a mode will be asked to use
   (require 'scratch)
-  
+
   ;; Turn on eldoc for modes which support it
   (dolist
       (the_mode
       (list 'emacs-lisp-mode-hook 'lisp-interaction-mode-hook 'ielm-mode-hook 'python-mode))
-    (add-hook the_mode 'turn-on-eldoc-mode))  
-#+END_SRC 
+    (add-hook the_mode 'turn-on-eldoc-mode))
+#+END_SRC
 ** Org-mode
 Orgmode configuraton is probably the largest part of my Emacs
 configuration, because most of the time I spent in Emacs, when not
@@ -419,7 +421,7 @@ did that on the main initialisation to get org-babel started.
 (require 'org)                   ;; This is required, see installation docs
 (require 'org-clock)             ;; Should not be needed, but otherwise links don't work
 (require 'org-mouse)             ;; Enable menu on right mouse button and other mouse functions
-(require 'org-special-blocks)    ;; Generalizes the #+begin_foo and #+end_foo blocks, useful on latex (export) 
+(require 'org-special-blocks)    ;; Generalizes the #+begin_foo and #+end_foo blocks, useful on latex (export)
 (require 'org-datetree)          ;; Allows for archiving and refiling in a date organised tree
 (require 'org-mobile)            ;; Only org-mobile-push and pull get autoloaded and we neede the file list before that.
 #+END_SRC
@@ -458,12 +460,12 @@ Here are the templates used for them.
 #+BEGIN_SRC emacs-lisp
   (setq org-capture-templates
         (quote (
-                ("b" "Buy" 
+                ("b" "Buy"
                  entry (id "new-todo-receiver") "* BUY %? :buy:\n" :prepend t)
-                ("t" "Todo" 
+                ("t" "Todo"
                  entry (id "new-todo-receiver") "* TODO %?" :prepend t)
-                ("j" "Journal" 
-                 entry (file+datetree (concat org-directory "journal.org")) 
+                ("j" "Journal"
+                 entry (file+datetree (concat org-directory "journal.org"))
                  "* ___________________________________________________________ *%U* ___\n\n%?\n" )
                 )
                )
@@ -485,16 +487,16 @@ delete the other windows which may be in the frame.
 #+BEGIN_SRC emacs-lisp
   (defun make-capture-frame ()
     "Create a new frame for org-capture to use."
-    (select-frame (make-frame '((name . "capture") 
+    (select-frame (make-frame '((name . "capture")
                                 (width . 115) (height . 15)
                                 (menu-bar-lines . 0) (tool-bar-lines . 0))))
     )
-  
+
   (defadvice org-capture-finalize (after delete-capture-frame activate)
     "Advise org-capture-finalize to close the frame if it is the capture frame"
     (if (equal "capture" (frame-parameter nil 'name))
         (delete-frame)))
-  
+
   (defadvice org-capture-destroy (after delete-capture-frame activate)
     "Advise org-capture-destroy to close the frame if it is the capture frame"
     (if (equal "capture" (frame-parameter nil 'name))
@@ -512,7 +514,7 @@ be easily bound to keys.
     (make-capture-frame)
     (org-capture nil "t")
     )
-  
+
   (defun capture-buy ()
     "Capture a BUY item"
     (interactive)
@@ -524,7 +526,7 @@ be easily bound to keys.
     (interactive)
     (org-capture nil "j")
   )
-  
+
 #+END_SRC
 
 By default C-c C-c ends the capture, but is normally the shortcut to
@@ -537,7 +539,7 @@ enter tags, so I define a shortcut to define tags while capturing.
     (save-excursion
       (org-back-to-heading)
       (org-set-tags)))
-  
+
   (define-key org-capture-mode-map "\C-c\C-t" 'mrb/add-tags-in-capture)
 #+END_SRC
 
@@ -570,11 +572,11 @@ something is DONE, remove tags from it and automatically adding a
 'buy' tag when a BUY item is created.
 Note: capturing does not honour this, i.e. when creating a new item.
 #+BEGIN_SRC emacs-lisp
-  (setq org-todo-state-tags-triggers 
+  (setq org-todo-state-tags-triggers
         (quote (
                 ('todo ("inactive"))          ; remove inactive tags if moved to any active state
                 ('done ("inactive") ("fork")) ; remove tags from any inactive state
-                ("BUY"  ("buy" . t)))))       ; add buy tag when this is a buying action 
+                ("BUY"  ("buy" . t)))))       ; add buy tag when this is a buying action
 #+END_SRC
 
 *** Registering creation time of todo items
@@ -593,7 +595,7 @@ inserted must not be active, otherwise they'll appear all over the
 place in the agenda.
 #+BEGIN_SRC emacs-lisp
   (require 'org-expiry)
-  
+
   (setq org-expiry-created-property-name "CREATED")
   (setq org-expiry-inactive-timestamps   t)
 #+END_SRC
@@ -601,7 +603,7 @@ place in the agenda.
 So, to create the timestamp I need a little helper function which
 actually inserts it, using org-expiry. There is some additional
 cursor munging to make sure it is used comfortably during editing.
-#+BEGIN_SRC emacs-lisp                                          
+#+BEGIN_SRC emacs-lisp
   (defun mrb/insert-created-timestamp()
     "Insert a CREATED property using org-expiry.el for TODO entries"
     (org-expiry-insert-created)
@@ -621,7 +623,7 @@ Now that function is used to insert the proprty when:
     (mrb/insert-created-timestamp)
   )
   (ad-activate 'org-insert-todo-heading)
-  
+
   (require 'org-capture)
   (defadvice org-capture (after mrb/created-timestamp-advice activate)
     "Insert a CREATED property using org-expiry.el for TODO entries"
@@ -656,11 +658,11 @@ face which will then be used to render the standard 3 dots.
 There are a couple of ways within org to emphasize text inline
 for *bold*, /italics/, _underlined_ etc. These are set in the text by
 enclosing regions with delimiters. I do not want to see these
-delimiters, but rather render the text. 
+delimiters, but rather render the text.
 #+BEGIN_SRC emacs-lisp
 (setq org-hide-emphasis-markers t)
 #+END_SRC
-  
+
 A similar thing can be done with pretty entity characters (like '\delta'
 for example). These characters can be added to the text by adding a
 '\' before a symbol name ('delta' in the example).  I make an
@@ -682,7 +684,7 @@ past, but I think it has been solved recently.
 A couple of settings to steer the column in which the tags and habits
 appear in the frame:
 #+BEGIN_SRC emacs-lisp
-(setq 
+(setq
    org-tags-column -110
    org-agenda-tags-column -110
    org-habit-graph-column 100
@@ -694,7 +696,7 @@ some icons based on the category an items belongs to. The category
 assignment itself is done by setting the =CATEGORY= property explicitly
 on the item or on the file.
 #+BEGIN_SRC emacs-lisp
-  (setq org-agenda-category-icon-alist 
+  (setq org-agenda-category-icon-alist
         '(
           ("Afspraak"      "~/.outlet/images/stock_new-meeting.png" nil nil :ascent center)
           ("Blogging"      "~/.outlet/images/edit.png" nil nil :ascent center)
@@ -720,7 +722,7 @@ my setup I want blocked tasks hidden, that is the reason for
 blocking. Hide tasks which are DONE already and a deadline is coming
 up, no use showing those; the same goes for tasks which are DONE and
 are scheduled. In short, anything that does not need my attention
-needs to be hidden. 
+needs to be hidden.
 #+BEGIN_SRC emacs-lisp
 (setq
     org-agenda-dim-blocked-tasks t
@@ -732,8 +734,8 @@ needs to be hidden.
 *** Agenda customization
 #+BEGIN_SRC emacs-lisp
   (require 'keywiz)
-  
-  ;; Helper function to build a set of functions and their 
+
+  ;; Helper function to build a set of functions and their
   (defun mrb/load-keybindings ()
     "Since we don't want to have to pass through a keywiz game each time..."
     (setq keywiz-cached-commands nil)
@@ -751,10 +753,10 @@ needs to be hidden.
           ;;                               (where-is-internal sym))))
           (and keys
                (push (list sym keys) keywiz-cached-commands))))))
-  
+
   ;; Load em up
   (mrb/load-keybindings)
-  
+
   ;; Might be good to use this in org-agenda...
   (defun mrb/random-keybinding ()
     "Describe a random keybinding."
@@ -768,15 +770,15 @@ needs to be hidden.
                         (concat ": " (substring doc 0 (string-match "\n" doc)))
                       ""))
           "")))
-  
-  
+
+
   ;; Call this function in a multipart agenda command.
   (defun mrb/org-agenda-show-tip (arg)
     (interactive)
     (let ((inhibit-read-only t))
       (insert "A random keybinding for inspiration:\n  ")
       (insert (mrb/random-keybinding) "\n")))
-  
+
 #+END_SRC
 *** Babel / Literate programming
 #+BEGIN_SRC emacs-lisp
@@ -788,7 +790,7 @@ needs to be hidden.
   ;;(require 'ob-mathomatic)
   (org-babel-do-load-languages
    'org-babel-load-languages
-   '((R . t) (ditaa . t) (sql . t) (sh . t) (emacs-lisp t) (lisp t) 
+   '((R . t) (ditaa . t) (sql . t) (sh . t) (emacs-lisp t) (lisp t)
      (css t) (awk t) (js t) (lisp t) (org t) (plantuml t) (gnuplot . t)))
 #+END_SRC
 
@@ -832,20 +834,20 @@ and HTML as destination format
 #+END_SRC
 #+BEGIN_SRC emacs-lisp
   ; Exporting and Publishing related settings
-   
+
   ; Apart from the normal export menu, I need something that exports
   ; just the body, so the resulting html is suitable to be used inside a
   ; blogging system like wordpress for example
-  
+
   ; This puts the body inside a buffer called  blog-entry
   (defun org-export-body-as-html ()
     (interactive)
     (org-export-as-html 3 nil nil "blog-entry" t))
-  
+
   ; Make sure we export in css mode, meaning no inline css crap
   (setq org-export-htmlize-output-type 'css)
   (define-key org-mode-map "\C-c\C-e" 'org-export-body-as-html)
-  
+
   (defun org-export-body-as-html-batch ()
     "Call `org-export-as-html', may be used in batch processing as
   emacs   --batch
@@ -863,27 +865,27 @@ migrate this into more literal sections
 #+BEGIN_SRC emacs-lisp
   (setq
    org-use-fast-todo-selection t
-  
+
    ; We support task dependencies
    org-enforce-todo-dependencies t
    ; but relax checkbox constraints
    org-enforce-todo-checkbox-dependencies nil
-  
+
    ; We dont do priorities
    org-enable-priority-commands nil
-  
+
    ; Agenda settings
    org-agenda-include-diary t
    org-agenda-start-with-log-mode t
    org-agenda-todo-ignore-scheduled "future"
-  
+
    ; Habits
    org-habit-show-habits-only-for-today nil
-  
+
    ; Pressing enter on a link should activate it
    org-return-follows-link t
    org-support-shift-select (quote always)
-  
+
    org-agenda-log-mode-items (quote (closed clock state))
    org-agenda-skip-deadline-prewarning-if-scheduled t
    org-blank-before-new-entry (quote ((heading) (plain-list-item)))
@@ -905,23 +907,23 @@ migrate this into more literal sections
    org-stuck-projects (quote ("-inactive/TODO" ("TODO" "WAITING") nil ""))
    org-track-ordered-property-with-tag nil
   )
-  
+
   ;; Bit of a leftover from reorganising bits, do this later
   (add-to-list 'org-tags-exclude-from-inheritance (quote "fix"))
   (add-to-list 'org-tags-exclude-from-inheritance (quote "sell"))
   (add-to-list 'org-tags-exclude-from-inheritance (quote "build"))
-  
-  
+
+
   ; Keybindings which only make sense when having an orgmode file
   (define-key org-mode-map "\C-ct" 'org-set-tags)
-  
+
   ;; After 7.9.4(?) the export menu is called by dispatch
   (if
       (version< "7.9.4" (org-version))
       (define-key org-mode-map "\C-ce" 'org-export-dispatch)
     (define-key org-mode-map "\C-ce" 'org-export)
     )
-  
+
   (define-key org-mode-map [(super .)] 'org-todo)
   (defun force-org-todo()
     (interactive)
@@ -935,7 +937,7 @@ migrate this into more literal sections
   )
   (define-key org-mode-map [(control super .)] 'force-org-todo)
   (define-key org-agenda-mode-map [(control super .)] 'force-org-agenda-todo)
-  
+
   (define-key org-agenda-mode-map [(super .)] 'org-agenda-todo)
   ; Map ⌘t to schedule in both task and agenda-view
   (define-key org-mode-map [(super t)] 'org-schedule)
@@ -943,15 +945,15 @@ migrate this into more literal sections
   (define-key org-mode-map [(meta p)] 'org-set-property)
   (define-key org-agenda-mode-map [(meta p)] 'org-set-property)
   (define-key org-mode-map [(control super s)] 'org-save-all-org-buffers)
-  
+
   ; Dynamic behaviour
   (defun gtd()
     "Start my GTD system"
     (interactive)
     (find-file org-default-notes-file)
   )
-  
-  
+
+
   (defun mrb/is-project-p ()
     "This function returns true if the entry is considered a project.
      A project is defined to be:
@@ -972,7 +974,7 @@ migrate this into more literal sections
       (and is-a-task has-subtask)
       )
     )
-  
+
   ; FIXME: testing for tag presence should be easier than a re-search forward
   ; FIXNE: are we not searching for all 'incomplete' type keywords here?, there must be an org function for that
   (defun mrb/skip-non-stuck-projects ()
@@ -985,34 +987,34 @@ migrate this into more literal sections
       (if (and (mrb/is-project-p) (not has-next))
           nil ; a stuck project, has subtasks but no next task
         subtree-end)))
-  
+
   (defun mrb/skip-non-projects ()
     "Skip trees that are not projects"
     (let* ((subtree-end (save-excursion (org-end-of-subtree t))))
       (if (mrb/is-project-p)
           nil
         subtree-end)))
-  
+
   (defun mrb/skip-projects ()
     "Skip trees that are projects"
     (let* ((subtree-end (save-excursion (org-end-of-subtree t))))
       (if (mrb/is-project-p)
           subtree-end
         nil)))
-  
+
   (defun save-containing-org-file()
-    (org-save-all-org-buffers) ;; FIXME: bit over the top, no?  
+    (org-save-all-org-buffers) ;; FIXME: bit over the top, no?
   )
   (add-hook 'org-after-todo-state-change-hook 'save-containing-org-file)
-  
+
   ; When in agenda mode, show the line we're working on.
   (add-hook 'org-agenda-mode-hook '(lambda () (hl-line-mode 1)))
-    
+
     ; When a tag change adds the waiting tag, make sure it gets scheduled
   ; 1 week from now if it is not already.
     (defun autoschedule-waiting()
     ; variable 'tags' contains the values of the tag-string
-    ; If tags has the tag :waiting:, schedule this 
+    ; If tags has the tag :waiting:, schedule this
     ;(if includes tags "waiting")
     (message "Running my own hook")
     ;(message tags)
@@ -1020,9 +1022,9 @@ migrate this into more literal sections
   )
   ; Activate it
   ;(add-hook 'org-after-tags-change-hook 'autoschedule-waiting)
-  
-  
-  
+
+
+
   ; Remove empty property drawers
   (defun mrb/org-remove-empty-propert-drawers ()
     "*Remove all empty property drawers in current file."
@@ -1034,10 +1036,10 @@ migrate this into more literal sections
       (while (re-search-forward ":PROPERTIES:" nil t)
         (save-excursion
           (org-remove-empty-drawer-at "PROPERTIES" (match-beginning 0))))))
-  
+
   (defun mrb/org-remove-redundant-tags ()
     "Remove redundant tags of headlines in current buffer.
-  
+
   A tag is considered redundant if it is local to a headline and
   inherited by a parent headline."
     (interactive)
@@ -1053,11 +1055,11 @@ migrate this into more literal sections
               (dolist (tag local)
                 (if (member tag inherited) (org-toggle-tag tag 'off)))))
          t nil))))
-  
-  
+
+
   (defvar org-agenda-group-by-property nil
     "Set this in org-mode agenda views to group tasks by property")
-  
+
   (defun org-group-bucket-items (prop items)
     (let ((buckets ()))
       (dolist (item items)
@@ -1074,7 +1076,7 @@ migrate this into more literal sections
                             buckets))
       (sort buckets (lambda (i1 i2)
                       (string< (car i1) (car i2))))))
-  
+
   (defadvice org-agenda-finalize-entries (around org-group-agenda-finalize
                                                  (list &optional nosort))
     "Prepare bucketed agenda entry lists"
@@ -1101,12 +1103,12 @@ migrate this into more literal sections
           (setq ad-return-value text))
       ad-do-it))
   (ad-activate 'org-agenda-finalize-entries)
-  
+
   ; Directly tie into the GIT org2blog repository
   (add-to-list 'load-path "~/dev/emacs/packages/org2blog/")
   (add-to-list 'load-path "~/dev/emacs/packages/xml-rpc-el/")
   (require 'org2blog-autoloads)
-  
+
   (setq
    org2blog/wp-server-weblog-id ""
    org2blog/wp-default-title "<Untitled>"
@@ -1114,16 +1116,16 @@ migrate this into more literal sections
    org2blog/wp-confirm-post t
    org2blog/wp-track-posts (list (concat org-directory "/blogs/org2blog-track.org") "To be filed properly")
   )
-  
+
     ; Per blog configuration
   (setq org2blog/wp-blog-alist
         '(
           ("mrblog"
       :url "http://mrblog.nl/xmlrpc.php"
-      :username "mrb"   
+      :username "mrb"
       :track-posts ("blogs/blogs.org" "mrblog.nl")
            )
-          ("cobra"             
+          ("cobra"
            :url "http://cobra.mrblog.nl/xmlrpc.php"
            :username "mrb"
            :track-posts ("blogs/blogs.org" "cobra.mrblog.nl")
@@ -1135,7 +1137,7 @@ migrate this into more literal sections
           )
         )
   )
-  
+
   ;; Shorten url at point
   ;; This is a stripped down version of the code in identica-mode
   (defun mrb/ur1ca-get (api longurl)
@@ -1152,7 +1154,7 @@ migrate this into more literal sections
                 (match-string-no-properties 1)
               (error "URL shortening service failed: %s" longurl))
         (kill-buffer buffer)))))
-  
+
   (defun mrb/shortenurl-replace-at-point ()
     "Replace the url at point with a tiny version."
     (interactive)
@@ -1164,12 +1166,12 @@ migrate this into more literal sections
               (narrow-to-region (car url-bounds) (cdr url-bounds))
               (delete-region (point-min) (point-max))
               (insert url)))))))
-  
-  
+
+
   (defvar mrb/org-my-archive-expiry-days 365
     "The number of days after which a completed task should be auto-archived.
   This can be 0 for immediate, or a floating point value.")
-  
+
   (defun mrb/org-my-archive-done-tasks ()
     (interactive)
     (save-excursion
@@ -1194,16 +1196,16 @@ migrate this into more literal sections
                                         (apply #'encode-time when-closed)))
                         mrb/org-my-archive-expiry-days)
                     (org-archive-subtree)))))))))
-  
+
   (defalias 'archive-done-tasks 'mrb/org-my-archive-done-tasks)
-  
+
   ;; Map it to Ctrl-C S in orgmode (consider a global key assignment?
   (define-key org-mode-map "\C-cs" 'mrb/shortenurl-replace-at-point)
   ;; END shorten url functionality
-  
+
   (add-to-list 'load-path "~/dev/emacs/packages/org-bom/")
   (require 'org-bom)
-  
+
   ;; archive entries into a date-tree
   ;; (setq org-archive-location "%s_archive::date-tree")
   (defadvice org-archive-subtree
@@ -1235,7 +1237,7 @@ migrate this into more literal sections
             (switch-to-buffer this-buffer))
           ad-do-it)
       ad-do-it))
-  
+
   ;;
   ;; Org-mobile configuration
   (setq
@@ -1247,22 +1249,22 @@ migrate this into more literal sections
    org-mobile-files (quote ("~/.outlet/GTD.org" "~/.outlet/habits.org" "~/.outlet/_calendars/meetings.org"))
    org-mobile-use-encryption nil
   )
-  
+
   ;; Define timer variables for pull and push operations
   (defvar org-mobile-push-timer nil)
   (defvar org-mobile-pull-timer nil)
-  
+
   ;; Define notificaters
   (require 'notifications)
-  
+
   (defun org-mobile-notify (type result)
     (notifications-notify
      :title (concat type " complete:")
      :body  (format (concat "Org-mobile-" type ": %s") result)))
-  
+
   (defun notify-push (result) (org-mobile-notify "Push" result))
   (defun notify-pull (result) (org-mobile-notify "Pull" result))
-  
+
   ;; Fork the work of pushing to mobile
   (defun fork-org-mobile-push()
     (async-start
@@ -1270,12 +1272,12 @@ migrate this into more literal sections
      `(lambda ()
         ,(async-inject-variables "org-\\(mobile-\\|directory\\)")
         (org-mobile-push))
-     
+
      ; What to do when it finishes
      (lambda (result)
        (notify-push result)
        (message "Push of mobile org complete"))))
-  
+
   ;; Push to mobile when the idle timer runs out
   (defun org-mobile-push-with-delay (secs)
     (when org-mobile-push-timer
@@ -1283,17 +1285,17 @@ migrate this into more literal sections
     (setq org-mobile-push-timer
           (run-with-idle-timer
            (* 1 secs) nil 'fork-org-mobile-push)))
-  
+
   ;; After saving files, start a 30 seconds idle timer after which we
   ;; are going to push
   ;; (add-hook
   ;;  'after-save-hook
-  ;;  (lambda () 
+  ;;  (lambda ()
   ;;    (when (eq major-mode 'org-mode)
   ;;      (dolist (file (org-mobile-files-alist))
   ;;        (if (string= (expand-file-name (car file)) (buffer-file-name))
   ;;         (org-mobile-push-with-delay 30))))))
-  
+
   ;; Fork the work of pushing to mobile
   (defun fork-org-mobile-pull ()
     (async-start
@@ -1301,19 +1303,19 @@ migrate this into more literal sections
      `(lambda ()
         ,(async-inject-variables "org-\\(mobile-\\|directory\\)")
         (org-mobile-pull))
-     
+
      ; What to do when it finishes
      (lambda (result)
        (notify-pull result)
        (message "Pull of mobile org complete"))))
-  
+
   ;; Construct the name of the remote file
   (setq remote-org-mobile-file
         (file-truename
          (concat
           (file-name-as-directory org-mobile-directory)
           "mobileorg.org")))
-  
+
   ;; Pull by monitoring the file mobile-org writes to
   (defun install-monitor (file secs)
     ;; Cancel an existing timer, if any
@@ -1330,11 +1332,11 @@ migrate this into more literal sections
                (fork-org-mobile-pull)))
            file
            secs)))
-  
+
   ;; Install a monitor on the remote org file. Don't make the time too
   ;; short, otherwise the file might nog get pulled in.
   ;; (install-monitor remote-org-mobile-file 30)
-  
+
   ;; Mail facilities related to org-mode
   (require 'org-mime)
   (defun mrb/mail-subtree-from-org-agenda ()
@@ -1344,25 +1346,25 @@ migrate this into more literal sections
   ;; Bind it to a C-c m (similar to C-x m which opens an empty mail)
   ;;(define-key org-mode-map [(control c) m] 'org-mime-subtree)
   (define-key org-mode-map "\C-cm" 'org-mime-subtree)
-  
+
   ;; This does not work
   ;;(define-key org-agenda-mode-map [(control c) m] 'mrb/mail-subtree-from-org-agenda)
   ;; This does
   (define-key org-agenda-mode-map "\C-cm" 'mrb/mail-subtree-from-org-agenda)
   ;;
-  
+
   (require 'stripe-buffer)
   (defun mrb/enable-org-table-striping ()
     (interactive)
     (stripe-org-tables-enable))
   ;; TODO I want to have this in the agenda mode to
 #+END_SRC
- 
+
 *** Encrypting information in org-mode
 I use the /encrypt/ tag for encrypting sections in org-mode (and
 sometimes my journal). The sections get encrypted and decrypted
 automatically on saving and opening. This uses the EasyPG library to
-get to my GPG key. 
+get to my GPG key.
 
 #+BEGIN_SRC emacs-lisp
 (require 'org-crypt)
@@ -1395,7 +1397,7 @@ default, so it won't be inherited by mistake.
 *** Commiting automatically
 I have lost a number of changes in the past because I reverted a
 file, made a mistake or whatever. Some of these mistakes can be
-reverted easily if saves are automatically committed 
+reverted easily if saves are automatically committed
 
 Rather than using an after save hook, there is a minor
 git-auto-commit mode package which does just what I need.
@@ -1421,7 +1423,7 @@ Statusnet, or perhaps microblog in general settings
   (add-to-list 'load-path  "~/dev/emacs/packages/identica-mode")
   (load-library "identica-mode.el")
   (require 'longlines)
-  (setq 
+  (setq
    statusnet-server "o.mrblog.nl"
    statusnet-access-url "http://o.mrblog.nl/api/oauth/access_token"
    statusnet-authorize-url "http://o.mrblog.nl/api/oauth/authorize"
@@ -1434,28 +1436,28 @@ Statusnet, or perhaps microblog in general settings
    identica-update-status-method (quote minibuffer)
    identica-oldest-first nil
    identica-soft-wrap-status nil
-   identica-urlshortening-service (quote isgd) 
+   identica-urlshortening-service (quote isgd)
    identica-enable-striping t
    identica-enable-highlighting t
   )
-  
-  
-  
+
+
+
   ;; I'm using a floating frame in awesome WM for dents
   (defun make-dent-frame ()
     "Create a new frame and run identica-update status."
     (interactive)
     ;; Create and select the frame
-    (select-frame (make-frame '((name . "dent") 
+    (select-frame (make-frame '((name . "dent")
                   (width . 80) (height . 15)
                   (menu-bar-lines . 0) (tool-bar-lines . 0))))
     ;; Capture a Todo entry, force edit-window method
     (identica-update-status 'edit-buffer)
-  
+
     ;; Once there, make sure we're the only one
     (delete-other-windows)
   )
-  
+
   ;; Make sure we remove our frame too
   (defadvice identica-update-status-from-edit-buffer-send (after delete-dent-frame-on-send activate)
     "Advise to close the frame"
@@ -1467,9 +1469,9 @@ Statusnet, or perhaps microblog in general settings
     (if (equal "dent" (frame-parameter nil 'name))
         (delete-frame))
   )
-  
+
   (provide 'statusnet)
-  
+
 #+END_SRC
 ** OpenSCAD
 OpenSCAP mode, it’s a mode that describes 3D-models
@@ -1477,36 +1479,36 @@ OpenSCAP mode, it’s a mode that describes 3D-models
   ; OpenSCAD has git repository in my dev tree
   (add-to-list 'load-path "~/dev/reprapping/openscad/contrib")
   (load "scad-mode")
-  
+
   (provide 'openscad)
-  
+
 #+END_SRC
 ** LDAP
 LDAP integration, mostly for address book lookups
 #+BEGIN_SRC emacs-lisp
   ; LDAP integration
-  
+
   (setq ldap-host-parameters-alist
         (quote (("ldap.hsdev.com" base "ou=addressbook,dc=hsdev,dc=com"))))
-  
+
   (require 'ldap)
   (require 'eudc)
-  
+
   (setq eudc-default-return-attributes nil
         eudc-strict-return-matches nil)
-  
+
   (setq ldap-ldapsearch-args (quote ("-tt" "-LLL" "-x")))
   (setq eudc-inline-query-format '((name)
                                    (firstname)
                                    (firstname name)
                                    (email)
                                    ))
-  
-  
+
+
   (eudc-set-server "ldap.hsdev.com" 'ldap t)
   (setq eudc-server-hotlist '(("ldap.hsdev.com" . ldap)))
   (setq eudc-inline-expansion-servers 'hotlist)
-  
+
   (defun enz-eudc-expand-inline()
     (interactive)
     (move-end-of-line 1)
@@ -1516,16 +1518,16 @@ LDAP integration, mostly for address book lookups
               (error nil))
       (backward-delete-char-untabify 1))
     )
-  
+
   ;; Adds some hooks
-  
+
   (eval-after-load "message"
     '(define-key message-mode-map (kbd "TAB") 'enz-eudc-expand-inline))
   (eval-after-load "sendmail"
     '(define-key mail-mode-map (kbd "TAB") 'enz-eudc-expand-inline))
   (eval-after-load "post"
     '(define-key post-mode-map (kbd "TAB") 'enz-eudc-expand-inline))
-  
+
 #+END_SRC
 ** Key and mouse bindings
 Keyboard binding are the primary way to interact for me. I have been
@@ -1566,46 +1568,46 @@ find out a better way for this.
 (global-unset-key (kbd "<mouse-3>"))
 #+END_SRC
 *** Setting keys
-This is the remnant of my old configuration. 
+This is the remnant of my old configuration.
 #+BEGIN_SRC emacs-lisp
   ; Let marks be set when shift arrowing, everybody does this
   ;; FIXME: this does not belong in keybindings, but somwhere global
   (setq shift-select-mode t)
   (delete-selection-mode 1)
-    
+
   ; Font scaling, like in chrome
   (global-set-key [(super =)] 'text-scale-increase)
   (global-set-key [(super -)] 'text-scale-decrease)
   ; Font scaling, like in firefox
   (global-set-key [(control +)] 'text-scale-increase)
   (global-set-key [(control -)] 'text-scale-decrease)
-  
+
   ; Line handling functions
   ;; For external keyboard FIXME: these bindings contain dead characters
   ;; if such a keyboard is used, which can be confusing.
   (global-set-key [(?\s-\§)] 'toggle-truncate-lines)
   ;; For t510 keyboard (the same place)
   (global-set-key [(super \`)] 'toggle-truncate-lines)
-  
+
   ;; Most of the time I want return to be newline and indent
   ;; Every mode can augment this at will obviously (org-mode does, for example)
   (global-set-key (kbd "RET") 'newline-and-indent)
-  
+
   ;; Comment code lines, command reacts based on the major mode.
   (global-set-key [(super /)] 'comment-or-uncomment-region)
-  
+
   (global-set-key [(super s)] 'save-buffer)
-    
+
   ;; Kill buffer, FIXME: asks for name, which I dont need
   (global-set-key [(super k)] 'ido-kill-buffer)
-  
+
   ;; Resizing windows
   ;; Introduce a bit of intelligence so the shrink and enlarge know what window I'm in.
   (defun xor (b1 b2)
     "Exclusive or between arguments"
     (or (and b1 b2)
         (and (not b1) (not b2))))
-  
+
   (defun move-border-left-or-right (arg dir)
     "General function covering move-border-left and move-border-right. If DIR is
     t, then move left, otherwise move right."
@@ -1616,15 +1618,15 @@ This is the remnant of my old configuration.
           (shrink-window arg t)
         (enlarge-window arg t)))
     )
-  
+
   (defun move-border-left (arg)
     (interactive "P")
     (move-border-left-or-right arg t))
-  
+
   (defun move-border-right (arg)
     (interactive "P")
     (move-border-left-or-right arg nil))
-  
+
   ;; Same for up and down
   (defun move-border-up-or-down (arg dir)
     "General function covering move-border-up and move-border-down. If DIR is
@@ -1635,32 +1637,32 @@ This is the remnant of my old configuration.
       (if (xor (= top-edge 0) dir)
           (shrink-window arg nil)
         (enlarge-window arg nil))))
-  
+
   (defun move-border-up (arg)
     (interactive "P")
     (move-border-up-or-down arg t))
-  
+
   (defun move-border-down (arg)
     (interactive "P")
     (move-border-up-or-down arg nil))
-  
-  
-  ;; cut, copy and paste with cmd-key (like on osx). 
+
+
+  ;; cut, copy and paste with cmd-key (like on osx).
   ;; this kinds sucks now, because the rest of the OS does not do this
   (global-set-key [(super z)] 'undo)
   (global-set-key [(super x)] 'clipboard-kill-region)
   (global-set-key [(super c)] 'clipboard-kill-ring-save)
   (global-set-key [(super v)] 'yank)
   (global-set-key [(super a)] 'mark-whole-buffer)
-  
+
   ;; What is the kp- here?
   (global-set-key [(kp-delete)] 'delete-char)
-  
+
   ;; Make `C-x C-m' and `C-x RET' be different (since I tend
   ;; to type the latter by accident sometimes.)
   ;; Should this not be an unset?
   (global-set-key [(control x) return] nil)
-    
+
   (defun new-empty-buffer ()
     "Opens a new empty buffer."
     (interactive)
@@ -1677,7 +1679,7 @@ This is the remnant of my old configuration.
   ;; status to offer save
   ;; This custome kill buffer is close-current-buffer.
   (global-set-key [(super n)] 'new-empty-buffer)
-  
+
   ;; Misc.
   (global-set-key [(control x) (m)] 'make-mailcompose-frame)
 #+END_SRC
@@ -1704,7 +1706,7 @@ I like the incremental matching that smex does, so I am going to
 rebind the M-x keybinding to that, and rebind the original to have
 C-c as a prefix. Using the shift modifier with the M-x command also
 runs smex, but limits the commands to make sense for the current
-major mode only. 
+major mode only.
 #+BEGIN_SRC emacs-lisp
   (global-set-key [(control c)(meta x)] 'execute-extended-command)
   (global-set-key [(meta x)] 'smex)
@@ -1723,13 +1725,13 @@ the previous definition.
   (global-set-key [f1] 'help-command)
   (global-set-key [f2] 'save-buffer)
   (global-set-key [f3] 'find-file)
-  
+
   ;; Make gnome compliant, define a full-screen function and bind to F11
   (defun mrb/switch-full-screen ()
     (interactive)
     (shell-command "wmctrl -r :ACTIVE: -btoggle,fullscreen"))
   (global-set-key [f11] 'switch-full-screen)
-  
+
   ;; Not sure what this is? It is not the menu key.
   (global-set-key [XF86MenuKB] 'accelerate-menu)
 #+END_SRC
@@ -1740,7 +1742,7 @@ the previous definition.
   ;; Arrows, seems consistent with the other window movements
   (global-set-key [XF86AudioNext] 'next-multiframe-window)
   (global-set-key [XF86AudioPrev] 'previous-multiframe-window)
-  
+
   ;; Alt-Cmd left-right arrows browse through buffers within the same frame
   (global-set-key [(meta super left)] 'previous-buffer)
   (global-set-key [(meta super right)] 'next-buffer)
@@ -1752,7 +1754,7 @@ the previous definition.
   ;; These would conflict with awesome bindings, perhaps we should change those bindings
   ;; (global-set-key (kbd "<C-S-left>")   'buf-move-left)
   ;; (global-set-key (kbd "<C-S-right>")  'buf-move-right)
-  
+
   ;; Use Super + Arrows to steer the borders
   (global-set-key [(super up)] 'move-border-up)
   (global-set-key [(super down)] 'move-border-down)
@@ -1764,11 +1766,11 @@ the previous definition.
   (global-set-key [(control c) (a)] 'org-agenda)
   (global-set-key [(control c) (b)] 'org-iswitchb)
   (global-set-key [(control c) (l)] 'org-store-link)
-  (global-set-key [(control c) (j)] 'make-journal-entry) 
+  (global-set-key [(control c) (j)] 'make-journal-entry)
 
-  
+
 #+END_SRC
-  
+
 ***** Identica-mode
 #+BEGIN_SRC emacs-lisp
   (global-set-key [(control c) (ip)] 'identica-update-status-interactive)
@@ -1779,7 +1781,7 @@ the previous definition.
 
 ** Terminals, Character encodings and emulation
 My policy is to use Emacs for as many things and use as little
-programs as necessary. All this within reason obvously. 
+programs as necessary. All this within reason obvously.
 
 This sections describes how terminals and shells are used from within
 Emacs. In an ideal situation I won't be needing any other terminal
@@ -1796,19 +1798,19 @@ At the momen I use two varieties:
   (set-keyboard-coding-system 'utf-8)
   (prefer-coding-system 'utf-8)
   (setq current-language-environment "UTF-8")
-  
+
   (defun mrb/use-utf8 ()
     (set-buffer-process-coding-system 'utf-8-unix 'utf-8-unix))
   (add-hook 'term-exec-hook 'mrb/use-utf8)
-  
+
   ;; Define terminal config, I prefer ansi-term
   (require 'term)
   (defun mrb/ansi-term (&optional new-buffer-name)
     "Start a terminal-emulator in a new buffer."
-    (interactive) 
-  
+    (interactive)
+
     (setq program "/bin/bash")
-  
+
     ;; Pick the name of the new buffer.
     (setq term-ansi-buffer-name
           (if new-buffer-name
@@ -1818,32 +1820,32 @@ At the momen I use two varieties:
                     (file-name-nondirectory program)
                   term-ansi-buffer-base-name)
               "ansi-term")))
-  
+
     (setq term-ansi-buffer-name (concat "*" term-ansi-buffer-name "*"))
-  
+
     ;; In order to have more than one term active at a time
     ;; I'd like to have the term names have the *term-ansi-term<?>* form,
     ;; for now they have the *term-ansi-term*<?> form but we'll see...
-  
+
     (setq term-ansi-buffer-name (generate-new-buffer-name term-ansi-buffer-name))
     (setq term-ansi-buffer-name (term-ansi-make-term term-ansi-buffer-name program))
-  
+
     (set-buffer term-ansi-buffer-name)
     (term-mode)
     (term-char-mode)
-  
+
     ;; I wanna have find-file on C-x C-f -mm
     ;; your mileage may definitely vary, maybe it's better to put this in your
     ;; .emacs ...
-  
+
     (term-set-escape-char ?\C-x)
-  
+
     ;; Go there
     (switch-to-buffer term-ansi-buffer-name))
-  
+
   ; Aliases
   (defalias 'at 'mrb/ansi-term)
-  
+
   ;; When closing the ansi term window, close the useless buffer too
   (defadvice term-sentinel (around mrb/advice-term-sentinel (proc msg))
     (if (memq (process-status proc) '(signal exit))
@@ -1851,16 +1853,16 @@ At the momen I use two varieties:
           ad-do-it
           (kill-buffer buffer))
       ad-do-it))
-  (ad-activate 'term-sentinel)  
+  (ad-activate 'term-sentinel)
 #+END_SRC handling.
 *** Eshell
 Eshell is theoretically the ideal shell; part of emacs, completely
 implemented in lisp and thus available regardless of the underlying
 hardware and operating system. In practice, many things won't work as
-expected. 
+expected.
 
 In the window manager (awesome-wm) 'Cmd Enter' launches a terminal,
-similarly within Emacs 'C-c Enter' launches Eshell: 
+similarly within Emacs 'C-c Enter' launches Eshell:
 #+BEGIN_SRC emacs-lisp
   (define-key global-map [(control c) return] 'eshell)
 #+END_SRC
@@ -1930,10 +1932,10 @@ The last bit of that command line is the function to evaluate, which
 was taken from http://ur1.ca/cf1m4 and sligthly adapted.
 #+BEGIN_SRC emacs-lisp
   (require 'cl)
-  
+
   (defun server-eshell ()
     "Command to be called by emacs-client to start a new shell.
-  
+
   A new eshell will be created. When the frame is closed, the buffer is deleted or the shell exits,
   then hooks will take care that the other actions happen. For example, when the frame is closed,
   then the buffer will be deleted and the client disconnected.
@@ -1950,7 +1952,7 @@ was taken from http://ur1.ca/cf1m4 and sligthly adapted.
       (add-hook 'eshell-exit-hook #'close t t)
       (add-hook 'delete-frame-functions #'close t t))
       (delete-other-windows)
-      nil))  
+      nil))
 #+END_SRC
 ** Completion
 I want completion to work as follows:
@@ -1963,7 +1965,7 @@ I want completion to work as follows:
 3. for each mode, a specialization is ok, if that improves the
    situation; I expect to have many specialisations to improve the
    autocomplete quality;
-4. completion should be inline whenever possible. 
+4. completion should be inline whenever possible.
 5. if a completion window *must* be openened, do this at the same place
    always and do not mess up other windows.
 6. Completion should behave somewhat like real-time systems. An
@@ -2003,14 +2005,14 @@ at all.
   (add-to-list 'smart-tab-completion-functions-alist '(emacs-lisp-mode . lisp-complete-symbol))
   (add-to-list 'smart-tab-completion-functions-alist '(text-mode . dabbrev-completion))
   (add-to-list 'smart-tab-completion-functions-alist '(erc-mode . pcomplete))
-  
+
   ;; Disable it in org-mode, tab is heavily customized there (org-cycle)
   (add-to-list 'smart-tab-disabled-major-modes 'org-mode)
   (add-to-list 'smart-tab-disabled-major-modes 'org-agenda-mode)
-  
+
   ;; eshell gets very confused if smart-tab is enabled
   (add-to-list 'smart-tab-disabled-major-modes 'eshell-mode)
-  
+
   ;; Similarly, term-mode doesn't like it either
   (add-to-list 'smart-tab-disabled-major-modes 'term-mode)
 #+END_SRC
@@ -2087,14 +2089,14 @@ that is.
 *** ERC
 ERC is an irc implementation within emacs. When I start erc I want to
 connect automatically the configured servers without having to enter
-nicks and passwords and stuff. 
+nicks and passwords and stuff.
 
 Start by configuring some basic settings
 #+BEGIN_SRC emacs-lisp
   (require 'erc)
   (require 'erc-tweet)
   (require 'erc-image)
-  
+
   (setq
    erc-modules (quote (
                        autojoin button completion fill
@@ -2130,15 +2132,15 @@ server by itself.
 
 After joining, ERC keeps track of the channels, by putting notifiers
 in the modeline. I am not interested in some of the things happening
-in the channels. 
-#+BEGIN_SRC emacs-lisp 
+in the channels.
+#+BEGIN_SRC emacs-lisp
 (erc-track-mode t)
 (setq erc-track-exclude-types '("JOIN" "NICK" "PART" "QUIT" "MODE"
                                  "324" "329" "332" "333" "353" "477"))
 (setq erc-hide-list '("JOIN" "PART" "QUIT" "NICK"))
 #+END_SRC
 
-Log every channel in a simple =#channel-date.txt= file. 
+Log every channel in a simple =#channel-date.txt= file.
 #+BEGIN_SRC emacs-lisp
   (setq erc-generate-log-file-name-function (quote erc-generate-log-file-name-with-date))
 #+END_SRC
@@ -2151,25 +2153,25 @@ channel; a quick google search turned out with this code:
                 (if (and (boundp 'erc-default-recipients) (erc-default-target))
                     (erc-propertize (concat (erc-default-target) ">") 'read-only t 'rear-nonsticky t 'front-nonsticky t)
                   (erc-propertize (concat "ERC>") 'read-only t 'rear-nonsticky t 'front-nonsticky t))))
-  
+
 #+END_SRC
 
-Define a function to start erc, so I can start it the way I like it. 
+Define a function to start erc, so I can start it the way I like it.
 #+BEGIN_SRC emacs-lisp
   (defun mrb/erc ()
     "Wrapper to start erc in the way I want it"
     (interactive)
-  
+
     ;;I use freenode for most things
     (erc-tls :server "irc.freenode.net" :port 7000))
 #+END_SRC
 *** Mail
-Mail configuration. 
+Mail configuration.
 #+BEGIN_SRC emacs-lisp
-  (setq 
+  (setq
    ; User agent style is message mode (gnus, but independent of it)
     mail-user-agent 'message-user-agent
-  
+
     ; Sending it
     smtpmail-default-smtp-server "localhost"
     smtpmail-smtp-service 24
@@ -2177,7 +2179,7 @@ Mail configuration.
     smtpmail-sendto-domain "hsdev.com"
     send-mail-function 'smtpmail-send-it                 ; This is for mail
     message-send-mail-function 'message-smtpmail-send-it ; This is for gnus
-  
+
     ; Always put one in the Sent folder on sending
     message-default-mail-headers "Bcc: mrb+Sent@hsdev.com\n"
     mail-yank-prefix ">> "
@@ -2190,17 +2192,17 @@ Mail configuration.
   (setq password-cache t)            ; default is true, so no need to set this actually
   (setq password-cache-expiry 28800) ; default is 16 seconds, which is ridiculously low
   (require 'smtpmail)
-  
+
   ;;(add-hook 'message-mode-hook 'orgstruct++-mode 'append)
-  (add-hook 'message-mode-hook 'turn-on-auto-fill 'append)  
+  (add-hook 'message-mode-hook 'turn-on-auto-fill 'append)
 #+END_SRC
 
 I think I might light mu4e use once in a while, so let's set up a
 configuration for that as well.
 #+BEGIN_SRC emacs-lisp
     (require 'mu4e)
-    
-    (setq 
+
+    (setq
      mu4e-maildir "~/Maildir"
      mu4e-sent-folder "/.Sent"
      mu4e-drafts-folder "/.Drafts"
@@ -2223,17 +2225,17 @@ match on the varying name that xprop delivers, so. we make our own here:
       "Create a new frame and run mail-compose"
       (interactive)
       ;; Create and select the frame
-      (select-frame (make-frame '((name . "mailcompose") 
+      (select-frame (make-frame '((name . "mailcompose")
                     (width . 100) (height . 50)
                     (menu-bar-lines . 0) (tool-bar-lines . 0))))
-  
+
       ;; Capture a Todo entry, force edit-window method
       (compose-mail)
-    
+
       ;; Once there, make sure we're the only one
       (delete-other-windows)
     )
-  
+
     (defadvice message-kill-buffer (after delete-mailcompose-frame activate)
       "Advise message-kill-buffer to close the frame if it is the capture frame"
       (if (equal "mailcompose" (frame-parameter nil 'name))
@@ -2252,9 +2254,9 @@ XMPP related settings, including interfacing it to other systems
   (add-to-list 'load-path "~/dev/emacs/packages/emacs-jabber/compat/")
   ;;(require 'jabber-autoloads)
   (require 'jabber)
-  
+
   ; Configuration variables
-  (setq 
+  (setq
    jabber-show-offline-contacts nil
    jabber-default-priority 30
    jabber-alert-message-hooks (quote (jabber-message-libnotify jabber-message-echo jabber-message-scroll))
@@ -2263,15 +2265,15 @@ XMPP related settings, including interfacing it to other systems
    jabber-auto-reconnect t
    jabber-show-resources t
   )
-  
+
   ;; Me wants the smileys too
   ;; FIXME: I suspect this makes chats annoyingly slow to type in?
   ;;(require 'autosmiley)
   ;;(add-hook 'jabber-chat-mode-hook 'autosmiley-mode)
-  
+
   ;; Show some info in the modeline
   (jabber-mode-line-mode 1)
-  
+
   ;; Do not steal my focus in the mini buffer
   ;; Message alert hooks
   (define-jabber-alert echo "Show a message in the echo area"
@@ -2306,14 +2308,14 @@ Google map integration for Emacs
 #+BEGIN_SRC emacs-lisp
   ; Directly tie into the GIT repository on this machine
   (add-to-list 'load-path "~/dev/emacs/packages/jd-el/")
-  
+
   (require 'google-maps)
-  
+
   ; org-mode integration
   (require 'org-location-google-maps)
-  
+
   (provide 'google-map-settings)
-  
+
 #+END_SRC
 *** Quantified Emacs!
 Taken from sacha’s configuration, this records which keys I press in
@@ -2329,7 +2331,7 @@ etc.
 * Self configuration                                                                                 :exclude:
 I have the same config file for orgmode itself
 #+SETUPFILE: "~/.outlet/etc/org-config.org"
-  
+
 If there is anything that needs to be configured specifically for this
 file, here is the place to do it. Other than those, nothing else
 should come below this point
