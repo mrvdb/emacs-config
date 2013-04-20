@@ -314,10 +314,16 @@ And enable the minor mode globally.
     ;; automatically, keep all font-locking in the region instead of
     ;; just overwriting the whole section. The trick here is to specify
     ;; nil in the foreground attribute
+    (setq mrb-bg-highlight "gray22")
+    
     (dolist
         (the_face
-         (list 'region 'show-paren-match 'magit-item-highlight))
-      (set-face-attribute the_face nil :inherit nil :foreground nil :background "gray32"))
+         (list 'region 'show-paren-match))
+      (set-face-attribute the_face nil :inherit nil :foreground nil :background mrb-bg-highlight))
+  
+    ;; The above did not work for magit, let's try it after loading magit
+    (eval-after-load "magit"
+      '(set-face-attribute 'magit-item-highlight nil :inherit nil :foreground nil :background mrb-bg-highlight))
   )
   
   ;; Defer fontification a little bit, so we could gain a bit in scroll speed
