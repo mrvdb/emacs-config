@@ -121,7 +121,7 @@ for the details on the settings for this.
       (goto-address-mode 1)))
   (global-goto-address-mode t)
 #+END_SRC
-** Packages
+** Package Management
 Package handling, do this early so emacs knows where to find things.
 
 I want to manage my packages with el-get. This has grown over time,
@@ -1745,7 +1745,7 @@ the previous definition.
   (global-set-key [XF86MenuKB] 'accelerate-menu)
 #+END_SRC
 
-***** Resizing and swithcing windows and frames
+***** Resizing and switching windows and frames
 #+BEGIN_SRC emacs-lisp
   ;; Moving back and forth in windows For now, I'm using the Fn Key +
   ;; Arrows, seems consistent with the other window movements
