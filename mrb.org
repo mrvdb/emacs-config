@@ -155,35 +155,22 @@ When installing a new package, add a recipe in this list, eval it,
 and run =el-get-install= with the package name.
 
 #+BEGIN_SRC emacs-lisp
+  ;; Personal or adapted recipes
   (setq el-get-sources
         '(
           ;; Obviously we need el-get itself, so we can run a self-update
-          ;; There is a recipe, but that is conservative, runs version 3.stable
-          (:name el-get :type github :pkgname "dimitri/el-get" :features "el-get")
+          ;; There is a recipe, but we want the master branch of it
+          (:name el-get :branch "master")
           ;; Using a different source than the built-in recipe (why was this again?)
           (:name zenburn-emacs :type github :pkgname "bbatsov/zenburn-emacs")
           ;; Version from elpa does not work for me (init problem?)
-          smex
-          ace-jump-mode
-          apache-mode
           (:name cursor-chg :type github :pkgname  "emacsmirror/cursor-chg" :features cursor-chg)
-          gnuplot-mode
-          sudo-save
-          erc-highlight-nicknames
-          edit-server
-          magit
-          markdown-mode
           (:name php-mode-improved)    ; Just to have example for other syntax
           (:name newlua-mode :type github :pkgname "immerrr/lua-mode" :features lua-mode)
-          rainbow-delimiters
           (:name typopunct :type github :pkgname "emacsmirror/typopunct" :features typopunct)
           (:name oauth :type github :pkgname "psanford/emacs-oauth")
-          scratch
-          popwin
-          highlight-parentheses
           (:name expand-region :type github :pkgname "magnars/expand-region.el")
           (:name mark-multiple :type github :pkgname "magnars/mark-multiple.el")
-          multiple-cursors
           (:name fixed-point-completion :type github :pkgname "smithzvk/fixed-point-completion")
           (:name xlicense :type github :pkgname "emacsmirror/xlicense")
           (:name autosmiley :type github :pkgname "emacsmirror/autosmiley")
@@ -203,13 +190,23 @@ and run =el-get-install= with the package name.
           (:name popup :type github :pkgname "auto-complete/popup-el")
           (:name auto-complete :type github :pkgname "auto-complete/auto-complete")
           (:name dash :type github :pkgname "magnars/dash.el")
-          wrap-region
         )
   )
-  (el-get)
+
+  (setq mrb/packages
+        (append
+         ;; list of packages we use from standard recipes
+         '(smex ace-jump-mode apache-mode gnuplot-mode sudo-save erc-highlight-nicknames
+                edit-server magit markdown-mode rainbow-delimiters scratch popwin
+                highlight-parentheses multiple-cursors wrap-region git-modes cl-lib keywiz
+                smart-tab)
+
+         (mapcar 'el-get-as-symbol (mapcar 'el-get-source-name el-get-sources))))
+
+  (el-get 'sync mrb/packages)
 #+END_SRC
 
-** Visual 
+** Visual
 Many settings have to do with how the screen looks and behaves in a
 visual way. Thing like colors, highlighting etc. go fall into this
 category.
