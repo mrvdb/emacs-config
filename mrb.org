@@ -394,13 +394,10 @@ one mode in particular.
   (require 'scratch)
   
   ;; Turn on eldoc for modes which support it
-  (add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
-  (add-hook 'lisp-interaction-mode-hook 'turn-on-eldoc-mode)
-  (add-hook 'ielm-mode-hook 'turn-on-eldoc-mode)
-  (add-hook 'python-mode 'turn-on-eldoc-mode)
-  
-
-  
+  (dolist
+      (the_mode
+      (list 'emacs-lisp-mode-hook 'lisp-interaction-mode-hook 'ielm-mode-hook 'python-mode))
+    (add-hook the_mode 'turn-on-eldoc-mode))  
 #+END_SRC 
 ** Org-mode
 Orgmode configuraton is probably the largest part of my Emacs
