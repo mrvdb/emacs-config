@@ -826,6 +826,9 @@ and HTML as destination format
  org-export-docbook-xslt-proc-command "xsltproc --output %o %s %i"
  org-export-htmlize-output-type (quote css)
  org-export-htmlized-org-css-url "orgmode.css"
+ org-latex-pdf-process (quote ("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f" "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f" "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"))
+ org-latex-to-pdf-process (quote ("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f" "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f" "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"))
+
 )
 
 #+END_SRC
@@ -935,7 +938,7 @@ migrate this into more literal sections
   (define-key org-agenda-mode-map [(control super .)] 'force-org-agenda-todo)
 
   (define-key org-agenda-mode-map [(super .)] 'org-agenda-todo)
-  ; Map ⌘t to schedule in both task and agenda-view
+  ; Map \cmd{}t to schedule in both task and agenda-view
   (define-key org-mode-map [(super t)] 'org-schedule)
   (define-key org-agenda-mode-map [(super t)] 'org-agenda-schedule)
   (define-key org-mode-map [(meta p)] 'org-set-property)
