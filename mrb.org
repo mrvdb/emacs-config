@@ -47,7 +47,7 @@ a way to have them forcibly compiled.
 Seems like a good idea to start configuratiion with some details
 about me. Just name and email-address for now in public.
 #+BEGIN_SRC emacs-lisp
-  (setq user-full-name "Marcel van der Boom")
+  (setq user-full-name    "Marcel van der Boom")
   (setq user-mail-address "marcel@hsdev.com")
 #+END_SRC
 
