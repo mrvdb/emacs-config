@@ -3,7 +3,8 @@
 all:
 
 clean:
-	$(RM) *.dvi 
+	$(RM) *.dvi
 	$(RM) *.html
 	$(RM) *.pdf
 	$(RM) *.tex
+	$(RM) *.log
