@@ -1783,12 +1783,6 @@ At the momen I use two varieties:
     (term-mode)
     (term-char-mode)
 
-    ;; I wanna have find-file on C-x C-f -mm
-    ;; your mileage may definitely vary, maybe it's better to put this in your
-    ;; .emacs ...
-
-    (term-set-escape-char ?\C-x)
-
     ;; Go there
     (switch-to-buffer term-ansi-buffer-name))
 
