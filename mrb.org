@@ -58,6 +58,9 @@ published, should I decide some day to push this config somewhere.
 One solution is to have all these in a separate file, and not publish
 that file. I’m also encrypting the file, as I’m sure I *will* publish
 it by accident some day.
+
+For settings that are made in elisp, load secrets.el.gpg which will
+be encrypted automatically.
 #+BEGIN_SRC emacs-lisp
 (load-library "secrets.el.gpg")
 #+END_SRC
@@ -66,6 +69,10 @@ Apart from this there is some inline content that is not suitable for
 storing in the secrets file. For org-mode for example, there is a way
 to encrypt sections separately. See [[Encrypting information in org-mode]]
 for the details on the settings for this.
+
+Next to inline content in org that needs encryption, there is also
+content that needs encrypting which is more suitable to store in a
+separate file for several reasons.
 ** Global Generic settings
 #+BEGIN_SRC emacs-lisp
   ;; disable auto-save files (#foo#)
