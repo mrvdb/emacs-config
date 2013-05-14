@@ -893,7 +893,6 @@ migrate this into more literal sections
    org-goto-interface (quote outline-path-completion)
    ;; non nil is just direct children, what an ODD name!!!!
    org-hierarchical-todo-statistics nil
-
    org-provide-todo-statistics t
    org-log-into-drawer t
    org-log-redeadline (quote note)
@@ -2055,7 +2054,7 @@ Start by configuring some basic settings
                                 networks noncommands notify readonly
                                 replace ring smiley stamp track unmorse highlight-nicknames smiley
                                 tweet image))
-   erc-image-inline-fixed-size 150
+   erc-image-inline-rescale 150
    )
 #+END_SRC
 
