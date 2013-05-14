@@ -7,10 +7,10 @@ just a normal orgmode file. That allows me to separate the
 configuration is different sections, publish the configuration in a
 variety of formats and generally describe the configuration in a clear
 way so I can remember what this was all about. This is not unlike
-literal programming. 
+literal programming.
 
 * General configuration
-This section contains general settings. 
+This section contains general settings.
 
 #+STARTUP: overview
 #+STARTUP: indent
@@ -30,7 +30,7 @@ them. If that need does not exist for one of the tags below, remove
 them. The list requirement is valid in general for any tag btw.
 
 Things I do to physical objects:
-#+TAGS: { buy(b) sell(s) } build(u) fix(f) clean(n) 
+#+TAGS: { buy(b) sell(s) } build(u) fix(f) clean(n)
 
 Administration like tags:
 #+TAGS: call(c) check(e) mail(m) read(r) write(w)  learn(l)
@@ -48,7 +48,7 @@ Product tags allow me to create lists which are related to one
 particular product. A product is defined vaguely; it is something we
 produce, sell, buy or use. The product shortcuts should all be
 capitals.
-#+TAGS: emacs(E) openobject(O) pcs(P) eSign(S) claws(C) 
+#+TAGS: emacs(E) openobject(O) pcs(P) eSign(S) claws(C)
 
 Other:
 - out : on the road, outside habitat, away from home etc.
@@ -101,7 +101,7 @@ progress on them. All this leads to the following state definitions:
 
 When an item reaches a /DONE/ state, i.e. anything after the vertical
 bar, we can log this automatically, either by inserting a timestamp,
-or by requiring to log a note. We use the timestamp. 
+or by requiring to log a note. We use the timestamp.
 #+STARTUP: logdone
 
 Given a certain workflow with repeating tasks, tell the system to
@@ -126,8 +126,8 @@ Define a tag which hides stuff from exported documents
 #+TAGS: exclude(x)
 
 and use it
-#+EXPORT_EXCLUDE_TAGS: exclude 
- 
+#+EXPORT_EXCLUDE_TAGS: exclude
+
 ** LateX specific configuration
 I have separated the latex (pdf exporting) from the rest because it is
 much more elaborate and took more time to get right.
@@ -139,6 +139,7 @@ article style.
 This option does not seem to work when not in the same file as
 exporting. I have added this in the customize interface directly now.
 #+LaTeX_CLASS_OPTIONS: [10pt,a4paper,twoside,microtype]
+
 
 Latex default configuration to produce a memo-style document.
 
@@ -155,7 +156,7 @@ Make headers a bit more compact and more pleasing to look at
 
 Make our headers use the HSD purple color
 #+LaTeX_HEADER: \usepackage{sectsty}
-#+LaTeX_HEADER: \usepackage{color}
+#+LaTeX_HEADER: \usepackage{xcolor}
 #+LaTeX_HEADER: \definecolor{hsdpurple}{RGB}{102,102,153}
 #+LaTex_HEADER: \allsectionsfont{\color{hsdpurple}}
 
@@ -166,7 +167,7 @@ I still like the sans family of computer modern
 #+LATEX_HEADER: \renewcommand{\familydefault}{\sfdefault}
 
 Use the geometry package to set our left and top margins, the width as
-last parameter defines the body text /rectangle/ 
+last parameter defines the body text /rectangle/
 #+LATEX_HEADER: \usepackage[left=3cm,top=2cm,width=16cm]{geometry}
 
 Allow the landscape environment
@@ -178,7 +179,7 @@ amount of TeX passes is minimally 2 to get all the references right.
 #+LATEX_HEADER: \usepackage{lastpage}
 
 Use the fancyhdr package to allow the customization of headers in an
-easy way. 
+easy way.
 #+LATEX_HEADER: \usepackage{fancyhdr}
 
 Both header and footer have a horizontal rule along the width of the
@@ -187,7 +188,7 @@ entire text, thus clearlyt separating them from the content.
 #+LATEX_HEADER: \renewcommand{\footrulewidth}{0.4pt}
 
 Activate the fancy style, which is roughly a left, middle and right
-field for both header and footer. 
+field for both header and footer.
 #+LATEX_HEADER: \pagestyle{fancy}
 
 Clear the header and footer first, so we are sure they are empty.
@@ -227,6 +228,14 @@ screenshots or other larger pictures which interrupt the text flow aggressively.
 #+LATEX_HEADER: \raggedbottom
 #+LATEX_HEADER: \raggedright
 
+Use the minted package for trying to colorize source listings
+#+LATEX_HEADER: \usepackage{minted}
+#+LATEX_HEADER: \usemintedstyle{emacs}
+#+LATEX_HEADER: \newminted{common-lisp}{fontsize=\footnotesize}
+#+LATEX_HEADER: \usepackage{listings}
+
+For keyboard symbols:
+#+LATEX_HEADER: \usepackage{menukeys}
 * Links
 Autolinks which can be entered like [[keyword:parameter]] This is mostly
 here as an example, I don’t think I’ve ever used these in my org files
@@ -235,5 +244,3 @@ here as an example, I don’t think I’ve ever used these in my org files
 #+LINK: google http://www.google.com/search?q=
 #+LINK: gmap   http://maps.google.com/maps?q=%s
 #+LINK: omap   http://nominatim.openstreetmap.org/search?q=%s&polygon=1
-  
-
