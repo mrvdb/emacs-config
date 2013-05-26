@@ -1687,6 +1687,17 @@ the previous definition.
   (global-set-key [f2] 'save-buffer)
   (global-set-key [f3] 'find-file)
 
+  ;; Define the toggle-frame-fullscreen function in
+  ;; the case that it is not already.
+
+  (if (not (fboundp 'toggle-frame-fullscreen))
+      (defun toggle-frame-fullscreen()
+        (interactive)
+        (when (eq window-system 'x)
+          (set-frame-parameter
+           nil 'fullscreen
+           (when (not (frame-parameter nil 'fullscreen)) 'fullboth)))))
+
   ;; Make gnome compliant, define a full-screen function and bind to F11
   (defun mrb/switch-full-screen ()
     (interactive)
