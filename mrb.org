@@ -205,7 +205,7 @@ and run =el-get-install= with the package name.
          ;; list of packages we use from standard recipes
          '(smex ace-jump-mode apache-mode gnuplot-mode sudo-save erc-highlight-nicknames
                 edit-server magit markdown-mode rainbow-delimiters scratch popwin
-                highlight-parentheses multiple-cursors wrap-region git-modes cl-lib keywiz
+                highlight-parentheses multiple-cursors wrap-region git-commit-mode git-modes cl-lib keywiz
                 smart-tab)
 
          (mapcar 'el-get-as-symbol (mapcar 'el-get-source-name el-get-sources))))
@@ -2091,7 +2091,7 @@ the channels in the rest of the list. This does not connect to a
 server by itself.
 #+BEGIN_SRC emacs-lisp
   (setq erc-autojoin-channels-alist
-        '((".*\\.freenode.net" "#emacs" "#mediagoblin" "#openobject" "#claws")))
+        '((".*\\.freenode.net" "#openobject" "#emacs")))
 #+END_SRC
 
 After joining, ERC keeps track of the channels, by putting notifiers
@@ -2358,11 +2358,13 @@ Taken from sacha’s configuration, this records which keys I press in
 emacs and how often I do that. This is usefull, or may be, for
 decisions with respect to keyboard choices, bindings configuration
 etc.
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
   (require 'keyfreq)
   (keyfreq-mode 1)
   (keyfreq-autosave-mode 1)
-#+end_src
+#+END_SRC
+
+The results can be shown by entering =keyfreq-show=.
 
 * Self configuration                                                                                 :exclude:
 I have the same config file for orgmode itself
