@@ -397,6 +397,7 @@ one mode in particular.
   (add-to-list 'auto-mode-alist '("\\.js$"         . javascript-mode))
   (add-to-list 'auto-mode-alist '("\\.htaccess"    . apache-mode))
   (add-to-list 'auto-mode-alist '("\\.patch"       . diff-mode))
+  (add-to-list 'auto-mode-alist '("\\.zsh"         . sh-mode))
 
   ;; Open scratch buffer by default in the mode we are in at the moment
   ;; with C-u prefix a mode will be asked to use
