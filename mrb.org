@@ -865,7 +865,155 @@ and HTML as destination format
     (interactive)
     (org-export-as-html 3 nil nil nil t))
 #+END_SRC
+*** Blogging with org-mode
+Having most of my writings in org-mode it makes sense to add just a
+little bit more to be able to push that content to my blogging
+platform; wordpress. Fortunately, there's some elisp for that in the
+form of org2blog, which publishes orgmode files as wordpress articles
+or pages.
+For
 
+**** Org2Blog configuration for Wordpress
+
+I use my own repositories mostly
+#+BEGIN_SRC emacs-lisp
+  ; Directly tie into the GIT org2blog repository
+  (add-to-list 'load-path "~/dev/emacs/packages/org2blog/")
+  (add-to-list 'load-path "~/dev/emacs/packages/xml-rpc-el/")
+  (require 'org2blog-autoloads)
+#+END_SRC
+
+The configuration of org2blog is a matter of setting some
+variables. First let get some of the basics out of the way.
+#+BEGIN_SRC elisp
+  (setq
+   org2blog/wp-server-weblog-id ""
+   org2blog/wp-default-title "<Untitled>"
+   org2blog/wp-default-categories ""
+   org2blog/wp-confirm-post t)
+#+END_SRC
+
+Each blog-entry has it's own file, but is really nothing different
+from a normal org-mode file. To be able to have wordpress and orgmode
+work together, org2blog could insert some properties into the file,
+but I choose to have these in a so called /tracking-file/ which is a
+convenient outline of all blog entries. Bij making the header a link
+to the file, it makes a convenient system.
+
+#+BEGIN_SRC emacs-lisp
+  (setq
+   org2blog/wp-track-posts (list (concat org-directory "blogs/blogs.org") "To be filed properly")
+  )
+#+END_SRC
+
+This leaves use with the blogs to configure; the name, url and
+username are probably the required entries for each blog. I added the
+tracker file, which is the same as the global value. Authentication
+to the blogs is done interactively by default.
+#+BEGIN_SRC emacs-lisp
+  (setq org2blog/wp-blog-alist
+        '(("cobra"
+           :url "http://cobra.mrblog.nl/xmlrpc.php"
+           :username "mrb"
+           :track-posts ("blogs/blogs.org" "cobra.mrblog.nl")
+           )
+          ("hsd"
+           :url "http://test.hsdev.com/xmlrpc.php"
+           :username "mrb"
+           :track-posts ("blog/blogs.org" "hsdev.com")
+           )))
+
+#+END_SRC
+**** Using org-jekyll for Jekyll based sites
+Using jekyll and orgmode together is a bit more low level, because
+jekyll as such is not a blogging solution, it can just parse files
+from one format to html. What org-jekyll does is have orgmode
+prepare the proper stuff for jekyl so it can be processed.
+
+So, we need the orgmode publishing part and the org-jekyll package:
+#+BEGIN_SRC emacs-lisp
+  (require 'ox-publish)
+  (require 'ox-html)
+  (require 'org-jekyll)
+#+END_SRC
+
+As there are quite a few different setups possible, it's probably
+smart to write a few paragraphs on how to set things up.
+
+As usual, I want it to be as simple as possible at first. One thing
+that is sort of fixed is the directory structure that jekyll expects
+and I that as a starting point.  Typically there is a =_posts=
+subdirectory there which will hold the html files that jekyll will
+need to put into the site.
+
+Typically in org-mode, after writing a subtree, which is one blog
+post in this case, a call to =org-jekyll-export-current-entry= is
+called. This will try to deduce which project org-mode must use to
+publish the entry with based on the filename, i.e. is the file in or below the
+':base-directory' of one the publishing projects and has the proper
+extension and so on.
+
+Once the publishing project has been established, org-jekyll will then
+take the heading of the subtree and use that as the title of the
+posting. Some of the properties defined in the subtree will be
+converted to the yaml-header that jekyll expects to be present.
+
+Using the export framework of orgmode the entry is then exported to
+html and placed into the destination directory for the project,
+typically the "_posts" directory of the base jekyll folder.
+
+After that, jekyll can do its thing and have the site published.
+
+Org-jekyl has a couple of special extra features:
+
+- Categories
+  If the subtree defines a category property, the post will be placed
+  in subfolder wiht the name of that category. Within that
+  subdirectory, the converted contents will be placed in a "_posts"
+  directory. This construct allows for multisites/multicategories.
+- Localization
+  If a :lang: property is defined it will be used to look for a file
+  called =[lang].yml= which will be included in the frontmatter of the
+  post. Similarly as with categories, posts end up in =[lang]/_posts=
+- when publishing multiple entries at once, for example by using
+  =org-jekyll-export-blog=, org-jekyll will only consider subtree which
+  have a tag =blog= or =BLOG=
+
+
+#+BEGIN_SRC emacs-lisp
+  ;; I dont use categories in my blog, but i do use multiple blogs
+  ;; Define the property to specify that to be "blog"
+  (setq org-jekyll-category "blog")
+
+  (setq org-publish-project-alist
+        '(
+
+    ("mrblog-org"
+            ;; Path to your org files.
+            :base-directory "~/.outlet/"
+            :base-extension "org"
+
+            ;; Path to your Jekyll project.
+            :publishing-directory "~/.outlet/blogs/mrblog/"
+            :recursive t
+            :publishing-function org-html-publish-to-html
+            :headline-levels 4
+            :html-extension "html"
+            :body-only t ;; Only export section between <body> </body>
+      )xo
+
+
+      ("mrblog-files"
+            :base-directory "~/.outlet/"
+            :base-extension "css\\|js\\|png\\|jpg\\|gif\\|pdf\\|mp3\\|ogg\\|swf\\|php"
+            :publishing-directory "~/.outlet/blogs/mrblog/files/"
+            :recursive t
+            :publishing-function org-publish-attachment)
+
+      ("mrblog" :components ("mrblog-org" "mrblog-files"))
+
+  ))
+#+END_SRC
 *** Old configuration
 Below is what was contained in the old configuration. I will slowly
 migrate this into more literal sections
@@ -1111,39 +1259,6 @@ migrate this into more literal sections
       ad-do-it))
   (ad-activate 'org-agenda-finalize-entries)
 
-  ; Directly tie into the GIT org2blog repository
-  (add-to-list 'load-path "~/dev/emacs/packages/org2blog/")
-  (add-to-list 'load-path "~/dev/emacs/packages/xml-rpc-el/")
-  (require 'org2blog-autoloads)
-
-  (setq
-   org2blog/wp-server-weblog-id ""
-   org2blog/wp-default-title "<Untitled>"
-   org2blog/wp-default-categories ""
-   org2blog/wp-confirm-post t
-   org2blog/wp-track-posts (list (concat org-directory "/blogs/org2blog-track.org") "To be filed properly")
-  )
-
-    ; Per blog configuration
-  (setq org2blog/wp-blog-alist
-        '(
-          ("mrblog"
-      :url "http://mrblog.nl/xmlrpc.php"
-      :username "mrb"
-      :track-posts ("blogs/blogs.org" "mrblog.nl")
-           )
-          ("cobra"
-           :url "http://cobra.mrblog.nl/xmlrpc.php"
-           :username "mrb"
-           :track-posts ("blogs/blogs.org" "cobra.mrblog.nl")
-           )
-          ("hsd"
-           :url "http://test.hsdev.com/xmlrpc.php"
-           :username "mrb"
-           :track-posts ("blog/blogs.org" "hsdev.com")
-          )
-        )
-  )
 
   ;; Shorten url at point
   ;; This is a stripped down version of the code in identica-mode
