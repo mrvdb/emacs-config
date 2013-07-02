@@ -50,6 +50,24 @@ about me. Just name and email-address for now in public.
   (setq user-full-name    "Marcel van der Boom")
   (setq user-mail-address "marcel@hsdev.com")
 #+END_SRC
+*** Authorization
+Several things I use within Emacs need autorization, such as tramp,
+jabber, erc etc. The authorization can come from several sources;
+ideally as few as possible. Many packages in Emacs have support for a
+=.netrc= like mechanism, others want to use the keyring in GNOME. The
+variables =auth-sources= defines the sources available.
+
+I want to use the gnome keyring as much as possible, so let's
+configure that in as the sole source and see how far we float. We
+define two things:
+1. that our auth-sources include the login secrets;
+2. we encrypt with the key specified by marcel@hsdev.com
+
+#+BEGIN_SRC emacs-lisp
+(setq auth-sources (quote ("secrets:Login"))) ;; Not sure what this does, seems to have no effect?
+(setq epa-file-encrypt-to "marcel@hsdev.com")
+#+END_SRC
+
 
 *** Encrypting information
 I need a way to store some sensitive information without that being
