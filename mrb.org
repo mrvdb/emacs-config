@@ -2403,6 +2403,7 @@ XMPP related settings, including interfacing it to other systems
    jabber-auto-reconnect t
    jabber-show-resources t
   )
+  (setq jabber-account-list (quote (("marcel@hsdev.com/Emacs" (:connection-type . ssl)))))
 
   ;; Me wants the smileys too
   ;; FIXME: I suspect this makes chats annoyingly slow to type in?
