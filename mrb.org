@@ -421,15 +421,23 @@ We do not have to load the main orgmode location, because we already
 did that on the main initialisation to get org-babel started.
 
 #+BEGIN_SRC emacs-lisp
-(add-to-list 'load-path "~/dev/emacs/packages/org-mode/contrib/lisp/")
-(add-to-list 'load-path "~/dev/emacs/packages/org-mode/contrib/babel/langs/")
-;; CHECKME: is this still the proper installation method, it has changed a lot lately
-(require 'org)                   ;; This is required, see installation docs
-(require 'org-clock)             ;; Should not be needed, but otherwise links don't work
-(require 'org-mouse)             ;; Enable menu on right mouse button and other mouse functions
-(require 'org-special-blocks)    ;; Generalizes the #+begin_foo and #+end_foo blocks, useful on latex (export)
-(require 'org-datetree)          ;; Allows for archiving and refiling in a date organised tree
-(require 'org-mobile)            ;; Only org-mobile-push and pull get autoloaded and we neede the file list before that.
+  (add-to-list 'load-path "~/dev/emacs/packages/org-mode/contrib/lisp/")
+  (add-to-list 'load-path "~/dev/emacs/packages/org-mode/contrib/babel/langs/")
+
+  ;; Also make sure we never load org from internal, this can happen
+  ;; when functions were defined in the included org version and not
+  ;; anymore in newer versions. We want an error, not a silent load of
+  ;; the older function.
+
+  (delete  "/usr/local/share/emacs/24.3/lisp/org" load-path)
+  ;; CHECKME: is this still the proper installation method, it has changed a lot lately
+  (require 'org)                   ;; This is required, see installation docs
+  (require 'org-clock)             ;; Should not be needed, but otherwise links don't work
+  (require 'org-mouse)             ;; Enable menu on right mouse button and other mouse functions
+  ;; FIXME: for v8 this isn't working?
+  ;;(require 'org-special-blocks)    ;; Generalizes the #+begin_foo and #+end_foo blocks, useful on latex (export)
+  (require 'org-datetree)          ;; Allows for archiving and refiling in a date organised tree
+  (require 'org-mobile)            ;; Only org-mobile-push and pull get autoloaded and we neede the file list before that.
 #+END_SRC
 
 Most of work originates in capturing some task item in orgmode. Set
@@ -837,6 +845,18 @@ and HTML as destination format
  org-export-htmlized-org-css-url "orgmode.css"
  org-latex-pdf-process (quote ("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f" "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f" "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"))
  org-latex-to-pdf-process (quote ("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f" "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f" "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"))
+
+ org-export-copy-to-kill-ring (quote if-interactive)
+ org-export-docbook-xsl-fo-proc-command "fop %i %o"
+ org-export-docbook-xslt-proc-command "xsltproc --output %o %s %i"
+ org-export-htmlize-output-type (quote css)
+ org-export-htmlized-org-css-url "orgmode.css"
+ org-export-latex-classes (quote (("article" "\\documentclass[11pt,a4paper,twoside]{article}" ("\\section{%s}" . "\\section*{%s}") ("\\subsection{%s}" . "\\subsection*{%s}") ("\\subsubsection{%s}" . "\\subsubsection*{%s}") ("\\paragraph{%s}" . "\\paragraph*{%s}") ("\\subparagraph{%s}" . "\\subparagraph*{%s}")) ("report" "\\documentclass[11pt]{report}" ("\\part{%s}" . "\\part*{%s}") ("\\chapter{%s}" . "\\chapter*{%s}") ("\\section{%s}" . "\\section*{%s}") ("\\subsection{%s}" . "\\subsection*{%s}") ("\\subsubsection{%s}" . "\\subsubsection*{%s}")) ("book" "\\documentclass[11pt]{book}" ("\\part{%s}" . "\\part*{%s}") ("\\chapter{%s}" . "\\chapter*{%s}") ("\\section{%s}" . "\\section*{%s}") ("\\subsection{%s}" . "\\subsection*{%s}") ("\\subsubsection{%s}" . "\\subsubsection*{%s}")) ("beamer" "\\documentclass{beamer}" org-beamer-sectioning)))
+ org-export-latex-hyperref-format "\\ref{%s}:{%s}"
+ org-latex-title-command " "
+ org-export-latex-title-command " "
+ org-export-with-tags nil
+ org-export-with-todo-keywords nil
 
 )
 
