@@ -174,7 +174,6 @@ and run =el-get-install= with the package name.
           (:name cursor-chg :type github :pkgname  "emacsmirror/cursor-chg" :features cursor-chg)
           (:name php-mode-improved)    ; Just to have example for other syntax
           (:name newlua-mode :type github :pkgname "immerrr/lua-mode" :features lua-mode)
-          (:name typopunct :type github :pkgname "emacsmirror/typopunct" :features typopunct)
           (:name oauth :type github :pkgname "psanford/emacs-oauth")
           (:name expand-region :type github :pkgname "magnars/expand-region.el")
           (:name mark-multiple :type github :pkgname "magnars/mark-multiple.el")
