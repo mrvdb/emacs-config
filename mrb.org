@@ -2038,7 +2038,7 @@ I've found none applicable yet.
 #+END_SRC
 ** Remote editing
 #+BEGIN_SRC emacs-lisp
-(setq tramp-default-method "ssh")
+(setq tramp-default-method "sshx")
 #+END_SRC
 
 ** Browser integration
