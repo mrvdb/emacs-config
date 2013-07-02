@@ -1579,7 +1579,9 @@ of ways to enable it:
    enables it for all files in the directory
 3. as a hook
 
-I'm using the first method on relevant file.
+I'm using the first method on relevant files. The disadvantage of
+this method is that you have to think about it for each file, so
+perhaps a =.dir-locals.el= is a better solution.
 
 I am considering using a generic hook again to enable the method and
 either using =git commit --amend= and commit squashing if working on
@@ -1762,13 +1764,14 @@ This is the remnant of my old configuration.
 
   ;; cut, copy and paste with cmd-key (like on osx).
   ;; this kinds sucks now, because the rest of the OS does not do this
+  ;; SOLUTION: learn to work with standard emacs keybinding and adjust the OS  ?
   (global-set-key [(super z)] 'undo)
   (global-set-key [(super x)] 'clipboard-kill-region)
   (global-set-key [(super c)] 'clipboard-kill-ring-save)
   (global-set-key [(super v)] 'yank)
   (global-set-key [(super a)] 'mark-whole-buffer)
 
-  ;; What is the kp- here?
+  ;; Keypad delete
   (global-set-key [(kp-delete)] 'delete-char)
 
   ;; Make `C-x C-m' and `C-x RET' be different (since I tend
@@ -1796,10 +1799,10 @@ This is the remnant of my old configuration.
 #+END_SRC
 *** Key bindings
 **** Global
-I am running the emacs daemon and when I quit it, I want it to quit
-too. This sounds a bit counterintuitive, but as long as my emacs
-config is moving and I am not proficient enough in making sure I can
-apply the changed settings reliably from within emacsm, restarting
+I am running the emacs daemon and sometime when I quit emacs, I want
+it to quit too. This sounds a bit counterintuitive, but as long as my
+emacs config is moving and I am not proficient enough in making sure I
+can apply the changed settings reliably from within emacs, restarting
 emacs is just easier. This saves me from having to kill the emacs
 daemon from the terminal.
 
