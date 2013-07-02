@@ -196,7 +196,9 @@ and run =el-get-install= with the package name.
           (:name org-present :type github :pkgname "rlister/org-present")
           (:name popup :type github :pkgname "auto-complete/popup-el")
           (:name auto-complete :type github :pkgname "auto-complete/auto-complete")
-          (:name dash :type github :pkgname "magnars/dash.el")
+          (:name dash :type github :pkgname "magnars/dash.el") ;; Dependency? I dont use this directly
+          (:name gitmessenger :type github :pkgname "syohex/emacs-git-messenger")
+          (:name metaweblog :type github :pkgname "punchagan/metaweblog.el")
         )
   )
 
