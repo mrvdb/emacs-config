@@ -120,7 +120,7 @@ published.
 #+DESCRIPTION: description
 #+KEYWORDS: keyword
 #+LANGUAGE: nl
-#+OPTIONS:  h:5 toc:nil creator:t email:nil author:t timestamp:t tags:nil
+#+OPTIONS:  h:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil
 
 Define a tag which hides stuff from exported documents
 #+TAGS: exclude(x)
@@ -226,7 +226,8 @@ relaxing to look at. This is especially an issue when using
 screenshots or other larger pictures which interrupt the text flow aggressively.
 #+LATEX_HEADER: \parindent 0pt
 #+LATEX_HEADER: \raggedbottom
-#+LATEX_HEADER: \raggedright
+#+COMMENT LATEX_HEADER: \raggedright
+#+LATEX_HEADER: \usepackage{parskip}
 
 Use the minted package for trying to colorize source listings
 #+LATEX_HEADER: \usepackage{minted}
