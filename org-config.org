@@ -30,7 +30,7 @@ them. If that need does not exist for one of the tags below, remove
 them. The list requirement is valid in general for any tag btw.
 
 Things I do to physical objects:
-#+TAGS: { buy(b) sell(s) } build(u) fix(f) clean(n)
+#+TAGS: { buy(b) sell(s) lent(<) borrowed(>) } build(u) fix(f) clean(n)
 
 Administration like tags:
 #+TAGS: call(c) check(e) mail(m) read(r) write(w)  learn(l)
