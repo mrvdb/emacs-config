@@ -1636,8 +1636,9 @@ either using =git commit --amend= and commit squashing if working on
 more structured commits. For files that I really do not want
 autocommit to run I can use a file local variable to disable the hook
 (or the minor mode)
-** OpenSCAD
-OpenSCAP mode, it’s a mode that describes 3D-models
+*** OpenSCAD
+OpenSCAD mode, it’s a mode for files that describe 3D-models. I use it
+for part design for the 3D-print and for the lathe.
 #+BEGIN_SRC emacs-lisp
   ; OpenSCAD has git repository in my dev tree
   (add-to-list 'load-path "~/dev/reprapping/openscad/contrib")
