@@ -277,11 +277,12 @@ and otherwise I'd have a large set of faces defined in a wrong color.
 #+BEGIN_SRC emacs-lisp
   ;; Adjust zenburn with the ujelly theme which makes is a bit more vibrant.
   ;; This is obviously not the way to do this, but it works for me
-  (require 'ujelly-theme)
-  (load-theme 'ujelly)
+  ;;(require 'ujelly-theme)
+  ;;(load-theme 'ujelly)
 
   ;; Zenburn underlines date face in org, no go
   (set-face-attribute 'org-date nil :underline nil)
+
 
   ;; Adjust the faces for the modeline
   (set-face-attribute 'mode-line nil :foreground "white" :background "grey40" :box nil)
