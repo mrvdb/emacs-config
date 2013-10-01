@@ -44,12 +44,22 @@ a way to have them forcibly compiled.
 #+END_SRC
 
 ** Personal information
-Seems like a good idea to start configuratiion with some details
-about me. Just name and email-address for now in public.
+I'd like to arrange 3 things related to personal information:
+1. register the proper identification to use;
+2. Make sure the proper authentication information is stored;
+3. Store this information privately.
+
+So, identification, authorisation and encryption.
+
+Seems like a good idea to start configuration with some details
+about me. Just name and email-address for now in public. I don't think
+there is anything else that needs to be public at the moment.
 #+BEGIN_SRC emacs-lisp
   (setq user-full-name    "Marcel van der Boom")
   (setq user-mail-address "marcel@hsdev.com")
 #+END_SRC
+
+
 *** Authorization
 Several things I use within Emacs need autorization, such as tramp,
 jabber, erc etc. The authorization can come from several sources;
@@ -57,17 +67,21 @@ ideally as few as possible. Many packages in Emacs have support for a
 =.netrc= like mechanism, others want to use the keyring in GNOME. The
 variables =auth-sources= defines the sources available.
 
-I want to use the gnome keyring as much as possible, so let's
-configure that in as the sole source and see how far we float. We
-define two things:
-1. that our auth-sources include the login secrets;
-2. we encrypt with the key specified by marcel@hsdev.com
+I want to use systems which are desktop independent, so things like
+the gnome keyring are out because they depend on the gnome environment
+being present, which I can not guarantee, nor want to related to
+authentication. The situation which I want to prevent is that if gnome
+is broken, I can't authenticate to services I need.
+
+I have a gpg-agent daemon configured which manages gpg and ssh keys,
+protected by one password. Let's make the system as simple as we can
+for now and just store passwords in the gpg agent store only,
+i.e. authinfo.gpg
 
 #+BEGIN_SRC emacs-lisp
-(setq auth-sources (quote ("secrets:Login"))) ;; Not sure what this does, seems to have no effect?
-(setq epa-file-encrypt-to "marcel@hsdev.com")
+;; Use only authinfo.gpg for password storage
+(setq auth-source '("~/.authinfo.gpg"))
 #+END_SRC
-
 
 *** Encrypting information
 I need a way to store some sensitive information without that being
@@ -80,7 +94,8 @@ it by accident some day.
 For settings that are made in elisp, load secrets.el.gpg which will
 be encrypted automatically.
 #+BEGIN_SRC emacs-lisp
-;;(load-library "secrets.el.gpg")
+;; Use my email-address for encryption
+(setq epa-file-encrypt-to user-mail-address)
 #+END_SRC
 
 Apart from this there is some inline content that is not suitable for
