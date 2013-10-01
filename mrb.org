@@ -231,6 +231,9 @@ and run =el-get-install= with the package name.
           (:name dash :type github :pkgname "magnars/dash.el") ;; Dependency? I dont use this directly
           (:name gitmessenger :type github :pkgname "syohex/emacs-git-messenger")
           (:name metaweblog :type github :pkgname "punchagan/metaweblog.el")
+          (:name org-screenshot :type github :pkgname "dfeich/org-screenshot")
+          (:name org-agenda-property :type github :pkgname "Bruce-Connor/org-agenda-property")
+          (:name pump.io :type github :pkgname "cnngimenez/pumpio-el")
         )
   )
 
@@ -240,7 +243,7 @@ and run =el-get-install= with the package name.
          '(smex ace-jump-mode apache-mode gnuplot-mode sudo-save erc-highlight-nicknames
                 edit-server magit markdown-mode rainbow-mode rainbow-delimiters scratch popwin
                 highlight-parentheses multiple-cursors wrap-region git-commit-mode cl-lib keywiz
-                smart-tab yaml-mode org-jekyll)
+                smart-tab yaml-mode org-jekyll hideshow-org oauth flim)
          ;; the sources we have configured above
          (mapcar 'el-get-as-symbol (mapcar 'el-get-source-name el-get-sources))))
 
