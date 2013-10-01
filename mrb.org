@@ -504,7 +504,7 @@ Finally, run some things when entering orgmode.
 (add-hook 'org-mode-hook 'turn-on-auto-fill)
 #+END_SRC
 
-*** Capturing information
+**** Capturing information
 I guess 90% of the information I keep in the main orgmode files
 starts life originally as a captured item. I use it for:
 
@@ -607,7 +607,22 @@ enter tags, so I define a shortcut to define tags while capturing.
 
 Capturing dents for status updates in statusnet are done the
 same. Their config is in the section [[Statusnet]]
-*** Workflow
+
+Capturing of screenshots is provided by the org-screenshot library.
+#+BEGIN_SRC emacs-lisp
+  (require 'org-screenshot)
+
+  (defun capture-screenshot()
+    "Capture a screenshot"
+    (interactive)
+    ;; Always create the standard attach dir if there is none
+    (org-attach-dir t)
+
+    ;; Don't hide the emacs frame, it's silly
+    (org-screenshot t ""))
+#+END_SRC
+
+**** Workflow
 Orgmode used a couple of thing which enable you to steer the workflow
 for items. Item states are the most prominent ones. Org-mode uses
 keyword definitions to denote states on items. I keep an [[file:org-config.org][Orgmode
