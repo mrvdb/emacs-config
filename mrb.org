@@ -1646,6 +1646,20 @@ OpenSCAP mode, it’s a mode that describes 3D-models
   (provide 'openscad)
 
 #+END_SRC
+*** Python
+Python is a indent aware language, wich saves quite a bit of fiddling
+around with parenthes and what have you.
+
+Having lines truncated is the preferred way in python, usually lines
+will be short enough anyway, but I can't have line automatically
+folding because that disturbs the way I think when looking at python
+code.
+
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'python-mode-hook
+            (lambda ()
+              (toggle-truncate-lines t)))
+#+END_SRC
 ** LDAP
 LDAP integration, mostly for address book lookups
 #+BEGIN_SRC emacs-lisp
