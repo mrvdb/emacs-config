@@ -2628,7 +2628,17 @@ etc.
 #+END_SRC
 
 The results can be shown by entering =keyfreq-show=.
-
+** Wishlist
+There's always more to want, here a quick list of things:
+- epub export from org-mode
+- a working fill-column indicator which does not kill performance
+- specific changes to increase emacs performance, it can be slow at
+  times
+- doc-view window fitting
+- if i had a browser in emacs i could do away with all other programs
+  ;-)
+- threading or reliable async operation
+-
 * Self configuration                                                                                 :exclude:
 I have the same config file for orgmode itself
 #+SETUPFILE: "~/.outlet/etc/org-config.org"
