@@ -656,7 +656,7 @@ Note: capturing does not honour this, i.e. when creating a new item.
                 ("BUY"  ("buy" . t)))))       ; add buy tag when this is a buying action
 #+END_SRC
 
-*** Registering creation time of todo items
+**** Registering creation time of todo items
 Over time it gets a bit messy in my orgmode files. I can not remember
 when something was created and thus, by judging the time I didn't do
 anything with the item, decide if it is still important or not.
@@ -709,7 +709,7 @@ Now that function is used to insert the proprty when:
   (ad-activate 'org-capture)
 #+END_SRC
 
-*** Visual settings
+**** Visual settings
 Having an attractive screen to look at becomes more important if you
 use the system all day long. /Attractive/ is rather subjective
 here. For me it mainly consists of functional things. Anyways, this
@@ -733,7 +733,7 @@ face which will then be used to render the standard 3 dots.
 #+END_SRC
 
 There are a couple of ways within org to emphasize text inline
-for *bold*, /italics/, _underlined_ etc. These are set in the text by
+for *bold*, /italics/, underlined etc. These are set in the text by
 enclosing regions with delimiters. I do not want to see these
 delimiters, but rather render the text.
 #+BEGIN_SRC emacs-lisp
@@ -808,7 +808,7 @@ needs to be hidden.
 )
 #+END_SRC
 
-*** Agenda customization
+**** Agenda customization
 #+BEGIN_SRC emacs-lisp
   (require 'keywiz)
 
@@ -856,8 +856,11 @@ needs to be hidden.
       (insert "A random keybinding for inspiration:\n  ")
       (insert (mrb/random-keybinding) "\n")))
 
+  ;; Show properties in agenda view
+  (require 'org-agenda-property)
+  (setq org-agenda-property-list '("LOCATION" "Responsible"))
 #+END_SRC
-*** Babel / Literate programming
+**** Babel / Literate programming
 #+BEGIN_SRC emacs-lisp
   (setq
      org-babel-interpreters (quote ("emacs-lisp" "python" "ditaa" "sql" "sh" "R"))
@@ -871,7 +874,7 @@ needs to be hidden.
      (css t) (awk t) (js t) (lisp t) (org t) (plantuml t) (gnuplot . t)))
 #+END_SRC
 
-*** Refiling
+**** Refiling
 A big part of organizing information and task is shuffling things
 around. The 'thing' to throw around is a heading and 'refiling' is
 the term org-mode uses for throwing.
@@ -890,7 +893,7 @@ thing to do, which is not the case.
    org-refile-use-outline-path 'file
 )
 #+END_SRC
-*** Exporting to other formats
+**** Exporting to other formats
 Orgmode can export to a variety of formats, I mainly use LaTeX (PDF)
 and HTML as destination format
 
@@ -949,7 +952,7 @@ and HTML as destination format
     (interactive)
     (org-export-as-html 3 nil nil nil t))
 #+END_SRC
-*** Blogging with org-mode
+**** Blogging with org-mode
 Having most of my writings in org-mode it makes sense to add just a
 little bit more to be able to push that content to my blogging
 platform; wordpress. Fortunately, there's some elisp for that in the
@@ -957,7 +960,7 @@ form of org2blog, which publishes orgmode files as wordpress articles
 or pages.
 For
 
-**** Org2Blog configuration for Wordpress
+***** Org2Blog configuration for Wordpress
 
 I use my own repositories mostly
 #+BEGIN_SRC emacs-lisp
@@ -1008,7 +1011,7 @@ to the blogs is done interactively by default.
            )))
 
 #+END_SRC
-**** Using org-jekyll for Jekyll based sites
+***** Using org-jekyll for Jekyll based sites
 Using jekyll and orgmode together is a bit more low level, because
 jekyll as such is not a blogging solution, it can just parse files
 from one format to html. What org-jekyll does is have orgmode
@@ -1098,7 +1101,7 @@ Org-jekyl has a couple of special extra features:
 
   ))
 #+END_SRC
-*** Old configuration
+**** Old configuration
 Below is what was contained in the old configuration. I will slowly
 migrate this into more literal sections
 
@@ -1575,7 +1578,7 @@ migrate this into more literal sections
   ;; TODO I want to have this in the agenda mode to
 #+END_SRC
 
-*** Encrypting information in org-mode
+**** Encrypting information in org-mode
 I use the /encrypt/ tag for encrypting sections in org-mode (and
 sometimes my journal). The sections get encrypted and decrypted
 automatically on saving and opening. This uses the EasyPG library to
@@ -1609,7 +1612,7 @@ default, so it won't be inherited by mistake.
 (add-to-list 'org-tags-exclude-from-inheritance (quote "crypt"))
 #+END_SRC
 
-*** Commiting automatically
+**** Commiting automatically
 I have lost a number of changes in the past because I reverted a
 file, made a mistake or whatever. Some of these mistakes can be
 reverted easily if saves are automatically committed
