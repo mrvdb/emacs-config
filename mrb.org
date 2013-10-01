@@ -2484,9 +2484,50 @@ Statusnet, or perhaps microblog in general settings
     (if (equal "dent" (frame-parameter nil 'name))
         (delete-frame))
   )
+#+END_SRC
+*** Pump.io
+Similar to capturing TODO and BUY entries, there's a way to captur
+pump.io entries too.
 
-  (provide 'statusnet)
+The only pump.io elisp implementation does almost everything like I
+want it to be, including key bindings.
+#+BEGIN_SRC emacs-lisp
+   (add-to-list 'load-path  "~/.emacs.d/el-get/pump.io/src")
+   (require 'pumpio-interface)
 
+   ;; Configure for qua.name
+   (setq pumpio-pod "http://qua.name")
+   ;; pmpio-client-id: "ElJu_hKISw0xS2aurzxfeQ"
+   ;; pmpio-client-secret: "2mcvN7dVLA-WPqWxbJ5L5sz1YFUWx3uvEMyvPu9-dNU"
+   (setq pmpio-auth-token
+         [cl-struct-oauth-access-token "ElJu_hKISw0xS2aurzxfeQ" "2mcvN7dVLA-WPqWxbJ5L5sz1YFUWx3uvEMyvPu9-dNU"
+                                       [cl-struct-oauth-t "Z96ly0FYf6aOp2_hDiG8_A" "dwriXA736awDlYgoVlQREsBtupkmy1pEqYqNeRX1lHk"]])
+
+   ;; I'm using a floating frame in awesome WM for dents
+   (defun make-pump-frame ()
+     "Create a new frame and run pump postnote"
+     (interactive)
+     ;; Create and select the frame
+     (select-frame (make-frame '((name . "pump")
+                                 (width . 80) (height . 15)
+                                 (menu-bar-lines . 0) (tool-bar-lines . 0)))))
+
+   (defun capture-pump ()
+     "Capture a pump note"
+     (interactive)
+
+     (make-pump-frame)
+     (pmpio-ctrl-post-note)
+
+     ;; Once there, make sure we're the only one
+     (delete-other-windows)
+   )
+
+   ;; Make sure we close our frame
+   (defadvice pmpio-ctrl-close-new-note (after delet-pump-frame activate)
+     "Advise to close the frame"
+     (if (equal "pump" (frame-parameter nil 'name))
+         (delete-frame)))
 #+END_SRC
 *** XMPP
 XMPP related settings, including interfacing it to other systems
