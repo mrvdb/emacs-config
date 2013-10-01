@@ -1894,7 +1894,7 @@ I want to be able to call up magit from anywhere
   (global-set-key [(control c) m] 'magit-status) ;; Does not work for some reason
   (global-set-key (kbd "C-c m") 'magit-status)
 #+END_SRC
-***** Special keys
+***** COMMENT Special keys
 For some special keys I have defined some commands. Special keys are
 those keys that may not be on every keyboard, within reason. I
 consider the function keys also as special, although they do not fit
@@ -1926,6 +1926,7 @@ the previous definition.
 
   ;; Not sure what this is? It is not the menu key.
   (global-set-key [XF86MenuKB] 'accelerate-menu)
+  (global-set-key [XF86Battery] 'display-battery-mode)
 #+END_SRC
 
 ***** Resizing and switching windows and frames
