@@ -860,11 +860,12 @@ up, no use showing those; the same goes for tasks which are DONE and
 are scheduled. In short, anything that does not need my attention
 needs to be hidden.
 #+BEGIN_SRC emacs-lisp
-(setq
-    org-agenda-dim-blocked-tasks t
-    org-agenda-skip-deadline-if-done t
-    org-agenda-skip-scheduled-if-done t
-)
+  (setq
+      org-agenda-dim-blocked-tasks t
+      org-agenda-skip-deadline-if-done t
+      org-agenda-skip-scheduled-if-done t
+      org-agenda-skip-archived-trees nil
+  )
 #+END_SRC
 
 **** Agenda customization
