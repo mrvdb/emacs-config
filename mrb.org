@@ -694,20 +694,25 @@ Note: capturing does not honour this, i.e. when creating a new item.
 #+END_SRC
 
 To keep the TODO list clean we immediately archive the completed
-entry in the archive. I'm not sure if this works out in practice
+entry in the archive. The archiving only occurs when an item enters
+the 'DONE' state and the item is not marked as a habit.
+
+I'm not sure if this works out in practice
 without having a confirmation (because we archive the whole subtree),
 so for now, I'm building in the confirmation.
 #+BEGIN_SRC emacs-lisp
-  (defun mrb/archive-done-item()
-    ;; Determine if the item went to the DONE state
-    ;; if so, archive it
-    (when (equal org-state "DONE")
-      ;; Try to use a dialog box
-      (setq last-nonmenu-event nil)
-      (org-archive-subtree-default-with-confirmation)))
+    (defun mrb/archive-done-item()
+      ;; Determine if the item went to the DONE state
+      ;; if so, archive it
+      (when (and
+             (equal org-state "DONE")
+             (org-is-habit-p))
+        ;; Try to use a dialog box
+        (setq last-nonmenu-event nil)
+        (org-archive-subtree-default-with-confirmation)))
 
-  (add-hook 'org-after-todo-state-change-hook
-            'mrb/archive-done-item)
+    (add-hook 'org-after-todo-state-change-hook
+              'mrb/archive-done-item)
 
 #+END_SRC
 **** Registering creation time of todo items
