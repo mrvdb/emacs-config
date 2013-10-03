@@ -702,6 +702,8 @@ so for now, I'm building in the confirmation.
     ;; Determine if the item went to the DONE state
     ;; if so, archive it
     (when (equal org-state "DONE")
+      ;; Try to use a dialog box
+      (setq last-nonmenu-event nil)
       (org-archive-subtree-default-with-confirmation)))
 
   (add-hook 'org-after-todo-state-change-hook
