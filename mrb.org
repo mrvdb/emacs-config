@@ -76,11 +76,12 @@ is broken, I can't authenticate to services I need.
 I have a gpg-agent daemon configured which manages gpg and ssh keys,
 protected by one password. Let's make the system as simple as we can
 for now and just store passwords in the gpg agent store only,
-i.e. authinfo.gpg
+i.e. authinfo.gpg using public key encryption aimed at my key.
 
 #+BEGIN_SRC emacs-lisp
 ;; Use only authinfo.gpg for password storage
-(setq auth-source '("~/.authinfo.gpg"))
+(setq auth-sources '("~/.authinfo.gpg"))
+(setq auth-source-gpg-encrypt-to (list user-mail-address))
 #+END_SRC
 
 *** Encrypting information
