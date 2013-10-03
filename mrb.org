@@ -1039,7 +1039,7 @@ to the file, it makes a convenient system.
 
 #+BEGIN_SRC emacs-lisp
   (setq
-   org2blog/wp-track-posts (list (concat org-directory "blogs/blogs.org") "To be filed properly")
+   org2blog/wp-track-posts (list "~/dat/blogs/blogs.org" "To be filed properly")
   )
 #+END_SRC
 
@@ -1052,12 +1052,12 @@ to the blogs is done interactively by default.
         '(("cobra"
            :url "http://cobra.mrblog.nl/xmlrpc.php"
            :username "mrb"
-           :track-posts ("blogs/blogs.org" "cobra.mrblog.nl")
+           :track-posts ("~/dat/blogs/blogs.org" "cobra.mrblog.nl")
            )
           ("hsd"
            :url "http://test.hsdev.com/xmlrpc.php"
            :username "mrb"
-           :track-posts ("blog/blogs.org" "hsdev.com")
+           :track-posts ("~/dat/blogs/blogs.org" "hsdev.com")
            )))
 
 #+END_SRC
@@ -1083,12 +1083,12 @@ and I that as a starting point.  Typically there is a =_posts=
 subdirectory there which will hold the html files that jekyll will
 need to put into the site.
 
-Typically in org-mode, after writing a subtree, which is one blog
-post in this case, a call to =org-jekyll-export-current-entry= is
+Typically in org-mode, after writing a subtree, which is one blog post
+in this case, a call to =org-jekyll-export-current-entry= is
 called. This will try to deduce which project org-mode must use to
-publish the entry with based on the filename, i.e. is the file in or below the
-':base-directory' of one the publishing projects and has the proper
-extension and so on.
+publish the entry with based on the filename, i.e. is the file in or
+below the ':base-directory' of one the publishing projects and has the
+proper extension and so on.
 
 Once the publishing project has been established, org-jekyll will then
 take the heading of the subtree and use that as the title of the
@@ -1122,28 +1122,26 @@ Org-jekyl has a couple of special extra features:
   ;; Define the property to specify that to be "blog"
   (setq org-jekyll-category "blog")
 
-  (setq org-publish-project-alist
-        '(
-
+  (setq org-publish-project-alist '(
     ("mrblog-org"
             ;; Path to your org files.
-            :base-directory "~/.outlet/"
+            :base-directory "~/dat/"
             :base-extension "org"
 
             ;; Path to your Jekyll project.
-            :publishing-directory "~/.outlet/blogs/mrblog/"
+            :publishing-directory "~/dat/blogs/mrblog/"
             :recursive t
             :publishing-function org-html-publish-to-html
             :headline-levels 4
             :html-extension "html"
             :body-only t ;; Only export section between <body> </body>
-      )xo
+      )
 
 
       ("mrblog-files"
-            :base-directory "~/.outlet/"
+            :base-directory "~/dat/"
             :base-extension "css\\|js\\|png\\|jpg\\|gif\\|pdf\\|mp3\\|ogg\\|swf\\|php"
-            :publishing-directory "~/.outlet/blogs/mrblog/files/"
+            :publishing-directory "~/dat/blogs/mrblog/files/"
             :recursive t
             :publishing-function org-publish-attachment)
 
