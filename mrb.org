@@ -161,6 +161,40 @@ separate file for several reasons.
       (goto-address-mode 1)))
   (global-goto-address-mode t)
 #+END_SRC
+** Internationalisation and multi-language features
+If anything multi-language should work, UTF-8 encoding is a must, so
+let's make sure we try to use that everywhere
+#+BEGIN_SRC emacs-lisp
+(prefer-coding-system 'utf-8)
+(setq current-language-environment "UTF-8")
+#+END_SRC
+
+For conveniently editting accented characters like 'é' and 'è' there
+are quite a few options to reach that result. I have dead characters
+configured as an option in the operating system, but that is far from
+ideal, especially when programming. As I hardly need those characters
+outside of emacs, i can leave that option as needed and optimize Emacs
+to my needs.
+
+The fallback is C-x 8 C-h which gives specific shortcuts for special
+characters which are available. For the exotic characters that will do
+just fine. For the more common characters the C-x 8 prefix is to
+complex.
+
+After evaluating some systems, the TeX input method suits me the
+best. I'd like to enable that globally by default, which needs two
+things:
+1. enable multi-language editting by default (input-method is only
+   active in a multi-language environment)
+2. set the default input-method to tex
+
+#+BEGIN_SRC emacs-lisp
+  ;; Set the default input method to TeX
+  (setq default-input-method "TeX")
+  ;; Enable multi-language mode by default Not sure what to do here: C-\
+  ;; toggles the input-method
+#+END_SRC
+
 ** Package Management
 Package handling, do this early so emacs knows where to find things.
 
@@ -1985,12 +2019,6 @@ At the momen I use two varieties:
 
 *** Ansi term
 #+BEGIN_SRC emacs-lisp
-  ;; Full utf-8 support
-  (set-terminal-coding-system 'utf-8)
-  (set-keyboard-coding-system 'utf-8)
-  (prefer-coding-system 'utf-8)
-  (setq current-language-environment "UTF-8")
-
   (defun mrb/use-utf8 ()
     (set-buffer-process-coding-system 'utf-8-unix 'utf-8-unix))
   (add-hook 'term-exec-hook 'mrb/use-utf8)
