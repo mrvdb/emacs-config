@@ -2355,7 +2355,7 @@ the channels in the rest of the list. This does not connect to a
 server by itself.
 #+BEGIN_SRC emacs-lisp
   (setq erc-autojoin-channels-alist
-        '((".*\\.freenode.net" "#openobject" "#emacs")))
+        '((".*\\.freenode.net" "#openobject" "#social")))
 #+END_SRC
 
 After joining, ERC keeps track of the channels, by putting notifiers
