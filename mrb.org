@@ -95,8 +95,10 @@ it by accident some day.
 For settings that are made in elisp, load secrets.el.gpg which will
 be encrypted automatically.
 #+BEGIN_SRC emacs-lisp
-;; Use my email-address for encryption
-(setq epa-file-encrypt-to user-mail-address)
+  ;; Use my email-address for encryption
+  (setq-default epa-file-encrypt-to user-mail-address)
+  ;; Make sure we always use this
+  (setq-default epa-file-select-keys nil)
 #+END_SRC
 
 Apart from this there is some inline content that is not suitable for
