@@ -326,7 +326,8 @@ and otherwise I'd have a large set of faces defined in a wrong color.
   (set-face-attribute 'mode-line-inactive nil :box nil :underline nil :overline "grey40")
 
   (set-face-attribute 'isearch nil :background "black" :foreground "tomato")
-  (set-face-attribute 'lazy-highlight nil :inherit isearch-lazy-highlight :background "sea green" :foreground "black")
+  (set-face-attribute 'lazy-highlight nil :inherit isearch-lazy-highlight
+                      :background "sea green" :foreground "black")
 
 #+END_SRC
 
@@ -344,82 +345,84 @@ valid for 5 levels, not 6.
 
 And enable the minor mode globally.
 #+BEGIN_SRC emacs-lisp
-    (define-globalized-minor-mode global-highlight-parentheses-mode
-      highlight-parentheses-mode
-      (lambda ()
-        (highlight-parentheses-mode t)))
-    (global-highlight-parentheses-mode t)
+  (define-globalized-minor-mode global-highlight-parentheses-mode
+    highlight-parentheses-mode
+    (lambda ()
+      (highlight-parentheses-mode t)))
+  (global-highlight-parentheses-mode t)
 
-    ;; no splash screen
-    (setq inhibit-startup-screen  t)
-    (setq inhibit-startup-message t)
-    (setq initial-scratch-message nil)
+  ;; no splash screen
+  (setq inhibit-startup-screen  t)
+  (setq inhibit-startup-message t)
+  (setq initial-scratch-message nil)
 
-    ;; check speed consequences of this
-    (setq column-number-mode t)
+  ;; check speed consequences of this
+  (setq column-number-mode t)
 
-    ;; When I am not typing, the cursor should become more visible, so I
-    ;; don't lose it.
-    (require 'cursor-chg)                   ; Load this library
-    (change-cursor-mode 0)                  ; On for overwrite/read-only/input mode
-    (toggle-cursor-type-when-idle 1)        ; On when idle
-    (setq curchg-default-cursor-color "LightGreen")
-    (setq curchg-default-cursor-type (quote bar\ \.\ 1))
+  ;; When I am not typing, the cursor should become more visible, so I
+  ;; don't lose it.
+  (require 'cursor-chg)                   ; Load this library
+  (change-cursor-mode 0)                  ; On for overwrite/read-only/input mode
+  (toggle-cursor-type-when-idle 1)        ; On when idle
+  (setq curchg-default-cursor-color "LightGreen")
+  (setq curchg-default-cursor-type (quote bar\ \.\ 1))
 
-    ;; Default frame properties frame position, color, etc
-    (setq default-frame-alist
-          '((cursor-type . (bar . 1))
-            (cursor-color . "LightGreen")
-            (height . 60)
-            (width . 100)
-    ))
+  ;; Default frame properties frame position, color, etc
+  (setq default-frame-alist
+        '((cursor-type . (bar . 1))
+          (cursor-color . "LightGreen")
+          (height . 60)
+          (width . 100)
+  ))
 
-    ;; Parenthesis matching
-    (show-paren-mode 1)
-    (setq show-paren-style (quote expression))
-    (setq show-paren-delay 0)
+  ;; Parenthesis matching
+  (show-paren-mode 1)
+  (setq show-paren-style (quote expression))
+  (setq show-paren-delay 0)
 
-    ;; As we start emacs in daemon mode, certain (mostly visual) settings
-    ;; do not get applied. This is because starting the daemon does not
-    ;; open an X connection. This only happens when frames are being
-    ;; opened. By adding these settings to the 'server-visit-hook' we can
-    ;; still seemingly painless apply these settings.
-    (defun run-client-settings()
-      (interactive)
+  ;; As we start emacs in daemon mode, certain (mostly visual) settings
+  ;; do not get applied. This is because starting the daemon does not
+  ;; open an X connection. This only happens when frames are being
+  ;; opened. By adding these settings to the 'server-visit-hook' we can
+  ;; still seemingly painless apply these settings.
+  (defun run-client-settings()
+    (interactive)
 
-      (tool-bar-mode -1)   ;; No tool-bar
-      (scroll-bar-mode -1) ;; No scroll-bar
-      (menu-bar-mode -1)   ;; No menu-bar
-      (tooltip-mode -1)    ;; No tooltips
+    (tool-bar-mode -1)   ;; No tool-bar
+    (scroll-bar-mode -1) ;; No scroll-bar
+    (menu-bar-mode -1)   ;; No menu-bar
+    (tooltip-mode -1)    ;; No tooltips
 
-      ;; When making a selection of in case of highlighting a region
-      ;; automatically, keep all font-locking in the region instead of
-      ;; just overwriting the whole section. The trick here is to specify
-      ;; nil in the foreground attribute
-      (defvar mrb-bg-highlight "gray22")
+    ;; When making a selection of in case of highlighting a region
+    ;; automatically, keep all font-locking in the region instead of
+    ;; just overwriting the whole section. The trick here is to specify
+    ;; nil in the foreground attribute
+    (defvar mrb-bg-highlight "gray22")
 
-      (dolist
-          (the_face
-           (list 'region 'show-paren-match))
-        (set-face-attribute the_face nil :inherit nil :foreground nil :background mrb-bg-highlight))
+    (dolist
+        (the_face
+         (list 'region 'show-paren-match))
+      (set-face-attribute the_face nil :inherit nil :foreground nil
+                          :background mrb-bg-highlight))
 
-      ;; The above did not work for magit, let's try it after loading magit
-      (eval-after-load "magit"
-        '(set-face-attribute 'magit-item-highlight nil :inherit nil :foreground nil :background mrb-bg-highlight))
-      )
+    ;; The above did not work for magit, let's try it after loading magit
+    (eval-after-load "magit"
+      '(set-face-attribute 'magit-item-highlight nil :inherit nil :foreground nil
+                           :background mrb-bg-highlight))
+    )
 
-    ;; Defer fontification a little bit, so we could gain a bit in scroll speed
-    (setq jit-lock-defer-time 0.02)
+  ;; Defer fontification a little bit, so we could gain a bit in scroll speed
+  (setq jit-lock-defer-time 0.02)
 
-    ;; This seems to work if we start up emacs using filename on cli and
-    ;; server was not running yet. It does however not work if we just
-    ;; startup emacs (through my edit script) without a filename on the cli
-    (add-hook 'server-visit-hook 'run-client-settings)
-    ;; But we also want to run it, regardless
-    (run-client-settings)
+  ;; This seems to work if we start up emacs using filename on cli and
+  ;; server was not running yet. It does however not work if we just
+  ;; startup emacs (through my edit script) without a filename on the cli
+  (add-hook 'server-visit-hook 'run-client-settings)
+  ;; But we also want to run it, regardless
+  (run-client-settings)
 
-    ;; Make colorful balanced parentheses etc. in different modes
-    (add-hook 'lisp-mode 'rainbow-delimiters-mode)
+  ;; Make colorful balanced parentheses etc. in different modes
+  (add-hook 'lisp-mode 'rainbow-delimiters-mode)
 #+END_SRC
 
 ** Buffers and files
@@ -520,9 +523,11 @@ did that on the main initialisation to get org-babel started.
   (require 'org-clock)             ;; Should not be needed, but otherwise links don't work
   (require 'org-mouse)             ;; Enable menu on right mouse button and other mouse functions
   ;; FIXME: for v8 this isn't working?
-  ;;(require 'org-special-blocks)    ;; Generalizes the #+begin_foo and #+end_foo blocks, useful on latex (export)
+  ;;(require 'org-special-blocks)  ;; Generalizes the #+begin_foo and #+end_foo blocks,
+                                   ;; useful on latex (export)
   (require 'org-datetree)          ;; Allows for archiving and refiling in a date organised tree
-  (require 'org-mobile)            ;; Only org-mobile-push and pull get autoloaded and we neede the file list before that.
+  (require 'org-mobile)            ;; Only org-mobile-push and pull get autoloaded and we need
+                                   ;; the file list before that.
 #+END_SRC
 
 Most of work originates in capturing some task item in orgmode. Set
@@ -557,18 +562,19 @@ Make sure org-capture is available:
 
 Here are the templates used for them.
 #+BEGIN_SRC emacs-lisp
-  (setq org-capture-templates
-        (quote (
-                ("b" "Buy"
-                 entry (id "new-todo-receiver") "* BUY %? :buy:\n" :prepend t)
-                ("t" "Todo"
-                 entry (id "new-todo-receiver") "* TODO %?" :prepend t)
-                ("j" "Journal"
-                 entry (file+datetree (concat org-directory "journal.org"))
-                 "* ___________________________________________________________ *%U* ___\n\n%?\n" )
-                )
-               )
-        )
+  (setq
+   org-capture-templates
+   (quote (
+           ("b" "Buy"
+            entry (id "new-todo-receiver") "* BUY %? :buy:\n" :prepend t)
+           ("t" "Todo"
+            entry (id "new-todo-receiver") "* TODO %?" :prepend t)
+           ("j" "Journal"
+            entry (file+datetree (concat org-directory "journal.org"))
+            "* ___________________________________________________________ *%U* ___\n\n%?\n")
+           )
+          )
+   )
 #+END_SRC
 
 The concept I use for capturing is that a window is opened in the
@@ -961,33 +967,61 @@ Orgmode can export to a variety of formats, I mainly use LaTeX (PDF)
 and HTML as destination format
 
 #+BEGIN_SRC emacs-lisp
-(setq
- org-export-latex-hyperref-format "\\ref{%s}:{%s}"
- ;; old system
- org-export-latex-title-command " "
- ;; new system > 8.0
- org-latex-title-command " "
+  (setq
+   org-export-latex-hyperref-format "\\ref{%s}:{%s}"
+   ;; old system
+   org-export-latex-title-command " "
+   ;; new system > 8.0
+   org-latex-title-command " "
 
- org-export-docbook-xsl-fo-proc-command "fop %i %o"
- org-export-docbook-xslt-proc-command "xsltproc --output %o %s %i"
- org-export-htmlize-output-type (quote css)
- org-export-htmlized-org-css-url "orgmode.css"
- org-latex-pdf-process (quote ("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f" "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f" "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"))
- org-latex-to-pdf-process (quote ("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f" "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f" "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"))
+   org-export-docbook-xsl-fo-proc-command "fop %i %o"
+   org-export-docbook-xslt-proc-command "xsltproc --output %o %s %i"
+   org-export-htmlize-output-type (quote css)
+   org-export-htmlized-org-css-url "orgmode.css"
+   org-latex-pdf-process
+   (quote
+    ("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
+     "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
+     "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"))
+   org-latex-to-pdf-process
+   (quote
+    ("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
+     "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
+     "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"))
 
- org-export-copy-to-kill-ring (quote if-interactive)
- org-export-docbook-xsl-fo-proc-command "fop %i %o"
- org-export-docbook-xslt-proc-command "xsltproc --output %o %s %i"
- org-export-htmlize-output-type (quote css)
- org-export-htmlized-org-css-url "orgmode.css"
- org-export-latex-classes (quote (("article" "\\documentclass[11pt,a4paper,twoside]{article}" ("\\section{%s}" . "\\section*{%s}") ("\\subsection{%s}" . "\\subsection*{%s}") ("\\subsubsection{%s}" . "\\subsubsection*{%s}") ("\\paragraph{%s}" . "\\paragraph*{%s}") ("\\subparagraph{%s}" . "\\subparagraph*{%s}")) ("report" "\\documentclass[11pt]{report}" ("\\part{%s}" . "\\part*{%s}") ("\\chapter{%s}" . "\\chapter*{%s}") ("\\section{%s}" . "\\section*{%s}") ("\\subsection{%s}" . "\\subsection*{%s}") ("\\subsubsection{%s}" . "\\subsubsection*{%s}")) ("book" "\\documentclass[11pt]{book}" ("\\part{%s}" . "\\part*{%s}") ("\\chapter{%s}" . "\\chapter*{%s}") ("\\section{%s}" . "\\section*{%s}") ("\\subsection{%s}" . "\\subsection*{%s}") ("\\subsubsection{%s}" . "\\subsubsection*{%s}")) ("beamer" "\\documentclass{beamer}" org-beamer-sectioning)))
- org-export-latex-hyperref-format "\\ref{%s}:{%s}"
- org-latex-title-command " "
- org-export-latex-title-command " "
- org-export-with-tags nil
- org-export-with-todo-keywords nil
+   org-export-copy-to-kill-ring (quote if-interactive)
+   org-export-docbook-xsl-fo-proc-command "fop %i %o"
+   org-export-docbook-xslt-proc-command "xsltproc --output %o %s %i"
+   org-export-htmlize-output-type (quote css)
+   org-export-htmlized-org-css-url "orgmode.css"
+   org-export-latex-classes
+   (quote (
+           ("article" "\\documentclass[11pt,a4paper,twoside]{article}"
+            ("\\section{%s}" . "\\section*{%s}")
+            ("\\subsection{%s}" . "\\subsection*{%s}")
+            ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+            ("\\paragraph{%s}" . "\\paragraph*{%s}")
+            ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))
+           ("report" "\\documentclass[11pt]{report}"
+            ("\\part{%s}" . "\\part*{%s}")
+            ("\\chapter{%s}" . "\\chapter*{%s}")
+            ("\\section{%s}" . "\\section*{%s}")
+            ("\\subsection{%s}" . "\\subsection*{%s}")
+            ("\\subsubsection{%s}" . "\\subsubsection*{%s}"))
+           ("book" "\\documentclass[11pt]{book}"
+            ("\\part{%s}" . "\\part*{%s}")
+            ("\\chapter{%s}" . "\\chapter*{%s}")
+            ("\\section{%s}" . "\\section*{%s}")
+            ("\\subsection{%s}" . "\\subsection*{%s}")
+            ("\\subsubsection{%s}" . "\\subsubsection*{%s}"))
+           ("beamer" "\\documentclass{beamer}" org-beamer-sectioning)))
+   org-export-latex-hyperref-format "\\ref{%s}:{%s}"
+   org-latex-title-command " "
+   org-export-latex-title-command " "
+   org-export-with-tags nil
+   org-export-with-todo-keywords nil
 
-)
+  )
 
 #+END_SRC
 #+BEGIN_SRC emacs-lisp
@@ -1119,7 +1153,7 @@ Org-jekyl has a couple of special extra features:
 - Categories
   If the subtree defines a category property, the post will be placed
   in subfolder wiht the name of that category. Within that
-  subdirectory, the converted contents will be placed in a "_posts"
+  subdirectory, the converted contents will be placed in a ="_posts"=
   directory. This construct allows for multisites/multicategories.
 - Localization
   If a :lang: property is defined it will be used to look for a file
@@ -1195,7 +1229,12 @@ migrate this into more literal sections
    org-blank-before-new-entry (quote ((heading) (plain-list-item)))
    org-export-htmlize-output-type (quote css)
    org-fast-tag-selection-single-key (quote expert)
-   org-file-apps (quote ((auto-mode . emacs) ("\\.dia\\'" . "dia %s") ("\\.mm\\'" . default) ("\\.pdf\\'" . default)))
+   org-file-apps
+   (quote
+    ((auto-mode . emacs)
+    ("\\.dia\\'" . "dia %s")
+    ("\\.mm\\'" . default)
+    ("\\.pdf\\'" . default)))
    org-fontify-done-headline t
    org-goto-interface (quote outline-path-completion)
    ;; non nil is just direct children, what an ODD name!!!!
@@ -1204,7 +1243,10 @@ migrate this into more literal sections
    org-log-into-drawer t
    org-log-redeadline (quote note)
    org-log-reschedule (quote time)
-   org-modules (quote (org-info org-jsinfo org-habit org-inlinetask org-irc org-toc org-mac-iCal org-mouse))
+   org-modules (quote
+                (org-info org-jsinfo org-habit
+                          org-inlinetask org-irc
+                          org-toc org-mac-iCal org-mouse))
    org-remember-default-headline ""
    org-special-ctrl-a/e t
    org-stuck-projects (quote ("-inactive/TODO" ("TODO" "WAITING") nil ""))
@@ -1279,7 +1321,8 @@ migrate this into more literal sections
     )
 
   ; FIXME: testing for tag presence should be easier than a re-search forward
-  ; FIXNE: are we not searching for all 'incomplete' type keywords here?, there must be an org function for that
+  ; FIXME: are we not searching for all 'incomplete' type keywords here?,
+  ;        there must be an org function for that
   (defun mrb/skip-non-stuck-projects ()
     "Skip trees that are not stuck projects"
     (let* ((subtree-end (save-excursion (org-end-of-subtree t)))
@@ -1513,12 +1556,20 @@ migrate this into more literal sections
   ;;
   ;; Org-mobile configuration
   (setq
-   ;;org-mobile-directory "/plato.hsdev.com:/home/mrb/data/mobileorg"              ; Remote org dir
-   org-mobile-inbox-for-pull (concat org-metadir "from-mobile.org")    ; Where to place items which needs resolving
-   org-mobile-force-id-on-agenda-items nil                             ; No id yet, don't see the advatage yet
-   org-mobile-use-encryption nil                                       ; No encryption yet.
+   ; Remote org dir
+   ;;org-mobile-directory "/plato.hsdev.com:/home/mrb/data/mobileorg"
+   ; Where to place items which need resolving
+   org-mobile-inbox-for-pull (concat org-metadir "from-mobile.org")
+   ; No id yet, don't see the advantage yet
+   org-mobile-force-id-on-agenda-items nil
+   ; No encryption (yet)
+   org-mobile-use-encryption nil
    org-mobile-agendas (quote all)
-   org-mobile-files (quote ("~/.outlet/GTD.org" "~/.outlet/habits.org" "~/.outlet/_calendars/meetings.org"))
+   org-mobile-files
+   (quote (
+           "~/.outlet/GTD.org"
+           "~/.outlet/habits.org"
+           "~/.outlet/_calendars/meetings.org"))
    org-mobile-use-encryption nil
   )
 
@@ -2392,10 +2443,24 @@ Within each channel, I like to change the prompt to the name of the
 channel; a quick google search turned out with this code:
 #+BEGIN_SRC emacs-lisp
   (setq
-   erc-prompt (lambda ()
-                (if (and (boundp 'erc-default-recipients) (erc-default-target))
-                    (erc-propertize (concat (erc-default-target) ">") 'read-only t 'rear-nonsticky t 'front-nonsticky t)
-                  (erc-propertize (concat "ERC>") 'read-only t 'rear-nonsticky t 'front-nonsticky t))))
+   erc-prompt
+   (lambda ()
+     (if (and
+          (boundp 'erc-default-recipients)
+          (erc-default-target))
+         (erc-propertize
+          (concat (erc-default-target) ">")
+          'read-only t
+          'rear-nonsticky t
+          'front-nonsticky t)
+       (erc-propertize
+        (concat "ERC>")
+        'read-only t
+        'rear-nonsticky t
+        'front-nonsticky t)
+       )
+     )
+   )
 
 #+END_SRC
 
@@ -2532,12 +2597,14 @@ Statusnet, or perhaps microblog in general settings
   )
 
   ;; Make sure we remove our frame too
-  (defadvice identica-update-status-from-edit-buffer-send (after delete-dent-frame-on-send activate)
+  (defadvice identica-update-status-from-edit-buffer-send
+    (after delete-dent-frame-on-send activate)
     "Advise to close the frame"
     (if (equal "dent" (frame-parameter nil 'name))
         (delete-frame))
   )
-  (defadvice identica-update-status-from-edit-buffer-cancel (after delete-dent-frame-on-cancel activate)
+  (defadvice identica-update-status-from-edit-buffer-cancel
+    (after delete-dent-frame-on-cancel activate)
     "Advise to close the frame"
     (if (equal "dent" (frame-parameter nil 'name))
         (delete-frame))
@@ -2550,42 +2617,46 @@ pump.io entries too.
 The only pump.io elisp implementation does almost everything like I
 want it to be, including key bindings.
 #+BEGIN_SRC emacs-lisp
-   (add-to-list 'load-path  "~/.emacs.d/el-get/pump.io/src")
-   (require 'pumpio-interface)
+  (add-to-list 'load-path  "~/.emacs.d/el-get/pump.io/src")
+  (require 'pumpio-interface)
 
-   ;; Configure for qua.name
-   (setq pumpio-pod "http://qua.name")
-   ;; pmpio-client-id: "ElJu_hKISw0xS2aurzxfeQ"
-   ;; pmpio-client-secret: "2mcvN7dVLA-WPqWxbJ5L5sz1YFUWx3uvEMyvPu9-dNU"
-   (setq pmpio-auth-token
-         [cl-struct-oauth-access-token "ElJu_hKISw0xS2aurzxfeQ" "2mcvN7dVLA-WPqWxbJ5L5sz1YFUWx3uvEMyvPu9-dNU"
-                                       [cl-struct-oauth-t "Z96ly0FYf6aOp2_hDiG8_A" "dwriXA736awDlYgoVlQREsBtupkmy1pEqYqNeRX1lHk"]])
+  ;; Configure for qua.name
+  (setq pumpio-pod "http://qua.name")
+  ;; pmpio-client-id: "ElJu_hKISw0xS2aurzxfeQ"
+  ;; pmpio-client-secret: "2mcvN7dVLA-WPqWxbJ5L5sz1YFUWx3uvEMyvPu9-dNU"
+  (setq pmpio-auth-token
+        [cl-struct-oauth-access-token
+         "ElJu_hKISw0xS2aurzxfeQ"
+         "2mcvN7dVLA-WPqWxbJ5L5sz1YFUWx3uvEMyvPu9-dNU"
+         [cl-struct-oauth-t
+          "Z96ly0FYf6aOp2_hDiG8_A"
+          "dwriXA736awDlYgoVlQREsBtupkmy1pEqYqNeRX1lHk"]])
 
-   ;; I'm using a floating frame in awesome WM for dents
-   (defun make-pump-frame ()
-     "Create a new frame and run pump postnote"
-     (interactive)
-     ;; Create and select the frame
-     (select-frame (make-frame '((name . "pump")
-                                 (width . 80) (height . 15)
-                                 (menu-bar-lines . 0) (tool-bar-lines . 0)))))
+  ;; I'm using a floating frame in awesome WM for dents
+  (defun make-pump-frame ()
+    "Create a new frame and run pump postnote"
+    (interactive)
+    ;; Create and select the frame
+    (select-frame (make-frame '((name . "pump")
+                                (width . 80) (height . 15)
+                                (menu-bar-lines . 0) (tool-bar-lines . 0)))))
 
-   (defun capture-pump ()
-     "Capture a pump note"
-     (interactive)
+  (defun capture-pump ()
+    "Capture a pump note"
+    (interactive)
 
-     (make-pump-frame)
-     (pmpio-ctrl-post-note)
+    (make-pump-frame)
+    (pmpio-ctrl-post-note)
 
-     ;; Once there, make sure we're the only one
-     (delete-other-windows)
-   )
+    ;; Once there, make sure we're the only one
+    (delete-other-windows)
+  )
 
-   ;; Make sure we close our frame
-   (defadvice pmpio-ctrl-close-new-note (after delet-pump-frame activate)
-     "Advise to close the frame"
-     (if (equal "pump" (frame-parameter nil 'name))
-         (delete-frame)))
+  ;; Make sure we close our frame
+  (defadvice pmpio-ctrl-close-new-note (after delete-pump-frame activate)
+    "Advise to close the frame"
+    (if (equal "pump" (frame-parameter nil 'name))
+        (delete-frame)))
 #+END_SRC
 *** XMPP
 XMPP related settings, including interfacing it to other systems
@@ -2600,7 +2671,11 @@ XMPP related settings, including interfacing it to other systems
   (setq
    jabber-show-offline-contacts nil
    jabber-default-priority 30
-   jabber-alert-message-hooks (quote (jabber-message-libnotify jabber-message-echo jabber-message-scroll))
+   jabber-alert-message-hooks
+   (quote
+    (jabber-message-libnotify
+     jabber-message-echo
+     jabber-message-scroll))
    jabber-message-alert-same-buffer nil
    jabber-roster-show-bindings nil
    jabber-auto-reconnect t
