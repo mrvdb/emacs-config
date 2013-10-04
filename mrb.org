@@ -701,16 +701,19 @@ I'm not sure if this works out in practice
 without having a confirmation (because we archive the whole subtree),
 so for now, I'm building in the confirmation.
 #+BEGIN_SRC emacs-lisp
+    (require 'org-habit)
     (defun mrb/archive-done-item()
       ;; Determine if the item went to the DONE state
-      ;; if so, archive it
+      ;; if so, archive it, but skip habits which have
+      ;; their own logic.
       (when (and
              (equal org-state "DONE")
-             (org-is-habit-p))
+             (not (org-is-habit-p)))
         ;; Try to use a dialog box
         (setq last-nonmenu-event nil)
         (org-archive-subtree-default-with-confirmation)))
 
+    ;; Run archive for the item that changed state
     (add-hook 'org-after-todo-state-change-hook
               'mrb/archive-done-item)
 
