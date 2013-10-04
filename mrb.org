@@ -1305,10 +1305,12 @@ migrate this into more literal sections
           subtree-end
         nil)))
 
-  (defun save-containing-org-file()
-    (org-save-all-org-buffers) ;; FIXME: bit over the top, no?
+  (defun mrb/save-containing-org-file()
+    ;; FIXME: this is a bit over the top, especially as I am auto
+    ;; commiting to a git repository.
+    (org-save-all-org-buffers)
   )
-  (add-hook 'org-after-todo-state-change-hook 'save-containing-org-file)
+  (add-hook 'org-after-todo-state-change-hook 'mrb/save-containing-org-file)
 
   ; When in agenda mode, show the line we're working on.
   (add-hook 'org-agenda-mode-hook '(lambda () (hl-line-mode 1)))
