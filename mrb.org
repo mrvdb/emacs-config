@@ -734,13 +734,15 @@ so for now, I'm building in the confirmation.
     (equalp "habit" (org-entry-get (or pom (point)) "STYLE" t)))
 
   (defun mrb/archive-done-item()
-    ;; Determine if the item went to the DONE state
-    ;; if so, archive it, but skip habits which have
+    ;; Determine if the item went to the DONE/CANCELLED state
+    ;; if so, ask to archive it, but skip habits which have
     ;; their own logic.
     (when (and
-           (equal org-state "DONE")
+           (or
+            (equal org-state "DONE")
+            (equal org-state "CANCELLED"))
            (not (mrb/org-is-habit-recursive-p)))
-      ;; Try to use a dialog box
+      ;; Try to use a dialog box to ask for confirmation
       (setq last-nonmenu-event nil)
       (org-archive-subtree-default-with-confirmation)))
 
