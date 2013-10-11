@@ -2,6 +2,7 @@ tramp
 auto-save-list
 el-get
 /url/cookies
+/url/cache
 eshell
 session.*
 abbrev_defs
