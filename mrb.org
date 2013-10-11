@@ -288,6 +288,7 @@ and run =el-get-install= with the package name.
           (:name org-screenshot :type github :pkgname "dfeich/org-screenshot")
           (:name org-agenda-property :type github :pkgname "Bruce-Connor/org-agenda-property")
           (:name pump.io :type github :pkgname "cnngimenez/pumpio-el")
+          (:name elfeed :type github :pkgname "skeeto/elfeed")
         )
   )
 
