@@ -191,13 +191,30 @@ things:
    active in a multi-language environment)
 2. set the default input-method to tex
 
+There is however a problem, the TeX input method assumes the first
+character / string produced will always be the choice I need, without
+allowing selecting an alternative. This turns out to be due to
+=quail-define-package= which determines the way the completions work.
+The problem is the =DETERMINISTIC= argument of the function, that is set
+to 't'. (8th argument). While I am at it, I also changed the
+=FORGET-LAST-SELECTION= (7th argument) to nil, so the last seleciton is
+remembered.
+
+For this to work properly we have to define a whole new input-method
+based on a copy of latin-ltx.el
+
 #+BEGIN_SRC emacs-lisp
+  ;; Register a new input method
+  (register-input-method
+   "MyTeX" "UTF-8" 'quail-use-package
+   "\\" "Personalized TeX input method"
+   "~/.emacs.d/mytex-inputmethod")
   ;; Set the default input method to TeX
-  (setq default-input-method "TeX")
+  (setq default-input-method "MyTeX")
   ;; Enable multi-language mode by default Not sure what to do here: C-\
   ;; toggles the input-method
-#+END_SRC
 
+#+END_SRC
 ** Package Management
 Package handling, do this early so emacs knows where to find things.
 
