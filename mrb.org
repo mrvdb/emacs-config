@@ -2551,26 +2551,76 @@ configuration for that as well.
 #+END_SRC
 
 Composing mail is often an /out of band/ activity, like creating a dent
-or a capture, so I would like to have roughly the same
-behaviour. This is provided by commpose-mail-other-frame, but I could
-not get awesome to properly place the windows because it's hard to
-match on the varying name that xprop delivers, so. we make our own here:
+or a capture, so I would like to have roughly the same behaviour. This
+is by default provided by commpose-mail-other-frame, but I could not
+get awesome to properly place the windows because it's hard to match
+on the varying name that xprop delivers, so. we make our own window.
 
 #+BEGIN_SRC emacs-lisp
-  (defun make-mailcompose-frame ()
-      "Create a new frame and run mail-compose"
-      (interactive)
-      ;; Create and select the frame
-      (select-frame (make-frame '((name . "mailcompose")
-                    (width . 100) (height . 50)
-                    (menu-bar-lines . 0) (tool-bar-lines . 0))))
+  (defun make-mailcompose-frame (&optional mailto-url)
+    "Create a new frame and run mail-compose, use mailto URI if it is given."
+    (interactive)
 
-      ;; Capture a Todo entry, force edit-window method
-      (compose-mail)
+    ;; Create and select the frame, awesome wm takes care of the
+    ;; placement and floating it on top of all other windows.
+    (select-frame (make-frame '((name . "mailcompose")
+                                (width . 100) (height . 50)
+                                (menu-bar-lines . 0) (tool-bar-lines . 0))))
 
-      ;; Once there, make sure we're the only one
-      (delete-other-windows)
-    )
+    ;; If we have a mailto argument, parse and use it
+    (if (and (stringp mailto-url)
+             (string-match "\\`mailto:" mailto-url))
+        (progn
+          (require 'rfc2368)
+          (require 'rfc2047)
+          (require 'mailheader)
+
+          (let ((hdr-alist (rfc2368-parse-mailto-url mailto-url))
+                (body "")
+                to subject
+                ;; In addtion to To, Subject and body these headers are
+                ;; allowed:
+                (allowed-xtra-hdrs '(cc bcc in-reply-to)))
+            (with-temp-buffer
+              ;; Extract body if it is defined
+              (when (assoc "Body" hdr-alist)
+                (dolist (hdr hdr-alist)
+                  (when (equal "Body" (car hdr))
+                    (insert (format "%s\n:" (cdr hdr)))))
+                (rfc2047-decode-region (point-min) (point-max))
+                (setq body (buffer-substring-no-properties
+                            (point-min) (point-max)))
+                (erase-buffer))
+
+              ;; Extract headers
+              (dolist (hdr hdr-alist)
+                (unless (equal "Body" (car hdr))
+                  (insert (format "%s: %s\n" (car hdr) (cdr hdr)))))
+              (rfc2047-decode-region (point-min) (point-max))
+              (goto-char (point-min))
+              (setq hdr-alist (mail-header-extract-no-properties)))
+
+            (setq to (or (cdr (assq 'to hdr-alist)) "")
+                  subject (or (cdr (assq 'subject hdr-alist)) "")
+                  hdr-alist
+                  (remove nil (mapcar
+                               #'(lambda (item)
+                                   (when (memq (car item) allowed-xtra-hdrs)
+                                     (cons (capitalize (symbol-name (car item)))
+                                           (cdr item))))
+                               hdr-alist)))
+
+
+            ;; Fill it
+            (compose-mail to subject hdr-alist nil nil
+                          (list (lambda (string)
+                                  (insert string))
+                                body))))
+      ;; No mailto, argument, just run compose mail
+      (compose-mail))
+
+      ;; Delete other windows from the frame we are composing it in.
+    (delete-other-windows))
 
     (defadvice message-kill-buffer (after delete-mailcompose-frame activate)
       "Advise message-kill-buffer to close the frame if it is the capture frame"
