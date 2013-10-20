@@ -8,12 +8,14 @@
 
 ;; Load in the main org file which starts up configuration This will
 ;; lead to an mrb.el file automatically, so that can't exist in the
-;; current directory for this to work. 
+;; current directory for this to work.
 (require 'org)
 (org-babel-load-file "~/.emacs.d/mrb.org")
 
 ;; END init.el
 ;; This is all there should be in this file, the rest is handled in org-mode.
 
-
-
+;; Exception 1:
+;; Apparently when disabled functions get enabled, Emacs puts them here
+;;
+(put 'narrow-to-region 'disabled nil)
