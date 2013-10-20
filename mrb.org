@@ -2641,6 +2641,27 @@ on the varying name that xprop delivers, so. we make our own window.
           (delete-frame)))
 #+END_SRC
 
+To be able to use the =mailcompose-frame= function as a mailto handler we need to be
+able to call it from outside of emacs. Let's define a small shell script that
+does exactly this. The SRC attributes tangle it into my =bin= directory
+where is will be in the path. In the OS, this script will need to be
+set as the default mail handler.
+
+#+BEGIN_SRC sh :exports code :tangle ~/bin/mailto-handler :shebang #!/bin/sh
+# Emacs mailto URI handler
+
+mailto=$1
+mailto="mailto:${mailto#mailto:}"
+
+mailto=$(printf '%s\n' "$mailto" | sed -e 's/[\"]/\\&/g')
+
+# Call the elisp function handling our mailto URI
+elisp_expr="(make-mailcompose-frame \"$mailto\")"
+
+# Go
+edit --eval "$elisp_expr"
+
+#+END_SRC
 *** Statusnet
 Statusnet, or perhaps microblog in general settings
 #+BEGIN_SRC emacs-lisp
