@@ -741,18 +741,24 @@ so for now, I'm building in the confirmation.
     ;; Determine if the item went to the DONE/CANCELLED state
     ;; if so, ask to archive it, but skip habits which have
     ;; their own logic.
-    (when (and
-           (or
-            (equal org-state "DONE")
-            (equal org-state "CANCELLED"))
-           (not (mrb/org-is-habit-recursive-p)))
-      ;; Try to use a dialog box to ask for confirmation
-      (setq last-nonmenu-event nil)
-      (org-archive-subtree-default-with-confirmation)))
+    (when (not (mrb/org-is-habit-recursive-p))
+      ;; No habit, so we have a candidate
+      (progn
+       ;; Try to use a dialog box to ask for confirmation
+       (setq last-nonmenu-event nil)
+
+       ;; When a note is going to be added, postpone that Otherwise just
+       ;; run the archiving question
+       ;; FIXME: org-add-note runs through post-command-hook,
+       ;;        which is kinda weird, how to i get it to run
+       ;;        before the archiving question?
+       (when (equal org-state "DONE")
+         (org-archive-subtree-default-with-confirmation)))))
+
 
   ;; Run archive for the item that changed state
   (add-hook 'org-after-todo-state-change-hook
-            'mrb/archive-done-item)
+            'mrb/archive-done-item t)
 
 #+END_SRC
 **** Registering creation time of todo items
