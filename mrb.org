@@ -945,9 +945,9 @@ needs to be hidden.
     "Describe a random keybinding."
     (interactive)
     (let* ((command (keywiz-random keywiz-cached-commands))
-           (doc (and command (documentation (car command)))))
+           (doc (and command (documentation (first command)))))
         (if command
-            (concat (symbol-name (car command)) " "
+            (concat (symbol-name (first command)) " "
                     "(" (mapconcat 'key-description (cadr command) ", ") ")"
                     (if doc
                         (concat ": " (substring doc 0 (string-match "\n" doc)))
@@ -1452,15 +1452,15 @@ migrate this into more literal sections
                (pvalue (org-entry-get marker prop t))
                (cell (assoc pvalue buckets)))
           (if cell
-              (setcdr cell (cons item (cdr cell)))
+              (setcdr cell (cons item (rest cell)))
             (setq buckets (cons (cons pvalue (list item))
                                 buckets)))))
       (setq buckets (mapcar (lambda (bucket)
-                              (cons (car bucket)
-                                    (reverse (cdr bucket))))
+                              (cons (first bucket)
+                                    (reverse (rest bucket))))
                             buckets))
       (sort buckets (lambda (i1 i2)
-                      (string< (car i1) (car i2))))))
+                      (string< (first i1) (first i2))))))
 
   (defadvice org-agenda-finalize-entries (around org-group-agenda-finalize
                                                  (list &optional nosort))
@@ -1474,7 +1474,7 @@ migrate this into more literal sections
             (let ((header (concat "Property "
                                   org-agenda-group-by-property
                                   " is "
-                                  (or (car bucket) "<nil>") ":\n")))
+                                  (or (first bucket) "<nil>") ":\n")))
               (add-text-properties 0 (1- (length header))
                                    (list 'face 'org-agenda-structure)
                                    header)
@@ -1483,7 +1483,7 @@ migrate this into more literal sections
                             ;; recursively process
                             (let ((org-agenda-group-by-property nil))
                               (org-agenda-finalize-entries
-                               (cdr bucket) nosort))
+                               (rest bucket) nosort))
                             "\n\n"))))
           (setq ad-return-value text))
       ad-do-it))
@@ -1515,7 +1515,7 @@ migrate this into more literal sections
         (let ((url (mrb/ur1ca-get "http://ur1.ca" (thing-at-point 'url))))
           (when url
             (save-restriction
-              (narrow-to-region (car url-bounds) (cdr url-bounds))
+              (narrow-to-region (first url-bounds) (rest url-bounds))
               (delete-region (point-min) (point-max))
               (insert url)))))))
 
@@ -1653,7 +1653,7 @@ migrate this into more literal sections
   ;;  (lambda ()
   ;;    (when (eq major-mode 'org-mode)
   ;;      (dolist (file (org-mobile-files-alist))
-  ;;        (if (string= (expand-file-name (car file)) (buffer-file-name))
+  ;;        (if (string= (expand-file-name (first file)) (buffer-file-name))
   ;;         (org-mobile-push-with-delay 30))))))
 
   ;; Fork the work of pushing to mobile
@@ -2594,8 +2594,8 @@ on the varying name that xprop delivers, so. we make our own window.
               ;; Extract body if it is defined
               (when (assoc "Body" hdr-alist)
                 (dolist (hdr hdr-alist)
-                  (when (equal "Body" (car hdr))
-                    (insert (format "%s\n:" (cdr hdr)))))
+                  (when (equal "Body" (first hdr))
+                    (insert (format "%s\n:" (rest hdr)))))
                 (rfc2047-decode-region (point-min) (point-max))
                 (setq body (buffer-substring-no-properties
                             (point-min) (point-max)))
@@ -2603,20 +2603,20 @@ on the varying name that xprop delivers, so. we make our own window.
 
               ;; Extract headers
               (dolist (hdr hdr-alist)
-                (unless (equal "Body" (car hdr))
-                  (insert (format "%s: %s\n" (car hdr) (cdr hdr)))))
+                (unless (equal "Body" (first hdr))
+                  (insert (format "%s: %s\n" (first hdr) (rest hdr)))))
               (rfc2047-decode-region (point-min) (point-max))
               (goto-char (point-min))
               (setq hdr-alist (mail-header-extract-no-properties)))
 
-            (setq to (or (cdr (assq 'to hdr-alist)) "")
-                  subject (or (cdr (assq 'subject hdr-alist)) "")
+            (setq to (or (rest (assq 'to hdr-alist)) "")
+                  subject (or (rest (assq 'subject hdr-alist)) "")
                   hdr-alist
                   (remove nil (mapcar
                                #'(lambda (item)
-                                   (when (memq (car item) allowed-xtra-hdrs)
-                                     (cons (capitalize (symbol-name (car item)))
-                                           (cdr item))))
+                                   (when (memq (first item) allowed-xtra-hdrs)
+                                     (cons (capitalize (symbol-name (first item)))
+                                           (rest item))))
                                hdr-alist)))
 
 
