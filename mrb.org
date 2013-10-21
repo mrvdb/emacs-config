@@ -1880,6 +1880,16 @@ Because I am daft, here is the notation for the modifiers:
 - M - :: meta, meaning the (left) alt key in my configuration
 - S - :: shift
 
+To help me out with this when writing about key bindings, the lisp
+function =key-description= can help out, with a little bit of glue
+around it:
+
+#+BEGIN_SRC emacs-lisp
+  (defun mrb/insert-key-description ()
+    "Insert a pretty printed representation of a key sequence"
+    (interactive)
+    (insert (key-description (read-key-sequence "Type a key seqence:"))))
+#+END_SRC
 I like the explicit notation where the name of the key is spelled out
 better, and I'll move all configured keybindings to that eventually.
 
