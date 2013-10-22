@@ -2588,6 +2588,31 @@ Define a function to start erc, so I can start it the way I like it.
     ;;I use freenode for most things
     (erc-tls :server "irc.freenode.net" :port 7000))
 #+END_SRC
+
+Especially in long running sessions on IRC, nick notifications are
+essential. I am on emacs 24 and this has DBUS notifications built-in,
+so let's start to use that. I'd rather have a graceful fallback (like
+notify.el) but we can use that later on. For now, the builtin
+notifications is preferred, so I don't have to install anything extra
+#+BEGIN_SRC emacs-lisp
+  (require 'notifications)
+
+  (defun mrb/erc-notify (match-type nick message)
+    "Notify when a message is received on erc"
+
+    (when (eq match-type 'current-nick)
+      (notifications-notify
+         :title nick
+         :body message
+         :app-icon "/usr/share/notify-osd/icons/gnome/scalable/status/notification-message-im.svg"
+         :urgency 'low)))
+
+  (add-hook 'erc-text-matched-hook 'mrb/erc-notify)
+#+END_SRC
+
+This is the simplest I can come up with for now. It notifies a bit too
+much, like server messages etc.
+
 *** Mail
 Mail configuration.
 #+BEGIN_SRC emacs-lisp
