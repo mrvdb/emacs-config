@@ -52,63 +52,63 @@ The script does two things:
 And edit the file obviously.
 
 #+BEGIN_SRC sh sh :exports code :tangle ~/bin/edit :shebang #!/bin/bash
-#set -x
+  #set -x
 
-# This is an improved version of my edit script. The original one is
-# still available as edit.old. This one does not use any window
-# manager trickery to see if the daemon is already there. This one
-# just starts it if it is not already there.
-#
-# TODO: see if we can have some output when the daemon is not there,
-# it is now very silent
-# TODO: there is a mention of server-visit-hook not running when no
-# file is passed in in edit.old. I have not seen any ill effects, so
-# left that out
-#
-# This script starts emacs daemon if it is not running, opens whatever file
-# you pass in and changes the focus to emacs.  Without any arguments, it just
-# opens the current buffer or *scratch* if nothing else is open.
-EMACSCLIENT="/usr/local/bin/emacsclient --quiet --no-wait"
+  # This is an improved version of my edit script. The original one is
+  # still available as edit.old. This one does not use any window
+  # manager trickery to see if the daemon is already there. This one
+  # just starts it if it is not already there.
+  #
+  # TODO: see if we can have some output when the daemon is not there,
+  # it is now very silent
+  # TODO: there is a mention of server-visit-hook not running when no
+  # file is passed in in edit.old. I have not seen any ill effects, so
+  # left that out
+  #
+  # This script starts emacs daemon if it is not running, opens whatever file
+  # you pass in and changes the focus to emacs.  Without any arguments, it just
+  # opens the current buffer or *scratch* if nothing else is open.
+  EMACSCLIENT="/usr/local/bin/emacsclient --quiet --no-wait"
 
-# Number of current visible frames,
-# Emacs daemon always has a visible frame called F1
-visible_frames() {
-  $EMACSCLIENT --alternate-editor="" --eval '(length (visible-frame-list))' 2>/dev/null
-}
+  # Number of current visible frames,
+  # Emacs daemon always has a visible frame called F1
+  visible_frames() {
+    $EMACSCLIENT --alternate-editor="" --eval '(length (visible-frame-list))' 2>/dev/null
+  }
 
-change_focus() {
-  $EMACSCLIENT --eval "(select-frame-set-input-focus (selected-frame))" > /dev/null
-}
+  change_focus() {
+    $EMACSCLIENT --eval "(select-frame-set-input-focus (selected-frame))" > /dev/null
+  }
 
-# Editting stdin, part 1: save the input to a file
-save_stdin() {
-    TMPSTDIN="$(mktemp /tmp/emacsstdinXXX)";
-    cat >"$TMPSTDIN";
-}
+  # Editting stdin, part 1: save the input to a file
+  save_stdin() {
+      TMPSTDIN="$(mktemp /tmp/emacsstdinXXX)";
+      cat >"$TMPSTDIN";
+  }
 
-# if the file argument is '-', treat this as stdin
-# TODO: pass $@ further down?
-if [ $1 == "-" ]; then
-    save_stdin
-    # Recursive call!
-    edit $TMPSTDIN;
-    rm $TMPSTDIN;
-    exit 0;
-fi
+  # if the file argument is '-', treat this as stdin
+  # TODO: pass $@ further down?
+  if [ "X$1" == "X-" ]; then
+      save_stdin
+      # Recursive call!
+      edit $TMPSTDIN;
+      rm $TMPSTDIN;
+      exit 0;
+  fi
 
-# try switching to the frame incase it is just minimized
-# This will start a server if not running
-test "$(visible_frames)" -eq "1" && change_focus
+  # try switching to the frame incase it is just minimized
+  # This will start a server if not running
+  test "$(visible_frames)" -eq "1" && change_focus
 
-if [ "$(visible_frames)" -lt  "2" ]; then
-    # need to create a frame
-    # -c $@ with no args just opens the scratch buffer
-    $EMACSCLIENT --create-frame "$@" && change_focus
-else
-    # there is already a visible frame besides the daemon, change focus
-    # -n $@ errors if there are no args
-    test  "$#" -ne "0" && $EMACSCLIENT "$@"
-fi
+  if [ "$(visible_frames)" -lt  "2" ]; then
+      # need to create a frame
+      # -c $@ with no args just opens the scratch buffer
+      $EMACSCLIENT --create-frame "$@" && change_focus
+  else
+      # there is already a visible frame besides the daemon, change focus
+      # -n $@ errors if there are no args
+      test  "$#" -ne "0" && $EMACSCLIENT "$@"
+  fi
 #+END_SRC
 
 ** Personal information
