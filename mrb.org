@@ -1094,6 +1094,11 @@ and HTML as destination format
      "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
      "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"))
 
+    org-latex-listings (quote minted)
+    ;; Define a default background color name, this needs to be set through
+    ;; a latex header
+    org-latex-minted-options (quote (("bgcolor" "codebg")))
+
    org-export-copy-to-kill-ring (quote if-interactive)
    org-export-docbook-xsl-fo-proc-command "fop %i %o"
    org-export-docbook-xslt-proc-command "xsltproc --output %o %s %i"
