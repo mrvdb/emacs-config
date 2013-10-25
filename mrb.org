@@ -430,9 +430,9 @@ and otherwise I'd have a large set of faces defined in a wrong color.
   (set-face-attribute 'mode-line nil :foreground "white" :background "grey40" :box nil)
   (set-face-attribute 'mode-line-inactive nil :box nil :underline nil :overline "grey40")
 
-  (set-face-attribute 'isearch nil :background "black" :foreground "tomato")
+  (set-face-attribute 'isearch nil :background "sea green" :foreground "black")
   (set-face-attribute 'lazy-highlight nil :inherit isearch-lazy-highlight
-                      :background "sea green" :foreground "black")
+                      :background "black" :foreground "tomato")
 
 #+END_SRC
 
