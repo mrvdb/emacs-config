@@ -492,7 +492,7 @@ And enable the minor mode globally.
   ;; open an X connection. This only happens when frames are being
   ;; opened. By adding these settings to the 'server-visit-hook' we can
   ;; still seemingly painless apply these settings.
-  (defun run-client-settings()
+  (defun mrb/run-client-settings()
     (interactive)
 
     (tool-bar-mode -1)   ;; No tool-bar
@@ -527,9 +527,9 @@ And enable the minor mode globally.
   ;; This seems to work if we start up emacs using filename on cli and
   ;; server was not running yet. It does however not work if we just
   ;; startup emacs (through my edit script) without a filename on the cli
-  (add-hook 'server-visit-hook 'run-client-settings)
+  (add-hook 'server-visit-hook 'mrb/run-client-settings)
   ;; But we also want to run it, regardless
-  (run-client-settings)
+  (mrb/run-client-settings)
 
   ;; Make colorful balanced parentheses etc. in different modes
   (add-hook 'lisp-mode 'rainbow-delimiters-mode)
@@ -572,9 +572,10 @@ Customisation setting for specific models
   (autoload 'css-mode      "css-mode"      "Mode for editing CSS file" t)
   (autoload 'apache-mode   "apache-mode"   "Apache config files" t)
 
-  (add-hook 'javascript-mode-hook 'javascript-custom-setup)
-      (defun javascript-custom-setup ()
-        (moz-minor-mode 1))
+  (add-hook 'javascript-mode-hook 'mrb/javascript-custom-setup)
+
+  (defun mrb/javascript-custom-setup ()
+    (moz-minor-mode 1))
 
   ;; Second, specify the extension to function mappings
   (add-to-list 'auto-mode-alist '("\\.org\\'"      . org-mode))
@@ -706,7 +707,7 @@ have a dedicated frame for it, so on entering capture mode we just
 delete the other windows which may be in the frame.
 
 #+BEGIN_SRC emacs-lisp
-  (defun make-capture-frame ()
+  (defun mrb/make-capture-frame ()
     "Create a new frame for org-capture to use."
     (select-frame (make-frame '((name . "capture")
                                 (width . 115) (height . 15)
@@ -730,20 +731,20 @@ Define functions for each piece of information captured, so they can
 be easily bound to keys.
 
 #+BEGIN_SRC emacs-lisp
-  (defun capture-todo ()
+  (defun mrb/capture-todo ()
     "Capture a TODO item"
     (interactive)
-    (make-capture-frame)
+    (mrb/make-capture-frame)
     (org-capture nil "t")
     )
 
-  (defun capture-buy ()
+  (defun mrb/capture-buy ()
     "Capture a BUY item"
     (interactive)
-    (make-capture-frame)
+    (mrb/make-capture-frame)
     (org-capture nil "b")
     )
-  (defun make-journal-entry ()
+  (defun mrb/make-journal-entry ()
     "Create a journal entry"
     (interactive)
     (org-capture nil "j")
@@ -773,7 +774,7 @@ Capturing of screenshots is provided by the org-screenshot library.
 #+BEGIN_SRC emacs-lisp
   (require 'org-screenshot)
 
-  (defun capture-screenshot()
+  (defun mrb/capture-screenshot()
     "Capture a screenshot"
     (interactive)
     ;; Always create the standard attach dir if there is none
@@ -1190,15 +1191,15 @@ and HTML as destination format
   ; blogging system like wordpress for example
 
   ; This puts the body inside a buffer called  blog-entry
-  (defun org-export-body-as-html ()
+  (defun mrb/org-export-body-as-html ()
     (interactive)
     (org-export-as-html 3 nil nil "blog-entry" t))
 
   ; Make sure we export in css mode, meaning no inline css crap
   (setq org-export-htmlize-output-type 'css)
-  (define-key org-mode-map "\C-c\C-e" 'org-export-body-as-html)
+  (define-key org-mode-map "\C-c\C-e" 'mrb/org-export-body-as-html)
 
-  (defun org-export-body-as-html-batch ()
+  (defun mrb/org-export-body-as-html-batch ()
     "Call `org-export-as-html', may be used in batch processing as
   emacs   --batch
           --load=$HOME/lib/emacs/org.el
@@ -1432,18 +1433,18 @@ migrate this into more literal sections
     )
 
   (define-key org-mode-map [(super .)] 'org-todo)
-  (defun force-org-todo()
+  (defun mrb/force-org-todo()
     (interactive)
     (let ((current-prefix-arg '(64)))  ;; Triple C-u (4^3)
       (call-interactively 'org-todo))
   )
-  (defun force-org-agenda-todo()
+  (defun mrb/force-org-agenda-todo()
     (interactive)
     (let ((current-prefix-arg '(64)))  ;; Triple C-u (4^3)
       (call-interactively 'org-agenda-todo))
   )
-  (define-key org-mode-map [(control super .)] 'force-org-todo)
-  (define-key org-agenda-mode-map [(control super .)] 'force-org-agenda-todo)
+  (define-key org-mode-map [(control super .)] 'mrb/force-org-todo)
+  (define-key org-agenda-mode-map [(control super .)] 'mrb/force-org-agenda-todo)
 
   (define-key org-agenda-mode-map [(super .)] 'org-agenda-todo)
   ; Map \cmd{}t to schedule in both task and agenda-view
@@ -1454,7 +1455,7 @@ migrate this into more literal sections
   (define-key org-mode-map [(control super s)] 'org-save-all-org-buffers)
 
   ; Dynamic behaviour
-  (defun gtd()
+  (defun mrb/gtd()
     "Start my GTD system"
     (interactive)
     (find-file org-default-notes-file)
@@ -1520,9 +1521,9 @@ migrate this into more literal sections
   ; When in agenda mode, show the line we're working on.
   (add-hook 'org-agenda-mode-hook '(lambda () (hl-line-mode 1)))
 
-    ; When a tag change adds the waiting tag, make sure it gets scheduled
+  ; When a tag change adds the waiting tag, make sure it gets scheduled
   ; 1 week from now if it is not already.
-    (defun autoschedule-waiting()
+  (defun mrb/autoschedule-waiting()
     ; variable 'tags' contains the values of the tag-string
     ; If tags has the tag :waiting:, schedule this
     ;(if includes tags "waiting")
@@ -1531,7 +1532,7 @@ migrate this into more literal sections
     (org-schedule nil (org-timestring-to-seconds "+1w"))
   )
   ; Activate it
-  ;(add-hook 'org-after-tags-change-hook 'autoschedule-waiting)
+  ;(add-hook 'org-after-tags-change-hook 'mrb/autoschedule-waiting)
 
 
 
@@ -1570,7 +1571,7 @@ migrate this into more literal sections
   (defvar org-agenda-group-by-property nil
     "Set this in org-mode agenda views to group tasks by property")
 
-  (defun org-group-bucket-items (prop items)
+  (defun mrb/org-group-bucket-items (prop items)
     (let ((buckets ()))
       (dolist (item items)
         (let* ((marker (get-text-property 0 'org-marker item))
@@ -1593,7 +1594,7 @@ migrate this into more literal sections
     (if org-agenda-group-by-property
         ;; bucketed, handle appropriately
         (let ((text ""))
-          (dolist (bucket (org-group-bucket-items
+          (dolist (bucket (mrb/org-group-bucket-items
                            org-agenda-group-by-property
                            list))
             (let ((header (concat "Property "
@@ -1742,16 +1743,16 @@ migrate this into more literal sections
   ;; Define notificaters
   (require 'notifications)
 
-  (defun org-mobile-notify (type result)
+  (defun mrb/org-mobile-notify (type result)
     (notifications-notify
      :title (concat type " complete:")
      :body  (format (concat "Org-mobile-" type ": %s") result)))
 
-  (defun notify-push (result) (org-mobile-notify "Push" result))
-  (defun notify-pull (result) (org-mobile-notify "Pull" result))
+  (defun mrb/notify-push (result) (mrb/org-mobile-notify "Push" result))
+  (defun mrb/notify-pull (result) (mrb/org-mobile-notify "Pull" result))
 
   ;; Fork the work of pushing to mobile
-  (defun fork-org-mobile-push()
+  (defun mrb/fork-org-mobile-push()
     (async-start
      ;; What to do in the child process
      `(lambda ()
@@ -1760,16 +1761,16 @@ migrate this into more literal sections
 
      ; What to do when it finishes
      (lambda (result)
-       (notify-push result)
+       (mrb/notify-push result)
        (message "Push of mobile org complete"))))
 
   ;; Push to mobile when the idle timer runs out
-  (defun org-mobile-push-with-delay (secs)
+  (defun mrb/org-mobile-push-with-delay (secs)
     (when org-mobile-push-timer
       (cancel-timer org-mobile-push-timer))
     (setq org-mobile-push-timer
           (run-with-idle-timer
-           (* 1 secs) nil 'fork-org-mobile-push)))
+           (* 1 secs) nil 'mrb/fork-org-mobile-push)))
 
   ;; After saving files, start a 30 seconds idle timer after which we
   ;; are going to push
@@ -1779,10 +1780,10 @@ migrate this into more literal sections
   ;;    (when (eq major-mode 'org-mode)
   ;;      (dolist (file (org-mobile-files-alist))
   ;;        (if (string= (expand-file-name (first file)) (buffer-file-name))
-  ;;         (org-mobile-push-with-delay 30))))))
+  ;;         (mrb/org-mobile-push-with-delay 30))))))
 
   ;; Fork the work of pushing to mobile
-  (defun fork-org-mobile-pull ()
+  (defun mrb/fork-org-mobile-pull ()
     (async-start
      ;; What to do in the child process
      `(lambda ()
@@ -1791,7 +1792,7 @@ migrate this into more literal sections
 
      ; What to do when it finishes
      (lambda (result)
-       (notify-pull result)
+       (mrb/notify-pull result)
        (message "Pull of mobile org complete"))))
 
   ;; Construct the name of the remote file
@@ -1802,7 +1803,7 @@ migrate this into more literal sections
           "mobileorg.org")))
 
   ;; Pull by monitoring the file mobile-org writes to
-  (defun install-monitor (file secs)
+  (defun mrb/install-monitor (file secs)
     ;; Cancel an existing timer, if any
     (when org-mobile-pull-timer
       (cancel-timer org-mobile-pull-timer))
@@ -1814,13 +1815,13 @@ migrate this into more literal sections
              ;; If the remote file has been changed within out repeat
              ;; period, we need a new copy
              (unless (< p (second (time-since (elt (file-attributes f) 5))))
-               (fork-org-mobile-pull)))
+               (mrb/fork-org-mobile-pull)))
            file
            secs)))
 
   ;; Install a monitor on the remote org file. Don't make the time too
   ;; short, otherwise the file might nog get pulled in.
-  ;; (install-monitor remote-org-mobile-file 30)
+  ;; (mrb/install-monitor remote-org-mobile-file 30)
 
   ;; Mail facilities related to org-mode
   (require 'org-mime)
@@ -1965,7 +1966,7 @@ LDAP integration, mostly for address book lookups
   (setq eudc-server-hotlist '(("ldap.hsdev.com" . ldap)))
   (setq eudc-inline-expansion-servers 'hotlist)
 
-  (defun enz-eudc-expand-inline()
+  (defun mrb/enz-eudc-expand-inline()
     (interactive)
     (move-end-of-line 1)
     (insert "*")
@@ -1978,11 +1979,11 @@ LDAP integration, mostly for address book lookups
   ;; Adds some hooks
 
   (eval-after-load "message"
-    '(define-key message-mode-map (kbd "TAB") 'enz-eudc-expand-inline))
+    '(define-key message-mode-map (kbd "TAB") 'mrb/enz-eudc-expand-inline))
   (eval-after-load "sendmail"
-    '(define-key mail-mode-map (kbd "TAB") 'enz-eudc-expand-inline))
+    '(define-key mail-mode-map (kbd "TAB") 'mrb/enz-eudc-expand-inline))
   (eval-after-load "post"
-    '(define-key post-mode-map (kbd "TAB") 'enz-eudc-expand-inline))
+    '(define-key post-mode-map (kbd "TAB") 'mrb/enz-eudc-expand-inline))
 
 #+END_SRC
 * Key and mouse bindings
@@ -2070,48 +2071,48 @@ This is the remnant of my old configuration.
 
   ;; Resizing windows
   ;; Introduce a bit of intelligence so the shrink and enlarge know what window I'm in.
-  (defun xor (b1 b2)
+  (defun mrb/xor (b1 b2)
     "Exclusive or between arguments"
     (or (and b1 b2)
         (and (not b1) (not b2))))
 
-  (defun move-border-left-or-right (arg dir)
+  (defun mrb/move-border-left-or-right (arg dir)
     "General function covering move-border-left and move-border-right. If DIR is
     t, then move left, otherwise move right."
     (interactive)
     (if (null arg) (setq arg 5))
     (let ((left-edge (nth 0 (window-edges))))
-      (if (xor (= left-edge 0) dir)
+      (if (mrb/xor (= left-edge 0) dir)
           (shrink-window arg t)
         (enlarge-window arg t)))
     )
 
-  (defun move-border-left (arg)
+  (defun mrb/move-border-left (arg)
     (interactive "P")
-    (move-border-left-or-right arg t))
+    (mrb/move-border-left-or-right arg t))
 
-  (defun move-border-right (arg)
+  (defun mrb/move-border-right (arg)
     (interactive "P")
-    (move-border-left-or-right arg nil))
+    (mrb/move-border-left-or-right arg nil))
 
   ;; Same for up and down
-  (defun move-border-up-or-down (arg dir)
+  (defun mrb/move-border-up-or-down (arg dir)
     "General function covering move-border-up and move-border-down. If DIR is
     t, then move up, otherwise move down."
     (interactive)
     (if (null arg) (setq arg 5))
     (let ((top-edge (nth 1 (window-edges))))
-      (if (xor (= top-edge 0) dir)
+      (if (mrb/xor (= top-edge 0) dir)
           (shrink-window arg nil)
         (enlarge-window arg nil))))
 
-  (defun move-border-up (arg)
+  (defun mrb/move-border-up (arg)
     (interactive "P")
-    (move-border-up-or-down arg t))
+    (mrb/move-border-up-or-down arg t))
 
   (defun move-border-down (arg)
     (interactive "P")
-    (move-border-up-or-down arg nil))
+    (mrb/move-border-up-or-down arg nil))
 
 
   ;; cut, copy and paste with cmd-key (like on osx).
@@ -2131,7 +2132,7 @@ This is the remnant of my old configuration.
   ;; Should this not be an unset?
   (global-set-key [(control x) return] nil)
 
-  (defun new-empty-buffer ()
+  (defun mrb/new-empty-buffer ()
     "Opens a new empty buffer."
     (interactive)
     (let ((buf (generate-new-buffer "untitled")))
@@ -2146,7 +2147,7 @@ This is the remnant of my old configuration.
   ;; that wraps around kill-buffer, and check on the buffer modification
   ;; status to offer save
   ;; This custome kill buffer is close-current-buffer.
-  (global-set-key [(super n)] 'new-empty-buffer)
+  (global-set-key [(super n)] 'mrb/new-empty-buffer)
 
 #+END_SRC
 ** Key bindings
@@ -2203,7 +2204,7 @@ the previous definition.
   ;; the case that it is not already.
 
   (if (not (fboundp 'toggle-frame-fullscreen))
-      (defun toggle-frame-fullscreen()
+      (defun mrb/toggle-frame-fullscreen()
         (interactive)
         (when (eq window-system 'x)
           (set-frame-parameter
@@ -2213,7 +2214,7 @@ the previous definition.
   ;; Make gnome compliant, define a full-screen function and bind to F11
   (defun mrb/switch-full-screen ()
     (interactive)
-    (toggle-frame-fullscreen))
+    (mrb/toggle-frame-fullscreen))
   (global-set-key [f11] 'mrb/switch-full-screen)
 
   ;; Not sure what this is? It is not the menu key.
@@ -2253,11 +2254,24 @@ Orgmode specific keybindings.
   (global-set-key [(control c) (a)] 'org-agenda)
   (global-set-key [(control c) (b)] 'org-iswitchb)
   (global-set-key [(control c) (l)] 'org-store-link)
-  (global-set-key [(control c) (j)] 'make-journal-entry)
+  (global-set-key [(control c) (j)] 'mrb/make-journal-entry)
 #+END_SRC
+** Other mouse settings
+Emacs has, like for everything else, a peculiar idea on scrolling and
+moving from screen to screen.
 
+These settings work better for me.
 
+#+BEGIN_SRC emacs-lisp
+(setq redisplay-dont-pause t
+      scroll-margin 1
+      scroll-step 1
+      scroll-conservatively 10000
+      scroll-preserve-screen-position 1)
 
+(setq mouse-wheel-follow-mouse 't)
+(setq mouse-wheel-scroll-amount '(1 ((shift) . 1)))
+#+END_SRC
 * Terminals, Character encodings and emulation
 My policy is to use Emacs for as many things and use as little
 programs as necessary. All this within reason obvously.
@@ -2399,7 +2413,7 @@ number of parts:
 The calling part is simpel:
 
 #+BEGIN_SRC sh
-emacsclient -a "" -n -c -e '(server-eshell)'
+emacsclient -a "" -n -c -e '(mrb/server-eshell)'
 #+END_SRC
 
 The last bit of that command line is the function to evaluate, which
@@ -2408,7 +2422,7 @@ was taken from http://ur1.ca/cf1m4 and sligthly adapted.
 #+BEGIN_SRC emacs-lisp
   (require 'cl)
 
-  (defun server-eshell ()
+  (defun mrb/server-eshell ()
     "Command to be called by emacs-client to start a new shell.
 
   A new eshell will be created. When the frame is closed, the buffer is deleted or the shell exits,
@@ -2751,7 +2765,7 @@ get awesome to properly place the windows because it's hard to match
 on the varying name that xprop delivers, so. we make our own window.
 
 #+BEGIN_SRC emacs-lisp
-  (defun make-mailcompose-frame (&optional mailto-url)
+  (defun mrb/make-mailcompose-frame (&optional mailto-url)
     "Create a new frame and run mail-compose, use mailto URI if it is given."
     (interactive)
 
@@ -2841,7 +2855,7 @@ mailto="mailto:${mailto#mailto:}"
 mailto=$(printf '%s\n' "$mailto" | sed -e 's/[\"]/\\&/g')
 
 # Call the elisp function handling our mailto URI
-elisp_expr="(make-mailcompose-frame \"$mailto\")"
+elisp_expr="(mrb/make-mailcompose-frame \"$mailto\")"
 
 # Go
 edit --eval "$elisp_expr"
@@ -2878,11 +2892,11 @@ Statusnet, or perhaps microblog in general settings
   (global-set-key [(control c) (ip)] 'identica-update-status-interactive)
   (global-set-key [(control c) (id)] 'identica-direct-message-interactive)
   (global-set-key [(control c) (is)] 'identica-shortenurl-replace-at-point)
-  (global-set-key [(control c) (d)]  'make-dent-frame)
+  (global-set-key [(control c) (d)]  'mrb/make-dent-frame)
 
 
   ;; I'm using a floating frame in awesome WM for dents
-  (defun make-dent-frame ()
+  (defun mrb/make-dent-frame ()
     "Create a new frame and run identica-update status."
     (interactive)
     ;; Create and select the frame
@@ -2934,7 +2948,7 @@ want it to be, including key bindings.
           "dwriXA736awDlYgoVlQREsBtupkmy1pEqYqNeRX1lHk"]])
 
   ;; I'm using a floating frame in awesome WM for dents
-  (defun make-pump-frame ()
+  (defun mrb/make-pump-frame ()
     "Create a new frame and run pump postnote"
     (interactive)
     ;; Create and select the frame
@@ -2942,11 +2956,11 @@ want it to be, including key bindings.
                                 (width . 80) (height . 15)
                                 (menu-bar-lines . 0) (tool-bar-lines . 0)))))
 
-  (defun capture-pump ()
+  (defun mrb/capture-pump ()
     "Capture a pump note"
     (interactive)
 
-    (make-pump-frame)
+    (mrb/make-pump-frame)
     (pmpio-ctrl-post-note)
 
     ;; Once there, make sure we're the only one
