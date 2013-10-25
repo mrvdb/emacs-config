@@ -335,13 +335,16 @@ and run =el-get-install= with the package name.
           ;; Using a different source than the built-in recipe (why was this again?)
           (:name zenburn-emacs :type github :pkgname "bbatsov/zenburn-emacs")
           ;; Version from elpa does not work for me (init problem?)
-          (:name cursor-chg :type github :pkgname  "emacsmirror/cursor-chg" :features cursor-chg)
+          (:name cursor-chg :type github :pkgname  "emacsmirror/cursor-chg"
+                 :features cursor-chg)
           (:name php-mode-improved)    ; Just to have example for other syntax
-          (:name newlua-mode :type github :pkgname "immerrr/lua-mode" :features lua-mode)
+          (:name newlua-mode :type github :pkgname "immerrr/lua-mode"
+                 :features lua-mode)
           (:name oauth :type github :pkgname "psanford/emacs-oauth")
           (:name expand-region :type github :pkgname "magnars/expand-region.el")
           (:name mark-multiple :type github :pkgname "magnars/mark-multiple.el")
-          (:name fixed-point-completion :type github :pkgname "smithzvk/fixed-point-completion")
+          (:name fixed-point-completion :type github
+                 :pkgname "smithzvk/fixed-point-completion")
           (:name xlicense :type github :pkgname "emacsmirror/xlicense")
           (:name autosmiley :type github :pkgname "emacsmirror/autosmiley")
           (:name async :type github :pkgname "jwiegley/emacs-async")
@@ -351,7 +354,8 @@ and run =el-get-install= with the package name.
           (:name gisthub :type github :pkgname  "defunkt/gist.el" :depends (gh))
           (:name stripe-buffer :type github :pkgname "sabof/stripe-buffer")
           (:name keyfreq :type github :pkgname "dacap/keyfreq")
-          (:name git-auto-commit-mode :type github :pkgname "ryuslash/git-auto-commit-mode")
+          (:name git-auto-commit-mode :type github
+                 :pkgname "ryuslash/git-auto-commit-mode")
           (:name ujelly-theme :type github :pkgname "marktran/color-theme-ujelly")
           (:name erc-tweet :type github :pkgname "kidd/erc-tweet.el")
           (:name erc-image :type github :pkgname "mrvdb/erc-image.el")
@@ -359,13 +363,16 @@ and run =el-get-install= with the package name.
           (:name org-present :type github :pkgname "rlister/org-present")
           (:name popup :type github :pkgname "auto-complete/popup-el")
           (:name auto-complete :type github :pkgname "auto-complete/auto-complete")
-          (:name dash :type github :pkgname "magnars/dash.el") ;; Dependency? I dont use this directly
+          ;; Dependency? I dont use this directly
+          (:name dash :type github :pkgname "magnars/dash.el")
           (:name gitmessenger :type github :pkgname "syohex/emacs-git-messenger")
           (:name metaweblog :type github :pkgname "punchagan/metaweblog.el")
           (:name org-screenshot :type github :pkgname "dfeich/org-screenshot")
-          (:name org-agenda-property :type github :pkgname "Bruce-Connor/org-agenda-property")
+          (:name org-agenda-property :type github
+                 :pkgname "Bruce-Connor/org-agenda-property")
           (:name pump.io :type github :pkgname "cnngimenez/pumpio-el")
           (:name elfeed :type github :pkgname "skeeto/elfeed")
+          (:name litable :type github :pkgname "Fuco1/litable")
         )
   )
 
