@@ -1335,7 +1335,7 @@ Org-jekyl has a couple of special extra features:
   (setq org-publish-project-alist '(
     ("mrblog-org"
             ;; Path to your org files.
-            :base-directory "~/dat/"
+            :base-directory "~/dat/blogs/mrblog/sties/main/org/"
             :base-extension "org"
 
             ;; Path to your Jekyll project.
@@ -1349,7 +1349,7 @@ Org-jekyl has a couple of special extra features:
 
 
       ("mrblog-files"
-            :base-directory "~/dat/"
+            :base-directory "~/dat/blogs/mrblog/files/"
             :base-extension "css\\|js\\|png\\|jpg\\|gif\\|pdf\\|mp3\\|ogg\\|swf\\|php"
             :publishing-directory "~/dat/blogs/mrblog/files/"
             :recursive t
