@@ -22,3 +22,4 @@ mrb.el
 /elpa/archives/*
 /newsticker/*
 /test.org
+/.litable-lists.el
