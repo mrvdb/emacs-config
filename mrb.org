@@ -2978,9 +2978,8 @@ XMPP related settings, including interfacing it to other systems
 
 #+BEGIN_SRC emacs-lisp
   ; Directly tie into the GIT repository on this machine if needed
-  (add-to-list 'load-path "~/dev/emacs/packages/emacs-jabber/")
-  (add-to-list 'load-path "~/dev/emacs/packages/emacs-jabber/compat/")
-  ;;(require 'jabber-autoloads)
+  (add-to-list 'load-path "~/dev/emacs/packages/jabber/")
+
   (require 'jabber)
 
   ; Configuration variables
