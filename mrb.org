@@ -2279,7 +2279,7 @@ more than needed. I think, by default, this is properly configure, but
 I just want to make sure.
 
 #+BEGIN_SRC emacs-lisp
-(setq redisplay-dont-pause nil)
+(setq redisplay-dont-pause t)
 #+END_SRC
 
 When scrolling, I don't tend to think in /half-screens/ like emacs does,
