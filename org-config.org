@@ -233,8 +233,8 @@ Use the minted package for trying to colorize source listings
 #+LATEX_HEADER: \usepackage{minted}
 #+LATEX_HEADER: \usemintedstyle{perldoc}
 #+LATEX_HEADER: \definecolor{codebg}{rgb}{0.85,0.85,0.85}
-# #+LATEX_HEADER: \newminted{common-lisp}{fontsize=\footnotesize}
-# #+LATEX_HEADER: \usepackage{listings}
+#+LATEX_HEADER: \newminted{common-lisp}{fontsize=\footnotesize}
+#+LATEX_HEADER: \usepackage{listings}
 
 For keyboard symbols:
 #+LATEX_HEADER: \usepackage{menukeys}
