@@ -3040,6 +3040,16 @@ XMPP related settings, including interfacing it to other systems
       (unless (minibuffer-prompt)
         (message "%s" msg))))
 #+END_SRC
+
+The default C-x map for emacs has a C-j entry which binds it to
+dired-jump. This gets in the way of all the keyboard shortcuts for
+jabber, so lets re-call the definition here, so we are sure we get
+them.
+
+#+BEGIN_SRC emacs-lisp
+ (define-key ctl-x-map "\C-j" jabber-global-keymap)
+#+END_SRC
+
 * Development settings
 Some settings which aid in development tasks.
 
