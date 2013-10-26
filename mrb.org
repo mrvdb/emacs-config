@@ -2256,19 +2256,39 @@ Orgmode specific keybindings.
   (global-set-key [(control c) (l)] 'org-store-link)
   (global-set-key [(control c) (j)] 'mrb/make-journal-entry)
 #+END_SRC
-** Other mouse settings
+** Other key and mouse related settings
 Emacs has, like for everything else, a peculiar idea on scrolling and
 moving from screen to screen.
 
 These settings work better for me.
 
-#+BEGIN_SRC emacs-lisp
-(setq redisplay-dont-pause t
-      scroll-margin 1
-      scroll-step 1
-      scroll-conservatively 10000
-      scroll-preserve-screen-position 1)
+I have my keyboard repeat rate rather quick; this helps by moving the
+cursor fast. It also means that if I press a key like backspace things
+disappear quite quickly, so it's important that what happens on the
+screen is 'real-time'. The effect I want to prevent is that when
+releasing the backspace key, the cursor keeps on going and deletes way
+more than needed. I think, by default, this is properly configure, but
+I just want to make sure.
 
+#+BEGIN_SRC emacs-lisp
+(setq redisplay-dont-pause nil)
+#+END_SRC
+
+When scrolling, I don't tend to think in /half-screens/ like emacs does,
+I just want the text in the window to move up or down without having
+to guess where it's going to be. Make sure we scroll 1 line and have a
+small, or none at all, scroll-margin. Having both at a value of 1 is
+intuitive.
+
+#+BEGIN_SRC emacs-lisp
+(setq scroll-margin 1  scroll-step 1)
+#+END_SRC
+
+Make sure that the scroll wheel scrolls the window that the mouse
+pointer is over and that we are scrolling 1 line at a time. I don't
+use any modifiers with the scroll wheel.
+
+#+BEGIN_SRC emacs-lisp
 (setq mouse-wheel-follow-mouse 't)
 (setq mouse-wheel-scroll-amount '(1 ((shift) . 1)))
 #+END_SRC
