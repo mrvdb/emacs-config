@@ -111,11 +111,11 @@ And edit the file obviously.
   if [ "$(visible_frames)" -lt  "2" ]; then
       # need to create a frame
       # -c $@ with no args just opens the scratch buffer
-      $EMACSCLIENT --create-frame "$XARGS" && change_focus
+      $EMACSCLIENT --create-frame $XARGS && change_focus
   else
       # there is already a visible frame besides the daemon, change focus
       # -n $@ errors if there are no args
-      test  "$#" -ne "0" && $EMACSCLIENT "$XARGS"
+      test  "$#" -ne "0" && $EMACSCLIENT $XARGS
   fi
 #+END_SRC
 
