@@ -504,6 +504,8 @@ And enable the minor mode globally.
     (scroll-bar-mode -1) ;; No scroll-bar
     (menu-bar-mode -1)   ;; No menu-bar
     (tooltip-mode -1)    ;; No tooltips
+    (setq fringe-mode 0) ;; No fringe
+    (set-fringe-mode fringe-mode)
 
     ;; When making a selection of in case of highlighting a region
     ;; automatically, keep all font-locking in the region instead of
