@@ -104,14 +104,18 @@ And edit the file obviously.
   # This will start a server if not running
   test "$(visible_frames)" -eq "1" && change_focus
 
+  XARGS=$@
+  if [ "X$XARGS" == "X" ]; then
+    XARGS='~/untitled'
+  fi
   if [ "$(visible_frames)" -lt  "2" ]; then
       # need to create a frame
       # -c $@ with no args just opens the scratch buffer
-      $EMACSCLIENT --create-frame "$@" && change_focus
+      $EMACSCLIENT --create-frame "$XARGS" && change_focus
   else
       # there is already a visible frame besides the daemon, change focus
       # -n $@ errors if there are no args
-      test  "$#" -ne "0" && $EMACSCLIENT "$@"
+      test  "$#" -ne "0" && $EMACSCLIENT "$XARGS"
   fi
 #+END_SRC
 
@@ -495,6 +499,7 @@ And enable the minor mode globally.
   (defun mrb/run-client-settings()
     (interactive)
 
+    (message "Running client settings which server may not have applied")
     (tool-bar-mode -1)   ;; No tool-bar
     (scroll-bar-mode -1) ;; No scroll-bar
     (menu-bar-mode -1)   ;; No menu-bar
@@ -528,8 +533,9 @@ And enable the minor mode globally.
   ;; server was not running yet. It does however not work if we just
   ;; startup emacs (through my edit script) without a filename on the cli
   (add-hook 'server-visit-hook 'mrb/run-client-settings)
+
   ;; But we also want to run it, regardless
-  (mrb/run-client-settings)
+  ;;(mrb/run-client-settings)
 
   ;; Make colorful balanced parentheses etc. in different modes
   (add-hook 'lisp-mode 'rainbow-delimiters-mode)
