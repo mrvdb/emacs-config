@@ -3175,6 +3175,13 @@ There's always more to want, here a quick list of things:
   ;-)
 - threading or reliable async operation
 -
+* Finale
+When we are all done with this, provide it.
+
+#+BEGIN_SRC emacs-lisp
+(provide 'mrb)
+;;; mrb ends here
+#+END_SRC
 * Self configuration                                                                                 :exclude:
 I have the same config file for orgmode itself
 #+SETUPFILE: "~/.outlet/etc/org-config.org"
