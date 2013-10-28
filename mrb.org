@@ -759,7 +759,19 @@ be easily bound to keys.
     (interactive)
     (org-capture nil "j")
   )
+#+END_SRC
 
+These capture functions are called from shell scripts in the operating
+system and have a shortcut key assigned to them. The scripts are
+produced directly from this document, in a similar way as the main
+edit script was produced in [[Preparing for lift-off]]
+
+#+BEGIN_SRC sh :exports code :tangle ~/bin/capture-todo.sh :shebang #!/bin/bash
+edit -e '(mrb/capture-todo)'
+#+END_SRC
+
+#+BEGIN_SRC sh :exports code :tangle ~/bin/capture-buy.sh :shebang #!/bin/bash
+edit -e '(mrb/capture-buy)'
 #+END_SRC
 
 By default C-c C-c ends the capture, but is normally the shortcut to
@@ -2905,6 +2917,13 @@ elisp_expr="(mrb/make-mailcompose-frame \"$mailto\")"
 edit --eval "$elisp_expr"
 
 #+END_SRC
+
+On top of that, I want a manual capture script which is basically the
+same as the mailto handler.
+#+BEGIN_SRC sh :exports code :tangle ~/bin/capture-mail.sh :shebang #!/bin/bash
+edit -e '(mrb/make-mailcompose-frame)'
+#+END_SRC
+
 ** Statusnet
 Statusnet, or perhaps microblog in general settings
 
@@ -2968,6 +2987,13 @@ Statusnet, or perhaps microblog in general settings
         (delete-frame))
   )
 #+END_SRC
+
+Denting interface from the commandline goes to here:
+
+#+BEGIN_SRC sh :exports code :tangle ~/bin/capture-dent.sh :shebang #!/bin/bash
+edit -e '(mrb/make-dent-frame)'
+#+END_SRC
+
 ** Pump.io
 Similar to capturing TODO and BUY entries, there's a way to captur
 pump.io entries too.
@@ -3017,6 +3043,13 @@ want it to be, including key bindings.
     (if (equal "pump" (frame-parameter nil 'name))
         (delete-frame)))
 #+END_SRC
+
+Commandline interface for posting a pump.io notices goes here:
+
+#+BEGIN_SRC sh :exports code :tangle ~/bin/capture-pump.sh :shebang #!/bin/bash
+edit -e '(mrb/capture-pump)'
+#+END_SRC
+
 ** XMPP
 XMPP related settings, including interfacing it to other systems
 
