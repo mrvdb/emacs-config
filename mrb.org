@@ -22,8 +22,8 @@ The base of the emacs configuration is in the =~/.emacs.d/= directory,
 so add this to my loadpaths first and give it a name.
 
 #+BEGIN_SRC emacs-lisp
-(setq emacs-directory "~/.emacs.d/")
-(add-to-list 'load-path emacs-directory)
+  (setq emacs-directory "~/.emacs.d/")
+  (add-to-list 'load-path emacs-directory)
 #+END_SRC
 
 The first thing I want to take care of is to make customizations
@@ -32,8 +32,8 @@ first so anything in the configuration I define explicitly overrides
 it.
 
 #+BEGIN_SRC emacs-lisp
-(setq custom-file (concat emacs-directory "custom.el"))
-(load custom-file)
+  (setq custom-file (concat emacs-directory "custom.el"))
+  (load custom-file)
 #+END_SRC
 
 Now that we have the locations of the configuration determined, I want
@@ -55,7 +55,7 @@ The script does two things:
 
 And edit the file obviously.
 
-#+BEGIN_SRC sh sh :exports code :tangle ~/bin/edit :shebang #!/bin/bash
+#+BEGIN_SRC sh :exports code :tangle ~/bin/edit :shebang #!/bin/bash
   #set -x
 
   # This is an improved version of my edit script. The original one is
@@ -2645,20 +2645,20 @@ nicks and passwords and stuff.
 Start by configuring some basic settings
 
 #+BEGIN_SRC emacs-lisp
-  (require 'erc)
-  (require 'erc-tweet)
-  (require 'erc-image)
+    (require 'erc)
+    (require 'erc-tweet)
+    (require 'erc-image)
 
-  (setq
-   erc-modules (quote (
-                       autojoin button completion fill
-                                irccontrols keep-place list log
-                                match menu move-to-prompt netsplit
-                                networks noncommands notify readonly
-                                replace ring smiley stamp track unmorse highlight-nicknames smiley
-                                tweet image))
-   erc-image-inline-rescale 150
-   )
+    (setq
+     erc-modules
+     (quote
+      (autojoin button completion fill
+       irccontrols keep-place list log
+       match move-to-prompt netsplit
+       networks noncommands notify notifications
+       readonly replace ring smiley stamp track unmorse
+        highlight-nicknames smiley tweet image truncate))
+     erc-image-inline-rescale 150)
 #+END_SRC
 
 Configure erc to use services and automatically identify my Nicks to
