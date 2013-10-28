@@ -363,7 +363,6 @@ and run =el-get-install= with the package name.
           (:name ujelly-theme :type github :pkgname "marktran/color-theme-ujelly")
           (:name erc-tweet :type github :pkgname "kidd/erc-tweet.el")
           (:name erc-image :type github :pkgname "mrvdb/erc-image.el")
-          (:name flycheck :type github :pkgname "lunaryorn/flycheck")
           (:name org-present :type github :pkgname "rlister/org-present")
           (:name popup :type github :pkgname "auto-complete/popup-el")
           (:name auto-complete :type github :pkgname "auto-complete/auto-complete")
@@ -371,12 +370,10 @@ and run =el-get-install= with the package name.
           (:name dash :type github :pkgname "magnars/dash.el")
           (:name gitmessenger :type github :pkgname "syohex/emacs-git-messenger")
           (:name metaweblog :type github :pkgname "punchagan/metaweblog.el")
-          (:name org-screenshot :type github :pkgname "dfeich/org-screenshot")
           (:name org-agenda-property :type github
                  :pkgname "Bruce-Connor/org-agenda-property")
           (:name pump.io :type github :pkgname "cnngimenez/pumpio-el")
           (:name elfeed :type github :pkgname "skeeto/elfeed")
-          (:name litable :type github :pkgname "Fuco1/litable")
         )
   )
 
