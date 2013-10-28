@@ -2393,6 +2393,20 @@ registered as a command automatically.
 	(delete-region (point-min) (point-max))))
 #+END_SRC
 
+We want to be able to open files from within eshell in the same way as
+we do from the command line shell in the os. For this I have define an
+alias which just uses find-file-other-window.
+To be able to open multiple files (so we can use $* as argument
+instead of just $1) we need to advice find-file-other-window to support this.
+
+#+BEGIN_SRC emacs-lisp
+  (defadvice find-file-other-window (around find-files activate)
+    "Also find all files within a list of files. Thsi even works recursively."
+    (if (listp filename)
+        (loop for f in filename do (find-file-other-window f wildcards))
+      ad-do-it))
+#+END_SRC
+
 Set the main directory for eshell, I do not want in in the default
 place but below the .emacs.d directory where all other configuration
 of emacs stuff is.
