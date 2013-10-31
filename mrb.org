@@ -1121,7 +1121,7 @@ Specific settings for babel and literate programming within org-mode
 
 #+BEGIN_SRC emacs-lisp
   (setq
-     org-babel-interpreters (quote ("emacs-lisp" "python" "ditaa" "sql" "sh" "R"))
+     org-babel-interpreters (quote ("emacs-lisp" "python" "ditaa" "sql" "sh" "R" "haskell"))
   )
   ;; Activate Babel languages
   (require 'ob-gnuplot)
@@ -1129,7 +1129,8 @@ Specific settings for babel and literate programming within org-mode
   (org-babel-do-load-languages
    'org-babel-load-languages
    '((R . t) (ditaa . t) (sql . t) (sh . t) (emacs-lisp t) (lisp t)
-     (css t) (awk t) (js t) (lisp t) (org t) (plantuml t) (gnuplot . t)))
+     (css t) (awk t) (js t) (lisp t) (org t) (plantuml t) (gnuplot . t)
+     (haskell t)))
 #+END_SRC
 
 *** Refiling
