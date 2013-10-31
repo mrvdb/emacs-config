@@ -564,7 +564,26 @@ get confused:
   (provide 'buffers)
 #+END_SRC
 * Modes
-Customisation setting for specific models
+Customisation setting for specific modes. Most of the modes I use have
+a separate section, so this section is only for other modes.
+
+To determine the default major mode; the mode that is started with
+before all the magic starts is determined by buffer-file-name. If we
+have it, the normal routine can be followed. If there is no filename
+yet, the buffer-name is used to determine which mode is needed.
+
+By looking at the code this may have a side-effect, because the
+buffer-file-name is given a value. Let's try this and see if it gives
+any issues.
+#+BEGIN_SRC emacs-lisp
+  (setq-default major-mode
+                (lambda ()
+                  (if buffer-file-name
+                      (fundamental-mode)
+                    (let ((buffer-file-name (buffer-name)))
+                      (set-auto-mode)))))
+#+END_SRC
+
 
 #+BEGIN_SRC emacs-lisp
   (add-hook 'after-init-hook #'global-flycheck-mode)
