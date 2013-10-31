@@ -1990,7 +1990,7 @@ and showing syntax errors.
 
 #+BEGIN_SRC emacs-lisp
 (autoload 'haskell-mode "haskell-mode" "Haskell support" t)
-(add-to-list 'auto-mode-alist '("\\.hs" . haskell-mode))
+(add-to-list 'auto-mode-alist '("\\.hs\\'" . haskell-mode))
 (add-hook 'haskell-mode-hook (lambda () (ghc-init) ))
 #+END_SRC
 * LDAP
