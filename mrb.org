@@ -683,6 +683,13 @@ Finally, run some things when entering orgmode.
 (add-hook 'org-mode-hook 'turn-on-auto-fill)
 #+END_SRC
 
+I want to activate org-mode automatically on =*.org= files, this is
+probably already the case, but making it explicit can't hurt.
+
+#+BEGIN_SRC emacs-lisp
+  (add-to-list 'auto-mode-alist '("\\.org\\'"      . org-mode))
+#+END_SRC
+
 *** Capturing information
 I guess 90% of the information I keep in the main orgmode files
 starts life originally as a captured item. I use it for:
