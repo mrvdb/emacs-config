@@ -2105,7 +2105,14 @@ the echo area each time we push the spacebar.
 
 #+BEGIN_SRC emacs-lisp
 (defun no-op() (interactive))
+
+;; We want the spacebar itself to do nothing
 (global-set-key [key-4660] 'no-op)
+
+;; C-c C-space has the control key in it, so this needs redefinition
+(global-set-key [(control c) (control key-4660)] 'erc-track-switch-buffer)
+
+;; Put more cases here when we encounter them
 #+END_SRC
 
 This small change requires quite a bit of tweaking because you don't
