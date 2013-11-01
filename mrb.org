@@ -2088,6 +2088,31 @@ find out a better way for this.
 #+BEGIN_SRC emacs-lisp
 (global-unset-key (kbd "<mouse-3>"))
 #+END_SRC
+
+Because I use the spacebar in a bit of a special way; an extra control
+key, this complicates things a bit. To be able to do this I use xcape,
+which takes control keys and allows them to insert normal characters
+when they are not used with other keys.
+For this, I have defined the space bar in Xmodmap to be a control key
+with keycode 0x1234. Without xcape, the behaviour would be that there
+is no more spacebar on the keyboard.
+The configuration of xcape says: 'when the control key 0x1234 is
+pressed by itself, insert a space'
+
+The problem is that emacs then still thinks the key is undefined, so
+we let it do nothing in emacs, just to prevent an annoying message in
+the echo area each time we push the spacebar.
+
+#+BEGIN_SRC emacs-lisp
+(defun no-op() (interactive))
+(global-set-key [key-4660] 'no-op)
+#+END_SRC
+
+This small change requires quite a bit of tweaking because you don't
+want this to be in way, ever. The only customization I had to make was
+the shortening of the timeout from 50ms to 35ms to make it work for
+me.
+
 ** Setting keys
 This is the remnant of my old configuration.
 
