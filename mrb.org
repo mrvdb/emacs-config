@@ -2734,6 +2734,7 @@ Nickserv.
 
   (setq erc-prompt-for-nickserv-password nil)
   (erc-services-mode 1)
+  (erc-truncate-mode 1)
 #+END_SRC
 
 These are the channels I visit regularly, maintain a list of
