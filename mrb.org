@@ -374,6 +374,8 @@ and run =el-get-install= with the package name.
                  :pkgname "Bruce-Connor/org-agenda-property")
           (:name pump.io :type github :pkgname "cnngimenez/pumpio-el")
           (:name elfeed :type github :pkgname "skeeto/elfeed")
+          (:name mrb/ubiquitous :type github :pkgname "DarwinAwardWinner/ido-ubiquitous")
+          (:name guide-key :type github :pkgname "kbkbkbkb1/guide-key")
         )
   )
 
