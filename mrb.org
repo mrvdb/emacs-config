@@ -2672,7 +2672,13 @@ I haven't found a solution for this yet.
 
 * Editing control
 
-I like to do thing interactively where I can:
+I like to do things interactively where I can. The package =ido= is part
+of emacs and is more or less a defacto standard within the emacs
+community. The basic promis is that when finding files, switching
+buffers or otherwise completing things in the command area, ido takes
+over and make that completion a better experience. One of these this
+is so called flex matching, which makes the completion match strings
+which contain the entered characters if it doesn't match directly.
 
 #+BEGIN_SRC emacs-lisp
 (require 'ido)
@@ -2681,6 +2687,22 @@ I like to do thing interactively where I can:
 (ido-everywhere)
 #+END_SRC
 
+Normally, ido presents choices as a horizontal list which is kind of
+messy, especially when working in projects which have standard files
+in many directories.
+
+#+BEGIN_SRC emacs-lisp
+(require 'ido-vertical-mode)
+(ido-vertical-mode)
+#+END_SRC
+
+The =(ido-everywhere)= call above does not really enable ido
+everywhere. =ido-ubiquitous= does, so let's enable that.
+
+#+BEGIN_SRC emacs-lisp
+(require 'ido-ubiquitous)
+(ido-ubiquitous-mode)
+#+END_SRC
 
 By selecting a piece of text, wrap-region can quote or otherwise
 delimit that region automatically. I enable this globally. There is
