@@ -386,7 +386,7 @@ and run =el-get-install= with the package name.
                 edit-server magit markdown-mode rainbow-mode rainbow-delimiters scratch popwin
                 highlight-parentheses multiple-cursors wrap-region git-modes cl-lib keywiz
                 smart-tab yaml-mode org-jekyll hideshow-org oauth flim haskell-mode ghc-mod s f
-                flycheck pkg-info)
+                flycheck pkg-info perspective)
          ;; the sources we have configured above
          (mapcar 'el-get-as-symbol (mapcar 'el-get-source-name el-get-sources))))
 
@@ -553,6 +553,13 @@ get confused:
   ;; nicer buffer names
   (require 'uniquify)
   (setq uniquify-buffer-name-style 'forward)
+#+END_SRC
+
+Secondly, provide some mechanism to group them logically together
+
+#+BEGIN_SRC emacs-lisp
+(require 'perspective)
+(persp-mode)
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
