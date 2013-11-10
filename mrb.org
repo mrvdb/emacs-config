@@ -3107,15 +3107,7 @@ want it to be, including key bindings.
 
   ;; Configure for qua.name
   (setq pumpio-pod "http://qua.name")
-  ;; pmpio-client-id: "ElJu_hKISw0xS2aurzxfeQ"
-  ;; pmpio-client-secret: "2mcvN7dVLA-WPqWxbJ5L5sz1YFUWx3uvEMyvPu9-dNU"
-  (setq pmpio-auth-token
-        [cl-struct-oauth-access-token
-         "ElJu_hKISw0xS2aurzxfeQ"
-         "2mcvN7dVLA-WPqWxbJ5L5sz1YFUWx3uvEMyvPu9-dNU"
-         [cl-struct-oauth-t
-          "Z96ly0FYf6aOp2_hDiG8_A"
-          "dwriXA736awDlYgoVlQREsBtupkmy1pEqYqNeRX1lHk"]])
+
 
   ;; I'm using a floating frame in awesome WM for dents
   (defun mrb/make-pump-frame ()
