@@ -607,6 +607,7 @@ any issues.
   (autoload 'css-mode      "css-mode"      "Mode for editing CSS file" t)
   (autoload 'apache-mode   "apache-mode"   "Apache config files" t)
   (autoload 'rainbow-mode  "rainbow-mode"  "Coloring of color codes" t)
+  (autoload 'yaml-mode     "yaml-mode"     "YAML files" t)
 
   (add-hook 'javascript-mode-hook 'mrb/javascript-custom-setup)
   (add-hook 'css-mode-hook 'rainbow-mode)
@@ -619,11 +620,12 @@ any issues.
   (add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
   (add-to-list 'auto-mode-alist '("\\.gp\\'"       . gnuplot-mode))
   (add-to-list 'auto-mode-alist '("\\.php\\'"      . php-mode))
-  (add-to-list 'auto-mode-alist '("\\.css\\'"        . css-mode))
-  (add-to-list 'auto-mode-alist '("\\.js\\'"         . javascript-mode))
-  (add-to-list 'auto-mode-alist '("\\.htaccess\\'"    . apache-mode))
-  (add-to-list 'auto-mode-alist '("\\.patch\\'"       . diff-mode))
-  (add-to-list 'auto-mode-alist '("\\.zsh\\'"         . sh-mode))
+  (add-to-list 'auto-mode-alist '("\\.css\\'"      . css-mode))
+  (add-to-list 'auto-mode-alist '("\\.js\\'"       . javascript-mode))
+  (add-to-list 'auto-mode-alist '("\\.htaccess\\'" . apache-mode))
+  (add-to-list 'auto-mode-alist '("\\.patch\\'"    . diff-mode))
+  (add-to-list 'auto-mode-alist '("\\.zsh\\'"      . sh-mode))
+  (add-to-list 'auto-mode-alist '("\\.yml\\'"      . yaml-mode))
 
   ;; Open scratch buffer by default in the mode we are in at the moment
   ;; with C-u prefix a mode will be asked to use
