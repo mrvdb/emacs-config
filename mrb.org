@@ -475,13 +475,13 @@ And enable the minor mode globally.
   (require 'cursor-chg)                   ; Load this library
   (change-cursor-mode 0)                  ; On for overwrite/read-only/input mode
   (toggle-cursor-type-when-idle 1)        ; On when idle
-  (setq curchg-default-cursor-color "LightGreen")
+  (setq curchg-default-cursor-color "white smoke")
   (setq curchg-default-cursor-type (quote bar\ \.\ 1))
 
   ;; Default frame properties frame position, color, etc
   (setq default-frame-alist
         '((cursor-type . (bar . 1))
-          (cursor-color . "LightGreen")
+          (cursor-color . "white smoke")
           (height . 60)
           (width . 100)
   ))
