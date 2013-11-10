@@ -604,8 +604,10 @@ any issues.
   (autoload 'php-mode      "php-mode"      "PHP" t)
   (autoload 'css-mode      "css-mode"      "Mode for editing CSS file" t)
   (autoload 'apache-mode   "apache-mode"   "Apache config files" t)
+  (autoload 'rainbow-mode  "rainbow-mode"  "Coloring of color codes" t)
 
   (add-hook 'javascript-mode-hook 'mrb/javascript-custom-setup)
+  (add-hook 'css-mode-hook 'rainbow-mode)
 
   (defun mrb/javascript-custom-setup ()
     (moz-minor-mode 1))
