@@ -435,6 +435,8 @@ and otherwise I'd have a large set of faces defined in a wrong color.
   (set-face-attribute 'mode-line-inactive nil :box nil :underline nil :overline "grey40")
 
   (set-face-attribute 'isearch nil :background "sea green" :foreground "black")
+  (set-face-attribute 'ido-first-match nil :background "sea green" :foreground "black")
+
   (set-face-attribute 'lazy-highlight nil :inherit isearch-lazy-highlight
                       :background "black" :foreground "tomato")
 
