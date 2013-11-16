@@ -9,6 +9,10 @@ variety of formats and generally describe the configuration in a clear
 way so I can remember what this was all about. This is not unlike
 literal programming.
 
+The disadvantage is that it needs to be in every org-mode, which can
+sometimes be a nuisance (for example, it needs to be in every blog
+posting i write in orgmode if they are contained in separate files)
+
 * General configuration
 This section contains general settings.
 
