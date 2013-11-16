@@ -386,7 +386,7 @@ and run =el-get-install= with the package name.
                 edit-server magit markdown-mode rainbow-mode rainbow-delimiters scratch popwin
                 highlight-parentheses multiple-cursors wrap-region git-modes cl-lib keywiz
                 smart-tab yaml-mode org-jekyll hideshow-org oauth flim haskell-mode ghc-mod s f
-                flycheck pkg-info perspective ido-vertical-mode)
+                flycheck pkg-info perspective ido-vertical-mode jekyll-el)
          ;; the sources we have configured above
          (mapcar 'el-get-as-symbol (mapcar 'el-get-source-name el-get-sources))))
 
@@ -1266,13 +1266,13 @@ and HTML as destination format
     (interactive)
     (org-export-as-html 3 nil nil nil t))
 #+END_SRC
-*** Blogging with org-mode
+*** Blogging with org-mode                                                                            :blog:
 Having most of my writings in org-mode it makes sense to add just a
 little bit more to be able to push that content to my blogging
 platform; wordpress. Fortunately, there's some elisp for that in the
 form of org2blog, which publishes orgmode files as wordpress articles
 or pages.
-For
+
 
 **** Org2Blog configuration for Wordpress
 
@@ -1328,19 +1328,10 @@ to the blogs is done interactively by default.
            )))
 
 #+END_SRC
-**** Using org-jekyll for Jekyll based sites
+**** Using org-mode for Jekyll based sites
 Using jekyll and orgmode together is a bit more low level, because
 jekyll as such is not a blogging solution, it can just parse files
-from one format to html. What org-jekyll does is have orgmode
-prepare the proper stuff for jekyl so it can be processed.
-
-So, we need the orgmode publishing part and the org-jekyll package:
-
-#+BEGIN_SRC emacs-lisp
-  (require 'ox-publish)
-  (require 'ox-html)
-  (require 'org-jekyll)
-#+END_SRC
+from one format to html.
 
 As there are quite a few different setups possible, it's probably
 smart to write a few paragraphs on how to set things up.
@@ -1348,75 +1339,46 @@ smart to write a few paragraphs on how to set things up.
 As usual, I want it to be as simple as possible at first. One thing
 that is sort of fixed is the directory structure that jekyll expects
 and I that as a starting point.  Typically there is a =_posts=
-subdirectory there which will hold the html files that jekyll will
-need to put into the site.
+subdirectory there which will hold the sourse files that jekyll will
+need to convert into content for the website.
 
 Typically in org-mode, after writing a subtree, which is one blog post
 in this case, a call to =org-jekyll-export-current-entry= is
 called. This will try to deduce which project org-mode must use to
-publish the entry with based on the filename, i.e. is the file in or
+publish the entry, based on the filename, i.e. is the file in or
 below the ':base-directory' of one the publishing projects and has the
 proper extension and so on.
 
-Once the publishing project has been established, org-jekyll will then
-take the heading of the subtree and use that as the title of the
-posting. Some of the properties defined in the subtree will be
-converted to the yaml-header that jekyll expects to be present.
+I chose to simplify this and use the org-mode files directly as source
+files in the jekyll directory structure and use =org-ruby= to convert
+the files with a jekyll plugin. This dramatically simplifies the
+process.
 
-Using the export framework of orgmode the entry is then exported to
-html and placed into the destination directory for the project,
-typically the "_posts" directory of the base jekyll folder.
-
-After that, jekyll can do its thing and have the site published.
-
-Org-jekyl has a couple of special extra features:
-
-- Categories
-  If the subtree defines a category property, the post will be placed
-  in subfolder wiht the name of that category. Within that
-  subdirectory, the converted contents will be placed in a ="_posts"=
-  directory. This construct allows for multisites/multicategories.
-- Localization
-  If a :lang: property is defined it will be used to look for a file
-  called =[lang].yml= which will be included in the frontmatter of the
-  post. Similarly as with categories, posts end up in =[lang]/_posts=
-- when publishing multiple entries at once, for example by using
-  =org-jekyll-export-blog=, org-jekyll will only consider subtree which
-  have a tag =blog= or =BLOG=
-
-
+To support this process, I'm using the =jekyll-el= package as a base.
+Given the unmodified package, just setting the variables defined in
+there gets it configured for my situation:
 #+BEGIN_SRC emacs-lisp
-  ;; I dont use categories in my blog, but i do use multiple blogs
-  ;; Define the property to specify that to be "blog"
-  (setq org-jekyll-category "blog")
+  (require 'jekyll)
+  (setq jekyll-directory "~/dat/blogs/mrblog/sites/main/")
+  (setq jekyll-post-ext ".org")
 
-  (setq org-publish-project-alist '(
-    ("mrblog-org"
-            ;; Path to your org files.
-            :base-directory "~/dat/blogs/mrblog/sties/main/org/"
-            :base-extension "org"
+  (defun file-string (file)
+      "Read the contents of a file and return as a string."
+      (with-temp-buffer
+        (insert-file-contents file)
+        (buffer-string)))
 
-            ;; Path to your Jekyll project.
-            :publishing-directory "~/dat/blogs/mrblog/"
-            :recursive t
-            :publishing-function org-html-publish-to-html
-            :headline-levels 4
-            :html-extension "html"
-            :body-only t ;; Only export section between <body> </body>
-      )
-
-
-      ("mrblog-files"
-            :base-directory "~/dat/blogs/mrblog/files/"
-            :base-extension "css\\|js\\|png\\|jpg\\|gif\\|pdf\\|mp3\\|ogg\\|swf\\|php"
-            :publishing-directory "~/dat/blogs/mrblog/files/"
-            :recursive t
-            :publishing-function org-publish-attachment)
-
-      ("mrblog" :components ("mrblog-org" "mrblog-files"))
-
-  ))
+  (setq jekyll-post-template
+        (file-string
+         (concat jekyll-directory jekyll-posts-dir "_posttemplate.org")))
 #+END_SRC
+
+The only special thing here is that I save the template in a file, so
+it's easier to change. On a call to =jekyll-draft-post= a title is asked
+and a buffer is filled with this title properly filled in, plus the
+filename is attached to the the buffer in the proper location. A
+simple save creates the draft as a file.
+
 *** Old configuration
 Below is what was contained in the old configuration. I will slowly
 migrate this into more literal sections

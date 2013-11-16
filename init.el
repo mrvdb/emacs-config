@@ -19,3 +19,4 @@
 ;; Apparently when disabled functions get enabled, Emacs puts them here
 ;;
 (put 'narrow-to-region 'disabled nil)
+(put 'downcase-region 'disabled nil)
