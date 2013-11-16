@@ -557,13 +557,6 @@ get confused:
   (setq uniquify-buffer-name-style 'forward)
 #+END_SRC
 
-Secondly, provide some mechanism to group them logically together
-
-#+BEGIN_SRC emacs-lisp
-(require 'perspective)
-(persp-mode)
-#+END_SRC
-
 #+BEGIN_SRC emacs-lisp
   ;; Minibuffer prompt is a prompt, don't enter it as text.
   (setq minibuffer-prompt-properties (quote (read-only t point-entered minibuffer-avoid-prompt face minibuffer-prompt)))
