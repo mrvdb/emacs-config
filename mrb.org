@@ -1014,6 +1014,13 @@ subscript all the time.
 (setq org-pretty-entities-include-sub-superscripts nil)
 #+END_SRC
 
+Related to that is the display of links. I want them to be explicit
+most of the time to avoid confusion
+
+#+BEGIN_SRC emacs-lisp
+  (setq org-descriptive-links nil)
+#+END_SRC
+
 For most of the source blocks I want Emacs to render those blocks in
 their native mode. This had a serious performance problem in the
 past, but I think it has been solved recently.
