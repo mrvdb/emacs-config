@@ -416,19 +416,13 @@ background color. The default one is to light in daylight conditions.
 #+END_SRC
 
 The zenburn theme does not fit for everything so I have a number of
-correction, of which the most important one is loading the ujelly
-theme. I do it like this because zenburn is more complete than ujelly
-and otherwise I'd have a large set of faces defined in a wrong color.
+corrections. I do it like this because zenburn is more complete than
+ujelly and otherwise I'd have a large set of faces defined in a wrong
+color.
 
 #+BEGIN_SRC emacs-lisp
-  ;; Adjust zenburn with the ujelly theme which makes is a bit more vibrant.
-  ;; This is obviously not the way to do this, but it works for me
-  ;;(require 'ujelly-theme)
-  ;;(load-theme 'ujelly)
-
   ;; Zenburn underlines date face in org, no go
   (set-face-attribute 'org-date nil :underline nil)
-
 
   ;; Adjust the faces for the modeline
   (set-face-attribute 'mode-line nil :foreground "white" :background "grey40" :box nil)
@@ -1357,6 +1351,7 @@ process.
 To support this process, I'm using the =jekyll-el= package as a base.
 Given the unmodified package, just setting the variables defined in
 there gets it configured for my situation:
+
 #+BEGIN_SRC emacs-lisp
   (require 'jekyll)
   (setq jekyll-directory "~/dat/blogs/mrblog/sites/main/")
