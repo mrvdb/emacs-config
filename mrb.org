@@ -2681,6 +2681,60 @@ I've found none applicable yet.
 (wrap-region-global-mode 1)
 ;; (add-to-list 'wrap-region-except-modes 'conflicting-mode)
 #+END_SRC
+** Navigation
+Navigating pieces of text effectively is probably the best
+optimization to make in the emacs configuration.
+
+In my browser I use vimium to jump to links with the keyboard. In
+emacs =ace-jump-mode= does something similar. On pressing the hotkey,
+all matches of the first char typed are highlighted (frame wide) by a
+single character. By pressing that characator the cursor is place
+there directly. This makes =within-frame= navigation a 3-key
+operation, which is considerably faster than anything else.
+
+The mechanisme is similar to isearch, so I want the faces to be the
+same. I don't think there is a risk of confusion as to which mechanism
+is in use, but we'll see.
+
+#+BEGIN_SRC emacs-lisp
+  (require 'ace-jump-mode)
+
+  (set-face-attribute
+   'ace-jump-face-foreground nil
+   :inherit isearch-lazy-highlight
+   :background "black"
+   :foreground "tomato")
+
+  (set-face-attribute
+   'ace-jump-face-background nil
+   :foreground nil
+   :background mrb-bg-paren-match)
+#+END_SRC
+
+The effectiveness is also dependent on a quick and easy keyboard
+shortcut. Ace jump mode has 3 modes:
+1. char mode
+2. word mode
+3. line mode
+
+which respectively search for the existence of a character, the
+beginning of a word and the beginning of a line. The mode keeps
+highlighting jump locations until there is a unique match before it
+jumps.
+The =word mode= is typically 90% of the usage, so that should get the
+main keyboard shortcut, while the two others can get the usual C-u
+treatment.
+For now, we take the standard keybinding C-c SPC. This key needs to be
+undefined in org-mode (clear table cell). I never use this.
+
+#+BEGIN_SRC emacs-lisp
+  (define-key org-mode-map (kbd "C-c SPC") nil)
+  (define-key global-map (kbd "C-c SPC") 'ace-jump-mode)
+#+END_SRC
+
+Recall that once jumped, jumping back is just a /pop the mark/ (C-u
+C-SPC) away.
+
 * Remote editing
 
 #+BEGIN_SRC emacs-lisp
