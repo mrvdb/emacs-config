@@ -2728,7 +2728,17 @@ undefined in org-mode (clear table cell). I never use this.
 #+END_SRC
 
 Recall that once jumped, jumping back is just a /pop the mark/ (C-u
-C-SPC) away.
+C-SPC) away, but there is a little catch. If the scope of ace-jumping
+is global, popping the mark is not working properly because the mark
+is by current window only. I'm not sure hwo this works out for me;
+estimation is that the normal pop mark is enough. I'm just taking the
+advised configuration from the author at this point.
+
+#+BEGIN_SRC emacs-lisp
+  (eval-after-load "ace-jump-mode"
+    '(ace-jump-mode-enable-mark-sync))
+  (define-key global-map (kbd "C-x SPC") 'ace-jump-mode-pop-mark)
+#+END_SRC
 
 * Remote editing
 
