@@ -492,6 +492,8 @@ And enable the minor mode globally.
   ;; open an X connection. This only happens when frames are being
   ;; opened. By adding these settings to the 'server-visit-hook' we can
   ;; still seemingly painless apply these settings.
+  (defvar mrb-bg-paren-match "gray22")
+  (defvar mrb-bg-region "gray35")
   (defun mrb/run-client-settings()
     (interactive)
 
@@ -507,12 +509,12 @@ And enable the minor mode globally.
     ;; automatically, keep all font-locking in the region instead of
     ;; just overwriting the whole section. The trick here is to specify
     ;; nil in the foreground attribute
-    (defvar mrb-bg-paren-match "gray22")
+
     (set-face-attribute 'show-paren-match nil
                         :inherit nil :foreground nil
                         :weight 'normal :background mrb-bg-paren-match)
 
-    (defvar mrb-bg-region "gray35")
+
     ;; Set regions so we keep the normal font locking
     (set-face-attribute 'region nil
                         :inherit nil :foreground nil
