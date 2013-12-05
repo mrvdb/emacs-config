@@ -2101,18 +2101,11 @@ This is the remnant of my old configuration.
   (setq shift-select-mode t)
   (delete-selection-mode 1)
 
-  ; Font scaling, like in chrome
-  (global-set-key [(super =)] 'text-scale-increase)
-  (global-set-key [(super -)] 'text-scale-decrease)
   ; Font scaling, like in firefox
   (global-set-key [(control +)] 'text-scale-increase)
   (global-set-key [(control -)] 'text-scale-decrease)
 
-  ; Line handling functions
-  ;; For external keyboard FIXME: these bindings contain dead characters
-  ;; if such a keyboard is used, which can be confusing.
-  (global-set-key [(?\s-\§)] 'toggle-truncate-lines)
-  ;; For t510 keyboard (the same place)
+  ;; Line handling functions
   (global-set-key [(super \`)] 'toggle-truncate-lines)
 
   ;; Most of the time I want return to be newline and indent
