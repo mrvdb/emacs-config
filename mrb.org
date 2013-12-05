@@ -2751,6 +2751,14 @@ that is.
 (setq browse-url-generic-program "x-www-browser")
 #+END_SRC
 
+Entering information in text areas in the browsert, provided it is of
+the chrome family, can be delegated to emacs with the 'edit with
+emacs' extension. This requires the 'edit-server' package in emacs.
+
+#+BEGIN_SRC emacs-lisp
+(require 'edit-server)
+(edit-server-start)
+#+END_SRC
 * Messaging and chatting
 ** ERC
 ERC is an irc implementation within emacs. When I start erc I want to
