@@ -784,6 +784,17 @@ system, including many technical ones.  Examples:
  ("\\textrquill" ?⁆)
  ("\\textcircledP" ?℗)
  ("\\textreferencemark" ?※)
+ ;; ADDED BY ME
+ ("\\bitcoin" ?฿)
+ ("\\cmd" ?⌘)
+ ("\\shift" ?⇧)
+ ("\\alt" ?⎇)
+ ("\\option" ?⌥)
+ ("\\return" ?⏎)
+ ("\\tab" ?↹)
+ ("\\backspace" ?⌫)
+ ("\\delete" ?⌦)
+
  )
 
 ;;; latin-ltx.el ends here
