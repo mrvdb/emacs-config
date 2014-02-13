@@ -2789,7 +2789,7 @@ Nickserv.
 
 #+BEGIN_SRC emacs-lisp
   (require 'erc-services)
-  (setq erc-nick '("Marcel|HSD" "Marcel||HSD"))
+  (setq erc-nick '("_MrB_" "_MrB__"))
 
   (setq erc-prompt-for-nickserv-password nil)
   (erc-services-mode 1)
@@ -2805,7 +2805,7 @@ server by itself.
 
 #+BEGIN_SRC emacs-lisp
   (setq erc-autojoin-channels-alist
-        '((".*\\.freenode.net" "#openobject" "#social")))
+        '((".*\\.freenode.net" "#openobject" "#social" "#bitcoin-nl")))
 #+END_SRC
 
 After joining, ERC keeps track of the channels, by putting notifiers
