@@ -357,7 +357,6 @@ and run =el-get-install= with the package name.
           (:name gh :type github :pkgname "sigma/gh.el" :depends (pcache logito))
           (:name gisthub :type github :pkgname  "defunkt/gist.el" :depends (gh))
           (:name stripe-buffer :type github :pkgname "sabof/stripe-buffer")
-          (:name keyfreq :type github :pkgname "dacap/keyfreq")
           (:name git-auto-commit-mode :type github
                  :pkgname "ryuslash/git-auto-commit-mode")
           (:name ujelly-theme :type github :pkgname "marktran/color-theme-ujelly")
@@ -3329,19 +3328,6 @@ Google map integration for Emacs
   (provide 'google-map-settings)
 
 #+END_SRC
-** Quantified Emacs!
-Taken from sacha’s configuration, this records which keys I press in
-emacs and how often I do that. This is usefull, or may be, for
-decisions with respect to keyboard choices, bindings configuration
-etc.
-
-#+BEGIN_SRC emacs-lisp
-  (require 'keyfreq)
-  (keyfreq-mode 1)
-  (keyfreq-autosave-mode 1)
-#+END_SRC
-
-The results can be shown by entering =keyfreq-show=.
 * Wishlist
 There's always more to want, here a quick list of things:
 - epub export from org-mode
