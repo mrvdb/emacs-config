@@ -907,6 +907,37 @@ so for now, I'm building in the confirmation.
             'mrb/archive-done-item t)
 
 #+END_SRC
+*** Marking items as DONE
+Marking work as completed should be a smooth process to stop getting
+in the way of doing the actual work. A shortcut is defined to mark
+items done in the standard way and have an additional shortcut to mark
+it done should it be blocked.
+
+When an item changes to the DONE state, a question is asked if the
+item should be archived, to which the normal answer should be 'Yes' to
+keep the active file as clean as possible.
+
+Thus, the normal sequence would be:
+#+BEGIN_SRC emacs-lisp
+  (define-key org-mode-map [(super .)] 'org-todo)
+
+  (defun mrb/force-org-todo()
+    (interactive)
+    ;; Disable blocking temporarily
+    (let ((org-inhibit-blocking t))
+      (org-todo)))
+
+  (defun mrb/force-org-agenda-todo()
+    (interactive)
+    ;; Disable blocking temporily
+    (let ((org-inhibit-blocking t))
+      (org-agenda-todo)))
+
+  (define-key org-mode-map [(control super .)] 'mrb/force-org-todo)
+  (define-key org-agenda-mode-map [(control super .)] 'mrb/force-org-agenda-todo)
+  (define-key org-agenda-mode-map [(super .)] 'org-agenda-todo)
+#+END_SRC
+
 *** Registering creation time of todo items
 Over time it gets a bit messy in my orgmode files. I can not remember
 when something was created and thus, by judging the time I didn't do
@@ -1448,21 +1479,8 @@ migrate this into more literal sections
     (define-key org-mode-map "\C-ce" 'org-export)
     )
 
-  (define-key org-mode-map [(super .)] 'org-todo)
-  (defun mrb/force-org-todo()
-    (interactive)
-    (let ((current-prefix-arg '(64)))  ;; Triple C-u (4^3)
-      (call-interactively 'org-todo))
-  )
-  (defun mrb/force-org-agenda-todo()
-    (interactive)
-    (let ((current-prefix-arg '(64)))  ;; Triple C-u (4^3)
-      (call-interactively 'org-agenda-todo))
-  )
-  (define-key org-mode-map [(control super .)] 'mrb/force-org-todo)
-  (define-key org-agenda-mode-map [(control super .)] 'mrb/force-org-agenda-todo)
 
-  (define-key org-agenda-mode-map [(super .)] 'org-agenda-todo)
+
   ; Map \cmd{}t to schedule in both task and agenda-view
   (define-key org-mode-map [(super t)] 'org-schedule)
   (define-key org-agenda-mode-map [(super t)] 'org-agenda-schedule)
