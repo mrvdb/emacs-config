@@ -213,7 +213,7 @@ pages and on the right for even pages.
 #+LATEX_HEADER: \fancyhead[LO,RE]{\color{hsdpurple}\LARGE{\bf{\@title}}}
 
 The logo is just displayed on odd pages, on the right.
-#+LATEX_HEADER: \fancyhead[RO]{\includegraphics[height=16mm]{//home/mrb/.outlet/images/hsd.pdf}}
+#+LATEX_HEADER: \fancyhead[RO]{\includegraphics[height=16mm]{//home/mrb/dat/org/images/hsd.pdf}}
 
 The footer contains page references N of M style and the author
 information. Here also, the position is alternating with odd and even pages.

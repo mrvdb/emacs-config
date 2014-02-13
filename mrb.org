@@ -649,8 +649,8 @@ We do not have to load the main orgmode location, because we already
 did that on the main initialisation to get org-babel started.
 
 #+BEGIN_SRC emacs-lisp
-  (add-to-list 'load-path "~/dev/emacs/packages/org-mode/contrib/lisp/")
-  (add-to-list 'load-path "~/dev/emacs/packages/org-mode/contrib/babel/langs/")
+  (add-to-list 'load-path "~/dat/src/emacs/packages/org-mode/contrib/lisp/")
+  (add-to-list 'load-path "~/dat/src/emacs/packages/org-mode/contrib/babel/langs/")
 
   ;; Also make sure we never load org from internal, this can happen
   ;; when functions were defined in the included org version and not
@@ -674,7 +674,7 @@ Most of work originates in capturing some task item in orgmode. Set
 up the location and files for that.
 
 #+BEGIN_SRC emacs-lisp
-(setq org-directory "~/.outlet/")
+(setq org-directory "~/dat/org/")
 (setq org-metadir (concat org-directory "_orgmeta/"))
 (setq org-archive-location (concat org-metadir "archive.org::date-tree"))
 (setq org-default-notes-file (concat org-directory "GTD.org"))
@@ -1276,8 +1276,8 @@ I use my own repositories mostly
 
 #+BEGIN_SRC emacs-lisp
   ; Directly tie into the GIT org2blog repository
-  (add-to-list 'load-path "~/dev/emacs/packages/org2blog/")
-  (add-to-list 'load-path "~/dev/emacs/packages/xml-rpc-el/")
+  (add-to-list 'load-path "~/dat/src/emacs/packages/org2blog/")
+  (add-to-list 'load-path "~/dat/src/emacs/packages/xml-rpc-el/")
   (require 'org2blog-autoloads)
 #+END_SRC
 
@@ -1936,7 +1936,7 @@ for part design for the 3D-print and for the lathe.
 
 #+BEGIN_SRC emacs-lisp
   ; OpenSCAD has git repository in my dev tree
-  (add-to-list 'load-path "~/dev/reprapping/openscad/contrib")
+  (add-to-list 'load-path "~/dat/src/reprapping/openscad/contrib")
   (load "scad-mode")
 
   (provide 'openscad)
@@ -3054,7 +3054,7 @@ Statusnet, or perhaps microblog in general settings
 
 #+BEGIN_SRC emacs-lisp
   ; Identica comes directly from its git repository
-  (add-to-list 'load-path  "~/dev/emacs/packages/identica-mode")
+  (add-to-list 'load-path  "~/dat/src/emacs/packages/identica-mode")
   (load-library "identica-mode.el")
   (require 'longlines)
   (setq
@@ -3319,7 +3319,7 @@ Google map integration for Emacs
 
 #+BEGIN_SRC emacs-lisp
   ; Directly tie into the GIT repository on this machine
-  (add-to-list 'load-path "~/dev/emacs/packages/jd-el/")
+  (add-to-list 'load-path "~/dat/src/emacs/packages/jd-el/")
 
   (require 'google-maps)
 
@@ -3362,7 +3362,7 @@ When we are all done with this, provide it.
 #+END_SRC
 * Self configuration                                                                                 :exclude:
 I have the same config file for orgmode itself
-#+SETUPFILE: "~/.outlet/etc/org-config.org"
+#+SETUPFILE: "~/dat/org/etc/org-config.org"
 
 If there is anything that needs to be configured specifically for this
 file, here is the place to do it. Other than those, nothing else
