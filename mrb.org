@@ -1044,22 +1044,22 @@ on the item or on the file.
 #+BEGIN_SRC emacs-lisp
   (setq org-agenda-category-icon-alist
         '(
-          ("Afspraak"      "~/.outlet/images/stock_new-meeting.png" nil nil :ascent center)
-          ("Blogging"      "~/.outlet/images/edit.png" nil nil :ascent center)
-          ("Cobra"         "~/.outlet/images/car.png" nil nil :ascent center)
-          ("DVD"           "~/.outlet/images/media-cdrom.png" nil nil :ascent center)
-          ("Emacs"         "~/.outlet/images/emacs.png" nil nil :ascent center)
-          ("Finance"       "~/.outlet/images/finance.png" nil nil :ascent center)
-          ("Habitat"       "~/.outlet/images/house.png" nil nil :ascent center)
-          ("Habit"         "~/.outlet/images/stock_task-recurring.png" nil nil :ascent center)
-          ("Hobbies"       "~/.outlet/images/hobbies.png" nil nil :ascent center)
-          ("Partners"      "~/.outlet/images/partners.png" nil nil :ascent center)
-          ("Personal"      "~/.outlet/images/personal.png" nil nil :ascent center)
-          ("Task"          "~/.outlet/images/stock_todo.png" nil nil :ascent center)
-          ("Org"           "~/.outlet/images/org-mode-unicorn.png" nil nil :ascent center)
-          ("Statusnet"     "~/.outlet/images/statusnet.png" nil nil :ascent center)
-          ("Systeem"       "~/.outlet/images/systeembeheer.png" nil nil :ascent center)
-          ("Wordpress"     "~/.outlet/images/wordpress.png" nil nil :ascent center)
+          ("Afspraak"      "~/dat/org/images/stock_new-meeting.png" nil nil :ascent center)
+          ("Blogging"      "~/dat/org/images/edit.png" nil nil :ascent center)
+          ("Cobra"         "~/dat/org/images/car.png" nil nil :ascent center)
+          ("DVD"           "~/dat/org/images/media-cdrom.png" nil nil :ascent center)
+          ("Emacs"         "~/dat/org/images/emacs.png" nil nil :ascent center)
+          ("Finance"       "~/dat/org/images/finance.png" nil nil :ascent center)
+          ("Habitat"       "~/dat/org/images/house.png" nil nil :ascent center)
+          ("Habit"         "~/dat/org/images/stock_task-recurring.png" nil nil :ascent center)
+          ("Hobbies"       "~/dat/org/images/hobbies.png" nil nil :ascent center)
+          ("Partners"      "~/dat/org/images/partners.png" nil nil :ascent center)
+          ("Personal"      "~/dat/org/images/personal.png" nil nil :ascent center)
+          ("Task"          "~/dat/org/images/stock_todo.png" nil nil :ascent center)
+          ("Org"           "~/dat/org/images/org-mode-unicorn.png" nil nil :ascent center)
+          ("Statusnet"     "~/dat/org/images/statusnet.png" nil nil :ascent center)
+          ("Systeem"       "~/dat/org/images/systeembeheer.png" nil nil :ascent center)
+          ("Wordpress"     "~/dat/org/images/wordpress.png" nil nil :ascent center)
   ))
 #+END_SRC
 
@@ -1698,7 +1698,7 @@ migrate this into more literal sections
   (define-key org-mode-map "\C-cs" 'mrb/shortenurl-replace-at-point)
   ;; END shorten url functionality
 
-  (add-to-list 'load-path "~/dev/emacs/packages/org-bom/")
+  (add-to-list 'load-path "~/dat/src/emacs/packages/org-bom/")
   (require 'org-bom)
 
   ;; archive entries into a date-tree
@@ -1747,9 +1747,9 @@ migrate this into more literal sections
    org-mobile-agendas (quote all)
    org-mobile-files
    (quote (
-           "~/.outlet/GTD.org"
-           "~/.outlet/habits.org"
-           "~/.outlet/_calendars/meetings.org"))
+           "~/dat/src/GTD.org"
+           "~/dat/src/habits.org"
+           "~/dat/src/_calendars/meetings.org"))
    org-mobile-use-encryption nil
   )
 
@@ -2920,7 +2920,7 @@ Mail configuration.
   (add-hook 'message-mode-hook 'turn-on-auto-fill 'append)
 #+END_SRC
 
-I think I might light mu4e use once in a while, so let's set up a
+I think I might like mu4e use once in a while, so let's set up a
 configuration for that as well.
 
 #+BEGIN_SRC emacs-lisp
@@ -3171,7 +3171,7 @@ XMPP related settings, including interfacing it to other systems
 
 #+BEGIN_SRC emacs-lisp
   ; Directly tie into the GIT repository on this machine if needed
-  (add-to-list 'load-path "~/dev/emacs/packages/jabber/")
+  (add-to-list 'load-path "~/dat/src/emacs/packages/jabber/")
 
   (require 'jabber-autoloads)
   (require 'jabber)
