@@ -23,7 +23,6 @@ so add this to my loadpaths first and give it a name.
 
 #+BEGIN_SRC emacs-lisp
   (setq emacs-directory "~/.emacs.d/")
-  (add-to-list 'load-path emacs-directory)
 #+END_SRC
 
 The first thing I want to take care of is to make customizations
