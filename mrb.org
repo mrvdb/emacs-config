@@ -3225,7 +3225,7 @@ XMPP related settings, including interfacing it to other systems
    jabber-message-alert-same-buffer nil
    jabber-roster-show-bindings nil
    jabber-auto-reconnect t
-   jabber-show-resources t
+   jabber-show-resources 'sometimes
   )
   (setq jabber-account-list (quote (("marcel@hsdev.com/Emacs" (:connection-type . ssl)))))
 
@@ -3376,6 +3376,9 @@ There's always more to want, here a quick list of things:
 - if i had a browser in emacs i could do away with all other programs
   ;-)
 - threading or reliable async operation
+- much better integration of emacs into social systems
+  There is proper support for xmpp, irc, possibly twitter, but the
+  rest sucks.
 -
 * Finale
 When we are all done with this, provide it.
