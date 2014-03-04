@@ -334,11 +334,11 @@ want *this* entry to be the definitive one, not adding to a list.
   (add-to-list 'load-path (concat emacs-directory "/el-get/el-get"))
 
   (unless  (require 'el-get nil 'noerror)
-    (url-retrieve
-     "https://github.com/dimitri/el-get.git/raw/master/el-get-install.el"
-     (lambda (s)
-       (goto-char (point-max))
-       (eval-print-last-sexp))))
+    (with-current-buffer
+        (url-retrieve-synchronously
+         "https://github.com/dimitri/el-get.git/raw/master/el-get-install.el")
+      (goto-char (point-max))
+      (eval-print-last-sexp)))
 #+END_SRC
 
 Now, =el-get= is either require’d, and thus available, or loaded by the
