@@ -1892,12 +1892,12 @@ migrate this into more literal sections
     (interactive "P")
     (if useOrgTree
         (mrb/mail-subtree-from-org)
-      (make-mailcompose-frame)))
+      (mrb/make-mailcompose-frame)))
   ;; Bind it to \C-xm in org-mode only
   (define-key org-mode-map "\C-xm" 'mrb/construct-mail)
   (define-key org-agenda-mode-map "\C-xm" 'mrb/construct-mail)
   ;; But not for all others, because the org subtree will never be there
-  (global-set-key (kbd "\C-xm") 'make-mailcompose-frame)
+  (global-set-key (kbd "\C-xm") 'mrb/make-mailcompose-frame)
 
 
   (require 'stripe-buffer)
