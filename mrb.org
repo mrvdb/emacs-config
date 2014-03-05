@@ -361,7 +361,6 @@ and run =el-get-install= with the package name.
             ;; Version from elpa does not work for me (init problem?)
             (:name cursor-chg             :type github :pkgname  "emacsmirror/cursor-chg"
                    :features cursor-chg)
-            (:name php-mode-improved)
             (:name newlua-mode            :type github :pkgname "immerrr/lua-mode"
                    :features lua-mode)
             (:name oauth                  :type github :pkgname "psanford/emacs-oauth")
@@ -394,6 +393,8 @@ and run =el-get-install= with the package name.
             (:name elfeed                 :type github :pkgname "skeeto/elfeed")
             ;;(:name mrb/ubiquitous       :type github :pkgname "DarwinAwardWinner/ido-ubiquitous")
             (:name guide-key              :type github :pkgname "kbkbkbkb1/guide-key")
+            (:name org-screenshot         :type github :pkgname "dfeich/org-screenshot")
+            (:name jabber                 :type elpa)
           )
     )
 
@@ -404,7 +405,8 @@ and run =el-get-install= with the package name.
                   edit-server magit markdown-mode rainbow-mode rainbow-delimiters scratch popwin
                   highlight-parentheses multiple-cursors wrap-region git-modes cl-lib keywiz
                   smart-tab yaml-mode org-jekyll hideshow-org oauth flim haskell-mode ghc-mod s f
-                  flycheck pkg-info perspective ido-vertical-mode jekyll-el jedi elpy)
+                  flycheck pkg-info perspective ido-vertical-mode jekyll-el jedi elpy org2blog
+                  identica-mode )
            ;; the sources we have configured above
            (mapcar 'el-get-as-symbol (mapcar 'el-get-source-name el-get-sources))))
 
@@ -678,8 +680,8 @@ did that on the main initialisation to get org-babel started.
   (delete  "/usr/local/share/emacs/24.3/lisp/org" load-path)
   ;; CHECKME: is this still the proper installation method, it has changed a lot lately
   (require 'org)                   ;; This is required, see installation docs
-  (require 'org-clock)             ;; Should not be needed, but otherwise links don't work
-  (require 'org-mouse)             ;; Enable menu on right mouse button and other mouse functions
+  ;;(require 'org-clock)             ;; Should not be needed, but otherwise links don't work
+  ;;(require 'org-mouse)             ;; Enable menu on right mouse button and other mouse functions
   ;; FIXME: for v8 this isn't working?
   ;;(require 'org-special-blocks)  ;; Generalizes the #+begin_foo and #+end_foo blocks,
                                    ;; useful on latex (export)
@@ -1324,9 +1326,6 @@ or pages.
 I use my own repositories mostly
 
 #+BEGIN_SRC emacs-lisp
-  ; Directly tie into the GIT org2blog repository
-  (add-to-list 'load-path "~/dat/src/emacs/packages/org2blog/")
-  (add-to-list 'load-path "~/dat/src/emacs/packages/xml-rpc-el/")
   (require 'org2blog-autoloads)
 #+END_SRC
 
@@ -1734,8 +1733,8 @@ migrate this into more literal sections
   (define-key org-mode-map "\C-cs" 'mrb/shortenurl-replace-at-point)
   ;; END shorten url functionality
 
-  (add-to-list 'load-path "~/dat/src/emacs/packages/org-bom/")
-  (require 'org-bom)
+  ;;(add-to-list 'load-path "~/dat/src/emacs/packages/org-bom/")
+  ;;(require 'org-bom)
 
   ;; archive entries into a date-tree
   ;; (setq org-archive-location "%s_archive::date-tree")
@@ -3090,8 +3089,6 @@ Statusnet, or perhaps microblog in general settings
 
 #+BEGIN_SRC emacs-lisp
   ; Identica comes directly from its git repository
-  (add-to-list 'load-path  "~/dat/src/emacs/packages/identica-mode")
-  (load-library "identica-mode.el")
   (require 'longlines)
   (setq
    statusnet-server "o.mrblog.nl"
@@ -3207,9 +3204,6 @@ XMPP related settings, including interfacing it to other systems
 
 #+BEGIN_SRC emacs-lisp
   ; Directly tie into the GIT repository on this machine if needed
-  (add-to-list 'load-path "~/dat/src/emacs/packages/jabber/")
-
-  (require 'jabber-autoloads)
   (require 'jabber)
 
   ; Configuration variables
@@ -3355,12 +3349,12 @@ Google map integration for Emacs
 
 #+BEGIN_SRC emacs-lisp
   ; Directly tie into the GIT repository on this machine
-  (add-to-list 'load-path "~/dat/src/emacs/packages/jd-el/")
+  ;(add-to-list 'load-path "~/.emacs.d/el-get/google-maps/")
 
-  (require 'google-maps)
+  ;(require 'google-maps)
 
   ; org-mode integration
-  (require 'org-location-google-maps)
+  ;(require 'org-location-google-maps)
 
   (provide 'google-map-settings)
 
