@@ -2700,8 +2700,8 @@ The =(ido-everywhere)= call above does not really enable ido
 everywhere. =ido-ubiquitous= does, so let's enable that.
 
 #+BEGIN_SRC emacs-lisp
-(require 'ido-ubiquitous)
-(ido-ubiquitous-mode)
+;;(require 'ido-ubiquitous)
+;;(ido-ubiquitous-mode)
 #+END_SRC
 
 By selecting a piece of text, wrap-region can quote or otherwise
