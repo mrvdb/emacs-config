@@ -508,13 +508,28 @@ And enable the minor mode globally.
   (setq show-paren-style (quote expression))
   (setq show-paren-delay 0)
 
-  ;; As we start emacs in daemon mode, certain (mostly visual) settings
-  ;; do not get applied. This is because starting the daemon does not
-  ;; open an X connection. This only happens when frames are being
-  ;; opened. By adding these settings to the 'server-visit-hook' we can
-  ;; still seemingly painless apply these settings.
+  ;; variables for the hightlighting of regions
   (defvar mrb-bg-paren-match "gray22")
   (defvar mrb-bg-region "gray35")
+
+
+  ;; Defer fontification a little bit, so we could gain a bit in scroll speed
+  (setq jit-lock-defer-time 0.02)
+
+
+
+  ;; Make colorful balanced parentheses etc. in different modes
+  (add-hook 'lisp-mode 'rainbow-delimiters-mode)
+#+END_SRC
+** Client dependent settings
+Because most of my usage involves having a long lasting emacs daemon,
+some settings only come into scope once a client connects to that
+daemon. Most of these settings have to do with appearance and are
+related to having X available.
+Anyways, some settings need to be moved to the event when a client
+visits the server, so we can still apply these settings transparently.
+
+#+BEGIN_SRC emacs-lisp
   (defun mrb/run-client-settings()
     (interactive)
 
@@ -545,23 +560,16 @@ And enable the minor mode globally.
     (eval-after-load "magit"
       '(set-face-attribute 'magit-item-highlight nil :inherit nil :foreground nil
                            :background mrb-bg-paren-match))
-    )
-
-  ;; Defer fontification a little bit, so we could gain a bit in scroll speed
-  (setq jit-lock-defer-time 0.02)
+    ;; whitespace butler can only be initialized once there is a client
+    ;; I suspect this is because it depends on highlight changes mode.
+    (ws-butler-global-mode 1))
 
   ;; This seems to work if we start up emacs using filename on cli and
   ;; server was not running yet. It does however not work if we just
   ;; startup emacs (through my edit script) without a filename on the cli
   (add-hook 'server-visit-hook 'mrb/run-client-settings)
 
-  ;; But we also want to run it, regardless
-  ;;(mrb/run-client-settings)
-
-  ;; Make colorful balanced parentheses etc. in different modes
-  (add-hook 'lisp-mode 'rainbow-delimiters-mode)
 #+END_SRC
-
 * Buffers and files
 How do I deal with all those buffers?
 
@@ -3262,11 +3270,9 @@ exact problem. It implements the removal of whitespace on top of the
 highlight-changes-mode which, at least in theory, would remove only
 the trailing whitespace on changes I have made.
 
-#+BEGIN_SRC emacs-lisp
-(require 'ws-butler)
-(ws-butler-global-mode t)
+The initialisation of ws-butler as global mode requires however a
+client (i.e. X), so enabling the mode is done in [[Client dependent settings]]
 
-#+END_SRC
 * GIT integration
 This section is a temporary place to store some git related
 settings. I need to reorganize this document a bit so I have a section
