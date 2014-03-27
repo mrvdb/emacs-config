@@ -395,6 +395,7 @@ and run =el-get-install= with the package name.
             (:name guide-key              :type github :pkgname "kbkbkbkb1/guide-key")
             (:name org-screenshot         :type github :pkgname "dfeich/org-screenshot")
             (:name jabber                 :type elpa)
+            (:name ws-butler              :type github :pkgname "lewang/ws-butler")
           )
     )
 
@@ -3253,15 +3254,19 @@ Some settings which aid in development tasks.
 Trailing whitespace can sneak into files without knowing it. I could
 enable the display of trailing whitespace, but I find that annoying
 to look at. Instead I just remove it just before saving a file.
+One solution is to enable a before-save-hook, which would make me the
+trailing-whitespace police in all projects.
+
+Alternatively a package ws-butler exists on github, which solves this
+exact problem. It implements the removal of whitespace on top of the
+highlight-changes-mode which, at least in theory, would remove only
+the trailing whitespace on changes I have made.
 
 #+BEGIN_SRC emacs-lisp
-(add-hook 'before-save-hook 'delete-trailing-whitespace)
-#+END_SRC
+(require 'ws-butler)
+(ws-butler-global-mode t)
 
-I'm not sure if this can be set globally like this for all types of
-files, but I can't come up with an example where I would like to keep
-trailing whitespace, so let's keep this setting and adjust when
-needed.
+#+END_SRC
 * GIT integration
 This section is a temporary place to store some git related
 settings. I need to reorganize this document a bit so I have a section
