@@ -2601,6 +2601,35 @@ can't it tries to complete stuff.
 (setq tab-always-indent (quote complete))
 #+END_SRC
 
+In a standard emacs installation, TAB indents, depending on mode
+obviously. If indenting would not make sense, a TAB can be inserted or
+completion could start. The funciton =completion-at-point= is used in
+some situations. Ideally the =company-complet= function could take
+over in many cases. Here's a simplistic approach to get me started:
+ 1. if in minibuffer, do completion there like we are used to;
+ 2. if cursor is at the end of a symbol, try to complet it with company;
+ 3. else, indent according to mode.
+
+This is probably incomplete or wrong even in some cases, but it's a start.
+
+#+BEGIN_SRC emacs-lisp
+  (require 'company)
+  (defun mrb/indent-or-complete ()
+    (interactive)
+    (if (minibufferp)
+        ;; Just do the normal thing in the minibuffer
+        (minibuffer-complete)
+      (if (looking-at "\\_>") ;; end of symbol match
+          (company-complete-common)
+        (indent-according-to-mode))))
+
+  ;; bind tab key this in company mode (which is everywhere by default)
+  (define-key company-mode-map "\t" 'mrb/indent-or-complete)
+#+END_SRC
+
+This way, TAB always does completion or indent, unless company-mode is
+not active.
+
 ** Ad 2. Completion should always produce something
 Not sure if there is anything to do here.
 
@@ -2634,19 +2663,23 @@ I had auto-complete installed for a while and this worked fine. I am
 migrating to company-mode now, as it seems a lot faster and a lot
 easier to write backends for. Also, company mode gets more praise from
 emacs users, but I recall having problems with it. Anyway, let's
-enable company-mode everywhere for everything:
+enable company-mode everywhere for everything except for some mode
+which we know lead to problems:
 
 #+BEGIN_SRC emacs-lisp
-(add-hook 'after-init-hook 'global-company-mode)
+  (setq company-global-modes
+        '(not magit-status-mode
+              help-mode))
+  (add-hook 'after-init-hook 'global-company-mode)
 #+END_SRC
 
 The capf backend uses 'completion-at-point-functions' as source for
 candidates, which is what emacs by default does, so I want that in my
-backend-lists
-#+BEGIN_SRC emacs-lisp
-  (add-to-list 'company-backends 'company-capf)
-
-#+END_SRC
+backend-lists. This backend gets added automatically when emacs
+version is larger than 24.3.50. I'm not sure what the logis is behind
+that, as there is no mention of it not working before that version?
+Assuming that there is a good reason, I'm not going to do anything to
+the backends list for now.
 
 The default colors of =company-mode= are horrendous, but I have put
 some corrections by executing a snippet, based on standard
@@ -2947,14 +2980,6 @@ notifications is preferred, so I don't have to install anything extra
 
 This is the simplest I can come up with for now. It notifies a bit too
 much, like server messages etc.
-
-For completion in erc, =pcomplete= seems the way to go, but I want to
-use company mode everywhere. Until I find the time to write a specific
-backend, i'm just going to bind TAB to =company-complete= and be done
-with it.
-#+BEGIN_SRC emacs-lisp
-(define-key erc-mode-map "\t" 'company-complete)
-#+END_SRC
 
 ** Mail
 Mail configuration.
