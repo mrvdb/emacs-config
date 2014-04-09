@@ -88,11 +88,6 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(default ((t (:inherit nil :stipple nil :background "#202020" :foreground "#dcdccc" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 98 :width normal :foundry "microsoft" :family "Consolas"))))
- '(company-scrollbar-bg ((t (:background "#393939"))))
- '(company-scrollbar-fg ((t (:background "#2c2c2c"))))
- '(company-tooltip ((t (:inherit default :background "#252525"))))
- '(company-tooltip-common ((t (:inherit font-lock-constant-face))))
- '(company-tooltip-selection ((t (:inherit font-lock-function-name-face))))
  '(fixed-pitch ((t (:family "Consolas"))))
  '(flyspell-duplicate ((t (:foreground "goldenrod" :underline t :weight bold))) t)
  '(flyspell-incorrect ((t (:foreground "tomato" :underline t :weight bold))) t)

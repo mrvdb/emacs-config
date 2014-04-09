@@ -350,66 +350,67 @@ When installing a new package, add a recipe in this list, eval it,
 and run =el-get-install= with the package name.
 
 #+BEGIN_SRC emacs-lisp
-      ;; Personal or adapted recipes
-      (setq el-get-sources
-            '(
-              ;; Obviously we need el-get itself, so we can run a self-update
-              ;; There is a recipe, but we want the master branch of it
-              (:name el-get :branch "master")
-              ;; Using a different source than the built-in recipe (why was this again?)
-              (:name zenburn-emacs          :type github :pkgname "bbatsov/zenburn-emacs")
-              ;; Version from elpa does not work for me (init problem?)
-              (:name cursor-chg             :type github :pkgname  "emacsmirror/cursor-chg"
-                     :features cursor-chg)
-              (:name newlua-mode            :type github :pkgname "immerrr/lua-mode"
-                     :features lua-mode)
-              (:name oauth                  :type github :pkgname "psanford/emacs-oauth")
-              (:name expand-region          :type github :pkgname "magnars/expand-region.el")
-              (:name mark-multiple          :type github :pkgname "magnars/mark-multiple.el")
-              (:name fixed-point-completion :type github :pkgname "smithzvk/fixed-point-completion")
-              (:name xlicense               :type github :pkgname "emacsmirror/xlicense")
-              (:name autosmiley             :type github :pkgname "emacsmirror/autosmiley")
-              (:name async                  :type github :pkgname "jwiegley/emacs-async")
-              (:name pcache                 :type github :pkgname "sigma/pcache")
-              (:name logito                 :type github :pkgname "sigma/logito")
-              (:name gh                     :type github :pkgname "sigma/gh.el"
-                     :depends (pcache logito))
-              (:name gisthub                :type github :pkgname  "defunkt/gist.el"
-                     :depends (gh))
-              (:name stripe-buffer          :type github :pkgname "sabof/stripe-buffer")
-              (:name git-auto-commit-mode   :type github :pkgname "ryuslash/git-auto-commit-mode")
-              (:name ujelly-theme           :type github :pkgname "marktran/color-theme-ujelly")
-              (:name erc-tweet              :type github :pkgname "kidd/erc-tweet.el")
-              (:name erc-image              :type github :pkgname "mrvdb/erc-image.el")
-              (:name org-present            :type github :pkgname "rlister/org-present")
-              ;; Dependency? I dont use this directly
-              (:name dash                   :type github :pkgname "magnars/dash.el")
-              (:name gitmessenger           :type github :pkgname "syohex/emacs-git-messenger")
-              (:name metaweblog             :type github :pkgname "punchagan/metaweblog.el")
-              (:name org-agenda-property    :type github :pkgname "Bruce-Connor/org-agenda-property")
-              (:name pump.io                :type github :pkgname "cnngimenez/pumpio-el")
-              (:name elfeed                 :type github :pkgname "skeeto/elfeed")
-              ;;(:name mrb/ubiquitous       :type github :pkgname "DarwinAwardWinner/ido-ubiquitous")
-              (:name guide-key              :type github :pkgname "kbkbkbkb1/guide-key")
-              (:name org-screenshot         :type github :pkgname "dfeich/org-screenshot")
-              (:name jabber                 :type elpa)
-              (:name ethan-wspace :after (progn (global-ethan-wspace-mode 1)))
-            )
-      )
+  ;; Personal or adapted recipes
+  (setq el-get-sources
+        '(
+          ;; Obviously we need el-get itself, so we can run a self-update
+          ;; There is a recipe, but we want the master branch of it
+          (:name el-get :branch "master")
+          ;; Using a different source than the built-in recipe (why was this again?)
+          (:name zenburn-emacs          :type github :pkgname "bbatsov/zenburn-emacs")
+          ;; Version from elpa does not work for me (init problem?)
+          (:name cursor-chg             :type github :pkgname  "emacsmirror/cursor-chg"
+                 :features cursor-chg)
+          (:name newlua-mode            :type github :pkgname "immerrr/lua-mode"
+                 :features lua-mode)
+          (:name oauth                  :type github :pkgname "psanford/emacs-oauth")
+          (:name expand-region          :type github :pkgname "magnars/expand-region.el")
+          (:name mark-multiple          :type github :pkgname "magnars/mark-multiple.el")
+          (:name fixed-point-completion :type github :pkgname "smithzvk/fixed-point-completion")
+          (:name xlicense               :type github :pkgname "emacsmirror/xlicense")
+          (:name autosmiley             :type github :pkgname "emacsmirror/autosmiley")
+          (:name async                  :type github :pkgname "jwiegley/emacs-async")
+          (:name pcache                 :type github :pkgname "sigma/pcache")
+          (:name logito                 :type github :pkgname "sigma/logito")
+          (:name gh                     :type github :pkgname "sigma/gh.el"
+                 :depends (pcache logito))
+          (:name gisthub                :type github :pkgname  "defunkt/gist.el"
+                 :depends (gh))
+          (:name stripe-buffer          :type github :pkgname "sabof/stripe-buffer")
+          (:name git-auto-commit-mode   :type github :pkgname "ryuslash/git-auto-commit-mode")
+          (:name ujelly-theme           :type github :pkgname "marktran/color-theme-ujelly")
+          (:name erc-tweet              :type github :pkgname "kidd/erc-tweet.el")
+          (:name erc-image              :type github :pkgname "mrvdb/erc-image.el")
+          (:name org-present            :type github :pkgname "rlister/org-present")
+          ;; Dependency? I dont use this directly
+          (:name dash                   :type github :pkgname "magnars/dash.el")
+          (:name gitmessenger           :type github :pkgname "syohex/emacs-git-messenger")
+          (:name metaweblog             :type github :pkgname "punchagan/metaweblog.el")
+          (:name org-agenda-property    :type github :pkgname "Bruce-Connor/org-agenda-property")
+          (:name pump.io                :type github :pkgname "cnngimenez/pumpio-el")
+          (:name elfeed                 :type github :pkgname "skeeto/elfeed")
+          ;;(:name mrb/ubiquitous       :type github :pkgname "DarwinAwardWinner/ido-ubiquitous")
+          (:name guide-key              :type github :pkgname "kbkbkbkb1/guide-key")
+          (:name org-screenshot         :type github :pkgname "dfeich/org-screenshot")
+          (:name jabber                 :type elpa)
+          (:name ethan-wspace :after (progn (global-ethan-wspace-mode 1)))
+          (:name erc-hl-nicks           :type elpa)
+        )
+  )
 
-      (setq mrb/packages
-            (append
-             ;; list of packages we use from standard recipes
-             '(smex ace-jump-mode apache-mode gnuplot-mode sudo-save erc-highlight-nicknames
-                    edit-server magit markdown-mode rainbow-mode rainbow-delimiters scratch popwin
-                    highlight-parentheses multiple-cursors wrap-region git-modes cl-lib keywiz
-                    smart-tab yaml-mode org-jekyll hideshow-org oauth flim haskell-mode ghc-mod s f
-                    flycheck pkg-info perspective ido-vertical-mode jekyll-el jedi elpy org2blog
-                    identica-mode php-mode company-mode)
-             ;; the sources we have configured above
-             (mapcar 'el-get-as-symbol (mapcar 'el-get-source-name el-get-sources))))
+  (setq mrb/packages
+        (append
+         ;; list of packages we use from standard recipes
+         '(smex ace-jump-mode apache-mode gnuplot-mode sudo-save
+                edit-server magit markdown-mode rainbow-mode rainbow-delimiters scratch popwin
+                highlight-parentheses multiple-cursors wrap-region git-modes cl-lib keywiz
+                smart-tab yaml-mode org-jekyll hideshow-org oauth flim haskell-mode ghc-mod s f
+                flycheck pkg-info perspective ido-vertical-mode jekyll-el jedi elpy org2blog
+                identica-mode php-mode company-mode)
+         ;; the sources we have configured above
+         (mapcar 'el-get-as-symbol (mapcar 'el-get-source-name el-get-sources))))
 
-      (el-get 'sync mrb/packages)
+  (el-get 'sync mrb/packages)
 #+END_SRC
 
 * Visual
@@ -2869,8 +2870,8 @@ Start by configuring some basic settings
        irccontrols keep-place list log
        match move-to-prompt netsplit
        networks noncommands notify notifications
-       readonly replace ring smiley stamp track unmorse
-        highlight-nicknames smiley tweet image truncate))
+       readonly replace ring services smiley stamp track unmorse
+         smiley tweet image truncate))
      erc-image-inline-rescale 150)
 #+END_SRC
 
