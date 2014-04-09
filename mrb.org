@@ -350,68 +350,66 @@ When installing a new package, add a recipe in this list, eval it,
 and run =el-get-install= with the package name.
 
 #+BEGIN_SRC emacs-lisp
-    ;; Personal or adapted recipes
-    (setq el-get-sources
-          '(
-            ;; Obviously we need el-get itself, so we can run a self-update
-            ;; There is a recipe, but we want the master branch of it
-            (:name el-get :branch "master")
-            ;; Using a different source than the built-in recipe (why was this again?)
-            (:name zenburn-emacs          :type github :pkgname "bbatsov/zenburn-emacs")
-            ;; Version from elpa does not work for me (init problem?)
-            (:name cursor-chg             :type github :pkgname  "emacsmirror/cursor-chg"
-                   :features cursor-chg)
-            (:name newlua-mode            :type github :pkgname "immerrr/lua-mode"
-                   :features lua-mode)
-            (:name oauth                  :type github :pkgname "psanford/emacs-oauth")
-            (:name expand-region          :type github :pkgname "magnars/expand-region.el")
-            (:name mark-multiple          :type github :pkgname "magnars/mark-multiple.el")
-            (:name fixed-point-completion :type github :pkgname "smithzvk/fixed-point-completion")
-            (:name xlicense               :type github :pkgname "emacsmirror/xlicense")
-            (:name autosmiley             :type github :pkgname "emacsmirror/autosmiley")
-            (:name async                  :type github :pkgname "jwiegley/emacs-async")
-            (:name pcache                 :type github :pkgname "sigma/pcache")
-            (:name logito                 :type github :pkgname "sigma/logito")
-            (:name gh                     :type github :pkgname "sigma/gh.el"
-                   :depends (pcache logito))
-            (:name gisthub                :type github :pkgname  "defunkt/gist.el"
-                   :depends (gh))
-            (:name stripe-buffer          :type github :pkgname "sabof/stripe-buffer")
-            (:name git-auto-commit-mode   :type github :pkgname "ryuslash/git-auto-commit-mode")
-            (:name ujelly-theme           :type github :pkgname "marktran/color-theme-ujelly")
-            (:name erc-tweet              :type github :pkgname "kidd/erc-tweet.el")
-            (:name erc-image              :type github :pkgname "mrvdb/erc-image.el")
-            (:name org-present            :type github :pkgname "rlister/org-present")
-            (:name popup                  :type github :pkgname "auto-complete/popup-el")
-            (:name auto-complete          :type github :pkgname "auto-complete/auto-complete")
-            ;; Dependency? I dont use this directly
-            (:name dash                   :type github :pkgname "magnars/dash.el")
-            (:name gitmessenger           :type github :pkgname "syohex/emacs-git-messenger")
-            (:name metaweblog             :type github :pkgname "punchagan/metaweblog.el")
-            (:name org-agenda-property    :type github :pkgname "Bruce-Connor/org-agenda-property")
-            (:name pump.io                :type github :pkgname "cnngimenez/pumpio-el")
-            (:name elfeed                 :type github :pkgname "skeeto/elfeed")
-            ;;(:name mrb/ubiquitous       :type github :pkgname "DarwinAwardWinner/ido-ubiquitous")
-            (:name guide-key              :type github :pkgname "kbkbkbkb1/guide-key")
-            (:name org-screenshot         :type github :pkgname "dfeich/org-screenshot")
-            (:name jabber                 :type elpa)
-            (:name ws-butler              :type github :pkgname "lewang/ws-butler")
-          )
-    )
+      ;; Personal or adapted recipes
+      (setq el-get-sources
+            '(
+              ;; Obviously we need el-get itself, so we can run a self-update
+              ;; There is a recipe, but we want the master branch of it
+              (:name el-get :branch "master")
+              ;; Using a different source than the built-in recipe (why was this again?)
+              (:name zenburn-emacs          :type github :pkgname "bbatsov/zenburn-emacs")
+              ;; Version from elpa does not work for me (init problem?)
+              (:name cursor-chg             :type github :pkgname  "emacsmirror/cursor-chg"
+                     :features cursor-chg)
+              (:name newlua-mode            :type github :pkgname "immerrr/lua-mode"
+                     :features lua-mode)
+              (:name oauth                  :type github :pkgname "psanford/emacs-oauth")
+              (:name expand-region          :type github :pkgname "magnars/expand-region.el")
+              (:name mark-multiple          :type github :pkgname "magnars/mark-multiple.el")
+              (:name fixed-point-completion :type github :pkgname "smithzvk/fixed-point-completion")
+              (:name xlicense               :type github :pkgname "emacsmirror/xlicense")
+              (:name autosmiley             :type github :pkgname "emacsmirror/autosmiley")
+              (:name async                  :type github :pkgname "jwiegley/emacs-async")
+              (:name pcache                 :type github :pkgname "sigma/pcache")
+              (:name logito                 :type github :pkgname "sigma/logito")
+              (:name gh                     :type github :pkgname "sigma/gh.el"
+                     :depends (pcache logito))
+              (:name gisthub                :type github :pkgname  "defunkt/gist.el"
+                     :depends (gh))
+              (:name stripe-buffer          :type github :pkgname "sabof/stripe-buffer")
+              (:name git-auto-commit-mode   :type github :pkgname "ryuslash/git-auto-commit-mode")
+              (:name ujelly-theme           :type github :pkgname "marktran/color-theme-ujelly")
+              (:name erc-tweet              :type github :pkgname "kidd/erc-tweet.el")
+              (:name erc-image              :type github :pkgname "mrvdb/erc-image.el")
+              (:name org-present            :type github :pkgname "rlister/org-present")
+              ;; Dependency? I dont use this directly
+              (:name dash                   :type github :pkgname "magnars/dash.el")
+              (:name gitmessenger           :type github :pkgname "syohex/emacs-git-messenger")
+              (:name metaweblog             :type github :pkgname "punchagan/metaweblog.el")
+              (:name org-agenda-property    :type github :pkgname "Bruce-Connor/org-agenda-property")
+              (:name pump.io                :type github :pkgname "cnngimenez/pumpio-el")
+              (:name elfeed                 :type github :pkgname "skeeto/elfeed")
+              ;;(:name mrb/ubiquitous       :type github :pkgname "DarwinAwardWinner/ido-ubiquitous")
+              (:name guide-key              :type github :pkgname "kbkbkbkb1/guide-key")
+              (:name org-screenshot         :type github :pkgname "dfeich/org-screenshot")
+              (:name jabber                 :type elpa)
+              (:name ethan-wspace :after (progn (global-ethan-wspace-mode 1)))
+            )
+      )
 
-    (setq mrb/packages
-          (append
-           ;; list of packages we use from standard recipes
-           '(smex ace-jump-mode apache-mode gnuplot-mode sudo-save erc-highlight-nicknames
-                  edit-server magit markdown-mode rainbow-mode rainbow-delimiters scratch popwin
-                  highlight-parentheses multiple-cursors wrap-region git-modes cl-lib keywiz
-                  smart-tab yaml-mode org-jekyll hideshow-org oauth flim haskell-mode ghc-mod s f
-                  flycheck pkg-info perspective ido-vertical-mode jekyll-el jedi elpy org2blog
-                  identica-mode php-mode)
-           ;; the sources we have configured above
-           (mapcar 'el-get-as-symbol (mapcar 'el-get-source-name el-get-sources))))
+      (setq mrb/packages
+            (append
+             ;; list of packages we use from standard recipes
+             '(smex ace-jump-mode apache-mode gnuplot-mode sudo-save erc-highlight-nicknames
+                    edit-server magit markdown-mode rainbow-mode rainbow-delimiters scratch popwin
+                    highlight-parentheses multiple-cursors wrap-region git-modes cl-lib keywiz
+                    smart-tab yaml-mode org-jekyll hideshow-org oauth flim haskell-mode ghc-mod s f
+                    flycheck pkg-info perspective ido-vertical-mode jekyll-el jedi elpy org2blog
+                    identica-mode php-mode company-mode)
+             ;; the sources we have configured above
+             (mapcar 'el-get-as-symbol (mapcar 'el-get-source-name el-get-sources))))
 
-    (el-get 'sync mrb/packages)
+      (el-get 'sync mrb/packages)
 #+END_SRC
 
 * Visual
@@ -560,9 +558,7 @@ visits the server, so we can still apply these settings transparently.
     (eval-after-load "magit"
       '(set-face-attribute 'magit-item-highlight nil :inherit nil :foreground nil
                            :background mrb-bg-paren-match))
-    ;; whitespace butler can only be initialized once there is a client
-    ;; I suspect this is because it depends on highlight changes mode.
-    (ws-butler-global-mode 1))
+  )
 
   ;; This seems to work if we start up emacs using filename on cli and
   ;; server was not running yet. It does however not work if we just
@@ -2594,23 +2590,20 @@ I want completion to work as follows:
 
 The next secions deal with the above requirments
 ** Ad 1. Bind completion always involves TAB-key
-The package =smart-tab= seems to fit this bill.
+The package =smart-tab= seems to fit this bill, but the thing that I
+care about can be achieved fine without it (I only found this out
+after considerable time using smart-tab).
 
-Once activated, the default behaviour, if not specified otherwise, is
-to call dabbrev-expand. A more elaborate function is hippie-expand,
-which tries various methods.
+So, tab tries to indent, which is the main expectation, and if it
+can't it tries to complete stuff.
 
 #+BEGIN_SRC emacs-lisp
-  (require 'smart-tab)
-  (setq smart-tab-using-hippie-expand t)
+(setq tab-always-indent (quote complete))
 #+END_SRC
+
 ** Ad 2. Completion should always produce something
-This is just a matter of enabling smart-tab globally.
+Not sure if there is anything to do here.
 
-#+BEGIN_SRC emacs-lisp
-  ;; Enable everywhere
-  (global-smart-tab-mode 1)
-#+END_SRC
 ** Ad 3. Mode specialisation
 Be smart with tabs and try to have the tab key do the sensible
 thing. The list below contains things the tab key should do in certain
@@ -2618,48 +2611,67 @@ modes if it does not already. The second part is the exclusion list
 where the sensible thing the =smart-tab= mode provides is not sensible
 at all.
 
-#+BEGIN_SRC emacs-lisp
-  (require 'smart-tab)
-  ;; Make sure it does the right thing in some modes
-  (add-to-list 'smart-tab-completion-functions-alist '(emacs-lisp-mode . lisp-complete-symbol))
-  (add-to-list 'smart-tab-completion-functions-alist '(text-mode . dabbrev-completion))
-  (add-to-list 'smart-tab-completion-functions-alist '(erc-mode . pcomplete))
-
-  ;; Disable it in org-mode, tab is heavily customized there (org-cycle)
-  (add-to-list 'smart-tab-disabled-major-modes 'org-mode)
-  (add-to-list 'smart-tab-disabled-major-modes 'org-agenda-mode)
-
-  ;; eshell gets very confused if smart-tab is enabled
-  (add-to-list 'smart-tab-disabled-major-modes 'eshell-mode)
-
-  ;; Similarly, term-mode doesn't like it either
-  (add-to-list 'smart-tab-disabled-major-modes 'term-mode)
-#+END_SRC
 ** Ad 4. Inline completion when possible
-What I want:
+With inline completion I mean without opening a whole new
+**Completions** window if not needed.
+
+Content that I want:
 - languages: lisp, python, ruby, bash, C/C++ roughtly in that order
+  (function and argument completion)
 - for all languages, function/method signature shorthands
 - speed, slowness is killing here
+- prevent minibuffer distractions, put info where my eyes are and that
+  is the cursor in most cases.
+- maybe: spelling suggestions
+- nick completion in irc channels
+-
 
 Candidates:
 - auto-complete :: http://cx4a.org/software/auto-complete/
+- company-mode :: http://company-mode.github.io
 
-I have a feeling auto-complete will be slow and I will get annoyed by
-the window popping up on the screen, but let's see if configuration
-could be made such that it is usable for me.
-
-Starting with the default config, which should probably work for most
-situations. The good news is that smart-tab seems to be auto-complete
-aware so we should be good to go.
+I had auto-complete installed for a while and this worked fine. I am
+migrating to company-mode now, as it seems a lot faster and a lot
+easier to write backends for. Also, company mode gets more praise from
+emacs users, but I recall having problems with it. Anyway, let's
+enable company-mode everywhere for everything:
 
 #+BEGIN_SRC emacs-lisp
-(require 'auto-complete-config)
-(ac-config-default)
+(add-hook 'after-init-hook 'global-company-mode)
 #+END_SRC
 
+The capf backend uses 'completion-at-point-functions' as source for
+candidates, which is what emacs by default does, so I want that in my
+backend-lists
+#+BEGIN_SRC emacs-lisp
+  (add-to-list 'company-backends 'company-capf)
+
+#+END_SRC
+
+The default colors of =company-mode= are horrendous, but I have put
+some corrections by executing a snippet, based on standard
+color-names. The snippet is here:
+http://www.emacswiki.org/CompanyMode#toc7
+
+The default keybindings needs changing too; moving the selection up
+and down is mapped to C-p and C-n, just like moving the cursor in
+normal text.
+
+#+BEGIN_SRC emacs-lisp
+(define-key company-active-map "\C-n" 'company-select-next)
+(define-key company-active-map "\C-p" 'company-select-previous)
+#+END_SRC
+
+Having the completion pop up automatically is annoying in most cases,
+so I disable that.
+
+#+BEGIN_SRC emacs-lisp
+(setq company-idle-delay nil)
+#+END_SRC
 ** Ad 5. Open completion window predictably
-Completion normally opens a special window like **Completions** for
-example. The =popwin= package make this behaviour a bit more
+If there is a need to open a **Completions** window, let's at least do
+it predictably, so I know what and where to expect it.
+The =popwin= package make this behaviour a bit more
 predictable by showing it in the same place and making sure I can get
 rid of it easily.
 
@@ -2668,7 +2680,8 @@ rid of it easily.
 (setq display-buffer-function 'popwin:display-buffer)
 #+END_SRC
 ** Ad 6. Guaranteed response-time
-I haven't found a solution for this yet.
+I haven't found a solution for this yet, but also have not found it to
+be a problem that needs solving in practice so far.
 
 * Editing control
 
@@ -2930,6 +2943,14 @@ notifications is preferred, so I don't have to install anything extra
 
 This is the simplest I can come up with for now. It notifies a bit too
 much, like server messages etc.
+
+For completion in erc, =pcomplete= seems the way to go, but I want to
+use company mode everywhere. Until I find the time to write a specific
+backend, i'm just going to bind TAB to =company-complete= and be done
+with it.
+#+BEGIN_SRC emacs-lisp
+(define-key erc-mode-map "\t" 'company-complete)
+#+END_SRC
 
 ** Mail
 Mail configuration.

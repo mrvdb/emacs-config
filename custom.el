@@ -76,7 +76,6 @@
  '(sieve-manage-authenticators (quote (plain digest-md5 cram-md5 scram-md5 ntlm login)))
  '(sql-postgres-options (quote ("-P" "pager=off" "-p 5434")))
  '(sql-server "dbserver.hsdev.com")
- '(tab-always-indent (quote complete))
  '(typopunct-buffer-language (quote english))
  '(vc-annotate-background "#2B2B2B")
  '(vc-annotate-color-map (quote ((20 . "#BC8383") (40 . "#CC9393") (60 . "#DFAF8F") (80 . "#D0BF8F") (100 . "#E0CF9F") (120 . "#F0DFAF") (140 . "#5F7F5F") (160 . "#7F9F7F") (180 . "#8FB28F") (200 . "#9FC59F") (220 . "#AFD8AF") (240 . "#BFEBBF") (260 . "#93E0E3") (280 . "#6CA0A3") (300 . "#7CB8BB") (320 . "#8CD0D3") (340 . "#94BFF3") (360 . "#DC8CC3"))))
@@ -89,6 +88,11 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(default ((t (:inherit nil :stipple nil :background "#202020" :foreground "#dcdccc" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 98 :width normal :foundry "microsoft" :family "Consolas"))))
+ '(company-scrollbar-bg ((t (:background "#393939"))))
+ '(company-scrollbar-fg ((t (:background "#2c2c2c"))))
+ '(company-tooltip ((t (:inherit default :background "#252525"))))
+ '(company-tooltip-common ((t (:inherit font-lock-constant-face))))
+ '(company-tooltip-selection ((t (:inherit font-lock-function-name-face))))
  '(fixed-pitch ((t (:family "Consolas"))))
  '(flyspell-duplicate ((t (:foreground "goldenrod" :underline t :weight bold))) t)
  '(flyspell-incorrect ((t (:foreground "tomato" :underline t :weight bold))) t)
