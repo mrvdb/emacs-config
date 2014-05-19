@@ -229,6 +229,7 @@
  '(sgml-xml-mode t)
  '(show-paren-mode t)
  '(sieve-manage-authenticators (quote (plain digest-md5 cram-md5 scram-md5 ntlm login)))
+ '(sieve-manage-default-port "2000")
  '(sql-postgres-options (quote ("-P" "pager=off" "-p 5434")))
  '(sql-server "dbserver.hsdev.com")
  '(typopunct-buffer-language (quote english))
