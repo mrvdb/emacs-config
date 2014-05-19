@@ -3328,7 +3328,62 @@ them.
 #+BEGIN_SRC emacs-lisp
  (define-key ctl-x-map "\C-j" jabber-global-keymap)
 #+END_SRC
+** Twister
+Twister is a p2p microblogging application based on
+1. Bitcoin - for user registration and authentication
+2. Distributed Hash Tables - for KV storage and tracker location for:
+3. Bittorrent - manage followers(leechers/seeders) for notification
 
+http://twister.net.co has all the info
+
+I want this to behave the same as my other microblog postings,
+hopefully one day consolidating all these entry points into a
+consistent interface to rule them all.
+
+#+BEGIN_SRC emacs-lisp
+  (add-to-list 'load-path "/home/mrb/dat/src/twister/twister.el")
+  (require 'twister)
+  (setq twister-user "mrb")
+
+  (defun mrb/capture-twist()
+    "Create a new frame an run twister postnote"
+    (interactive)
+
+    (select-frame (make-frame '((name . "twister")
+                                (width . 80) (height . 15)
+                                (menu-bar-lines .0)
+                                (tool-bar-lines .0))))
+
+    (twister-create-post)
+
+    ;; And once we're there, make sure we are alone
+    (delete-other-windows))
+
+  ;; Make sure we close our frame after we close the post
+  (defadvice twister-close-post (after delete-twister-frame activate)
+    "Advise to close the frame"
+    (if (equal "twister" (frame-parameter nil 'name))
+        (delete-frame)))
+
+  ;; I normally want to close the post after posting Note: this is not
+  ;; at all a duh! Another advise could be to just clear the window and
+  ;; have it ready for another twist
+  (defadvice twister-post-region (after close-twister-post activate)
+    "Advise to close the post"
+    (twister-close-post))
+
+  ;; Change the default keybinding to company mode completion
+  (define-key twister-post-mode-map "\C-i" 'company-complete)
+#+END_SRC
+
+And, like the others, a commandline interface
+
+#+BEGIN_SRC sh :exports code :tangle ~/bin/capture-twist.sh :shebang #!/bin/bash
+edit -e '(mrb/capture-twist)'
+#+END_SRC
+
+The keybinding for the separate posting frame is configured with
+bindkeys on my system.
 * Development settings
 Some settings which aid in development tasks.
 
