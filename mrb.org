@@ -2577,10 +2577,10 @@ I want completion to work as follows:
 2. completion should *always* produce *something*, even if emacs has no
    special semantic knowledge of the current mode, it should produce
    /something/ which makes sense;
-3. for each mode, a specialization is ok, if that improves the
+3. completion should be inline whenever possible.
+4. for each mode, a specialization is ok, if that improves the
    situation; I expect to have many specialisations to improve the
    autocomplete quality;
-4. completion should be inline whenever possible.
 5. if a completion window *must* be openened, do this at the same place
    always and do not mess up other windows.
 6. Completion should behave somewhat like real-time systems. An
@@ -2599,7 +2599,7 @@ So, tab tries to indent, which is the main expectation, and if it
 can't it tries to complete stuff.
 
 #+BEGIN_SRC emacs-lisp
-(setq tab-always-indent (quote complete))
+(setq tab-always-indent 'complete)
 #+END_SRC
 
 In a standard emacs installation, TAB indents, depending on mode
@@ -2615,17 +2615,24 @@ This is probably incomplete or wrong even in some cases, but it's a start.
 
 #+BEGIN_SRC emacs-lisp
   (require 'company)
-  (defun mrb/indent-or-complete ()
-    (interactive)
-    (if (minibufferp)
-        ;; Just do the normal thing in the minibuffer
-        (minibuffer-complete)
-      (if (looking-at "\\_>") ;; end of symbol match
-          (company-complete-common)
-        (indent-according-to-mode))))
 
-  ;; bind tab key this in company mode (which is everywhere by default)
-  (define-key company-mode-map "\t" 'mrb/indent-or-complete)
+  ;; Remap normal indent-for-tab-command
+  (define-key company-mode-map [remap indent-for-tab-command]
+    'company-indent-for-tab-command)
+
+  ;; Save the normal completion functions temporarily
+  (defvar completion-at-point-functions-saved nil)
+
+  (defun company-indent-for-tab-command (&optional arg)
+    (interactive "P")
+    (let ((completion-at-point-functions-saved completion-at-point-functions)
+          (completion-at-point-functions '(company-complete-common-wrapper)))
+      (indent-for-tab-command arg)))
+
+  (defun company-complete-common-wrapper ()
+    (let ((completion-at-point-functions completion-at-point-functions-saved))
+      (company-complete-common)))
+
 #+END_SRC
 
 This way, TAB always does completion or indent, unless company-mode is
@@ -2633,15 +2640,7 @@ not active.
 
 ** Ad 2. Completion should always produce something
 Not sure if there is anything to do here.
-
-** Ad 3. Mode specialisation
-Be smart with tabs and try to have the tab key do the sensible
-thing. The list below contains things the tab key should do in certain
-modes if it does not already. The second part is the exclusion list
-where the sensible thing the =smart-tab= mode provides is not sensible
-at all.
-
-** Ad 4. Inline completion when possible
+** Ad 3. Inline completion when possible
 With inline completion I mean without opening a whole new
 **Completions** window if not needed.
 
@@ -2701,6 +2700,18 @@ so I disable that.
 
 #+BEGIN_SRC emacs-lisp
 (setq company-idle-delay nil)
+#+END_SRC
+** Ad 4. Mode specialisatio
+There's always exceptions to the rule; with Emacs doubly so. Here's
+the relevant exceptions for my configuration.
+
+#+BEGIN_SRC emacs-lisp
+  ; (define-key erc-mode-map [remap completion-at-point]
+  ;   'company-complete)
+
+  ;; This does not work for some reason?
+  ;;(define-key eshell-mode-map [tab] 'company-complete)
+
 #+END_SRC
 ** Ad 5. Open completion window predictably
 If there is a need to open a **Completions** window, let's at least do
