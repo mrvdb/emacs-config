@@ -16,7 +16,7 @@
    (quote
     ("/home/mrb/.emacs.d/el-get/" "/home/mrb/.emacs.d/el-get/zenburn-emacs/" custom-theme-directory t)))
  '(dired-bind-jump nil)
- '(erc-generate-log-file-name-function (quote erc-generate-log-file-name-with-date) t)
+ '(erc-generate-log-file-name-function (quote erc-generate-log-file-name-with-date))
  '(erc-header-line-uses-help-echo-p nil)
  '(eshell-modules-list
    (quote
