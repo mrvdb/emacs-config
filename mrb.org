@@ -392,9 +392,9 @@ and run =el-get-install= with the package name.
           ;;(:name mrb/ubiquitous       :type github :pkgname "DarwinAwardWinner/ido-ubiquitous")
           (:name guide-key              :type github :pkgname "kbkbkbkb1/guide-key")
           (:name org-screenshot         :type github :pkgname "dfeich/org-screenshot")
-          (:name jabber                 :type elpa)
           (:name ethan-wspace :after (progn (global-ethan-wspace-mode 1)))
           (:name erc-hl-nicks           :type elpa)
+          (:name json-rpc               :type github :pkgname "skeeto/elisp-json-rpc")
         )
   )
 
@@ -406,7 +406,7 @@ and run =el-get-install= with the package name.
                 highlight-parentheses multiple-cursors wrap-region git-modes cl-lib keywiz
                 smart-tab yaml-mode org-jekyll hideshow-org oauth flim haskell-mode ghc-mod s f
                 flycheck pkg-info perspective ido-vertical-mode jekyll-el org2blog
-                identica-mode php-mode company-mode xml-rpc)
+                identica-mode php-mode company-mode xml-rpc csv-mode)
          ;; the sources we have configured above
          (mapcar 'el-get-as-symbol (mapcar 'el-get-source-name el-get-sources))))
 
