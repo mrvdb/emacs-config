@@ -122,7 +122,7 @@ published.
 #+AUTHOR: Marcel van der Boom
 #+EMAIL:  marcel@hsdev.com
 #+DESCRIPTION: description
-#+KEYWORDS: keyword
+#+KEYWORDS: orgmode
 #+LANGUAGE: nl
 #+OPTIONS:  h:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil
 
@@ -142,8 +142,14 @@ article style.
 
 This option does not seem to work when not in the same file as
 exporting. I have added this in the customize interface directly now.
-#+LaTeX_CLASS_OPTIONS: [10pt,a4paper,twoside,microtype]
+#+LaTeX_CLASS_OPTIONS: [10pt,a4paper,twoside]
 
+Make sure we use the scaleable fonts, this looks a lot better than the
+bitmapped fonts.
+#+LaTeX_HEADER: \usepackage{type1cm}
+
+And take advantage of them by enabling advanced layout techniques.
+#+LaTeX_HEADER: \usepackage{microtype}
 
 Latex default configuration to produce a memo-style document.
 
