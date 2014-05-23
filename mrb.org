@@ -2715,13 +2715,16 @@ so I disable that.
 #+BEGIN_SRC emacs-lisp
 (setq company-idle-delay nil)
 #+END_SRC
-** Ad 4. Mode specialisatio
+** Ad 4. Mode specialisation
 There's always exceptions to the rule; with Emacs doubly so. Here's
 the relevant exceptions for my configuration.
 
 #+BEGIN_SRC emacs-lisp
-  ; (define-key erc-mode-map [remap completion-at-point]
-  ;   'company-complete)
+  (add-hook 'erc-mode-hook
+            (lambda ()
+                    (define-key erc-mode-map
+                      [remap completion-at-point]
+                      'company-complete)))
 
   ;; This does not work for some reason?
   ;;(define-key eshell-mode-map [tab] 'company-complete)
