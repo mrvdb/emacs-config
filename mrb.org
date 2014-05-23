@@ -1244,6 +1244,7 @@ Orgmode can export to a variety of formats, I mainly use LaTeX (PDF)
 and HTML as destination format
 
 #+BEGIN_SRC emacs-lisp
+  ;; {% raw %}
   (setq
    org-export-latex-hyperref-format "\\ref{%s}:{%s}"
    ;; old system
@@ -1304,7 +1305,7 @@ and HTML as destination format
    org-export-with-todo-keywords nil
 
   )
-
+  ;; {% endraw %}
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
