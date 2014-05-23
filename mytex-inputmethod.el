@@ -241,12 +241,13 @@ system, including many technical ones.  Examples:
  ("\\:" ? )
  ("\\;" ? )
 
- ((lambda (name char)
-    (let* ((base (concat (match-string 1 name) (match-string 3 name)))
-           (basechar (cdr (assoc base (ucs-names)))))
-      (when (latin-ltx--ascii-p basechar)
-        (string (if (match-end 2) ?^ ?_) basechar))))
-  "\\(.*\\)SU\\(?:B\\|\\(PER\\)\\)SCRIPT \\(.*\\)")
+ ;; Disable sub- and superscript rendering for now, do this in 'userland'
+ ;; ((lambda (name char)
+ ;;    (let* ((base (concat (match-string 1 name) (match-string 3 name)))
+ ;;           (basechar (cdr (assoc base (ucs-names)))))
+ ;;      (when (latin-ltx--ascii-p basechar)
+ ;;        (string (if (match-end 2) ?^ ?_) basechar))))
+ ;;  "\\(.*\\)SU\\(?:B\\|\\(PER\\)\\)SCRIPT \\(.*\\)")
 
  ("^\\gamma" ?ˠ)
 
