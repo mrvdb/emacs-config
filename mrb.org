@@ -3436,6 +3436,11 @@ seems to be the least intrusive, as it keeps files which do not have
 trailing spaces clean and highlights 'dirty' ones in the hope that I
 notice and remove them. ws-trim.el can have different levels of
 intrusiveness. I'm installing ethan-space for now.
+
+[2014-05-20 di] worked with it for a while and it's pretty
+annoying. 80% of the space it is displaying as being /wrong/ is
+harmless. I have uninstalled it for now, I may reconsider installing
+it only for /some/ modes and not globally.
 * GIT integration
 This section is a temporary place to store some git related
 settings. I need to reorganize this document a bit so I have a section
