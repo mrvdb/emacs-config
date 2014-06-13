@@ -2869,7 +2869,8 @@ undefined in org-mode (clear table cell). I never use this.
 
 #+BEGIN_SRC emacs-lisp
   (define-key org-mode-map (kbd "C-c SPC") nil)
-  (define-key global-map (kbd "C-c SPC") 'ace-jump-mode)
+  (define-key global-map (kbd "s-j") 'ace-jump-mode)
+  ;; Pop back to mark is special for ace-jump? C-x space is the key i think.
 #+END_SRC
 
 Recall that once jumped, jumping back is just a /pop the mark/ (C-u
