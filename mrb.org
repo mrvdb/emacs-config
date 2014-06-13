@@ -3278,8 +3278,8 @@ The only pump.io elisp implementation does almost everything like I
 want it to be, including key bindings.
 
 #+BEGIN_SRC emacs-lisp
-  (add-to-list 'load-path  "~/.emacs.d/el-get/pump.io/src")
-  (require 'pumpio-interface)
+  ;;(add-to-list 'load-path  "~/.emacs.d/el-get/pump.io/src")
+  ;;(require 'pumpio-interface)
 
   ;; Configure for qua.name
   (setq pumpio-pod "http://qua.name")
