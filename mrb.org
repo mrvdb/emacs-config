@@ -247,8 +247,7 @@ If anything multi-language should work, UTF-8 encoding is a must, so
 let's make sure we try to use that everywhere
 
 #+BEGIN_SRC emacs-lisp
-  (prefer-coding-system 'utf-8)
-  
+  (prefer-coding-system 'utf-8)  
 #+END_SRC
 
 For conveniently editting accented characters like 'é' and 'è' there
@@ -305,8 +304,38 @@ based on a copy of latin-ltx.el
   ;; FIXME: this works ok-ish, but is not a very clean solution I think.
   (add-hook 'text-mode-hook 'mrb/set-input-method)
   ;; Orgmode is derived from outline-mode -> text-mode so this should already work.
-
 #+END_SRC
+
+For even more esoteric characters we have to do some extra work. No
+font provides all Unicode characters. There are packages (like
+unicode-fonts) which aim to create a giant replacement table for
+characters. While I'm sure this works, the characters I tried either
+already worked or didn't change, i.e. still don't work. So, the
+solution I've come up with (with some borrowing here and there
+obviously) is to create a table of my own to which I can add
+characters to use certain fonts which *do* have the characters and be
+done with them.
+
+#+BEGIN_SRC emacs-lisp
+  (defun mrb/fix-fontset-font ( family from &optional to)
+    "Make characters FROM to TO come from FAMILY. The TO parameter
+  defaults to the same value as the FROM parameter. The FAMILY
+  parameter, when specified as nil defaults to 'FreeSerif'"
+    (set-fontset-font
+     t
+     (cons from (or to from))
+     (font-spec :family (or family "FreeSerif"))))
+
+  ;; Add a line like the following  for each char displaying improperly
+  (mrb/fix-fontset-font "Symbola" #x1F4A9) 
+  ;; PILE OF POO symbol 💩 \larr This should now show a pile of poo if all is well
+#+END_SRC
+
+So, when characters do not show properly, the steps to take now are:
+1. Find a font which has the char
+2. Map the character(-range) to that font
+3. Optional: define a convenient way to type the character
+
 * Package Management
 Package handling, do this early so emacs knows where to find things.
 
