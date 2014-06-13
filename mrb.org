@@ -1,7 +1,8 @@
+#+SETUPFILE: "~/dat/org/etc/org-config.org"
 #+TITLE: Emacs configuration
 #+DESCRIPTION: An org-babel based emacs configuration
 #+LANGUAGE:  en
-#+OPTIONS:  h:5 toc:2 creator:nil email:nil author:t timestamp:t tags:nil
+#+OPTIONS:  H:5 toc:2 creator:nil email:nil author:t timestamp:t tags:nil
 #+PROPERTY: results silent
 
 This is my emacs configuration file that is loaded with
@@ -3730,8 +3731,8 @@ When we are all done with this, provide it.
 #+END_SRC
 * Self configuration                                                                                 :exclude:
 I have the same config file for orgmode itself
-#+SETUPFILE: "~/dat/org/etc/org-config.org"
 
+#+COMMENTS: SETUPFILE moved to top of file so we can override some settings.
 If there is anything that needs to be configured specifically for this
 file, here is the place to do it. Other than those, nothing else
 should come below this point
