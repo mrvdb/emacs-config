@@ -430,11 +430,13 @@ And enable the minor mode globally.
 
   ;; When I am not typing, the cursor should become more visible, so I
   ;; don't lose it.
-  (require 'cursor-chg)                   ; Load this library
-  (change-cursor-mode 0)                  ; On for overwrite/read-only/input mode
-  (toggle-cursor-type-when-idle 1)        ; On when idle
-  (setq curchg-default-cursor-color "white smoke")
-  (setq curchg-default-cursor-type (quote bar\ \.\ 1))
+  (use-package cursor-chg
+    :init
+    (progn
+      (change-cursor-mode 0)        ; On for overwrite/read-only/input mode
+      (toggle-cursor-type-when-idle 1)   ; On when idle
+      (setq curchg-default-cursor-color "white smoke")
+      (setq curchg-default-cursor-type (quote bar\ \.\ 1))))
 
   ;; Default frame properties frame position, color, etc
   (setq default-frame-alist
@@ -777,7 +779,7 @@ enter tags, so I define a shortcut to define tags while capturing.
       (org-back-to-heading)
       (org-set-tags)))
 
-  (define-key org-capture-mode-map "\C-c\C-t" 'mrb/add-tags-in-capture)
+  (bind-key "C-c C-t" 'mrb/add-tags-in-capture org-capture-mode-map)
 #+END_SRC
 
 Capturing dents for status updates in statusnet are done the
@@ -888,7 +890,7 @@ keep the active file as clean as possible.
 
 Thus, the normal sequence would be:
 #+BEGIN_SRC emacs-lisp
-  (define-key org-mode-map [(super .)] 'org-todo)
+  (bind-key [(super .)] 'org-todo org-mode-map)
 
   (defun mrb/force-org-todo()
     (interactive)
@@ -902,9 +904,9 @@ Thus, the normal sequence would be:
     (let ((org-inhibit-blocking t))
       (org-agenda-todo)))
 
-  (define-key org-mode-map [(control super .)] 'mrb/force-org-todo)
-  (define-key org-agenda-mode-map [(control super .)] 'mrb/force-org-agenda-todo)
-  (define-key org-agenda-mode-map [(super .)] 'org-agenda-todo)
+  (bind-key [(control super .)] 'mrb/force-org-todo org-mode-map)
+  (bind-key [(control super .)] 'mrb/force-org-agenda-todo org-agenda-mode-map)
+  (bind-key [(super .)] 'org-agenda-todo org-agenda-mode-map)
 #+END_SRC
 
 *** Registering creation time of todo items
@@ -1252,7 +1254,7 @@ and HTML as destination format
 
   ; Make sure we export in css mode, meaning no inline css crap
   (setq org-export-htmlize-output-type 'css)
-  (define-key org-mode-map "\C-c\C-e" 'mrb/org-export-body-as-html)
+  (bind-key "C-c C-e" 'mrb/org-export-body-as-html org-mode-map)
 
   (defun mrb/org-export-body-as-html-batch ()
     "Call `org-export-as-html', may be used in batch processing as
@@ -1438,23 +1440,23 @@ migrate this into more literal sections
 
 
   ; Keybindings which only make sense when having an orgmode file
-  (define-key org-mode-map "\C-ct" 'org-set-tags)
+  (bind-key "C-c t" 'org-set-tags org-mode-map)
 
   ;; After 7.9.4(?) the export menu is called by dispatch
   (if
       (version< "7.9.4" (org-version))
-      (define-key org-mode-map "\C-ce" 'org-export-dispatch)
-    (define-key org-mode-map "\C-ce" 'org-export)
+      (bind-key "C-c e" 'org-export-dispatch org-mode-map)
+    (bind-key "C-c e" 'org-export org-mode-map)
     )
 
 
 
   ; Map \cmd{}t to schedule in both task and agenda-view
-  (define-key org-mode-map [(super t)] 'org-schedule)
-  (define-key org-agenda-mode-map [(super t)] 'org-agenda-schedule)
-  (define-key org-mode-map [(meta p)] 'org-set-property)
-  (define-key org-agenda-mode-map [(meta p)] 'org-set-property)
-  (define-key org-mode-map [(control super s)] 'org-save-all-org-buffers)
+  (bind-key [(super t)] 'org-schedule org-mode-map)
+  (bind-key [(super t)] 'org-agenda-schedule org-agenda-mode-map)
+  (bind-key [(meta p)] 'org-set-property org-mode-map)
+  (bind-key [(meta p)] 'org-set-property org-agenda-mode-map)
+  (bind-key [(control super s)] 'org-save-all-org-buffers org-mode-map)
 
   ; Dynamic behaviour
   (defun mrb/gtd()
@@ -1680,7 +1682,7 @@ migrate this into more literal sections
   (defalias 'archive-done-tasks 'mrb/org-my-archive-done-tasks)
 
   ;; Map it to Ctrl-C S in orgmode (consider a global key assignment?
-  (define-key org-mode-map "\C-cs" 'mrb/shortenurl-replace-at-point)
+  (bind-key "\C-cs" 'mrb/shortenurl-replace-at-point org-mode-map)
   ;; END shorten url functionality
 
   ;;(add-to-list 'load-path "~/dat/src/emacs/packages/org-bom/")
@@ -1844,10 +1846,10 @@ migrate this into more literal sections
         (mrb/mail-subtree-from-org)
       (mrb/make-mailcompose-frame)))
   ;; Bind it to \C-xm in org-mode only
-  (define-key org-mode-map "\C-xm" 'mrb/construct-mail)
-  (define-key org-agenda-mode-map "\C-xm" 'mrb/construct-mail)
+  (bind-key "C-x m" 'mrb/construct-mail org-mode-map)
+  (bind-key "C-x m" 'mrb/construct-mail org-agenda-mode-map)
   ;; But not for all others, because the org subtree will never be there
-  (global-set-key (kbd "\C-xm") 'mrb/make-mailcompose-frame)
+  (bind-key "C-x m" 'mrb/make-mailcompose-frame)
 
 
   (require 'stripe-buffer)
@@ -1992,11 +1994,11 @@ LDAP integration, mostly for address book lookups
   ;; Adds some hooks
 
   (eval-after-load "message"
-    '(define-key message-mode-map (kbd "TAB") 'mrb/enz-eudc-expand-inline))
+    '(bind-key "TAB" 'mrb/enz-eudc-expand-inline message-mode-map))
   (eval-after-load "sendmail"
-    '(define-key mail-mode-map (kbd "TAB") 'mrb/enz-eudc-expand-inline))
+    '(bind-key "TAB" 'mrb/enz-eudc-expand-inline mail-mode-map))
   (eval-after-load "post"
-    '(define-key post-mode-map (kbd "TAB") 'mrb/enz-eudc-expand-inline))
+    '(bind-key "TAB" 'mrb/enz-eudc-expand-inline post-mode-map))
 
 #+END_SRC
 * Key and mouse bindings
@@ -2412,7 +2414,7 @@ In the window manager (awesome-wm) 'Cmd Enter' launches a terminal,
 similarly within Emacs 'C-c Enter' launches Eshell:
 
 #+BEGIN_SRC emacs-lisp
-  (define-key global-map [(control c) return] 'eshell)
+  (bind-key [(control c) return] 'eshell)
 #+END_SRC
 
 First thing I missed in eshell was a the =clear= function, as in
@@ -2570,8 +2572,8 @@ This is probably incomplete or wrong even in some cases, but it's a start.
   (require 'company)
 
   ;; Remap normal indent-for-tab-command
-  (define-key company-mode-map [remap indent-for-tab-command]
-    'company-indent-for-tab-command)
+  (bind-key [remap indent-for-tab-command]
+    'company-indent-for-tab-command company-mode-map)
 
   ;; Save the normal completion functions temporarily
   (defvar completion-at-point-functions-saved nil)
@@ -2644,8 +2646,8 @@ and down is mapped to C-p and C-n, just like moving the cursor in
 normal text.
 
 #+BEGIN_SRC emacs-lisp
-(define-key company-active-map "\C-n" 'company-select-next)
-(define-key company-active-map "\C-p" 'company-select-previous)
+(bind-key  "C-n" 'company-select-next company-active-map)
+(bind-key  "C-p" 'company-select-previous company-active-map)
 #+END_SRC
 
 Having the completion pop up automatically is annoying in most cases,
@@ -2661,12 +2663,14 @@ the relevant exceptions for my configuration.
 #+BEGIN_SRC emacs-lisp
   (add-hook 'erc-mode-hook
             (lambda ()
-                    (define-key erc-mode-map
+                    (bind-key 
                       [remap completion-at-point]
-                      'company-complete)))
+                      'company-complete erc-mode-map)))
 
   ;; This does not work for some reason?
-  ;;(define-key eshell-mode-map [tab] 'company-complete)
+  ;; (use-package eshell
+  ;;   :init
+  ;;   (bind-key "<tab>"  'company-complete  eshell-mode-map))
 
 #+END_SRC
 ** Ad 5. Open completion window predictably
@@ -2745,18 +2749,18 @@ same. I don't think there is a risk of confusion as to which mechanism
 is in use, but we'll see.
 
 #+BEGIN_SRC emacs-lisp
-  (require 'ace-jump-mode)
+  (use-package ace-jump-mode
+    :config
+    (set-face-attribute
+     'ace-jump-face-foreground nil
+     :inherit isearch-lazy-highlight
+     :background "black"
+     :foreground "tomato")
 
-  (set-face-attribute
-   'ace-jump-face-foreground nil
-   :inherit isearch-lazy-highlight
-   :background "black"
-   :foreground "tomato")
-
-  (set-face-attribute
-   'ace-jump-face-background nil
-   :foreground nil
-   :background mrb-bg-paren-match)
+    (set-face-attribute
+     'ace-jump-face-background nil
+     :foreground nil
+     :background mrb-bg-paren-match))
 #+END_SRC
 
 The effectiveness is also dependent on a quick and easy keyboard
@@ -2776,8 +2780,8 @@ For now, we take the standard keybinding C-c SPC. This key needs to be
 undefined in org-mode (clear table cell). I never use this.
 
 #+BEGIN_SRC emacs-lisp
-  (define-key org-mode-map (kbd "C-c SPC") nil)
-  (define-key global-map (kbd "s-j") 'ace-jump-mode)
+  (bind-key "C-c SPC" nil org-mode-map)
+  (bind-key "s-j" 'ace-jump-mode)
   ;; Pop back to mark is special for ace-jump? C-x space is the key i think.
 #+END_SRC
 
@@ -2791,7 +2795,7 @@ advised configuration from the author at this point.
 #+BEGIN_SRC emacs-lisp
   (eval-after-load "ace-jump-mode"
     '(ace-jump-mode-enable-mark-sync))
-  (define-key global-map (kbd "C-x SPC") 'ace-jump-mode-pop-mark)
+  (bind-key "C-x SPC" 'ace-jump-mode-pop-mark)
 #+END_SRC
 
 * Remote editing
@@ -3303,7 +3307,7 @@ jabber, so lets re-call the definition here, so we are sure we get
 them.
 
 #+BEGIN_SRC emacs-lisp
- (define-key ctl-x-map "\C-j" jabber-global-keymap)
+ (bind-key "C-j" jabber-global-keymap ctl-x-map)
 #+END_SRC
 ** Twister
 Twister is a p2p microblogging application based on
@@ -3350,7 +3354,7 @@ consistent interface to rule them all.
     (twister-close-post))
 
   ;; Change the default keybinding to company mode completion
-  (define-key twister-post-mode-map "\C-i" 'company-complete)
+  (bind-key "C-i" 'company-complete twister-post-mode-map)
 #+END_SRC
 
 And, like the others, a commandline interface
