@@ -119,6 +119,26 @@ And edit the file obviously.
   fi
 #+END_SRC
 
+* Package Management
+Package handling, do this early so emacs knows where to find things.
+
+This has gotten a bit of attention in the last years and there are now
+lots of options, of which package.el seems to be the choice if not
+anything else explicitly preferred. I have always used el-get instead
+of package.el, although I have no idea why I made that decision at
+that time, but I think it was because it allowed me to inlcude git
+recipes in an easy way.
+
+I have now converted package management and delegated it to Cask. From
+this configuration point of view, everything needed should be there.
+The main cask configuration is in =init.el=
+
+The reasons for converting my el-get based setup to cask:
+1. separate the pure package management to a tool specifically
+   designed for that
+2. be able to use use-package later on.
+3. configuration seemed cleaner.
+
 * Personal information
 I'd like to arrange 3 things related to personal information:
 1. register the proper identification to use;
@@ -336,33 +356,6 @@ So, when characters do not show properly, the steps to take now are:
 1. Find a font which has the char
 2. Map the character(-range) to that font
 3. Optional: define a convenient way to type the character
-
-* Package Management
-Package handling, do this early so emacs knows where to find things.
-
-This has gotten a bit of attention in the last years and there are now
-lots of options, of which package.el seems to be the choice if not
-anything else explicitly preferred. I have always used el-get instead
-of package.el, although I have no idea why I made that decision at
-that time, but I think it was because it allowed me to inlcude git
-recipes in an easy way.
-
-I have now converted package management and delegated it to Cask. From
-this configuration point of view, everything needed should be there.
-
-#+BEGIN_SRC emacs-lisp
-(require 'cask "~/.cask/cask.el")
-(cask-initialize)
-#+END_SRC
-
-The reasons for converting my el-get based setup to cask:
-1. separate the pure package management to a tool specifically
-   designed for that
-2. be able to use use-package later on.
-3. configuration seemed cleaner.
-
-
-
 
 * Visual
 Many settings have to do with how the screen looks and behaves in a
