@@ -2237,7 +2237,7 @@ major mode only.
 I want to be able to call up magit from anywhere
 
 #+BEGIN_SRC emacs-lisp
-  (bind-key [(control c) m] 'magit-status)
+  (bind-key [(control c) (m)] 'magit-status)
 #+END_SRC
 **** COMMENT Special keys
 For some special keys I have defined some commands. Special keys are
