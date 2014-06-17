@@ -1090,6 +1090,7 @@ Settings which are just applicable for the org-mode agenda view.
 
 #+BEGIN_SRC emacs-lisp
   (require 'keywiz)
+  (require 'cl)
 
   ;; Helper function to build a set of functions and their
   (defun mrb/load-keybindings ()

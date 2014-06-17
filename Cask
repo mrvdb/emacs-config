@@ -26,7 +26,7 @@
 (depends-on "expand-region"         :git "https://github.com/magnars/expand-region.el")
 (depends-on "f")
 (depends-on "fixed-point-completion")
-(depends-on "flim"		    :git "https://github.com/wanderlust/flim.git")
+;(depends-on "flim"		    :git "https://github.com/wanderlust/flim.git")
 (depends-on "flycheck")
 (depends-on "gh"                    :git "https://github.com/sigma/gh.el")
 (depends-on "ghc-mod")
