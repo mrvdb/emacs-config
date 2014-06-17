@@ -1,4 +1,3 @@
-;; -*- mode: emacs-lisp -*-
 (source gnu)
 (source melpa)
 (source marmalade)
@@ -26,7 +25,6 @@
 (depends-on "expand-region"         :git "https://github.com/magnars/expand-region.el")
 (depends-on "f")
 (depends-on "fixed-point-completion")
-;(depends-on "flim"		    :git "https://github.com/wanderlust/flim.git")
 (depends-on "flycheck")
 (depends-on "gh"                    :git "https://github.com/sigma/gh.el")
 (depends-on "ghc-mod")
@@ -64,7 +62,6 @@
 (depends-on "php-mode")
 (depends-on "pkg-info")
 (depends-on "popwin")
-;(depends-on "pump.io"               :git "https://github.com/cnngimenez/pumpio-el")
 (depends-on "rainbow-delimiters")
 (depends-on "rainbow-mode")
 (depends-on "s")
@@ -78,4 +75,4 @@
 (depends-on "xlicense"              :git "https://github.com/emacsmirror/xlicense")
 (depends-on "xml-rpc")
 (depends-on "yaml-mode")
-(depends-on "zenburn-theme"         :git "https://github.com/bbatsov/zenburn-emacs")         
+(depends-on "zenburn-theme"         :git "https://github.com/bbatsov/zenburn-emacs")
