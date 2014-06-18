@@ -459,8 +459,6 @@ And enable the minor mode globally.
   ;; Defer fontification a little bit, so we could gain a bit in scroll speed
   (setq jit-lock-defer-time 0.02)
 
-
-
   ;; Make colorful balanced parentheses etc. in different modes
   (add-hook 'lisp-mode 'rainbow-delimiters-mode)
 #+END_SRC
@@ -519,8 +517,9 @@ get confused:
 
 #+BEGIN_SRC emacs-lisp
   ;; nicer buffer names
-  (require 'uniquify)
-  (setq uniquify-buffer-name-style 'forward)
+  (use-package uniquify
+    :init
+    (setq uniquify-buffer-name-style 'forward))
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
@@ -528,10 +527,9 @@ get confused:
   (setq minibuffer-prompt-properties (quote (read-only t point-entered minibuffer-avoid-prompt face minibuffer-prompt)))
 
   ;; Save places in buffers between sessions
-  (setq-default save-place t)
-  (require 'saveplace)
-
-  (provide 'buffers)
+  (use-package saveplace
+    :init
+    (setq-default save-place t))
 #+END_SRC
 * Modes
 Customisation setting for specific modes. Most of the modes I use have
@@ -588,7 +586,7 @@ any issues.
 
   ;; Open scratch buffer by default in the mode we are in at the moment
   ;; with C-u prefix a mode will be asked to use
-  (require 'scratch)
+  (use-package scratch)
 
   ;; Turn on eldoc for modes which support it
   (dolist
@@ -3191,7 +3189,6 @@ The only pump.io elisp implementation does almost everything like I
 want it to be, including key bindings.
 
 #+BEGIN_SRC emacs-lisp
-  ;;(add-to-list 'load-path  "~/.emacs.d/el-get/pump.io/src")
   ;;(require 'pumpio-interface)
 
   ;; Configure for qua.name
