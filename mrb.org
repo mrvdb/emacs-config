@@ -3367,18 +3367,18 @@ In an attempt to do even more in emacs, i've installed `elfeed' and
 imported my feeds from RSSyl 
 
 #+BEGIN_SRC emacs-lisp
-  (defun mrb/elfeed-watchlater()
-    (interactive)
-    (elfeed-search-tag-all 'watchlater))
-
   (use-package elfeed
     :init
+    (bind-key "C-c f" 'elfeed)
+    :config
     (progn
+      (defun mrb/elfeed-watchlater()
+        (interactive)
+        (elfeed-search-tag-all 'watchlater))
       ;; Bind 'w' to add watch later tag (TODO: use a toggle?)
       (bind-key "w" 'mrb/elfeed-watchlater elfeed-show-mode-map)
       (bind-key "w" 'mrb/elfeed-watchlater elfeed-search-mode-map)
-      (bind-key "C-c f" 'elfeed)
-
+      
       ;; New entry hook allows meta information manipulation
       ;; without directly having to change elfeed-feeds
       (add-hook 'elfeed-new-entry-hook
