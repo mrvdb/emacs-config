@@ -3370,16 +3370,26 @@ In an attempt to do even more in emacs, i've installed `elfeed' and
 imported my feeds from RSSyl 
 
 #+BEGIN_SRC emacs-lisp
-  (require 'elfeed)
+  (defun mrb/elfeed-watchlater()
+    (interactive)
+    (elfeed-search-tag-all 'watchlater))
 
-  ;; New entry hook allows meta information manipulation
-  ;; without directly having to change elfeed-feeds
-  (add-hook 'elfeed-new-entry-hook
-            (elfeed-make-tagger :feed-url "youtube\\.com"
-                                :add '(video youtube)))
-  (add-hook 'elfeed-new-entry-hook
-            (elfeed-make-tagger :feed-url "vimeo\\.com"
-                                :add '(video vimeo)))
+  (use-package elfeed
+    :init
+    (progn
+      ;; Bind 'w' to add watch later tag (TODO: use a toggle?)
+      (bind-key "w" 'mrb/elfeed-watchlater elfeed-show-mode-map)
+      (bind-key "w" 'mrb/elfeed-watchlater elfeed-search-mode-map)
+      (bind-key "C-c f" 'elfeed)
+
+      ;; New entry hook allows meta information manipulation
+      ;; without directly having to change elfeed-feeds
+      (add-hook 'elfeed-new-entry-hook
+                (elfeed-make-tagger :feed-url "youtube\\.com"
+                                    :add '(video youtube)))
+      (add-hook 'elfeed-new-entry-hook
+                (elfeed-make-tagger :feed-url "vimeo\\.com"
+                                    :add '(video vimeo)))))
 
 #+END_SRC
 
@@ -3491,7 +3501,7 @@ clumsy, although very flexible.
   ;; Automatically update the feeds every now and then
   (run-at-time 180 1800 (lambda () (unless elfeed-waiting (elfeed-update))))
 
-  (bind-key [(control c) (f)]  'elfeed)
+  
 #+END_SRC
 
 * Development settings
