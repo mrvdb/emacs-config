@@ -268,7 +268,7 @@ If anything multi-language should work, UTF-8 encoding is a must, so
 let's make sure we try to use that everywhere
 
 #+BEGIN_SRC emacs-lisp
-  (prefer-coding-system 'utf-8)  
+  (prefer-coding-system 'utf-8)
 #+END_SRC
 
 For conveniently editting accented characters like 'é' and 'è' there
@@ -308,7 +308,7 @@ based on a copy of latin-ltx.el
    "MyTeX" "UTF-8" 'quail-use-package
    "\\" "Personalized TeX input method"
    "~/.emacs.d/mytex-inputmethod")
-   
+
   (defun mrb/set-input-method()
     (interactive)
     (setq default-input-method "MyTeX")
@@ -348,7 +348,7 @@ done with them.
      (font-spec :family (or family "FreeSerif"))))
 
   ;; Add a line like the following  for each char displaying improperly
-  (mrb/fix-fontset-font "Symbola" #x1F4A9) 
+  (mrb/fix-fontset-font "Symbola" #x1F4A9)
   ;; PILE OF POO symbol 💩 \larr This should now show a pile of poo if all is well
 #+END_SRC
 
@@ -2425,7 +2425,7 @@ registered as a command automatically.
   (interactive)
   ;; clear read-only of prompts
   (let ((inhibit-read-only t))
-	(delete-region (point-min) (point-max))))
+        (delete-region (point-min) (point-max))))
 #+END_SRC
 
 We want to be able to open files from within eshell in the same way as
@@ -2661,7 +2661,7 @@ the relevant exceptions for my configuration.
 #+BEGIN_SRC emacs-lisp
   (add-hook 'erc-mode-hook
             (lambda ()
-                    (bind-key 
+                    (bind-key
                       [remap completion-at-point]
                       'company-complete erc-mode-map)))
 
@@ -3277,7 +3277,7 @@ XMPP related settings, including interfacing it to other systems
 
   ;; Some face adjustments
   (add-hook 'jabber-chat-mode-hook
-     (lambda () 
+     (lambda ()
          (set-face-attribute 'jabber-chat-prompt-system nil :foreground "dark gray" :weight 'bold)))
 
   (setq jabber-account-list (quote (("marcel@hsdev.com/Emacs" (:connection-type . starttls)))))
@@ -3364,7 +3364,7 @@ The keybinding for the separate posting frame is configured with
 bindkeys on my system.
 ** Elfeed
 In an attempt to do even more in emacs, i've installed `elfeed' and
-imported my feeds from RSSyl 
+imported my feeds from RSSyl
 
 #+BEGIN_SRC emacs-lisp
   (use-package elfeed
@@ -3498,7 +3498,7 @@ clumsy, although very flexible.
   ;; Automatically update the feeds every now and then
   (run-at-time 180 1800 (lambda () (unless elfeed-waiting (elfeed-update))))
 
-  
+
 #+END_SRC
 
 * Development settings
@@ -3546,11 +3546,11 @@ This particular setting is for eshell git completion:
     (search-forward "available git commands in")
     (let (commands)
       (while (re-search-forward
-	      "^[[:blank:]]+\\([[:word:]-.]+\\)[[:blank:]]*\\([[:word:]-.]+\\)?"
-	      nil t)
-	(push (match-string 1) commands)
-	(when (match-string 2)
-	  (push (match-string 2) commands)))
+              "^[[:blank:]]+\\([[:word:]-.]+\\)[[:blank:]]*\\([[:word:]-.]+\\)?"
+              nil t)
+        (push (match-string 1) commands)
+        (when (match-string 2)
+          (push (match-string 2) commands)))
       (sort commands #'string<))))
 
 (defconst pcmpl-git-commands (pcmpl-git-commands)
@@ -3566,7 +3566,7 @@ This particular setting is for eshell git completion:
     (goto-char (point-min))
     (let (refs)
       (while (re-search-forward (concat "^refs/" type "/\\(.+\\)$") nil t)
-	(push (match-string 1) refs))
+        (push (match-string 1) refs))
       (nreverse refs))))
 
 (defun pcmpl-git-remotes ()
@@ -3585,7 +3585,7 @@ This particular setting is for eshell git completion:
    ;; provide branch completion for the command `checkout'.
    ((pcomplete-match "checkout" 1)
     (pcomplete-here* (append (pcmpl-git-get-refs "heads")
-			     (pcmpl-git-get-refs "tags"))))
+                             (pcmpl-git-get-refs "tags"))))
    (t
     (while (pcomplete-here (pcomplete-entries))))))
 #+END_SRC
