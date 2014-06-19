@@ -3372,13 +3372,24 @@ imported my feeds from RSSyl
     (bind-key "C-c f" 'elfeed)
     :config
     (progn
-      (defun mrb/elfeed-watchlater()
+      (defun mrb/elfeed-search-toggle-tag(tag)
+        (let ((entries (elfeed-search-selected)))
+          (cl-loop for entry in entries do
+                   (if (elfeed-tagged-p tag entry)
+                       (elfeed-untag entry tag)
+                     (elfeed-tag entry tag)))
+          (mapc #'elfeed-search-update-entry entries)
+          (unless (use-region-p) (forward-line))))
+
+      (defun mrb/elfeed-show-toggle-tag(tag)
         (interactive)
-        (elfeed-search-tag-all 'watchlater))
-      ;; Bind 'w' to add watch later tag (TODO: use a toggle?)
-      (bind-key "w" 'mrb/elfeed-watchlater elfeed-show-mode-map)
-      (bind-key "w" 'mrb/elfeed-watchlater elfeed-search-mode-map)
-      
+        (if (elfeed-tagged-p tag elfeed-show-entry)
+            (elfeed-show-untag tag)
+          (elfeed-show-tag tag)))
+
+      (bind-key "w" '(lambda () (interactive) (mrb/elfeed-show-toggle-tag 'watchlater)) elfeed-show-mode-map)
+      (bind-key "w" '(lambda () (interactive) (mrb/elfeed-search-toggle-tag 'watchlater)) elfeed-search-mode-map)
+
       ;; New entry hook allows meta information manipulation
       ;; without directly having to change elfeed-feeds
       (add-hook 'elfeed-new-entry-hook
