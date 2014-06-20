@@ -3413,7 +3413,8 @@ clumsy, although very flexible.
   (makunbound 'feed-patterns)
   (defvar feed-patterns
     '((marktplaats "http://kopen.marktplaats.nl/opensearch.php?q=%s")
-      (youtube     "https://gdata/youtube.com/feeds/base/users/%s/uploads")))
+      (youtube     "https://gdata/youtube.com/feeds/base/users/%s/uploads")
+      (reddit      "https://reddit.com/r/%s/.rss")))
 
   ;; Bulk of the feed specification
   (makunbound 'elfeed-feeds-alist)
@@ -3425,6 +3426,7 @@ clumsy, although very flexible.
           ("cazeneuve" marktplaats machining)
           ("deckel" marktplaats machining)
           ("lista" marktplaats machining)
+          ("x200s" marktplaats computing)
           ("http://dvd.netflix.com/NewReleasesRSS" netflix )
           ("http://vimeo.com/mrvdb/subscriptions/videos/rss/41079679d642fcfa95b88a00aae8f7b9dd07dffc" video vimeo)
           ("http://mrblog.nl/feed" me blog )
@@ -3462,7 +3464,6 @@ clumsy, although very flexible.
           ("http://feeds.feedburner.com/wyome" people)
           ("http://julien.danjou.info/blog/index.xml" people)
           ("http://torvalds-family.blogspot.com/feeds/posts/default" people)
-          ("http://jaskaleimi.blogspot.com/feeds/posts/default")
           ("http://feeds.feedburner.com/JuanReyero" people)
           ("http://www.garron.me/en/atom.xml" people emacs jekyll)
           ("http://technomancy.us/feed/atom.xml" people emacs)
@@ -3475,7 +3476,11 @@ clumsy, although very flexible.
           ("http://whattheemacsd.com/atom.xml" emacs)
           ("http://feeds.twit.tv/sn_video_large")
           ("http://blog.prosody.im/feed/atom.xml")
-          ("http://www.thetoolanddieguy.com/feed" machining)))
+          ("http://www.thetoolanddieguy.com/feed" machining)
+          ("thinkpad" reddit computing)
+          ("http://www.emacswiki.org/emacs/index.rss?action=rss" emacs software)
+          ;; Add new feeds above this
+          ))
 
   ;; Expand what is in the feeds-alist, taking the patterns into account
   (defun feed-expand (tags url)
