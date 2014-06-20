@@ -888,7 +888,7 @@ keep the active file as clean as possible.
 
 Thus, the normal sequence would be:
 #+BEGIN_SRC emacs-lisp
-  (bind-key [(super .)] 'org-todo org-mode-map)
+  (bind-key "s-." 'org-todo org-mode-map)
 
   (defun mrb/force-org-todo()
     (interactive)
@@ -902,9 +902,9 @@ Thus, the normal sequence would be:
     (let ((org-inhibit-blocking t))
       (org-agenda-todo)))
 
-  (bind-key [(control super .)] 'mrb/force-org-todo org-mode-map)
-  (bind-key [(control super .)] 'mrb/force-org-agenda-todo org-agenda-mode-map)
-  (bind-key [(super .)] 'org-agenda-todo org-agenda-mode-map)
+  (bind-key "C-s-." 'mrb/force-org-todo org-mode-map)
+  (bind-key "C-s-." 'mrb/force-org-agenda-todo org-agenda-mode-map)
+  (bind-key "s-."   'org-agenda-todo org-agenda-mode-map)
 #+END_SRC
 
 *** Registering creation time of todo items
@@ -1450,11 +1450,11 @@ migrate this into more literal sections
 
 
   ; Map \cmd{}t to schedule in both task and agenda-view
-  (bind-key [(super t)] 'org-schedule org-mode-map)
-  (bind-key [(super t)] 'org-agenda-schedule org-agenda-mode-map)
-  (bind-key [(meta p)] 'org-set-property org-mode-map)
-  (bind-key [(meta p)] 'org-set-property org-agenda-mode-map)
-  (bind-key [(control super s)] 'org-save-all-org-buffers org-mode-map)
+  (bind-key "s-t" 'org-schedule org-mode-map)
+  (bind-key "s-t" 'org-agenda-schedule org-agenda-mode-map)
+  (bind-key "M-p" 'org-set-property org-mode-map)
+  (bind-key "M-p" 'org-set-property org-agenda-mode-map)
+  (bind-key "C-s-s" 'org-save-all-org-buffers org-mode-map)
 
   ; Dynamic behaviour
   (defun mrb/gtd()
@@ -1680,7 +1680,7 @@ migrate this into more literal sections
   (defalias 'archive-done-tasks 'mrb/org-my-archive-done-tasks)
 
   ;; Map it to Ctrl-C S in orgmode (consider a global key assignment?
-  (bind-key "\C-cs" 'mrb/shortenurl-replace-at-point org-mode-map)
+  (bind-key "C-c s" 'mrb/shortenurl-replace-at-point org-mode-map)
   ;; END shorten url functionality
 
   ;;(add-to-list 'load-path "~/dat/src/emacs/packages/org-bom/")
@@ -2097,23 +2097,23 @@ accepts all kinds of key specifications, including strings.
   (delete-selection-mode 1)
 
   ; Font scaling, like in firefox
-  (bind-key [(control +)] 'text-scale-increase)
-  (bind-key [(control -)] 'text-scale-decrease)
+  (bind-key "C-+" 'text-scale-increase)
+  (bind-key "C--" 'text-scale-decrease)
 
   ;; Line handling functions
-  (bind-key [(super \`)] 'toggle-truncate-lines)
+  (bind-key "s-`" 'toggle-truncate-lines)
 
   ;; Most of the time I want return to be newline and indent
   ;; Every mode can augment this at will obviously (org-mode does, for example)
-  (bind-key (kbd "RET") 'newline-and-indent)
+  (bind-key "RET" 'newline-and-indent)
 
   ;; Comment code lines, command reacts based on the major mode.
-  (bind-key [(super /)] 'comment-or-uncomment-region)
+  (bind-key "s-/" 'comment-or-uncomment-region)
 
-  (bind-key [(super s)] 'save-buffer)
+  (bind-key "s-s" 'save-buffer)
 
   ;; Kill buffer, FIXME: asks for name, which I dont need
-  (bind-key [(super k)] 'ido-kill-buffer)
+  (bind-key "s-k" 'ido-kill-buffer)
 
   ;; Resizing windows
   ;; Introduce a bit of intelligence so the shrink and enlarge know what window I'm in.
@@ -2164,11 +2164,11 @@ accepts all kinds of key specifications, including strings.
   ;; cut, copy and paste with cmd-key (like on osx).
   ;; this kinds sucks now, because the rest of the OS does not do this
   ;; SOLUTION: learn to work with standard emacs keybinding and adjust the OS  ?
-  (bind-key [(super z)] 'undo)
-  (bind-key [(super x)] 'clipboard-kill-region)
-  (bind-key [(super c)] 'clipboard-kill-ring-save)
-  (bind-key [(super v)] 'yank)
-  (bind-key [(super a)] 'mark-whole-buffer)
+  (bind-key "s-z" 'undo)
+  (bind-key "s-x" 'clipboard-kill-region)
+  (bind-key "s-c" 'clipboard-kill-ring-save)
+  (bind-key "s-v" 'yank)
+  (bind-key "s-a" 'mark-whole-buffer)
 
   ;; Keypad delete
   (bind-key [(kp-delete)] 'delete-char)
@@ -2176,7 +2176,7 @@ accepts all kinds of key specifications, including strings.
   ;; Make `C-x C-m' and `C-x RET' be different (since I tend
   ;; to type the latter by accident sometimes.)
   ;; Should this not be an unset?
-  (bind-key [(control x) return] nil)
+  (bind-key "C-x RET" nil)
 
   (defun mrb/new-empty-buffer ()
     "Opens a new empty buffer."
@@ -2193,7 +2193,7 @@ accepts all kinds of key specifications, including strings.
   ;; that wraps around kill-buffer, and check on the buffer modification
   ;; status to offer save
   ;; This custome kill buffer is close-current-buffer.
-  (bind-key [(super n)] 'mrb/new-empty-buffer)
+  (bind-key "s-n" 'mrb/new-empty-buffer)
 
 #+END_SRC
 ** Key bindings
@@ -2206,7 +2206,7 @@ emacs is just easier. This saves me from having to kill the emacs
 daemon from the terminal.
 
 #+BEGIN_SRC emacs-lisp
-  (bind-key [(control x) (control q)] 'save-buffers-kill-emacs)
+  (bind-key "C-x C-q" 'save-buffers-kill-emacs)
 #+END_SRC
 
 Probably the most important key is =M-x= (as set by default). That key
@@ -2222,15 +2222,15 @@ runs smex, but limits the commands to make sense for the current
 major mode only.
 
 #+BEGIN_SRC emacs-lisp
-  (bind-key [(control c)(meta x)] 'execute-extended-command)
-  (bind-key [(meta x)] 'smex)
-  (bind-key [(meta X)] 'smex-major-mode-commands)
+  (bind-key "C-c M-x" 'execute-extended-command)
+  (bind-key "M-x" 'smex)
+  (bind-key "M-X" 'smex-major-mode-commands)
 #+END_SRC
 
 I want to be able to call up magit from anywhere
 
 #+BEGIN_SRC emacs-lisp
-  (bind-key [(control c) (m)] 'magit-status)
+  (bind-key "C-c m" 'magit-status)
 #+END_SRC
 **** COMMENT Special keys
 For some special keys I have defined some commands. Special keys are
@@ -2241,9 +2241,9 @@ the previous definition.
 #+BEGIN_SRC emacs-lisp
   ;; Menu key does M-x, if we have it.
   ;;(bind-key (kbd "<apps>") 'execute-extended-command)
-  (bind-key [f1] 'help-command)
-  (bind-key [f2] 'save-buffer)
-  (bind-key [f3] 'find-file)
+  (bind-key "<f1>" 'help-command)
+  (bind-key "<f2>" 'save-buffer)
+  (bind-key "<f4>" 'find-file)
 
   ;; Define the toggle-frame-fullscreen function in
   ;; the case that it is not already.
@@ -2260,7 +2260,7 @@ the previous definition.
   (defun mrb/switch-full-screen ()
     (interactive)
     (mrb/toggle-frame-fullscreen))
-  (bind-key [f11] 'mrb/switch-full-screen)
+  (bind-key "<f11>" 'mrb/switch-full-screen)
 
   ;; Not sure what this is? It is not the menu key.
   (bind-key [XF86MenuKB] 'accelerate-menu)
@@ -2276,30 +2276,30 @@ the previous definition.
   (bind-key [XF86AudioPrev] 'previous-multiframe-window)
 
   ;; Alt-Cmd left-right arrows browse through buffers within the same frame
-  (bind-key [(meta super left)] 'previous-buffer)
-  (bind-key [(meta super right)] 'next-buffer)
+  (bind-key "<M-s-left>"  'previous-buffer)
+  (bind-key "<M-s-right>" 'next-buffer)
 
   ;; Ctrl Cmd moves buffers up and down in the tiling of emacs
-  (bind-key [(control super up)]   'buf-move-up)
-  (bind-key [(control super down)] 'buf-move-down)
+  (bind-key "<C-s-up>"  'buf-move-up)
+  (bind-key "<C-s-down>" 'buf-move-down)
 
   ;; These would conflict with awesome bindings, perhaps we should change those bindings
-  ;; (bind-key (kbd "<C-S-left>")   'buf-move-left)
-  ;; (bind-key (kbd "<C-S-right>")  'buf-move-right)
+  ;; (bind-key "<C-S-left>"  'buf-move-left)
+  ;; (bind-key "<C-S-right>" 'buf-move-right)
 
   ;; Use Super + Arrows to steer the borders
-  (bind-key [(super up)] 'move-border-up)
-  (bind-key [(super down)] 'move-border-down)
+  (bind-key "<s-up>" 'move-border-up)
+  (bind-key "<s-down>" 'move-border-down)
 #+END_SRC
 *** Org-mode
 Orgmode specific keybindings.
 
 #+BEGIN_SRC emacs-lisp
-  (bind-key [(control c) (g)] 'mrb/gtd)
-  (bind-key [(control c) (a)] 'org-agenda)
-  (bind-key [(control c) (b)] 'org-iswitchb)
-  (bind-key [(control c) (l)] 'org-store-link)
-  (bind-key [(control c) (j)] 'mrb/make-journal-entry)
+  (bind-key "C-c g" 'mrb/gtd)
+  (bind-key "C-c a" 'org-agenda)
+  (bind-key "C-c b" 'org-iswitchb)
+  (bind-key "C-c l" 'org-store-link)
+  (bind-key "C-c j" 'mrb/make-journal-entry)
 #+END_SRC
 ** Other key and mouse related settings
 Emacs has, like for everything else, a peculiar idea on scrolling and
@@ -2412,7 +2412,7 @@ In the window manager (awesome-wm) 'Cmd Enter' launches a terminal,
 similarly within Emacs 'C-c Enter' launches Eshell:
 
 #+BEGIN_SRC emacs-lisp
-  (bind-key [(control c) return] 'eshell)
+  (bind-key "C-c RET" 'eshell)
 #+END_SRC
 
 First thing I missed in eshell was a the =clear= function, as in
@@ -3139,10 +3139,10 @@ Statusnet, or perhaps microblog in general settings
   )
 
 
-  (bind-key [(control c) (ip)] 'identica-update-status-interactive)
-  (bind-key [(control c) (id)] 'identica-direct-message-interactive)
-  (bind-key [(control c) (is)] 'identica-shortenurl-replace-at-point)
-  (bind-key [(control c) (d)]  'mrb/make-dent-frame)
+  (bind-key "C-c ip" 'identica-update-status-interactive)
+  (bind-key "C-c id" 'identica-direct-message-interactive)
+  (bind-key "C-c is" 'identica-shortenurl-replace-at-point)
+  (bind-key "C-c d"  'mrb/make-dent-frame)
 
 
   ;; I'm using a floating frame in awesome WM for dents
