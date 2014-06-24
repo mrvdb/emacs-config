@@ -73,6 +73,7 @@
 (depends-on "ujelly-theme"          :git "https://github.com/marktran/color-theme-ujelly")
 (depends-on "use-package")
 (depends-on "wrap-region")
+(depends-on "ws-butler")
 (depends-on "xlicense"              :git "https://github.com/emacsmirror/xlicense")
 (depends-on "xml-rpc")
 (depends-on "yaml-mode")

@@ -502,7 +502,11 @@ visits the server, so we can still apply these settings transparently.
     (eval-after-load "magit"
       '(set-face-attribute 'magit-item-highlight nil :inherit nil :foreground nil
                            :background mrb-bg-paren-match))
-  )
+
+    (use-package ws-butler
+      :init
+      (ws-butler-global-mode 1)))
+
 
   ;; This seems to work if we start up emacs using filename on cli and
   ;; server was not running yet. It does however not work if we just
@@ -3352,6 +3356,7 @@ consistent interface to rule them all.
     (twister-close-post))
 
   ;; Change the default keybinding to company mode completion
+  ;; C-i is the same as TAB
   (bind-key "C-i" 'company-complete twister-post-mode-map)
 #+END_SRC
 
@@ -3543,10 +3548,14 @@ trailing spaces clean and highlights 'dirty' ones in the hope that I
 notice and remove them. ws-trim.el can have different levels of
 intrusiveness. I'm installing ethan-space for now.
 
-[2014-05-20 di] worked with it for a while and it's pretty
+[2014-05-20 di] worked with ethan-wspace for a while and it's pretty
 annoying. 80% of the space it is displaying as being /wrong/ is
 harmless. I have uninstalled it for now, I may reconsider installing
 it only for /some/ modes and not globally.
+
+[2014-06-20 vr] Retrying ws-butler mode (see Visual
+#+BEGIN_SRC emacs-lisp
+  #+END_SRC
 * GIT integration
 This section is a temporary place to store some git related
 settings. I need to reorganize this document a bit so I have a section
