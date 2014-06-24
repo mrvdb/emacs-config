@@ -2284,17 +2284,17 @@ the previous definition.
   (bind-key "<M-s-left>"  'previous-buffer)
   (bind-key "<M-s-right>" 'next-buffer)
 
-  ;; Ctrl Cmd moves buffers up and down in the tiling of emacs
-  (bind-key "<C-s-up>"  'buf-move-up)
-  (bind-key "<C-s-down>" 'buf-move-down)
-
   ;; These would conflict with awesome bindings, perhaps we should change those bindings
   ;; (bind-key "<C-S-left>"  'buf-move-left)
   ;; (bind-key "<C-S-right>" 'buf-move-right)
 
-  ;; Use Super + Arrows to steer the borders
-  (bind-key "<s-up>" 'move-border-up)
-  (bind-key "<s-down>" 'move-border-down)
+  ;; Awesome uses Super+Arrows to move between its 'frames'
+  ;; Emacs   uses Shift-Super+Arrows to move between its windows
+  (bind-key "<S-s-right>" 'windmove-right)
+  (bind-key "<S-s-left>"  'windmove-left)
+  (bind-key "<S-s-up>"    'windmove-up)
+  (bind-key "<S-s-down>"  'windmove-down)
+
 #+END_SRC
 *** Org-mode
 Orgmode specific keybindings.
