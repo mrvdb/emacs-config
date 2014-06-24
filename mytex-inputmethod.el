@@ -701,8 +701,8 @@ system, including many technical ones.  Examples:
  ("\\Bbb{P}" ?ℙ)			; Also sometimes \mathbb.
  ("\\Bbb{R}" ?ℝ)
  ("\\Bbb{Z}" ?ℤ)
- ("--" ?–)
- ("---" ?—)
+ ;("--" ?–)  ; Disabled, this is really annoying most of the time
+ ;("---" ?—) ; also because I use this input method as global. Alternative?
  ;; We used to use ~ for NBSP but that's inconvenient and may even look like
  ;; a bug where the user finds his ~ key doesn't insert a ~ any more.
  ("\\ " ? )
