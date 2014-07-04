@@ -3489,6 +3489,7 @@ clumsy, although very flexible.
           ("http://www.thetoolanddieguy.com/feed" machining)
           ("thinkpad" reddit computing)
           ("http://www.emacswiki.org/emacs/index.rss?action=rss" emacs software)
+          ("http://feeds.feedburner.com/hacknmod/qjUG")
           ;; Add new feeds above this
           ))
 
