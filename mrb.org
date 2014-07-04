@@ -349,7 +349,9 @@ done with them.
      (font-spec :family (or family "FreeSerif"))))
 
   ;; Add a line like the following  for each char displaying improperly
+  ;; FIXME: this doesn't get applied on startup??? manually it does work.
   (mrb/fix-fontset-font "Symbola" #x1F4A9)
+  (mrb/fix-fontset-font "Symbola" #x1f44d)
   ;; PILE OF POO symbol 💩 \larr This should now show a pile of poo if all is well
 #+END_SRC
 
