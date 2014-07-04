@@ -971,6 +971,29 @@ Now that function is used to insert the proprty when:
       (mrb/insert-created-timestamp)))
   (ad-activate 'org-capture)
 #+END_SRC
+*** Scheduling items
+Orgmode has a number of provisions to schedule items, either
+explicitly by setting the SCHEDULE property, inferring a deadline by
+setting the DEADLINE property, thus scheduling the task in an interval
+before the deadline expires.
+
+A routine task I am performing, often at the beginning of the day, is
+to make a list of what I want to do that day. This is often ad-hoc and
+thus still on paper most of the time. Over time, I want this to be
+done in orgmode, but that requires the process to be a lot simpler
+than it is now and one of the things is to make it easier to model a
+thing like: "yeah, do this today"
+
+#+BEGIN_SRC emacs-lisp
+  (defun mrb/org-schedule-for-today()
+    "Schedule the current item for today"
+    (interactive)
+    (org-schedule nil
+                  (format-time-string "%Y-%m-%d")))
+
+  (bind-key "C-." 'mrb/org-schedule-for-today org-mode-map)
+
+#+END_SRC
 
 *** Visual settings
 Having an attractive screen to look at becomes more important if you
