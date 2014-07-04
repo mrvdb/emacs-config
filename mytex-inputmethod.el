@@ -1,4 +1,4 @@
-;;; latin-ltx.el --- Quail package for TeX-style input -*-coding: utf-8;-*-
+;;; mytex-inputmethod.el --- Modified input method, based on TeX-style input -*-coding: utf-8;-*-
 
 ;; Copyright (C) 2001-2013 Free Software Foundation, Inc.
 ;; Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
@@ -10,7 +10,7 @@
 ;;         Dave Love <fx@gnu.org>
 ;; Keywords: multilingual, input, Greek, i18n
 
-;; This file is part of GNU Emacs.
+;; This file is NOT part of GNU Emacs.
 
 ;; GNU Emacs is free software: you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -36,7 +36,7 @@
  "LaTeX-like input method for many characters.
 These characters are from the charsets used by the `utf-8' coding
 system, including many technical ones.  Examples:
- \\'a -> á  \\`{a} -> à
+ \\`a -> à  \\`{a} -> à
  \\pi -> π  \\int -> ∫  ^1 -> ¹"
 
  '(("\t" . quail-completion))
@@ -241,13 +241,13 @@ system, including many technical ones.  Examples:
  ("\\:" ? )
  ("\\;" ? )
 
- ;; Disable sub- and superscript rendering for now, do this in 'userland'
- ;; ((lambda (name char)
- ;;    (let* ((base (concat (match-string 1 name) (match-string 3 name)))
- ;;           (basechar (cdr (assoc base (ucs-names)))))
- ;;      (when (latin-ltx--ascii-p basechar)
- ;;        (string (if (match-end 2) ?^ ?_) basechar))))
- ;;  "\\(.*\\)SU\\(?:B\\|\\(PER\\)\\)SCRIPT \\(.*\\)")
+ ;;; Disable sub- and superscript rendering for now, do this in 'userland'
+ ;;; ((lambda (name char)
+ ;;;    (let* ((base (concat (match-string 1 name) (match-string 3 name)))
+ ;;;           (basechar (cdr (assoc base (ucs-names)))))
+ ;;;      (when (latin-ltx--ascii-p basechar)
+ ;;;        (string (if (match-end 2) ?^ ?_) basechar))))
+ ;;;  "\\(.*\\)SU\\(?:B\\|\\(PER\\)\\)SCRIPT \\(.*\\)")
 
  ("^\\gamma" ?ˠ)
 
@@ -701,8 +701,8 @@ system, including many technical ones.  Examples:
  ("\\Bbb{P}" ?ℙ)			; Also sometimes \mathbb.
  ("\\Bbb{R}" ?ℝ)
  ("\\Bbb{Z}" ?ℤ)
- ;("--" ?–)  ; Disabled, this is really annoying most of the time
- ;("---" ?—) ; also because I use this input method as global. Alternative?
+ ;;;("--" ?–)  ; Disabled, this is really annoying most of the time
+ ;;;("---" ?—) ; also because I use this input method as global. Alternative?
  ;; We used to use ~ for NBSP but that's inconvenient and may even look like
  ;; a bug where the user finds his ~ key doesn't insert a ~ any more.
  ("\\ " ? )
@@ -785,7 +785,8 @@ system, including many technical ones.  Examples:
  ("\\textrquill" ?⁆)
  ("\\textcircledP" ?℗)
  ("\\textreferencemark" ?※)
- ;; ADDED BY ME
+
+;;; ADDED BY ME
  ("\\bitcoin" ?฿)
  ("\\cmd" ?⌘)
  ("\\shift" ?⇧)
@@ -795,7 +796,7 @@ system, including many technical ones.  Examples:
  ("\\tab" ?↹)
  ("\\backspace" ?⌫)
  ("\\delete" ?⌦)
-
+ ("\\plusminus" ?±)
  )
 
-;;; latin-ltx.el ends here
+;;; mytext-inputmethod.el ends here
