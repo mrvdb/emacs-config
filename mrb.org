@@ -818,10 +818,12 @@ Adapt the colors of the states I use a bit:
 
 #+BEGIN_SRC emacs-lisp
   (setq org-todo-keyword-faces '(
-    ("DONE"   .    (:foreground "#afd8af"     :weight bold))
+    ("DONE"      . (:foreground "#afd8af"     :weight bold))
     ("WAITING"   . (:foreground "dark salmon" :weight bold))
     ("CANCELLED" . (:foreground "dim gray"    :weight bold))
-    ("BUY      " . (:foreground "goldenrod"   :weight bold))
+    ("BUY"       . (:foreground "goldenrod"   :weight bold))
+    ("HOWTO"     . (:foreground "SkyBlue3"    :weight bold))
+    ("INFO"      . (:foreground "khaki1"      :weight bold))
   ))
 #+END_SRC
 
