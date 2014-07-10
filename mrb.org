@@ -72,7 +72,7 @@ And edit the file obviously.
   # This script starts emacs daemon if it is not running, opens whatever file
   # you pass in and changes the focus to emacs.  Without any arguments, it just
   # opens the current buffer or *scratch* if nothing else is open.
-  EMACSCLIENT="/usr/local/bin/emacsclient --quiet --no-wait"
+  EMACSCLIENT="`which emacsclient` --quiet --no-wait"
 
   # Number of current visible frames,
   # Emacs daemon always has a visible frame called F1
