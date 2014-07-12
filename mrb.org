@@ -264,6 +264,14 @@ separate file for several reasons.
       (goto-address-mode 1)))
   (global-goto-address-mode t)
 #+END_SRC
+
+Make life easier if we have sudo, so we can just edit the files and be
+done with them if possible
+
+#+BEGIN_SRC emacs-lisp
+  (use-package sudo-save)
+
+#+END_SRC
 * Internationalisation and multi-language features
 If anything multi-language should work, UTF-8 encoding is a must, so
 let's make sure we try to use that everywhere
