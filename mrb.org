@@ -2092,10 +2092,13 @@ for part design for the 3D-print and for the lathe.
 
 #+BEGIN_SRC emacs-lisp
   ; OpenSCAD has git repository in my dev tree
-  (add-to-list 'load-path "~/dat/src/reprapping/openscad/contrib")
-  (load "scad-mode")
+  ;; Find a way to get this with el-get, say from github
+  ;; It is part of the openscad package and in the contrib folder
+  ;; there. Until that time, we're disabling
+  ;; (add-to-list 'load-path "~/dat/src/reprapping/openscad/contrib")
+  ;; (load "scad-mode")
 
-  (provide 'openscad)
+  ;;(provide 'openscad)
 
 #+END_SRC
 ** Python
