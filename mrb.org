@@ -127,17 +127,122 @@ lots of options, of which package.el seems to be the choice if not
 anything else explicitly preferred. I have always used el-get instead
 of package.el, although I have no idea why I made that decision at
 that time, but I think it was because it allowed me to inlcude git
-recipes in an easy way.
+recipes in an easy way. ([2014-03-03 ma] Not sure if this is stil the
+case now)
 
-I have now converted package management and delegated it to Cask. From
-this configuration point of view, everything needed should be there.
-The main cask configuration is in =init.el=
+There are several options:
+1. Just use plain package.el
+2. Use el-get
+3. Use use-package (piggybacks on package.el)
+4. Homebrew
+5. Others...?
 
-The reasons for converting my el-get based setup to cask:
-1. separate the pure package management to a tool specifically
-   designed for that
-2. be able to use use-package later on.
-3. configuration seemed cleaner.
+The *important* bit here is that this section manages *ALL* my packages,
+including the ones gotten from apt-get, git and elpa.
+The reason for this is that it provides one neat umbrella (in Emacs)
+to manage its packages.
+
+We manage everything with =el-get= so we start by loading that if we
+don't have it already.
+
+First of all, define the package archives I need; for now, just the
+default gnu augmented with the melpa repository. I use setq because I
+want *this* entry to be the definitive one, not adding to a list.
+#+BEGIN_SRC emacs-lisp
+  (setq package-archives
+        '(("melpa" . "http://melpa.milkbox.net/packages/")
+          ("gnu"   . "http://elpa.gnu.org/packages/")))
+  (package-initialize)
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (add-to-list 'load-path (concat emacs-directory "/el-get/el-get"))
+
+  (unless  (require 'el-get nil 'noerror)
+    (with-current-buffer
+        (url-retrieve-synchronously
+         "https://raw.github.com/dimitri/el-get/master/el-get-install.el")
+      (goto-char (point-max))
+      (eval-print-last-sexp)))
+#+END_SRC
+
+Now, =el-get= is either require’d, and thus available, or loaded by the
+el-get installer, in which case it is also available.
+
+The rest is basically a long list of sources for el-get where to get
+the packages from and how to install and update them.
+When installing a new package, add a recipe in this list, eval it,
+and run =el-get-install= with the package name.
+
+#+BEGIN_SRC emacs-lisp
+  ;; Personal or adapted recipes
+  (setq el-get-sources
+        '(
+          ;; Obviously we need el-get itself, so we can run a self-update
+          ;; There is a recipe, but we want the master branch of it
+          (:name el-get :branch "master")
+          ;; Using a different source than the built-in recipe (why was this again?)
+          (:name zenburn-emacs          :type github :pkgname "bbatsov/zenburn-emacs")
+          ;; Version from elpa does not work for me (init problem?)
+          (:name cursor-chg             :type github :pkgname  "emacsmirror/cursor-chg"
+                 :features cursor-chg)
+          (:name newlua-mode            :type github :pkgname "immerrr/lua-mode"
+                 :features lua-mode)
+          (:name oauth                  :type github :pkgname "psanford/emacs-oauth")
+          (:name expand-region          :type github :pkgname "magnars/expand-region.el")
+          (:name mark-multiple          :type github :pkgname "magnars/mark-multiple.el")
+          (:name fixed-point-completion :type github :pkgname "smithzvk/fixed-point-completion")
+          (:name xlicense               :type github :pkgname "emacsmirror/xlicense")
+          (:name autosmiley             :type github :pkgname "emacsmirror/autosmiley")
+          (:name async                  :type github :pkgname "jwiegley/emacs-async")
+          (:name pcache                 :type github :pkgname "sigma/pcache")
+          (:name logito                 :type github :pkgname "sigma/logito")
+          (:name gh                     :type github :pkgname "sigma/gh.el"
+                 :depends (pcache logito))
+          (:name gisthub                :type github :pkgname  "defunkt/gist.el"
+                 :depends (gh))
+          (:name stripe-buffer          :type github :pkgname "sabof/stripe-buffer")
+          (:name git-auto-commit-mode   :type github :pkgname "ryuslash/git-auto-commit-mode")
+          (:name ujelly-theme           :type github :pkgname "marktran/color-theme-ujelly")
+          ;;(:name erc-tweet              :type github :pkgname "kidd/erc-tweet.el")
+          (:name erc-image              :type github :pkgname "mrvdb/erc-image.el")
+          (:name org-present            :type github :pkgname "rlister/org-present")
+          ;; Dependency? I dont use this directly
+          (:name dash                   :type github :pkgname "magnars/dash.el")
+          (:name gitmessenger           :type github :pkgname "syohex/emacs-git-messenger")
+          (:name metaweblog             :type github :pkgname "punchagan/metaweblog.el")
+          (:name org-agenda-property    :type github :pkgname "Bruce-Connor/org-agenda-property")
+          (:name pump.io                :type github :pkgname "cnngimenez/pumpio-el")
+          (:name elfeed                 :type github :pkgname "skeeto/elfeed")
+          ;;(:name mrb/ubiquitous       :type github :pkgname "DarwinAwardWinner/ido-ubiquitous")
+          (:name guide-key              :type github :pkgname "kbkbkbkb1/guide-key")
+          (:name org-screenshot         :type github :pkgname "dfeich/org-screenshot")
+          ;;(:name ethan-wspace :after (progn (global-ethan-wspace-mode 1)))
+          (:name erc-hl-nicks           :type github :pkgname "leathekd/erc-hl-nicks")
+          (:name json-rpc               :type github :pkgname "skeeto/elisp-json-rpc")
+          (:name btcticker              :type github :pkgname "niedbalski/emacs-btc-ticker"
+                 :depends request)
+          (:name ws-butler              :type github :pkgname "lewang/ws-butler")
+          (:name wrap-region            :type github :pkgname "rejeep/wrap-region.el")
+        )
+  )
+
+  (setq mrb/packages
+        (append
+         ;; list of packages we use from standard recipes
+         '(smex ace-jump-mode apache-mode gnuplot-mode sudo-save
+                edit-server magit markdown-mode rainbow-mode rainbow-delimiters scratch popwin
+                highlight-parentheses multiple-cursors git-modes cl-lib keywiz
+                smart-tab yaml-mode org-jekyll hideshow-org oauth flim haskell-mode ghc-mod s f
+                flycheck pkg-info perspective ido-vertical-mode jekyll-el org2blog
+                identica-mode php-mode company-mode xml-rpc csv-mode notmuch use-package)
+         ;; the sources we have configured above
+         (mapcar 'el-get-as-symbol (mapcar 'el-get-source-name el-get-sources))))
+
+  (el-get 'sync mrb/packages)
+  (require 'use-package)
+#+END_SRC
+
 
 * Personal information
 I'd like to arrange 3 things related to personal information:
@@ -358,7 +463,7 @@ done with them.
 
   ;; Add a line like the following  for each char displaying improperly
   ;; FIXME: this doesn't get applied on startup??? manually it does work.
-  (mrb/fix-fontset-font "Symbola" #x1F4A9)
+  (mrb/fix-fontset-font "Symbola" #x1F4A9) ;; 💩
   (mrb/fix-fontset-font "Symbola" #x1f44d) ;; 👍
   ;; PILE OF POO symbol 💩 \larr This should now show a pile of poo if all is well
 #+END_SRC
@@ -391,7 +496,9 @@ background color. The default one is to light in daylight conditions.
 #+END_SRC
 
 The zenburn theme does not fit for everything so I have a number of
-corrections.
+corrections. I do it like this because zenburn is more complete than
+ujelly and otherwise I'd have a large set of faces defined in a wrong
+color.
 
 #+BEGIN_SRC emacs-lisp
   ;; Zenburn underlines date face in org, no go
@@ -402,7 +509,7 @@ corrections.
   (set-face-attribute 'mode-line-inactive nil :box nil :underline nil :overline "grey40")
 
   (set-face-attribute 'isearch nil :background "sea green" :foreground "black")
-  ;(set-face-attribute 'ido-first-match nil :background "sea green" :foreground "black")
+  (set-face-attribute 'ido-first-match nil :background "sea green" :foreground "black")
 
   (set-face-attribute 'lazy-highlight nil :inherit isearch-lazy-highlight
                       :background "black" :foreground "tomato")
@@ -2782,7 +2889,7 @@ I've found none applicable yet.
 
 #+BEGIN_SRC emacs-lisp
 
-(require 'wrap-region)
+(use-package wrap-region)
 (wrap-region-global-mode 1)
 ;; (add-to-list 'wrap-region-except-modes 'conflicting-mode)
 #+END_SRC
@@ -2885,7 +2992,7 @@ Start by configuring some basic settings
 
 #+BEGIN_SRC emacs-lisp
     (require 'erc)
-    (require 'erc-tweet)
+    ;;(require 'erc-tweet)
     (require 'erc-image)
 
     (setq
