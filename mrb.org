@@ -3001,9 +3001,8 @@ nicks and passwords and stuff.
 Start by configuring some basic settings
 
 #+BEGIN_SRC emacs-lisp
-    (require 'erc)
-    ;;(require 'erc-tweet)
-    (require 'erc-image)
+    (use-package erc)
+    (use-package erc-image)
 
     (setq
      erc-modules
@@ -3013,7 +3012,7 @@ Start by configuring some basic settings
        match move-to-prompt netsplit
        networks noncommands notify notifications
        readonly replace ring services smiley stamp track unmorse
-         smiley tweet image truncate))
+         smiley image truncate))
      erc-image-inline-rescale 150)
 #+END_SRC
 
@@ -3021,7 +3020,7 @@ Configure erc to use services and automatically identify my Nicks to
 Nickserv.
 
 #+BEGIN_SRC emacs-lisp
-    (require 'erc-services)
+    (use-package 'erc-services)
     (setq erc-nick '("_MrB_" "_MrB__"))
 
     (setq erc-prompt-for-nickserv-password nil)
