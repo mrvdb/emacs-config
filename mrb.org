@@ -359,7 +359,7 @@ done with them.
   ;; Add a line like the following  for each char displaying improperly
   ;; FIXME: this doesn't get applied on startup??? manually it does work.
   (mrb/fix-fontset-font "Symbola" #x1F4A9)
-  (mrb/fix-fontset-font "Symbola" #x1f44d)
+  (mrb/fix-fontset-font "Symbola" #x1f44d) ;; 👍
   ;; PILE OF POO symbol 💩 \larr This should now show a pile of poo if all is well
 #+END_SRC
 
@@ -705,6 +705,20 @@ Here are the templates used for them.
            ("j" "Journal"
             entry (file+datetree (concat org-directory "journal.org"))
             "* ___________________________________________________________ *%U* ___\n\n%?\n")
+           ("w" "Weigh-In"
+            entry (file+headline (concat org-directory "diet.org") "Daily Logs")
+            "* CAL-IN Diet for day %t
+  %^{Weight}p
+  | Food / Exercise | Calories | Quantity | Total |
+  |-----------------+----------+----------+-------|
+  | %?              |          |          |       |
+  |-----------------+----------+----------+-------|
+  | Total           |          |          |       |
+  |-----------------+----------+----------+-------|
+  #+TBLFM: $4=$2*$3;%.0f::$LR4=vsum(@2$4..@-I$4)
+
+  "
+            :prepend t :empty-lines 1)
            )
           )
    )
@@ -1988,9 +2002,10 @@ source (*.hs files) and the ghc-mod package to help with completion
 and showing syntax errors.
 
 #+BEGIN_SRC emacs-lisp
-(autoload 'haskell-mode "haskell-mode" "Haskell support" t)
-(add-to-list 'auto-mode-alist '("\\.hs\\'" . haskell-mode))
-(add-hook 'haskell-mode-hook (lambda () (ghc-init) ))
+  ;(autoload 'haskell-mode "haskell-mode" "Haskell support" t)
+  (add-to-list 'auto-mode-alist '("\\.hs\\'" . haskell-mode))
+  ;(add-hook 'haskell-mode-hook (lambda () (ghc-init) ))
+
 #+END_SRC
 * LDAP
 LDAP integration, mostly for address book lookups
@@ -3521,6 +3536,7 @@ clumsy, although very flexible.
           ("thinkpad" reddit computing)
           ("http://www.emacswiki.org/emacs/index.rss?action=rss" emacs software)
           ("http://feeds.feedburner.com/hacknmod/qjUG")
+          ("https://blog.sleeplessbeastie.eu/atom.xml")
           ;; Add new feeds above this
           ))
 

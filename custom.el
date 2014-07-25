@@ -11,27 +11,40 @@
  '(compilation-scroll-output t)
  '(custom-safe-themes
    (quote
-    ("3cc6c42bee60b0a031be65497e630b3ffaaaa41ffc1f41b9f7863ee484688640" "471877df61bcd989ba4c0a5097654684fcfe918e124d46f811b533e44df34f53" "a37600b047da389eccc4a17b5f165d512fb1d32f18d93cffb28154b5f4eb4437" "54266114287ef8abeda6a3df605deffe777957ba994750da6b8595fe90e932f0" "39fb431548791db3e64b047524a65be40a41f14779f4087255c7ad759f329d73" "51b018973bd206cbe49185abcba0c2f2e9da0a88c36d3f039cf97d946921e4f6" "e7f43be7b03c0ac4a927724fe242c4befb40b11403fb655a15b42f5e86f4ce1e" "bfcb55c7cf76f7fe4fa7eb067425b7d2f58af27b6a193f07b0351429faf2eb91" "52b5da0a421b020e2d3429f1d4929089d18a56e8e43fe7470af2cea5a6c96443" "e15fde341e7fc4b7f4dfb225031d3e3b39c215a72d71cb9d77f055e3de885a29" "bd50e3b2dea5d01950991bc230583fdab93f3fd7af6a7c62421c370e347226ec" "d6a00ef5e53adf9b6fe417d2b4404895f26210c52bb8716971be106550cea257" "fc5fcb6f1f1c1bc01305694c59a1a861b008c534cae8d0e48e4d5e81ad718bc6" "81805c86e126018f339211bb3f03e1c9eae30adfbe72832bd02f89ca0cbe5885" "f23144cd3b2cfd4d873f16bef36a246d55616658aff372ec87d96cd1330ebafd" "bf7ed640479049f1d74319ed004a9821072c1d9331bc1147e01d22748c18ebdf" "702ed17ae44a6f3cb71ed2e5bf5edeec06a771c80eb61b265ebf8a658edd2462" "b2382ac6b8a922aee932d81ef846e83ab4c950198986849c622e60996b698c71" "ebb23762f3569b2d146b6091a6ed22cac44c4e53e8a33d9ff2bc3b90cc9e58e8" "819d81fabb0bde707a0f34cdd66e3bc1960273e8283e912a310e446ce3c44620" "363772e75d98d439856d08c013ae280ca55958db6ed073c43081ddba4404bef8" default)))
+    ("08cfa7b21bb5c1d5d86c3ec51705439acb300bf8e92eaaba46f8ec387e505923" "63222f9c4cc924778e29a349cd110ad5739b0a3589c4c399117dbaddf875d209" "5c95e6818b3bbb0d079921952f4a509661c599fb1cfb0330606ce5cb892c312e" "3cc6c42bee60b0a031be65497e630b3ffaaaa41ffc1f41b9f7863ee484688640" "471877df61bcd989ba4c0a5097654684fcfe918e124d46f811b533e44df34f53" "a37600b047da389eccc4a17b5f165d512fb1d32f18d93cffb28154b5f4eb4437" "54266114287ef8abeda6a3df605deffe777957ba994750da6b8595fe90e932f0" "39fb431548791db3e64b047524a65be40a41f14779f4087255c7ad759f329d73" "51b018973bd206cbe49185abcba0c2f2e9da0a88c36d3f039cf97d946921e4f6" "e7f43be7b03c0ac4a927724fe242c4befb40b11403fb655a15b42f5e86f4ce1e" "bfcb55c7cf76f7fe4fa7eb067425b7d2f58af27b6a193f07b0351429faf2eb91" "52b5da0a421b020e2d3429f1d4929089d18a56e8e43fe7470af2cea5a6c96443" "e15fde341e7fc4b7f4dfb225031d3e3b39c215a72d71cb9d77f055e3de885a29" "bd50e3b2dea5d01950991bc230583fdab93f3fd7af6a7c62421c370e347226ec" "d6a00ef5e53adf9b6fe417d2b4404895f26210c52bb8716971be106550cea257" "fc5fcb6f1f1c1bc01305694c59a1a861b008c534cae8d0e48e4d5e81ad718bc6" "81805c86e126018f339211bb3f03e1c9eae30adfbe72832bd02f89ca0cbe5885" "f23144cd3b2cfd4d873f16bef36a246d55616658aff372ec87d96cd1330ebafd" "bf7ed640479049f1d74319ed004a9821072c1d9331bc1147e01d22748c18ebdf" "702ed17ae44a6f3cb71ed2e5bf5edeec06a771c80eb61b265ebf8a658edd2462" "b2382ac6b8a922aee932d81ef846e83ab4c950198986849c622e60996b698c71" "ebb23762f3569b2d146b6091a6ed22cac44c4e53e8a33d9ff2bc3b90cc9e58e8" "819d81fabb0bde707a0f34cdd66e3bc1960273e8283e912a310e446ce3c44620" "363772e75d98d439856d08c013ae280ca55958db6ed073c43081ddba4404bef8" default)))
  '(custom-theme-load-path
    (quote
     ("/home/mrb/.emacs.d/el-get/" "/home/mrb/.emacs.d/el-get/zenburn-emacs/" custom-theme-directory t)))
  '(dired-bind-jump nil)
- '(erc-generate-log-file-name-function (quote erc-generate-log-file-name-with-date))
+ '(erc-generate-log-file-name-function (quote erc-generate-log-file-name-with-date) t)
  '(erc-header-line-uses-help-echo-p nil)
  '(eshell-modules-list
    (quote
     (eshell-alias eshell-banner eshell-basic eshell-cmpl eshell-dirs eshell-glob eshell-hist eshell-ls eshell-pred eshell-prompt eshell-rebind eshell-script eshell-term eshell-unix)))
  '(explicit-shell-file-name "/bin/bash")
+ '(fci-rule-color "#383838")
  '(flyspell-issue-message-flag nil)
  '(font-lock-maximum-size nil)
  '(gud-gdb-command-name "gdb --annotate=1")
+ '(haskell-mode-hook (quote (turn-on-haskell-indent)))
  '(ispell-use-framepop-p t)
-
+ '(jabber-chat-buffer-format "*-chat-%n-*")
+ '(jabber-groupchat-buffer-format "*-groupchat-%n-*")
+ '(jabber-muc-colorize-foreign t)
+ '(jabber-muc-colorize-local t)
+ '(jabber-muc-disable-disco-check t)
+ '(jabber-muc-private-buffer-format "*-muc-priv-%g-%n-*")
+ '(jabber-roster-buffer "*-roster-*")
  '(jit-lock-stealth-time 16)
  '(mail-signature nil)
  '(markdown-css-path "/home/mrb/.markdown.css")
  '(mu4e-attachment-dir "/home/mrb/Downloads")
  '(notmuch-fcc-dirs nil)
+ '(notmuch-poll-script nil)
+ '(notmuch-saved-searches
+   (quote
+    ((:name "inbox" :query "tag:inbox")
+     (:name "unread" :query "tag:unread"))))
  '(nxml-heading-element-name-regexp "\\|.*")
  '(nxml-section-element-name-regexp "\\|file\\|.+")
  '(org-M-RET-may-split-line (quote ((default . t) (headline))))
@@ -41,40 +54,41 @@
       ((org-agenda-overriding-header "WAITING FOR-list")
        (org-agenda-dim-blocked-tasks t)
        (org-agenda-group-by-property "Responsible")))
-     ("b" "Buying list" tags-todo "-inactive+buy/BUY|TODO"
-      ((org-agenda-overriding-header "Buying list")
-       (org-agenda-dim-blocked-tasks
-        (quote invisible))
-       (org-agenda-sorting-strategy
-        (quote
-         (todo-state-up)))))
+     ("b" "Buying list"
+      ((tags-todo "-inactive+buy/TODO"
+		  ((org-agenda-overriding-header "Buying list (tagged)")))
+       (tags-todo "-inactive/BUY"
+		  ((org-agenda-overriding-header "Buying list (keyword)"))))
+      ((org-agenda-dim-blocked-tasks
+	(quote invisible)))
+      nil)
      ("p" "Active project list" tags-todo "-ignore-inactive+LEVEL>1-TODO=\"DONE\"-TODO=\"CANCELLED\""
       ((org-agenda-overriding-header "Active project list")
        (org-agenda-skip-function
-        (quote mrb/skip-non-projects))
+	(quote mrb/skip-non-projects))
        (org-agenda-dim-blocked-tasks nil)
        (org-agenda-group-by-property "Group")
        (org-agenda-sorting-strategy
-        (quote
-         (alpha-up)))))
+	(quote
+	 (alpha-up)))))
      ("A" "Active task list" tags-todo "+SCHEDULED=\"\"-inactive/TODO"
       ((org-agenda-group-by-property "Group")
        (org-agenda-dim-blocked-tasks
-        (quote invisible))))
+	(quote invisible))))
      ("r" "To Review"
       ((tags-todo "SCHEDULED=\"\"+DEADLINE=\"\"-{.}/TODO"
-                  ((org-agenda-overriding-header "Untagged items")))
+		  ((org-agenda-overriding-header "Untagged items")))
        (tags-todo "-inactive+SCHEDULED=\"\"+DEADLINE=\"\"+TODO=\"TODO\"+{.}"
-                  ((org-agenda-overriding-header "Unscheduled active items"))))
+		  ((org-agenda-overriding-header "Unscheduled active items"))))
       ((org-agenda-dim-blocked-tasks
-        (quote invisible))))
+	(quote invisible))))
      ("S" "Someday/Maybe List"
       ((tags "+inactive"
-             ((org-agenda-overriding-header "Inactive projects")
-              (org-agenda-skip-function
-               (quote mrb/skip-non-projects))))
+	     ((org-agenda-overriding-header "Inactive projects")
+	      (org-agenda-skip-function
+	       (quote mrb/skip-non-projects))))
        (tags-todo "+inactive-BLOCKED=\"t\"/TODO"
-                  ((org-agenda-overriding-header "Inactive TODO items"))))
+		  ((org-agenda-overriding-header "Inactive TODO items"))))
       nil nil)
      ("c" "Scheduled overview" tags-todo "SCHEDULED<>\"\"|DEADLINE<>\"\"/TODO"
       ((org-agenda-overriding-header "SCHEDULED")
@@ -83,21 +97,21 @@
        (org-agenda-dim-blocked-tasks t)))
      ("l" "Blocked projects and tasks"
       ((tags-todo "+BLOCKED=\"t\"/PROJ"
-                  ((org-agenda-overriding-header "Blocked projects")
-                   (org-agenda-dim-blocked-tasks t)))
+		  ((org-agenda-overriding-header "Blocked projects")
+		   (org-agenda-dim-blocked-tasks t)))
        (tags-todo "+BLOCKED=\"t\"/TODO"
-                  ((org-agenda-overriding-header "Blocked tasks")
-                   (org-agenda-dim-blocked-tasks t)
-                   (org-agenda-group-by-property "Group"))))
+		  ((org-agenda-overriding-header "Blocked tasks")
+		   (org-agenda-dim-blocked-tasks t)
+		   (org-agenda-group-by-property "Group"))))
       nil nil)
      ("n" "Next Action List [hides blocked/inactive/waiting/INBOX-ed]" tags-todo "+SCHEDULED=\"\"+DEADLINE=\"\"-BLOCKED=\"t\"-inactive/-WAITING"
       ((org-agenda-overriding-header "Next Action List")
        (org-agenda-dim-blocked-tasks
-        (quote invisible))
+	(quote invisible))
        (org-agenda-group-by-property "CREATED")))
      ("x" "List of stuck projects (debug)" tags "-inactive+LEVEL>1-TODO=\"DONE\"-TODO=\"CANCELLED\""
       ((org-agenda-skip-function
-        (quote mrb/skip-non-stuck-projects))
+	(quote mrb/skip-non-stuck-projects))
        (org-agenda-overriding-header "List of STUCK projects")))
      ("D" "Items ready for archiving" todo "DONE"
       ((org-agenda-overriding-header "Items ready for archiving")
@@ -107,29 +121,29 @@
        (org-agenda-prefix-format "  ")))
      ("g" "AGENDA"
       ((agenda ""
-               ((org-agenda-filter-preset
-                 (quote
-                  ("-inactive")))
-                (org-agenda-span
-                 (quote day))
-                (org-agenda-skip-function
-                 (quote
-                  (org-agenda-skip-entry-if
-                   (quote todo)
-                   (quote
-                    ("WAITING")))))))
+	       ((org-agenda-filter-preset
+		 (quote
+		  ("-inactive")))
+		(org-agenda-span
+		 (quote day))
+		(org-agenda-skip-function
+		 (quote
+		  (org-agenda-skip-entry-if
+		   (quote todo)
+		   (quote
+		    ("WAITING")))))))
        (mrb/org-agenda-show-tip "" nil))
       ((org-agenda-dim-blocked-tasks
-        (quote invisible))
+	(quote invisible))
        (org-agenda-archives-mode t)))
      ("$" "Expected revenue" tags "Effort<>\"\""
       ((org-agenda-overriding-columns-format "%40ITEM %10Effort")
        (org-agenda-sorting-strategy
-        (quote
-         (effort-down))))))))
+	(quote
+	 (effort-down))))))))
  '(org-agenda-files
    (quote
-    ("~/dat/org/geocaching.org" "~/dat/org/secrets.org" "~/dat/org/_calendars/marcel.org" "~/dat/org/projects/reprap.org" "~/dat/org/ideas.org" "~/dat/org/GTD.org" "~/dat/org/orgmode.org" "~/dat/org/projects/cobra.org" "~/dat/org/habits.org" "~/dat/blogs/blogs.org" "~/dat/org/projects/keuken.org" "~/dat/org/_calendars/hsd.org" "~/dat/org/_calendars/planner.org" "/home/mrb/dat/org/journal/20140211.org")))
+    ("~/dat/org/geocaching.org" "~/dat/org/secrets.org" "~/dat/org/_calendars/marcel.org" "~/dat/org/projects/reprap.org" "~/dat/org/ideas.org" "~/dat/org/GTD.org" "~/dat/org/orgmode.org" "~/dat/org/projects/cobra.org" "~/dat/org/habits.org" "~/dat/blogs/blogs.org" "~/dat/org/projects/keuken.org" "~/dat/org/_calendars/sylvia.org" "~/dat/org/_calendars/planner.org" "/home/mrb/dat/org/journal/20140211.org")))
  '(org-agenda-text-search-extra-files (quote (agenda-archives)))
  '(org-agenda-todo-ignore-scheduled (quote future))
  '(org-beamer-outline-frame-options nil)
@@ -138,7 +152,7 @@
  '(org-clock-x11idle-program-name "xprintidle")
  '(org-closed-keep-when-no-todo t)
  '(org-entities-user (quote (("cmd" "\\cmd{}" nil "⌘" "⌘" "⌘" "⌘"))))
- '(org-export-copy-to-kill-ring (quote if-interactive))
+ '(org-export-copy-to-kill-ring (quote if-interactive) t)
  '(org-export-docbook-xsl-fo-proc-command "fop %i %o" t)
  '(org-export-docbook-xslt-proc-command "xsltproc --output %o %s %i" t)
  '(org-export-htmlize-output-type (quote css) t)
@@ -166,8 +180,8 @@
      ("beamer" "\\documentclass{beamer}" org-beamer-sectioning))) t)
  '(org-export-latex-hyperref-format "\\ref{%s}:{%s}" t)
  '(org-export-latex-title-command " " t)
- '(org-export-with-tags nil)
- '(org-export-with-todo-keywords nil)
+ '(org-export-with-tags nil t)
+ '(org-export-with-todo-keywords nil t)
  '(org-file-apps
    (quote
     ((auto-mode . emacs)
@@ -196,8 +210,8 @@
      "\\tolerance=1000")))
  '(org-latex-pdf-process
    (quote
-    ("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f" "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f" "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f")))
- '(org-latex-title-command " ")
+    ("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f" "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f" "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f")) t)
+ '(org-latex-title-command " " t)
  '(org-latex-to-pdf-process
    (quote
     ("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f" "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f" "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f")) t)
@@ -228,6 +242,7 @@
  '(scad-keywords (quote ("return" "true" "false" "include")))
  '(sgml-xml-mode t)
  '(show-paren-mode t)
+ '(show-paren-priority 98)
  '(sieve-manage-authenticators (quote (plain digest-md5 cram-md5 scram-md5 ntlm login)))
  '(sieve-manage-default-port "2000")
  '(sql-postgres-options (quote ("-P" "pager=off" "-p 5434")))
@@ -256,6 +271,7 @@
      (360 . "#DC8CC3"))))
  '(vc-annotate-very-old-color "#DC8CC3")
  '(warning-suppress-types (quote ((undo))))
+ '(winner-mode t)
  '(wtf-custom-alist (quote (("YOLO" . "you only live once")))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -267,6 +283,7 @@
  '(flyspell-duplicate ((t (:foreground "goldenrod" :underline t :weight bold))))
  '(flyspell-incorrect ((t (:foreground "tomato" :underline t :weight bold))))
  '(identica-stripe-face ((t (:background "dim gray"))) t)
+ '(jabber-chat-prompt-system ((t (:foreground "dark gray" :weight bold))))
  '(org-agenda-date ((t (:inherit org-agenda-structure :height 1.2))) t)
  '(org-agenda-date-today ((t (:foreground "white" :slant italic :weight bold :height 1.2))) t)
  '(org-agenda-structure ((t (:inherit font-lock-comment-face :weight bold :height 1.1))))
