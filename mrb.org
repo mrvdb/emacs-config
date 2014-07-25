@@ -3023,7 +3023,7 @@ Configure erc to use services and automatically identify my Nicks to
 Nickserv.
 
 #+BEGIN_SRC emacs-lisp
-    (use-package 'erc-services)
+    (use-package erc-services)
     (setq erc-nick '("_MrB_" "_MrB__"))
 
     (setq erc-prompt-for-nickserv-password nil)
