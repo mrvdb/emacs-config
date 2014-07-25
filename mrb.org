@@ -627,9 +627,7 @@ visits the server, so we can still apply these settings transparently.
         '(set-face-attribute 'magit-item-highlight nil :inherit nil :foreground nil
                              :background mrb-bg-paren-match))
 
-      (use-package ws-butler
-        :init
-        (ws-butler-global-mode 1))
+      (use-package ws-butler)
 
       (mrb/unicode-font-corrections)
       )
