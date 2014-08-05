@@ -625,9 +625,7 @@ visits the server, so we can still apply these settings transparently.
         '(set-face-attribute 'magit-item-highlight nil :inherit nil :foreground nil
                              :background mrb-bg-paren-match))
 
-      (use-package ws-butler
-        :init
-        (ws-butler-global-mode 1))
+      (use-package ws-butler)
 
       (mrb/unicode-font-corrections)
       )
@@ -2090,10 +2088,13 @@ for part design for the 3D-print and for the lathe.
 
 #+BEGIN_SRC emacs-lisp
   ; OpenSCAD has git repository in my dev tree
-  (add-to-list 'load-path "~/dat/src/reprapping/openscad/contrib")
-  (load "scad-mode")
+  ;; Find a way to get this with el-get, say from github
+  ;; It is part of the openscad package and in the contrib folder
+  ;; there. Until that time, we're disabling
+  ;; (add-to-list 'load-path "~/dat/src/reprapping/openscad/contrib")
+  ;; (load "scad-mode")
 
-  (provide 'openscad)
+  ;;(provide 'openscad)
 
 #+END_SRC
 ** Python
@@ -3282,6 +3283,30 @@ same as the mailto handler.
 edit -e '(mrb/make-mailcompose-frame)'
 #+END_SRC
 
+*** GNUS
+    GNUS warrants its own chapter for configuration, as it is somewhat
+    /different/ from other clients. This is my story of gnus.
+
+    It's probably going to be an iterative effort to get things
+    working the way I want them to, so I'm going to configure things
+    from a working situation to a new working situation where the
+    latte does not necessarily represent a wanted situation, but takes
+    me close to it.
+    
+    So, let's begin by enabling imap as the selection method.
+
+    #+BEGIN_SRC emacs-lisp
+    (setq gnus-select-method
+      '(nnimap "hsd"
+	       (nnimap-address "imap.hsdev.com")
+	       (nnimap-server-port 993)
+	       (nnimap-stream ssl)))    
+    #+END_SRC
+
+    This, in combination with a line in .authinfo.gpg which holds the
+    authentication info is enough to get things rolling. The initial
+    connect subscribes to all my mail folders and shows them in a
+    group window. 
 ** Statusnet
 Statusnet, or perhaps microblog in general settings
 
