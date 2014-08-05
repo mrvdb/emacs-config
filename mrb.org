@@ -3641,7 +3641,6 @@ clumsy, although very flexible.
           ("http://planet.jabber.org/rss20.xml")
           ("http://planet.claws-mail.org/rss20.xml")
           ("http://planet.emacsen.org/atom.xml" emacs)
-          ("http://www.veiligheidsblog.nl/feed/")
           ("http://nva-openerp.blogspot.com/feeds/posts/default" odoo)
           ("http://whattheemacsd.com/atom.xml" emacs)
           ("http://feeds.twit.tv/sn_video_large")
@@ -3651,6 +3650,8 @@ clumsy, although very flexible.
           ("http://www.emacswiki.org/emacs/index.rss?action=rss" emacs software)
           ("http://feeds.feedburner.com/hacknmod/qjUG")
           ("https://blog.sleeplessbeastie.eu/atom.xml")
+          ("http://esr.ibiblio.org/?feed=atom" people )
+          ("http://esr.ibiblio.org/?feed=atom&tag=gpsd")
           ;; Add new feeds above this
           ))
 
