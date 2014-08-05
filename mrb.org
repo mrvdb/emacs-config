@@ -176,6 +176,7 @@ and run =el-get-install= with the package name.
 
 #+BEGIN_SRC emacs-lisp
   ;; Personal or adapted recipes
+  ;; Sounds like this could use its own file?
   (setq el-get-sources
         '(
           ;; Obviously we need el-get itself, so we can run a self-update
@@ -204,7 +205,6 @@ and run =el-get-install= with the package name.
           (:name stripe-buffer          :type github :pkgname "sabof/stripe-buffer")
           (:name git-auto-commit-mode   :type github :pkgname "ryuslash/git-auto-commit-mode")
           (:name ujelly-theme           :type github :pkgname "marktran/color-theme-ujelly")
-          ;;(:name erc-tweet              :type github :pkgname "kidd/erc-tweet.el")
           (:name erc-image              :type github :pkgname "mrvdb/erc-image.el")
           (:name org-present            :type github :pkgname "rlister/org-present")
           ;; Dependency? I dont use this directly
@@ -217,7 +217,6 @@ and run =el-get-install= with the package name.
           ;;(:name mrb/ubiquitous       :type github :pkgname "DarwinAwardWinner/ido-ubiquitous")
           (:name guide-key              :type github :pkgname "kbkbkbkb1/guide-key")
           (:name org-screenshot         :type github :pkgname "dfeich/org-screenshot")
-          ;;(:name ethan-wspace :after (progn (global-ethan-wspace-mode 1)))
           (:name erc-hl-nicks           :type github :pkgname "leathekd/erc-hl-nicks")
           (:name json-rpc               :type github :pkgname "skeeto/elisp-json-rpc")
           (:name btcticker              :type github :pkgname "niedbalski/emacs-btc-ticker"
@@ -235,14 +234,13 @@ and run =el-get-install= with the package name.
                 highlight-parentheses multiple-cursors git-modes cl-lib keywiz
                 smart-tab yaml-mode org-jekyll hideshow-org oauth flim haskell-mode ghc-mod s f
                 flycheck pkg-info perspective ido-vertical-mode jekyll-el org2blog
-                identica-mode php-mode company-mode xml-rpc csv-mode notmuch use-package)
+                identica-mode php-mode company-mode xml-rpc csv-mode notmuch use-package git-timemachine)
          ;; the sources we have configured above
          (mapcar 'el-get-as-symbol (mapcar 'el-get-source-name el-get-sources))))
 
   (el-get 'sync mrb/packages)
   (require 'use-package)
 #+END_SRC
-
 
 * Personal information
 I'd like to arrange 3 things related to personal information:
@@ -759,7 +757,7 @@ did that on the main initialisation to get org-babel started.
 
   (delete  "/usr/local/share/emacs/24.3/lisp/org" load-path)
   ;; CHECKME: is this still the proper installation method, it has changed a lot lately
-  (require 'org)                   ;; This is required, see installation docs
+  (use-package org)                   ;; This is required, see installation docs
   ;;(require 'org-clock)             ;; Should not be needed, but otherwise links don't work
   ;;(require 'org-mouse)             ;; Enable menu on right mouse button and other mouse functions
   ;; FIXME: for v8 this isn't working?
@@ -2121,7 +2119,7 @@ and showing syntax errors.
 #+BEGIN_SRC emacs-lisp
   ;(autoload 'haskell-mode "haskell-mode" "Haskell support" t)
   (add-to-list 'auto-mode-alist '("\\.hs\\'" . haskell-mode))
-  ;(add-hook 'haskell-mode-hook (lambda () (ghc-init) ))
+  ;;(add-hook 'haskell-mode-hook (lambda () (ghc-init) ))
 
 #+END_SRC
 * LDAP
@@ -3020,7 +3018,7 @@ Configure erc to use services and automatically identify my Nicks to
 Nickserv.
 
 #+BEGIN_SRC emacs-lisp
-    (use-package 'erc-services)
+    (use-package erc-services)
     (setq erc-nick '("_MrB_" "_MrB__"))
 
     (setq erc-prompt-for-nickserv-password nil)
