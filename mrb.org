@@ -2472,6 +2472,7 @@ Orgmode specific keybindings.
   (bind-key "C-c b" 'org-iswitchb)
   (bind-key "C-c l" 'org-store-link)
   (bind-key "C-c j" 'mrb/make-journal-entry)
+  (bind-key "C-c p" 'org-plot/gnuplot)
 #+END_SRC
 ** Other key and mouse related settings
 Emacs has, like for everything else, a peculiar idea on scrolling and
