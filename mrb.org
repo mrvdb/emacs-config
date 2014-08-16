@@ -3692,6 +3692,8 @@ clumsy, although very flexible.
           ("https://blog.sleeplessbeastie.eu/atom.xml")
           ("http://esr.ibiblio.org/?feed=atom" people )
           ("http://esr.ibiblio.org/?feed=atom&tag=gpsd")
+          ("http://feeds2.feedburner.com/TheArtOfManliness")
+          ("http://www.lunaryorn.com/feed.atom" emacs haskell)
           ;; Add new feeds above this
           ))
 
