@@ -3670,7 +3670,6 @@ clumsy, although very flexible.
           ("http://www.garagejournal.com/feed/")
           ("http://www.readynas.com/?feed=rss2")
           ("http://forums.segwaychat.com/external.php?type=RSS")
-          ("http://support.lenovo.com/en_US/rss/default.page?PROD=P014-S006-SS0066--")
           ("http://feeds.feedburner.com/wyome" people)
           ("http://julien.danjou.info/blog/index.xml" people)
           ("http://torvalds-family.blogspot.com/feeds/posts/default" people)
