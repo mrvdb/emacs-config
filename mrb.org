@@ -223,6 +223,7 @@ and run =el-get-install= with the package name.
                  :depends request)
           (:name ws-butler              :type github :pkgname "lewang/ws-butler")
           (:name wrap-region            :type github :pkgname "rejeep/wrap-region.el")
+          (:name vlc                    :type github :pkgname "mrvdb/vlc.el")
         )
   )
 
@@ -3562,6 +3563,7 @@ In an attempt to do even more in emacs, i've installed `elfeed' and
 imported my feeds from RSSyl
 
 #+BEGIN_SRC emacs-lisp
+  (use-package vlc)  ;; Needs my little hack from https://github.com/mrvrb/vlc.el
   (use-package elfeed
     :init
     (bind-key "C-c f" 'elfeed)
@@ -3582,8 +3584,21 @@ imported my feeds from RSSyl
             (elfeed-show-untag tag)
           (elfeed-show-tag tag)))
 
+      (defun mrb/enqueue-video()
+        "Enqueue the current entry, assuming it is playable, to vlc"
+        (interactive)
+        (vlc/enqueue (elfeed-entry-link elfeed-show-entry)))
+
+      (defun mrb/play-video()
+        "Play the video in the current entry, bypassing the queeu it first"
+        (interactive)
+        (vlc/add (elfeed-entry-link elfeed-show-entry)))
+
       (bind-key "w" '(lambda () (interactive) (mrb/elfeed-show-toggle-tag 'watchlater)) elfeed-show-mode-map)
       (bind-key "w" '(lambda () (interactive) (mrb/elfeed-search-toggle-tag 'watchlater)) elfeed-search-mode-map)
+      (bind-key "e" '(lambda () (interactive) (mrb/enqueue-video)) elfeed-show-mode-map)
+      (bind-key "v" '(lambda () (interactive) (mrb/play-video)) elfeed-show-mode-map)
+      
 
       ;; New entry hook allows meta information manipulation
       ;; without directly having to change elfeed-feeds
