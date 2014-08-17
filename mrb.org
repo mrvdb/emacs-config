@@ -224,6 +224,7 @@ and run =el-get-install= with the package name.
           (:name ws-butler              :type github :pkgname "lewang/ws-butler")
           (:name wrap-region            :type github :pkgname "rejeep/wrap-region.el")
           (:name vlc                    :type github :pkgname "mrvdb/vlc.el")
+          (:name tsupport               :type github :pkgname "mrvdb/tsupport")
         )
   )
 
@@ -3731,7 +3732,13 @@ clumsy, although very flexible.
 
 
 #+END_SRC
+** Telegram
+There's no telegram client in emacs lisp (yet), but I do have a little
+mode I use when giving telegram support. It's in my own repository on github.
 
+#+BEGIN_SRC emacs-lisp
+  (use-package tsupport)
+#+END_SRC
 * Development settings
 Some settings which aid in development tasks.
 
