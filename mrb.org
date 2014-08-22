@@ -261,6 +261,7 @@ there is anything else that needs to be public at the moment.
   (setq user-full-name    "Marcel van der Boom")
   (setq user-mail-address "marcel@hsdev.com")
   (setq user-domain "hsdev.com") ;; This one I made up.
+  (setq user-organisation "HS-Development BV") ;; This one too
 #+END_SRC
 
 
@@ -3747,8 +3748,7 @@ License templates
 (require 'xlicense)
 (setq license-directory (concat emacs-directory "licenses"))
 (add-to-list 'license-types '(agpl . "AGPL"))
-(setenv "ORGANIZATION" "HS-Development BV")
-(setq user-organization "HS-Development BV")
+(setenv "ORGANIZATION" user-organisation)
 #+END_SRC
 
 Make sure erase works properly, even though I don't understand this,
