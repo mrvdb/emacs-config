@@ -238,6 +238,7 @@
  '(org-toodledo-sync-new-completed-tasks t)
  '(org-toodledo-sync-on-save "no")
  '(org-use-fast-tag-selection (quote auto))
+ '(reb-re-syntax (quote string))
  '(safe-local-variable-values (quote ((encoding . utf-8) (buffer-auto-save-file-name))))
  '(scad-keywords (quote ("return" "true" "false" "include")))
  '(sgml-xml-mode t)
