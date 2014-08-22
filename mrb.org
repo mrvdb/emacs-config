@@ -319,6 +319,7 @@ separate file for several reasons.
 
 #+BEGIN_SRC emacs-lisp
   ;; disable auto-save files (#foo#)
+  ;; FIXME: I actually want them, but not in my face
   (setq
    auto-save-default nil
 
@@ -3674,8 +3675,6 @@ harmless. I have uninstalled it for now, I may reconsider installing
 it only for /some/ modes and not globally.
 
 [2014-06-20 vr] Retrying ws-butler mode (see Visual
-#+BEGIN_SRC emacs-lisp
-  #+END_SRC
 * GIT integration
 This section is a temporary place to store some git related
 settings. I need to reorganize this document a bit so I have a section
@@ -3739,7 +3738,7 @@ This particular setting is for eshell git completion:
 Multiple cursors sounds interesting
 
 #+BEGIN_SRC emacs-lisp
-(require 'multiple-cursors)
+(use-package multiple-cursors)
 #+END_SRC
 
 License templates
