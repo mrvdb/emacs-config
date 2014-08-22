@@ -225,6 +225,7 @@ and run =el-get-install= with the package name.
           (:name wrap-region            :type github :pkgname "rejeep/wrap-region.el")
           (:name vlc                    :type github :pkgname "mrvdb/vlc.el")
           (:name tsupport               :type github :pkgname "mrvdb/tsupport")
+          (:name rmh-elfeed-org         :type github :pkgname "remyhonig/rmh-elfeed-org")
         )
   )
 
@@ -3565,172 +3566,74 @@ In an attempt to do even more in emacs, i've installed `elfeed' and
 imported my feeds from RSSyl
 
 #+BEGIN_SRC emacs-lisp
-  (use-package vlc)  ;; Needs my little hack from https://github.com/mrvrb/vlc.el
-  (use-package elfeed
-    :init
-    (bind-key "C-c f" 'elfeed)
-    :config
-    (progn
-      (defun mrb/elfeed-search-toggle-tag(tag)
-        (let ((entries (elfeed-search-selected)))
-          (cl-loop for entry in entries do
-                   (if (elfeed-tagged-p tag entry)
-                       (elfeed-untag entry tag)
-                     (elfeed-tag entry tag)))
-          (mapc #'elfeed-search-update-entry entries)
-          (unless (use-region-p) (forward-line))))
+    (use-package vlc)  ;; Needs my little hack from https://github.com/mrvrb/vlc.el
+    (use-package elfeed
+      :init
+      (bind-key "C-c f" 'elfeed)
+      :config
+      (progn
+        (defun mrb/elfeed-search-toggle-tag(tag)
+          (let ((entries (elfeed-search-selected)))
+            (cl-loop for entry in entries do
+                     (if (elfeed-tagged-p tag entry)
+                         (elfeed-untag entry tag)
+                       (elfeed-tag entry tag)))
+            (mapc #'elfeed-search-update-entry entries)
+            (unless (use-region-p) (forward-line))))
 
-      (defun mrb/elfeed-show-toggle-tag(tag)
-        (interactive)
-        (if (elfeed-tagged-p tag elfeed-show-entry)
-            (elfeed-show-untag tag)
-          (elfeed-show-tag tag)))
+        (defun mrb/elfeed-show-toggle-tag(tag)
+          (interactive)
+          (if (elfeed-tagged-p tag elfeed-show-entry)
+              (elfeed-show-untag tag)
+            (elfeed-show-tag tag)))
 
-      (defun mrb/enqueue-video()
-        "Enqueue the current entry, assuming it is playable, to vlc"
-        (interactive)
-        (vlc/enqueue (elfeed-entry-link elfeed-show-entry)))
+        (defun mrb/enqueue-video()
+          "Enqueue the current entry, assuming it is playable, to vlc"
+          (interactive)
+          (vlc/enqueue (elfeed-entry-link elfeed-show-entry)))
 
-      (defun mrb/play-video()
-        "Play the video in the current entry, bypassing the queeu it first"
-        (interactive)
-        (vlc/add (elfeed-entry-link elfeed-show-entry)))
+        (defun mrb/play-video()
+          "Play the video in the current entry, bypassing the queeu it first"
+          (interactive)
+          (vlc/add (elfeed-entry-link elfeed-show-entry)))
 
-      (bind-key "w" '(lambda () (interactive) (mrb/elfeed-show-toggle-tag 'watchlater)) elfeed-show-mode-map)
-      (bind-key "w" '(lambda () (interactive) (mrb/elfeed-search-toggle-tag 'watchlater)) elfeed-search-mode-map)
-      (bind-key "e" '(lambda () (interactive) (mrb/enqueue-video)) elfeed-show-mode-map)
-      (bind-key "v" '(lambda () (interactive) (mrb/play-video)) elfeed-show-mode-map)
-      
+        (bind-key "w" '(lambda () (interactive) (mrb/elfeed-show-toggle-tag 'watchlater)) elfeed-show-mode-map)
+        (bind-key "w" '(lambda () (interactive) (mrb/elfeed-search-toggle-tag 'watchlater)) elfeed-search-mode-map)
+        (bind-key "e" '(lambda () (interactive) (mrb/enqueue-video)) elfeed-show-mode-map)
+        (bind-key "v" '(lambda () (interactive) (mrb/play-video)) elfeed-show-mode-map)
+        
 
-      ;; New entry hook allows meta information manipulation
-      ;; without directly having to change elfeed-feeds
-      (add-hook 'elfeed-new-entry-hook
-                (elfeed-make-tagger :feed-url "youtube\\.com"
-                                    :add '(video youtube)))
-      (add-hook 'elfeed-new-entry-hook
-                (elfeed-make-tagger :feed-url "vimeo\\.com"
-                                    :add '(video vimeo)))))
-
+        ;; New entry hook allows meta information manipulation
+        ;; without directly having to change elfeed-feeds
+        (add-hook 'elfeed-new-entry-hook
+                  (elfeed-make-tagger :feed-url "youtube\\.com"
+                                      :add '(video youtube)))
+        (add-hook 'elfeed-new-entry-hook
+                  (elfeed-make-tagger :feed-url "vimeo\\.com"
+                                      :add '(video vimeo)))))
 #+END_SRC
 
 Elfeed allows to interactively subscribe to a feed (defaulting to
 what is in the clipboard. Managing elfeed-feeds as a variable is kinda
-clumsy, although very flexible.
+clumsy, although very flexible. There is a middle ground which fits me
+even better. At the cost of the bare-bone flexibilith of having the
+feeds directly in lisp, I'm using an orgmode file to record the feeds
+i want.
 
 #+BEGIN_SRC emacs-lisp
-  ;; Most of what is below is directly inspired by the config of the
-  ;; author of elfeed.
+(use-package rmh-elfeed-org
+      :init
+      (setq rmh-elfeed-org-files (list (concat emacs-directory "feeds.org")))
 
-  ;; Prevent unneeded repetition in specifying feeds
-  (makunbound 'feed-patterns)
-  (defvar feed-patterns
-    '((marktplaats "http://kopen.marktplaats.nl/opensearch.php?q=%s")
-      (youtube     "https://gdata/youtube.com/feeds/base/users/%s/uploads")
-      (reddit      "https://reddit.com/r/%s/.rss")))
-
-  ;; Bulk of the feed specification
-  (makunbound 'elfeed-feeds-alist)
-  (defvar elfeed-feeds-alist
-        '(("http://gdata.youtube.com/feeds/base/users/mvanderboom/newsubscriptionvideos")
-          ("bridgeport" marktplaats machining)
-          ("abene" marktplaats machining)
-          ("plasmasnijder" marktplaats machining)
-          ("cazeneuve" marktplaats machining)
-          ("deckel" marktplaats machining)
-          ("lista" marktplaats machining)
-          ("x200s" marktplaats computing)
-          ("http://dvd.netflix.com/NewReleasesRSS" netflix )
-          ("http://vimeo.com/mrvdb/subscriptions/videos/rss/41079679d642fcfa95b88a00aae8f7b9dd07dffc" video vimeo)
-          ("http://mrblog.nl/feed" me blog )
-          ("http://www.flixfilms.nl/feed" netflix info)
-          ("http://feeds.feedburner.com/TheDailyBitcoinShow" bitcoin )
-          ("http://feeds.feedburner.com/GeekAndPoke")
-          ("http://blag.xkcd.com/feed/" humor )
-          ("http://www.xkcd.com/rss.xml" humor comic)
-          ("http://extechops.net/full-episode-feeds/daily-show.rss" video humor)
-          ("http://www.nu.nl/feeds/rss/de-jager.rss" humor comic)
-          ("http://feeds.feedburner.com/oatmealfeed" humor comic)
-          ("http://what-if.xkcd.com/feed.atom" humor comic science)
-          ("https://kimmo.suominen.com/stuff/dilbert-daily.xml" humor comic)
-          ("http://www.commitstrip.com/en/feed/" comic humor programming)
-          ("http://feeds.feedburner.com/TheChicane" oldschool )
-          ("http://gd427cobrabuild.blogspot.com/feeds/posts/default" cobra)
-          ("http://buildingmycobra.blogspot.com/feeds/posts/default"  cobra)
-          ("http://www.cobraclub.com/forum/external.php?type=RSS2" cobra)
-          ("http://www.sumobuild.co.uk/xml/sumobuild.xml" cobra)
-          ("http://www.gdcars.com/feed" cobra)
-          ("http://forum.cobraclub.nl/index.php?type=rss;action=.xml" cobra)
-          ("http://isispower.blogspot.com/feeds/posts/default" cobra)
-          ("http://andysgd427.blogspot.com/feeds/posts/default" cobra)
-          ("http://gd-cobra.blogspot.com/feeds/posts/default" cobra)
-          ("http://robscobra.blogspot.com/feeds/posts/default" cobra)
-          ("http://ryan427.blogspot.com/feeds/posts/default" cobra)
-          ("http://str-427-cobra.blogspot.com/feeds/posts/default" cobra)
-          ("http://cobnut.blogspot.com/feeds/posts/default" cobra)
-          ("http://cobra.mrblog.nl/feed" cobra me)
-          ("http://www.gearjournal.com/feed/")
-          ("http://www.garagejournal.com/feed/")
-          ("http://www.readynas.com/?feed=rss2")
-          ("http://forums.segwaychat.com/external.php?type=RSS")
-          ("http://feeds.feedburner.com/wyome" people)
-          ("http://julien.danjou.info/blog/index.xml" people)
-          ("http://torvalds-family.blogspot.com/feeds/posts/default" people)
-          ("http://feeds.feedburner.com/JuanReyero" people)
-          ("http://www.garron.me/en/atom.xml" people emacs jekyll)
-          ("http://technomancy.us/feed/atom.xml" people emacs)
-          ("http://nullprogram.com/feed/" people emacs)
-          ("http://planet.jabber.org/rss20.xml")
-          ("http://planet.claws-mail.org/rss20.xml")
-          ("http://planet.emacsen.org/atom.xml" emacs)
-          ("http://nva-openerp.blogspot.com/feeds/posts/default" odoo)
-          ("http://whattheemacsd.com/atom.xml" emacs)
-          ("http://feeds.twit.tv/sn_video_large")
-          ("http://blog.prosody.im/feed/atom.xml")
-          ("http://www.thetoolanddieguy.com/feed" machining)
-          ("thinkpad" reddit computing)
-          ("http://www.emacswiki.org/emacs/index.rss?action=rss" emacs software)
-          ("http://feeds.feedburner.com/hacknmod/qjUG")
-          ("https://blog.sleeplessbeastie.eu/atom.xml")
-          ("http://esr.ibiblio.org/?feed=atom" people )
-          ("http://esr.ibiblio.org/?feed=atom&tag=gpsd")
-          ("http://feeds2.feedburner.com/TheArtOfManliness")
-          ("http://www.lunaryorn.com/feed.atom" emacs haskell)
-          ;; Add new feeds above this
-          ))
-
-  ;; Expand what is in the feeds-alist, taking the patterns into account
-  (defun feed-expand (tags url)
-    "Expand URL depending on its TAGS."
-    (loop for tag in tags
-          when (assoc tag feed-patterns)
-          return (format (cadr it) url)
-          finally (return url)))
-
-  (makunbound 'elfeed-tagger-db)
-  (defvar elfeed-tagger-db (make-hash-table :test 'equal)
-    "Marks what feeds get what tags.")
+      (defadvice elfeed (before configure-elfeed activate)
+        "Load all feed settings before elfeed is started"
+        (rmh-elfeed-org-configure)))
+#+END_SRC
 
 
-  (setq elfeed-feeds
-        (loop with specials = (mapcar #'car feed-patterns)
-              for (url . tags) in elfeed-feeds-alist
-              for real-url = (feed-expand tags url)
-              do (setf (gethash real-url elfeed-tagger-db) tags)
-              collect real-url))
-
-  ;; Allow the hook to run our tags
-  (defun elfeed-tagger-db-tagger (entry)
-    "Tag ENTRY using the `elfeed-tagger-db'."
-    (let* ((feed-url (elfeed-feed-url (elfeed-entry-feed entry)))
-           (tags (gethash feed-url elfeed-tagger-db)))
-      (apply #'elfeed-tag entry tags)))
-
-  (add-hook 'elfeed-new-entry-hook 'elfeed-tagger-db-tagger)
-
+#+BEGIN_SRC emacs-lisp
   ;; Automatically update the feeds every now and then
   (run-at-time 180 1800 (lambda () (unless elfeed-waiting (elfeed-update))))
-
-
 #+END_SRC
 ** Telegram
 There's no telegram client in emacs lisp (yet), but I do have a little

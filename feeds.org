@@ -1,0 +1,90 @@
+#+SETUPFILE: "~/dat/org/etc/org-config.org"
+* Elfeed feeds
+:PROPERTIES:
+:ID: elfeed
+:END:
+This org-mode file is the input for the package rmh-elfeed-org which
+allows storing the configuration for elfeed in an orgmode file.
+
+This has a number of attractive properties:
+- tagging is easier, tags get inherited by child entries
+- most of my editting is already in org-mode
+- tag rules start with entry-title: and then a regular expression on
+  how to tag entries of which the title matches.
+- Feeds start with http
+- Everything else in the tree is ignored.
+** Feeds
+*** Emacs                                                                                            :emacs:
+**** entry-title: \(emacs\|org-mode\)
+**** http://whattheemacsd.com/atom.xml
+**** http://www.garron.me/en/atom.xml                                                       :people:jekyll:
+**** http://technomancy.us/feed/atom.xml                                                           :people:
+**** http://nullprogram.com/feed/                                                                  :people:
+**** http://www.lunaryorn.com/feed.atom                                                           :haskell:
+**** http://www.emacswiki.org/emacs/index.rss?action=rss                                         :software:
+**** http://planet.emacsen.org/atom.xml
+*** Marktplaats                                                                                :marktplaats:
+**** http://kopen.marktplaats.nl/opensearch.php?q=bridgeport                                    :machining:
+**** http://kopen.marktplaats.nl/opensearch.php?q=abene                                         :machining:
+**** http://kopen.marktplaats.nl/opensearch.php?q=plasmasnijder                                 :machining:
+**** http://kopen.marktplaats.nl/opensearch.php?q=cazeneuve                                     :machining:
+**** http://kopen.marktplaats.nl/opensearch.php?q=deckel                                        :machining:
+**** http://kopen.marktplaats.nl/opensearch.php?q=lista                                         :machining:
+**** http://kopen.marktplaats.nl/opensearch.php?q=x200s                                         :computing:
+*** Humor                                                                                            :humor:
+**** http://feeds.feedburner.com/GeekAndPoke
+**** http://blag.xkcd.com/feed/ 
+**** http://extechops.net/full-episode-feeds/daily-show.rss                                         :video:
+**** http://feeds.feedburner.com/oatmealfeed                                                        :comic:
+**** http://www.xkcd.com/rss.xml                                                                    :comic:
+**** http://what-if.xkcd.com/feed.atom                                                      :comic:science:
+**** https://kimmo.suominen.com/stuff/dilbert-daily.xml                                             :comic:
+**** http://www.nu.nl/feeds/rss/de-jager.rss                                                        :comic:
+**** http://www.commitstrip.com/en/feed/                                                :comic:programming:
+*** Cobra                                                                                            :cobra:
+**** http://gd427cobrabuild.blogspot.com/feeds/posts/default
+**** http://buildingmycobra.blogspot.com/feeds/posts/default
+**** http://www.cobraclub.com/forum/external.php?type=RSS2
+**** http://www.sumobuild.co.uk/xml/sumobuild.xml
+**** http://www.gdcars.com/feed
+**** http://forum.cobraclub.nl/index.php?type=rss;action=.xml
+**** http://isispower.blogspot.com/feeds/posts/default
+**** http://andysgd427.blogspot.com/feeds/posts/default
+**** http://gd-cobra.blogspot.com/feeds/posts/default
+**** http://robscobra.blogspot.com/feeds/posts/default
+**** http://ryan427.blogspot.com/feeds/posts/default
+**** http://str-427-cobra.blogspot.com/feeds/posts/default
+**** http://cobnut.blogspot.com/feeds/posts/default
+**** http://cobra.mrblog.nl/feed                                                                       :me:
+*** Bitcoin                                                                                        :bitcoin:
+**** http://feeds.feedburner.com/TheDailyBitcoinShow
+*** Software
+**** http://nva-openerp.blogspot.com/feeds/posts/default                                             :odoo:
+**** http://esr.ibiblio.org/?feed=atom&tag=gpsd                                                      :gpsd:
+**** http://planet.claws-mail.org/rss20.xml
+**** http://blog.prosody.im/feed/atom.xml
+*** Hardware                                                                                      :hardware:
+**** http://www.readynas.com/?feed=rss2
+**** https://reddit.com/r/thinkpad.rss                                                          :computing:
+*** Other
+**** http://dvd.netflix.com/NewReleasesRSS                                                        :netflix:
+**** http://vimeo.com/mrvdb/subscriptions/videos/rss/41079679d642fcfa95b88a00aae8f7b9dd07dffc" :video: vimeo
+**** http://www.flixfilms.nl/feed                                                            :netflix:info:
+**** http://feeds.feedburner.com/TheChicane                                                     :oldschool:
+**** http://www.gearjournal.com/feed/
+**** http://www.garagejournal.com/feed/
+**** http://forums.segwaychat.com/external.php?type=RSS
+**** http://feeds.feedburner.com/wyome                                                             :people:
+**** http://julien.danjou.info/blog/index.xml                                                      :people:
+**** http://torvalds-family.blogspot.com/feeds/posts/default                                       :people:
+**** http://feeds.feedburner.com/JuanReyero                                                        :people:
+**** http://planet.jabber.org/rss20.xml
+**** http://feeds.twit.tv/sn_video_large
+**** http://www.thetoolanddieguy.com/feed                                                       :machining:
+**** http://feeds.feedburner.com/hacknmod/qjUG
+**** https://blog.sleeplessbeastie.eu/atom.xml
+**** http://esr.ibiblio.org/?feed=atom                                                             :people:
+**** http://feeds2.feedburner.com/TheArtOfManliness
+**** http://tsfkb.com/feed.php?type=rss2                                      :telegram:diffs:wiki:support:
+**** http://gdata.youtube.com/feeds/base/users/mvanderboom/newsubscriptionvideos                    :video:
+**** http://mrblog.nl/feed                                                                      :people:me:
