@@ -3756,6 +3756,42 @@ apparently this is what I need.
 #+BEGIN_SRC emacs-lisp
 (if window-system  (normal-erase-is-backspace-mode t))
 #+END_SRC
+
+Having regex based query replace options is quite a large usecase, but
+regexps in emacs are, well, odd.
+Luckily there is re-build which lets you interactively build a regular
+expression on a target buffer and see the matches.
+
+Once such an expression is made, 90% of the time I want to copy the
+regexp to the input of =query-replace-regexp= to do the actual
+replacing. 
+Somehow the copy of the regexp is mangled in that process (apparently
+suitable for programming) so the operation won't work.
+
+Below is a function which fixes this. I want to have this in my
+config, bound to a key in the re-builder keymap.
+
+#+BEGIN_SRC emacs-lisp
+(defun reb-query-replace (to-string)
+      "Replace current RE from point with `query-replace-regexp'."
+      (interactive
+       (progn (barf-if-buffer-read-only)
+              (list (query-replace-read-to (reb-target-binding reb-regexp)
+                                           "Query replace"  t))))
+      (with-current-buffer reb-target-buffer
+        (query-replace-regexp (reb-target-binding reb-regexp)
+to-string)))
+#+END_SRC
+
+Usecase: copying a rectangle of text and re-using it somewhere else.
+
+#+BEGIN_SRC emacs-lisp
+(defun my-copy-rectangle (start end)
+   "Copy the region-rectangle instead of `kill-rectangle'."
+   (interactive "r")
+   (setq killed-rectangle (extract-rectangle start end)))
+#+END_SRC
+
 ** Google-map
 Google map integration for Emacs
 
