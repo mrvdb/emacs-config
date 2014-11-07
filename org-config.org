@@ -175,7 +175,12 @@ Make headers a bit more compact and more pleasing to look at
 Make our headers use the HSD purple color
 #+LaTeX_HEADER: \usepackage{sectsty}
 #+LaTeX_HEADER: \usepackage{xcolor}
+
+#+COMMENT This looks ok-ish on screen, but not on print
 #+LaTeX_HEADER: \definecolor{hsdpurple}{RGB}{102,102,153}
+
+#+COMMENT This looks ok in print, but not so much on screen
+#+LaTeX_HEADER: \definecolor{hsdpurple}{RGB}{102,50,153}
 #+LaTex_HEADER: \allsectionsfont{\color{hsdpurple}}
 
 Do the same for figure and table captions.
@@ -231,8 +236,8 @@ The logo is just displayed on odd pages, on the right.
 
 The footer contains page references N of M style and the author
 information. Here also, the position is alternating with odd and even pages.
-#+LATEX_HEADER: \fancyfoot[RO,LE]{\small{\bf{\thepage | \pageref{LastPage}}}}
-#+LATEX_HEADER: \fancyfoot[LO,RE]{\small{\bf{\@date{} | \@author <\href{mailto:marcel@hsdev.com}{marcel@hsdev.com}>}}}
+#+LATEX_HEADER: \fancyfoot[RO,LE]{\small{\bf{\thepage{}|\pageref{LastPage}}}}
+#+LATEX_HEADER: \fancyfoot[LO,RE]{\small{\bf{\@date{} | \@author{} <\href{mailto:marcel@hsdev.com}{marcel@hsdev.com}>}}}
 
 Reset the @ character back to what it was
 #+LATEX_HEADER: \makeatother
