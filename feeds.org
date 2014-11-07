@@ -1,6 +1,8 @@
 * Elfeed feeds
-This org-mode file is the input for the package rmh-elfeed-org which
-allows storing the configuration for elfeed in an orgmode file.
+This org-mode file is the input for the package elfeed-org which
+allows storing the configuration for elfeed in an orgmode file, which
+is far more attractive for most users than maitaining an elisp
+variable.
 
 This has a number of attractive properties:
 - tagging is easier, tags get inherited by child entries
@@ -8,20 +10,12 @@ This has a number of attractive properties:
 - tag rules start with entry-title: and then a regular expression on
   how to tag entries of which the title matches.
 - Feeds start with http
-- Everything else in the tree is ignored.
+- Everything else in the tree is ignored. ( this is a good thing )
+
 ** Feeds
-:PROPERTIES:
+  :PROPERTIES:
 :ID:       elfeed
 :END:
-*** Emacs                                                                                            :emacs:
-**** entry-title: \(emacs\|org-mode\)
-**** http://whattheemacsd.com/atom.xml
-**** http://www.garron.me/en/atom.xml                                                       :people:jekyll:
-**** http://technomancy.us/feed/atom.xml                                                           :people:
-**** http://nullprogram.com/feed/                                                                  :people:
-**** http://www.lunaryorn.com/feed.atom                                                           :haskell:
-**** http://www.emacswiki.org/emacs/index.rss?action=rss                                         :software:
-**** http://planet.emacsen.org/atom.xml
 *** Marktplaats                                                                                :marktplaats:
 **** http://kopen.marktplaats.nl/opensearch.php?q=bridgeport                                    :machining:
 **** http://kopen.marktplaats.nl/opensearch.php?q=abene                                         :machining:
@@ -62,12 +56,22 @@ This has a number of attractive properties:
 **** http://esr.ibiblio.org/?feed=atom&tag=gpsd                                                      :gpsd:
 **** http://planet.claws-mail.org/rss20.xml
 **** http://blog.prosody.im/feed/atom.xml
+**** Emacs											       :emacs:
+***** entry-title: \(emacs\|org-mode\)
+***** http://whattheemacsd.com/atom.xml
+***** http://www.garron.me/en/atom.xml							       :people:jekyll:
+***** http://technomancy.us/feed/atom.xml							      :people:
+***** http://nullprogram.com/feed/								      :people:
+***** http://www.lunaryorn.com/feed.atom							     :haskell:
+***** http://www.emacswiki.org/emacs/index.rss?action=rss					    :software:
+***** http://planet.emacsen.org/atom.xml
+***** http://masteringemacs.org/feed								      :people:
 *** Hardware                                                                                      :hardware:
 **** http://www.readynas.com/?feed=rss2
 **** https://reddit.com/r/thinkpad.rss                                                          :computing:
 *** Other
 **** http://dvd.netflix.com/NewReleasesRSS                                                        :netflix:
-**** http://vimeo.com/mrvdb/subscriptions/videos/rss/41079679d642fcfa95b88a00aae8f7b9dd07dffc :video:vimeo:
+**** http://vimeo.com/mrvdb/subscriptions/videos/rss/5d94482c63b00132e107359e3740cd5d62bb60d3	 :video:vimeo:
 **** http://www.flixfilms.nl/feed                                                            :netflix:info:
 **** http://feeds.feedburner.com/TheChicane                                                     :oldschool:
 **** http://www.gearjournal.com/feed/
@@ -87,3 +91,4 @@ This has a number of attractive properties:
 **** http://tsfkb.com/feed.php?type=rss2                                      :telegram:diffs:wiki:support:
 **** http://gdata.youtube.com/feeds/base/users/mvanderboom/newsubscriptionvideos                    :video:
 **** http://mrblog.nl/feed                                                                      :people:me:
+c
