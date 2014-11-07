@@ -225,7 +225,7 @@ and run =el-get-install= with the package name.
           (:name wrap-region            :type github :pkgname "rejeep/wrap-region.el")
           (:name vlc                    :type github :pkgname "mrvdb/vlc.el")
           (:name tsupport               :type github :pkgname "mrvdb/tsupport")
-          (:name rmh-elfeed-org         :type github :pkgname "remyhonig/rmh-elfeed-org")
+          (:name elfeed-org             :type github :pkgname "remyhonig/elfeed-org")
         )
   )
 
@@ -3623,7 +3623,7 @@ feeds directly in lisp, I'm using an orgmode file to record the feeds
 i want.
 
 #+BEGIN_SRC emacs-lisp
-(use-package rmh-elfeed-org
+(use-package elfeed-org
       :init
       (setq rmh-elfeed-org-files (list (concat emacs-directory "feeds.org")))
 
