@@ -998,16 +998,31 @@ so for now, I'm building in the confirmation.
 
   ;; I need a modified version of org-is-habit, which takes inheritance
   ;; in to account
-  (defun mrb/org-is-habit-recursive-p (&optional pom)
+  (defun mrb/org-is-habit-test (&optional pom)
     "Is the task at POM or point a habit, taking property
   inheritance into account?"
+    (message "Testing for habit")
+    (if (org-is-habit-p)
+        (message "Org-direct: Seems to be a habit")
+      (message "Org-direct: Nope, no habit"))
+
+    (if (equalp "habit" (org-entry-get (or pom (point)) "STYLE" t))
+        (message "My test: seems to be a habit")
+      (progn
+        (message "My test: Nope, no habit")
+        (message (org-entry-get (or pom (point)) "STYLE" t))
+        (message "Still here")
+        )))
+
+  (defun mrb/org-is-habit-p (&optional pom)
+    "org-is-habit-p taking property inheritance into account"
     (equalp "habit" (org-entry-get (or pom (point)) "STYLE" t)))
 
   (defun mrb/archive-done-item()
     ;; Determine if the item went to the DONE/CANCELLED state
     ;; if so, ask to archive it, but skip habits which have
     ;; their own logic.
-    (when (not (mrb/org-is-habit-recursive-p))
+    (when (not (mrb/org-is-habit-p))
       ;; No habit, so we have a candidate
       (progn
        ;; Try to use a dialog box to ask for confirmation
