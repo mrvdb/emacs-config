@@ -66,6 +66,8 @@ This has a number of attractive properties:
 ***** http://www.emacswiki.org/emacs/index.rss?action=rss					    :software:
 ***** http://planet.emacsen.org/atom.xml
 ***** http://masteringemacs.org/feed								      :people:
+***** http://endlessparentheses.com/atom.xml
+***** http://www.howardism.org/index.xml							      :people:
 *** Hardware                                                                                      :hardware:
 **** http://www.readynas.com/?feed=rss2
 **** https://reddit.com/r/thinkpad.rss                                                          :computing:
