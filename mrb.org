@@ -182,9 +182,8 @@ and run =el-get-install= with the package name.
             ;; Obviously we need el-get itself, so we can run a self-update
             ;; There is a recipe, but we want the master branch of it
             (:name el-get :branch "master")
-            ;; Using a different source than the built-in recipe (why was this again?)
             (:name zenburn-emacs          :type github :pkgname "bbatsov/zenburn-emacs")
-            ;; Version from elpa does not work for me (init problem?)
+            (:name org-mode               :type git    :url "/home/mrb/dat/src/emacs/packages/org-mode/" :branch "mrb/release_8.2.9")
             (:name cursor-chg             :type github :pkgname  "emacsmirror/cursor-chg"
                    :features cursor-chg)
             (:name newlua-mode            :type github :pkgname "immerrr/lua-mode"
