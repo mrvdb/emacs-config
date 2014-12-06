@@ -68,6 +68,8 @@ This has a number of attractive properties:
 ***** http://masteringemacs.org/feed								      :people:
 ***** http://endlessparentheses.com/atom.xml
 ***** http://www.howardism.org/index.xml							      :people:
+**** Telegram
+***** http://trellorss.appspot.com/feed/5707648880082944
 *** Hardware                                                                                      :hardware:
 **** http://www.readynas.com/?feed=rss2
 **** https://reddit.com/r/thinkpad.rss                                                          :computing:
