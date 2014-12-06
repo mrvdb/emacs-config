@@ -4,6 +4,9 @@
 ;; I want to have as little in here as possible. The configuration is
 ;; org-babel based. This means the bootstrap here is to load a proper
 ;; (part of) org-mode and be on our way.
+
+;;; Code:
+
 (add-to-list 'load-path "~/dat/src/emacs/packages/org-mode/lisp/")
 
 ;; Load in the main org file which starts up configuration This will
@@ -21,3 +24,5 @@
 (put 'narrow-to-region 'disabled nil)
 (put 'downcase-region 'disabled nil)
 (put 'upcase-region 'disabled nil)
+
+;;; init.el ends here
