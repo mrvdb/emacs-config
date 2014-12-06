@@ -2442,7 +2442,7 @@ the previous definition.
   ;; the case that it is not already.
 
   (if (not (fboundp 'toggle-frame-fullscreen))
-      (defun mrb/toggle-frame-fullscreen()
+      (defun toggle-frame-fullscreen()
         (interactive)
         (when (eq window-system 'x)
           (set-frame-parameter
@@ -2452,7 +2452,7 @@ the previous definition.
   ;; Make gnome compliant, define a full-screen function and bind to F11
   (defun mrb/switch-full-screen ()
     (interactive)
-    (mrb/toggle-frame-fullscreen))
+    (toggle-frame-fullscreen))
   (bind-key "<f11>" 'mrb/switch-full-screen)
 
   ;; Not sure what this is? It is not the menu key.
