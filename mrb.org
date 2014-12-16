@@ -525,6 +525,8 @@ color.
   (set-face-attribute 'lazy-highlight nil :inherit isearch-lazy-highlight
                       :background "black" :foreground "tomato")
 
+  (set-face-attribute 'fringe nil :background zenburn-bg)
+
 #+END_SRC
 
 I enable hightlighting matching parentheses in many levels
@@ -607,8 +609,8 @@ visits the server, so we can still apply these settings transparently.
       (tool-bar-mode -1)   ;; No tool-bar
       (scroll-bar-mode -1) ;; No scroll-bar
       (menu-bar-mode -1)   ;; No menu-bar
-      ;;(tooltip-mode -1)    ;; No tooltips
-      (setq fringe-mode 0) ;; No fringe
+      (tooltip-mode -1)    ;; No tooltips
+      (setq fringe-mode '(8 . 0)) ;; Fringe, 8 pixels left and 0 pixels right
       (set-fringe-mode fringe-mode)
 
       ;; When making a selection or in case of highlighting a region
