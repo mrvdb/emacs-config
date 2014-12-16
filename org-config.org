@@ -162,7 +162,7 @@ And take advantage of them by enabling advanced layout techniques.
 Latex default configuration to produce a memo-style document.
 
 Our documents are mostly in dutch, so load that up by default, it's
-easy to override this on a subtree or file basis.
+easy to override this on a subtree or file basis. (NO, it's not)
 #+COMMENTS LATEX_HEADER: \usepackage[dutch]{babel}
 
 Adjust the title of our documents

@@ -267,7 +267,7 @@ there is anything else that needs to be public at the moment.
 
 
 ** Authorization
-Several things I use within Emacs need autorization, such as tramp,
+Several things I use within Emacs need authorization, such as tramp,
 jabber, erc etc. The authorization can come from several sources;
 ideally as few as possible. Many packages in Emacs have support for a
 =.netrc= like mechanism, others want to use the keyring in GNOME. The
