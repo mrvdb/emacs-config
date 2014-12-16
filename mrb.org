@@ -3646,11 +3646,11 @@ i want.
 #+BEGIN_SRC emacs-lisp
 (use-package elfeed-org
       :init
-      (setq elfeed-org-files (list (concat emacs-directory "feeds.org")))
+      (setq rmh-elfeed-org-files (list (concat emacs-directory "feeds.org")))
 
       (defadvice elfeed (before configure-elfeed activate)
         "Load all feed settings before elfeed is started"
-        (elfeed-org-configure)))
+        (rmh-elfeed-org-configure)))
 #+END_SRC
 
 
