@@ -347,9 +347,11 @@ separate file for several reasons.
    complex-buffers-menu-p t
    next-line-add-newlines nil
    kill-whole-line t
-   truncate-lines t
   )
 
+  ;; What I want: one line is one line unless I explicitly tell to wrap
+  ;; FIXME: This does not seem to work.
+  (setq-default truncate-lines t)
   (global-visual-line-mode 1)
 
   ;; Only require to type 'y' or 'n' instead of 'yes' or 'no' when prompted
@@ -740,7 +742,7 @@ any issues.
   ;; Truncate lines in some modes
   (dolist
       (the_mode
-       (list 'python-mode))
+       (list 'python-mode 'org-mode))
     (add-hook the_mode (toggle-truncate-lines 1)))
 #+END_SRC
 ** Org-mode
