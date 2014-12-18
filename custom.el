@@ -206,7 +206,7 @@
      ("" "latexsym" t)
      ("" "amssymb" t)
      ("" "amstext" nil)
-     ("" "hyperref" nil)
+     ("hidelinks=true" "hyperref" nil)
      "\\tolerance=1000")))
  '(org-latex-pdf-process
    (quote
