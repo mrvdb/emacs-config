@@ -9,8 +9,8 @@ This is my emacs configuration file that is loaded with
 =org-babel-load-file= in the Emacs init file. The intent is to have as
 much of my Emacs configuration in here as possible. The system works
 as a literal programming system where with a tangle the elisp code
-that actually makes up my configuration is extracted automatically
-and loaded.
+that actually makes up my configuration is extracted automatically and
+loaded.
 
 This file was created from many separate elisp files and has not been
 fully sanitized yet. Following the history of that may be interesting
@@ -63,23 +63,36 @@ And edit the file obviously.
   # manager trickery to see if the daemon is already there. This one
   # just starts it if it is not already there.
   #
-  # TODO: see if we can have some output when the daemon is not there,
-  # it is now very silent
-  # TODO: there is a mention of server-visit-hook not running when no
-  # file is passed in in edit.old. I have not seen any ill effects, so
-  # left that out
+  # This script should provide the following functionality:
+  # - start emacs if it hasn't already started
+  # - open a frame if emacs is there, but no frames are visible yet
+  # - be suitable as 'open with...' target for linux file managers
+  # - allow additional command line arguments 
+  #   (like -e to just run a piece of elisp)
+  # - change the focus to the emacs frame
   #
-  # This script starts emacs daemon if it is not running, opens whatever file
-  # you pass in and changes the focus to emacs.  Without any arguments, it just
-  # opens the current buffer or *scratch* if nothing else is open.
+  # The script is basically a wrapper around emacsclient and we would 
+  # like to be compatible with it.
+  # 
+  # - TODO: see if we can have some output when the daemon is not there,
+  #         it is now very silent
+  # - TODO: there is a mention of server-visit-hook not running when no
+  #         file is passed in in edit.old. I have not seen any ill effects, 
+  #         so left that out
+  # - TODO: the way we open files and treat options is inconsistent, we now
+  #         optimize to opening files and adapt scripts
+  #
+
+  # Base invocation of emacsclient
   EMACSCLIENT="`which emacsclient` --quiet --no-wait"
 
   # Number of current visible frames,
-  # Emacs daemon always has a visible frame called F1
+  # Emacs daemon always has a visible frame called F1 which is erm, not visible.
   visible_frames() {
     $EMACSCLIENT --alternate-editor="" --eval '(length (visible-frame-list))' 2>/dev/null
   }
 
+  # Change the focus to emacs
   change_focus() {
     $EMACSCLIENT --eval "(select-frame-set-input-focus (selected-frame))" > /dev/null
   }
@@ -3165,7 +3178,7 @@ Mail configuration.
 
     ; Sending it
     smtpmail-default-smtp-server "localhost"
-    smtpmail-smtp-service 24 ;; I use anubis for pre-processing
+    smtpmail-smtp-service 24 ;; I use anubis for pre-processing, 24 is private mail port
     smtpmail-local-domain user-domain
     smtpmail-sendto-domain user-domain
     send-mail-function 'smtpmail-send-it                 ; This is for mail
@@ -3178,6 +3191,7 @@ Mail configuration.
   ;; Automatically sign outgoing messages, be part of the solution here,
   ;; not the problem
   ;; TODO: where can I toggle this on/off while composing?
+  ;; TODO: I want to do this in anubis, so this can probably go
   ;;(setq smime-keys (quote (("marcel@hsdev.com" "~/keys/comodo-2012-06-12.pem" nil))))
   ;;(add-hook 'message-send-hook 'mml-secure-message-sign-smime)
   (setq password-cache t)            ; default is true, so no need to set this actually
@@ -3208,7 +3222,7 @@ configuration for that as well.
 
 Composing mail is often an /out of band/ activity, like creating a dent
 or a capture, so I would like to have roughly the same behaviour. This
-is by default provided by commpose-mail-other-frame, but I could not
+is by default provided by compose-mail-other-frame, but I could not
 get awesome to properly place the windows because it's hard to match
 on the varying name that xprop delivers, so. we make our own window.
 
