@@ -237,7 +237,7 @@ and run =el-get-install= with the package name.
                 smart-tab yaml-mode org-jekyll hideshow-org oauth flim haskell-mode ghc-mod s f
                 flycheck pkg-info perspective ido-vertical-mode jekyll-el org2blog
                 identica-mode php-mode company-mode xml-rpc csv-mode notmuch use-package 
-                git-timemachine eimp mu4e)
+                git-timemachine eimp mu4e litable diminish paredit)
 
          ;; the sources we have configured above
          (mapcar 'el-get-as-symbol (mapcar 'el-get-source-name el-get-sources))))
@@ -476,8 +476,14 @@ and call that when we are done with our visual (X) init.
 #+BEGIN_SRC emacs-lisp
   (defun mrb/unicode-font-corrections()
     ;; Add a line like the following  for each char displaying improperly
-    (mrb/fix-fontset-font "Symbola" #x1F4A9) ;; 💩  pile of poo is required
-    (mrb/fix-fontset-font "Symbola" #x1f44d) ;; 👍  thumbs up
+    (mrb/fix-fontset-font "Symbola" #x1f3d8) ;; 🏘
+    (mrb/fix-fontset-font "Symbola" #x1f3e0) ;; 🏠 house building
+    (mrb/fix-fontset-font "Symbola" #x1f3e1) ;; 🏡
+    (mrb/fix-fontset-font "Symbola" #x1f435) ;; 🐵 monkey
+    (mrb/fix-fontset-font "Symbola" #x1f44d) ;; 👍 thumbs up
+    (mrb/fix-fontset-font "Symbola" #x1f4a9) ;; 💩 pile of poo is required
+    (mrb/fix-fontset-font "Symbola" #x1f4ac) ;; 🗨🗩💬
+    (mrb/fix-fontset-font "Symbola" #x1f4de) ;; 📞 telephone receiver
    )
 #+END_SRC
 
