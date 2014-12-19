@@ -3478,35 +3478,42 @@ XMPP related settings, including interfacing it to other systems
 
 #+BEGIN_SRC emacs-lisp
   ; Directly tie into the GIT repository on my machine because I have
-  ; made some modifications which are workarounds
+                                          ; made some modifications which are workarounds
+  ;; FIXME: formulate this as el-get recipe
   (add-to-list 'load-path "/home/mrb/dat/src/emacs/packages/jabber.el/")
+  ;; FIMXE: use-package
   (require 'jabber)
 
   ; Configuration variables
   (setq
    jabber-show-offline-contacts nil
    jabber-default-priority 30
-   jabber-alert-message-hooks
-   (quote
-    (jabber-message-libnotify
-     jabber-message-echo
-     jabber-message-awesome
-     jabber-message-wave
-     jabber-message-scroll))
+   jabber-alert-message-hooks (quote
+                               (jabber-message-libnotify
+                                jabber-message-echo
+                                jabber-message-awesome
+                                jabber-message-wave
+                                jabber-message-scroll))
    jabber-message-alert-same-buffer nil
    jabber-roster-show-bindings nil
    jabber-auto-reconnect t
+   jabber-chat-buffer-format "*-chat-%n-*"
+   jabber-groupchat-buffer-format "*-groupchat-%n-*"
+   jabber-muc-colorize-foreign t
+   jabber-muc-colorize-local t
+   jabber-muc-disable-disco-check t
+   jabber-muc-private-buffer-format "*-muc-priv-%g-%n-*"
+   jit-lock-stealth-time 16
    jabber-show-resources 'sometimes
    jabber-resource-line-format "         %j/%r%S [%p]"
    jabber-roster-buffer "*-roster-*"
    jabber-roster-line-format "  %u %a %-25n - %S"
    jabber-roster-show-title nil
-   jabber-roster-subscription-display
-     (quote
-      (("none" . "   ")
-       ("from" . "← ")
-       ("to" . " →")
-       ("both" . "←→")))
+   jabber-roster-subscription-display (quote
+                                       (("none" . "   ")
+                                        ("from" . "← ")
+                                        ("to" . " →")
+                                        ("both" . "←→")))
     jabber-socks5-proxies (quote ("proxy.hsdev.com"))
     jabber-vcard-avatars-retrieve nil
     jabber-chat-buffer-format "*-chat-%n-*"
