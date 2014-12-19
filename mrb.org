@@ -3050,19 +3050,21 @@ nicks and passwords and stuff.
 Start by configuring some basic settings
 
 #+BEGIN_SRC emacs-lisp
-    (use-package erc)
-    (use-package erc-image)
-
-    (setq
-     erc-modules
-     (quote
-      (autojoin button completion fill
-       irccontrols keep-place list log
-       match move-to-prompt netsplit
-       networks noncommands notify notifications
-       readonly replace ring services smiley stamp track unmorse
-         smiley image truncate))
-     erc-image-inline-rescale 150)
+  (use-package erc
+    :init
+    (progn
+      (setq
+       erc-modules (quote
+                    (autojoin button completion fill
+                              irccontrols keep-place list log
+                              match move-to-prompt netsplit
+                              networks noncommands notify notifications
+                              readonly replace ring services smiley stamp track unmorse
+                              smiley truncate))
+       ;erc-image-inline-rescale 150
+       erc-generate-log-file-name-function 'erc-generate-log-file-name-with-date
+       erc-header-line-uses-help-echo-p nil
+  ))
 #+END_SRC
 
 Configure erc to use services and automatically identify my Nicks to
