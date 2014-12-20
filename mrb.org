@@ -3070,7 +3070,7 @@ Start by configuring some basic settings
        ;erc-image-inline-rescale 150
        erc-generate-log-file-name-function 'erc-generate-log-file-name-with-date
        erc-header-line-uses-help-echo-p nil
-  ))
+  )))
 #+END_SRC
 
 Configure erc to use services and automatically identify my Nicks to
