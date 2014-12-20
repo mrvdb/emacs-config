@@ -3066,7 +3066,7 @@ Start by configuring some basic settings
                               networks noncommands notify notifications
                               readonly replace ring services smiley stamp track unmorse
                               smiley truncate))
-       ;erc-image-inline-rescale 150
+       ;;erc-image-inline-rescale 150
        erc-generate-log-file-name-function 'erc-generate-log-file-name-with-date
        erc-header-line-uses-help-echo-p nil
   )))
