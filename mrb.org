@@ -124,11 +124,11 @@ And edit the file obviously.
   if [ "$(visible_frames)" -lt  "2" ]; then
       # need to create a frame
       # -c $@ with no args just opens the scratch buffer
-      $EMACSCLIENT --create-frame $XARGS && change_focus
+      $EMACSCLIENT --create-frame "$XARGS" && change_focus
   else
       # there is already a visible frame besides the daemon, change focus
       # -n $@ errors if there are no args
-      test  "$#" -ne "0" && $EMACSCLIENT $XARGS
+      test  "$#" -ne "0" && $EMACSCLIENT "$XARGS"
   fi
 #+END_SRC
 
@@ -941,11 +941,11 @@ produced directly from this document, in a similar way as the main
 edit script was produced in [[Preparing for lift-off]]
 
 #+BEGIN_SRC sh :exports code :tangle ~/bin/capture-todo.sh :shebang #!/bin/bash
-edit -e '(mrb/capture-todo)'
+emacsclient --eval '(mrb/capture-todo)'
 #+END_SRC
 
 #+BEGIN_SRC sh :exports code :tangle ~/bin/capture-buy.sh :shebang #!/bin/bash
-edit -e '(mrb/capture-buy)'
+emacsclient --eval '(mrb/capture-buy)'
 #+END_SRC
 
 By default C-c C-c ends the capture, but is normally the shortcut to
