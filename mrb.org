@@ -517,12 +517,9 @@ I generally use dark backgrounds, so let's tell Emacs that.
 #+END_SRC
 
 Set the zenburn theme, slightly corrected for a darker
-background color. The default one is to light in daylight conditions.
+background color. The default one is too light in daylight conditions.
 
 #+BEGIN_SRC emacs-lisp
-  ;; FIXME: this should be done in a different way
-  (defvar zenburn-bg "#252525")
-  (defvar zenburn-bg-1 "#252525")
   (require 'zenburn-theme)
   (load-theme 'zenburn)
 #+END_SRC
@@ -531,6 +528,14 @@ The zenburn theme does not fit for everything so I have a number of
 corrections. I do it like this because zenburn is more complete than
 ujelly and otherwise I'd have a large set of faces defined in a wrong
 color.
+
+First, the default background of zenburn is to wooshy for me and I
+like the purple background that Ubuntu uses for the terminal. This
+happens to mix rather well with the other Zenburn colors, so I'm using
+that. The actual config for this is in the custom-set-faces section of
+my =custom.el= file which I found to be the most reliable for the
+default settings.
+
 
 #+BEGIN_SRC emacs-lisp
   ;; Zenburn underlines date face in org, no go
@@ -546,6 +551,7 @@ color.
   (set-face-attribute 'lazy-highlight nil :inherit isearch-lazy-highlight
                       :background "black" :foreground "tomato")
 
+  ;; Set the face for the fring to have the normal backbround.
   (set-face-attribute 'fringe nil :background (face-attribute 'default :background))
 
 #+END_SRC
