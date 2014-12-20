@@ -546,7 +546,7 @@ color.
   (set-face-attribute 'lazy-highlight nil :inherit isearch-lazy-highlight
                       :background "black" :foreground "tomato")
 
-  (set-face-attribute 'fringe nil :background zenburn-bg)
+  (set-face-attribute 'fringe nil :background (face-attribute 'default :background))
 
 #+END_SRC
 

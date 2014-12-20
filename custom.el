@@ -11,13 +11,11 @@
  '(compilation-scroll-output t)
  '(custom-safe-themes
    (quote
-    ("e4e97731f52a5237f37ceb2423cb327778c7d3af7dc831788473d4a76bcc9760" "3c9d994e18db86ae397d077b6324bfdc445ecc7dc81bb9d528cd9bba08c1dac1" "08cfa7b21bb5c1d5d86c3ec51705439acb300bf8e92eaaba46f8ec387e505923" "63222f9c4cc924778e29a349cd110ad5739b0a3589c4c399117dbaddf875d209" "5c95e6818b3bbb0d079921952f4a509661c599fb1cfb0330606ce5cb892c312e" "3cc6c42bee60b0a031be65497e630b3ffaaaa41ffc1f41b9f7863ee484688640" "471877df61bcd989ba4c0a5097654684fcfe918e124d46f811b533e44df34f53" "a37600b047da389eccc4a17b5f165d512fb1d32f18d93cffb28154b5f4eb4437" "54266114287ef8abeda6a3df605deffe777957ba994750da6b8595fe90e932f0" "39fb431548791db3e64b047524a65be40a41f14779f4087255c7ad759f329d73" "51b018973bd206cbe49185abcba0c2f2e9da0a88c36d3f039cf97d946921e4f6" "e7f43be7b03c0ac4a927724fe242c4befb40b11403fb655a15b42f5e86f4ce1e" "bfcb55c7cf76f7fe4fa7eb067425b7d2f58af27b6a193f07b0351429faf2eb91" "52b5da0a421b020e2d3429f1d4929089d18a56e8e43fe7470af2cea5a6c96443" "e15fde341e7fc4b7f4dfb225031d3e3b39c215a72d71cb9d77f055e3de885a29" "bd50e3b2dea5d01950991bc230583fdab93f3fd7af6a7c62421c370e347226ec" "d6a00ef5e53adf9b6fe417d2b4404895f26210c52bb8716971be106550cea257" "fc5fcb6f1f1c1bc01305694c59a1a861b008c534cae8d0e48e4d5e81ad718bc6" "81805c86e126018f339211bb3f03e1c9eae30adfbe72832bd02f89ca0cbe5885" "f23144cd3b2cfd4d873f16bef36a246d55616658aff372ec87d96cd1330ebafd" "bf7ed640479049f1d74319ed004a9821072c1d9331bc1147e01d22748c18ebdf" "702ed17ae44a6f3cb71ed2e5bf5edeec06a771c80eb61b265ebf8a658edd2462" "b2382ac6b8a922aee932d81ef846e83ab4c950198986849c622e60996b698c71" "ebb23762f3569b2d146b6091a6ed22cac44c4e53e8a33d9ff2bc3b90cc9e58e8" "819d81fabb0bde707a0f34cdd66e3bc1960273e8283e912a310e446ce3c44620" "363772e75d98d439856d08c013ae280ca55958db6ed073c43081ddba4404bef8" default)))
+    ("8aebf25556399b58091e533e455dd50a6a9cba958cc4ebb0aab175863c25b9a4" "a8245b7cc985a0610d71f9852e9f2767ad1b852c2bdea6f4aadc12cce9c4d6d0" "e4e97731f52a5237f37ceb2423cb327778c7d3af7dc831788473d4a76bcc9760" "3c9d994e18db86ae397d077b6324bfdc445ecc7dc81bb9d528cd9bba08c1dac1" "08cfa7b21bb5c1d5d86c3ec51705439acb300bf8e92eaaba46f8ec387e505923" "63222f9c4cc924778e29a349cd110ad5739b0a3589c4c399117dbaddf875d209" "5c95e6818b3bbb0d079921952f4a509661c599fb1cfb0330606ce5cb892c312e" "3cc6c42bee60b0a031be65497e630b3ffaaaa41ffc1f41b9f7863ee484688640" "471877df61bcd989ba4c0a5097654684fcfe918e124d46f811b533e44df34f53" "a37600b047da389eccc4a17b5f165d512fb1d32f18d93cffb28154b5f4eb4437" "54266114287ef8abeda6a3df605deffe777957ba994750da6b8595fe90e932f0" "39fb431548791db3e64b047524a65be40a41f14779f4087255c7ad759f329d73" "51b018973bd206cbe49185abcba0c2f2e9da0a88c36d3f039cf97d946921e4f6" "e7f43be7b03c0ac4a927724fe242c4befb40b11403fb655a15b42f5e86f4ce1e" "bfcb55c7cf76f7fe4fa7eb067425b7d2f58af27b6a193f07b0351429faf2eb91" "52b5da0a421b020e2d3429f1d4929089d18a56e8e43fe7470af2cea5a6c96443" "e15fde341e7fc4b7f4dfb225031d3e3b39c215a72d71cb9d77f055e3de885a29" "bd50e3b2dea5d01950991bc230583fdab93f3fd7af6a7c62421c370e347226ec" "d6a00ef5e53adf9b6fe417d2b4404895f26210c52bb8716971be106550cea257" "fc5fcb6f1f1c1bc01305694c59a1a861b008c534cae8d0e48e4d5e81ad718bc6" "81805c86e126018f339211bb3f03e1c9eae30adfbe72832bd02f89ca0cbe5885" "f23144cd3b2cfd4d873f16bef36a246d55616658aff372ec87d96cd1330ebafd" "bf7ed640479049f1d74319ed004a9821072c1d9331bc1147e01d22748c18ebdf" "702ed17ae44a6f3cb71ed2e5bf5edeec06a771c80eb61b265ebf8a658edd2462" "b2382ac6b8a922aee932d81ef846e83ab4c950198986849c622e60996b698c71" "ebb23762f3569b2d146b6091a6ed22cac44c4e53e8a33d9ff2bc3b90cc9e58e8" "819d81fabb0bde707a0f34cdd66e3bc1960273e8283e912a310e446ce3c44620" "363772e75d98d439856d08c013ae280ca55958db6ed073c43081ddba4404bef8" default)))
  '(custom-theme-load-path
    (quote
     ("/home/mrb/.emacs.d/el-get/" "/home/mrb/.emacs.d/el-get/zenburn-emacs/" custom-theme-directory t)))
  '(dired-bind-jump nil)
- '(erc-generate-log-file-name-function (quote erc-generate-log-file-name-with-date) t)
- '(erc-header-line-uses-help-echo-p nil)
  '(eshell-modules-list
    (quote
     (eshell-alias eshell-banner eshell-basic eshell-cmpl eshell-dirs eshell-glob eshell-hist eshell-ls eshell-pred eshell-prompt eshell-rebind eshell-script eshell-term eshell-unix)))
@@ -31,8 +29,6 @@
  '(mail-signature nil)
  '(markdown-css-path "/home/mrb/.markdown.css")
  '(mu4e-attachment-dir "/home/mrb/Downloads")
- '(notmuch-fcc-dirs nil)
- '(notmuch-poll-script nil)
  '(notmuch-saved-searches
    (quote
     ((:name "inbox" :query "tag:inbox")
@@ -148,7 +144,7 @@
  '(org-export-docbook-xsl-fo-proc-command "fop %i %o" t)
  '(org-export-docbook-xslt-proc-command "xsltproc --output %o %s %i" t)
  '(org-export-htmlize-output-type (quote css) t)
- '(org-export-htmlized-org-css-url "orgmode.css")
+ '(org-export-htmlized-org-css-url "orgmode.css" t)
  '(org-export-latex-classes
    (quote
     (("article" "\\documentclass[11pt,a4paper,twoside]{article}"
@@ -225,10 +221,6 @@
       ("fork"))
      ("BUY"
       ("buy" . t)))))
- '(org-toodledo-flatten-all-tasks t)
- '(org-toodledo-inhibit-https t)
- '(org-toodledo-sync-new-completed-tasks t)
- '(org-toodledo-sync-on-save "no")
  '(org-use-fast-tag-selection (quote auto))
  '(reb-re-syntax (quote string))
  '(safe-local-variable-values (quote ((encoding . utf-8) (buffer-auto-save-file-name))))
