@@ -2216,12 +2216,12 @@ LDAP integration, mostly for address book lookups
 
   ;; Adds some hooks
 
-  (eval-after-load "message"
-    '(bind-key "TAB" 'mrb/enz-eudc-expand-inline message-mode-map))
-  (eval-after-load "sendmail"
-    '(bind-key "TAB" 'mrb/enz-eudc-expand-inline mail-mode-map))
-  (eval-after-load "post"
-    '(bind-key "TAB" 'mrb/enz-eudc-expand-inline post-mode-map))
+  ;; (eval-after-load "message"
+  ;;   '(bind-key "TAB" 'mrb/enz-eudc-expand-inline message-mode-map))
+  ;; (eval-after-load "sendmail"
+  ;;   '(bind-key "TAB" 'mrb/enz-eudc-expand-inline mail-mode-map))
+  ;; (eval-after-load "post"
+  ;;   '(bind-key "TAB" 'mrb/enz-eudc-expand-inline post-mode-map))
 
 #+END_SRC
 * Key and mouse bindings
