@@ -3342,29 +3342,74 @@ edit -e '(mrb/make-mailcompose-frame)'
 #+END_SRC
 
 *** GNUS
-    GNUS warrants its own chapter for configuration, as it is somewhat
-    /different/ from other clients. This is my story of gnus.
+GNUS warrants its own chapter for configuration, as it is somewhat
+/different/ from other clients. This is my story of gnus.
 
-    It's probably going to be an iterative effort to get things
-    working the way I want them to, so I'm going to configure things
-    from a working situation to a new working situation where the
-    latte does not necessarily represent a wanted situation, but takes
-    me close to it.
+It's probably going to be an iterative effort to get things working
+the way I want them to, so I'm going to configure things from a
+working situation to a new working situation where the latte does
+not necessarily represent a wanted situation, but takes me close
+to it.
     
-    So, let's begin by enabling imap as the selection method.
+So, let's begin by enabling imap as the selection method.
 
-    #+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp
     (setq gnus-select-method
       '(nnimap "hsd"
 	       (nnimap-address "imap.hsdev.com")
 	       (nnimap-server-port 993)
 	       (nnimap-stream ssl)))    
-    #+END_SRC
+#+END_SRC
 
-    This, in combination with a line in .authinfo.gpg which holds the
-    authentication info is enough to get things rolling. The initial
-    connect subscribes to all my mail folders and shows them in a
-    group window. 
+This, in combination with a line in .authinfo.gpg which holds the
+authentication info is enough to get things rolling. The initial
+connect subscribes to all my mail folders and shows them in a
+group window.
+*** Notmuch
+Not having used GNUS enough to be comfortable, notmuch seems a route
+which can be taken somewhat easier. The compose part of emails is,
+with the capture like frame, basically done. The one thing which was a
+bit messy was the address completion which was supposed to go to an
+LDAP directory tied to an ODOO instance. 
+
+The cop-out intermediate solution is address completion by a small
+utility which searches the notmuch database for email-addresses used
+before, which is likely to be a match in 90% of the cases.
+
+https://github.com/aperezdc/notmuch-addrlookup-c 
+
+Installation would be quite easy:
+
+#+BEGIN_SRC elisp 
+   (use-package notmuch-address
+     :config
+     (progn
+       (setq notmuch-address-command "/usr/local/bin/notmuch-addrlookup"
+             notmuch-fcc-dirs nil
+             notmuch-poll-script nil)
+       (notmuch-address-message-insinuate)
+       (message "Notmuch address completion loaded...")))
+#+END_SRC
+
+but this only activates the completion after notmuch has loaded, so it
+seems we need to put a similar piece of code on a lower level. This
+can work because notmuch is a database on the OS level.
+
+Ideally, i'd want to use inline completion with company mode, but I
+haven't figured out yet how to do that. So, for the time being, I'll
+use the ido completion I use in many other places as the selection
+function.
+
+#+BEGIN_SRC elisp
+  (defun mrb/notmuch-address-selection-function (prompt addressess first)
+    "Use `ido-completing-read' to select one of the addresses."
+    (ido-completing-read prompt (cons first addressess)
+                         nil nil nil 'notmuch-address-history))
+
+  (setq notmuch-address-selection-function
+        'mrb/notmuch-address-selection-function)
+
+#+END_SRC
 ** Statusnet
 Statusnet, or perhaps microblog in general settings
 
@@ -3627,51 +3672,100 @@ In an attempt to do even more in emacs, i've installed `elfeed' and
 imported my feeds from RSSyl
 
 #+BEGIN_SRC emacs-lisp
-    (use-package vlc)  ;; Needs my little hack from https://github.com/mrvrb/vlc.el
-    (use-package elfeed
-      :init
-      (bind-key "C-c f" 'elfeed)
-      :config
-      (progn
-        (defun mrb/elfeed-search-toggle-tag(tag)
-          (let ((entries (elfeed-search-selected)))
-            (cl-loop for entry in entries do
-                     (if (elfeed-tagged-p tag entry)
-                         (elfeed-untag entry tag)
-                       (elfeed-tag entry tag)))
-            (mapc #'elfeed-search-update-entry entries)
-            (unless (use-region-p) (forward-line))))
+  (use-package vlc)  ;; Needs my little hack from https://github.com/mrvrb/vlc.el
+  (use-package elfeed
+    :init
+    (bind-key "C-c f" 'elfeed)
+    :config
+    (progn
+      (defun mrb/elfeed-search-toggle-tag(tag)
+        (let ((entries (elfeed-search-selected)))
+          (cl-loop for entry in entries do
+                   (if (elfeed-tagged-p tag entry)
+                       (elfeed-untag entry tag)
+                     (elfeed-tag entry tag)))
+          (mapc #'elfeed-search-update-entry entries)
+          (unless (use-region-p) (forward-line))))
 
-        (defun mrb/elfeed-show-toggle-tag(tag)
-          (interactive)
-          (if (elfeed-tagged-p tag elfeed-show-entry)
-              (elfeed-show-untag tag)
-            (elfeed-show-tag tag)))
+      (defun mrb/elfeed-show-toggle-tag(tag)
+        (interactive)
+        (if (elfeed-tagged-p tag elfeed-show-entry)
+            (elfeed-show-untag tag)
+          (elfeed-show-tag tag)))
 
-        (defun mrb/enqueue-video()
-          "Enqueue the current entry, assuming it is playable, to vlc"
-          (interactive)
-          (vlc/enqueue (elfeed-entry-link elfeed-show-entry)))
+      (defun mrb/enqueue-video()
+        "Enqueue the current entry, assuming it is playable, to vlc"
+        (interactive)
+        (vlc/enqueue (elfeed-entry-link elfeed-show-entry)))
 
-        (defun mrb/play-video()
-          "Play the video in the current entry, bypassing the queeu it first"
-          (interactive)
-          (vlc/add (elfeed-entry-link elfeed-show-entry)))
+      (defun mrb/play-video()
+        "Play the video in the current entry, bypassing the queeu it first"
+        (interactive)
+        (vlc/add (elfeed-entry-link elfeed-show-entry)))
 
-        (bind-key "w" '(lambda () (interactive) (mrb/elfeed-show-toggle-tag 'watchlater)) elfeed-show-mode-map)
-        (bind-key "w" '(lambda () (interactive) (mrb/elfeed-search-toggle-tag 'watchlater)) elfeed-search-mode-map)
-        (bind-key "e" '(lambda () (interactive) (mrb/enqueue-video)) elfeed-show-mode-map)
-        (bind-key "v" '(lambda () (interactive) (mrb/play-video)) elfeed-show-mode-map)
-        
+      (defun youtube-get-id (url)
+        "Get the YouTube video ID from URL. Returns nil for invalid URLs."
+        (let* ((obj (url-generic-parse-url url))
+               (host (url-host obj))
+               (path (url-filename obj))
+               (match (string-match-p "[-_a-zA-Z0-9]\\{11\\}" path)))
+          (when (and match (member host youtube-hosts))
+            (substring path match (+ match 11)))))
 
-        ;; New entry hook allows meta information manipulation
-        ;; without directly having to change elfeed-feeds
-        (add-hook 'elfeed-new-entry-hook
-                  (elfeed-make-tagger :feed-url "youtube\\.com"
-                                      :add '(video youtube)))
-        (add-hook 'elfeed-new-entry-hook
-                  (elfeed-make-tagger :feed-url "vimeo\\.com"
-                                      :add '(video vimeo)))))
+      (defcustom youtube-pl-arguments '("--title" "--no-mtime" )
+        "Arguments to be send to youtube-pl."
+        :group 'external)
+
+      (defvar youtube-hosts '("www.youtube.com" "youtube.com" "youtu.be")
+        "Domain names for YouTube.")
+      
+      (defun youtube-pl-sentinel (process event)
+        "Responds to completed youtube-dl processes."
+        (let ((buffer (process-buffer process)))
+          (with-current-buffer buffer
+            (when (string-match-p "finished" event)
+              (message "youtube-pl %s completed." (youtube-get-id youtube-pl-url))
+              (kill-buffer buffer))
+            (when (string-match-p "abnormal" event)
+              (message "youtube-pl %s failed." (youtube-get-id youtube-pl-url))))))
+      
+      (defun mrb/play-youtube-video (url)
+        "Play the video at URL with youtube-pl. Returns the buffer
+         that will show progress output. The buffer is killed if the
+         play completes successfully."
+        (interactive (list (read-from-minibuffer "URL: " (x-get-selection-value))))
+        (let ((id (youtube-get-id url)))
+          (when id
+            (let* ((process-name (format "youtube-pl-%s" id))
+                   (buffer-name (format "*youtube-pl %s*" id))
+                   (buffer (get-buffer-create buffer-name)))
+              (unless (get-buffer-process buffer)
+                (with-current-buffer buffer
+                  (erase-buffer)
+                  ;(youtube-dl-mode)
+                  (setq youtube-pl-url url)
+                  ;(setq default-directory
+                  ;      (concat (directory-file-name youtube-dl-directory) "/"))
+                  (set-process-sentinel
+                   (apply #'start-process process-name buffer "youtube-pl" 
+                          (append youtube-pl-arguments (list "--" id)))
+                   'youtube-pl-sentinel)))
+              buffer))))
+
+      (bind-key "w" '(lambda () (interactive) (mrb/elfeed-show-toggle-tag 'watchlater)) elfeed-show-mode-map)
+      (bind-key "w" '(lambda () (interactive) (mrb/elfeed-search-toggle-tag 'watchlater)) elfeed-search-mode-map)
+      (bind-key "e" '(lambda () (interactive) (mrb/enqueue-video)) elfeed-show-mode-map)
+      (bind-key "v" '(lambda () (interactive) (mrb/play-video)) elfeed-show-mode-map)
+      
+
+      ;; New entry hook allows meta information manipulation
+      ;; without directly having to change elfeed-feeds
+      (add-hook 'elfeed-new-entry-hook
+                (elfeed-make-tagger :feed-url "youtube\\.com"
+                                    :add '(video youtube)))
+      (add-hook 'elfeed-new-entry-hook
+                (elfeed-make-tagger :feed-url "vimeo\\.com"
+                                    :add '(video vimeo)))))
 #+END_SRC
 
 Elfeed allows to interactively subscribe to a feed (defaulting to
