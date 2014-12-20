@@ -217,12 +217,12 @@ and run =el-get-install= with the package name.
             (:name stripe-buffer          :type github :pkgname "sabof/stripe-buffer")
             (:name git-auto-commit-mode   :type github :pkgname "ryuslash/git-auto-commit-mode")
             (:name ujelly-theme           :type github :pkgname "marktran/color-theme-ujelly")
-            (:name erc-image              :type github :pkgname "mrvdb/erc-image.el")
+            ;(:name erc-image              :type github :pkgname "mrvdb/erc-image.el")
             (:name org-present            :type github :pkgname "rlister/org-present")
             ;; Dependency? I dont use this directly
             (:name dash                   :type github :pkgname "magnars/dash.el")
             (:name gitmessenger           :type github :pkgname "syohex/emacs-git-messenger")
-            (:name metaweblog             :type github :pkgname "punchagan/metaweblog.el")
+;            (:name metaweblog             :type github :pkgname "punchagan/metaweblog.el")
             (:name org-agenda-property    :type github :pkgname "Bruce-Connor/org-agenda-property")
             (:name pump.io                :type github :pkgname "cnngimenez/pumpio-el")
             (:name elfeed                 :type github :pkgname "skeeto/elfeed")
@@ -588,13 +588,13 @@ And enable the minor mode globally.
 
   ;; When I am not typing, the cursor should become more visible, so I
   ;; don't lose it.
-  (makunbound 'mrb-cursor-color)
-  (defvar mrb-cursor-color "springgreen")
+  ;;(makunbound 'mrb-cursor-color)
+  (setq mrb-cursor-color "springgreen")
 
   ;; Default frame properties frame position, color, etc
   (setq default-frame-alist
         '((cursor-type . (bar . 1))
-          (cursor-color . mrb-cursor-color)
+          (cursor-color . "springgreen") ;; FIXME: variable use yields error here, why?
           (height . 60)
           (width . 100)
   ))
