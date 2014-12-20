@@ -217,7 +217,7 @@ and run =el-get-install= with the package name.
             (:name stripe-buffer          :type github :pkgname "sabof/stripe-buffer")
             (:name git-auto-commit-mode   :type github :pkgname "ryuslash/git-auto-commit-mode")
             (:name ujelly-theme           :type github :pkgname "marktran/color-theme-ujelly")
-            (:name erc-image              :type github :pkgname "mrvdb/erc-image.el")
+            ;;(:name erc-image              :type github :pkgname "mrvdb/erc-image.el")
             (:name org-present            :type github :pkgname "rlister/org-present")
             ;; Dependency? I dont use this directly
             (:name dash                   :type github :pkgname "magnars/dash.el")
@@ -594,7 +594,7 @@ And enable the minor mode globally.
   ;; Default frame properties frame position, color, etc
   (setq default-frame-alist
         '((cursor-type . (bar . 1))
-          (cursor-color . mrb-cursor-color)
+          (cursor-color . "springgreen")
           (height . 60)
           (width . 100)
   ))
@@ -3067,7 +3067,7 @@ Start by configuring some basic settings
                               networks noncommands notify notifications
                               readonly replace ring services smiley stamp track unmorse
                               smiley truncate))
-       ;erc-image-inline-rescale 150
+       ;;erc-image-inline-rescale 150
        erc-generate-log-file-name-function 'erc-generate-log-file-name-with-date
        erc-header-line-uses-help-echo-p nil
   )))
