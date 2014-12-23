@@ -911,6 +911,7 @@ delete the other windows which may be in the frame.
         (delete-frame)))
 
   (add-hook 'org-capture-mode-hook 'delete-other-windows)
+  (add-hook 'org-capture-mode-hook '(lambda () (setq mode-line-format nil)))
 #+END_SRC
 
 Define functions for each piece of information captured, so they can
