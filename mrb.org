@@ -3830,7 +3830,7 @@ annoying. 80% of the space it is displaying as being /wrong/ is
 harmless. I have uninstalled it for now, I may reconsider installing
 it only for /some/ modes and not globally.
 
-[2014-06-20 vr] Retrying ws-butler mode (see Visual
+[2014-06-20 vr] Retrying ws-butler mode (see [[Visual]] )
 * GIT integration
 This section is a temporary place to store some git related
 settings. I need to reorganize this document a bit so I have a section
