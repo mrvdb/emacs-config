@@ -1191,9 +1191,14 @@ thing like: "yeah, do this today"
     (interactive)
     (org-schedule nil
                   (format-time-string "%Y-%m-%d")))
-
   (bind-key "C-." 'mrb/org-schedule-for-today org-mode-map)
 
+  (defun mrb/org-agenda-schedule-for-today()
+    "Schedule the current item in the agenda for today"
+    (interactive)
+    (org-agenda-schedule nil
+                         (format-time-string "%Y-%m-%d")))
+  (bind-key "C-." 'mrb/org-agenda-schedule-for-today org-agenda-mode-map)
 #+END_SRC
 
 *** Visual settings
