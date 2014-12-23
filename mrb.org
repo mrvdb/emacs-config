@@ -856,7 +856,7 @@ Here are the templates used for them.
            ("b" "Buy"
             entry (id "new-todo-receiver") "* BUY %? :buy:\n" :prepend t)
            ("t" "Todo"
-            entry (id "new-todo-receiver") "* TODO %?" :prepend t)
+            entry (id "new-todo-receiver") "* TODO %?\n%i" :prepend t)
            ("j" "Journal"
             entry (file+datetree (concat org-directory "journal.org"))
             "* ___________________________________________________________ *%U* ___\n\n%?\n")
