@@ -665,11 +665,7 @@ extra care here.
                         :inherit nil :foreground nil
                         :weight 'normal :background mrb-bg-region)
 
-    ;; The above did not work for magit, let's try it after loading magit
-    (eval-after-load "magit"
-      '(set-face-attribute 'magit-item-highlight nil :inherit nil :foreground nil
-                           :background mrb-bg-paren-match))
-
+    ;; Probably move this to somewhere else ?
     (use-package ws-butler
       :config
       (progn
@@ -3844,6 +3840,26 @@ harmless. I have uninstalled it for now, I may reconsider installing
 it only for /some/ modes and not globally.
 
 [2014-06-20 vr] Retrying ws-butler mode (see [[Visual]] )
+[2014-12-23 di] Retrying ws-butler mode (see [[Visual]] )
+* Magit
+For most, if not all development work (and some other work too) I use
+git as the revision control system. In emacs that translates to useing
+magit, so let's begin with bringing that in.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package magit
+    ;; the 'MRev' text in the modeline is useless
+    :diminish magit-autorevert-mode
+
+    :config
+    (progn
+      ;; Make sure that highlighted regions in magit keep their syntax
+      (set-face-attribute 'magit-item-highlight nil
+                          :inherit nil
+                          :foreground nil :background mrb-bg-paren-match)))
+#+END_SRC
+
+
 * GIT integration
 This section is a temporary place to store some git related
 settings. I need to reorganize this document a bit so I have a section
