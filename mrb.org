@@ -634,48 +634,56 @@ related to having X available.
 Anyways, some settings need to be moved to the event when a client
 visits the server, so we can still apply these settings transparently.
 
+Note that if this code is evaluated any call to emacsclient (be that
+from external or, more importantly Magit) will try to run this code
+and magit will fail if there's an error in the next section. Take
+extra care here.
 #+BEGIN_SRC emacs-lisp
-    (defun mrb/run-client-settings()
-      (interactive)
+  (defun mrb/run-client-settings()
+    (interactive)
 
-      (message "Running client settings which server may not have applied")
-      (tool-bar-mode -1)   ;; No tool-bar
-      (scroll-bar-mode -1) ;; No scroll-bar
-      (menu-bar-mode -1)   ;; No menu-bar
-      (tooltip-mode -1)    ;; No tooltips
-      (setq fringe-mode '(8 . 0)) ;; Fringe, 8 pixels left and 0 pixels right
-      (set-fringe-mode fringe-mode)
+    (message "Running client settings which server may not have applied")
+    (tool-bar-mode -1)   ;; No tool-bar
+    (scroll-bar-mode -1) ;; No scroll-bar
+    (menu-bar-mode -1)   ;; No menu-bar
+    (tooltip-mode -1)    ;; No tooltips
+    (setq fringe-mode '(8 . 0)) ;; Fringe, 8 pixels left and 0 pixels right
+    (set-fringe-mode fringe-mode)
 
-      ;; When making a selection or in case of highlighting a region
-      ;; automatically, keep all font-locking in the region instead of
-      ;; just overwriting the whole section. The trick here is to specify
-      ;; nil in the foreground attribute
+    ;; When making a selection or in case of highlighting a region
+    ;; automatically, keep all font-locking in the region instead of
+    ;; just overwriting the whole section. The trick here is to specify
+    ;; nil in the foreground attribute
 
-      (set-face-attribute 'show-paren-match nil
-                          :inherit nil :foreground nil
-                          :weight 'normal :background mrb-bg-paren-match)
-
-
-      ;; Set regions so we keep the normal font locking
-      (set-face-attribute 'region nil
-                          :inherit nil :foreground nil
-                          :weight 'normal :background mrb-bg-region)
-
-      ;; The above did not work for magit, let's try it after loading magit
-      (eval-after-load "magit"
-        '(set-face-attribute 'magit-item-highlight nil :inherit nil :foreground nil
-                             :background mrb-bg-paren-match))
-
-      (use-package ws-butler)
-
-      (mrb/unicode-font-corrections)
-      )
+    (set-face-attribute 'show-paren-match nil
+                        :inherit nil :foreground nil
+                        :weight 'normal :background mrb-bg-paren-match)
 
 
-    ;; This seems to work if we start up emacs using filename on cli and
-    ;; server was not running yet. It does however not work if we just
-    ;; startup emacs (through my edit script) without a filename on the cli
-    (add-hook 'server-visit-hook 'mrb/run-client-settings)
+    ;; Set regions so we keep the normal font locking
+    (set-face-attribute 'region nil
+                        :inherit nil :foreground nil
+                        :weight 'normal :background mrb-bg-region)
+
+    ;; The above did not work for magit, let's try it after loading magit
+    (eval-after-load "magit"
+      '(set-face-attribute 'magit-item-highlight nil :inherit nil :foreground nil
+                           :background mrb-bg-paren-match))
+
+    (use-package ws-butler
+      :config
+      (progn
+        (add-hook 'lisp-mode-hook         'ws-butler-mode)
+        (add-hook 'emacs-lisp-mode-hook   'ws-butler-mode)
+        (add-hook 'python-mode-hook       'ws-butler-mode)))
+
+    (mrb/unicode-font-corrections))
+
+
+  ;; This seems to work if we start up emacs using filename on cli and
+  ;; server was not running yet. It does however not work if we just
+  ;; startup emacs (through my edit script) without a filename on the cli
+  (add-hook 'server-visit-hook 'mrb/run-client-settings)
 
 #+END_SRC
 * Buffers and files
