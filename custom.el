@@ -92,7 +92,7 @@
 		   (org-agenda-dim-blocked-tasks t)
 		   (org-agenda-group-by-property "Group"))))
       nil nil)
-     ("n" "Next Action List [hides blocked/inactive/waiting/INBOX-ed]" tags-todo "+SCHEDULED=\"\"+DEADLINE=\"\"-BLOCKED=\"t\"-inactive/-WAITING"
+     ("n" "Next Action List [hides blocked/inactive/waiting/INBOX-ed]" tags-todo "+SCHEDULED=\"\"+DEADLINE=\"\"-BLOCKED=\"t\"-inactive/-WAITING-INFO-HOWTO"
       ((org-agenda-overriding-header "Next Action List")
        (org-agenda-dim-blocked-tasks
 	(quote invisible))
@@ -132,6 +132,7 @@
  '(org-agenda-files
    (quote
     ("~/dat/org/geocaching.org" "~/dat/org/secrets.org" "~/dat/org/_calendars/marcel.org" "~/dat/org/projects/reprap.org" "~/dat/org/ideas.org" "~/dat/org/GTD.org" "~/dat/org/orgmode.org" "~/dat/org/projects/cobra.org" "~/dat/org/habits.org" "~/dat/blogs/blogs.org" "~/dat/org/projects/keuken.org" "~/dat/org/_calendars/sylvia.org" "~/dat/org/_calendars/planner.org" "/home/mrb/dat/org/journal/20140211.org")))
+ '(org-agenda-ignore-drawer-properties (quote (effort appt category)))
  '(org-agenda-text-search-extra-files (quote (agenda-archives)))
  '(org-agenda-todo-ignore-scheduled (quote future))
  '(org-beamer-outline-frame-options nil)
