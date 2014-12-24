@@ -2181,9 +2181,13 @@ source (*.hs files) and the ghc-mod package to help with completion
 and showing syntax errors.
 
 #+BEGIN_SRC emacs-lisp
-  ;(autoload 'haskell-mode "haskell-mode" "Haskell support" t)
-  (add-to-list 'auto-mode-alist '("\\.hs\\'" . haskell-mode))
-  ;;(add-hook 'haskell-mode-hook (lambda () (ghc-init) ))
+    (use-package haskell-mode
+
+      (add-to-list 'auto-mode-alist '("\\.hs\\'". haskell-mode))
+      (add-hook 'haskell-mode-hook 'interactive-haskell-mode)
+      (add-hook 'haskell-mode-hook 'turn-on-haskell-doc-mode)
+      (add-hook 'haskell-mode-hook 'turn-on-haskell-indent)
+      )
 
 #+END_SRC
 * LDAP
