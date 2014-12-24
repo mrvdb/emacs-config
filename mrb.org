@@ -2965,10 +2965,19 @@ an option to configure in exception, which I have commented out as
 I've found none applicable yet.
 
 #+BEGIN_SRC emacs-lisp
-
 (use-package wrap-region)
 (wrap-region-global-mode 1)
 ;; (add-to-list 'wrap-region-except-modes 'conflicting-mode)
+#+END_SRC
+
+Creating regions can be done in many different ways and expand region
+which expands a selection by semantic analysis can not be left out
+
+#+BEGIN_SRC emacs-lisp
+  (use-package expand-region
+    :bind 
+    ("s-\\" . er/expand-region)
+    ("s-|"  . er/contract-region))
 #+END_SRC
 ** Navigation
 Navigating pieces of text effectively is probably the best
