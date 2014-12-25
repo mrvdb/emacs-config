@@ -935,6 +935,7 @@ be easily bound to keys.
   (defun mrb/make-journal-entry ()
     "Create a journal entry"
     (interactive)
+    (setq org-descriptive-links t)
     (org-capture nil "j")
   )
 #+END_SRC
