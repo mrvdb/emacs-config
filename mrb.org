@@ -4002,6 +4002,24 @@ Google map integration for Emacs
   (provide 'google-map-settings)
 
 #+END_SRC
+* Machine specific configurations
+The aim is to have the exact same configuration on each machine, but
+there may be occasions where is pays to have a slight difference in
+configuration on different machines.
+
+#+BEGIN_SRC emacs-lisp
+  (when (string= system-name "x200s")
+    (progn
+      ;; Stuff that needs to happen for machine named "x200s"
+      ;; TODO: deviate from the standard font, make it Ubuntu
+      ))
+
+  (when (string= system-name "t510")
+    (progn
+      ;; Stuff for the "t510" configuration
+      ))
+#+END_SRC
+
 * Wishlist
 There's always more to want, here a quick list of things:
 - epub export from org-mode
