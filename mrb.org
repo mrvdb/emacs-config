@@ -4012,11 +4012,13 @@ configuration on different machines.
     (progn
       ;; Stuff that needs to happen for machine named "x200s"
       ;; TODO: deviate from the standard font, make it Ubuntu
+      (set-frame-font "Ubuntu Mono")
       ))
 
   (when (string= system-name "t510")
     (progn
       ;; Stuff for the "t510" configuration
+      (set-frame-font "Consolas")
       ))
 #+END_SRC
 
