@@ -1006,6 +1006,8 @@ Adapt the colors of the states I use a bit:
     ("BUY"       . (:foreground "goldenrod"   :weight bold))
     ("HOWTO"     . (:foreground "SkyBlue3"    :weight bold))
     ("INFO"      . (:foreground "khaki1"      :weight bold))
+    ("COLLECT"   . (:foreground "MediumSeaGreen"   :weight bold))
+    ("SOLVE"     . (:foreground "orange red"    :weight bold))
   ))
 #+END_SRC
 
