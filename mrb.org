@@ -793,12 +793,14 @@ did that on the main initialisation to get org-babel started.
 #+BEGIN_SRC emacs-lisp
   (add-to-list 'load-path "~/dat/src/emacs/packages/org-mode/contrib/lisp/")
   (add-to-list 'load-path "~/dat/src/emacs/packages/org-mode/contrib/babel/langs/")
+#+END_SRC
 
-  ;; Also make sure we never load org from internal, this can happen
-  ;; when functions were defined in the included org version and not
-  ;; anymore in newer versions. We want an error, not a silent load of
-  ;; the older function.
+Also make sure we never load org from internal, this can happen when
+functions were defined in the included org version and not anymore in
+newer versions. We want an error, not a silent load of the older
+function.
 
+#+BEGIN_SRC emacs-lisp
   (delete  "/usr/local/share/emacs/24.3/lisp/org" load-path)
   ;; CHECKME: is this still the proper installation method, it has changed a lot lately
   (use-package org)                   ;; This is required, see installation docs
@@ -3593,10 +3595,7 @@ XMPP related settings, including interfacing it to other systems
                                         ("both" . "←→")))
     jabber-socks5-proxies (quote ("proxy.hsdev.com"))
     jabber-vcard-avatars-retrieve nil
-    jabber-chat-buffer-format "*-chat-%n-*"
-    jabber-groupchat-buffer-format "*-groupchat-%n-*"
     jabber-muc-disable-disco-check t
-    jabber-muc-private-buffer-format "*-muc-priv-%g-%n-*"
     jabber-muc-colorize-foreign t
     jabber-muc-colorize-local t
     jabber-muc-nick-saturation 0.35 ;; empirical value, suitable for my theme
