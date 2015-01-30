@@ -217,7 +217,6 @@ and run =el-get-install= with the package name.
             (:name stripe-buffer          :type github :pkgname "sabof/stripe-buffer")
             (:name git-auto-commit-mode   :type github :pkgname "ryuslash/git-auto-commit-mode")
             (:name ujelly-theme           :type github :pkgname "marktran/color-theme-ujelly")
-            ;(:name erc-image              :type github :pkgname "mrvdb/erc-image.el")
             (:name org-present            :type github :pkgname "rlister/org-present")
             ;; Dependency? I dont use this directly
             (:name dash                   :type github :pkgname "magnars/dash.el")
@@ -229,7 +228,6 @@ and run =el-get-install= with the package name.
             ;;(:name mrb/ubiquitous       :type github :pkgname "DarwinAwardWinner/ido-ubiquitous")
             (:name guide-key              :type github :pkgname "kbkbkbkb1/guide-key")
             (:name org-screenshot         :type github :pkgname "dfeich/org-screenshot")
-            (:name erc-hl-nicks           :type github :pkgname "leathekd/erc-hl-nicks")
             (:name json-rpc               :type github :pkgname "skeeto/elisp-json-rpc")
             (:name btcticker              :type github :pkgname "niedbalski/emacs-btc-ticker"
                    :depends request)
@@ -2309,9 +2307,6 @@ the echo area each time we push the spacebar.
 ;; We want the spacebar itself to do nothing
 (global-set-key [key-4660] 'ignore)
 
-;; C-c C-space has the control key in it, so this needs redefinition
-(global-set-key [(control c) (control key-4660)] 'erc-track-switch-buffer)
-
 ;; Put more cases here when we encounter them
 #+END_SRC
 
@@ -2903,11 +2898,6 @@ There's always exceptions to the rule; with Emacs doubly so. Here's
 the relevant exceptions for my configuration.
 
 #+BEGIN_SRC emacs-lisp
-  (add-hook 'erc-mode-hook
-            (lambda ()
-                    (bind-key
-                      [remap completion-at-point]
-                      'company-complete erc-mode-map)))
 
   ;; This does not work for some reason?
   ;; (use-package eshell
@@ -3074,138 +3064,6 @@ emacs' extension. This requires the 'edit-server' package in emacs.
 (edit-server-start)
 #+END_SRC
 * Messaging and chatting
-** ERC
-ERC is an irc implementation within emacs. When I start erc I want to
-connect automatically the configured servers without having to enter
-nicks and passwords and stuff.
-
-Start by configuring some basic settings
-
-#+BEGIN_SRC emacs-lisp
-  (use-package erc
-    :init
-    (progn
-      (setq
-       erc-modules (quote
-                    (autojoin button completion fill
-                              irccontrols keep-place list log
-                              match move-to-prompt netsplit
-                              networks noncommands notify notifications
-                              readonly replace ring services smiley stamp track unmorse
-                              smiley truncate))
-       ;;erc-image-inline-rescale 150
-       erc-generate-log-file-name-function 'erc-generate-log-file-name-with-date
-       erc-header-line-uses-help-echo-p nil
-  )))
-#+END_SRC
-
-Configure erc to use services and automatically identify my Nicks to
-Nickserv.
-
-#+BEGIN_SRC emacs-lisp
-    (use-package erc-services)
-    (setq erc-nick '("_MrB_" "_MrB__"))
-
-    (setq erc-prompt-for-nickserv-password nil)
-    (setq erc-nickserv-passwords
-          `((freenode     (
-                           ("_MrB_" . "M9UDV2Lk+BsG68uabZ1Kplh3")
-                           ))))
-    (erc-services-mode 1)
-    (erc-truncate-mode 1)
-#+END_SRC
-
-These are the channels I visit regularly, maintain a list of
-them. (Perhaps this should be outside of this config to be more
-flexible) The meaning here is that *when* I connect to a server which
-matches the expression in the first part of the list, it autojoins
-the channels in the rest of the list. This does not connect to a
-server by itself.
-
-#+BEGIN_SRC emacs-lisp
-  (setq erc-autojoin-channels-alist
-        '((".*\\.freenode.net" "#openobject" "#bitcoin-nl" "#twister")))
-#+END_SRC
-
-After joining, ERC keeps track of the channels, by putting notifiers
-in the modeline. I am not interested in some of the things happening
-in the channels.
-
-#+BEGIN_SRC emacs-lisp
-(erc-track-mode t)
-(setq erc-track-exclude-types '("JOIN" "NICK" "PART" "QUIT" "MODE"
-                                 "324" "329" "332" "333" "353" "477"))
-(setq erc-hide-list '("JOIN" "PART" "QUIT" "NICK"))
-#+END_SRC
-
-Log every channel in a simple =#channel-date.txt= file.
-
-#+BEGIN_SRC emacs-lisp
-  (setq erc-generate-log-file-name-function (quote erc-generate-log-file-name-with-date))
-#+END_SRC
-
-Within each channel, I like to change the prompt to the name of the
-channel; a quick google search turned out with this code:
-
-#+BEGIN_SRC emacs-lisp
-  (setq
-   erc-prompt
-   (lambda ()
-     (if (and
-          (boundp 'erc-default-recipients)
-          (erc-default-target))
-         (erc-propertize
-          (concat (erc-default-target) ">")
-          'read-only t
-          'rear-nonsticky t
-          'front-nonsticky t)
-       (erc-propertize
-        (concat "ERC>")
-        'read-only t
-        'rear-nonsticky t
-        'front-nonsticky t)
-       )
-     )
-   )
-
-#+END_SRC
-
-Define a function to start erc, so I can start it the way I like it.
-
-#+BEGIN_SRC emacs-lisp
-  (defun mrb/erc ()
-    "Wrapper to start erc in the way I want it"
-    (interactive)
-
-    ;;I use freenode for most things
-    (erc-tls :server "irc.freenode.net" :port 7000))
-#+END_SRC
-
-Especially in long running sessions on IRC, nick notifications are
-essential. I am on emacs 24 and this has DBUS notifications built-in,
-so let's start to use that. I'd rather have a graceful fallback (like
-notify.el) but we can use that later on. For now, the builtin
-notifications is preferred, so I don't have to install anything extra
-
-#+BEGIN_SRC emacs-lisp
-  (use-package notifications)
-
-  (defun mrb/erc-notify (match-type nick message)
-    "Notify when a message is received on erc"
-
-    (when (eq match-type 'current-nick)
-      (notifications-notify
-         :title nick
-         :body message
-         :app-icon "/usr/share/notify-osd/icons/gnome/scalable/status/notification-message-im.svg"
-         :urgency 'low)))
-
-  (add-hook 'erc-text-matched-hook 'mrb/erc-notify)
-#+END_SRC
-
-This is the simplest I can come up with for now. It notifies a bit too
-much, like server messages etc.
-
 ** Mail
 Mail configuration.
 
