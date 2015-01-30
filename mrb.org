@@ -67,17 +67,17 @@ And edit the file obviously.
   # - start emacs if it hasn't already started
   # - open a frame if emacs is there, but no frames are visible yet
   # - be suitable as 'open with...' target for linux file managers
-  # - allow additional command line arguments 
+  # - allow additional command line arguments
   #   (like -e to just run a piece of elisp)
   # - change the focus to the emacs frame
   #
-  # The script is basically a wrapper around emacsclient and we would 
+  # The script is basically a wrapper around emacsclient and we would
   # like to be compatible with it.
-  # 
+  #
   # - TODO: see if we can have some output when the daemon is not there,
   #         it is now very silent
   # - TODO: there is a mention of server-visit-hook not running when no
-  #         file is passed in in edit.old. I have not seen any ill effects, 
+  #         file is passed in in edit.old. I have not seen any ill effects,
   #         so left that out
   # - TODO: the way we open files and treat options is inconsistent, we now
   #         optimize to opening files and adapt scripts
@@ -248,7 +248,7 @@ and run =el-get-install= with the package name.
                 highlight-parentheses multiple-cursors git-modes cl-lib keywiz
                 smart-tab yaml-mode org-jekyll hideshow-org oauth flim haskell-mode ghc-mod s f
                 flycheck pkg-info perspective ido-vertical-mode jekyll-el org2blog
-                identica-mode php-mode company-mode xml-rpc csv-mode notmuch use-package 
+                identica-mode php-mode company-mode xml-rpc csv-mode notmuch use-package
                 git-timemachine eimp mu4e litable diminish paredit fullframe)
 
          ;; the sources we have configured above
@@ -2971,7 +2971,7 @@ which expands a selection by semantic analysis can not be left out
 
 #+BEGIN_SRC emacs-lisp
   (use-package expand-region
-    :bind 
+    :bind
     (("s-\\" . er/expand-region)
     ("s-|"  . er/contract-region)))
 #+END_SRC
@@ -3236,7 +3236,7 @@ the way I want them to, so I'm going to configure things from a
 working situation to a new working situation where the latte does
 not necessarily represent a wanted situation, but takes me close
 to it.
-    
+
 So, let's begin by enabling imap as the selection method.
 
 #+BEGIN_SRC emacs-lisp
@@ -3244,7 +3244,7 @@ So, let's begin by enabling imap as the selection method.
       '(nnimap "hsd"
 	       (nnimap-address "imap.hsdev.com")
 	       (nnimap-server-port 993)
-	       (nnimap-stream ssl)))    
+	       (nnimap-stream ssl)))
 #+END_SRC
 
 This, in combination with a line in .authinfo.gpg which holds the
@@ -3256,17 +3256,17 @@ Not having used GNUS enough to be comfortable, notmuch seems a route
 which can be taken somewhat easier. The compose part of emails is,
 with the capture like frame, basically done. The one thing which was a
 bit messy was the address completion which was supposed to go to an
-LDAP directory tied to an ODOO instance. 
+LDAP directory tied to an ODOO instance.
 
 The cop-out intermediate solution is address completion by a small
 utility which searches the notmuch database for email-addresses used
 before, which is likely to be a match in 90% of the cases.
 
-https://github.com/aperezdc/notmuch-addrlookup-c 
+https://github.com/aperezdc/notmuch-addrlookup-c
 
 Installation would be quite easy:
 
-#+BEGIN_SRC elisp 
+#+BEGIN_SRC elisp
    (use-package notmuch-address
      :config
      (progn
@@ -3595,7 +3595,7 @@ imported my feeds from RSSyl
 
       (defvar youtube-hosts '("www.youtube.com" "youtube.com" "youtu.be")
         "Domain names for YouTube.")
-      
+
       (defun youtube-pl-sentinel (process event)
         "Responds to completed youtube-dl processes."
         (let ((buffer (process-buffer process)))
@@ -3605,7 +3605,7 @@ imported my feeds from RSSyl
               (kill-buffer buffer))
             (when (string-match-p "abnormal" event)
               (message "youtube-pl %s failed." (youtube-get-id youtube-pl-url))))))
-      
+
       (defun mrb/play-youtube-video (url)
         "Play the video at URL with youtube-pl. Returns the buffer
          that will show progress output. The buffer is killed if the
@@ -3624,7 +3624,7 @@ imported my feeds from RSSyl
                   ;(setq default-directory
                   ;      (concat (directory-file-name youtube-dl-directory) "/"))
                   (set-process-sentinel
-                   (apply #'start-process process-name buffer "youtube-pl" 
+                   (apply #'start-process process-name buffer "youtube-pl"
                           (append youtube-pl-arguments (list "--" id)))
                    'youtube-pl-sentinel)))
               buffer))))
@@ -3633,7 +3633,7 @@ imported my feeds from RSSyl
       (bind-key "w" '(lambda () (interactive) (mrb/elfeed-search-toggle-tag 'watchlater)) elfeed-search-mode-map)
       (bind-key "e" '(lambda () (interactive) (mrb/enqueue-video)) elfeed-show-mode-map)
       (bind-key "v" '(lambda () (interactive) (mrb/play-video)) elfeed-show-mode-map)
-      
+
 
       ;; New entry hook allows meta information manipulation
       ;; without directly having to change elfeed-feeds
@@ -3816,7 +3816,7 @@ expression on a target buffer and see the matches.
 
 Once such an expression is made, 90% of the time I want to copy the
 regexp to the input of =query-replace-regexp= to do the actual
-replacing. 
+replacing.
 Somehow the copy of the regexp is mangled in that process (apparently
 suitable for programming) so the operation won't work.
 
