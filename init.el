@@ -1,4 +1,5 @@
-;;
+;;;; Package --- Emacs initialisation of mrvdb
+;;; Commentary:
 ;; Emacs initialisation starting point
 ;;
 ;; I want to have as little in here as possible. The configuration is
