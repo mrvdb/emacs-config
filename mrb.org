@@ -3416,8 +3416,11 @@ XMPP related settings, including interfacing it to other systems
 
 #+BEGIN_SRC emacs-lisp
   (use-package jabber
-    :init
+    :config
     (progn
+      ;; Show some info in the modeline
+      (jabber-mode-line-mode 1)
+
       ;; Configuration variables
       (setq
        jabber-show-offline-contacts nil
@@ -3465,12 +3468,7 @@ XMPP related settings, including interfacing it to other systems
       ;; jabber, so lets re-call the definition here, so we are sure we get
       ;; them.
 
-      (bind-key "C-j" jabber-global-keymap ctl-x-map))
-
-    :config 
-    (progn
-      ;; Show some info in the modeline
-      (jabber-mode-line-mode 1)
+      (bind-key "C-j" jabber-global-keymap ctl-x-map)
 
       ;; Do not steal my focus in the mini buffer
       ;; Message alert hooks
@@ -3485,7 +3483,7 @@ XMPP related settings, including interfacing it to other systems
                   (set-face-attribute 'jabber-chat-prompt-system nil :foreground "dark gray" :weight 'bold))))
 
     :bind
-    ("C-c C-SPC" . jabber-activity-switch-to)   
+    ("C-c C-SPC" . jabber-activity-switch-to))
 #+END_SRC
 ** Twister
 Twister is a p2p microblogging application based on
