@@ -267,14 +267,18 @@ I'd like to arrange 3 things related to personal information:
 So, identification, authorisation and encryption.
 
 Seems like a good idea to start configuration with some details
-about me. Just name and email-address for now in public. I don't think
-there is anything else that needs to be public at the moment.
+about me. The idea being that anything personal goes here and nowhere
+else. For one, this means my name only appears in this section in this
+document. Most of the variables I just made up, but some are used in
+other places too.
 
 #+BEGIN_SRC emacs-lisp
   (setq user-full-name    "Marcel van der Boom")
   (setq user-mail-address "marcel@hsdev.com")
-  (setq user-domain "hsdev.com") ;; This one I made up.
-  (setq user-organisation "HS-Development BV") ;; This one too
+  (setq user-domain "hsdev.com") 
+  (setq user-organisation "HS-Development BV")
+  (setq user-xmmp-account (concat user-mail-address "/" system-name))
+  (setq user-gpg-key (concat "<" user-mail-address ">"))
 #+END_SRC
 
 
@@ -2101,7 +2105,7 @@ get to my GPG key.
 (use-package org-crypt)
 (org-crypt-use-before-save-magic)
 (setq org-crypt-tag-matcher "encrypt")
-(setq org-crypt-key "<marcel@hsdev.com>")
+(setq org-crypt-key user-gpg-key)
 #+END_SRC
 
 This is mostly used for storing things like backup keys for 2-step
@@ -3089,7 +3093,7 @@ Mail configuration.
   ;; not the problem
   ;; TODO: where can I toggle this on/off while composing?
   ;; TODO: I want to do this in anubis, so this can probably go
-  ;;(setq smime-keys (quote (("marcel@hsdev.com" "~/keys/comodo-2012-06-12.pem" nil))))
+  ;;(setq smime-keys (quote (( user-mail-address "~/keys/comodo-2012-06-12.pem" nil))))
   ;;(add-hook 'message-send-hook 'mml-secure-message-sign-smime)
   (setq password-cache t)            ; default is true, so no need to set this actually
   (setq password-cache-expiry 28800) ; default is 16 seconds, which is ridiculously low
@@ -3460,7 +3464,7 @@ XMPP related settings, including interfacing it to other systems
        jabber-muc-nick-value 0.75)
 
       ;; My accounts
-      (setq jabber-account-list (quote (("marcel@hsdev.com/Emacs" (:connection-type . starttls)))))
+      (setq jabber-account-list (quote ((user-xmmp-account (:connection-type . starttls)))))
 
       ;; C-j is the prefix for all jabber command in the C-x map (so, C-x C-j precede all commands for jabber)
       ;; The default C-x map for emacs has a C-j entry which binds it to
