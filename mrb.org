@@ -236,7 +236,7 @@ and run =el-get-install= with the package name.
             (:name vlc                    :type github :pkgname "mrvdb/vlc.el")
             (:name tsupport               :type github :pkgname "mrvdb/tsupport")
             (:name elfeed-org             :type github :pkgname "remyhonig/elfeed-org")
-            (:name jabber                 :type git    :url     "/home/mrb/dat/src/emacs/packages/jabber.el" :branch "master")
+            (:name jabber                 :type git    :url     "/home/mrb/dat/src/emacs/packages/jabber.el" :branch "mrb/master")
           )
     )
 
@@ -277,7 +277,7 @@ other places too.
   (setq user-mail-address "marcel@hsdev.com")
   (setq user-domain "hsdev.com") 
   (setq user-organisation "HS-Development BV")
-  (setq user-xmmp-account (concat user-mail-address "/" system-name))
+  (setq user-xmpp-account (concat user-mail-address "/" system-name))
   (setq user-gpg-key (concat "<" user-mail-address ">"))
 #+END_SRC
 
@@ -3420,6 +3420,12 @@ XMPP related settings, including interfacing it to other systems
 
 #+BEGIN_SRC emacs-lisp
   (use-package jabber
+    :init
+    ;; My accounts
+    ;; Make sure the user-xmpp-account gets evaluated
+    (setq jabber-account-list
+          `((,user-xmpp-account (:connection-type . starttls))))
+    
     :config
     (progn
       ;; Show some info in the modeline
@@ -3461,11 +3467,16 @@ XMPP related settings, including interfacing it to other systems
        jabber-muc-colorize-foreign t
        jabber-muc-colorize-local t
        jabber-muc-nick-saturation 0.35 ;; empirical value, suitable for my theme
-       jabber-muc-nick-value 0.75)
+       jabber-muc-nick-value 0.75
 
-      ;; My accounts
-      (setq jabber-account-list (quote ((user-xmmp-account (:connection-type . starttls)))))
+       ;; Make the MUCs 
+       jabber-muc-show-affiliation-changes nil
+       jabber-muc-show-enter-presence nil
+       jabber-muc-show-leave-messages nil
+       jabber-muc-show-role-changes nil
+       )
 
+      
       ;; C-j is the prefix for all jabber command in the C-x map (so, C-x C-j precede all commands for jabber)
       ;; The default C-x map for emacs has a C-j entry which binds it to
       ;; dired-jump. This gets in the way of all the keyboard shortcuts for
