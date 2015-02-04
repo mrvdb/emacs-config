@@ -744,7 +744,7 @@ any issues.
 
   (add-hook 'javascript-mode-hook 'mrb/javascript-custom-setup)
   (add-hook 'css-mode-hook 'rainbow-mode)
-  (add-hook 'image-mode 'eimp-mode)
+  (add-hook 'image-mode-hook 'eimp-mode)
 
   (defun mrb/javascript-custom-setup ()
     (moz-minor-mode 1))
