@@ -221,11 +221,9 @@ and run =el-get-install= with the package name.
             ;; Dependency? I dont use this directly
             (:name dash                   :type github :pkgname "magnars/dash.el")
             (:name gitmessenger           :type github :pkgname "syohex/emacs-git-messenger")
-;            (:name metaweblog             :type github :pkgname "punchagan/metaweblog.el")
             (:name org-agenda-property    :type github :pkgname "Bruce-Connor/org-agenda-property")
             (:name pump.io                :type github :pkgname "cnngimenez/pumpio-el")
             (:name elfeed                 :type github :pkgname "skeeto/elfeed")
-            ;;(:name mrb/ubiquitous       :type github :pkgname "DarwinAwardWinner/ido-ubiquitous")
             (:name guide-key              :type github :pkgname "kbkbkbkb1/guide-key")
             (:name org-screenshot         :type github :pkgname "dfeich/org-screenshot")
             (:name json-rpc               :type github :pkgname "skeeto/elisp-json-rpc")
@@ -1591,19 +1589,21 @@ Given the unmodified package, just setting the variables defined in
 there gets it configured for my situation:
 
 #+BEGIN_SRC emacs-lisp
-  (use-package jekyll)
-  (setq jekyll-directory "~/dat/blogs/mrblog/sites/main/")
-  (setq jekyll-post-ext ".org")
+  (use-package jekyll
+    :config
+    (progn
+      (setq jekyll-directory "~/dat/blogs/mrblog/sites/main/")
+      (setq jekyll-post-ext ".org")
 
-  (defun file-string (file)
-      "Read the contents of a file and return as a string."
-      (with-temp-buffer
-        (insert-file-contents file)
-        (buffer-string)))
+      (defun file-string (file)
+        "Read the contents of a file and return as a string."
+        (with-temp-buffer
+          (insert-file-contents file)
+          (buffer-string)))
 
-  (setq jekyll-post-template
-        (file-string
-         (concat jekyll-directory jekyll-posts-dir "_posttemplate.org")))
+      (setq jekyll-post-template
+            (file-string
+             (concat jekyll-directory jekyll-posts-dir "_posttemplate.org")))))
 #+END_SRC
 
 The only special thing here is that I save the template in a file, so
@@ -1677,16 +1677,8 @@ migrate this into more literal sections
 
   ; Keybindings which only make sense when having an orgmode file
   (bind-key "C-c t" 'org-set-tags org-mode-map)
-
-  ;; After 7.9.4(?) the export menu is called by dispatch
-  (if
-      (version< "7.9.4" (org-version))
-      (bind-key "C-c e" 'org-export-dispatch org-mode-map)
-    (bind-key "C-c e" 'org-export org-mode-map)
-    )
-
-
-
+  (bind-key "C-c e" 'org-export-dispatch org-mode-map)
+  
   ; Map \cmd{}t to schedule in both task and agenda-view
   (bind-key "s-t" 'org-schedule org-mode-map)
   (bind-key "s-t" 'org-agenda-schedule org-agenda-mode-map)
