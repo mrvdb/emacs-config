@@ -769,7 +769,8 @@ any issues.
       (list 'emacs-lisp-mode-hook 'lisp-interaction-mode-hook 'ielm-mode-hook 'python-mode))
     (add-hook the_mode 'turn-on-eldoc-mode))
 
-  ;; Autofill should be off for a couple of modes
+  ;; Autofill should be off for a couple of modes, but mostly on
+  (auto-fill-mode 1)
   (dolist
       (the_mode
        (list 'nxml-mode))
