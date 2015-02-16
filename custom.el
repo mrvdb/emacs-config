@@ -120,7 +120,8 @@
 		   (quote todo)
 		   (quote
 		    ("WAITING")))))))
-       (mrb/org-agenda-show-tip "" nil))
+       (mrb/org-agenda-show-tip "" nil)
+       (todo "COLLECT" nil))
       ((org-agenda-dim-blocked-tasks
 	(quote invisible))
        (org-agenda-archives-mode t)))
