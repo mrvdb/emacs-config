@@ -276,7 +276,7 @@ other places too.
   (setq user-domain "hsdev.com") 
   (setq user-organisation "HS-Development BV")
   (setq user-xmpp-account (concat user-mail-address "/" system-name))
-  (setq user-gpg-key (concat "<" user-mail-address ">"))
+  (setq user-gpg-encrypt-key "FEAA7ADD")
 #+END_SRC
 
 
@@ -2098,7 +2098,7 @@ get to my GPG key.
 (use-package org-crypt)
 (org-crypt-use-before-save-magic)
 (setq org-crypt-tag-matcher "encrypt")
-(setq org-crypt-key user-gpg-key)
+(setq org-crypt-key user-gpg-encrypt-key)
 #+END_SRC
 
 This is mostly used for storing things like backup keys for 2-step
