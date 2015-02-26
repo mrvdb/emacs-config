@@ -6,6 +6,7 @@
  ;; If there is more than one, they won't work right.
  '(ansi-color-names-vector
    ["#3F3F3F" "#CC9393" "#7F9F7F" "#F0DFAF" "#8CD0D3" "#DC8CC3" "#93E0E3" "#DCDCCC"])
+ '(battery-mode-line-format "[%b%p%%~%mmin]")
  '(column-number-mode t)
  '(command-frequency-autosave-mode t)
  '(compilation-scroll-output t)
@@ -24,7 +25,7 @@
  '(flyspell-issue-message-flag nil)
  '(font-lock-maximum-size nil)
  '(gud-gdb-command-name "gdb --annotate=1")
- '(haskell-mode-hook (quote (turn-on-haskell-indent)) t)
+ '(haskell-mode-hook (quote (turn-on-haskell-indent)))
  '(ispell-use-framepop-p t)
  '(mail-signature nil)
  '(markdown-css-path "/home/mrb/.markdown.css")
@@ -264,8 +265,8 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:inherit nil :stipple nil :background "#300A24" :foreground "#dcdccc" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 98 :width normal :foundry "microsoft" :family "Consolas"))))
- '(fixed-pitch ((t (:family "Consolas"))))
+ '(default ((t (:inherit nil :stipple nil :background "#300A24" :foreground "#dcdccc" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 110 :width normal :family "DejaVu Sans Mono"))))
+ '(fixed-pitch ((t (:family "DejaVu Sans Mono"))))
  '(flyspell-duplicate ((t (:foreground "goldenrod" :underline t :weight bold))))
  '(flyspell-incorrect ((t (:foreground "tomato" :underline t :weight bold))))
  '(identica-stripe-face ((t (:background "dim gray"))) t)
@@ -274,7 +275,7 @@
  '(org-agenda-date-today ((t (:foreground "white" :slant italic :weight bold :height 1.2))) t)
  '(org-agenda-structure ((t (:inherit font-lock-comment-face :weight bold :height 1.1))))
  '(org-block-background ((t (:inherit fixed-pitch))))
- '(org-column ((t (:strike-through nil :underline nil :slant normal :weight normal :height 98 :family "Consolas"))))
+ '(org-column ((t (:strike-through nil :underline nil :slant normal :weight normal :height 98 :family "DejaVu Sans Mono"))))
  '(org-document-info ((((class color) (background light)) (:inherit org-date))))
  '(org-headline-done ((t (:foreground "#afd8af" :weight bold))))
  '(org-hide ((t (:foreground "#303030"))))
