@@ -16,6 +16,7 @@
    (quote
     ("/home/mrb/.emacs.d/el-get/" "/home/mrb/.emacs.d/el-get/zenburn-emacs/" custom-theme-directory t)))
  '(dired-bind-jump nil)
+ '(epg-gpg-program "/usr/bin/gpg2")
  '(eshell-modules-list
    (quote
     (eshell-alias eshell-banner eshell-basic eshell-cmpl eshell-dirs eshell-glob eshell-hist eshell-ls eshell-pred eshell-prompt eshell-rebind eshell-script eshell-term eshell-unix)))
