@@ -83,18 +83,32 @@ And edit the file obviously.
   #         optimize to opening files and adapt scripts
   #
 
+  # Save how we are called
+  WEARE=$(basename $0)
+
+  # Base invocation of emacsclient
+  EMACS_SOCKET=/tmp/emacs`id -u`/server
+
+  # Check how we are called and adapt
+  # This is for things like commit messages
+  XARGS="--quiet --socket-name=$EMACS_SOCKET"
+  if [ $WEARE == "edit" ]; then
+      XARGS=$XARGS' --no-wait'
+  fi
+  EMACSCLIENT="`which emacsclient` $XARGS"
+
   # Base invocation of emacsclient
   EMACSCLIENT="`which emacsclient` --quiet --no-wait"
 
   # Number of current visible frames,
   # Emacs daemon always has a visible frame called F1 which is erm, not visible.
   visible_frames() {
-    $EMACSCLIENT --alternate-editor="" --eval '(length (visible-frame-list))' 2>/dev/null
+      $EMACSCLIENT --alternate-editor="" --eval '(length (visible-frame-list))' 2>/dev/null
   }
 
   # Change the focus to emacs
   change_focus() {
-    $EMACSCLIENT --eval "(select-frame-set-input-focus (selected-frame))" > /dev/null
+      $EMACSCLIENT --eval "(select-frame-set-input-focus (selected-frame))" > /dev/null
   }
 
   # Editting stdin, part 1: save the input to a file
@@ -119,7 +133,7 @@ And edit the file obviously.
 
   XARGS=$@
   if [ "X$XARGS" == "X" ]; then
-    XARGS='~/untitled'
+      XARGS='~/untitled'
   fi
   if [ "$(visible_frames)" -lt  "2" ]; then
       # need to create a frame
