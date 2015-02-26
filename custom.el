@@ -114,13 +114,7 @@
 		 (quote
 		  ("-inactive")))
 		(org-agenda-span
-		 (quote day))
-		(org-agenda-skip-function
-		 (quote
-		  (org-agenda-skip-entry-if
-		   (quote todo)
-		   (quote
-		    ("WAITING")))))))
+		 (quote day))))
        (mrb/org-agenda-show-tip "" nil)
        (todo "COLLECT" nil))
       ((org-agenda-dim-blocked-tasks
@@ -133,7 +127,7 @@
 	 (effort-down))))))))
  '(org-agenda-files
    (quote
-    ("~/dat/org/geocaching.org" "~/dat/org/secrets.org" "~/dat/org/_calendars/marcel.org" "~/dat/org/projects/reprap.org" "~/dat/org/ideas.org" "~/dat/org/GTD.org" "~/dat/org/orgmode.org" "~/dat/org/projects/cobra.org" "~/dat/org/habits.org" "~/dat/blogs/blogs.org" "~/dat/org/projects/keuken.org" "~/dat/org/_calendars/sylvia.org" "~/dat/org/_calendars/planner.org" "/home/mrb/dat/org/journal/20140211.org")))
+    ("~/dat/org/_calendars/afval.org" "~/dat/org/geocaching.org" "~/dat/org/secrets.org" "~/dat/org/_calendars/marcel.org" "~/dat/org/projects/reprap.org" "~/dat/org/ideas.org" "~/dat/org/GTD.org" "~/dat/org/orgmode.org" "~/dat/org/projects/cobra.org" "~/dat/org/habits.org" "~/dat/blogs/blogs.org" "~/dat/org/projects/keuken.org" "~/dat/org/_calendars/sylvia.org" "~/dat/org/_calendars/planner.org")))
  '(org-agenda-ignore-drawer-properties (quote (effort appt category)))
  '(org-agenda-text-search-extra-files (quote (agenda-archives)))
  '(org-agenda-todo-ignore-scheduled (quote future))
@@ -266,7 +260,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:inherit nil :stipple nil :background "#300A24" :foreground "#dcdccc" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 98 :width normal :foundry "microsoft" :family "Consolas"))))
+ '(default ((t (:inherit nil :stipple nil :background "#300A24" :foreground "#dcdccc" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 102 :width normal :foundry "unknown" :family "DejaVu Sans Mono"))))
  '(fixed-pitch ((t (:family "Consolas"))))
  '(flyspell-duplicate ((t (:foreground "goldenrod" :underline t :weight bold))))
  '(flyspell-incorrect ((t (:foreground "tomato" :underline t :weight bold))))
