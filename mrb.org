@@ -260,7 +260,7 @@ and run =el-get-install= with the package name.
                 highlight-parentheses multiple-cursors git-modes cl-lib keywiz
                 smart-tab yaml-mode org-jekyll hideshow-org oauth flim haskell-mode ghc-mod s f
                 flycheck pkg-info perspective ido-vertical-mode jekyll-el org2blog
-                identica-mode php-mode company-mode xml-rpc csv-mode notmuch use-package
+                identica-mode php-mode company-mode csv-mode notmuch use-package
                 git-timemachine eimp mu4e litable diminish paredit fullframe)
 
          ;; the sources we have configured above
