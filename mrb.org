@@ -97,9 +97,6 @@ And edit the file obviously.
   fi
   EMACSCLIENT="`which emacsclient` $XARGS"
 
-  # Base invocation of emacsclient
-  EMACSCLIENT="`which emacsclient` --quiet --no-wait"
-
   # Number of current visible frames,
   # Emacs daemon always has a visible frame called F1 which is erm, not visible.
   visible_frames() {
