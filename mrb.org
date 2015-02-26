@@ -83,18 +83,32 @@ And edit the file obviously.
   #         optimize to opening files and adapt scripts
   #
 
+  # Save how we are called
+  WEARE=$(basename $0)
+
+  # Base invocation of emacsclient
+  EMACS_SOCKET=/tmp/emacs`id -u`/server
+
+  # Check how we are called and adapt
+  # This is for things like commit messages
+  XARGS="--quiet --socket-name=$EMACS_SOCKET"
+  if [ $WEARE == "edit" ]; then
+      XARGS=$XARGS' --no-wait'
+  fi
+  EMACSCLIENT="`which emacsclient` $XARGS"
+
   # Base invocation of emacsclient
   EMACSCLIENT="`which emacsclient` --quiet --no-wait"
 
   # Number of current visible frames,
   # Emacs daemon always has a visible frame called F1 which is erm, not visible.
   visible_frames() {
-    $EMACSCLIENT --alternate-editor="" --eval '(length (visible-frame-list))' 2>/dev/null
+      $EMACSCLIENT --alternate-editor="" --eval '(length (visible-frame-list))' 2>/dev/null
   }
 
   # Change the focus to emacs
   change_focus() {
-    $EMACSCLIENT --eval "(select-frame-set-input-focus (selected-frame))" > /dev/null
+      $EMACSCLIENT --eval "(select-frame-set-input-focus (selected-frame))" > /dev/null
   }
 
   # Editting stdin, part 1: save the input to a file
@@ -119,7 +133,7 @@ And edit the file obviously.
 
   XARGS=$@
   if [ "X$XARGS" == "X" ]; then
-    XARGS='~/untitled'
+      XARGS='~/untitled'
   fi
   if [ "$(visible_frames)" -lt  "2" ]; then
       # need to create a frame
@@ -246,7 +260,7 @@ and run =el-get-install= with the package name.
                 highlight-parentheses multiple-cursors git-modes cl-lib keywiz
                 smart-tab yaml-mode org-jekyll hideshow-org oauth flim haskell-mode ghc-mod s f
                 flycheck pkg-info perspective ido-vertical-mode jekyll-el org2blog
-                identica-mode php-mode company-mode xml-rpc csv-mode notmuch use-package
+                identica-mode php-mode company-mode csv-mode notmuch use-package
                 git-timemachine eimp mu4e litable diminish paredit fullframe)
 
          ;; the sources we have configured above
@@ -500,6 +514,8 @@ and call that when we are done with our visual (X) init.
     (mrb/fix-fontset-font "Symbola" #x1f4ac) ;; 💬 chat balloon
     (mrb/fix-fontset-font "Symbola" #x1f4de) ;; 📞 telephone receiver
     (mrb/fix-fontset-font "Symbola" #x1f385) ;; 🎅 santa claus
+    (mrb/fix-fontset-font "Symbola" #x1f60e) ;; 😎 emoji
+    (mrb/fix-fontset-font "Symbola" #x1f60a) ;; 😊 
    )
 #+END_SRC
 
@@ -3875,7 +3891,8 @@ configuration on different machines.
     (progn
       ;; Stuff that needs to happen for machine named "x200s"
       ;; TODO: deviate from the standard font, make it Ubuntu
-      (set-frame-font "Ubuntu Mono")
+      (set-frame-font "DejaVu Sans Mono")
+      (set-face-attribute 'default nil :height 110)
       ))
 
   (when (string= system-name "t510")
