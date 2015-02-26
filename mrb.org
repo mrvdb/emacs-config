@@ -3890,7 +3890,8 @@ configuration on different machines.
     (progn
       ;; Stuff that needs to happen for machine named "x200s"
       ;; TODO: deviate from the standard font, make it Ubuntu
-      (set-frame-font "Ubuntu Mono")
+      (set-frame-font "DejaVu Sans Mono")
+      (set-face-attribute 'default nil :height 110)
       ))
 
   (when (string= system-name "t510")
