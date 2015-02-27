@@ -508,6 +508,7 @@ and call that when we are done with our visual (X) init.
     (mrb/fix-fontset-font "Symbola" #x1f385) ;; 🎅 santa claus
     (mrb/fix-fontset-font "Symbola" #x1f60e) ;; 😎 emoji
     (mrb/fix-fontset-font "Symbola" #x1f60a) ;; 😊 
+    (mrb/fix-fontset-font "Symbola" #x1f596) ;; 🖖
    )
 #+END_SRC
 
