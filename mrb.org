@@ -345,7 +345,6 @@ separate file for several reasons.
 
 #+BEGIN_SRC emacs-lisp
   (setq
-   auto-save-default t
    
    ; disable backup files (foo~)
    backup-inhibited t
@@ -703,6 +702,21 @@ get confused:
   (use-package uniquify
     :init
     (setq uniquify-buffer-name-style 'forward))
+#+END_SRC
+
+For every file-based buffer, I want auto-save to be on, but not in the
+same location as the file, as that clutters up everything. For that, I
+add to the list of file-name transforms to have (local) files
+autosaved in a designated folder)
+
+#+BEGIN_SRC emacs-lisp
+  (setq auto-save-default t)
+
+  (setq mrb/auto-save-folder "~/.emacs.d/auto-save-list/")
+
+  (add-to-list 'auto-save-file-name-transforms
+               (list "\\(.+/\\)*\\(.*?\\)" (expand-file-name "\\2" mrb/auto-save-folder))
+               t)
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
