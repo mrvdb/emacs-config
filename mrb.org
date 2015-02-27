@@ -344,16 +344,12 @@ separate file for several reasons.
 * Global Generic settings
 
 #+BEGIN_SRC emacs-lisp
-  ;; disable auto-save files (#foo#)
-  ;; FIXME: I actually want them, but not in my face
   (setq
-   auto-save-default nil
-
+   auto-save-default t
+   
    ; disable backup files (foo~)
    backup-inhibited t
 
-   ; disable auto-save-list/.saves
-   auto-save-list-file-prefix nil
 
    ; move files to the trash instead of rm
    delete-by-moving-to-trash t
@@ -2114,21 +2110,11 @@ get to my GPG key.
 (setq org-crypt-key user-gpg-encrypt-key)
 #+END_SRC
 
-This is mostly used for storing things like backup keys for 2-step
-authenticationn services etc. This setting does not play very nice
-with =auto-save-default= having any other value than =nil=. This was
-already my setting, but it can't hurt to set it here too.
-
-#+BEGIN_SRC emacs-lisp
-(setq auto-save-default nil)
-
-#+END_SRC
-
-Furthermore, we do not want to inherit this tag automatically, as its
-behaviour is already subsection inclusive. When you encrypt a
-section, everything below it is considered content of that section
-and gets encrypted. I also add the value "crypt" as that is the org
-default, so it won't be inherited by mistake.
+We do not want to inherit this tag automatically, as its behaviour is
+already subsection inclusive. When you encrypt a section, everything
+below it is considered content of that section and gets encrypted. I
+also add the value "crypt" as that is the org default, so it won't be
+inherited by mistake.
 
 #+BEGIN_SRC emacs-lisp
 (add-to-list 'org-tags-exclude-from-inheritance (quote "encrypt"))
