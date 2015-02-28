@@ -496,20 +496,13 @@ and call that when we are done with our visual (X) init.
 #+BEGIN_SRC emacs-lisp
   (defun mrb/unicode-font-corrections()
     ;; Add a line like the following  for each char displaying improperly
-    ;; TODO: this looks like it can be done more efficiently by using a do-list
-    (mrb/fix-fontset-font "Symbola" #x1f3d8) ;; 🏘
-    (mrb/fix-fontset-font "Symbola" #x1f3e0) ;; 🏠 house building
-    (mrb/fix-fontset-font "Symbola" #x1f3e1) ;; 🏡
-    (mrb/fix-fontset-font "Symbola" #x1f435) ;; 🐵 monkey
-    (mrb/fix-fontset-font "Symbola" #x1f44d) ;; 👍 thumbs up
-    (mrb/fix-fontset-font "Symbola" #x1f4a9) ;; 💩 pile of poo is required
-    (mrb/fix-fontset-font "Symbola" #x1f4ac) ;; 💬 chat balloon
-    (mrb/fix-fontset-font "Symbola" #x1f4de) ;; 📞 telephone receiver
-    (mrb/fix-fontset-font "Symbola" #x1f385) ;; 🎅 santa claus
-    (mrb/fix-fontset-font "Symbola" #x1f60e) ;; 😎 emoji
-    (mrb/fix-fontset-font "Symbola" #x1f60a) ;; 😊 
-    (mrb/fix-fontset-font "Symbola" #x1f596) ;; 🖖
-   )
+    (dolist
+        (the_char
+         (list '#x1f3d8 '#x1f3e0 '#x1f3d8   ;; 🏘 🏠 🏡
+               '#x1f435 '#x1f44d '#x1f4a9   ;; 🐵 👍 💩
+               '#x1f4ac '#x1f4de '#x1f385   ;; 💬 📞 🎅
+               '#x1f60e '#x1f60a '#x1f596)) ;; 😎 😊 🖖
+      (mrb/fix-fontset-font "Symbola" the_char))
 #+END_SRC
 
 So, when characters do not show properly, the steps to take now are:
