@@ -670,7 +670,7 @@ extra care here.
 
     ;; Probably move this to somewhere else ?
     (use-package ws-butler
-      :config
+      :init
       (progn
         (add-hook 'lisp-mode-hook         'ws-butler-mode)
         (add-hook 'emacs-lisp-mode-hook   'ws-butler-mode)
