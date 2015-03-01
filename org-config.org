@@ -69,8 +69,6 @@ Define a tag which gives orgmode the signal to encrypt the contents of
 a certain headline
 #+TAGS: encrypt(y)
 
-#+TAGS: security(t)
-
 * Workflow states
 The 'TODO' keyword signals something that I myself have to do. It is
 is either still TO-DO or it has been DONE. If I change my mind, it's
