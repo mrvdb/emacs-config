@@ -3890,7 +3890,7 @@ configuration on different machines.
   (when (string= system-name "t510")
     (progn
       ;; Stuff for the "t510" configuration
-      (set-frame-font "Consolas")
+      
       ))
 #+END_SRC
 
