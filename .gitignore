@@ -24,3 +24,7 @@ mrb.el
 /test.org
 /.litable-lists.el
 /.cask/
+/elpa/
+/gamify-stats
+/image-dired/
+/var/
