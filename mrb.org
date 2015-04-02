@@ -3130,14 +3130,18 @@ on the varying name that xprop delivers, so. we make our own window.
 
 #+BEGIN_SRC emacs-lisp
   (defun mrb/make-mailcompose-frame (&optional mailto-url)
-    "Create a new frame and run mail-compose, use mailto URI if it is given."
+    "Create a new frame and run mail-compose, use mailto URI if it
+  is given."
     (interactive)
 
     ;; Create and select the frame, awesome wm takes care of the
     ;; placement and floating it on top of all other windows.
-    (select-frame (make-frame '((name . "mailcompose")
-                                (width . 100) (height . 50)
-                                (menu-bar-lines . 0) (tool-bar-lines . 0))))
+    ;; FIXME: the sizes should not be absolute
+    (select-frame (make-frame
+                   '((name . "mailcompose")
+                     (width . 100 ) (height . 48)
+                     (menu-bar-lines . 0) (tool-bar-lines . 0))))
+
 
     ;; If we have a mailto argument, parse and use it
     (if (and (stringp mailto-url)
