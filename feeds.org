@@ -16,14 +16,6 @@ This has a number of attractive properties:
   :PROPERTIES:
 :ID:       elfeed
 :END:
-*** Marktplaats											 :marktplaats:
-**** http://kopen.marktplaats.nl/opensearch.php?q=bridgeport					   :machining:
-**** http://kopen.marktplaats.nl/opensearch.php?q=abene						   :machining:
-**** http://kopen.marktplaats.nl/opensearch.php?q=plasmasnijder					   :machining:
-**** http://kopen.marktplaats.nl/opensearch.php?q=cazeneuve					   :machining:
-**** http://kopen.marktplaats.nl/opensearch.php?q=deckel					   :machining:
-**** http://kopen.marktplaats.nl/opensearch.php?q=lista						   :machining:
-**** http://kopen.marktplaats.nl/opensearch.php?q=thinkpad					   :computing:
 *** Humor											       :humor:
 **** http://feeds.feedburner.com/GeekAndPoke
 **** http://blag.xkcd.com/feed/ 
@@ -55,7 +47,7 @@ This has a number of attractive properties:
 **** http://nva-openerp.blogspot.com/feeds/posts/default						:odoo:
 **** http://esr.ibiblio.org/?feed=atom&tag=gpsd								:gpsd:
 **** http://planet.claws-mail.org/rss20.xml
-**** http://feeds.facerepo.com/rss/faces/faces.rss?faceType=facer&shape=round&sortOrder=newest
+**** http://feeds.facerepo.com/rss/faces/faces.rss?faceType=facer&faceType=watchmaker&shape=round&sortOrder=newest
 **** http://blog.prosody.im/feed/atom.xml
 **** Emacs											       :emacs:
 ***** entry-title: \(emacs\|org-mode\)
@@ -70,11 +62,13 @@ This has a number of attractive properties:
 ***** http://endlessparentheses.com/atom.xml
 ***** http://www.howardism.org/index.xml							      :people:
 ***** http://oremacs.com/atom.xml
+***** http://emacsnyc.org/atom.xml
 **** Telegram
 ***** http://trellorss.appspot.com/feed/5707648880082944
 *** Hardware											    :hardware:
 **** http://www.readynas.com/?feed=rss2
 **** https://reddit.com/r/thinkpad.rss 								   :computing:
+**** https://www.yubico.com/feed/								    :security:
 *** Other
 **** http://vimeo.com/mrvdb/subscriptions/videos/rss/5d94482c63b00132e107359e3740cd5d62bb60d3	 :video:vimeo:
 **** http://feeds.feedburner.com/TheChicane							   :oldschool:
