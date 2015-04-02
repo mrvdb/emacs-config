@@ -284,7 +284,7 @@ other places too.
 #+BEGIN_SRC emacs-lisp
   (setq user-full-name    "Marcel van der Boom")
   (setq user-mail-address "marcel@hsdev.com")
-  (setq user-domain "hsdev.com") 
+  (setq user-domain "hsdev.com")
   (setq user-organisation "HS-Development BV")
   (setq user-xmpp-account (concat user-mail-address "/" system-name))
   (setq user-gpg-encrypt-key "FEAA7ADD")
@@ -345,7 +345,7 @@ separate file for several reasons.
 
 #+BEGIN_SRC emacs-lisp
   (setq
-   
+
    ; disable backup files (foo~)
    backup-inhibited t
 
@@ -1697,7 +1697,7 @@ migrate this into more literal sections
   ; Keybindings which only make sense when having an orgmode file
   (bind-key "C-c t" 'org-set-tags org-mode-map)
   (bind-key "C-c e" 'org-export-dispatch org-mode-map)
-  
+
   ; Map \cmd{}t to schedule in both task and agenda-view
   (bind-key "s-t" 'org-schedule org-mode-map)
   (bind-key "s-t" 'org-agenda-schedule org-agenda-mode-map)
@@ -3423,10 +3423,10 @@ XMPP related settings, including interfacing it to other systems
   (use-package jabber
     :init
     ;; My accounts
-    ;; Make sure the user-xmpp-account gets evaluated
+    ;; The ',' makes sure the user-xmpp-account gets evaluated
     (setq jabber-account-list
           `((,user-xmpp-account (:connection-type . starttls))))
-    
+
     :config
     (progn
       ;; Show some info in the modeline
@@ -3470,14 +3470,14 @@ XMPP related settings, including interfacing it to other systems
        jabber-muc-nick-saturation 0.35 ;; empirical value, suitable for my theme
        jabber-muc-nick-value 0.75
 
-       ;; Make the MUCs 
+       ;; Make the MUCs
        jabber-muc-show-affiliation-changes nil
        jabber-muc-show-enter-presence nil
        jabber-muc-show-leave-messages nil
        jabber-muc-show-role-changes nil
        )
 
-      
+
       ;; C-j is the prefix for all jabber command in the C-x map (so, C-x C-j precede all commands for jabber)
       ;; The default C-x map for emacs has a C-j entry which binds it to
       ;; dired-jump. This gets in the way of all the keyboard shortcuts for
