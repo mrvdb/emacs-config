@@ -1527,6 +1527,8 @@ or pages.
 
 
 **** Org2Blog configuration for Wordpress
+Note: this section can probably be archived as I am not using
+wordpress anymore.
 
 I use my own repositories mostly
 
@@ -1601,7 +1603,10 @@ proper extension and so on.
 I chose to simplify this and use the org-mode files directly as source
 files in the jekyll directory structure and use =org-ruby= to convert
 the files with a jekyll plugin. This dramatically simplifies the
-process.
+process. The files written are actually valid org files, be it that
+the header is a bit strange and should really be an org header with
+properties.
+
 
 To support this process, I'm using the =jekyll-el= package as a base.
 Given the unmodified package, just setting the variables defined in
