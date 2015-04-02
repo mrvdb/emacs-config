@@ -3046,6 +3046,9 @@ advised configuration from the author at this point.
 #+END_SRC
 
 * Remote editing
+Somehow I found that 'sshx' method works, but 'ssh' does not. At some
+point I'll need to find out why that is. The only thing different
+seems to be the '-t' option to the =ssh= program.
 
 #+BEGIN_SRC emacs-lisp
 (setq tramp-default-method "sshx")
