@@ -675,7 +675,8 @@ extra care here.
         (add-hook 'lisp-mode-hook         'ws-butler-mode)
         (add-hook 'emacs-lisp-mode-hook   'ws-butler-mode)
         (add-hook 'python-mode-hook       'ws-butler-mode)
-        (add-hook 'org-mode-hook          'ws-butler-mode)))
+        (add-hook 'org-mode-hook          'ws-butler-mode)
+        (add-hook 'nxml-mode-hook         'ws-butler-mode)))
 
     (mrb/unicode-font-corrections))
 
