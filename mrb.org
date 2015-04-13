@@ -2175,83 +2175,6 @@ for part design for the 3D-print and for the lathe.
   ;;(provide 'openscad)
 
 #+END_SRC
-** Python
-Python is a indent aware language, wich saves quite a bit of fiddling
-around with parenthes and what have you.
-
-Having lines truncated is the preferred way in python, usually lines
-will be short enough anyway, but I can't have line automatically
-folding because that disturbs the way I think when looking at python
-code.
-
-#+BEGIN_SRC emacs-lisp
-  (add-hook 'python-mode-hook
-            (lambda ()
-              (toggle-truncate-lines t)))
-#+END_SRC
-** Haskell
-I am just starting out with haskell, but the two things that are
-probably needed in any case are a mode to use when editting Haskell
-source (*.hs files) and the ghc-mod package to help with completion
-and showing syntax errors.
-
-#+BEGIN_SRC emacs-lisp
-    (use-package haskell-mode
-
-      (add-to-list 'auto-mode-alist '("\\.hs\\'". haskell-mode))
-      (add-hook 'haskell-mode-hook 'interactive-haskell-mode)
-      (add-hook 'haskell-mode-hook 'turn-on-haskell-doc-mode)
-      (add-hook 'haskell-mode-hook 'turn-on-haskell-indent)
-      )
-
-#+END_SRC
-* LDAP
-LDAP integration, mostly for address book lookups
-
-#+BEGIN_SRC emacs-lisp
-  ; LDAP integration
-
-  (setq ldap-host-parameters-alist
-        (quote (("ldap.hsdev.com" base "ou=addressbook,dc=hsdev,dc=com"))))
-
-  (use-package ldap)
-  (use-package eudc)
-
-  (setq eudc-default-return-attributes nil
-        eudc-strict-return-matches nil)
-
-  (setq ldap-ldapsearch-args (quote ("-tt" "-LLL" "-x")))
-  (setq eudc-inline-query-format '((name)
-                                   (firstname)
-                                   (firstname name)
-                                   (email)
-                                   ))
-
-
-  (eudc-set-server "ldap.hsdev.com" 'ldap t)
-  (setq eudc-server-hotlist '(("ldap.hsdev.com" . ldap)))
-  (setq eudc-inline-expansion-servers 'hotlist)
-
-  (defun mrb/enz-eudc-expand-inline()
-    (interactive)
-    (move-end-of-line 1)
-    (insert "*")
-    (unless (condition-case nil
-                (eudc-expand-inline)
-              (error nil))
-      (backward-delete-char-untabify 1))
-    )
-
-  ;; Adds some hooks
-
-  ;; (eval-after-load "message"
-  ;;   '(bind-key "TAB" 'mrb/enz-eudc-expand-inline message-mode-map))
-  ;; (eval-after-load "sendmail"
-  ;;   '(bind-key "TAB" 'mrb/enz-eudc-expand-inline mail-mode-map))
-  ;; (eval-after-load "post"
-  ;;   '(bind-key "TAB" 'mrb/enz-eudc-expand-inline post-mode-map))
-
-#+END_SRC
 * Key and mouse bindings
 Keyboard binding are the primary way to interact for me. I have been
 struggling with consistent keyboard shorcuts and how to integrate
@@ -3733,28 +3656,37 @@ it only for /some/ modes and not globally.
 
 [2014-06-20 vr] Retrying ws-butler mode (see [[Visual]] )
 [2014-12-23 di] Retrying ws-butler mode (see [[Visual]] )
-* Magit
-For most, if not all development work (and some other work too) I use
-git as the revision control system. In emacs that translates to useing
-magit, so let's begin with bringing that in.
+** Python
+Python is a indent aware language, wich saves quite a bit of fiddling
+around with parenthes and what have you.
+
+Having lines truncated is the preferred way in python, usually lines
+will be short enough anyway, but I can't have line automatically
+folding because that disturbs the way I think when looking at python
+code.
 
 #+BEGIN_SRC emacs-lisp
-  (use-package magit
-    ;; the 'MRev' text in the modeline is useless
-    :diminish magit-autorevert-mode
-
-    :init
-     (fullframe magit-status magit-mode-quit-window)
-
-    :config
-    (progn
-      ;; Make sure that highlighted regions in magit keep their syntax
-      (set-face-attribute 'magit-item-highlight nil
-                          :inherit nil
-                          :foreground nil :background mrb-bg-paren-match)))
+  (add-hook 'python-mode-hook
+            (lambda ()
+              (toggle-truncate-lines t)))
 #+END_SRC
+** Haskell
+I am just starting out with haskell, but the two things that are
+probably needed in any case are a mode to use when editting Haskell
+source (*.hs files) and the ghc-mod package to help with completion
+and showing syntax errors.
 
-* GIT integration
+#+BEGIN_SRC emacs-lisp
+  (use-package haskell-mode
+    :init
+    (progn
+      (add-to-list 'auto-mode-alist '("\\.hs\\'". haskell-mode))
+      (add-hook 'haskell-mode-hook 'interactive-haskell-mode)
+      (add-hook 'haskell-mode-hook 'turn-on-haskell-doc-mode)
+      (add-hook 'haskell-mode-hook 'turn-on-haskell-indent)))
+
+#+END_SRC
+** GIT integration
 This section is a temporary place to store some git related
 settings. I need to reorganize this document a bit so I have a section
 for source code control or something similar to group these settings.
@@ -3813,6 +3745,27 @@ This particular setting is for eshell git completion:
    (t
     (while (pcomplete-here (pcomplete-entries))))))
 #+END_SRC
+*** Magit
+For most, if not all development work (and some other work too) I use
+git as the revision control system. In emacs that translates to useing
+magit, so let's begin with bringing that in.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package magit
+    ;; the 'MRev' text in the modeline is useless
+    :diminish magit-autorevert-mode
+
+    :init
+     (fullframe magit-status magit-mode-quit-window)
+
+    :config
+    (progn
+      ;; Make sure that highlighted regions in magit keep their syntax
+      (set-face-attribute 'magit-item-highlight nil
+                          :inherit nil
+                          :foreground nil :background mrb-bg-paren-match)))
+#+END_SRC
+
 * To organize and properly configure
 Multiple cursors sounds interesting
 
