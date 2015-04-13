@@ -3183,9 +3183,9 @@ So, let's begin by enabling imap as the selection method.
 #+BEGIN_SRC emacs-lisp
     (setq gnus-select-method
       '(nnimap "hsd"
-	       (nnimap-address "imap.hsdev.com")
-	       (nnimap-server-port 993)
-	       (nnimap-stream ssl)))
+               (nnimap-address "imap.hsdev.com")
+               (nnimap-server-port 993)
+               (nnimap-stream ssl)))
 #+END_SRC
 
 This, in combination with a line in .authinfo.gpg which holds the
