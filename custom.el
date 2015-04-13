@@ -26,7 +26,6 @@
  '(flyspell-issue-message-flag nil)
  '(font-lock-maximum-size nil)
  '(gud-gdb-command-name "gdb --annotate=1")
- '(haskell-mode-hook (quote (turn-on-haskell-indent)))
  '(ispell-use-framepop-p t)
  '(mail-signature nil)
  '(markdown-css-path "/home/mrb/.markdown.css")
