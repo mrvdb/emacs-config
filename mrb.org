@@ -3873,7 +3873,834 @@ There's always more to want, here a quick list of things:
 - much better integration of emacs into social systems
   There is proper support for xmpp, irc, possibly twitter, but the
   rest sucks.
+** Emacs configuration                                              [1/84]                            :emacs:
+:PROPERTIES:
+:CATEGORY: Emacs
+:END:
+*** TODO Enter after headline should skip properties                                                 :build:
+:PROPERTIES:
+:CREATED: [2011-06-10 vr 08:55]
+:END:
+When the cursor in in an org headline an I press enter, instead of the
+current behaviour (insert a newline) what I want is the following:
+1. If the cursor is at the end of the line, place the cursor after
+   the :PROPERTIES: and or other :WHATEVER: type lines, just befor the
+   content
+2. If the cursor is in the middle of the line of the header take the
+   remainder of the line and take that to the first line of the
+   content.
+
+Basically, ignore everything befor the section content and do a
+newline.
+*** TODO When highlighting a block, provide keymappings to select it
+:PROPERTIES:
+:CREATED: [2011-06-10 vr 09:50]
+:END:
+I use a face hightlighting now to highlight on a parentheses or
+bracket to quickly show what the block is. It happens quite often that
+I either want to jump to the beginning or end of that block or want to
+select the block that is highlighted. A keybinding for this would be
+comfy.
+
+The highlighted region is *not* a region (yet), so the question is how
+to make it go from highlighted to a region?
+
+One way to do this would be to:
+1. Mark the point C-SPC
+2. Navigate to the matching parenthesis (C-M-n or C-M-p)
+
+or better, vice versa, so the cursor does not move.
+
+#+BEGIN_SRC emacs-lisp
+  (defun mrb/delimited-to-region()
+    "This function takes a parenthese-delimited region, before or after
+    the point and makes it into a region."
+    (interactive)
+    (save-excursion
+      (let ((cur (point))
+            (backward-list)
+            (push-mark)))))
+#+END_SRC
+
+*** TODO Master Emacs's regular expressions                               [1/2]
+:PROPERTIES:
+:ORDERED: t
+:END:
+This is obviously a more ongoing task than a single one. The task(s)
+here should be what to do to reach the goal of learning the Emacs'
+regular expression systax
+**** CANCELLED Define specific excercises                                                           :build:
+CLOSED: [2015-03-23 ma 11:27]
+:LOGBOOK:
+- State "CANCELLED"  from "TODO"       [2015-03-23 ma 11:27] \\
+  I'm using emacs all day long, the tasks which I create for myself are enough
+:END:
+:PROPERTIES:
+:CREATED: [2012-01-12 do 13:13]
+:END:
+**** TODO Integrate them into workflow (like defining keyboard shortcuts for them)
+:PROPERTIES:
+:END:
+*** TODO Look into the =Effort_ALL= property so I can sort/filter based on estimated effort            :check:
+:PROPERTIES:
+:CREATED: [2012-06-09 za 15:19]
+:END:
+See also: http://ur1.ca/9gxhw
+*** TODO Find out if I can hide the group bots in emacs jabber                                       :check:
+:PROPERTIES:
+:CREATED: [2012-06-27 wo 10:19]
+:END:
+*** TODO Formatting of list items in emacs epub manual are often split over two lines            :fix:emacs:
+*** TODO Create a piece of lisp which inserts an in-buffer mode spec line                            :build:
+:PROPERTIES:
+:CREATED: [2012-07-11 wo 19:56]
+:END:
+Usecase: files which are not directly associated with a mode, but are
+editted frequently.
+
+Example: -*- mode:conf -*-
+*** TODO Set up ediff as default merge tool instead of meld                                          :build:
+:PROPERTIES:
+:CREATED:  [2013-01-24 do 20:28]
+:END:
+There are some instructions online on how to set this up
+*** TODO Er moet een geluid aan jabber notificaties worden gekoppeld, anders mis ik ze           :build:fix:
+:PROPERTIES:
+:CREATED:  [2012-12-07 vr 10:24]
+:END:
+Does the default linux notify system support sound? If so, then it's easy.
+*** TODO Webjump moet current region gelijk meenemen                                             :fix:emacs:
+:PROPERTIES:
+:CREATED:  [2013-02-07 do 12:36]
+:END:
+*** TODO Learn about TAGS, seems to make a big difference in editting experience
+:PROPERTIES:
+:CREATED:  [2013-02-07 do 09:07]
+:END:
+*** TODO Find out if auto-complete can be used for trivial autocorrect things
+:PROPERTIES:
+:CREATED:  [2013-03-04 ma 14:48]
+:END:
+like teh -> the etc.
+*** TODO Create a wrapper for org-update-statistics-cookies with temporary hierarchy settings
+:PROPERTIES:
+:CREATED:  [2013-03-04 ma 13:57]
+:END:
+Reason is that I want to be able to update the statistics cookie for
+the complete tree, but not rely on the variable
+org-hierarchical-todo-statistic to be nil because that causes a lot
+of slowdown.
+*** TODO Can we give special buffers different coloring schemes?
+:PROPERTIES:
+:CREATED:  [2013-03-04 ma 16:21]
+:END:
+- Help*
+- eshell*
+- Scratch* etc.
+
+The help window is the most important here, because that pops up
+every now and then when completion kicks in. I want that to stand
+out, but not shout at me.
+*** TODO Make git work in eshell
+:PROPERTIES:
+:CREATED:  [2013-03-04 ma 15:11]
+:END:
+Some commands do work properly, but some don't
+These do not work:
+- git help <something> (git help itself *does* work)
+
+Less relevant the more I use magit
+*** TODO Configure some tag system for emacs to ease source navigation                               :emacs:
+:PROPERTIES:
+:CREATED:  [2013-03-13 wo 09:40]
+:END:
+At least for odoo.
+
+Options:
+- etags
+- gnu global
+- ctags
+- cscope
+
+Requirements:
+- 1 system for many languages
+- emacs support
+
+Preliminary choices:
+Seems that a combination of global, exuberant ctags and cscope gives
+the most flexible solution.
+
+- [2013-03-13 wo] Installed exuberant-ctags (had to rename the
+  ctags/etags installed by emacs itself)
+- [2013-03-13 wo] Installed global from the ubuntu repository (not
+  sure if this has been compiled with exuberant support, if not, I'll
+  need to recompile from source with configure flag)
+- [2013-03-13 wo] Tested ctags (M-.) briefly from within emacs, not
+  very useful so far, as it often sends to the wrong location
+*** TODO Learn to use paredit in elisp mode                                                          :check:
+:PROPERTIES:
+:CREATED:  [2013-03-22 vr 17:46]
+:END:
+This is probaly something for the longer term. On adding new lisp code
+I've got it mastered as long as I can enter code sequentially. The
+added value is then guaranteed tree balance and significant fast
+editting (the parentheses) slow down a lot.
+
+There are at least 8 or 10 commands to learn for navigating,
+inserting, (re-)moving parts of a lisp tree which will take the most
+effort.
+Long term stuff, but worth the effort I guess.
+
+Not sure if I should reformulate the task to configure paredit and
+leave the learning as something ongoing, or leave this task as ongoing
+reminder.
+
+*** TODO Find a better way to edit xml with nxml                                                     :check:
+:PROPERTIES:
+:CREATED:  [2013-03-20 wo 10:56]
+:END:
+Automatic tag closing WITH cursor positioning is the main need.
+*** TODO Spent some time learning emacs calc properly
+:PROPERTIES:
+:CREATED:  [2013-03-28 do 13:39]
+:END:
+One less device/application to have somewhere else
+*** TODO Configure saveplace and recentf into my emacs configuration                                 :emacs:
+:PROPERTIES:
+:CREATED:  [2013-04-04 do 16:29]
+:END:
+- saveplace :: saves position in file, goto it when reopening
+- recentf :: maintains a list of recently openend files
+*** TODO Stop the automatic wrapping in nxml, or at least make the threshole larger              :fix:emacs:
+:PROPERTIES:
+:CREATED:  [2013-04-10 wo 16:58]
+:END:
+This is probably easy to solve by disabling the autowrap/fill minor mode.
+*** TODO Convert the setting to arrangement better suited for use-package
+:PROPERTIES:
+:CREATED:  [2014-12-24 wo 22:24]
+:END:
+We want to take advantage of the advantages of use-package, so we'd
+better use it like it is supposed to be used.
+
+*** TODO Consider using web-mode for mixed html pages                                                :emacs:
+:PROPERTIES:
+:CREATED:  [2013-06-08 za 16:20]
+:END:
+http://web-mode.org
+*** TODO Transfer most of what is in custom.el to mrb.org                                              :fix:
+:PROPERTIES:
+:CREATED:  [2013-06-06 do 10:37]
+:END:
+The idea is that I want to keep custom.el to a minimum.
+*** TODO Reconsider C-x C-q shortcut, because this is already used in some modes (dired for example) :check:
+:PROPERTIES:
+:CREATED:  [2013-06-13 do 13:36]
+:END:
+Looking at it, it aint that bad. Perhaps we should modify other modes
+shortcuts?
+
+*** TODO Make capturing a link automatic                                                             :build:
+:PROPERTIES:
+:CREATED:  [2013-06-12 wo 12:20]
+:END:
+That is, always grab the front link of the browser ready to yank into
+emacs
+Use org-protocol?
+
+*Always* sounds a bit too intrusive though. There is nothing wrong
+ with an explicit action for capturing a link.
+
+Capturing a link and having it published on a shared filesystem
+somewhere almost sounds like a 'Pocket replacement'.
+
+*** TODO Document the GNUs configuration process
+Before diving into GNUs as a daily driver, make sure the actual
+backend configration is sort of stable, otherwise I fear I'll be
+chasing my own tail a lot of the time.
+Things that I want to make sure are working properly first:
+- LDAP address completion from the the Odoo database. In emacs it
+  does not work with the existing database, so fix that first, so we
+  know the config is correct.
+- Should we have a separate Emacs instance for gnus? might be worth it
+- The window manager awesome should be made to work properly again.
+
+The first thing I should probably do is write some sort of overview
+of what I want to do with GNUs, other than academic interest
+
+- read mail with it?
+- read news with it?
+- write with it too?
+- which problems are anticipated?
+- what advantages/gains am I hoping for
+- interesting backends:
+  - nnweb :: web searching
+  - nnslashdot :: read slashdot articles
+  - nnultimate :: Forum ultimate BB interface
+  - nnvirtual :: combining groups into one
+  - nnnil :: the backend that never has news
+  - nnrss :: viewing rss feeds as groups
+  -
+- apparently by default I get nndraft and nnfolder:archive
+- GNUs has sieve support, what does that mean?
+- Do the folders in IMAP have to the groups?
 -
+
+The main conceptual difference is that reading nntp news and reading mail have
+traditionally been different processes and GNUs will treat mail as
+news rather than mail. This takes some getting used to.
+
+**** Steps to GNUs
+1. Write a section on how I think GNUs works and what its concept is;
+2. Make sure the email backend I use is stable and does not change
+   while doing the hard work with GNUs;
+3.
+*** TODO Create /align counters/ function, like org-align-tags                                   :build:emacs:
+:PROPERTIES:
+:CREATED:  [2013-06-29 za 13:34]
+:END:
+*** TODO Find out if emacs help windows can be text highlighted, that makes them easier to read :check:emacs:
+:PROPERTIES:
+:CREATED:  [2013-06-27 do 23:39]
+:END:
+This does not given me any search results on google. In help windows
+there is not much structure. It's mostly just text and buttons
+
+*** TODO Find out how to set default fontsize to apply to all (new) buffers                    :check:emacs:
+:PROPERTIES:
+:CREATED:  [2013-07-02 di 21:04]
+:END:
+Usecase: on the train, it's sometimes handier to work with everything
+a bit bigger than usual.
+
+Seems I need two sizes, the normal one, which is configured now plus
+one that is two sizes bigger.
+
+We call text-scale increase now with a shortcut key, but this is per
+buffer, so we have to call it again and again each time. It would be
+nice if we could set it once for future buffers.
+*** TODO When enlarging font, the alignment goes out of whack                                    :fix:emacs:
+:PROPERTIES:
+:CREATED:  [2013-07-03 wo 15:21]
+:END:
+*** TODO Configure folding for python in emacs
+:PROPERTIES:
+:CREATED:  [2013-08-01 do 18:19]
+:END:
+http://www.emacswiki.org/emacs/HideShow seems the easiest option to
+go for.
+
+This is just a matter of invoking hs-minor-mode.
+
+The drawback is that the keyboard shortcuts are really bad and it's
+different from org-mode where things just seem to work.
+
+These problems are both addressed with:
+https://github.com/shanecelis/hideshow-org/blob/master/hideshow-org.el
+
+In python this interferes with something else, so a bit more work is
+needed. Even when run manually the hs-org/hideshow gives errors.
+
+*** TODO Find out if the windows emacs splitting can be steered                                :check:emacs:
+:PROPERTIES:
+:CREATED:  [2013-09-23 ma 10:27]
+:END:
+For example by limiting it to two windows
+*** TODO See which bash scripts I use can be replaced by scripted elisp                              :emacs:
+:PROPERTIES:
+:CREATED:  [2013-10-09 wo 13:21]
+:END:
+The ~/bin folder has a few scripts which may be better off written in
+elisp. The added advantage is that more stuff gets doen in the emacs
+ecosphere.
+
+I'm thinking mostly about the capture scripts initially, because they
+already are mostly calling out to emacs.
+
+Problem is mostly initialisation. It's smart not to consider this the
+same environment as emacs, but consider it empty (so not having the
+init file that emacs has). So, when a function is needed, make sure
+that the script loads it by itself and does not depend on anything.
+
+*** TODO It seems to make sense now to remap Alt-X to something else, because the alt key is less useful on HHKB :fix:emacs:
+:PROPERTIES:
+:CREATED:  [2013-10-01 di 16:02]
+:END:
+The problem is to determine what to map it to.
+
+The binding must be short and easy to type with both two hands as wel
+as with one hand as it is used so much.
+
+I had it mapped to a single Control 'tick' using xcape, but decided to
+turn that off again because I was pressing it by accident a lot.
+
+*** TODO Put some effort in customizing the modeline                                                 :emacs:
+:LOGBOOK:
+- Note taken on [2014-07-25 vr 12:25] \\
+  Notably diminish mode
+:END:
+:PROPERTIES:
+:CREATED:  [2013-10-15 di 13:49]
+:END:
+- make coloring consistent
+- decide on which things are to be always visible and which will be
+  temporary
+- with many buffers, there is quite a bit of waste in the modeline,
+  because the information in there is the same for all buffers.
+- perhaps some stuff can be moved to the awesome statusbar (jabber
+  status for example)
+- perhaps use the headerline more, it is mode specific, but can
+  perhaps be filled with some default information. It's also per
+  window, so it doesn't help much. I know it is used in the following
+  places:
+  - erc uses it
+  - org mode capture windows
+- see if there is a way to get *one* modeline, which reacts to the
+  active buffer. One mode-line per frame that is, unless explicitly
+  removed.
+- the modeline is also a visual separation between windows, so even if
+  it would not contain anything, we can't hide it everywhere, because
+  there would be no way to see where one window ends and another
+  begins.
+
+*** TODO Configure a cross-reference system for source code                                    :build:emacs:
+:PROPERTIES:
+:CREATED:  [2013-10-15 di 15:22]
+:END:
+- should work with emacs obviously
+- languages: C, elisp, python, php at least
+- both search caller and callee is neede
+- preferably transparent, that is, without a need to go to the
+  operating system, just maintenance in emacs itself.
+
+Candidates: etags, ctags, global, exuberant ctags
+
+**** TODO Write a function which transparantly creates tags files when find-tag needs one     :build:emacs:
+:PROPERTIES:
+:CREATED:  [2013-10-18 vr 21:50]
+:END:
+- probably set some ground rules on what the location for the file
+  needs to be (repetatively go up directories to find the root
+  location, or ask?)
+- there are several systems, dont really care which one I will use as
+  long as the interface is constistent with emacs documentation.
+*** TODO Configure /some/ sort of auto-away into emacs jabber.                                       :emacs:
+:PROPERTIES:
+:CREATED:  [2013-10-25 vr 23:42]
+:END:
+*** TODO Write a microblog interactive function to post to multiple sources                          :emacs:
+:PROPERTIES:
+:CREATED:  [2013-10-26 za 13:33]
+:END:
+Preliminary requirements:
+- post to gnu-social instance o.mrblog.nl
+- post to pump.io instance qua.name
+
+The syndication of timelines is much harder.
+*** TODO Disable flycheck for emacs lisp                                                             :emacs:
+:PROPERTIES:
+:CREATED:  [2013-10-31 do 11:37]
+:END:
+For embedded source like in org-mode its useless as the tips are
+assuming I'm wring a package.
+Alternatively, make sure those tips don't show.
+*** TODO If erc can show images, then jabber can too, can we use the same mode                       :emacs:
+:PROPERTIES:
+:CREATED:  [2013-10-31 do 17:27]
+:END:
+Turns out erc-image is a bit of a problem and I'm not really missing it.
+*** TODO Consider smartparens as global solution for matching delimiters                             :emacs:
+:PROPERTIES:
+:CREATED:  [2013-11-01 vr 16:47]
+:END:
+Can probably replace 2 other packages I have in use at the moment.
+*** TODO Check if messages can be displayed somewhere else than the echo area                        :emacs:
+:PROPERTIES:
+:CREATED:  [2013-11-25 ma 14:04]
+:END:
+The problem I am trying to solve is that messages are displayed in the
+echo area/minibuffer, even while we are typing a command there.
+
+If the messages could be displayed on top, or in the header always,
+this would be a lot nicer.
+
+http://www.emacswiki.org/emacs/EchoArea has a piece of elisp which
+allows filtering the messages, so it is at least less chattery
+
+On quick search, it seems that actually separating the echo area and
+minibuffer is not possible, because they are literally the same in the
+code.
+
+#+BEGIN_SRC emacs-lisp
+;; filter annoying messages
+(defvar message-filter-regexp-list '("^Starting new Ispell process \\[.+\\] \\.\\.\\.$"
+                                     "^Ispell process killed$")
+  "filter formatted message string to remove noisy messages")
+(defadvice message (around message-filter-by-regexp activate)
+  (if (not (ad-get-arg 0))
+      ad-do-it
+    (let ((formatted-string (apply 'format (ad-get-args 0))))
+      (if (and (stringp formatted-string)
+               (some (lambda (re) (string-match re formatted-string)) message-filter-regexp-list))
+          (save-excursion
+            (set-buffer "*Messages*")
+            (goto-char (point-max))
+            (insert formatted-string "\n"))
+        (progn
+          (ad-set-args 0 `("%s" ,formatted-string))
+          ad-do-it)))))
+#+END_SRC
+
+*** TODO Figure out how to get the erc room topic to render properly if it is long                     :fix:
+:PROPERTIES:
+:CREATED:  [2013-04-17 wo 20:46]
+:END:
+*** TODO Look into portable emacs
+:PROPERTIES:
+:CREATED:  [2014-02-08 za 07:27]
+:END:
+Idea: stick in a usb stick and have a familiar emacs.
+
+- probably needs some form of live disk with linux
+- rsync config from main machine?
+- usecases, or just for having around for emergencies?
+*** TODO Make highlighting the selection in company-active-mode stand out more                         :fix:
+:PROPERTIES:
+:CREATED:  [2014-04-23 wo 12:18]
+:END:
+like a blueish reverse background
+*** TODO See if we can have company completion in eshell                                             :build:
+:PROPERTIES:
+:CREATED:  [2014-04-23 wo 11:34]
+:END:
+*** TODO Set up completion in python with ropemacs                                                   :build:
+:PROPERTIES:
+:CREATED:  [2014-04-09 wo 15:50]
+:END:
+*** TODO Find a solution on editting files as root with emacs on remote hosts                        :build:
+:PROPERTIES:
+:CREATED:  [2014-01-17 vr 12:40]
+:END:
+Normal: ssh into host, sudo to su, edit file with nano or similar
+
+Wanted: open file in emacs and edit.
+
+Using tramp works for my normal account, but not for root files (and
+rightly so). There is however a TRAMP based solution which I tried
+briefly but could not get to work properly.
+
+*** TODO Flycheck: Get the yellow wavey lines out of my face.                                          :fix:
+:PROPERTIES:
+:CREATED:  [2014-05-14 wo 19:21]
+:END:
+They seem to be code conventions I don't need to know about for a long
+time.
+*** TODO Add delete-process interactive somewhere
+:PROPERTIES:
+:CREATED:  [2014-06-11 wo 20:55]
+:END:
+
+This is needed more often than not
+#+BEGIN_SRC emacs-lisp
+(defun mrb/delete-process-interactive ()
+  (interactive)
+  (let ((pname (ido-completing-read "Process Name: "
+                    (mapcar 'process-name (process-list)))))
+
+    (delete-process (get-process pname))))
+
+#+END_SRC
+*** Elfeed related
+**** TODO Often used filters in elfeed deserve a keybinding                                   :build:emacs:
+:PROPERTIES:
+:CREATED:  [2014-06-20 vr 15:58]
+:END:
+Like filtering on 'watchlater'
+
+**** TODO When pressing 'w' in elfeed, reprocess the search                                           :fix:
+:PROPERTIES:
+:CREATED:  [2014-07-09 wo 11:04]
+:END:
+I thought this was already the case.
+
+The effect should be that the results pane behaves more realtime
+*** TODO Do a write-up to use emacs on remote hosts more easily                                      :emacs:
+:PROPERTIES:
+:CREATED:  [2014-06-20 vr 10:52]
+:END:
+- have a (minimal) config uploaded (like zsh config) when I connect to
+  hosts;
+- make ssh more transparent and more reliable (i suspect my rare
+  freezes are mostly due to ssh/tramp connection stuff)
+- screen type setup comes to mine (tmux)
+*** TODO Review personal keybindings                                                                 :emacs:
+:PROPERTIES:
+:CREATED:  [2014-06-20 vr 11:33]
+:END:
+See if we can bring some consistency into it.
+[2014-12-24 wo] Printed a copy for review, beter oversight then just
+on screen.
+*** TODO Explore the golden ratio mode                                                         :check:emacs:
+:PROPERTIES:
+:CREATED:  [2014-11-06 do 16:09]
+:END:
+Divides emacs frame into uneven sized windows, depending upon which
+one has the focus.
+*** TODO Revisit keychords, the idea still seems nice.                                         :check:emacs:
+:PROPERTIES:
+:CREATED:  [2014-11-06 do 16:50]
+:END:
+*** TODO Study ibuffer                                                                               :check:
+:PROPERTIES:
+:CREATED:  [2014-11-06 do 17:30]
+:END:
+This seems to be a nice way to manage buffers, like in a project
+manager, but indpendent and faster and more integrated in emacs.
+*** TODO Eventually, have a look at bug reference mode                                          :read:emacs:
+:PROPERTIES:
+:CREATED:  [2014-12-23 di 18:05]
+:END:
+This turns on hyperlinks for bug mentions. Obviously needs a project
+sort of equivalent to produce the proper link.
+*** TODO Implement a travis config on one of my repositories                                   :build:emacs:
+:PROPERTIES:
+:CREATED:  [2014-12-23 di 17:56]
+:END:
+Preferably on an odoo module.
+*** TODO Fix org-jsinfo message on startup of emacs                                              :emacs:fix:
+:PROPERTIES:
+:CREATED:  [2014-12-22 ma 12:07]
+:END:
+Problems while trying to load feature `org-jsinfo'
+*** TODO Work on the modeline of emacs                                                         :emacs:build:
+:PROPERTIES:
+:CREATED:  [2014-12-20 za 11:43]
+:END:
+Now that we basically use the same colors in terminal and emacs,
+making emacs stand out a bit more can't hurt. Take the effort as an
+opportunity also to implement some simplifications
+**** TODO Look at diminish; leaving most of the info out can't hurt
+:PROPERTIES:
+:CREATED:  [2014-12-20 za 11:44]
+:END:
+**** TODO Revisit the powerline(?) package, that may be all I need
+:PROPERTIES:
+:CREATED:  [2014-12-20 za 11:45]
+:END:
+**** TODO The modeline colors are ok, but can be better (avoid the gray, hug the green)
+:PROPERTIES:
+:CREATED:  [2014-12-20 za 11:45]
+:END:
+**** TODO Make the active windows in emacs stand out a bit more
+:PROPERTIES:
+:CREATED:  [2014-12-20 za 11:46]
+:END:
+This may already be resolved once the modeline is remodelined
+**** TODO Look at the modeline menus, can there be an indicator if there is something useful in there?
+:PROPERTIES:
+:CREATED:  [2014-12-20 za 11:46]
+:END:
+*** TODO Make C-h-f and C-h-v etc. language aware                                                    :build:
+:PROPERTIES:
+:CREATED:  [2014-12-16 di 15:24]
+:END:
+C-h-f in elisp: DONE (built-in)
+C-h-f in scheme: ?
+C-h-f in
+*** TODO Experiment with the remote emacs                                                      :check:emacs:
+:PROPERTIES:
+:CREATED:  [2014-12-15 ma 22:02]
+:END:
+I have now implemented a way to connect to an emacs running on a
+remote machine. Which is basically just:
+
+#+BEGIN_SRC sh
+ssh -X remote emacsclient -c
+#+END_SRC
+
+So, 'implement' is maybe a bit overstating it. It just is supported
+out of the box.
+
+This frees a large part of the route of having a remote (fast) machine
+and a light working machine for remote editting; 'in the cloud' as it
+were.
+
+While editting there is a noticeable lag, but I'm not entirely sure if
+this is the local machine or something else.
+
+The main advantage for me is to have the option to work from different
+locations on the same files while not having to relinquish control to
+some third party, or at most a vps host for the machine I want to run
+it on.
+
+
+Issues observed:
+- sending anything outside the emacs realm will behave as if it was on
+  the remote machine, example: send to browser will send it to the
+  browser on the remote machine
+- things coming in from the outside won't work either, example: the
+  capturing of TODO items (which i do through a shell script), the
+  shell script is not remote emacs aware and will act on the local
+  emacs. (capturing from within emacs obviously will work fine)
+- leaving an editor session on a 'client' and suspending that
+  machine. Leaving this overnight, crashes the emacs server part
+  (happened twice now) How can I log this?
+*** TODO Revisit the contact lookup in email composition in emacs                          :fix:build:emacs:
+:PROPERTIES:
+:CREATED:  [2014-12-10 wo 10:15]
+:END:
+It's the only threshold for migrating at least composition to emacs
+
+Ideal:
+- find contacts from ODOO
+- find contacts from earlier mail composition
+- allow addtion of contact to ODOO
+
+Options:
+- expose ODOO as LDAP directory and use LDAP matching from emacs
+- custom solution
+*** TODO Blockdiag looks like something org-mode could benefit from                            :check:emacs:
+:PROPERTIES:
+:CREATED:  [2014-12-03 wo 11:21]
+:END:
+Especially the netdiag and rackdiag stuff could be useful to document
+our network in a way worthy
+*** TODO Localisation of org-mode export does not work                                           :fix:emacs:
+:PROPERTIES:
+:CREATED:  [2014-11-30 zo 17:20]
+:END:
+things like 'figure' and 'contents' stay untranslate
+
+*** TODO Create elisp fragment which make current main subtree a pdf document            :build:write:emacs:
+:PROPERTIES:
+:CREATED:  [2014-11-30 zo 15:30]
+:END:
+Main problem is to decide what 'the main subtree' is, we could use a
+specific property for this.
+The rest of the fragment is :
+
+- determine main subtree
+- place point on there temporarily
+- export dispatch
+- select subtree mode
+- latex output
+- o for open pdf
+
+Bind a key to this.
+*** TODO eshell shortcut does not work in orgmode                                                :fix:emacs:
+:PROPERTIES:
+:CREATED:  [2014-11-16 zo 15:52]
+:END:
+As i am often in orgmode, this is inconvenient
+*** TODO Creating a new heading with C-Return does not position it correctly on collapsed sections     :fix:
+:PROPERTIES:
+:CREATED:  [2014-11-11 di 13:00]
+:END:
+Not sure what the setting should be, but the obvious solution would be
+to rebind C-Return.
+It only seems to happen when the section after which the new heading
+should appear is collapsed. Once the section is expanded, the C-Return
+works like it should.
+*** TODO Write up a documentation policy for different languages                                     :emacs:
+:PROPERTIES:
+:CREATED:  [2014-12-24 wo 10:59]
+:END:
+The documentation of elisp is working perfectly and I would like to
+have at least something similar for other languages:
+
+- python
+- lua
+- (bash) shell scripting
+- java
+- php
+
+To prevent going at this ad-hoc, document the features and implement
+them one by one:
+
+1. Function help a la eldoc :: non-intrusive in the mode-line
+     expanding, possibly highlighting function arguments
+2. Reference information a la C-h-f with 'click-through'
+3. Access to examples, possibly on the web
+
+Note:
+*** TODO Changing the cursor color can be useful in emacs                                      :emacs:build:
+:PROPERTIES:
+:CREATED:  [2015-01-11 zo 17:19]
+:END:
+Inspired by something sacha uses: change to purple when something can
+be expanded.
+*** TODO Consider lentic for use with source + orgmode (=literal programming)                        :emacs:
+:PROPERTIES:
+:CREATED:  [2015-01-09 vr 08:35]
+:END:
+https://github.com/phillord/lentic
+*** INFO Multiple file org-mode strategy
+Up till now I have mostly managed my information in one org-mode
+file. (GTD.org). This has proven to be a fruitful strategy to get
+started but over time this just gets a bit cumbersome for a number of
+reasons:
+- it seems larger files have a major impact on the speed of org-mode
+- all information is in one file which makes it harder to focus
+
+
+I would like to work out a structured way to work in multiple files,
+although in part I am obviously already doing this. (Journal is in
+journal.org, configuration of orgmode is in a separate file etc.)
+
+I suspect analyzing the GTD file might reveal a suitable split up
+strategy. I have already parted some of the projects in separate
+files, but this just meant the files and thus the tasks in there got
+ignored, so there must be another way to do that so they do not get
+ignored.
+
+The part of the system that works really well is the capturing part,
+both for TODO items and journalling items.
+
+The part of the system that works least of all is proper organisation
+(and likely the discipline to review the tasks properly). I regularly
+end up with a whole slew of tasks which I have forgotten or are ill
+formed so they become non actionable.
+
+It is probably possible to identify a couple of things I will
+need. The capturing system, journalling, blogging and project files
+may be part of the things needed. If a project could be the same as
+the umbrella, that would simplify things.
+
+Two main things are missing in the system:
+
+1. Mobile
+2. Integration with other systems, either ODOO or some other task
+   management system (preferably ODOO though)
+
+Integration sounds nice (github and trello come to mind) but that has
+not worked in practice for me yet.
+Also, the interaction with mail is probably an importatnt part of what
+is needed, because many things come in over mail and lead to
+tasks. For some of the tasks, this integration is there by forwarding
+to tasks@hsdev.com (which creates a new task in ODOO)
+*** TODO Disable some useless flycheck checks                                                        :emacs:
+:PROPERTIES:
+:CREATED:  [2015-03-16 ma 10:42]
+:END:
+- you should have ;;; Code section
+- file ends here stuff
+*** TODO Make the reb-query-replace function permanent
+:PROPERTIES:
+:CREATED:  [2015-03-23 ma 11:27]
+:END:
+This function takes a RE-built expression and puts in into a
+query-replace-regexp command, which is the 90% case for using it.
+
+#+BEGIN_SRC emacs-lisp
+(defun reb-query-replace (to-string)
+      "Replace current RE from point with `query-replace-regexp'."
+      (interactive
+       (progn (barf-if-buffer-read-only)
+              (list (query-replace-read-to (reb-target-binding reb-regexp)
+                                           "Query replace"  t))))
+      (with-current-buffer reb-target-buffer
+        (query-replace-regexp (reb-target-binding reb-regexp) to-string)))
+#+END_SRC
 * Finale
 When we are all done with this, provide it.
 
