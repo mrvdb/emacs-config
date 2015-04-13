@@ -22,6 +22,7 @@ This has a number of attractive properties:
 **** http://extechops.net/full-episode-feeds/daily-show.rss					       :video:
 **** http://feeds.feedburner.com/oatmealfeed							       :comic:
 **** http://www.xkcd.com/rss.xml								       :comic:
+**** https://xkcd.com/atom.xml									       :comic:
 **** http://what-if.xkcd.com/feed.atom							       :comic:science:
 **** https://kimmo.suominen.com/stuff/dilbert-daily.xml						       :comic:
 **** http://www.nu.nl/feeds/rss/de-jager.rss							       :comic:
