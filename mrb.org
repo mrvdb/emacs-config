@@ -148,11 +148,11 @@ Package handling, do this early so emacs knows where to find things.
 
 This has gotten a bit of attention in the last years and there are now
 lots of options, of which package.el seems to be the choice if not
-anything else explicitly preferred. I have always used el-get instead
-of package.el, although I have no idea why I made that decision at
-that time, but I think it was because it allowed me to inlcude git
-recipes in an easy way. ([2014-03-03 ma] Not sure if this is stil the
-case now)
+anything else is explicitly preferred. I have always used el-get
+instead of package.el, although I have no idea why I made that
+decision at that time, but I think it was because it allowed me to
+inlcude git recipes in an easy way. ([2014-03-03 ma] Not sure if this
+is stil the case now)
 
 There are several options:
 1. Just use plain package.el
