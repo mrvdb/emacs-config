@@ -128,7 +128,7 @@
 	 (effort-down))))))))
  '(org-agenda-files
    (quote
-    ("~/dat/org/_calendars/afval.org" "~/dat/org/geocaching.org" "~/dat/org/secrets.org" "~/dat/org/_calendars/marcel.org" "~/dat/org/projects/reprap.org" "~/dat/org/ideas.org" "~/dat/org/GTD.org" "~/dat/org/orgmode.org" "~/dat/org/projects/cobra.org" "~/dat/org/habits.org" "~/dat/blogs/blogs.org" "~/dat/org/projects/keuken.org" "~/dat/org/_calendars/sylvia.org" "~/dat/org/_calendars/planner.org")))
+    ("~/.emacs.d/mrb.org" "~/dat/blogs/mrblog/about/issues.org" "~/dat/org/_calendars/afval.org" "~/dat/org/geocaching.org" "~/dat/org/_calendars/marcel.org" "~/dat/org/projects/reprap.org" "~/dat/org/ideas.org" "~/dat/org/GTD.org" "~/dat/org/orgmode.org" "~/dat/org/projects/cobra.org" "~/dat/org/habits.org" "~/dat/blogs/blogs.org" "~/dat/org/projects/keuken.org" "~/dat/org/_calendars/sylvia.org" "~/dat/org/_calendars/planner.org")))
  '(org-agenda-ignore-drawer-properties (quote (effort appt category)))
  '(org-agenda-text-search-extra-files (quote (agenda-archives)))
  '(org-agenda-todo-ignore-scheduled (quote future))
