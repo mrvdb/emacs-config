@@ -2912,6 +2912,13 @@ which expands a selection by semantic analysis can not be left out
     (("s-\\" . er/expand-region)
     ("s-|"  . er/contract-region)))
 #+END_SRC
+
+The multiple cursors package is often used for repetitive editting.
+
+#+BEGIN_SRC emacs-lisp
+(use-package multiple-cursors)
+#+END_SRC
+
 ** Navigation
 Navigating pieces of text effectively is probably the best
 optimization to make in the emacs configuration.
@@ -3775,12 +3782,6 @@ magit, so let's begin with bringing that in.
 #+END_SRC
 
 * To organize and properly configure
-Multiple cursors sounds interesting
-
-#+BEGIN_SRC emacs-lisp
-(use-package multiple-cursors)
-#+END_SRC
-
 License templates
 
 #+BEGIN_SRC emacs-lisp
