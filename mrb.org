@@ -2869,14 +2869,6 @@ in many directories.
 (ido-vertical-mode)
 #+END_SRC
 
-The =(ido-everywhere)= call above does not really enable ido
-everywhere. =ido-ubiquitous= does, so let's enable that.
-
-#+BEGIN_SRC emacs-lisp
-;;(use-package ido-ubiquitous)
-;;(ido-ubiquitous-mode)
-#+END_SRC
-
 By selecting a piece of text, wrap-region can quote or otherwise
 delimit that region automatically. I enable this globally. There is
 an option to configure in exception, which I have commented out as
