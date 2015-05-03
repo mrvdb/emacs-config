@@ -2163,21 +2163,6 @@ either using =git commit --amend= and commit squashing if working on
 more structured commits. For files that I really do not want
 autocommit to run I can use a file local variable to disable the hook
 (or the minor mode)
-** OpenSCAD
-OpenSCAD mode, it’s a mode for files that describe 3D-models. I use it
-for part design for the 3D-print and for the lathe.
-
-#+BEGIN_SRC emacs-lisp
-  ; OpenSCAD has git repository in my dev tree
-  ;; Find a way to get this with el-get, say from github
-  ;; It is part of the openscad package and in the contrib folder
-  ;; there. Until that time, we're disabling
-  ;; (add-to-list 'load-path "~/dat/src/reprapping/openscad/contrib")
-  ;; (load "scad-mode")
-
-  ;;(provide 'openscad)
-
-#+END_SRC
 * Key and mouse bindings
 Keyboard binding are the primary way to interact for me. I have been
 struggling with consistent keyboard shorcuts and how to integrate
