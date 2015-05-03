@@ -173,10 +173,13 @@ First of all, define the package archives I need; for now, just the
 default gnu augmented with the melpa repository. I use setq because I
 want *this* entry to be the definitive one, not adding to a list.
 #+BEGIN_SRC emacs-lisp
-  (setq package-archives
-        '(("melpa" . "http://melpa.milkbox.net/packages/")
-          ("gnu"   . "http://elpa.gnu.org/packages/")))
-  (package-initialize)
+(require 'package)
+(add-to-list 'package-archives
+             '("melpa" . "http://melpa.org/packages/") t)
+(when (< emacs-major-version 24)
+  ;; For important compatibility libraries like cl-lib
+  (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/")))
+(package-initialize)
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
