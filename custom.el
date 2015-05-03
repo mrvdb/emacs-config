@@ -262,11 +262,11 @@
  ;; If there is more than one, they won't work right.
  '(default ((t (:inherit nil :stipple nil :background "#300A24" :foreground "#dcdccc" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 102 :width normal :foundry "unknown" :family "DejaVu Sans Mono"))))
  '(fixed-pitch ((t (:family "Consolas"))))
- '(fixed-pitch ((t (:family "DejaVu Sans Mono"))))
  '(flyspell-duplicate ((t (:foreground "goldenrod" :underline t :weight bold))))
  '(flyspell-incorrect ((t (:foreground "tomato" :underline t :weight bold))))
  '(identica-stripe-face ((t (:background "dim gray"))) t)
  '(jabber-chat-prompt-system ((t (:foreground "dark gray" :weight bold))))
+ '(org-agenda-current-time ((t (:inherit org-time-grid :foreground "spring green"))) t)
  '(org-agenda-date ((t (:inherit org-agenda-structure :height 1.2))) t)
  '(org-agenda-date-today ((t (:foreground "white" :slant italic :weight bold :height 1.2))) t)
  '(org-agenda-structure ((t (:inherit font-lock-comment-face :weight bold :height 1.1))))
