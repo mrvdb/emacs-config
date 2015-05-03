@@ -3832,22 +3832,6 @@ Usecase: copying a rectangle of text and re-using it somewhere else.
    (interactive "r")
    (setq killed-rectangle (extract-rectangle start end)))
 #+END_SRC
-
-** Google-map
-Google map integration for Emacs
-
-#+BEGIN_SRC emacs-lisp
-  ; Directly tie into the GIT repository on this machine
-  ;(add-to-list 'load-path "~/.emacs.d/el-get/google-maps/")
-
-  ;(use-package google-maps)
-
-  ; org-mode integration
-  ;(use-package org-location-google-maps)
-
-  (provide 'google-map-settings)
-
-#+END_SRC
 * Machine specific configurations
 The aim is to have the exact same configuration on each machine, but
 there may be occasions where is pays to have a slight difference in
