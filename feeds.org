@@ -21,7 +21,6 @@ This has a number of attractive properties:
 **** http://blag.xkcd.com/feed/ 
 **** http://extechops.net/full-episode-feeds/daily-show.rss					       :video:
 **** http://feeds.feedburner.com/oatmealfeed							       :comic:
-**** http://www.xkcd.com/rss.xml								       :comic:
 **** https://xkcd.com/atom.xml									       :comic:
 **** http://what-if.xkcd.com/feed.atom							       :comic:science:
 **** https://kimmo.suominen.com/stuff/dilbert-daily.xml						       :comic:
@@ -64,6 +63,7 @@ This has a number of attractive properties:
 ***** http://www.howardism.org/index.xml							      :people:
 ***** http://oremacs.com/atom.xml
 ***** http://emacsnyc.org/atom.xml
+***** http://www.howardism.org/index.xml							      :people:
 **** Telegram
 ***** http://trellorss.appspot.com/feed/5707648880082944
 *** Hardware											    :hardware:
