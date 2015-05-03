@@ -138,11 +138,12 @@
  '(org-clock-x11idle-program-name "xprintidle")
  '(org-closed-keep-when-no-todo t)
  '(org-entities-user (quote (("cmd" "\\cmd{}" nil "⌘" "⌘" "⌘" "⌘"))))
+ '(org-export-backends (quote (ascii html icalendar latex md odt org texinfo)))
  '(org-export-copy-to-kill-ring (quote if-interactive))
  '(org-export-docbook-xsl-fo-proc-command "fop %i %o" t)
  '(org-export-docbook-xslt-proc-command "xsltproc --output %o %s %i" t)
  '(org-export-htmlize-output-type (quote css) t)
- '(org-export-htmlized-org-css-url "orgmode.css" t)
+ '(org-export-htmlized-org-css-url "orgmode.css")
  '(org-export-latex-classes
    (quote
     (("article" "\\documentclass[11pt,a4paper,twoside]{article}"
