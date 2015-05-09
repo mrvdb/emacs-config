@@ -64,6 +64,7 @@ This has a number of attractive properties:
 ***** http://oremacs.com/atom.xml
 ***** http://emacsnyc.org/atom.xml
 ***** http://www.howardism.org/index.xml							      :people:
+***** http://emacshorrors.com/feed
 **** Telegram
 ***** http://trellorss.appspot.com/feed/5707648880082944
 *** Hardware											    :hardware:
