@@ -84,7 +84,7 @@ One way to do this would be to:
 
 or better, vice versa, so the cursor does not move.
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle no
   (defun mrb/delimited-to-region()
     "This function takes a parenthese-delimited region, before or after
     the point and makes it into a region."
@@ -504,7 +504,7 @@ On quick search, it seems that actually separating the echo area and
 minibuffer is not possible, because they are literally the same in the
 code.
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle no
 ;; filter annoying messages
 (defvar message-filter-regexp-list '("^Starting new Ispell process \\[.+\\] \\.\\.\\.$"
                                      "^Ispell process killed$")
@@ -574,7 +574,7 @@ time.
 :END:
 
 This is needed more often than not
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle no
 (defun mrb/delete-process-interactive ()
   (interactive)
   (let ((pname (ido-completing-read "Process Name: "
