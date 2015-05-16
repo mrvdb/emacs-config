@@ -49,22 +49,6 @@ newline.
 :PROPERTIES:
 :CREATED:  [2015-05-08 vr 13:42]
 :END:
-** TODO doc-view window fitting zoom
-:PROPERTIES:
-:CREATED:  [2015-05-08 vr 13:42]
-:END:
-** TODO if i had a web browser in an emacs window, i'd get rid of another application
-:PROPERTIES:
-:CREATED:  [2015-05-08 vr 13:42]
-:END:
-** TODO threading / multitasking / reliable async
-:PROPERTIES:
-:CREATED:  [2015-05-08 vr 13:43]
-:END:
-** TODO much better integration of emacs into social systems
-:PROPERTIES:
-:CREATED:  [2015-05-08 vr 13:43]
-:END:
 ** TODO When highlighting a block, provide keymappings to select it
 :PROPERTIES:
 :CREATED: [2011-06-10 vr 09:50]
@@ -114,11 +98,6 @@ CLOSED: [2015-03-23 ma 11:27]
 *** TODO Integrate them into workflow (like defining keyboard shortcuts for them)
 :PROPERTIES:
 :END:
-** TODO Look into the =Effort_ALL= property so I can sort/filter based on estimated effort            :check:
-:PROPERTIES:
-:CREATED: [2012-06-09 za 15:19]
-:END:
-See also: http://ur1.ca/9gxhw
 ** TODO Find out if I can hide the group bots in emacs jabber                                         :check:
 :PROPERTIES:
 :CREATED: [2012-06-27 wo 10:19]
@@ -287,47 +266,6 @@ Use org-protocol?
 Capturing a link and having it published on a shared filesystem
 somewhere almost sounds like a 'Pocket replacement'.
 
-** TODO Document the GNUs configuration process
-Before diving into GNUs as a daily driver, make sure the actual
-backend configration is sort of stable, otherwise I fear I'll be
-chasing my own tail a lot of the time.
-Things that I want to make sure are working properly first:
-- LDAP address completion from the the Odoo database. In emacs it
-  does not work with the existing database, so fix that first, so we
-  know the config is correct.
-- Should we have a separate Emacs instance for gnus? might be worth it
-- The window manager awesome should be made to work properly again.
-
-The first thing I should probably do is write some sort of overview
-of what I want to do with GNUs, other than academic interest
-
-- read mail with it?
-- read news with it?
-- write with it too?
-- which problems are anticipated?
-- what advantages/gains am I hoping for
-- interesting backends:
-  - nnweb :: web searching
-  - nnslashdot :: read slashdot articles
-  - nnultimate :: Forum ultimate BB interface
-  - nnvirtual :: combining groups into one
-  - nnnil :: the backend that never has news
-  - nnrss :: viewing rss feeds as groups
-  -
-- apparently by default I get nndraft and nnfolder:archive
-- GNUs has sieve support, what does that mean?
-- Do the folders in IMAP have to the groups?
--
-
-The main conceptual difference is that reading nntp news and reading mail have
-traditionally been different processes and GNUs will treat mail as
-news rather than mail. This takes some getting used to.
-
-*** Steps to GNUs
-1. Write a section on how I think GNUs works and what its concept is;
-2. Make sure the email backend I use is stable and does not change
-   while doing the hard work with GNUs;
-3.
 ** TODO Create /align counters/ function, like org-align-tags                                   :build:emacs:
 :PROPERTIES:
 :CREATED:  [2013-06-29 za 13:34]
@@ -718,32 +656,12 @@ Issues observed:
 - leaving an editor session on a 'client' and suspending that
   machine. Leaving this overnight, crashes the emacs server part
   (happened twice now) How can I log this?
-** TODO Revisit the contact lookup in email composition in emacs                            :fix:build:emacs:
-:PROPERTIES:
-:CREATED:  [2014-12-10 wo 10:15]
-:END:
-It's the only threshold for migrating at least composition to emacs
-
-Ideal:
-- find contacts from ODOO
-- find contacts from earlier mail composition
-- allow addtion of contact to ODOO
-
-Options:
-- expose ODOO as LDAP directory and use LDAP matching from emacs
-- custom solution
 ** TODO Blockdiag looks like something org-mode could benefit from                              :check:emacs:
 :PROPERTIES:
 :CREATED:  [2014-12-03 wo 11:21]
 :END:
 Especially the netdiag and rackdiag stuff could be useful to document
 our network in a way worthy
-** TODO Localisation of org-mode export does not work                                             :fix:emacs:
-:PROPERTIES:
-:CREATED:  [2014-11-30 zo 17:20]
-:END:
-things like 'figure' and 'contents' stay untranslate
-
 ** TODO Create elisp fragment which make current main subtree a pdf document              :build:write:emacs:
 :PROPERTIES:
 :CREATED:  [2014-11-30 zo 15:30]
@@ -760,20 +678,6 @@ The rest of the fragment is :
 - o for open pdf
 
 Bind a key to this.
-** TODO eshell shortcut does not work in orgmode                                                  :fix:emacs:
-:PROPERTIES:
-:CREATED:  [2014-11-16 zo 15:52]
-:END:
-As i am often in orgmode, this is inconvenient
-** TODO Creating a new heading with C-Return does not position it correctly on collapsed sections       :fix:
-:PROPERTIES:
-:CREATED:  [2014-11-11 di 13:00]
-:END:
-Not sure what the setting should be, but the obvious solution would be
-to rebind C-Return.
-It only seems to happen when the section after which the new heading
-should appear is collapsed. Once the section is expanded, the C-Return
-works like it should.
 ** TODO Write up a documentation policy for different languages                                       :emacs:
 :PROPERTIES:
 :CREATED:  [2014-12-24 wo 10:59]
@@ -802,62 +706,13 @@ Note:
 :END:
 Inspired by something sacha uses: change to purple when something can
 be expanded.
-** TODO Consider lentic for use with source + orgmode (=literal programming)                          :emacs:
-:PROPERTIES:
-:CREATED:  [2015-01-09 vr 08:35]
-:END:
-https://github.com/phillord/lentic
 ** TODO Disable some useless flycheck checks                                                          :emacs:
 :PROPERTIES:
 :CREATED:  [2015-03-16 ma 10:42]
 :END:
 - you should have ;;; Code section
 - file ends here stuff
-** INFO Multiple file org-mode strategy
-Up till now I have mostly managed my information in one org-mode
-file. (GTD.org). This has proven to be a fruitful strategy to get
-started but over time this just gets a bit cumbersome for a number of
-reasons:
-- it seems larger files have a major impact on the speed of org-mode
-- all information is in one file which makes it harder to focus
-
-
-I would like to work out a structured way to work in multiple files,
-although in part I am obviously already doing this. (Journal is in
-journal.org, configuration of orgmode is in a separate file etc.)
-
-I suspect analyzing the GTD file might reveal a suitable split up
-strategy. I have already parted some of the projects in separate
-files, but this just meant the files and thus the tasks in there got
-ignored, so there must be another way to do that so they do not get
-ignored.
-
-The part of the system that works really well is the capturing part,
-both for TODO items and journalling items.
-
-The part of the system that works least of all is proper organisation
-(and likely the discipline to review the tasks properly). I regularly
-end up with a whole slew of tasks which I have forgotten or are ill
-formed so they become non actionable.
-
-It is probably possible to identify a couple of things I will
-need. The capturing system, journalling, blogging and project files
-may be part of the things needed. If a project could be the same as
-the umbrella, that would simplify things.
-
-Two main things are missing in the system:
-
-1. Mobile
-2. Integration with other systems, either ODOO or some other task
-   management system (preferably ODOO though)
-
-Integration sounds nice (github and trello come to mind) but that has
-not worked in practice for me yet.
-Also, the interaction with mail is probably an importatnt part of what
-is needed, because many things come in over mail and lead to
-tasks. For some of the tasks, this integration is there by forwarding
-to tasks@hsdev.com (which creates a new task in ODOO)
-** INFO Reading email inside emacs
+** INFO Email handling
 There is one major component which I would like to configure inside
 emacs and that is reading email. At this time I am using claws mail
 which is satisfactory for what I need, but I have the following
