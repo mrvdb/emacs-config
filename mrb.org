@@ -506,21 +506,6 @@ briefly but could not get to work properly.
 :END:
 They seem to be code conventions I don't need to know about for a long
 time.
-** TODO Add delete-process interactive somewhere
-:PROPERTIES:
-:CREATED:  [2014-06-11 wo 20:55]
-:END:
-
-This is needed more often than not
-#+BEGIN_SRC emacs-lisp :tangle no
-(defun mrb/delete-process-interactive ()
-  (interactive)
-  (let ((pname (ido-completing-read "Process Name: "
-                    (mapcar 'process-name (process-list)))))
-
-    (delete-process (get-process pname))))
-
-#+END_SRC
 ** Elfeed related
 *** TODO Often used filters in elfeed deserve a keybinding                                     :build:emacs:
 :PROPERTIES:
@@ -3577,6 +3562,18 @@ was taken from http://ur1.ca/cf1m4 and sligthly adapted.
       (add-hook 'delete-frame-functions #'close t t))
       (delete-other-windows)
       nil))
+#+END_SRC
+** Process handling
+Sometimes processes get stuck and i want a way to delete those
+processes easily.
+
+#+BEGIN_SRC emacs-lisp
+  (defun mrb/delete-process-interactive ()
+    "Based on an autocompleted list of process, choose one process to kill"
+    (interactive)
+    (let ((pname (ido-completing-read "Process Name: "
+                                      (mapcar 'process-name (process-list)))))
+      (delete-process) (get-process pname)))
 #+END_SRC
 * Completion
 I want completion to work as follows:
