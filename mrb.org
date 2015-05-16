@@ -1097,72 +1097,72 @@ When installing a new package, add a recipe in this list, eval it,
 and run =el-get-install= with the package name.
 
 #+BEGIN_SRC emacs-lisp
-    ;; Personal or adapted recipes
-    ;; Sounds like this could use its own file?
-    (setq el-get-sources
-          '(
-            ;; Obviously we need el-get itself, so we can run a self-update
-            ;; There is a recipe, but we want the master branch of it
-            (:name el-get :branch "master")
-            (:name zenburn-emacs          :type github :pkgname "bbatsov/zenburn-emacs")
-            (:name org-mode               :type git    :url "/home/mrb/dat/src/emacs/packages/org-mode/" :branch "mrb/release_8.2.9")
-            (:name cursor-chg             :type github :pkgname  "emacsmirror/cursor-chg"
-                   :features cursor-chg)
-            (:name newlua-mode            :type github :pkgname "immerrr/lua-mode"
-                   :features lua-mode)
-            (:name oauth                  :type github :pkgname "psanford/emacs-oauth")
-            (:name expand-region          :type github :pkgname "magnars/expand-region.el")
-            (:name mark-multiple          :type github :pkgname "magnars/mark-multiple.el")
-            (:name fixed-point-completion :type github :pkgname "smithzvk/fixed-point-completion")
-            (:name xlicense               :type github :pkgname "emacsmirror/xlicense")
-            (:name autosmiley             :type github :pkgname "emacsmirror/autosmiley")
-            (:name async                  :type github :pkgname "jwiegley/emacs-async")
-            (:name pcache                 :type github :pkgname "sigma/pcache")
-            (:name logito                 :type github :pkgname "sigma/logito")
-            (:name gh                     :type github :pkgname "sigma/gh.el"
-                   :depends (pcache logito))
-            (:name gisthub                :type github :pkgname  "defunkt/gist.el"
-                   :depends (gh))
-            (:name stripe-buffer          :type github :pkgname "sabof/stripe-buffer")
-            (:name git-auto-commit-mode   :type github :pkgname "ryuslash/git-auto-commit-mode")
-            (:name ujelly-theme           :type github :pkgname "marktran/color-theme-ujelly")
-            (:name org-present            :type github :pkgname "rlister/org-present")
-            ;; Dependency? I dont use this directly
-            (:name dash                   :type github :pkgname "magnars/dash.el")
-            (:name gitmessenger           :type github :pkgname "syohex/emacs-git-messenger")
-            (:name org-agenda-property    :type github :pkgname "Bruce-Connor/org-agenda-property")
-            (:name pump.io                :type github :pkgname "cnngimenez/pumpio-el")
-            (:name elfeed                 :type github :pkgname "skeeto/elfeed")
-            (:name guide-key              :type github :pkgname "kbkbkbkb1/guide-key")
-            (:name org-screenshot         :type github :pkgname "dfeich/org-screenshot")
-            (:name json-rpc               :type github :pkgname "skeeto/elisp-json-rpc")
-            (:name btcticker              :type github :pkgname "niedbalski/emacs-btc-ticker"
-                   :depends request)
-            (:name ws-butler              :type github :pkgname "lewang/ws-butler")
-            (:name wrap-region            :type github :pkgname "rejeep/wrap-region.el")
-            (:name vlc                    :type github :pkgname "mrvdb/vlc.el")
-            (:name tsupport               :type github :pkgname "mrvdb/tsupport")
-            (:name elfeed-org             :type github :pkgname "remyhonig/elfeed-org")
-            (:name jabber                 :type git    :url     "/home/mrb/dat/src/emacs/packages/jabber.el" :branch "mrb/master")
-          )
-    )
+      ;; Personal or adapted recipes
+      ;; Sounds like this could use its own file?
+      (setq el-get-sources
+            '(
+              ;; Obviously we need el-get itself, so we can run a self-update
+              ;; There is a recipe, but we want the master branch of it
+              (:name el-get :branch "master")
+              (:name zenburn-emacs          :type github :pkgname "bbatsov/zenburn-emacs")
+              (:name org-mode               :type git    :url "/home/mrb/dat/src/emacs/packages/org-mode/" :branch "mrb/release_8.2.9")
+              (:name cursor-chg             :type github :pkgname  "emacsmirror/cursor-chg"
+                     :features cursor-chg)
+              (:name newlua-mode            :type github :pkgname "immerrr/lua-mode"
+                     :features lua-mode)
+              (:name oauth                  :type github :pkgname "psanford/emacs-oauth")
+              (:name expand-region          :type github :pkgname "magnars/expand-region.el")
+              (:name mark-multiple          :type github :pkgname "magnars/mark-multiple.el")
+              (:name fixed-point-completion :type github :pkgname "smithzvk/fixed-point-completion")
+              (:name xlicense               :type github :pkgname "emacsmirror/xlicense")
+              (:name autosmiley             :type github :pkgname "emacsmirror/autosmiley")
+              (:name async                  :type github :pkgname "jwiegley/emacs-async")
+              (:name pcache                 :type github :pkgname "sigma/pcache")
+              (:name logito                 :type github :pkgname "sigma/logito")
+              (:name gh                     :type github :pkgname "sigma/gh.el"
+                     :depends (pcache logito))
+              (:name gisthub                :type github :pkgname  "defunkt/gist.el"
+                     :depends (gh))
+              (:name stripe-buffer          :type github :pkgname "sabof/stripe-buffer")
+              (:name git-auto-commit-mode   :type github :pkgname "ryuslash/git-auto-commit-mode")
+              (:name ujelly-theme           :type github :pkgname "marktran/color-theme-ujelly")
+              (:name org-present            :type github :pkgname "rlister/org-present")
+              ;; Dependency? I dont use this directly
+              (:name dash                   :type github :pkgname "magnars/dash.el")
+              (:name gitmessenger           :type github :pkgname "syohex/emacs-git-messenger")
+              (:name org-agenda-property    :type github :pkgname "Bruce-Connor/org-agenda-property")
+              (:name pump.io                :type github :pkgname "cnngimenez/pumpio-el")
+              (:name elfeed                 :type github :pkgname "skeeto/elfeed")
+              (:name guide-key              :type github :pkgname "kbkbkbkb1/guide-key")
+              (:name org-screenshot         :type github :pkgname "dfeich/org-screenshot")
+              (:name json-rpc               :type github :pkgname "skeeto/elisp-json-rpc")
+              (:name btcticker              :type github :pkgname "niedbalski/emacs-btc-ticker"
+                     :depends request)
+              (:name ws-butler              :type github :pkgname "lewang/ws-butler")
+              (:name wrap-region            :type github :pkgname "rejeep/wrap-region.el")
+              (:name vlc                    :type github :pkgname "mrvdb/vlc.el")
+              (:name tsupport               :type github :pkgname "mrvdb/tsupport")
+              (:name elfeed-org             :type github :pkgname "remyhonig/elfeed-org")
+              (:name jabber                 :type git    :url     "/home/mrb/dat/src/emacs/packages/jabber.el" :branch "mrb/master")
+            )
+      )
 
-  (setq mrb/packages
-        (append
-         ;; list of packages we use from standard recipes
-         '(smex ace-jump-mode apache-mode gnuplot-mode sudo-save
-                edit-server magit markdown-mode rainbow-mode rainbow-delimiters scratch popwin
-                highlight-parentheses multiple-cursors git-modes cl-lib keywiz
-                smart-tab yaml-mode hideshow-org oauth flim haskell-mode ghc-mod s f
-                flycheck pkg-info perspective ido-vertical-mode jekyll-el org2blog
-                identica-mode php-mode company-mode csv-mode notmuch use-package
-                git-timemachine eimp mu4e litable diminish paredit fullframe wanderlust)
+    (setq mrb/packages
+          (append
+           ;; list of packages we use from standard recipes
+           '(smex ace-jump-mode apache-mode gnuplot-mode sudo-save
+                  edit-server magit markdown-mode rainbow-mode rainbow-delimiters scratch popwin
+                  highlight-parentheses multiple-cursors git-modes cl-lib keywiz
+                  smart-tab yaml-mode hideshow-org oauth flim haskell-mode ghc-mod s f
+                  flycheck pkg-info perspective ido-vertical-mode jekyll-el org2blog
+                  identica-mode php-mode company-mode csv-mode notmuch use-package
+                  git-timemachine eimp mu4e litable diminish paredit fullframe wanderlust)
 
-         ;; the sources we have configured above
-         (mapcar 'el-get-as-symbol (mapcar 'el-get-source-name el-get-sources))))
+           ;; the sources we have configured above
+           (mapcar 'el-get-as-symbol (mapcar 'el-get-source-name el-get-sources))))
 
-    (el-get 'sync mrb/packages)
-    (require 'use-package)
+      (el-get 'sync mrb/packages)
+      (require 'use-package)
 #+END_SRC
 
 * Personal information
@@ -1182,7 +1182,7 @@ other places too.
 #+BEGIN_SRC emacs-lisp
   (setq user-full-name    "Marcel van der Boom")
   (setq user-mail-address "marcel@hsdev.com")
-  (setq user-domain "hsdev.com")
+  (setq user-domain       "hsdev.com")
   (setq user-organisation "HS-Development BV")
   (setq user-xmpp-account (concat user-mail-address "/" system-name))
   (setq user-gpg-encrypt-key "FEAA7ADD")
@@ -3782,7 +3782,7 @@ which expands a selection by semantic analysis can not be left out
   (use-package expand-region
     :bind
     (("s-\\" . er/expand-region)
-    ("s-|"  . er/contract-region)))
+     ("s-|"  . er/contract-region)))
 #+END_SRC
 
 The multiple cursors package is often used for repetitive editting.
@@ -4029,18 +4029,18 @@ where is will be in the path. In the OS, this script will need to be
 set as the default mail handler.
 
 #+BEGIN_SRC sh :exports code :tangle ~/bin/mailto-handler :shebang #!/bin/sh
-# Emacs mailto URI handler
+  # Emacs mailto URI handler
 
-mailto=$1
-mailto="mailto:${mailto#mailto:}"
+  mailto=$1
+  mailto="mailto:${mailto#mailto:}"
 
-mailto=$(printf '%s\n' "$mailto" | sed -e 's/[\"]/\\&/g')
+  mailto=$(printf '%s\n' "$mailto" | sed -e 's/[\"]/\\&/g')
 
-# Call the elisp function handling our mailto URI
-elisp_expr="(mrb/make-mailcompose-frame \"$mailto\")"
+  # Call the elisp function handling our mailto URI
+  elisp_expr="(mrb/make-mailcompose-frame \"$mailto\")"
 
-# Go
-edit --eval "$elisp_expr"
+  # Go
+  edit --eval "$elisp_expr"
 
 #+END_SRC
 
