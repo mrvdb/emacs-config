@@ -912,6 +912,145 @@ messages or folders from org-subtrees.
   mode?)
 - respond to mailto: links
 -
+*** INFO Wanderlust configuration
+Gathering info here, so I can blog about it eventually.
+**** TODO Customize the summary view
+:PROPERTIES:
+:CREATED:  [2015-05-08 vr 14:40]
+:END:
+- [X] no need for the message ID
+- [ ] fancier thread display (unicode based symbols)
+- [ ] make sure the date format is consistent
+- [ ] flag display (both wl and imap)
+- [ ] nntp: show unread messages only by default
+- [ ] row background alternation?
+-
+**** TODO Create address book from ODOO?
+:PROPERTIES:
+:CREATED:  [2015-05-08 vr 14:42]
+:END:
+Easy cron job should do the trick
+
+Cron job could do fancier stuff later, but using ODOO as reference
+would be nice
+
+- use cmdline client?
+- direct SQL query?
+-
+
+format of .addresses:
+email-address  "petname" "realname"
+**** TODO Omit User-Agent head in compose window
+:PROPERTIES:
+:CREATED:  [2015-05-08 vr 14:47]
+:END:
+**** TODO Configure signing with PGP
+:PROPERTIES:
+:CREATED:  [2015-05-08 vr 15:14]
+:END:
+**** TODO Configure encrypting with PGP
+:PROPERTIES:
+:CREATED:  [2015-05-08 vr 15:14]
+:END:
+**** TODO Create a shell starter
+:PROPERTIES:
+:CREATED:  [2015-05-09 za 17:25]
+:END:
+Using a wl-other-frame, but (for now) in the same emacs instance
+**** TODO Use a sample of every folder type
+:PROPERTIES:
+:CREATED:  [2015-05-09 za 17:26]
+:END:
+- filter folder
+- access group
+- imap plain
+- mh local
+- pipe
+-
+*** TODO Revisit the contact lookup in email composition in emacs                          :fix:build:emacs:
+:PROPERTIES:
+:CREATED:  [2014-12-10 wo 10:15]
+:END:
+It's the only threshold for migrating at least composition to emacs
+
+Ideal:
+- find contacts from ODOO
+- find contacts from earlier mail composition
+- allow addtion of contact to ODOO
+
+Options:
+- expose ODOO as LDAP directory and use LDAP matching from emacs
+- custom solution
+*** TODO Create proper 'Active conversations' folder in wanderlust
+:PROPERTIES:
+:CREATED:  [2015-05-07 do 22:16]
+:END:
+1. combination of INBOX and Sent, (the '*' designator)
+2. only include messages from Sent when the thread has at least one
+  message from INBOX
+*** TODO Document the GNUs configuration process
+Before diving into GNUs as a daily driver, make sure the actual
+backend configration is sort of stable, otherwise I fear I'll be
+chasing my own tail a lot of the time.
+Things that I want to make sure are working properly first:
+- LDAP address completion from the the Odoo database. In emacs it
+  does not work with the existing database, so fix that first, so we
+  know the config is correct.
+- Should we have a separate Emacs instance for gnus? might be worth it
+- The window manager awesome should be made to work properly again.
+
+The first thing I should probably do is write some sort of overview
+of what I want to do with GNUs, other than academic interest
+
+- read mail with it?
+- read news with it?
+- write with it too?
+- which problems are anticipated?
+- what advantages/gains am I hoping for
+- interesting backends:
+  - nnweb :: web searching
+  - nnslashdot :: read slashdot articles
+  - nnultimate :: Forum ultimate BB interface
+  - nnvirtual :: combining groups into one
+  - nnnil :: the backend that never has news
+  - nnrss :: viewing rss feeds as groups
+  -
+- apparently by default I get nndraft and nnfolder:archive
+- GNUs has sieve support, what does that mean?
+- Do the folders in IMAP have to the groups?
+
+The main conceptual difference is that reading nntp news and reading mail have
+traditionally been different processes and GNUs will treat mail as
+news rather than mail. This takes some getting used to.
+
+**** Steps to GNUs
+1. Write a section on how I think GNUs works and what its concept is;
+2. Make sure the email backend I use is stable and does not change
+   while doing the hard work with GNUs;
+3.
+** INFO much better integration of emacs into social systems
+:PROPERTIES:
+:CREATED:  [2015-05-08 vr 13:43]
+:END:
+Feature that should have a low threshold:
+- post a link to social networks
+- reply to a posting
+- get the friends timeline
+- create a posting.
+
+Networks I am involved in:
+- pump.io :: qua.name
+- twitter :: mrvdb
+- gnu-social :: mrb@o.mrblog.nl
+- twister :: mrb
+
+Of these only twitter and gnu-social have bidirectional gateway which
+makes them effectively one network.
+
+Ideal situation for me:
+1. one integrated timeline
+2. reply goes to author, no need to be public
+3. use one api to talk to (the xmpp gateway metaphor)
 
 * Preparing for lift-off
 The base of the emacs configuration is in the =~/.emacs.d/= directory,
@@ -3885,7 +4024,11 @@ emacs' extension. This requires the 'edit-server' package in emacs.
 #+END_SRC
 * Messaging and chatting
 ** Mail
-Mail configuration.
+This section describes a search for the mail setup I want in
+Emacs. There are a few mail related packages and I'm unsure at what I
+want to use; reading the feature list doesn't cut it.
+So, I'm having a setup where multiple mail handling packages may exist
+and hopefully one will float to the top as being *the one*
 
 #+BEGIN_SRC emacs-lisp
   (setq
