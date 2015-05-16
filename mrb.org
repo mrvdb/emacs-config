@@ -4119,6 +4119,77 @@ function.
         'mrb/notmuch-address-selection-function)
 
 #+END_SRC
+*** Wanderlust
+The configuration file for wanderlust is typically =~/.wl= but I want
+to have emacs stuff below .emacs.d, so let's start by customizing it.
+#+BEGIN_SRC emacs-lisp
+(setq wl-init-file (concat emacs-directory "wl.el"))
+#+END_SRC
+
+That file won't exist initially, but I'm going to generate it just
+like the main emacs configuration, with org-babel. The SRC type must
+not be emacs-lisp, otherwise the init (using =org-babel-load-file=)
+will load the file instead of the main configuration file (arguably a
+bug)
+
+#+BEGIN_SRC lisp :exports code :tangle ~/.emacs.d/wl.el
+  (setq
+
+   ;; Servers
+   elmo-imap4-default-server "localhost"
+   elmo-imap4-default-authenticate-type 'clear
+   elmo-imap4-default-stream-type "starttls"
+   elmo-imap4-default-user "mrb"
+   elmo-imap4-use-modified-utf7 t
+
+   wl-smtp-posting-server "localhost"
+   wl-smtp-posting-port 24
+
+   elmo-nntp-default-server "news.ziggozakelijk.nl"
+   wl-nntp-posting-server elmo-nntp-default-server
+
+   wl-insert-message-id nil
+   wl-local-domain "hsdev.com"
+   wl-stay-folder-window t
+   wl-folder-window-width 25
+   wl-folder-desktop-name "Main"
+   wl-draft-use-frame t
+   wl-auto-check-folder-name 'none
+
+   ;; Ignore all headers, then enable what I want
+   wl-message-ignored-field-list '("^.*:")
+   wl-message-visible-field-list
+   '("^\\(To\\|Cc\\):"
+     "^Subject:"
+     "^\\(From\\|Reply-To\\):"
+     "^\\(Posted\\|Date\\):")
+
+   ;; Make sure forwarded message use proper prefixing
+   wl-forward-subject-prefix "Fwd: "
+
+   ;; Summary line format
+   wl-summary-line-format "%T%P%M/%D(%W)%h:%m %t%[%17(%c %f%) %] %s"
+
+   ;; Don't ever thread on subject
+   wl-summary-search-parent-by-subject-regexp nil
+
+   ;; Show 'To:' instead of 'From:' in summary for some folders
+   ;; FIXME: could not get this to work
+   wl-use-petname nil
+   wl-summary-showto-folder-regexp ".*Sent.*"
+   wl-user-mail-address-list '(
+                               "marcel@hsdev.com"
+                               "mvanderboom@gmail.com")
+   ;; Make sure threads with new are expanded (does not scale)
+   wl-thread-insert-opened t
+
+   wl-default-folder "%INBOX"
+   wl-trash-folder "%INBOX.Trash"
+
+   wl-ask-range nil
+   )
+
+#+END_SRC
 ** Statusnet
 Statusnet, or perhaps microblog in general settings
 
