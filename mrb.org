@@ -2101,12 +2101,13 @@ so for now, I'm building in the confirmation.
   (defun mrb/org-is-habit-test (&optional pom)
     "Is the task at POM or point a habit, taking property
   inheritance into account?"
+    (interactive)
     (message "Testing for habit")
     (if (org-is-habit-p)
         (message "Org-direct: Seems to be a habit")
       (message "Org-direct: Nope, no habit"))
 
-    (if (equalp "habit" (org-entry-get (or pom (point)) "STYLE" t))
+    (if (mrb/org-is-habit-p)
         (message "My test: seems to be a habit")
       (progn
         (message "My test: Nope, no habit")
@@ -2116,7 +2117,8 @@ so for now, I'm building in the confirmation.
 
   (defun mrb/org-is-habit-p (&optional pom)
     "org-is-habit-p taking property inheritance into account"
-    (equalp "habit" (org-entry-get (or pom (point)) "STYLE" t)))
+    (equalp "habit" (org-with-point-at (or pom (point))
+                       (org-entry-get-with-inheritance "STYLE"))))
 
   (defun mrb/archive-done-item()
     ;; Determine if the item went to the DONE/CANCELLED state
@@ -2806,10 +2808,13 @@ migrate this into more literal sections
         nil)))
 
   (defun mrb/save-containing-org-file()
-    ;; FIXME: this is a bit over the top, especially as I am auto
-    ;; commiting to a git repository.
-    (org-save-all-org-buffers)
-  )
+    "I want to save the containing file in which the item state was
+    changed, but I'd like it to be asynchronous, because it can
+    take a bit and I don't want the system to stop responding.
+
+    To make it worse, git-autocommit-mode may be on for the file
+   which runs on the after-save hook" )
+
   (add-hook 'org-after-todo-state-change-hook 'mrb/save-containing-org-file)
 
   ; When in agenda mode, show the line we're working on.
