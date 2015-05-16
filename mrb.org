@@ -4913,8 +4913,39 @@ config, bound to a key in the re-builder keymap.
               (list (query-replace-read-to (reb-target-binding reb-regexp)
                                            "Query replace"  t))))
       (with-current-buffer reb-target-buffer
-        (query-replace-regexp (reb-target-binding reb-regexp) to-string)))
+        (query-replace-regexp (reb-target-binding reb-regexp)
+to-string)))
 #+END_SRC
+
+Usecase: copying a rectangle of text and re-using it somewhere else.
+
+#+BEGIN_SRC emacs-lisp
+(defun my-copy-rectangle (start end)
+   "Copy the region-rectangle instead of `kill-rectangle'."
+   (interactive "r")
+   (setq killed-rectangle (extract-rectangle start end)))
+#+END_SRC
+* Machine specific configurations
+The aim is to have the exact same configuration on each machine, but
+there may be occasions where is pays to have a slight difference in
+configuration on different machines.
+
+#+BEGIN_SRC emacs-lisp
+  (when (string= system-name "x200s")
+    (progn
+      ;; Stuff that needs to happen for machine named "x200s"
+      ;; TODO: deviate from the standard font, make it Ubuntu
+      (set-frame-font "DejaVu Sans Mono")
+      (set-face-attribute 'default nil :height 110)
+      ))
+
+  (when (string= system-name "t510")
+    (progn
+      ;; Stuff for the "t510" configuration
+
+      ))
+#+END_SRC
+
 * Finale
 When we are all done with this, provide it.
 
