@@ -1219,13 +1219,14 @@ Next to inline content in org that needs encryption, there is also
 content that needs encrypting which is more suitable to store in a
 separate file for several reasons.
 * Global Generic settings
+Most of what follows should probably be relocated to a better suited
+section.
 
 #+BEGIN_SRC emacs-lisp
   (setq
 
    ; disable backup files (foo~)
    backup-inhibited t
-
 
    ; move files to the trash instead of rm
    delete-by-moving-to-trash t
@@ -1245,11 +1246,6 @@ separate file for several reasons.
    next-line-add-newlines nil
    kill-whole-line t
   )
-
-  ;; What I want: one line is one line unless I explicitly tell to wrap
-  ;; FIXME: This does not seem to work.
-  (setq-default truncate-lines t)
-  (global-visual-line-mode 1)
 
   ;; Only require to type 'y' or 'n' instead of 'yes' or 'no' when prompted
   (fset 'yes-or-no-p 'y-or-n-p)
@@ -1506,6 +1502,23 @@ And enable the minor mode globally.
   ;; Make colorful balanced parentheses etc. in different modes
   (add-hook 'lisp-mode 'rainbow-delimiters-mode)
 #+END_SRC
+
+** Lines
+The most important element of an editor is probably how lines of text
+are displayed. This warrants its own section.
+
+My baseline is that each line is displayed on one line if it is one
+line in the file, i.e. has no CR/LF or other line breaking characters
+in it.
+In the cases where it makes sense to /artificially/ break a line, I
+want that to be explicit.
+
+#+BEGIN_SRC emacs-lisp
+(setq truncate-partial-width-windows nil)
+(setq-default truncate-lines t)
+#+END_SRC
+
+
 ** Client dependent settings
 Because most of my usage involves having a long lasting emacs daemon,
 some settings only come into scope once a client connects to that
