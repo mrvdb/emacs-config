@@ -3586,7 +3586,7 @@ processes easily.
     (interactive)
     (let ((pname (ido-completing-read "Process Name: "
                                       (mapcar 'process-name (process-list)))))
-      (delete-process) (get-process pname)))
+      (delete-process (get-process pname))))
 #+END_SRC
 * Completion
 I want completion to work as follows:
