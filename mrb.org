@@ -1418,22 +1418,22 @@ default settings.
 
 
 #+BEGIN_SRC emacs-lisp
-  ;; Zenburn underlines date face in org, no go
-  (set-face-attribute 'org-date nil :underline nil)
+    ;; Zenburn underlines date face in org, no go
+    (set-face-attribute 'org-date nil :underline nil)
 
-  ;; Adjust the faces for the modeline
-  (set-face-attribute 'mode-line nil :foreground "white" :background "grey40" :box nil)
-  (set-face-attribute 'mode-line-inactive nil :box nil :underline nil :overline "grey40")
+    ;; Adjust the faces for the modeline
+    (set-face-attribute 'mode-line nil :foreground "white" :background "grey40" :box nil)
+    (set-face-attribute 'mode-line-inactive nil :box nil :underline nil :overline "grey40")
 
-  (set-face-attribute 'isearch nil :background "sea green" :foreground "black")
-  (set-face-attribute 'ido-first-match nil :background "sea green" :foreground "black")
+    (set-face-attribute 'isearch nil :background "sea green" :foreground "black")
+    (set-face-attribute 'ido-first-match nil :background "sea green" :foreground "black")
 
-  (set-face-attribute 'lazy-highlight nil :inherit isearch-lazy-highlight
-                      :background "black" :foreground "tomato")
+    (set-face-attribute 'lazy-highlight nil :inherit isearch-lazy-highlight
+                        :background "black" :foreground "tomato")
 
-  ;; Set the face for the fring to have the normal backbround.
-  (set-face-attribute 'fringe nil :background (face-attribute 'default :background))
-
+    ;; Set the face for the fring to have the normal backbround.
+    (set-face-attribute 'fringe nil :background (face-attribute 'default :background)
+                        :foreground "light goldenrod")
 #+END_SRC
 
 I enable hightlighting matching parentheses in many levels
@@ -1542,8 +1542,9 @@ extra care here.
     (scroll-bar-mode -1) ;; No scroll-bar
     (menu-bar-mode -1)   ;; No menu-bar
     (tooltip-mode -1)    ;; No tooltips
-    (setq fringe-mode '(8 . 0)) ;; Fringe, 8 pixels left and 0 pixels right
+    (setq fringe-mode '(14 . 14)) ;; Fringe, left and right for the continuation characters
     (set-fringe-mode fringe-mode)
+    (setq indicate-buffer-boundaries 'left)
 
     ;; When making a selection or in case of highlighting a region
     ;; automatically, keep all font-locking in the region instead of
