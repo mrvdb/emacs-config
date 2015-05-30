@@ -4471,7 +4471,9 @@ imported my feeds from RSSyl
   (use-package vlc)  ;; Needs my little hack from https://github.com/mrvrb/vlc.el
   (use-package elfeed
     :init
-    (bind-key "C-c f" 'elfeed)
+    (progn
+      (bind-key "C-c f" 'elfeed)
+      (setq elfeed-db-directory "~/dat/.elfeed"))
     :config
     (progn
       (defun mrb/elfeed-search-toggle-tag(tag)
