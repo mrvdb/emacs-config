@@ -4741,7 +4741,8 @@ magit, so let's begin with bringing that in.
       ;; Make sure that highlighted regions in magit keep their syntax
       (set-face-attribute 'magit-item-highlight nil
                           :inherit nil
-                          :foreground nil :background mrb-bg-paren-match)))
+                          :foreground nil :background mrb-bg-paren-match)
+      (setq magit-last-seen-setup-instructions "1.4.0")))
 #+END_SRC
 
 * To organize and properly configure
