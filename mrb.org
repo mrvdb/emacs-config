@@ -1112,7 +1112,8 @@ and run =el-get-install= with the package name.
               (:name gitmessenger           :type github :pkgname "syohex/emacs-git-messenger")
               (:name org-agenda-property    :type github :pkgname "Bruce-Connor/org-agenda-property")
               (:name pump.io                :type github :pkgname "cnngimenez/pumpio-el")
-              (:name elfeed                 :type github :pkgname "skeeto/elfeed")
+              (:name elfeed                 :type github :pkgname "skeeto/elfeed"
+                     :depends (elfeed-org))
               (:name guide-key              :type github :pkgname "kbkbkbkb1/guide-key")
               (:name org-screenshot         :type github :pkgname "dfeich/org-screenshot")
               (:name json-rpc               :type github :pkgname "skeeto/elisp-json-rpc")
@@ -4574,13 +4575,12 @@ feeds directly in lisp, I'm using an orgmode file to record the feeds
 i want.
 
 #+BEGIN_SRC emacs-lisp
-(use-package elfeed-org
-      :init
+  (use-package elfeed-org
+    :init
+    (progn
       (setq rmh-elfeed-org-files (list (concat emacs-directory "feeds.org")))
-
-      (defadvice elfeed (before configure-elfeed activate)
-        "Load all feed settings before elfeed is started"
-        (rmh-elfeed-org-configure)))
+      (elfeed-org))
+    )
 #+END_SRC
 
 
