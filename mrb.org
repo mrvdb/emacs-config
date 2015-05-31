@@ -1861,11 +1861,11 @@ system and have a shortcut key assigned to them. The scripts are
 produced directly from this document, in a similar way as the main
 edit script was produced in [[Preparing for lift-off]]
 
-#+BEGIN_SRC sh :exports code :tangle ~/bin/capture-todo.sh :shebang #!/bin/bash
+#+BEGIN_SRC sh :exports code :tangle ~/bin/capture-todo.sh :shebang #!/bin/sh
 emacsclient --eval '(mrb/capture-todo)'
 #+END_SRC
 
-#+BEGIN_SRC sh :exports code :tangle ~/bin/capture-buy.sh :shebang #!/bin/bash
+#+BEGIN_SRC sh :exports code :tangle ~/bin/capture-buy.sh :shebang #!/bin/sh
 emacsclient --eval '(mrb/capture-buy)'
 #+END_SRC
 
@@ -4062,7 +4062,7 @@ set as the default mail handler.
 
 On top of that, I want a manual capture script which is basically the
 same as the mailto handler.
-#+BEGIN_SRC sh :exports code :tangle ~/bin/capture-mail.sh :shebang #!/bin/bash
+#+BEGIN_SRC sh :exports code :tangle ~/bin/capture-mail.sh :shebang #!/bin/sh
 edit -e '(mrb/make-mailcompose-frame)'
 #+END_SRC
 
@@ -4270,7 +4270,7 @@ Statusnet, or perhaps microblog in general settings
 
 Denting interface from the commandline goes to here:
 
-#+BEGIN_SRC sh :exports code :tangle ~/bin/capture-dent.sh :shebang #!/bin/bash
+#+BEGIN_SRC sh :exports code :tangle ~/bin/capture-dent.sh :shebang #!/bin/sh
 edit -e '(mrb/make-dent-frame)'
 #+END_SRC
 
@@ -4317,7 +4317,7 @@ want it to be, including key bindings.
 
 Commandline interface for posting a pump.io notices goes here:
 
-#+BEGIN_SRC sh :exports code :tangle ~/bin/capture-pump.sh :shebang #!/bin/bash
+#+BEGIN_SRC sh :exports code :tangle ~/bin/capture-pump.sh :shebang #!/bin/sh
 edit -e '(mrb/capture-pump)'
 #+END_SRC
 
@@ -4457,7 +4457,7 @@ consistent interface to rule them all.
 
 And, like the others, a commandline interface
 
-#+BEGIN_SRC sh :exports code :tangle ~/bin/capture-twist.sh :shebang #!/bin/bash
+#+BEGIN_SRC sh :exports code :tangle ~/bin/capture-twist.sh :shebang #!/bin/sh
 edit -e '(mrb/capture-twist)'
 #+END_SRC
 
