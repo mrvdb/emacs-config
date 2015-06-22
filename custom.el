@@ -179,14 +179,15 @@
  '(org-insert-heading-respect-content nil)
  '(org-latex-default-packages-alist
    (quote
-    (("T1" "fontenc" nil)
+    (("QX" "fontenc" t)
+     ("" "lmodern" t)
      ("AUTO" "inputenc" t)
      ("" "fixltx2e" nil)
      ("" "graphicx" t)
      ("" "longtable" nil)
      ("" "float" nil)
      ("" "wrapfig" nil)
-     ("" "soul" t)
+     ("" "soul" nil)
      ("" "textcomp" t)
      ("" "marvosym" t)
      ("" "wasysym" t)

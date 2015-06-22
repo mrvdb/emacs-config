@@ -150,13 +150,6 @@ This option does not seem to work when not in the same file as
 exporting. I have added this in the customize interface directly now.
 #+LaTeX_CLASS_OPTIONS: [10pt,a4paper,twoside]
 
-Make sure we use the scaleable fonts, this looks a lot better than the
-bitmapped fonts.
-#+LaTeX_HEADER: \usepackage{type1cm}
-
-And take advantage of them by enabling advanced layout techniques.
-#+LaTeX_HEADER: \usepackage{microtype}
-
 Latex default configuration to produce a memo-style document.
 
 Our documents are mostly in dutch, so load that up by default, it's
@@ -234,8 +227,8 @@ The logo is just displayed on odd pages, on the right.
 
 The footer contains page references N of M style and the author
 information. Here also, the position is alternating with odd and even pages.
-#+LATEX_HEADER: \fancyfoot[RO,LE]{\small{\bf{\thepage{}|\pageref{LastPage}}}}
-#+LATEX_HEADER: \fancyfoot[LO,RE]{\small{\bf{\@date{} | \@author{} <\href{mailto:marcel@hsdev.com}{marcel@hsdev.com}>}}}
+#+LATEX_HEADER: \fancyfoot[RO,LE]{\small{\bf{\thepage{}\textbar\pageref{LastPage}}}}
+#+LATEX_HEADER: \fancyfoot[LO,RE]{\small{\bf{\@date{} \textbar \@author{} \textlangle\href{mailto:marcel@hsdev.com?subject=Re: \@title}{marcel@hsdev.com}\textrangle}}}
 
 Reset the @ character back to what it was
 #+LATEX_HEADER: \makeatother
