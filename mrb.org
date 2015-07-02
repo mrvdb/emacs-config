@@ -2091,6 +2091,20 @@ Now that function is used to insert the proprty when:
       (mrb/insert-created-timestamp)))
   (ad-activate 'org-capture)
 #+END_SRC
+
+Related to the above, with some regularity I want to record
+timestamps, for example for documenting longer during tasks and
+recording incremental progress or information on them.
+
+#+BEGIN_SRC emacs-lisp
+  (defun mrb/org-insert-inactive-timestamp ()
+    (interactive)
+    (org-insert-time-stamp (current-time) nil 1 ))
+
+  ;; Bind to C-c , analogous to C-c . which inserts an active timestamp
+  (bind-key "C-c ," 'mrb/org-insert-inactive-timestamp org-mode-map)
+#+END_SRC
+
 *** Scheduling items
 Orgmode has a number of provisions to schedule items, either
 explicitly by setting the SCHEDULE property, inferring a deadline by
