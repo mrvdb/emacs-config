@@ -1928,6 +1928,7 @@ Adapt the colors of the states I use a bit:
     ("INFO"      . (:foreground "khaki1"      :weight bold))
     ("COLLECT"   . (:foreground "MediumSeaGreen"   :weight bold))
     ("SOLVE"     . (:foreground "orange red"    :weight bold))
+    ("READ"      . (:foreground "MediumPurple1" :weight bold))
   ))
 #+END_SRC
 
