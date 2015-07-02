@@ -1372,13 +1372,15 @@ and call that when we are done with our visual (X) init.
 
 #+BEGIN_SRC emacs-lisp
   (defun mrb/unicode-font-corrections()
+    (interactive)
     ;; Add a line like the following  for each char displaying improperly
     (dolist
         (the_char
-         (list '#x1f3d8 '#x1f3e0 '#x1f3d8   ;; 🏘 🏠 🏡
+         (list '#x1f3d8 '#x1f3e0 '#x1f3e1   ;; 🏘 🏠 🏡
                '#x1f435 '#x1f44d '#x1f4a9   ;; 🐵 👍 💩
                '#x1f4ac '#x1f4de '#x1f385   ;; 💬 📞 🎅
-               '#x1f60e '#x1f60a '#x1f596)) ;; 😎 😊 🖖
+               '#x1f60e '#x1f60a '#x1f596   ;; 😎 😊 🖖
+               '#x1f603 ))                  ;; 😃
       (mrb/fix-fontset-font "Symbola" the_char)))
 #+END_SRC
 
