@@ -2303,6 +2303,12 @@ Settings which are just applicable for the org-mode agenda view.
   ;; Show properties in agenda view
   (use-package org-agenda-property)
   (setq org-agenda-property-list '("LOCATION" "Responsible"))
+
+  ;; But remove the mouse-face text property which makes the lines
+  ;; highlight when hovering (it is either the cursor or the mouse, but not both)
+  (add-hook 'org-finalize-agenda-hook
+    (lambda () (remove-text-properties
+               (point-min) (point-max) '(mouse-face t))))
 #+END_SRC
 *** Babel / Literate programming
 Specific settings for babel and literate programming within org-mode
