@@ -4493,6 +4493,7 @@ imported my feeds from RSSyl
     :init
     (progn
       (bind-key "C-c f" 'elfeed)
+      (setf url-queue-timeout 30)
       (setq elfeed-db-directory "~/dat/.elfeed"))
     :config
     (progn
@@ -4605,7 +4606,8 @@ i want.
 
 #+BEGIN_SRC emacs-lisp
   ;; Automatically update the feeds every now and then
-  (run-at-time 180 1800 (lambda () (unless elfeed-waiting (elfeed-update))))
+  ;; FIXME: recently Emacs crashes on this (ipv6 problem), so we don't don it automatically anymore.
+  ;;(run-at-time 180 1800 (lambda () (unless elfeed-waiting (elfeed-update))))
 #+END_SRC
 ** Telegram
 There's no telegram client in emacs lisp (yet), but I do have a little
