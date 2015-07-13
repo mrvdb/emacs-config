@@ -32,7 +32,7 @@ This has a number of attractive properties:
 **** http://www.cobraclub.com/forum/external.php?type=RSS2
 **** http://www.sumobuild.co.uk/xml/sumobuild.xml
 **** http://www.gdcars.com/feed
-**** http://forum.cobraclub.nl/index.php?type=rss;action=.xml
+**** #+COMMENT http://forum.cobraclub.nl/index.php?type=rss;action=.xml
 **** http://isispower.blogspot.com/feeds/posts/default
 **** http://andysgd427.blogspot.com/feeds/posts/default
 **** http://gd-cobra.blogspot.com/feeds/posts/default
@@ -71,24 +71,26 @@ This has a number of attractive properties:
 **** http://www.readynas.com/?feed=rss2
 **** https://reddit.com/r/thinkpad.rss 								   :computing:
 **** https://www.yubico.com/feed/								    :security:
-*** Other
-**** http://vimeo.com/mrvdb/subscriptions/videos/rss/5d94482c63b00132e107359e3740cd5d62bb60d3	 :video:vimeo:
+*** People
+**** http://julien.danjou.info/blog/index.xml							      :people:
+**** http://mrblog.nl/feed									   :people:me:
+**** http://torvalds-family.blogspot.com/feeds/posts/default					      :people:
+**** http://esr.ibiblio.org/?feed=atom								      :people:
+**** http://feeds.feedburner.com/JuanReyero							      :people:
+**** http://feeds.feedburner.com/wyome								      :people:
+**** http://blog.sarine.nl/feed/index.xml
+*** Automotive
 **** http://feeds.feedburner.com/TheChicane							   :oldschool:
 **** http://www.gearjournal.com/feed/
 **** http://www.garagejournal.com/feed/
+*** Other
 **** http://forums.segwaychat.com/external.php?type=RSS
-**** http://feeds.feedburner.com/wyome								      :people:
-**** http://julien.danjou.info/blog/index.xml							      :people:
-**** http://torvalds-family.blogspot.com/feeds/posts/default					      :people:
-**** http://feeds.feedburner.com/JuanReyero							      :people:
 **** http://planet.jabber.org/rss20.xml
 **** http://feeds.twit.tv/sn_video_large
 **** http://www.thetoolanddieguy.com/feed							   :machining:
 **** http://feeds.feedburner.com/hacknmod/qjUG
 **** https://blog.sleeplessbeastie.eu/atom.xml
-**** http://esr.ibiblio.org/?feed=atom								      :people:
 **** http://feeds2.feedburner.com/TheArtOfManliness
 **** http://tsfkb.com/feed.php?type=rss2					 :telegram:diffs:wiki:support:
-**** http://gdata.youtube.com/feeds/base/users/mvanderboom/newsubscriptionvideos		       :video:
-**** http://mrblog.nl/feed									   :people:me:
 **** http://www.geocaching.com/blog/feed/
+**** http://vimeo.com/mrvdb/subscriptions/videos/rss/5d94482c63b00132e107359e3740cd5d62bb60d3	 :video:vimeo:
