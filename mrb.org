@@ -1133,7 +1133,7 @@ and run =el-get-install= with the package name.
     (setq mrb/packages
           (append
            ;; list of packages we use from standard recipes
-           '(smex ace-jump-mode apache-mode gnuplot-mode sudo-save
+           '(smex apache-mode gnuplot-mode sudo-save
                   edit-server markdown-mode rainbow-mode rainbow-delimiters scratch popwin
                   highlight-parentheses multiple-cursors cl-lib keywiz
                   smart-tab yaml-mode hideshow-org oauth flim haskell-mode ghc-mod s f
@@ -3828,7 +3828,7 @@ Navigating pieces of text effectively is probably the best
 optimization to make in the emacs configuration.
 
 In my browser I use vimium to jump to links with the keyboard. In
-emacs =ace-jump-mode= does something similar. On pressing the hotkey,
+emacs =avy= does something similar. On pressing the hotkey,
 all matches of the first char typed are highlighted (frame wide) by a
 single character. By pressing that characator the cursor is place
 there directly. This makes =within-frame= navigation a 3-key
@@ -3839,22 +3839,20 @@ same. I don't think there is a risk of confusion as to which mechanism
 is in use, but we'll see.
 
 #+BEGIN_SRC emacs-lisp
-  (use-package ace-jump-mode
+  (use-package avy
     :config
     (set-face-attribute
-     'ace-jump-face-foreground nil
+     'avy-lead-face nil
      :inherit isearch-lazy-highlight
      :background "black"
      :foreground "tomato")
-
-    (set-face-attribute
-     'ace-jump-face-background nil
-     :foreground nil
-     :background mrb-bg-paren-match))
+    :bind
+    ("s-j" . avy-goto-word-or-subword-1)
+    )
 #+END_SRC
 
 The effectiveness is also dependent on a quick and easy keyboard
-shortcut. Ace jump mode has 3 modes:
+shortcut. Avy has 3 modes:
 1. char mode
 2. word mode
 3. line mode
@@ -3866,27 +3864,9 @@ jumps.
 The =word mode= is typically 90% of the usage, so that should get the
 main keyboard shortcut, while the two others can get the usual C-u
 treatment.
-For now, we take the standard keybinding C-c SPC. This key needs to be
-undefined in org-mode (clear table cell). I never use this.
 
-#+BEGIN_SRC emacs-lisp
-  (bind-key "C-c SPC" nil org-mode-map)
-  (bind-key "s-j" 'ace-jump-mode)
-  ;; Pop back to mark is special for ace-jump? C-x space is the key i think.
-#+END_SRC
-
-Recall that once jumped, jumping back is just a /pop the mark/ (C-u
-C-SPC) away, but there is a little catch. If the scope of ace-jumping
-is global, popping the mark is not working properly because the mark
-is by current window only. I'm not sure hwo this works out for me;
-estimation is that the normal pop mark is enough. I'm just taking the
-advised configuration from the author at this point.
-
-#+BEGIN_SRC emacs-lisp
-  (eval-after-load "ace-jump-mode"
-    '(ace-jump-mode-enable-mark-sync))
-  (bind-key "C-x SPC" 'ace-jump-mode-pop-mark)
-#+END_SRC
+I used to use =ace-jump-mode=, which does exactly the same, but that
+package seems to be unmaintained. Avy is a reimplementation.
 
 * Remote editing
 Somehow I found that 'sshx' method works, but 'ssh' does not. At some
