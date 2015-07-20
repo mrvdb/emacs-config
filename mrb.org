@@ -1139,7 +1139,7 @@ and run =el-get-install= with the package name.
                   smart-tab yaml-mode hideshow-org oauth flim haskell-mode ghc-mod s f
                   flycheck pkg-info perspective ido-vertical-mode jekyll-el org2blog
                   identica-mode php-mode company-mode csv-mode notmuch use-package
-                  git-timemachine eimp litable diminish paredit fullframe wanderlust)
+                  git-timemachine eimp litable diminish paredit fullframe wanderlust avy adaptive-wrap)
 
            ;; the sources we have configured above
            (mapcar 'el-get-as-symbol (mapcar 'el-get-source-name el-get-sources))))
@@ -1519,11 +1519,66 @@ in it.
 In the cases where it makes sense to /artificially/ break a line, I
 want that to be explicit.
 
+So, the first thing to do is to set what I want for the lines in /all/
+buffers:
+- give each line one line of screen estate, without displaying
+  continuation lines
+- do not make an exception for small windows (yet)
+
+With these settings, lines in windows which are longer than the width
+of the window will break at the character boundary. The
+=toggle-truncate-lines= function toggles between the lines on one line
+and breaking them to display over multiple lines. When using that
+toggle, it makes sens to break the lines in the most sensible way:
+
+- break at the word boundary instead of the character boundary
+
 #+BEGIN_SRC emacs-lisp
-(setq truncate-partial-width-windows nil)
-(setq-default truncate-lines t)
+  (global-visual-line-mode)                ;; Turn on visual line mode by default
+  (setq-default truncate-lines t)          ;; Don't truncate lines
+  (setq truncate-partial-width-windows nil);; also not in partial width windows
 #+END_SRC
 
+For some modes, truncating still needs to be more subtle. One example
+I have is in chat-modes where there are lines lik:
+
+  [HH:MM] username> The thing that =username= typed into the chat
+
+These lines I want to truncate by default (because I always want to
+read complete sentences. I want them broken at the word boundary and
+from the second line forward the indent should be such that it
+dynamically adjust to line up the text under the 'T' from 'The' (in
+this example)
+
+There exists a package adaptive-wrap which can set one value per
+buffer, which is a step closer to what i want.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package adaptive-wrap)
+#+END_SRC
+
+Now, the modes that want to use this, should enable adaptive-wrap
+minor mode.
+
+#+BEGIN_SRC emacs-lisp
+  (defun mrb/jabber-chat-mode-hook ()
+    "Function that collects things to do when a chat-buffer is openend"
+
+    ;; First, set the adaptive wrap extra inden to skip the '[HH:MM] ' string, i.e. 9 places
+    (setq adaptive-wrap-extra-indent 8)
+
+    ;; and enable the minor mode
+    (adaptive-wrap-prefix-mode 1)
+
+    ;; And now we can happily stop truncating lines and show continuation lines
+    (setq truncate-lines nil)
+
+    ;; Make the system stuff a little less intrusive
+    (set-face-attribute 'jabber-chat-prompt-system nil :foreground "dark gray" :weight 'bold))
+
+  (add-hook 'jabber-chat-mode-hook 'mrb/jabber-chat-mode-hook)
+
+#+END_SRC
 
 ** Client dependent settings
 Because most of my usage involves having a long lasting emacs daemon,
@@ -4399,9 +4454,10 @@ XMPP related settings, including interfacing it to other systems
             (message "%s" msg))))
 
       ;; Some face adjustments
-      (add-hook 'jabber-chat-mode-hook
-                (lambda ()
-                  (set-face-attribute 'jabber-chat-prompt-system nil :foreground "dark gray" :weight 'bold))))
+      ;; (add-hook 'jabber-chat-mode-hook
+      ;;           (lambda ()
+      ;;             (set-face-attribute 'jabber-chat-prompt-system nil :foreground "dark gray" :weight 'bold)))
+)
 
     :bind
     ("C-c C-SPC" . jabber-activity-switch-to))
