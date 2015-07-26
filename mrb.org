@@ -1782,6 +1782,10 @@ function.
   (use-package org-datetree)          ;; Allows for archiving and refiling in a date organised tree
   (use-package org-mobile)            ;; Only org-mobile-push and pull get autoloaded and we need
                                    ;; the file list before that.
+  (use-package org-protocol
+    :init
+    (setq org-protocol-default-template-key "t") ;; Create a todo by default if nothing is specified
+    )
 #+END_SRC
 
 Most of work originates in capturing some task item in orgmode. Set
