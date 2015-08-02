@@ -1747,17 +1747,12 @@ any issues.
        (list 'nxml-mode))
     (add-hook the_mode 'turn-off-auto-fill))
 
-  ;; Truncate lines in some modes
-  (dolist
-      (the_mode
-       (list 'python-mode 'org-mode))
-    (add-hook the_mode (toggle-truncate-lines 1)))
 #+END_SRC
-** Org-mode
+* Org-mode
 Orgmode configuraton is probably the largest part of my Emacs
 configuration, because most of the time I spent in Emacs, when not
 coding, is spent in org-mode.
-*** Initialisation of Orgmode
+** Initialisation of Orgmode
 Basically where to find stuff and what to load.
 
 We do not have to load the main orgmode location, because we already
@@ -1774,7 +1769,6 @@ newer versions. We want an error, not a silent load of the older
 function.
 
 #+BEGIN_SRC emacs-lisp
-  (delete  "/usr/local/share/emacs/24.3/lisp/org" load-path)
   ;; CHECKME: is this still the proper installation method, it has changed a lot lately
   (use-package org)                   ;; This is required, see installation docs
   ;;(require 'org-special-blocks)  ;; Generalizes the #+begin_foo and #+end_foo blocks,
@@ -1812,7 +1806,7 @@ probably already the case, but making it explicit can't hurt.
   (add-to-list 'auto-mode-alist '("\\.org\\'"      . org-mode))
 #+END_SRC
 
-*** Capturing information
+** Capturing information
 I guess 90% of the information I keep in the main orgmode files
 starts life originally as a captured item. I use it for:
 
@@ -1964,7 +1958,7 @@ Capturing of screenshots is provided by the org-screenshot library.
     (org-screenshot t ""))
 #+END_SRC
 
-*** Workflow
+** Workflow
 Orgmode used a couple of thing which enable you to steer the workflow
 for items. Item states are the most prominent ones. Org-mode uses
 keyword definitions to denote states on items. I keep an [[file:org-config.org][Orgmode
@@ -2064,7 +2058,7 @@ so for now, I'm building in the confirmation.
             'mrb/archive-done-item t)
 
 #+END_SRC
-*** Marking items as DONE
+** Marking items as DONE
 Marking work as completed should be a smooth process to stop getting
 in the way of doing the actual work. A shortcut is defined to mark
 items done in the standard way and have an additional shortcut to mark
@@ -2095,7 +2089,7 @@ Thus, the normal sequence would be:
   (bind-key "s-."   'org-agenda-todo org-agenda-mode-map)
 #+END_SRC
 
-*** Registering creation time of todo items
+** Registering creation time of todo items
 Over time it gets a bit messy in my orgmode files. I can not remember
 when something was created and thus, by judging the time I didn't do
 anything with the item, decide if it is still important or not.
@@ -2164,7 +2158,7 @@ recording incremental progress or information on them.
   (bind-key "C-c ," 'mrb/org-insert-inactive-timestamp org-mode-map)
 #+END_SRC
 
-*** Scheduling items
+** Scheduling items
 Orgmode has a number of provisions to schedule items, either
 explicitly by setting the SCHEDULE property, inferring a deadline by
 setting the DEADLINE property, thus scheduling the task in an interval
@@ -2193,7 +2187,7 @@ thing like: "yeah, do this today"
   (bind-key "C-." 'mrb/org-agenda-schedule-for-today org-agenda-mode-map)
 #+END_SRC
 
-*** Visual settings
+** Visual settings
 Having an attractive screen to look at becomes more important if you
 use the system all day long. /Attractive/ is rather subjective
 here. For me it mainly consists of functional things. Anyways, this
@@ -2308,7 +2302,7 @@ needs to be hidden.
   )
 #+END_SRC
 
-*** Agenda customization
+** Agenda customization
 Settings which are just applicable for the org-mode agenda view.
 
 #+BEGIN_SRC emacs-lisp
@@ -2369,7 +2363,7 @@ Settings which are just applicable for the org-mode agenda view.
     (lambda () (remove-text-properties
                (point-min) (point-max) '(mouse-face t))))
 #+END_SRC
-*** Babel / Literate programming
+** Babel / Literate programming
 Specific settings for babel and literate programming within org-mode
 
 #+BEGIN_SRC emacs-lisp
@@ -2385,7 +2379,7 @@ Specific settings for babel and literate programming within org-mode
      (haskell t) (js t) (calc t) (mathomatic t)))
 #+END_SRC
 
-*** Refiling
+** Refiling
 A big part of organizing information and task is shuffling things
 around. The 'thing' to throw around is a heading and 'refiling' is
 the term org-mode uses for throwing.
@@ -2404,7 +2398,7 @@ thing to do, which is not the case.
    org-refile-use-outline-path 'file
 )
 #+END_SRC
-*** Exporting to other formats
+** Exporting to other formats
 Orgmode can export to a variety of formats, I mainly use LaTeX (PDF)
 and HTML as destination format
 
@@ -2498,7 +2492,7 @@ and HTML as destination format
     (interactive)
     (org-export-as-html 3 nil nil nil t))
 #+END_SRC
-*** Blogging with org-mode                                                                            :blog:
+** Blogging with org-mode                                                                              :blog:
 Having most of my writings in org-mode it makes sense to add just a
 little bit more to be able to push that content to my blogging
 platform; wordpress. Fortunately, there's some elisp for that in the
@@ -2506,7 +2500,7 @@ form of org2blog, which publishes orgmode files as wordpress articles
 or pages.
 
 
-**** Org2Blog configuration for Wordpress
+*** Org2Blog configuration for Wordpress
 Note: this section can probably be archived as I am not using
 wordpress anymore.
 
@@ -2559,7 +2553,7 @@ to the blogs is done interactively by default.
            )))
 
 #+END_SRC
-**** Using org-mode for Jekyll based sites
+*** Using org-mode for Jekyll based sites
 Using jekyll and orgmode together is a bit more low level, because
 jekyll as such is not a blogging solution, it can just parse files
 from one format to html.
@@ -2616,7 +2610,7 @@ and a buffer is filled with this title properly filled in, plus the
 filename is attached to the the buffer in the proper location. A
 simple save creates the draft as a file.
 
-*** Old configuration
+** Old configuration
 Below is what was contained in the old configuration. I will slowly
 migrate this into more literal sections
 
@@ -3094,7 +3088,7 @@ migrate this into more literal sections
   ;; TODO I want to have this in the agenda mode to
 #+END_SRC
 
-*** Encrypting information in org-mode
+** Encrypting information in org-mode
 I use the /encrypt/ tag for encrypting sections in org-mode (and
 sometimes my journal). The sections get encrypted and decrypted
 automatically on saving and opening. This uses the EasyPG library to
@@ -3118,7 +3112,7 @@ inherited by mistake.
 (add-to-list 'org-tags-exclude-from-inheritance (quote "crypt"))
 #+END_SRC
 
-*** Commiting automatically
+** Commiting automatically
 I have lost a number of changes in the past because I reverted a
 file, made a mistake or whatever. Some of these mistakes can be
 reverted easily if saves are automatically committed
