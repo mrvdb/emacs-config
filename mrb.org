@@ -3993,24 +3993,6 @@ and hopefully one will float to the top as being *the one*
   (add-hook 'message-mode-hook 'turn-on-auto-fill 'append)
 #+END_SRC
 
-I think I might like mu4e use once in a while, so let's set up a
-configuration for that as well.
-
-#+BEGIN_SRC emacs-lisp
-    (use-package mu4e)
-
-    (setq
-     mu4e-maildir "~/Maildir"
-     mu4e-sent-folder "/.Sent"
-     mu4e-drafts-folder "/.Drafts"
-     mu4e-trash-folder "/.Trash"
-     mu4e-get-mail-command t
-     mu4e-update-interval nil
-     mu4e-view-show-images t
-     mu4e-view-image-max-width 800
-     mu4e-reply-to-address user-mail-address)
-#+END_SRC
-
 Composing mail is often an /out of band/ activity, like creating a dent
 or a capture, so I would like to have roughly the same behaviour. This
 is by default provided by compose-mail-other-frame, but I could not
