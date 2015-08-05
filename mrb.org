@@ -18,7 +18,7 @@ to some as well. On top of that I have an auto commit hook on save
 running at the moment which does not produce the best hitory
 records. All that will change over time.
 
-* Emacs configuration                                              [1/92]                      :emacs:exclude:
+* Emacs configuration                                              [2/96]                      :emacs:exclude:
 :PROPERTIES:
 :CATEGORY: Emacs
 :END:
@@ -37,15 +37,26 @@ current behaviour (insert a newline) what I want is the following:
 
 Basically, ignore everything befor the section content and do a
 newline.
+** TODO I would like to have a global statusline in emacs
+:PROPERTIES:
+:CREATED:  [2015-07-29 Wed 13:08]
+:END:
+At the moment there is much duplication in the mode line for each
+buffer:
+- btc ticker
+- time / date
+- jabber status
+- progress bars
+- message area
+
+These are more suitable to have in an area which is always visible,
+regardless of buffer.
+(Like a status bar in other applications)
 ** TODO epub export from org-mode
 :PROPERTIES:
 :CREATED:  [2015-05-08 vr 13:41]
 :END:
-** TODO a working fill-column indicator which does not kill performance
-:PROPERTIES:
-:CREATED:  [2015-05-08 vr 13:42]
-:END:
-** TODO find some specific changes to increase emacs performance, it can be slow at times
+** TODO find a working fill-column indicator which does not kill performance
 :PROPERTIES:
 :CREATED:  [2015-05-08 vr 13:42]
 :END:
@@ -102,7 +113,6 @@ CLOSED: [2015-03-23 ma 11:27]
 :PROPERTIES:
 :CREATED: [2012-06-27 wo 10:19]
 :END:
-** TODO Formatting of list items in emacs epub manual are often split over two lines              :fix:emacs:
 ** TODO Create a piece of lisp which inserts an in-buffer mode spec line                              :build:
 :PROPERTIES:
 :CREATED: [2012-07-11 wo 19:56]
@@ -129,11 +139,19 @@ Does the default linux notify system support sound? If so, then it's easy.
 :PROPERTIES:
 :CREATED:  [2013-02-07 do 09:07]
 :END:
+
+I've settled on gnu global as this has excellent emacs support, but is
+largely independent from it.
+
 ** TODO Find out if auto-complete can be used for trivial autocorrect things
 :PROPERTIES:
 :CREATED:  [2013-03-04 ma 14:48]
 :END:
 like teh -> the etc.
+
+- separate key or just tab?
+- don't be intrusive, i might even mean teh when I type it (like
+  above) so I don't want to fight to get that in the editor.
 ** TODO Create a wrapper for org-update-statistics-cookies with temporary hierarchy settings
 :PROPERTIES:
 :CREATED:  [2013-03-04 ma 13:57]
@@ -153,15 +171,10 @@ of slowdown.
 The help window is the most important here, because that pops up
 every now and then when completion kicks in. I want that to stand
 out, but not shout at me.
-** TODO Make git work in eshell
-:PROPERTIES:
-:CREATED:  [2013-03-04 ma 15:11]
-:END:
-Some commands do work properly, but some don't
-These do not work:
-- git help <something> (git help itself *does* work)
 
-Less relevant the more I use magit
+I would expect just to be able to customize the faces, but there
+aren't that many in a help buffer (but there could be)
+
 ** TODO Configure some tag system for emacs to ease source navigation                                 :emacs:
 :PROPERTIES:
 :CREATED:  [2013-03-13 wo 09:40]
@@ -189,24 +202,6 @@ the most flexible solution.
   need to recompile from source with configure flag)
 - [2013-03-13 wo] Tested ctags (M-.) briefly from within emacs, not
   very useful so far, as it often sends to the wrong location
-** TODO Learn to use paredit in elisp mode                                                            :check:
-:PROPERTIES:
-:CREATED:  [2013-03-22 vr 17:46]
-:END:
-This is probaly something for the longer term. On adding new lisp code
-I've got it mastered as long as I can enter code sequentially. The
-added value is then guaranteed tree balance and significant fast
-editting (the parentheses) slow down a lot.
-
-There are at least 8 or 10 commands to learn for navigating,
-inserting, (re-)moving parts of a lisp tree which will take the most
-effort.
-Long term stuff, but worth the effort I guess.
-
-Not sure if I should reformulate the task to configure paredit and
-leave the learning as something ongoing, or leave this task as ongoing
-reminder.
-
 ** TODO Find a better way to edit xml with nxml                                                       :check:
 :PROPERTIES:
 :CREATED:  [2013-03-20 wo 10:56]
@@ -251,20 +246,6 @@ The idea is that I want to keep custom.el to a minimum.
 :END:
 Looking at it, it aint that bad. Perhaps we should modify other modes
 shortcuts?
-
-** TODO Make capturing a link automatic                                                               :build:
-:PROPERTIES:
-:CREATED:  [2013-06-12 wo 12:20]
-:END:
-That is, always grab the front link of the browser ready to yank into
-emacs
-Use org-protocol?
-
-*Always* sounds a bit too intrusive though. There is nothing wrong
- with an explicit action for capturing a link.
-
-Capturing a link and having it published on a shared filesystem
-somewhere almost sounds like a 'Pocket replacement'.
 
 ** TODO Create /align counters/ function, like org-align-tags                                   :build:emacs:
 :PROPERTIES:
@@ -892,6 +873,54 @@ Ideal situation for me:
 2. reply goes to author, no need to be public
 3. use one api to talk to (the xmpp gateway metaphor)
 
+** TODO Massage line continuation/truncation for jabber-chat mode                                       :fix:
+:PROPERTIES:
+:CREATED:  [2015-05-19 di 11:32]
+:END:
+- wrapping and not having the continuation chars makes sense in this
+  mode
+- preferably wrap with indent to the width of the users nickname
+** TODO Make sure that marked region overlays trump matching paren overlays                       :fix:emacs:
+:PROPERTIES:
+:CREATED:  [2015-05-09 za 11:07]
+:END:
+
+Usecase:
+expand region sequence marks something that is in between parentheses,
+the region is marked, but it is not visibly distiniguishable from a
+matching paren highlight.
+** TODO Mail compose window has side-effects of notmuch                                                 :fix:
+:PROPERTIES:
+:CREATED:  [2015-05-07 do 12:02]
+:END:
+After notmuch started, client is different?
+
+Probably going to use the wanderlust composer
+** TODO Look at fold-this.el package                                                                  :check:
+:PROPERTIES:
+:CREATED:  [2015-04-29 wo 20:43]
+:END:
+Can fold/unfold arbitrary region. The difficulty then becomes to
+create those regions effectively, context dependent.
+** TODO make λ be the notation for lamda-functions                                                    :build:
+:PROPERTIES:
+:CREATED:  [2015-04-15 wo 17:31]
+:END:
+- elisp
+- python (?)
+- haskell
+** TODO Get C-c C-c to work on haskell source blocks with results inline                                :fix:
+:PROPERTIES:
+:CREATED:  [2015-04-15 wo 17:30]
+:END:
+** TODO Learn edebug                                                                                  :learn:
+:PROPERTIES:
+:CREATED:  [2015-04-12 zo 14:13]
+:END:
+** TODO Instead of using edit-wait, create a script for capture-mail, which uses its own frame        :build:
+:PROPERTIES:
+:CREATED:  [2015-06-04 Thu 11:39]
+:END:
 * Preparing for lift-off
 The base of the emacs configuration is in the =~/.emacs.d/= directory,
 so add this to my loadpaths first and give it a name.
