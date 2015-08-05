@@ -1561,12 +1561,14 @@ of the window will break at the character boundary. The
 and breaking them to display over multiple lines. When using that
 toggle, it makes sens to break the lines in the most sensible way:
 
-- break at the word boundary instead of the character boundary
+Visual line mode would be the setting to have lines break at the word
+boundary, but it also has a side-effect of messing with the truncate
+line mode (if it's enabled, the global truncate-lines setting seems to
+have no effect).
 
 #+BEGIN_SRC emacs-lisp
-  (global-visual-line-mode)                ;; Turn on visual line mode by default
-  (setq-default truncate-lines t)          ;; Don't truncate lines
-  (setq truncate-partial-width-windows nil);; also not in partial width windows
+  (setq-default truncate-lines t)          ;; Truncate lines everywhere
+  (setq truncate-partial-width-windows nil);; also in partial width windows
 #+END_SRC
 
 For some modes, truncating still needs to be more subtle. One example
