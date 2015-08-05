@@ -4432,11 +4432,6 @@ XMPP related settings, including interfacing it to other systems
         (lambda (msg)
           (unless (minibuffer-prompt)
             (message "%s" msg))))
-
-      ;; Some face adjustments
-      ;; (add-hook 'jabber-chat-mode-hook
-      ;;           (lambda ()
-      ;;             (set-face-attribute 'jabber-chat-prompt-system nil :foreground "dark gray" :weight 'bold)))
 )
 
     :bind
