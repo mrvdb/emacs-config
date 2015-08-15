@@ -18,11 +18,11 @@ to some as well. On top of that I have an auto commit hook on save
 running at the moment which does not produce the best hitory
 records. All that will change over time.
 
-* Emacs configuration                                              [3/96]                      :emacs:exclude:
+* Emacs configuration                                              [1/79]                      :emacs:exclude:
 :PROPERTIES:
 :CATEGORY: Emacs
 :END:
-** TODO Enter after headline should skip properties                                                   :build:
+** TODO Enter after headline should skip properties                                                :build:
 :PROPERTIES:
 :CREATED: [2011-06-10 vr 08:55]
 :END:
@@ -56,20 +56,6 @@ regardless of buffer.
 :PROPERTIES:
 :CREATED:  [2015-05-08 vr 13:41]
 :END:
-** TODO find a working fill-column indicator which does not kill performance
-:PROPERTIES:
-:CREATED:  [2015-05-08 vr 13:42]
-:END:
-I don't know what this means anymore.
-
-I installed the package fill-column-indicator which can draw a
-vertical line on the fill column (or any other column for that
-matter).
-
-This line may come in handy when doing sensitive non-auto-fill work
-(like python coding). I'm not enabling it by default for any mode, but
-enabling the loading of the package.
-
 ** TODO When highlighting a block, provide keymappings to select it
 :PROPERTIES:
 :CREATED: [2011-06-10 vr 09:50]
@@ -106,16 +92,10 @@ or better, vice versa, so the cursor does not move.
 :END:
 This is obviously a more ongoing task than a single one. The task(s)
 here should be what to do to reach the goal of learning the Emacs'
-regular expression systax
-*** CANCELLED Define specific excercises                                                             :build:
-CLOSED: [2015-03-23 ma 11:27]
-:LOGBOOK:
-- State "CANCELLED"  from "TODO"       [2015-03-23 ma 11:27] \\
-  I'm using emacs all day long, the tasks which I create for myself are enough
-:END:
-:PROPERTIES:
-:CREATED: [2012-01-12 do 13:13]
-:END:
+regular expression syntax.
+
+
+
 *** TODO Integrate them into workflow (like defining keyboard shortcuts for them)
 :PROPERTIES:
 :END:
@@ -123,19 +103,18 @@ CLOSED: [2015-03-23 ma 11:27]
 :PROPERTIES:
 :CREATED: [2012-06-27 wo 10:19]
 :END:
-** TODO Create a piece of lisp which inserts an in-buffer mode spec line                              :build:
-:PROPERTIES:
-:CREATED: [2012-07-11 wo 19:56]
-:END:
-Usecase: files which are not directly associated with a mode, but are
-editted frequently.
+This is now becoming less important, unfortunately I'm using xmpp
+less and less in favour of Telegram.
 
-Example: -*- mode:conf -*-
 ** TODO Set up ediff as default merge tool instead of meld                                            :build:
 :PROPERTIES:
 :CREATED:  [2013-01-24 do 20:28]
 :END:
 There are some instructions online on how to set this up
+
+- main: how to teach git (or magit) to have ediff as default tool
+- how does a 3-way merge work in ediff, try this first
+
 ** TODO Er moet een geluid aan jabber notificaties worden gekoppeld, anders mis ik ze             :build:fix:
 :PROPERTIES:
 :CREATED:  [2012-12-07 vr 10:24]
@@ -205,7 +184,7 @@ This is probably easy to solve by disabling the autowrap/fill minor mode.
 We want to take advantage of the advantages of use-package, so we'd
 better use it like it is supposed to be used.
 
-** TODO Consider using web-mode for mixed html pages                                                  :emacs:
+** TODO Consider using web-mode for mixed html pages                                                   :emacs:
 :PROPERTIES:
 :CREATED:  [2013-06-08 za 16:20]
 :END:
@@ -250,24 +229,6 @@ nice if we could set it once for future buffers.
 :PROPERTIES:
 :CREATED:  [2013-07-03 wo 15:21]
 :END:
-** TODO Configure folding for python in emacs
-:PROPERTIES:
-:CREATED:  [2013-08-01 do 18:19]
-:END:
-http://www.emacswiki.org/emacs/HideShow seems the easiest option to
-go for.
-
-This is just a matter of invoking hs-minor-mode.
-
-The drawback is that the keyboard shortcuts are really bad and it's
-different from org-mode where things just seem to work.
-
-These problems are both addressed with:
-https://github.com/shanecelis/hideshow-org/blob/master/hideshow-org.el
-
-In python this interferes with something else, so a bit more work is
-needed. Even when run manually the hs-org/hideshow gives errors.
-
 ** TODO Find out if the windows emacs splitting can be steered                                  :check:emacs:
 :PROPERTIES:
 :CREATED:  [2013-09-23 ma 10:27]
@@ -397,10 +358,6 @@ code.
           ad-do-it)))))
 #+END_SRC
 
-** TODO Figure out how to get the erc room topic to render properly if it is long                       :fix:
-:PROPERTIES:
-:CREATED:  [2013-04-17 wo 20:46]
-:END:
 ** TODO Look into portable emacs
 :PROPERTIES:
 :CREATED:  [2014-02-08 za 07:27]
@@ -418,10 +375,6 @@ like a blueish reverse background
 ** TODO See if we can have company completion in eshell                                               :build:
 :PROPERTIES:
 :CREATED:  [2014-04-23 wo 11:34]
-:END:
-** TODO Set up completion in python with ropemacs                                                     :build:
-:PROPERTIES:
-:CREATED:  [2014-04-09 wo 15:50]
 :END:
 ** TODO Find a solution on editting files as root with emacs on remote hosts                          :build:
 :PROPERTIES:
@@ -464,41 +417,13 @@ The effect should be that the results pane behaves more realtime
 - make ssh more transparent and more reliable (i suspect my rare
   freezes are mostly due to ssh/tramp connection stuff)
 - screen type setup comes to mine (tmux)
-** TODO Review personal keybindings                                                                   :emacs:
-:PROPERTIES:
-:CREATED:  [2014-06-20 vr 11:33]
-:END:
-See if we can bring some consistency into it.
-[2014-12-24 wo] Printed a copy for review, beter oversight then just
-on screen.
-** TODO Explore the golden ratio mode                                                           :check:emacs:
-:PROPERTIES:
-:CREATED:  [2014-11-06 do 16:09]
-:END:
-Divides emacs frame into uneven sized windows, depending upon which
-one has the focus.
-** TODO Revisit keychords, the idea still seems nice.                                           :check:emacs:
-:PROPERTIES:
-:CREATED:  [2014-11-06 do 16:50]
-:END:
-** TODO Study ibuffer                                                                                 :check:
-:PROPERTIES:
-:CREATED:  [2014-11-06 do 17:30]
-:END:
-This seems to be a nice way to manage buffers, like in a project
-manager, but indpendent and faster and more integrated in emacs.
 ** TODO Eventually, have a look at bug reference mode                                            :read:emacs:
 :PROPERTIES:
 :CREATED:  [2014-12-23 di 18:05]
 :END:
 This turns on hyperlinks for bug mentions. Obviously needs a project
 sort of equivalent to produce the proper link.
-** TODO Implement a travis config on one of my repositories                                     :build:emacs:
-:PROPERTIES:
-:CREATED:  [2014-12-23 di 17:56]
-:END:
-Preferably on an odoo module.
-** TODO Fix org-jsinfo message on startup of emacs                                                :emacs:fix:
+** TODO Fix org-jsinfo message on startup of emacs                                                 :emacs:fix:
 :PROPERTIES:
 :CREATED:  [2014-12-22 ma 12:07]
 :END:
@@ -576,12 +501,6 @@ Issues observed:
 - leaving an editor session on a 'client' and suspending that
   machine. Leaving this overnight, crashes the emacs server part
   (happened twice now) How can I log this?
-** TODO Blockdiag looks like something org-mode could benefit from                              :check:emacs:
-:PROPERTIES:
-:CREATED:  [2014-12-03 wo 11:21]
-:END:
-Especially the netdiag and rackdiag stuff could be useful to document
-our network in a way worthy
 ** TODO Create elisp fragment which make current main subtree a pdf document              :build:write:emacs:
 :PROPERTIES:
 :CREATED:  [2014-11-30 zo 15:30]
@@ -660,6 +579,7 @@ possibly a combination of them:
 1. GNUS
 2. Wanderlust
 3. Mu4e
+4. Notmuch
 
 
 *** Current configuration
@@ -672,6 +592,13 @@ I already have quite an extensive configuration:
 - local imap access is provided by a local dovecot server access that Maildir
 - outgoing mail is processed by anubis before taken by postfix, which
   relays to mail.hsdev.com:2500
+
+[2015-08-15 Sat] The above setup was on Ubuntu, now that I am on
+parabola, the local imap server is not there anymore, nor is
+offlineimap. I'm not sure I want this back, the syncing was causing
+more problems than it solved. Probably due to my configuration, but
+alas.
+
 *** HOWTO Integration with org-mode
 The main integration I am looking for is coupling email-messages to
 subsections/TODO-items in org-mode.
@@ -814,8 +741,8 @@ Feature that should have a low threshold:
 - create a posting.
 
 Networks I am involved in:
-- pump.io :: qua.name
-- twitter :: mrvdb
+- pump.io :: mrb@qua.name
+- twitter :: @mrvdb
 - gnu-social :: mrb@o.mrblog.nl
 - twister :: mrb
 
@@ -827,13 +754,6 @@ Ideal situation for me:
 2. reply goes to author, no need to be public
 3. use one api to talk to (the xmpp gateway metaphor)
 
-** TODO Massage line continuation/truncation for jabber-chat mode                                       :fix:
-:PROPERTIES:
-:CREATED:  [2015-05-19 di 11:32]
-:END:
-- wrapping and not having the continuation chars makes sense in this
-  mode
-- preferably wrap with indent to the width of the users nickname
 ** TODO Make sure that marked region overlays trump matching paren overlays                       :fix:emacs:
 :PROPERTIES:
 :CREATED:  [2015-05-09 za 11:07]
@@ -843,19 +763,6 @@ Usecase:
 expand region sequence marks something that is in between parentheses,
 the region is marked, but it is not visibly distiniguishable from a
 matching paren highlight.
-** TODO Mail compose window has side-effects of notmuch                                                 :fix:
-:PROPERTIES:
-:CREATED:  [2015-05-07 do 12:02]
-:END:
-After notmuch started, client is different?
-
-Probably going to use the wanderlust composer
-** TODO Look at fold-this.el package                                                                  :check:
-:PROPERTIES:
-:CREATED:  [2015-04-29 wo 20:43]
-:END:
-Can fold/unfold arbitrary region. The difficulty then becomes to
-create those regions effectively, context dependent.
 ** TODO make λ be the notation for lamda-functions                                                    :build:
 :PROPERTIES:
 :CREATED:  [2015-04-15 wo 17:31]
@@ -871,10 +778,24 @@ create those regions effectively, context dependent.
 :PROPERTIES:
 :CREATED:  [2015-04-12 zo 14:13]
 :END:
-** TODO Instead of using edit-wait, create a script for capture-mail, which uses its own frame        :build:
+** TODO Consider scheduling saving all org buffers in emacs idle time                           :build:emacs:
 :PROPERTIES:
-:CREATED:  [2015-06-04 Thu 11:39]
+:CREATED:  [2015-07-30 Thu 12:40]
 :END:
+** TODO Add quick shortcuts for actions that need to happen for today.                          :build:emacs:
+:PROPERTIES:
+:CREATED:  [2015-07-30 Thu 12:37]
+:END:
+
+In several places:
+1. capture like normal, but immediately schedule for today
+2. on an existing item, quickly schedule for today.
+
+** TODO The inactive modeline has the same color as the org agenda header, fix this.              :fix:emacs:
+:PROPERTIES:
+:CREATED:  [2015-07-30 Thu 12:35]
+:END:
+Cos it's ugly
 * Preparing for lift-off
 The base of the emacs configuration is in the =~/.emacs.d/= directory,
 so add this to my loadpaths first and give it a name.
