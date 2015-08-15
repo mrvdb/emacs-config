@@ -1606,6 +1606,30 @@ any issues.
                       (set-auto-mode)))))
 #+END_SRC
 
+When emacs does not determine the right mode, I sometimes want a
+modestring somewhere in the file. Typically that string gets inserted
+on a line which is commented out in the proper syntax for that mode.
+
+#+BEGIN_SRC emacs-lisp
+  (defun mrb/buffer-majormode (&optional buffer-or-name)
+    "Returns the major-mode of the specified buffer, or
+      the current buffer if no buffer is specied"
+    (buffer-local-value 'major-mode
+                        (if buffer-or-name
+                            (get-buffer buffer-or-name)
+                          (current-buffer))))
+
+  (defun mrb/insert-mode-string()
+    "Inserts a mode string for the current mode at beginning of the current buffer"
+    (interactive)
+    (let ((m (symbol-name (buffer-majormode))))
+      (save-excursion
+        (beginning-of-buffer)
+        (insert "-*- mode:"
+                (substring m 0 (string-match "-mode" m))
+                " -*-")
+        (comment-region (point-min) (point)))))
+#+END_SRC
 
 #+BEGIN_SRC emacs-lisp
   (add-hook 'after-init-hook #'global-flycheck-mode)
