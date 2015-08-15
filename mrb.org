@@ -773,10 +773,6 @@ matching paren highlight.
 :PROPERTIES:
 :CREATED:  [2015-04-12 zo 14:13]
 :END:
-** TODO Consider scheduling saving all org buffers in emacs idle time                           :build:emacs:
-:PROPERTIES:
-:CREATED:  [2015-07-30 Thu 12:40]
-:END:
 ** TODO Add quick shortcuts for actions that need to happen for today.                          :build:emacs:
 :PROPERTIES:
 :CREATED:  [2015-07-30 Thu 12:37]
@@ -1572,6 +1568,33 @@ autosaved in a designated folder)
                t)
 #+END_SRC
 
+The autosave helps for the minor disasters, my backups help for the
+major disasters. What else is need is a 'normal save' but
+automatic.
+
+What I am aiming for here is to not have to think about explicitly
+saving for certain files. Typically when typing stuff in org-mode I
+just want the stuff saved that I have types so far.
+For /some/ files, each save is committed if I think the content
+warrants this (for example if I think going back to an earlier version
+is a likely event).
+
+#+BEGIN_SRC emacs-lisp
+  (defconst mrb/save-idle-time 10
+    "Time emacs needs to be idle to trigger the save idle timer")
+
+  ;; This function does the actual useful thing
+  (defun mrb/save-timer-callback()
+    "Callback function that runs when emacs is idle for
+  `mrb/save-idle-time' seconds. Typically we save files here"
+
+    (message "save-timer ran out, saving all orgmode files")
+    (org-save-all-org-buffers))
+
+  ;; Activate the timer
+  ;; #' means:
+  (run-with-idle-timer mrb/save-idle-time 'always #'mrb/save-timer-callback)
+#+END_SRC
 #+BEGIN_SRC emacs-lisp
   ;; Minibuffer prompt is a prompt, don't enter it as text.
   (setq minibuffer-prompt-properties (quote (read-only t point-entered minibuffer-avoid-prompt face minibuffer-prompt)))
