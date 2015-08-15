@@ -18,7 +18,7 @@ to some as well. On top of that I have an auto commit hook on save
 running at the moment which does not produce the best hitory
 records. All that will change over time.
 
-* Emacs configuration                                              [1/79]                      :emacs:exclude:
+* Emacs configuration                                              [1/78]                      :emacs:exclude:
 :PROPERTIES:
 :CATEGORY: Emacs
 :END:
@@ -423,11 +423,6 @@ The effect should be that the results pane behaves more realtime
 :END:
 This turns on hyperlinks for bug mentions. Obviously needs a project
 sort of equivalent to produce the proper link.
-** TODO Fix org-jsinfo message on startup of emacs                                                 :emacs:fix:
-:PROPERTIES:
-:CREATED:  [2014-12-22 ma 12:07]
-:END:
-Problems while trying to load feature `org-jsinfo'
 ** TODO Work on the modeline of emacs                                                           :emacs:build:
 :PROPERTIES:
 :CREATED:  [2014-12-20 za 11:43]
