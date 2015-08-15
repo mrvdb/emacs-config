@@ -3872,7 +3872,7 @@ and hopefully one will float to the top as being *the one*
 
     ; Sending it
     smtpmail-default-smtp-server "localhost"
-    smtpmail-smtp-service 24 ;; I use anubis for pre-processing, 24 is private mail port
+    smtpmail-smtp-service 25 ;; I used to use anubis for pre-processing, 24 is private mail port
     smtpmail-local-domain user-domain
     smtpmail-sendto-domain user-domain
     send-mail-function 'smtpmail-send-it                 ; This is for mail
