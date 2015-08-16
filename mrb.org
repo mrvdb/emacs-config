@@ -1580,7 +1580,7 @@ warrants this (for example if I think going back to an earlier version
 is a likely event).
 
 #+BEGIN_SRC emacs-lisp
-  (defconst mrb/save-idle-time 10
+  (defconst mrb/save-idle-time 30
     "Time emacs needs to be idle to trigger the save idle timer")
 
   ;; This function does the actual useful thing
