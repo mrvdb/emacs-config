@@ -3732,10 +3732,12 @@ normal text.
 #+END_SRC
 
 Having the completion pop up automatically is annoying in most cases,
-so I disable that.
+so I disable that and when the popup is there, don't require a match.
 
 #+BEGIN_SRC emacs-lisp
-(setq company-idle-delay nil)
+  (setq company-idle-delay nil)
+  (setq company-require-match 'never)
+
 #+END_SRC
 ** Ad 4. Mode specialisation
 There's always exceptions to the rule; with Emacs doubly so. Here's
