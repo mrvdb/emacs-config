@@ -1021,6 +1021,8 @@ and run =el-get-install= with the package name.
               (:name jabber                 :type git    :url     "/home/mrb/dat/src/emacs/packages/jabber.el"
                      :branch "mrb/master")
               (:name magit                  :type github :pkgname "magit/magit")
+              (:name company-emoji          :type github :pkgname "dunn/company-emoji")
+              (:name emoji-fontset          :type github :pkgname "zonuexe/emoji-fontset.el")
             )
       )
 
@@ -1251,36 +1253,18 @@ obviously) is to create a table of my own to which I can add
 characters to use certain fonts which *do* have the characters and be
 done with them.
 
-#+BEGIN_SRC emacs-lisp
-  (defun mrb/fix-fontset-font ( family from &optional to)
-    "Make characters FROM to TO come from FAMILY. The TO parameter
-  defaults to the same value as the FROM parameter. The FAMILY
-  parameter, when specified as nil defaults to 'FreeSerif'"
-    (set-fontset-font
-     t
-     (cons from (or to from))
-     (font-spec :family (or family "FreeSerif"))))
-#+END_SRC
-
 The problem with applying this function is that we need to be 'done'
 with our visual initialisation or otherwise they'll do nothing (at
 least that I can see). So, let's group our corrections in a function
 and call that when we are done with our visual (X) init.
 
 #+BEGIN_SRC emacs-lisp
+  (use-package emoji-fontset)
   (defun mrb/unicode-font-corrections()
     (interactive)
-    ;; Add a line like the following  for each char displaying improperly
-    (dolist
-        (the_char
-         (list '#x1f3d8 '#x1f3e0 '#x1f3e1   ;; 🏘 🏠 🏡
-               '#x1f435 '#x1f44d '#x1f4a9   ;; 🐵 👍 💩
-               '#x1f4ac '#x1f4de '#x1f385   ;; 💬 📞 🎅
-               '#x1f60e '#x1f60a '#x1f596   ;; 😎 😊 🖖
-               '#x1f603 '#x1f61e
-               '#x1f315 '#x1f311 '#x1f313   ;; 😃 😞
-               '#x1f50b '#x1f50c))                   ;; 🔋 🔌
-      (mrb/fix-fontset-font "Symbola" the_char)))
+
+    (message "Turning emojis on")
+    (emoji-fontset/turn-on "Symbola"))
 #+END_SRC
 
 So, when characters do not show properly, the steps to take now are:
@@ -1539,6 +1523,8 @@ extra care here.
   ;; startup emacs (through my edit script) without a filename on the cli
   (add-hook 'server-visit-hook 'mrb/run-client-settings)
 
+  ;; And we need to run those settings *now* too, when we are not in server mode
+  (mrb/run-client-settings)
 #+END_SRC
 * Buffers and files
 How do I deal with all those buffers?
@@ -3652,7 +3638,7 @@ can't it tries to complete stuff.
 In a standard emacs installation, TAB indents, depending on mode
 obviously. If indenting would not make sense, a TAB can be inserted or
 completion could start. The funciton =completion-at-point= is used in
-some situations. Ideally the =company-complet= function could take
+some situations. Ideally the =company-complete= function could take
 over in many cases. Here's a simplistic approach to get me started:
  1. if in minibuffer, do completion there like we are used to;
  2. if cursor is at the end of a symbol, try to complet it with company;
@@ -3661,7 +3647,9 @@ over in many cases. Here's a simplistic approach to get me started:
 This is probably incomplete or wrong even in some cases, but it's a start.
 
 #+BEGIN_SRC emacs-lisp
-  (use-package company)
+  (use-package company
+    :config
+    (add-to-list 'company-backends 'company-emoji))
 
   ;; Remap normal indent-for-tab-command
   (bind-key [remap indent-for-tab-command]
@@ -3670,6 +3658,8 @@ This is probably incomplete or wrong even in some cases, but it's a start.
   ;; Save the normal completion functions temporarily
   (defvar completion-at-point-functions-saved nil)
 
+  ;; Hook company completion into all normal completion functions, so it
+  ;; just is enabled everywhere
   (defun company-indent-for-tab-command (&optional arg)
     (interactive "P")
     (let ((completion-at-point-functions-saved completion-at-point-functions)
@@ -3710,7 +3700,7 @@ I had auto-complete installed for a while and this worked fine. I am
 migrating to company-mode now, as it seems a lot faster and a lot
 easier to write backends for. Also, company mode gets more praise from
 emacs users, but I recall having problems with it. Anyway, let's
-enable company-mode everywhere for everything except for some mode
+enable company-mode everywhere for everything except for some modes
 which we know lead to problems:
 
 #+BEGIN_SRC emacs-lisp
@@ -3723,7 +3713,7 @@ which we know lead to problems:
 The capf backend uses 'completion-at-point-functions' as source for
 candidates, which is what emacs by default does, so I want that in my
 backend-lists. This backend gets added automatically when emacs
-version is larger than 24.3.50. I'm not sure what the logis is behind
+version is larger than 24.3.50. I'm not sure what the logic is behind
 that, as there is no mention of it not working before that version?
 Assuming that there is a good reason, I'm not going to do anything to
 the backends list for now.
