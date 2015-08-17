@@ -18,7 +18,7 @@ to some as well. On top of that I have an auto commit hook on save
 running at the moment which does not produce the best hitory
 records. All that will change over time.
 
-* Emacs configuration                                              [1/78]                      :emacs:exclude:
+* Emacs configuration                                              [1/77]                      :emacs:exclude:
 :PROPERTIES:
 :CATEGORY: Emacs
 :END:
@@ -394,14 +394,13 @@ briefly but could not get to work properly.
 :END:
 They seem to be code conventions I don't need to know about for a long
 time.
-** Elfeed related
-*** TODO Often used filters in elfeed deserve a keybinding                                     :build:emacs:
+** TODO Often used filters in elfeed deserve a keybinding                                       :build:emacs:
 :PROPERTIES:
 :CREATED:  [2014-06-20 vr 15:58]
 :END:
 Like filtering on 'watchlater'
 
-*** TODO When pressing 'w' in elfeed, reprocess the search                                             :fix:
+** TODO When pressing 'w' in elfeed, reprocess the search                                               :fix:
 :PROPERTIES:
 :CREATED:  [2014-07-09 wo 11:04]
 :END:
