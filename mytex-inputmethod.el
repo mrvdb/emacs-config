@@ -241,13 +241,14 @@ system, including many technical ones.  Examples:
  ("\\:" ? )
  ("\\;" ? )
 
- ;;; Disable sub- and superscript rendering for now, do this in 'userland'
- ;;; ((lambda (name char)
- ;;;    (let* ((base (concat (match-string 1 name) (match-string 3 name)))
- ;;;           (basechar (cdr (assoc base (ucs-names)))))
- ;;;      (when (latin-ltx--ascii-p basechar)
- ;;;        (string (if (match-end 2) ?^ ?_) basechar))))
- ;;;  "\\(.*\\)SU\\(?:B\\|\\(PER\\)\\)SCRIPT \\(.*\\)")
+ ;; ;; This conflicts whith variable names like test_variable etc.
+ ;; ;; Wanted: \_1 -> ₁
+ ;; ((lambda (name char)
+ ;;    (let* ((base (concat (match-string 1 name) (match-string 3 name)))
+ ;;           (basechar (cdr (assoc base (ucs-names)))))
+ ;;      (when (latin-ltx--ascii-p basechar)
+ ;;        (string (if (match-end 2) ?^ ?_) basechar))))
+ ;;  "\\(.*\\)SU\\(?:B\\|\\(PER\\)\\)SCRIPT \\(.*\\)")
 
  ("^\\gamma" ?ˠ)
 
@@ -797,6 +798,8 @@ system, including many technical ones.  Examples:
  ("\\backspace" ?⌫)
  ("\\delete" ?⌦)
  ("\\plusminus" ?±)
+ ("\\_1" ?₁)
+ ("\\_2" ?₂)
  )
 
 ;;; mytext-inputmethod.el ends here
