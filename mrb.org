@@ -1448,7 +1448,7 @@ minor mode.
   (defun mrb/jabber-chat-mode-hook ()
     "Function that collects things to do when a chat-buffer is openend"
 
-    ;; First, set the adaptive wrap extra inden to skip the '[HH:MM] ' string, i.e. 9 places
+    ;; First, set the adaptive wrap extra indent to skip the '[HH:MM] ' string, i.e. 9 places
     (setq adaptive-wrap-extra-indent 8)
 
     ;; and enable the minor mode
@@ -1456,6 +1456,9 @@ minor mode.
 
     ;; And now we can happily stop truncating lines and show continuation lines
     (setq truncate-lines nil)
+
+    ;; Make our lines nicer and break at word boundaries
+    (visual-line-mode 1)
 
     ;; Make the system stuff a little less intrusive
     (set-face-attribute 'jabber-chat-prompt-system nil :foreground "dark gray" :weight 'bold))
