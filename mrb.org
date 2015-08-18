@@ -18,7 +18,7 @@ to some as well. On top of that I have an auto commit hook on save
 running at the moment which does not produce the best hitory
 records. All that will change over time.
 
-* Emacs configuration                                              [1/77]                      :emacs:exclude:
+* Emacs configuration                                              [0/82]                      :emacs:exclude:
 :PROPERTIES:
 :CATEGORY: Emacs
 :END:
@@ -786,6 +786,52 @@ In several places:
 :CREATED:  [2015-07-30 Thu 12:35]
 :END:
 Cos it's ugly
+** TODO Evaluate the predictive package
+:PROPERTIES:
+:CREATED:  [2015-08-17 Mon 12:51]
+:END:
+This predicts text when typing and can be configured as a company
+backend which I use for completion everywhere.
+
+In certain situations this may be nice for spelling assistance etc.
+
+- it seems dependent on dictionaries, what deptermines the language?
+-
+** TODO Give idle delay for company a new try
+:PROPERTIES:
+:CREATED:  [2015-08-17 Mon 12:59]
+:END:
+
+- slightly longer delay, so it does not come up when typing normally
+- if I just keep on typing without a match, remove the popup.
+** TODO Test inputting emojis in different modes
+:PROPERTIES:
+:CREATED:  [2015-08-17 Mon 11:57]
+:END:
+- orgmode (TAB is probably caught by org, so it won't complete)
+- [X] scratch buffer works, so it's configured properly
+- [ ] jabber mode (turn it ON) This will require writing a backend
+- [X] python mode checked
+- [ ] we probaly want it to be ON in mail composing modes
+-
+** TODO Look at company-jedi for python mode
+:PROPERTIES:
+:CREATED:  [2015-08-17 Mon 12:26]
+:END:
+Autocompletion
+** TODO Why not autocompletion in text-modes for the current language                            :check:read:
+:PROPERTIES:
+:CREATED:  [2015-08-15 Sat 14:53]
+:END:
+
+Based on a dictionary lookup I guess.
+** TODO In jabber chat, give the jid a different color in the statusbare                              :build:
+:PROPERTIES:
+:CREATED:  [2015-07-21 Tue 21:56]
+:END:
+At least the muc part.
+
+Goal: see quicker in which room i am.
 * Preparing for lift-off
 The base of the emacs configuration is in the =~/.emacs.d/= directory,
 so add this to my loadpaths first and give it a name.
