@@ -1866,6 +1866,10 @@ emacsclient --eval '(mrb/capture-todo)'
 emacsclient --eval '(mrb/capture-buy)'
 #+END_SRC
 
+#+BEGIN_SRC sh :exports code :tangle ~/bin/capture-twist.sh :shebang #!/bin/sh
+emacsclient --eval '(mrb/capture-twist)'
+#+END_SRC
+
 By default C-c C-c ends the capture, but is normally the shortcut to
 enter tags, so I define a shortcut to define tags while capturing.
 
