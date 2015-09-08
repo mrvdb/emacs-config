@@ -832,6 +832,13 @@ Based on a dictionary lookup I guess.
 At least the muc part.
 
 Goal: see quicker in which room i am.
+** TODO As XResources are mostly about colors, enable rainbow mode automatically                      :build:
+:PROPERTIES:
+:CREATED:  [2015-04-07 di 15:40]
+:END:
+
+Meaning, run rainbow-mode on conf-xdefaults-mode-hook
+
 * Preparing for lift-off
 The base of the emacs configuration is in the =~/.emacs.d/= directory,
 so add this to my loadpaths first and give it a name.
