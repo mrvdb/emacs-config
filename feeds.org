@@ -26,6 +26,8 @@ This has a number of attractive properties:
 **** https://kimmo.suominen.com/stuff/dilbert-daily.xml						       :comic:
 **** http://www.nu.nl/feeds/rss/de-jager.rss							       :comic:
 **** http://www.commitstrip.com/en/feed/						   :comic:programming:
+*** News
+**** http://www.yopmail.com/en/rssfeed.php?login=sajiverup-6473&h=55c32248db074193008707
 *** Cobra											       :cobra:
 **** http://gd427cobrabuild.blogspot.com/feeds/posts/default
 **** http://buildingmycobra.blogspot.com/feeds/posts/default
@@ -73,12 +75,13 @@ This has a number of attractive properties:
 **** https://www.yubico.com/feed/								    :security:
 *** People
 **** http://julien.danjou.info/blog/index.xml							      :people:
-**** http://mrblog.nl/feed									   :people:me:
+**** https://mrblog.nl/feed 									   :people:me:
 **** http://torvalds-family.blogspot.com/feeds/posts/default					      :people:
 **** http://esr.ibiblio.org/?feed=atom								      :people:
 **** http://feeds.feedburner.com/JuanReyero							      :people:
 **** http://feeds.feedburner.com/wyome								      :people:
 **** http://blog.sarine.nl/feed/index.xml
+**** http://heikkil.github.io/rss.xml
 *** Automotive
 **** http://feeds.feedburner.com/TheChicane							   :oldschool:
 **** http://www.gearjournal.com/feed/
