@@ -29,3 +29,8 @@ mrb.el
 /image-dired/
 /var/
 /wl.el
+/ido.last
+/places
+/smex-items
+/bookmarks
+request
