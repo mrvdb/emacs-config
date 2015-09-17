@@ -4372,82 +4372,103 @@ edit -e '(mrb/capture-pump)'
 XMPP related settings, including interfacing it to other systems
 
 #+BEGIN_SRC emacs-lisp
-  (use-package jabber
-    :init
-    ;; My accounts
-    ;; The ',' makes sure the user-xmpp-account gets evaluated
-    (setq jabber-account-list
-          `((,user-xmpp-account (:connection-type . starttls))))
+    (use-package jabber
+      :init
+      ;; My accounts
+      ;; The ',' makes sure the user-xmpp-account gets evaluated
+      (setq jabber-account-list
+            `((,user-xmpp-account (:connection-type . starttls))))
 
-    :config
-    (progn
-      ;; Show some info in the modeline
-      (jabber-mode-line-mode 1)
+      :config
+      (progn
+        ;; Show some info in the modeline
+        (jabber-mode-line-mode 1)
 
-      ;; Configuration variables
-      (setq
-       jabber-show-offline-contacts nil
-       jabber-default-priority 30
-       jabber-alert-message-hooks (quote
-                                   (jabber-message-libnotify
-                                    jabber-message-echo
-                                    jabber-message-awesome
-                                    jabber-message-wave
-                                    jabber-message-scroll))
-       jabber-message-alert-same-buffer nil
-       jabber-roster-show-bindings nil
-       jabber-auto-reconnect t
-       jabber-chat-buffer-format "*-chat-%n-*"
-       jabber-groupchat-buffer-format "*-groupchat-%n-*"
-       jabber-muc-colorize-foreign t
-       jabber-muc-colorize-local t
-       jabber-muc-disable-disco-check t
-       jabber-muc-private-buffer-format "*-muc-priv-%g-%n-*"
-       jit-lock-stealth-time 16
-       jabber-show-resources 'sometimes
-       jabber-resource-line-format "         %j/%r%S [%p]"
-       jabber-roster-buffer "*-roster-*"
-       jabber-roster-line-format "  %u %a %-25n - %S"
-       jabber-roster-show-title nil
-       jabber-roster-subscription-display (quote
-                                           (("none" . "   ")
-                                            ("from" . "← ")
-                                            ("to" . " →")
-                                            ("both" . "←→")))
-       jabber-socks5-proxies (quote ("proxy.hsdev.com"))
-       jabber-vcard-avatars-retrieve nil
-       jabber-muc-disable-disco-check t
-       jabber-muc-colorize-foreign t
-       jabber-muc-colorize-local t
-       jabber-muc-nick-saturation 0.35 ;; empirical value, suitable for my theme
-       jabber-muc-nick-value 0.75
+        ;; Configuration variables
+        (setq
+         jabber-show-offline-contacts nil
+         jabber-default-priority 30
+         jabber-alert-message-hooks (quote
+                                     (jabber-message-libnotify
+                                      jabber-message-echo
+                                      jabber-message-awesome
+                                      jabber-message-wave
+                                      jabber-message-scroll))
+         jabber-message-alert-same-buffer nil
+         jabber-roster-show-bindings nil
+         jabber-auto-reconnect t
+         jabber-chat-buffer-format "*-chat-%n-*"
+         jabber-groupchat-buffer-format "*-groupchat-%n-*"
+         jabber-muc-colorize-foreign t
+         jabber-muc-colorize-local t
+         jabber-muc-disable-disco-check t
+         jabber-muc-private-buffer-format "*-muc-priv-%g-%n-*"
+         jit-lock-stealth-time 16
+         jabber-show-resources 'sometimes
+         jabber-resource-line-format "         %j/%r%S [%p]"
+         jabber-roster-buffer "*-roster-*"
+         jabber-roster-line-format "  %u %a %-25n - %S"
+         jabber-roster-show-title nil
+         jabber-roster-subscription-display (quote
+                                             (("none" . "   ")
+                                              ("from" . "← ")
+                                              ("to" . " →")
+                                              ("both" . "←→")))
+         jabber-socks5-proxies (quote ("proxy.hsdev.com"))
+         jabber-vcard-avatars-retrieve nil
+         jabber-muc-disable-disco-check t
+         jabber-muc-colorize-foreign t
+         jabber-muc-colorize-local t
+         jabber-muc-nick-saturation 0.35 ;; empirical value, suitable for my theme
+         jabber-muc-nick-value 0.75
 
-       ;; Make the MUCs
-       jabber-muc-show-affiliation-changes nil
-       jabber-muc-show-enter-presence nil
-       jabber-muc-show-leave-messages nil
-       jabber-muc-show-role-changes nil
-       )
+         ;; Make the MUCs
+         jabber-muc-show-affiliation-changes nil
+         jabber-muc-show-enter-presence nil
+         jabber-muc-show-leave-messages nil
+         jabber-muc-show-role-changes nil
+         )
 
 
-      ;; C-j is the prefix for all jabber command in the C-x map (so, C-x C-j precede all commands for jabber)
-      ;; The default C-x map for emacs has a C-j entry which binds it to
-      ;; dired-jump. This gets in the way of all the keyboard shortcuts for
-      ;; jabber, so lets re-call the definition here, so we are sure we get
-      ;; them.
+        ;; C-j is the prefix for all jabber command in the C-x map (so, C-x C-j precede all commands for jabber)
+        ;; The default C-x map for emacs has a C-j entry which binds it to
+        ;; dired-jump. This gets in the way of all the keyboard shortcuts for
+        ;; jabber, so lets re-call the definition here, so we are sure we get
+        ;; them.
 
-      (bind-key "C-j" jabber-global-keymap ctl-x-map)
+        (bind-key "C-j" jabber-global-keymap ctl-x-map)
 
-      ;; Do not steal my focus in the mini buffer
-      ;; Message alert hooks
-      (define-jabber-alert echo "Show a message in the echo area"
-        (lambda (msg)
-          (unless (minibuffer-prompt)
-            (message "%s" msg))))
-)
+        ;; Do not steal my focus in the mini buffer
+        ;; Message alert hooks
+        (define-jabber-alert echo "Show a message in the echo area"
+          (lambda (msg)
+            (unless (minibuffer-prompt)
+              (message "%s" msg))))
 
-    :bind
-    ("C-c C-SPC" . jabber-activity-switch-to))
+        ;; Define a company backend
+        (defun company-jabber(command &optional arg &rest ignored)
+          (interactive (list 'interactive))
+          (cl-case command
+            ;; If called interactively, start the backend
+            (interactive (company-begin-backend 'company-jabber-muc-backend))
+            ;; Try to get the prefix in jabber-chat-mode
+            (prefix (and (eq major-mode 'jabber-chat-mode)
+                         (company-grab-symbol)))
+            ;; Getting candidates, remove non-matches from list
+            (candidates
+             (cl-remove-if-not
+              (lambda (c) (string-prefix-p arg c))
+              (jabber-muc-nicknames)))
+            ;; We have inserted candidate in the buffer, augment it with ': '
+            (post-completion (insert ": "))))
+        (add-to-list 'company-backends 'company-jabber)
+        (bind-key "<tab>" 'company-complete jabber-chat-mode-map)
+
+  )
+
+      :bind
+      ("C-c C-SPC" . jabber-activity-switch-to))
+
 #+END_SRC
 ** Twister
 Twister is a p2p microblogging application based on
