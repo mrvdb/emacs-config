@@ -138,6 +138,8 @@
  '(org-blocker-ignore-ancestor-siblings t)
  '(org-clock-x11idle-program-name "xprintidle")
  '(org-closed-keep-when-no-todo t)
+ '(org-contacts-files (quote ("~/dat/org/odoo-contacts.org")))
+ '(org-contacts-icon-use-gravatar nil)
  '(org-entities-user (quote (("cmd" "\\cmd{}" nil "⌘" "⌘" "⌘" "⌘"))))
  '(org-export-backends (quote (ascii html icalendar latex md odt org texinfo)))
  '(org-export-copy-to-kill-ring (quote if-interactive))

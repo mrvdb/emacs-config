@@ -3992,6 +3992,11 @@ and hopefully one will float to the top as being *the one*
 
   ;;(add-hook 'message-mode-hook 'orgstruct++-mode 'append)
   (add-hook 'message-mode-hook 'turn-on-auto-fill 'append)
+  (require 'org-contacts)
+
+  ;; While I'm pretty sure that bluntly rebinding tab is not
+  ;; the proper way to do this, it's the only thing i got working.
+  (bind-key "<tab>" 'company-complete message-mode-map)
 #+END_SRC
 
 Composing mail is often an /out of band/ activity, like creating a dent
