@@ -18,7 +18,7 @@ to some as well. On top of that I have an auto commit hook on save
 running at the moment which does not produce the best hitory
 records. All that will change over time.
 
-* Emacs configuration                                              [0/82]                      :emacs:exclude:
+* Emacs configuration                                              [1/84]                      :emacs:exclude:
 :PROPERTIES:
 :CATEGORY: Emacs
 :END:
@@ -93,9 +93,6 @@ or better, vice versa, so the cursor does not move.
 This is obviously a more ongoing task than a single one. The task(s)
 here should be what to do to reach the goal of learning the Emacs'
 regular expression syntax.
-
-
-
 *** TODO Integrate them into workflow (like defining keyboard shortcuts for them)
 :PROPERTIES:
 :END:
@@ -772,6 +769,12 @@ matching paren highlight.
 :PROPERTIES:
 :CREATED:  [2015-04-12 zo 14:13]
 :END:
+- space steps
+
+Questions:
+- how can we stop debugging
+- breakpoint list?
+-
 ** TODO Add quick shortcuts for actions that need to happen for today.                          :build:emacs:
 :PROPERTIES:
 :CREATED:  [2015-07-30 Thu 12:37]
@@ -839,6 +842,20 @@ Goal: see quicker in which room i am.
 
 Meaning, run rainbow-mode on conf-xdefaults-mode-hook
 
+** TODO Look at shackle for emacs window management                                                    :read:
+:PROPERTIES:
+:CREATED:  [2015-09-09 wo 10:21]
+:END:
+https://github.com/wasamasa/shackle
+** TODO Construct a bootable usb system with emacs on it, rsynced  with my config on the main machine :build:
+:PROPERTIES:
+:CREATED:  [2012-10-10 wo 19:49]
+:END:
+Idea is to take this with me and be able to test out keyboards
+whenever I want.
+
+Ideally, having a usb powered pocketsize computer would be even
+better.
 * Preparing for lift-off
 The base of the emacs configuration is in the =~/.emacs.d/= directory,
 so add this to my loadpaths first and give it a name.
@@ -1064,8 +1081,6 @@ and run =el-get-install= with the package name.
               (:name guide-key              :type github :pkgname "kbkbkbkb1/guide-key")
               (:name org-screenshot         :type github :pkgname "dfeich/org-screenshot")
               (:name json-rpc               :type github :pkgname "skeeto/elisp-json-rpc")
-              (:name btcticker              :type github :pkgname "niedbalski/emacs-btc-ticker"
-                     :depends request)
               (:name ws-butler              :type github :pkgname "lewang/ws-butler")
               (:name wrap-region            :type github :pkgname "rejeep/wrap-region.el")
               (:name vlc                    :type github :pkgname "mrvdb/vlc.el")
@@ -1090,7 +1105,8 @@ and run =el-get-install= with the package name.
                   flycheck pkg-info perspective ido-vertical-mode jekyll-el org2blog
                   identica-mode php-mode company-mode csv-mode notmuch use-package
                   git-timemachine eimp litable diminish paredit fullframe wanderlust avy
-                  adaptive-wrap elpy ggtags fill-column-indicator plantuml-mode free-keys)
+                  adaptive-wrap elpy ggtags fill-column-indicator plantuml-mode free-keys
+                  pdf-tools)
 
            ;; the sources we have configured above
            (mapcar 'el-get-as-symbol (mapcar 'el-get-source-name el-get-sources))))
@@ -1229,7 +1245,11 @@ done with them if possible
 
 #+BEGIN_SRC emacs-lisp
   (use-package sudo-save)
+#+END_SRC
 
+Using pdf-tools for PDF handling
+#+BEGIN_SRC emacs-lisp
+  (pdf-tools-install)
 #+END_SRC
 * Internationalisation and multi-language features
 If anything multi-language should work, UTF-8 encoding is a must, so
@@ -4533,6 +4553,7 @@ imported my feeds from RSSyl
 
 #+BEGIN_SRC emacs-lisp
   (use-package vlc)  ;; Needs my little hack from https://github.com/mrvrb/vlc.el
+  (use-package async) ;; This is for elfeed, why not add it as dependency there?
   (use-package elfeed
     :init
     (progn
