@@ -4133,6 +4133,43 @@ same as the mailto handler.
 edit -e '(mrb/make-mailcompose-frame)'
 #+END_SRC
 
+I've also configured claws in such a way that it can embed an editor
+in the compose screen, which means that it gets a temporary file with
+contents from claws. I define some stuff here that makes sure I get
+into the proper configuration when that gets called:
+
+#+BEGIN_SRC emacs-lisp
+  ;; Files opened from the tmp folder of claws are messages
+  (pushnew '("/home/mrb/.claws-mail/tmp/" . message-mode) auto-mode-alist)
+
+  (require 'org-faces)
+  ;; First quote level
+  (set-face-attribute 'message-cited-text nil :inherit 'org-level-1)
+
+  ;; Face for second level of quoting
+  (defface message-double-quoted-text-face
+    '((t (:inherit org-level-2)))
+    "Face for quotations in email")
+
+  ;; Face for third and higher level of quoting
+  (defface message-multiply-quoted-text-face
+    '((t (:inherit org-level-3)))
+    "Face for quotations in email")
+
+  (add-hook 'message-mode-hook
+            (lambda ()
+              (font-lock-add-keywords nil
+                                      '(("^[ \t]*>[ \t]*>[ \t]*>.*$"
+                                         (0 'message-multiply-quoted-text-face))
+                                        ("^[ \t]*>[ \t]*>.*$"
+                                         (0 'message-double-quoted-text-face))))))
+  ;;
+  ;; TODO
+  ;; - hide other files from sight?
+  ;; - remove the modeline?
+
+#+END_SRC
+
 *** GNUS
 GNUS warrants its own chapter for configuration, as it is somewhat
 /different/ from other clients. This is my story of gnus.
