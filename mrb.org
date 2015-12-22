@@ -4023,7 +4023,7 @@ and hopefully one will float to the top as being *the one*
   (setq password-cache-expiry 28800) ; default is 16 seconds, which is ridiculously low
   (use-package smtpmail)
 
-  ;;(add-hook 'message-mode-hook 'orgstruct++-mode 'append)
+  (add-hook 'message-mode-hook 'orgstruct++-mode 'append)
   (add-hook 'message-mode-hook 'turn-on-auto-fill 'append)
   (require 'org-contacts)
 
