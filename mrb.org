@@ -1106,7 +1106,7 @@ and run =el-get-install= with the package name.
                   identica-mode php-mode company-mode csv-mode notmuch use-package
                   git-timemachine eimp litable diminish paredit fullframe wanderlust avy
                   adaptive-wrap elpy ggtags fill-column-indicator plantuml-mode free-keys
-                  pdf-tools)
+                  pdf-tools hamlet-mode zeal-at-point flycheck-haskell)
 
            ;; the sources we have configured above
            (mapcar 'el-get-as-symbol (mapcar 'el-get-source-name el-get-sources))))
@@ -4770,8 +4770,31 @@ and showing syntax errors.
     :config
     (progn
       (setq haskell-font-lock-symbols t)))
+#+END_SRC
 
+Because the haskell environment can be different for each project, we
+need a way to adjust to that for certain things. One such thing is
+flycheck which will give false-negatives when checking haskell files
+if the specific build environment is not taken into account. The
+package flycheck-haskell automatically adjusts flycheck.
 
+#+BEGIN_SRC emacs-lisp
+  (use-package flycheck-haskell)
+
+  (eval-after-load 'flycheck
+    '(add-hook 'flycheck-mode-hook #'flycheck-haskell-setup))
+#+END_SRC
+
+For creating web apps I use yesod, which is supported by a number of
+packages
+#+BEGIN_SRC emacs-lisp
+  ;; Yesod's html like files
+  (use-package hamlet-mode)
+
+  ;; TODO: this is not Haskell specific
+  (use-package zeal-at-point)
+  (bind-key "s-d" 'zeal-at-point)
+  ;;
 #+END_SRC
 ** Python
 Python is an indent aware language, wich saves quite a bit of fiddling
