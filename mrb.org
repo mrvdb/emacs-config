@@ -18,7 +18,7 @@ to some as well. On top of that I have an auto commit hook on save
 running at the moment which does not produce the best hitory
 records. All that will change over time.
 
-* Emacs configuration                                              [1/84]                      :emacs:exclude:
+* Emacs configuration                                              [0/83]                      :emacs:exclude:
 :PROPERTIES:
 :CATEGORY: Emacs
 :END:
@@ -37,6 +37,13 @@ current behaviour (insert a newline) what I want is the following:
 
 Basically, ignore everything befor the section content and do a
 newline.
+** TODO Make inventory for emacs 25 migration
+:PROPERTIES:
+:CREATED:  [2015-12-06 zo 16:55]
+:END:
+- font in elfeed is different
+- most obbious things seem to work fine
+-
 ** TODO I would like to have a global statusline in emacs
 :PROPERTIES:
 :CREATED:  [2015-07-29 Wed 13:08]
@@ -52,6 +59,10 @@ buffer:
 These are more suitable to have in an area which is always visible,
 regardless of buffer.
 (Like a status bar in other applications)
+
+Questions:
+- how would I see what the active window is?
+-
 ** TODO epub export from org-mode
 :PROPERTIES:
 :CREATED:  [2015-05-08 vr 13:41]
@@ -102,15 +113,6 @@ regular expression syntax.
 :END:
 This is now becoming less important, unfortunately I'm using xmpp
 less and less in favour of Telegram.
-
-** TODO Set up ediff as default merge tool instead of meld                                            :build:
-:PROPERTIES:
-:CREATED:  [2013-01-24 do 20:28]
-:END:
-There are some instructions online on how to set this up
-
-- main: how to teach git (or magit) to have ediff as default tool
-- how does a 3-way merge work in ediff, try this first
 
 ** TODO Er moet een geluid aan jabber notificaties worden gekoppeld, anders mis ik ze             :build:fix:
 :PROPERTIES:
@@ -191,13 +193,6 @@ http://web-mode.org
 :CREATED:  [2013-06-06 do 10:37]
 :END:
 The idea is that I want to keep custom.el to a minimum.
-** TODO Reconsider C-x C-q shortcut, because this is already used in some modes (dired for example)   :check:
-:PROPERTIES:
-:CREATED:  [2013-06-13 do 13:36]
-:END:
-Looking at it, it aint that bad. Perhaps we should modify other modes
-shortcuts?
-
 ** TODO Create /align counters/ function, like org-align-tags                                   :build:emacs:
 :PROPERTIES:
 :CREATED:  [2013-06-29 za 13:34]
@@ -355,15 +350,6 @@ code.
           ad-do-it)))))
 #+END_SRC
 
-** TODO Look into portable emacs
-:PROPERTIES:
-:CREATED:  [2014-02-08 za 07:27]
-:END:
-Idea: stick in a usb stick and have a familiar emacs.
-
-- probably needs some form of live disk with linux
-- rsync config from main machine?
-- usecases, or just for having around for emergencies?
 ** TODO Make highlighting the selection in company-active-mode stand out more                           :fix:
 :PROPERTIES:
 :CREATED:  [2014-04-23 wo 12:18]
@@ -542,6 +528,161 @@ be expanded.
 :END:
 - you should have ;;; Code section
 - file ends here stuff
+** TODO Make sure that marked region overlays trump matching paren overlays                       :fix:emacs:
+:PROPERTIES:
+:CREATED:  [2015-05-09 za 11:07]
+:END:
+
+Usecase:
+expand region sequence marks something that is in between parentheses,
+the region is marked, but it is not visibly distiniguishable from a
+matching paren highlight.
+** TODO make λ be the notation for lamda-functions                                                    :build:
+:PROPERTIES:
+:CREATED:  [2015-04-15 wo 17:31]
+:END:
+- elisp
+- python (?)
+- haskell
+** TODO Get C-c C-c to work on haskell source blocks with results inline                                :fix:
+:PROPERTIES:
+:CREATED:  [2015-04-15 wo 17:30]
+:END:
+** TODO Learn edebug                                                                                  :learn:
+:PROPERTIES:
+:CREATED:  [2015-04-12 zo 14:13]
+:END:
+- space steps
+
+Questions:
+- how can we stop debugging
+- breakpoint list?
+-
+** TODO Add quick shortcuts for actions that need to happen for today.                          :build:emacs:
+:PROPERTIES:
+:CREATED:  [2015-07-30 Thu 12:37]
+:END:
+
+In several places:
+1. capture like normal, but immediately schedule for today
+2. on an existing item, quickly schedule for today.
+
+** TODO The inactive modeline has the same color as the org agenda header, fix this.              :fix:emacs:
+:PROPERTIES:
+:CREATED:  [2015-07-30 Thu 12:35]
+:END:
+Cos it's ugly
+** TODO Evaluate the predictive package
+:PROPERTIES:
+:CREATED:  [2015-08-17 Mon 12:51]
+:END:
+This predicts text when typing and can be configured as a company
+backend which I use for completion everywhere.
+
+In certain situations this may be nice for spelling assistance etc.
+
+- it seems dependent on dictionaries, what deptermines the language?
+-
+** TODO Give idle delay for company a new try
+:PROPERTIES:
+:CREATED:  [2015-08-17 Mon 12:59]
+:END:
+
+- slightly longer delay, so it does not come up when typing normally
+- if I just keep on typing without a match, remove the popup.
+** TODO Test inputting emojis in different modes
+:PROPERTIES:
+:CREATED:  [2015-08-17 Mon 11:57]
+:END:
+- orgmode (TAB is probably caught by org, so it won't complete)
+- [X] scratch buffer works, so it's configured properly
+- [ ] jabber mode (turn it ON) This will require writing a backend
+- [X] python mode checked
+- [ ] we probaly want it to be ON in mail composing modes
+-
+** TODO Look at company-jedi for python mode
+:PROPERTIES:
+:CREATED:  [2015-08-17 Mon 12:26]
+:END:
+Autocompletion
+** TODO Why not autocompletion in text-modes for the current language                            :check:read:
+:PROPERTIES:
+:CREATED:  [2015-08-15 Sat 14:53]
+:END:
+
+Based on a dictionary lookup I guess.
+** TODO In jabber chat, give the jid a different color in the statusbare                              :build:
+:PROPERTIES:
+:CREATED:  [2015-07-21 Tue 21:56]
+:END:
+At least the muc part.
+
+Goal: see quicker in which room i am.
+** TODO As XResources are mostly about colors, enable rainbow mode automatically                      :build:
+:PROPERTIES:
+:CREATED:  [2015-04-07 di 15:40]
+:END:
+
+Meaning, run rainbow-mode on conf-xdefaults-mode-hook
+
+** TODO Look at shackle for emacs window management                                                    :read:
+:PROPERTIES:
+:CREATED:  [2015-09-09 wo 10:21]
+:END:
+https://github.com/wasamasa/shackle
+
+It provides rules based functionality for controlling 'popup' windows
+in Emacs. Based on regualar expression matching the size and position
+of new windows (buffers) which appear can be controlled.
+
+Example:
+Help windows always appear on the bottom, with a height of 30 lines.
+
+It's a nice extension, not sure I want to configure this at this time
+until I gather a number of usecases.
+
+Usecases:
+- help windows always at the same location, relative to the
+  'requesting' buffer, so the information is visible. When closing the
+  help window, the original window arrangement should be restored
+- magit commit window on top half with the diff in lower half
+- customize screens split horizontally
+- the org agenda is auto-adjusting to its contents, and shows on the
+  bottom
+-
+** TODO Look into portable emacs
+:PROPERTIES:
+:CREATED:  [2014-02-08 za 07:27]
+:END:
+Idea: stick in a usb stick and have a familiar emacs.
+
+- probably needs some form of live disk with linux
+- rsync config from main machine?
+- usecases, or just for having around for emergencies?
+** INFO much better integration of emacs into social systems
+:PROPERTIES:
+:CREATED:  [2015-05-08 vr 13:43]
+:END:
+Feature that should have a low threshold:
+- post a link to social networks
+- reply to a posting
+- get the friends timeline
+- create a posting.
+
+Networks I am involved in:
+- pump.io :: mrb@qua.name
+- twitter :: @mrvdb
+- gnu-social :: mrb@o.mrblog.nl
+- twister :: mrb
+
+Of these only twitter and gnu-social have bidirectional gateway which
+makes them effectively one network.
+
+Ideal situation for me:
+1. one integrated timeline
+2. reply goes to author, no need to be public
+3. use one api to talk to (the xmpp gateway metaphor)
+
 ** INFO Email handling
 There is one major component which I would like to configure inside
 emacs and that is reading email. At this time I am using claws mail
@@ -721,141 +862,13 @@ news rather than mail. This takes some getting used to.
 2. Make sure the email backend I use is stable and does not change
    while doing the hard work with GNUs;
 3.
-** INFO much better integration of emacs into social systems
+** TODO Document emacs tip somewhere                                                                  :write:
 :PROPERTIES:
-:CREATED:  [2015-05-08 vr 13:43]
+:CREATED:  [2015-12-03 do 11:39]
 :END:
-Feature that should have a low threshold:
-- post a link to social networks
-- reply to a posting
-- get the friends timeline
-- create a posting.
-
-Networks I am involved in:
-- pump.io :: mrb@qua.name
-- twitter :: @mrvdb
-- gnu-social :: mrb@o.mrblog.nl
-- twister :: mrb
-
-Of these only twitter and gnu-social have bidirectional gateway which
-makes them effectively one network.
-
-Ideal situation for me:
-1. one integrated timeline
-2. reply goes to author, no need to be public
-3. use one api to talk to (the xmpp gateway metaphor)
-
-** TODO Make sure that marked region overlays trump matching paren overlays                       :fix:emacs:
-:PROPERTIES:
-:CREATED:  [2015-05-09 za 11:07]
-:END:
-
-Usecase:
-expand region sequence marks something that is in between parentheses,
-the region is marked, but it is not visibly distiniguishable from a
-matching paren highlight.
-** TODO make λ be the notation for lamda-functions                                                    :build:
-:PROPERTIES:
-:CREATED:  [2015-04-15 wo 17:31]
-:END:
-- elisp
-- python (?)
-- haskell
-** TODO Get C-c C-c to work on haskell source blocks with results inline                                :fix:
-:PROPERTIES:
-:CREATED:  [2015-04-15 wo 17:30]
-:END:
-** TODO Learn edebug                                                                                  :learn:
-:PROPERTIES:
-:CREATED:  [2015-04-12 zo 14:13]
-:END:
-- space steps
-
-Questions:
-- how can we stop debugging
-- breakpoint list?
--
-** TODO Add quick shortcuts for actions that need to happen for today.                          :build:emacs:
-:PROPERTIES:
-:CREATED:  [2015-07-30 Thu 12:37]
-:END:
-
-In several places:
-1. capture like normal, but immediately schedule for today
-2. on an existing item, quickly schedule for today.
-
-** TODO The inactive modeline has the same color as the org agenda header, fix this.              :fix:emacs:
-:PROPERTIES:
-:CREATED:  [2015-07-30 Thu 12:35]
-:END:
-Cos it's ugly
-** TODO Evaluate the predictive package
-:PROPERTIES:
-:CREATED:  [2015-08-17 Mon 12:51]
-:END:
-This predicts text when typing and can be configured as a company
-backend which I use for completion everywhere.
-
-In certain situations this may be nice for spelling assistance etc.
-
-- it seems dependent on dictionaries, what deptermines the language?
--
-** TODO Give idle delay for company a new try
-:PROPERTIES:
-:CREATED:  [2015-08-17 Mon 12:59]
-:END:
-
-- slightly longer delay, so it does not come up when typing normally
-- if I just keep on typing without a match, remove the popup.
-** TODO Test inputting emojis in different modes
-:PROPERTIES:
-:CREATED:  [2015-08-17 Mon 11:57]
-:END:
-- orgmode (TAB is probably caught by org, so it won't complete)
-- [X] scratch buffer works, so it's configured properly
-- [ ] jabber mode (turn it ON) This will require writing a backend
-- [X] python mode checked
-- [ ] we probaly want it to be ON in mail composing modes
--
-** TODO Look at company-jedi for python mode
-:PROPERTIES:
-:CREATED:  [2015-08-17 Mon 12:26]
-:END:
-Autocompletion
-** TODO Why not autocompletion in text-modes for the current language                            :check:read:
-:PROPERTIES:
-:CREATED:  [2015-08-15 Sat 14:53]
-:END:
-
-Based on a dictionary lookup I guess.
-** TODO In jabber chat, give the jid a different color in the statusbare                              :build:
-:PROPERTIES:
-:CREATED:  [2015-07-21 Tue 21:56]
-:END:
-At least the muc part.
-
-Goal: see quicker in which room i am.
-** TODO As XResources are mostly about colors, enable rainbow mode automatically                      :build:
-:PROPERTIES:
-:CREATED:  [2015-04-07 di 15:40]
-:END:
-
-Meaning, run rainbow-mode on conf-xdefaults-mode-hook
-
-** TODO Look at shackle for emacs window management                                                    :read:
-:PROPERTIES:
-:CREATED:  [2015-09-09 wo 10:21]
-:END:
-https://github.com/wasamasa/shackle
-** TODO Construct a bootable usb system with emacs on it, rsynced  with my config on the main machine :build:
-:PROPERTIES:
-:CREATED:  [2012-10-10 wo 19:49]
-:END:
-Idea is to take this with me and be able to test out keyboards
-whenever I want.
-
-Ideally, having a usb powered pocketsize computer would be even
-better.
+ Emacs tip: If your instance hangs and won't respond to C-g, you
+    can use `pkill -SIGUSR2 emacs` to force emacs to stop whatever
+    it's doing.
 * Preparing for lift-off
 The base of the emacs configuration is in the =~/.emacs.d/= directory,
 so add this to my loadpaths first and give it a name.
@@ -4878,6 +4891,7 @@ This particular setting is for eshell git completion:
    (t
     (while (pcomplete-here (pcomplete-entries))))))
 #+END_SRC
+
 *** Magit
 For most, if not all development work (and some other work too) I use
 git as the revision control system. In emacs that translates to useing
