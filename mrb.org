@@ -4196,9 +4196,11 @@ to it.
 So, let's begin by enabling imap as the selection method.
 
 #+BEGIN_SRC emacs-lisp
+(require 'nnir)
+
     (setq gnus-select-method
       '(nnimap "hsd"
-               (nnimap-address "imap.hsdev.com")
+               (nnimap-address "t510")
                (nnimap-server-port 993)
                (nnimap-stream ssl)))
 #+END_SRC
@@ -4207,6 +4209,62 @@ This, in combination with a line in .authinfo.gpg which holds the
 authentication info is enough to get things rolling. The initial
 connect subscribes to all my mail folders and shows them in a
 group window.
+
+Now we have gnus running, let's make the summary line to my liking.
+#+BEGIN_SRC emacs-lisp
+  (setq-default
+       gnus-summary-thread-gathering-function 'gnus-gather-threads-by-references
+       gnus-thread-sort-functions '(gnus-thread-sort-by-date)
+       gnus-sum-thread-tree-false-root      "◌"
+       gnus-sum-thread-tree-indent          " "
+       gnus-sum-thread-tree-single-indent   "○"
+       gnus-sum-thread-tree-root            "○"
+       gnus-sum-thread-tree-vertical        "│"
+       gnus-sum-thread-tree-leaf-with-other "├►"
+       gnus-sum-thread-tree-single-leaf     "╰►"
+       gnus-summary-display-arrow t
+       )
+
+
+  ;; Cobble up a set of conditions how to display the date
+  (setq gnus-user-date-format-alist
+            '(((gnus-seconds-today) . "%H:%M")
+              ((+ 86400 (gnus-seconds-today)) . "Gisteren, %H:%M")
+              (604800 . "%A %H:%M") ;;that's one week
+              ((gnus-seconds-month) . "%A %d")
+              ((gnus-seconds-year) . "%d %B")
+              (t . "%d %B %Y")))
+  ;; Or use something simple like this
+  (setq gnus-user-date-format-alist
+     '((t . "%Y-%m-%d")))
+
+
+
+  ;; Line in the summary buffer qin words:
+  ;; UnreadMarker,SecondaryMarker Treegraph
+  ;; precisely 30 chars for the name
+  ;; precisely 80 chars for the subject (highlight on hover)
+  ;; hard tabulate to pos 115
+  ;; insert user-date
+  (setq gnus-summary-line-format
+        (concat "%U%R %B %~(max-right 30)~(pad-right 30)n "
+                "%(%~(max-right 80)~(pad-right 80)s%) %-115= %&user-date;\n"))
+
+  (defvar *mrb-mails*
+    "marcel@hsdev\\.com\\|mrb@hsdev\\.com\\|m@rcel\\.hsdev\\.com")
+
+  (defun gnus-user-format-function-j (headers)
+    (let ((to (gnus-extra-header 'To headers)))
+      (if (string-match *mrb-mails* to)
+          (if (string-match "," to) "~" "»")
+          (if (or (string-match *mrb-mails*
+                                (gnus-extra-header 'Cc headers))
+                  (string-match *mrb-mails*
+                                (gnus-extra-header 'BCc headers)))
+              "~"
+              " "))))
+
+#+END_SRC
 *** Notmuch
 Not having used GNUS enough to be comfortable, notmuch seems a route
 which can be taken somewhat easier. The compose part of emails is,
