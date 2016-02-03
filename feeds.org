@@ -44,7 +44,6 @@ This has a number of attractive properties:
 **** http://cobnut.blogspot.com/feeds/posts/default
 **** https://cobra.mrblog.nl/feed 									  :me:
 *** Bitcoin											     :bitcoin:
-**** http://feeds.feedburner.com/TheDailyBitcoinShow
 *** Software
 **** http://nva-openerp.blogspot.com/feeds/posts/default						:odoo:
 **** http://esr.ibiblio.org/?feed=atom&tag=gpsd								:gpsd:
@@ -53,8 +52,9 @@ This has a number of attractive properties:
 **** http://blog.prosody.im/feed/atom.xml
 **** https://odoo-community.org/blog_rss.xml								:odoo:
 **** http://www.yesodweb.com/feed
+**** http://planet.haskell.org/atom.xml
+**** http://aherrmann.github.io/atom.xml
 **** Emacs											       :emacs:
-***** entry-title: \(emacs\|org-mode\)
 ***** http://whattheemacsd.com/atom.xml
 ***** http://www.garron.me/en/atom.xml							       :people:jekyll:
 ***** http://technomancy.us/feed/atom.xml							      :people:
@@ -69,9 +69,9 @@ This has a number of attractive properties:
 ***** http://emacsnyc.org/atom.xml
 ***** http://www.howardism.org/index.xml							      :people:
 ***** http://emacshorrors.com/feed.atom
+***** https://emacs.wordpress.com/feed/
 *** Hardware											    :hardware:
 **** http://www.readynas.com/?feed=rss2
-**** https://reddit.com/r/thinkpad.rss 								   :computing:
 **** https://www.yubico.com/feed/								    :security:
 *** People
 **** http://julien.danjou.info/blog/index.xml							      :people:
