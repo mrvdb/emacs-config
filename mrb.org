@@ -4324,6 +4324,25 @@ Some article customizations:
   (setq gnus-message-archive-group "nnimap:INBOX.Sent")
 #+END_SRC
 
+Configure the defaults for composition:
+
+#+BEGIN_SRC emacs-lisp
+  (setq gnus-posting-styles
+        '((".*" ;; Default posting style needs to come first
+           (X-Bitcoin "1LV6dxvgJrQiyL4C3p8eVWJtGh129XKzZz")
+           (Face "iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAMAAABg3Am1AAAAAXNSR0IArs4c6QAAADxQTFRFGxodGhsZHyEeKiwqODk3RUdFVVhXZWdkdXd1g4aDmZuap6qpsbOwsLW3s7i6tri10NPS5ejm8fTy/P77OGV04AAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9kJDhAMDkMBM34AAAIFSURBVEjHjZZZooMgDEUZwwzK2/9eXxisqFCbD2trDrkJIZb8PS1vWwyuWIjblq8PydM7oF+MAS2WTxcuzA3YU/Wu9rmJLu5zYE8+xan5tOcHkDeXxnWvUXwXdgI5hrRYvxgGzxdgDyF+txD2Adjdm3+RtX+A3cUp0EW2a0hINCCv9DTgyA2J3ID0KMozg36twObjrxZITSD9DNQI6VL/l2oRlXZ/AAMYZmh5TqhKZ4QXaQ1gtgPhu283QmuIt1TRxVujwBRA+B8AbyWjFOUgQM0PgCnuaFAAmV6Ttd2fclLjvAFe0MMKgGl/TdfB6d8A7r8CQNkNoOb7BgwBOiDX59Noo/kDYHbZzmX1ooiQEaBqeWzksfIBtBvuFoQd8h0BohcA0AUgFlnrUc4IEDtv76ekg4PFbmsyrj8A17SHaBY4mwFUL7fCWWPUExDrCYbHDW7AsNsWJJh7ewN9AhSaP8csCVxK5iWdAU2TV8rgc2l8mxJFENAZIGxvZ92qwnVFcGQbOgNE2bmS4Pm4I5cAH0AoDUIVQCIr+++iCpN3gAkuncbSMgPGC5wJehDqvbgAyqQt48BXpa1wwxXHMeVOHwby2ks6t3ecaJ2Is1ZK65zi7N52hyRV/xZsGlgDig6ufHJOzgHKweJbfnNcwXnapU3eKzYFagXtnxPG6A/C8Zsx8AT+AYKbW+clUxjrAAAAAElFTkSuQmCC")
+           (OpenPGP "id=F5E8DFFB; preference=sign; url=http://pgp.surfnet.nl/pks/lookup?op=get&search=0x235E5C8CF5E8DFFB")
+           (signature-file "~/.signature")
+
+           )))
+
+  ;; but do not pollute the visible headers unnneeded though
+  (add-to-list 'message-hidden-headers "^X-bitcoin")
+  (add-to-list 'message-hidden-headers "^OpenPGP")
+  (add-to-list 'message-hidden-headers "^Face")
+#+END_SRC
+
+
 *** Notmuch
 Not having used GNUS enough to be comfortable, notmuch seems a route
 which can be taken somewhat easier. The compose part of emails is,
