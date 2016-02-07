@@ -4227,8 +4227,7 @@ Now we have gnus running, let's make the summary line to my liking.
        gnus-sum-thread-tree-vertical        "│"
        gnus-sum-thread-tree-leaf-with-other "├►"
        gnus-sum-thread-tree-single-leaf     "╰►"
-       gnus-summary-display-arrow t
-       )
+       gnus-summary-display-arrow t)
 
 
   ;; Cobble up a set of conditions how to display the date
@@ -4250,7 +4249,7 @@ Now we have gnus running, let's make the summary line to my liking.
   ;; hard tabulate to pos 115
   ;; insert user-date
   (setq gnus-summary-line-format
-        (concat "%U%R %B %~(max-right 30)~(pad-right 30)n "
+        (concat "%*%U%R %B %~(max-right 30)~(pad-right 30)n "
                 "%(%~(max-right 80)~(pad-right 80)s%) %-115= %&user-date;\n"))
 
   (defvar *mrb-mails*
