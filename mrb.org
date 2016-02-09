@@ -4344,6 +4344,21 @@ Configure the defaults for composition:
   (add-to-list 'message-hidden-headers "^Face")
 #+END_SRC
 
+Displaying HTML email is a weak point, but we can improve a bit on shr
+by not displaying background colors.
+#+BEGIN_SRC emacs-lisp
+;; Code from https://ryuslash.org/posts/Stop-shr-from-using-background-color.html
+  (defun oni:shr-colorize-remove-last-arg (args)
+    "If ARGS has more than 3 items, remove the last one."
+    (if (> (length args) 3)
+        (butlast args)
+      args))
+
+  (with-eval-after-load 'shr
+    (advice-add #'shr-colorize-region :filter-args
+                #'oni:shr-colorize-remove-last-arg))
+
+#+END_SRC
 
 *** Notmuch
 Not having used GNUS enough to be comfortable, notmuch seems a route
