@@ -82,6 +82,7 @@ This has a number of attractive properties:
 **** http://feeds.feedburner.com/wyome								      :people:
 **** http://blog.sarine.nl/feed/index.xml
 **** http://heikkil.github.io/rss.xml
+**** https://www.jwz.org/blog/feed/
 *** Automotive
 **** http://feeds.feedburner.com/TheChicane							   :oldschool:
 **** http://www.gearjournal.com/feed/
