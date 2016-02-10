@@ -4197,10 +4197,6 @@ to it.
 So, let's begin by enabling imap as the selection method.
 
 #+BEGIN_SRC emacs-lisp
-  ;; If I'm understanding this right, this has no adverse
-  ;; effects, because I use a local mailserver.
-  (setq gnus-asynchronous 1)
-
   (require 'nnir)
   (setq gnus-select-method
         '(nnimap "hsd"
@@ -4215,7 +4211,21 @@ authentication info is enough to get things rolling. The initial
 connect subscribes to all my mail folders and shows them in a
 group window.
 
-Now we have gnus running, let's make the summary line to my liking.
+Now we have gnus running, albeit in the standard way, which is very
+likely not what I want. GNUS has a gazillion things which can be
+adjusted, toggled or rewritten and I have no clue yet on how to
+organize these bits, so I'm starting by just a section of variable I
+have set to a value to my liking.
+
+#+BEGIN_SRC emacs-lisp
+  (setq
+   gnus-asynchronous 1 ;; Try to use asynchronous calls, probably Ok because the IMAP server is local
+   gnus-completing-read-function 'gnus-ido-completing-read ;; I use ido completion in the command area everywhere
+   )
+
+#+END_SRC
+
+Let's make the summary line to my liking.
 #+BEGIN_SRC emacs-lisp
   (setq-default
        gnus-summary-thread-gathering-function 'gnus-gather-threads-by-references
@@ -4344,6 +4354,21 @@ Configure the defaults for composition:
   (add-to-list 'message-hidden-headers "^Face")
 #+END_SRC
 
+Displaying HTML email is a weak point, but we can improve a bit on shr
+by not displaying background colors.
+#+BEGIN_SRC emacs-lisp
+;; Code from https://ryuslash.org/posts/Stop-shr-from-using-background-color.html
+  (defun oni:shr-colorize-remove-last-arg (args)
+    "If ARGS has more than 3 items, remove the last one."
+    (if (> (length args) 3)
+        (butlast args)
+      args))
+
+  (with-eval-after-load 'shr
+    (advice-add #'shr-colorize-region :filter-args
+                #'oni:shr-colorize-remove-last-arg))
+
+#+END_SRC
 
 *** Notmuch
 Not having used GNUS enough to be comfortable, notmuch seems a route
