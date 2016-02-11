@@ -252,6 +252,7 @@ and run =el-get-install= with the package name.
               (:name magit                  :type github :pkgname "magit/magit")
               (:name company-emoji          :type github :pkgname "dunn/company-emoji")
               (:name emoji-fontset          :type github :pkgname "zonuexe/emoji-fontset.el")
+              (:name gnorb                  :type github :pkgname "girzel/gnorb")
             )
       )
 
@@ -3346,6 +3347,7 @@ to it.
 So, let's begin by enabling imap as the selection method.
 
 #+BEGIN_SRC emacs-lisp
+  (require 'gnorb)
   (require 'nnir)
   (setq gnus-select-method
         '(nnimap "hsd"
@@ -3407,8 +3409,9 @@ Let's make the summary line to my liking.
   ;; precisely 80 chars for the subject (highlight on hover)
   ;; hard tabulate to pos 115
   ;; insert user-date
+
   (setq gnus-summary-line-format
-        (concat "%*%U%R %B %~(max-right 30)~(pad-right 30)n "
+        (concat "%*%U%R%ug %B %~(max-right 30)~(pad-right 30)n "
                 "%(%~(max-right 80)~(pad-right 80)s%) %-115= %&user-date;\n"))
 
   (defvar *mrb-mails*
@@ -3425,9 +3428,16 @@ Let's make the summary line to my liking.
               "~"
               " "))))
 
+  (gnus-registry-initialize)
+  (require 'org-id)
+  (setq org-id-track-globally t)
+  (require 'gnorb-gnus)
+  (require 'gnorb-org)
+  (gnorb-tracking-initialize)
 #+END_SRC
 
 I like to have alternate striping in the summary view:
+
 #+BEGIN_SRC emacs-lisp
   ;; the color of the stripes is obtained by dimming the frame background color
     (defvar stripe-intensity 12
