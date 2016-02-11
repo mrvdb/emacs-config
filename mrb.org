@@ -3529,6 +3529,30 @@ by not displaying background colors.
 
 #+END_SRC
 
+Email expiry is probably worth doing a separate section about, because
+that is the only way to actually have stuff deleted (?)
+
+#+BEGIN_SRC emacs-lisp
+  ;; The default expiry of 7 days sounds fine as a default
+  (setq nnmail-expiry-wait 7)
+
+  ;; If we remove something, put it in the TRASH
+  (setq nnmail-expiry-target "INBOX.Trash")
+
+  ;; For the folders than need something else
+  ;; INBOX: do it immediately
+  ;; FIXME: this does not work, group params does work though
+  (defun mrb/expiry-wait (group)
+    "Function to determine the expiry wait period"
+
+    (cond
+     ((string= group "INBOX") 'immediate)
+     (t 7)))
+
+  (setq nnmail-expiry-wait-function 'mrb/expiry-wait)
+#+END_SRC
+
+
 *** Notmuch
 Not having used GNUS enough to be comfortable, notmuch seems a route
 which can be taken somewhat easier. The compose part of emails is,
