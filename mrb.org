@@ -759,7 +759,7 @@ extra care here.
   ;; This seems to work if we start up emacs using filename on cli and
   ;; server was not running yet. It does however not work if we just
   ;; startup emacs (through my edit script) without a filename on the cli
-  (add-hook 'before-make-frame-hook 'mrb/run-client-settings)
+  (add-hook 'server-visit-hook 'mrb/run-client-settings)
 
   ;; And we need to run those settings *now* too, when we are not in server mode
   (mrb/run-client-settings)
@@ -3369,6 +3369,7 @@ organize these bits, so I'm starting by just a section of variable I
 have set to a value to my liking.
 
 #+BEGIN_SRC emacs-lisp
+  (bind-key "C-c n" 'gnus)
   (setq
    gnus-asynchronous 1 ;; Try to use asynchronous calls, probably Ok because the IMAP server is local
    gnus-completing-read-function 'gnus-ido-completing-read ;; I use ido completion in the command area everywhere
@@ -3391,7 +3392,7 @@ Let's make the summary line to my liking.
        gnus-summary-display-arrow t)
 
 
-  ;; Cobble up a set of conditions how to display the date
+  ;; Use a fancy date format
   (setq gnus-user-date-format-alist
             '(((gnus-seconds-today) . "%H:%M")
               ((+ 86400 (gnus-seconds-today)) . "Gisteren, %H:%M")
@@ -3400,11 +3401,10 @@ Let's make the summary line to my liking.
               ((gnus-seconds-year) . "%d %B")
               (t . "%d %B %Y")))
   ;; Or use something simple like this
-  (setq gnus-user-date-format-alist
-     '((t . "%Y-%m-%d")))
+  (setq gnus-user-date-format-alist '((t . "%Y-%m-%d")))
 
   ;; Line in the summary buffer in words:
-  ;; UnreadMarker,SecondaryMarker Treegraph
+  ;; Cursor %*, UnreadMarker %U ,SecondaryMarker %R, gnorb marker %ug, Treegraph %B
   ;; precisely 30 chars for the name
   ;; precisely 80 chars for the subject (highlight on hover)
   ;; hard tabulate to pos 115
@@ -3414,19 +3414,6 @@ Let's make the summary line to my liking.
         (concat "%*%U%R%ug %B %~(max-right 30)~(pad-right 30)n "
                 "%(%~(max-right 80)~(pad-right 80)s%) %-115= %&user-date;\n"))
 
-  (defvar *mrb-mails*
-    "marcel@hsdev\\.com\\|mrb@hsdev\\.com\\|m@rcel\\.hsdev\\.com")
-
-  (defun gnus-user-format-function-j (headers)
-    (let ((to (gnus-extra-header 'To headers)))
-      (if (string-match *mrb-mails* to)
-          (if (string-match "," to) "~" "»")
-          (if (or (string-match *mrb-mails*
-                                (gnus-extra-header 'Cc headers))
-                  (string-match *mrb-mails*
-                                (gnus-extra-header 'BCc headers)))
-              "~"
-              " "))))
 
   (gnus-registry-initialize)
   (require 'org-id)
