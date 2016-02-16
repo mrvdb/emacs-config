@@ -3392,7 +3392,7 @@ Let's make the summary line to my liking.
        gnus-summary-display-arrow t)
 
 
-  ;; Cobble up a set of conditions how to display the date
+  ;; Use a fancy date format
   (setq gnus-user-date-format-alist
             '(((gnus-seconds-today) . "%H:%M")
               ((+ 86400 (gnus-seconds-today)) . "Gisteren, %H:%M")
@@ -3401,11 +3401,10 @@ Let's make the summary line to my liking.
               ((gnus-seconds-year) . "%d %B")
               (t . "%d %B %Y")))
   ;; Or use something simple like this
-  (setq gnus-user-date-format-alist
-     '((t . "%Y-%m-%d")))
+  (setq gnus-user-date-format-alist '((t . "%Y-%m-%d")))
 
   ;; Line in the summary buffer in words:
-  ;; UnreadMarker,SecondaryMarker Treegraph
+  ;; Cursor %*, UnreadMarker %U ,SecondaryMarker %R, gnorb marker %ug, Treegraph %B
   ;; precisely 30 chars for the name
   ;; precisely 80 chars for the subject (highlight on hover)
   ;; hard tabulate to pos 115
@@ -3415,19 +3414,6 @@ Let's make the summary line to my liking.
         (concat "%*%U%R%ug %B %~(max-right 30)~(pad-right 30)n "
                 "%(%~(max-right 80)~(pad-right 80)s%) %-115= %&user-date;\n"))
 
-  (defvar *mrb-mails*
-    "marcel@hsdev\\.com\\|mrb@hsdev\\.com\\|m@rcel\\.hsdev\\.com")
-
-  (defun gnus-user-format-function-j (headers)
-    (let ((to (gnus-extra-header 'To headers)))
-      (if (string-match *mrb-mails* to)
-          (if (string-match "," to) "~" "»")
-          (if (or (string-match *mrb-mails*
-                                (gnus-extra-header 'Cc headers))
-                  (string-match *mrb-mails*
-                                (gnus-extra-header 'BCc headers)))
-              "~"
-              " "))))
 
   (gnus-registry-initialize)
   (require 'org-id)
