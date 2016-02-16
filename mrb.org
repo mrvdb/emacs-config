@@ -3347,7 +3347,7 @@ to it.
 So, let's begin by enabling imap as the selection method.
 
 #+BEGIN_SRC emacs-lisp
-  (require 'gnorb)
+  ;;(require 'gnorb)
   (require 'nnir)
   (setq gnus-select-method
         '(nnimap "hsd"
@@ -3411,16 +3411,9 @@ Let's make the summary line to my liking.
   ;; insert user-date
 
   (setq gnus-summary-line-format
-        (concat "%*%U%R%ug %B %~(max-right 30)~(pad-right 30)n "
+        (concat "%*%U%R %B %~(max-right 30)~(pad-right 30)n "
                 "%(%~(max-right 80)~(pad-right 80)s%) %-115= %&user-date;\n"))
 
-
-  (gnus-registry-initialize)
-  (require 'org-id)
-  (setq org-id-track-globally t)
-  (require 'gnorb-gnus)
-  (require 'gnorb-org)
-  (gnorb-tracking-initialize)
 #+END_SRC
 
 I like to have alternate striping in the summary view:
