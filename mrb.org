@@ -759,7 +759,7 @@ extra care here.
   ;; This seems to work if we start up emacs using filename on cli and
   ;; server was not running yet. It does however not work if we just
   ;; startup emacs (through my edit script) without a filename on the cli
-  (add-hook 'before-make-frame-hook 'mrb/run-client-settings)
+  (add-hook 'server-visit-hook 'mrb/run-client-settings)
 
   ;; And we need to run those settings *now* too, when we are not in server mode
   (mrb/run-client-settings)
