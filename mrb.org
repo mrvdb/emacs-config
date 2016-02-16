@@ -3369,6 +3369,7 @@ organize these bits, so I'm starting by just a section of variable I
 have set to a value to my liking.
 
 #+BEGIN_SRC emacs-lisp
+  (bind-key "C-c n" 'gnus)
   (setq
    gnus-asynchronous 1 ;; Try to use asynchronous calls, probably Ok because the IMAP server is local
    gnus-completing-read-function 'gnus-ido-completing-read ;; I use ido completion in the command area everywhere
