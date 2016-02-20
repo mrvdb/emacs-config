@@ -3388,7 +3388,7 @@ So, let's begin by enabling imap as the selection method.
   (require 'nnir)
   (setq gnus-select-method
         '(nnimap "hsd"
-                 (nnimap-address "t510")
+                 (nnimap-address "127.0.0.1")
                  (nnimap-server-port 993)
                  (nnimap-stream ssl)
                  (nnir-search-engine imap)))
@@ -3414,7 +3414,14 @@ have set to a value to my liking.
 
 #+END_SRC
 
+Perhaps it makes sens to segment the customizations per GNUS view.
+
+**** Summary
 Let's make the summary line to my liking.
+
+The summary view is the place where the context of mails is visible,
+a.k.a. /threads/. Let's render them as nicely as possible.
+
 #+BEGIN_SRC emacs-lisp
   (setq-default
        gnus-summary-thread-gathering-function 'gnus-gather-threads-by-references
@@ -3500,6 +3507,7 @@ I like to have alternate striping in the summary view:
 
 #+END_SRC
 
+**** Article
 Some article customizations:
 
 #+BEGIN_SRC emacs-lisp
@@ -3511,6 +3519,33 @@ Some article customizations:
         (format-time-string "nnimap+hsd:INBOX.Sent.-%Y"))
   (setq gnus-gcc-mark-as-read t)
 #+END_SRC
+
+Displaying HTML email is a weak point, but we can improve a bit on shr
+by not displaying background colors.
+
+#+BEGIN_SRC emacs-lisp
+;; Code from https://ryuslash.org/posts/Stop-shr-from-using-background-color.html
+  (defun oni:shr-colorize-remove-last-arg (args)
+    "If ARGS has more than 3 items, remove the last one."
+    (if (> (length args) 3)
+        (butlast args)
+      args))
+
+  (with-eval-after-load 'shr
+    (advice-add #'shr-colorize-region :filter-args
+                #'oni:shr-colorize-remove-last-arg))
+
+#+END_SRC
+
+If =shr= fails we can always use the web-browser (typically =K H=) but
+don't keep asking for the temp HTML to be removed
+
+#+BEGIN_SRC emacs-lisp
+
+
+  (setq gnus-article-browse-delete-temp t)
+#+END_SRC
+**** Compose
 
 Configure the defaults for composition:
 
@@ -3530,22 +3565,7 @@ Configure the defaults for composition:
   (add-to-list 'message-hidden-headers "^Face")
 #+END_SRC
 
-Displaying HTML email is a weak point, but we can improve a bit on shr
-by not displaying background colors.
-#+BEGIN_SRC emacs-lisp
-;; Code from https://ryuslash.org/posts/Stop-shr-from-using-background-color.html
-  (defun oni:shr-colorize-remove-last-arg (args)
-    "If ARGS has more than 3 items, remove the last one."
-    (if (> (length args) 3)
-        (butlast args)
-      args))
-
-  (with-eval-after-load 'shr
-    (advice-add #'shr-colorize-region :filter-args
-                #'oni:shr-colorize-remove-last-arg))
-
-#+END_SRC
-
+**** Misc
 Email expiry is probably worth doing a separate section about, because
 that is the only way to actually have stuff deleted (?)
 
@@ -3569,6 +3589,10 @@ that is the only way to actually have stuff deleted (?)
   (setq nnmail-expiry-wait-function 'mrb/expiry-wait)
 #+END_SRC
 
+#+BEGIN_SRC emacs-lisp
+  ;; Get rid of messge that I should compile gnus
+  (gnus-byte-compile 'gnus)
+#+END_SRC
 
 *** Notmuch
 Not having used GNUS enough to be comfortable, notmuch seems a route
