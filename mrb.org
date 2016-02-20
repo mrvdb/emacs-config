@@ -1576,7 +1576,44 @@ thing to do, which is not the case.
    org-refile-allow-creating-parent-nodes (quote confirm)
    org-refile-targets (quote ((org-agenda-files :maxlevel . 10 )))
    org-refile-use-outline-path 'file
+   org-completion-use-ido t
+   org-outline-path-complete-in-steps nil
 )
+#+END_SRC
+
+The list of headers to refile to is, in the standard config, basically
+everything. I limit it above to a maximum depth of 10, but then
+still. By using =org-refile-target-verify-function= we can fine-tune
+the decision whether to use a header as target or not.
+The following conditions have been implemented:
+
+1. The header must /not/ be a DONE item;
+2. The header needs to have children.
+
+The latter is the most important one and will prevent creating
+'gathering' items to tasks themselves.
+
+#+BEGIN_SRC emacs-lisp
+  (defun mrb/has-DONE-keyword()
+    "Return t when the heading at point has a `DONE' like keyword"
+    (member (nth 2 (org-heading-components)) org-done-keywords))
+
+  (defun mrb/verify-refile-target()
+    "Decide if a target header can be used as a refile target
+  Conditions to return t:
+  - header must not have one of the DONE keywords
+  - it must be a parent of something already"
+    ;; interactive during testing
+    (interactive)
+
+    (and
+     ; exclude done keyword headers
+     (not (mrb/has-DONE-keyword))
+     ; must have a child
+     (save-excursion (org-goto-first-child))))
+
+
+  (setq org-refile-target-verify-function 'mrb/verify-refile-target)
 #+END_SRC
 ** Exporting to other formats
 Orgmode can export to a variety of formats, I mainly use LaTeX (PDF)
