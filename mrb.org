@@ -3416,6 +3416,28 @@ have set to a value to my liking.
 
 Perhaps it makes sens to segment the customizations per GNUS view.
 
+**** Groups
+The first view when GNUS starts is the group view.
+
+#+BEGIN_SRC emacs-lisp
+  ;; Replace the group name with a user function evaluation, so I can
+  ;; map the name to something more friendly.
+  (setq gnus-group-line-format"%M%S%p%P%5y:%B%(%uG%)\n")
+
+  (setq group-name-map '
+        (("nnvirtual:Discussions" . "INBOX+Sent")))
+
+  (defun gnus-user-format-function-G (arg)
+    (let ((mapped-name (assoc gnus-tmp-group group-name-map)))
+      (if (null mapped-name)
+          gnus-tmp-group
+        (cdr mapped-name))))
+
+  ;; Sort groups by their real name (backend name?)
+  (setq gnus-group-sort-function 'gnus-group-sort-by-real-name)
+
+
+#+END_SRC
 **** Summary
 Let's make the summary line to my liking.
 
@@ -3593,7 +3615,6 @@ that is the only way to actually have stuff deleted (?)
   ;; Get rid of messge that I should compile gnus
   (gnus-byte-compile 'gnus)
 #+END_SRC
-
 *** Notmuch
 Not having used GNUS enough to be comfortable, notmuch seems a route
 which can be taken somewhat easier. The compose part of emails is,
