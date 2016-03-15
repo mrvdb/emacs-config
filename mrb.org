@@ -3486,8 +3486,11 @@ a.k.a. /threads/. Let's render them as nicely as possible.
   ;; insert user-date
 
   (setq gnus-summary-line-format
-        (concat "%*%U%R %B %~(max-right 30)~(pad-right 30)n "
-                "%(%~(max-right 80)~(pad-right 80)s%) %-115= %&user-date;\n"))
+        (concat "%*%U%R %B %(%s %-80= %) "
+                "%~(max-right 35)~(pad-right 35)n %-115= %&user-date;\n"))
+
+  ;; Make sure that it is visible if the thread is missing articles
+  (setq gnus-summary-make-false-root 'dummy)
 
 #+END_SRC
 
