@@ -2459,7 +2459,7 @@ accepts all kinds of key specifications, including strings.
   (bind-key "RET" 'newline-and-indent)
 
   ;; Comment code lines, command reacts based on the major mode.
-  (bind-key "s-/" 'comment-or-uncomment-region)
+  (bind-key "s-/" 'comment-dwim)
 
   (bind-key "s-s" 'save-buffer)
 
