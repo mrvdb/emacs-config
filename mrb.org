@@ -3417,7 +3417,13 @@ have set to a value to my liking.
 Perhaps it makes sens to segment the customizations per GNUS view.
 
 **** Groups
-The first view when GNUS starts is the group view.
+The first view when GNUS starts is the group view. The defaults are
+mostly good.
+
+I want a way to control the displayed names of the groups and their
+sorting order. The default names are technical and have all sorts of
+information I don't need to see. Let's make a simple map which can map
+these technical names to somewhat friendlier ones.
 
 #+BEGIN_SRC emacs-lisp
   ;; Replace the group name with a user function evaluation, so I can
@@ -3432,12 +3438,15 @@ The first view when GNUS starts is the group view.
       (if (null mapped-name)
           gnus-tmp-group
         (cdr mapped-name))))
-
-  ;; Sort groups by their real name (backend name?)
-  (setq gnus-group-sort-function 'gnus-group-sort-by-real-name)
-
-
 #+END_SRC
+
+The sort order by real name seems to fit mostly; revisit later when
+needed.
+
+#+BEGIN_SRC emacs-lisp
+  (setq gnus-group-sort-function 'gnus-group-sort-by-real-name)
+#+END_SRC
+
 **** Summary
 Let's make the summary line to my liking.
 
