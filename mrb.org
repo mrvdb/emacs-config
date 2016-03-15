@@ -3549,8 +3549,10 @@ Some article customizations:
   (setq gnus-treat-hide-signature t)
 
   ;; All sent mail on server, grouped by year and mark them read
+  (setq gnus-message-archive-method
+        '(nnimap "hsd"))
   (setq gnus-message-archive-group
-        (format-time-string "nnimap+hsd:INBOX.Sent.-%Y"))
+        (format-time-string "INBOX.Sent.-%Y"))
   (setq gnus-gcc-mark-as-read t)
 #+END_SRC
 
