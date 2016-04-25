@@ -117,8 +117,11 @@ verbose howto on some systems management thing. They have in common
 thay I want to be able to look them up by type later on. So, I define
 some keywords, and give them fitting colors.
 
-#+SEQ_TODO: INFO HOWTO READ |
+#+SEQ_TODO: INFO HOWTO |
 
+Keep track of some reading efforts with a simple sequence
+
+#+SEQ_TODO: READ | DONE CANCELLED(@)
 * Publishing and exporting
 Getting the defaults right for publishing and exporting took some
 time, save them as defaults and code deviations in the sections to be
@@ -148,7 +151,7 @@ article style.
 
 This option does not seem to work when not in the same file as
 exporting. I have added this in the customize interface directly now.
-#+LaTeX_CLASS_OPTIONS: [10pt,a4paper,twoside]
+#+LaTeX_CLASS_OPTIONS: [10pt,a4paper,oneside]
 
 Latex default configuration to produce a memo-style document.
 
