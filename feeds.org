@@ -84,6 +84,8 @@ This has a number of attractive properties:
 **** http://blog.sarine.nl/feed/index.xml
 **** http://heikkil.github.io/rss.xml
 **** https://www.jwz.org/blog/feed/
+**** http://www.blaenkdenum.com/rss.xml
+**** http://localhost:8000/feed/atom.xml
 *** Automotive
 **** http://feeds.feedburner.com/TheChicane							   :oldschool:
 **** http://www.gearjournal.com/feed/
