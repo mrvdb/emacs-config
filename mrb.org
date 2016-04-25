@@ -266,7 +266,7 @@ and run =el-get-install= with the package name.
                   hideshow-org hideshowvis
                   oauth flim haskell-mode ghc-mod s f
                   flycheck pkg-info perspective ido-vertical-mode jekyll-el org2blog
-                  identica-mode php-mode company-mode csv-mode notmuch use-package
+                  php-mode company-mode csv-mode notmuch use-package
                   git-timemachine eimp litable diminish paredit fullframe wanderlust avy
                   adaptive-wrap elpy ggtags fill-column-indicator plantuml-mode free-keys
                   pdf-tools hamlet-mode zeal-at-point flycheck-haskell)
@@ -3746,74 +3746,6 @@ bug)
    )
 
 #+END_SRC
-** Statusnet
-Statusnet, or perhaps microblog in general settings
-
-
-#+BEGIN_SRC emacs-lisp
-  ; Identica comes directly from its git repository
-  (use-package longlines)
-  (setq
-   statusnet-server "o.mrblog.nl"
-   statusnet-access-url "http://o.mrblog.nl/api/oauth/access_token"
-   statusnet-authorize-url "http://o.mrblog.nl/api/oauth/authorize"
-   statusnet-request-url "http://o.mrblog.nl/api/oauth/request_token"
-   identica-username "mrb"
-   identica-display-success-messages nil
-   identica-soft-wrap-status t
-   identica-status-format "%i %s %r: %t"
-   identica-timer-interval 120
-   identica-update-status-method (quote minibuffer)
-   identica-oldest-first nil
-   identica-soft-wrap-status nil
-   identica-urlshortening-service (quote isgd)
-   identica-enable-striping t
-   identica-enable-highlighting t
-  )
-
-
-  (bind-key "C-c ip" 'identica-update-status-interactive)
-  (bind-key "C-c id" 'identica-direct-message-interactive)
-  (bind-key "C-c is" 'identica-shortenurl-replace-at-point)
-  (bind-key "C-c d"  'mrb/make-dent-frame)
-
-
-  ;; I'm using a floating frame in awesome WM for dents
-  (defun mrb/make-dent-frame ()
-    "Create a new frame and run identica-update status."
-    (interactive)
-    ;; Create and select the frame
-    (select-frame (make-frame '((name . "dent")
-                  (width . 80) (height . 15)
-                  (menu-bar-lines . 0) (tool-bar-lines . 0))))
-    ;; Capture a Todo entry, force edit-window method
-    (identica-update-status 'edit-buffer)
-
-    ;; Once there, make sure we're the only one
-    (delete-other-windows)
-  )
-
-  ;; Make sure we remove our frame too
-  (defadvice identica-update-status-from-edit-buffer-send
-    (after delete-dent-frame-on-send activate)
-    "Advise to close the frame"
-    (if (equal "dent" (frame-parameter nil 'name))
-        (delete-frame))
-  )
-  (defadvice identica-update-status-from-edit-buffer-cancel
-    (after delete-dent-frame-on-cancel activate)
-    "Advise to close the frame"
-    (if (equal "dent" (frame-parameter nil 'name))
-        (delete-frame))
-  )
-#+END_SRC
-
-Denting interface from the commandline goes to here:
-
-#+BEGIN_SRC sh :exports code :tangle ~/bin/capture-dent.sh :shebang #!/bin/sh
-edit -e '(mrb/make-dent-frame)'
-#+END_SRC
-
 ** Pump.io
 Similar to capturing TODO and BUY entries, there's a way to captur
 pump.io entries too.
