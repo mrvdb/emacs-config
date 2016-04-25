@@ -253,6 +253,8 @@ and run =el-get-install= with the package name.
               (:name company-emoji          :type github :pkgname "dunn/company-emoji")
               (:name emoji-fontset          :type github :pkgname "zonuexe/emoji-fontset.el")
               (:name gnorb                  :type github :pkgname "girzel/gnorb")
+              (:name nnreddit               :type github :pkgname "paul-issartel/nnreddit")
+              (:name selectric              :type github :pkgname "rbanffy/selectric-mode")
             )
       )
 
@@ -3629,6 +3631,13 @@ that is the only way to actually have stuff deleted (?)
 #+BEGIN_SRC emacs-lisp
   ;; Get rid of messge that I should compile gnus
   (gnus-byte-compile 'gnus)
+#+END_SRC
+
+There is a nnreddit backedn I'd like to play with.
+#+BEGIN_SRC emacs-lisp
+  (add-to-list 'gnus-secondary-select-methods
+               '(nnreddit ""))
+
 #+END_SRC
 *** Notmuch
 Not having used GNUS enough to be comfortable, notmuch seems a route
