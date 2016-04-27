@@ -268,7 +268,7 @@ and run =el-get-install= with the package name.
                   smart-tab yaml-mode
                   hideshow-org hideshowvis
                   oauth flim haskell-mode ghc-mod s f
-                  flycheck pkg-info perspective ido-vertical-mode jekyll-el org2blog
+                  flycheck pkg-info perspective ido-vertical-mode ido-hacks jekyll-el org2blog
                   php-mode company-mode csv-mode notmuch use-package
                   git-timemachine eimp litable diminish paredit fullframe wanderlust avy
                   adaptive-wrap elpy ggtags fill-column-indicator plantuml-mode free-keys
@@ -1579,7 +1579,6 @@ thing to do, which is not the case.
    org-refile-allow-creating-parent-nodes (quote confirm)
    org-refile-targets (quote ((org-agenda-files :maxlevel . 10 )))
    org-refile-use-outline-path 'file
-   org-completion-use-ido t
    org-outline-path-complete-in-steps nil
 )
 #+END_SRC
@@ -3076,6 +3075,9 @@ in many directories.
 #+BEGIN_SRC emacs-lisp
 (use-package ido-vertical-mode)
 (ido-vertical-mode)
+
+(use-package ido-hacks)
+(ido-hacks-mode)
 #+END_SRC
 
 By selecting a piece of text, wrap-region can quote or otherwise
