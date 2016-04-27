@@ -255,6 +255,7 @@ and run =el-get-install= with the package name.
               (:name gnorb                  :type github :pkgname "girzel/gnorb")
               (:name nnreddit               :type github :pkgname "paul-issartel/nnreddit")
               (:name selectric              :type github :pkgname "rbanffy/selectric-mode")
+              (:name selected               :type github :pkgname "Kungsgeten/selected.el")
             )
       )
 
