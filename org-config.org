@@ -117,7 +117,8 @@ verbose howto on some systems management thing. They have in common
 thay I want to be able to look them up by type later on. So, I define
 some keywords, and give them fitting colors.
 
-#+SEQ_TODO: INFO HOWTO |
+#+SEQ_TODO: | INFO
+#+SEQ_TODO: | HOWTO
 
 Keep track of some reading efforts with a simple sequence
 
