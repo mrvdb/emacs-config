@@ -146,139 +146,53 @@ And edit the file obviously.
 * Package Management
 Package handling, do this early so emacs knows where to find things.
 
-This has gotten a bit of attention in the last years and there are now
-lots of options, of which package.el seems to be the choice if not
-anything else is explicitly preferred. I have always used el-get
-instead of package.el, although I have no idea why I made that
-decision at that time, but I think it was because it allowed me to
-inlcude git recipes in an easy way. ([2014-03-03 ma] Not sure if this
-is stil the case now)
-
-There are several options:
-1. Just use plain package.el
-2. Use el-get
-3. Use use-package (piggybacks on package.el)
-4. Homebrew
-5. Others...?
-
-The *important* bit here is that this section manages *ALL* my packages,
-including the ones gotten from apt-get, git and elpa.
-The reason for this is that it provides one neat umbrella (in Emacs)
-to manage its packages.
-
-We manage everything with =el-get= so we start by loading that if we
-don't have it already.
-
 First of all, define the package archives I need; for now, just the
 default gnu augmented with the melpa repository. I use setq because I
 want *this* entry to be the definitive one, not adding to a list.
 #+BEGIN_SRC emacs-lisp
-(require 'package)
-(add-to-list 'package-archives
-             '("melpa" . "http://melpa.org/packages/") t)
-(when (< emacs-major-version 24)
-  ;; For important compatibility libraries like cl-lib
-  (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/")))
-(package-initialize)
-#+END_SRC
+    (require 'package)
+    (package-initialize)
 
-#+BEGIN_SRC emacs-lisp
-  (add-to-list 'load-path (concat emacs-directory "/el-get/el-get"))
+    (add-to-list 'package-archives
+                 '("melpa" . "http://melpa.org/packages/") t)
+    (add-to-list 'package-archives
+                 '("melpa-stable" . "https://stable.melpa.org/packages/") t)
+    (add-to-list 'package-archives
+                 '("gnu" . "http://elpa.gnu.org/packages/") t)
 
-  (unless  (require 'el-get nil 'noerror)
-    (with-current-buffer
-        (url-retrieve-synchronously
-         "https://raw.github.com/dimitri/el-get/master/el-get-install.el")
-      (goto-char (point-max))
-      (eval-print-last-sexp)))
-#+END_SRC
 
-Now, =el-get= is either require’d, and thus available, or loaded by the
-el-get installer, in which case it is also available.
+    ;; Transitioning to use-package Eventually this sections just needs to
+    ;; load use-package, the rest should be distributed with the actual
+    ;; configuration of the packages.
+    (add-to-list 'load-path "~/dat/src/emacs/packages/use-package/")
+    (eval-when-compile
+      (require 'use-package))
+    ;; Default is to have elpa provide the package
+    (setq use-package-always-ensure t)
 
-The rest is basically a long list of sources for el-get where to get
-the packages from and how to install and update them.
-When installing a new package, add a recipe in this list, eval it,
-and run =el-get-install= with the package name.
+    (use-package cl-lib )
 
-#+BEGIN_SRC emacs-lisp
-      ;; Personal or adapted recipes
-      ;; Sounds like this could use its own file?
-      (setq el-get-sources
-            '(
-              ;; Obviously we need el-get itself, so we can run a self-update
-              ;; There is a recipe, but we want the master branch of it
-              (:name el-get :branch "master")
-              (:name zenburn-emacs          :type github :pkgname "bbatsov/zenburn-emacs")
-              (:name org-mode               :type git    :url     "/home/mrb/dat/src/emacs/packages/org-mode/")
-              (:name cursor-chg             :type github :pkgname  "emacsmirror/cursor-chg"
-                     :features cursor-chg)
-              (:name newlua-mode            :type github :pkgname "immerrr/lua-mode"
-                     :features lua-mode)
-              (:name oauth                  :type github :pkgname "psanford/emacs-oauth")
-              (:name expand-region          :type github :pkgname "magnars/expand-region.el")
-              (:name mark-multiple          :type github :pkgname "magnars/mark-multiple.el")
-              (:name fixed-point-completion :type github :pkgname "smithzvk/fixed-point-completion")
-              (:name xlicense               :type github :pkgname "emacsmirror/xlicense")
-              (:name autosmiley             :type github :pkgname "emacsmirror/autosmiley")
-              (:name async                  :type github :pkgname "jwiegley/emacs-async")
-              (:name pcache                 :type github :pkgname "sigma/pcache")
-              (:name logito                 :type github :pkgname "sigma/logito")
-              (:name gh                     :type github :pkgname "sigma/gh.el"
-                     :depends (pcache logito))
-              (:name gisthub                :type github :pkgname  "defunkt/gist.el"
-                     :depends (gh))
-              (:name stripe-buffer          :type github :pkgname "sabof/stripe-buffer")
-              (:name git-auto-commit-mode   :type github :pkgname "ryuslash/git-auto-commit-mode")
-              (:name ujelly-theme           :type github :pkgname "marktran/color-theme-ujelly")
-              (:name org-present            :type github :pkgname "rlister/org-present")
-              ;; Dependency? I dont use this directly
-              (:name dash                   :type github :pkgname "magnars/dash.el")
-              (:name gitmessenger           :type github :pkgname "syohex/emacs-git-messenger")
-              (:name org-agenda-property    :type github :pkgname "Bruce-Connor/org-agenda-property")
-              (:name pump.io                :type github :pkgname "cnngimenez/pumpio-el")
-              (:name elfeed-org             :type github :pkgname "remyhonig/elfeed-org")
-              (:name elfeed                 :type github :pkgname "skeeto/elfeed"
-                     :depends (elfeed-org))
-              (:name guide-key              :type github :pkgname "kbkbkbkb1/guide-key")
-              (:name org-screenshot         :type github :pkgname "dfeich/org-screenshot")
-              (:name json-rpc               :type github :pkgname "skeeto/elisp-json-rpc")
-              (:name ws-butler              :type github :pkgname "lewang/ws-butler")
-              (:name wrap-region            :type github :pkgname "rejeep/wrap-region.el")
-              (:name vlc                    :type github :pkgname "mrvdb/vlc.el")
-              (:name tsupport               :type github :pkgname "mrvdb/tsupport")
-              (:name jabber                 :type git    :url     "/home/mrb/dat/src/emacs/packages/jabber.el"
-                     :branch "mrb/master")
-              (:name magit                  :type github :pkgname "magit/magit")
-              (:name company-emoji          :type github :pkgname "dunn/company-emoji")
-              (:name emoji-fontset          :type github :pkgname "zonuexe/emoji-fontset.el")
-              (:name gnorb                  :type github :pkgname "girzel/gnorb")
-              (:name nnreddit               :type github :pkgname "paul-issartel/nnreddit")
-              (:name selectric              :type github :pkgname "rbanffy/selectric-mode")
-              (:name selected               :type github :pkgname "Kungsgeten/selected.el")
-            )
-      )
+    (use-package flycheck )      ;; flycheck vs flymake?
 
-    (setq mrb/packages
-          (append
-           ;; list of packages we use from standard recipes
-           '(smex apache-mode gnuplot-mode sudo-save
-                  edit-server markdown-mode rainbow-mode rainbow-delimiters scratch popwin
-                  highlight-parentheses multiple-cursors cl-lib keywiz
-                  smart-tab yaml-mode
-                  hideshow-org hideshowvis
-                  oauth flim haskell-mode ghc-mod s f
-                  flycheck pkg-info perspective ido-vertical-mode ido-hacks jekyll-el org2blog
-                  php-mode company-mode csv-mode notmuch use-package
-                  git-timemachine eimp litable diminish paredit fullframe wanderlust avy
-                  adaptive-wrap elpy ggtags fill-column-indicator plantuml-mode free-keys
-                  pdf-tools hamlet-mode zeal-at-point flycheck-haskell)
+    (use-package fullframe  )    ;; show results of certain commands fullframe
 
-           ;; the sources we have configured above
-           (mapcar 'el-get-as-symbol (mapcar 'el-get-source-name el-get-sources))))
+    (use-package guide-key )
 
-      (el-get 'sync mrb/packages)
-      (require 'use-package)
+    (use-package hideshow-org )
+    (use-package hideshowvis )
+
+    (use-package json-rpc )
+    (use-package litable  )      ;; Real time evaluation (move to develop?)
+    (use-package mark-multiple )
+
+    (use-package paredit  )
+    (use-package rainbow-mode )  ;; show colornumbers/names as colors
+    (use-package edit-server )
+
+    (use-package fixed-point-completion
+      :load-path "~/dat/src/emacs/packages/fixed-point-completion/"
+      :ensure nil)
+    (use-package ghc )           ;; move to haskell?
 #+END_SRC
 
 * Personal information
@@ -410,12 +324,17 @@ Make life easier if we have sudo, so we can just edit the files and be
 done with them if possible
 
 #+BEGIN_SRC emacs-lisp
-  (use-package sudo-save)
+  (add-to-list 'load-path "~/dat/src/emacs/packages/sudo-save/")
+  (use-package sudo-save :ensure nil)
 #+END_SRC
 
 Using pdf-tools for PDF handling
 #+BEGIN_SRC emacs-lisp
-  (pdf-tools-install)
+  (use-package pdf-tools
+
+
+    :init
+    (pdf-tools-install))
 #+END_SRC
 * Internationalisation and multi-language features
 If anything multi-language should work, UTF-8 encoding is a must, so
@@ -497,12 +416,12 @@ least that I can see). So, let's group our corrections in a function
 and call that when we are done with our visual (X) init.
 
 #+BEGIN_SRC emacs-lisp
-  (use-package emoji-fontset)
   (defun mrb/unicode-font-corrections()
     (interactive)
 
     (message "Turning emojis on")
-    (emoji-fontset/turn-on "Symbola"))
+    ;(emoji-fontset-enable "Symbola")
+  )
 #+END_SRC
 
 So, when characters do not show properly, the steps to take now are:
@@ -551,7 +470,7 @@ default settings.
     (set-face-attribute 'mode-line-inactive nil :box nil :underline nil :overline "grey40")
 
     (set-face-attribute 'isearch nil :background "sea green" :foreground "black")
-    (set-face-attribute 'ido-first-match nil :background "sea green" :foreground "black")
+
 
     (set-face-attribute 'lazy-highlight nil :inherit isearch-lazy-highlight
                         :background "black" :foreground "tomato")
@@ -577,12 +496,14 @@ valid for 5 levels, not 6.
 And enable the minor mode globally.
 
 #+BEGIN_SRC emacs-lisp
-  (define-globalized-minor-mode global-highlight-parentheses-mode
-    highlight-parentheses-mode
-    (lambda ()
-      (highlight-parentheses-mode t)))
-  (global-highlight-parentheses-mode t)
-
+  (use-package highlight-parentheses
+     :config
+     (define-globalized-minor-mode global-highlight-parentheses-mode
+       highlight-parentheses-mode
+       (lambda ()
+         (highlight-parentheses-mode t)))
+     (global-highlight-parentheses-mode t)
+  )
   ;; no splash screen
   (setq inhibit-startup-screen  t)
   (setq inhibit-startup-message t)
@@ -599,18 +520,18 @@ And enable the minor mode globally.
   ;; Default frame properties frame position, color, etc
   (setq default-frame-alist
         '((cursor-type . (bar . 1))
-          (cursor-color . "springgreen") ;; FIXME: variable use yields error here, why?
+          (cursor-color . "springgreen") ;; TODO: this should be redundant (.Xresources has it)
           (height . 60)
           (width . 100)
   ))
 
   (use-package cursor-chg
-    :init
+    :config
     (progn
       (change-cursor-mode 0)        ; On for overwrite/read-only/input mode
       (toggle-cursor-type-when-idle 1)   ; On when idle
       (setq curchg-default-cursor-color mrb-cursor-color)
-        (setq curchg-default-cursor-type (quote bar\ \.\ 1))))
+      (setq curchg-default-cursor-type (quote bar\ \.\ 1))))
 
 
   ;; Parenthesis matching
@@ -627,7 +548,9 @@ And enable the minor mode globally.
   (setq jit-lock-defer-time 0.02)
 
   ;; Make colorful balanced parentheses etc. in different modes
-  (add-hook 'lisp-mode 'rainbow-delimiters-mode)
+  (use-package rainbow-delimiters
+    :config
+    (add-hook 'lisp-mode 'rainbow-delimiters-mode))
 #+END_SRC
 
 ** Lines
@@ -677,7 +600,7 @@ There exists a package adaptive-wrap which can set one value per
 buffer, which is a step closer to what i want.
 
 #+BEGIN_SRC emacs-lisp
-  (use-package adaptive-wrap)
+  (use-package adaptive-wrap )
 #+END_SRC
 
 Now, the modes that want to use this, should enable adaptive-wrap
@@ -775,9 +698,7 @@ get confused:
 
 #+BEGIN_SRC emacs-lisp
   ;; nicer buffer names
-  (use-package uniquify
-    :init
-    (setq uniquify-buffer-name-style 'forward))
+  (setq uniquify-buffer-name-style 'forward)
 #+END_SRC
 
 For every file-based buffer, I want auto-save to be on, but not in the
@@ -880,34 +801,53 @@ on a line which is commented out in the proper syntax for that mode.
 #+BEGIN_SRC emacs-lisp
   (add-hook 'after-init-hook #'global-flycheck-mode)
 
-  ;; Extension mappings
-  ;; First, specify which files to load when functions are called
-  (autoload 'markdown-mode "markdown-mode" "Markdown." t)
-  (autoload 'gnuplot-mode  "gnuplot"       "GNU-Plot" t)
-  (autoload 'php-mode      "php-mode"      "PHP" t)
-  (autoload 'css-mode      "css-mode"      "Mode for editing CSS file" t)
-  (autoload 'apache-mode   "apache-mode"   "Apache config files" t)
-  (autoload 'rainbow-mode  "rainbow-mode"  "Coloring of color codes" t)
-  (autoload 'yaml-mode     "yaml-mode"     "YAML files" t)
+  ;; Extension mappings for several modes
+  (use-package markdown-mode
+    :commands (markdown-mode)
+    :mode "\\.markdown|\\.md\\'")
 
-  (add-hook 'javascript-mode-hook 'mrb/javascript-custom-setup)
-  (add-hook 'css-mode-hook 'rainbow-mode)
-  (add-hook 'image-mode-hook 'eimp-mode)
+  (use-package gnuplot-mode
+    :commands (gnuplot)
+    :mode "\\.gp\\'")
 
-  (defun mrb/javascript-custom-setup ()
-    (moz-minor-mode 1))
+  (use-package php-mode
+    :commands (php-mode)
+    :mode "\\.php\\'")
+
+  (use-package css-mode
+    :commands (css-mode)
+    :mode "\\.css\\'"
+    :config
+    (add-hook 'css-mode-hook 'rainbow-mode))
+
+  (use-package apache-mode
+    :commands (apache-mode)
+    :mode "\\.htaccess\\'")
+
+  (use-package rainbow-mode
+    :commands (rainbow-mode))
+
+  (use-package yaml-mode
+    :commands (yaml-mode)
+    :mode "\\.yml\\'")
+
+  (use-package eimp
+    :config
+    (add-hook 'image-mode-hook 'eimp-mode))
+
+  (use-package lua-mode
+    :commands (lua-mode)
+    :mode "\\.lua\\'")
+
+  (use-package csv-mode
+    :commands (csv-mode)
+    :mode "\\.csv\\'")
+
 
   ;; Second, specify the extension to function mappings
-  (add-to-list 'auto-mode-alist '("\\.txt\\'"      . org-mode))
-  (add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
-  (add-to-list 'auto-mode-alist '("\\.gp\\'"       . gnuplot-mode))
-  (add-to-list 'auto-mode-alist '("\\.php\\'"      . php-mode))
-  (add-to-list 'auto-mode-alist '("\\.css\\'"      . css-mode))
   (add-to-list 'auto-mode-alist '("\\.js\\'"       . javascript-mode))
-  (add-to-list 'auto-mode-alist '("\\.htaccess\\'" . apache-mode))
   (add-to-list 'auto-mode-alist '("\\.patch\\'"    . diff-mode))
   (add-to-list 'auto-mode-alist '("\\.zsh\\'"      . sh-mode))
-  (add-to-list 'auto-mode-alist '("\\.yml\\'"      . yaml-mode))
 
   ;; Open scratch buffer by default in the mode we are in at the moment
   ;; with C-u prefix a mode will be asked to use
@@ -938,8 +878,7 @@ We do not have to load the main orgmode location, because we already
 did that on the main initialisation to get org-babel started.
 
 #+BEGIN_SRC emacs-lisp
-  (add-to-list 'load-path "~/dat/src/emacs/packages/org-mode/contrib/lisp/")
-  (add-to-list 'load-path "~/dat/src/emacs/packages/org-mode/contrib/babel/langs/")
+   (add-to-list 'load-path "~/dat/src/emacs/packages/org-mode/contrib/babel/langs/")
 #+END_SRC
 
 Also make sure we never load org from internal, this can happen when
@@ -948,16 +887,18 @@ newer versions. We want an error, not a silent load of the older
 function.
 
 #+BEGIN_SRC emacs-lisp
-  ;; CHECKME: is this still the proper installation method, it has changed a lot lately
-  (use-package org)                   ;; This is required, see installation docs
-  ;;(require 'org-special-blocks)  ;; Generalizes the #+begin_foo and #+end_foo blocks,
-                                   ;; useful on latex (export)
-  (use-package org-datetree)          ;; Allows for archiving and refiling in a date organised tree
-  (use-package org-mobile)            ;; Only org-mobile-push and pull get autoloaded and we need
-                                   ;; the file list before that.
-  (use-package org-protocol
-    :init
-    (setq org-protocol-default-template-key "t") ;; Create a todo by default if nothing is specified
+  (use-package org
+    :load-path "~/dat/src/emacs/packages/org-mode/lisp/"
+    :ensure nil
+    :mode ("\\.txt\\'" "\\.org\'")
+    :config
+    (add-hook 'org-mode-hook 'turn-on-auto-fill)
+    (use-package org-datetree :ensure nil)        ;; Allows for archiving and refiling in a date organised tree
+    (use-package org-mobile   :ensure nil)        ;;
+    (use-package org-protocol :ensure nil
+      :config
+      (setq org-protocol-default-template-key "t");; If nothing is specified, create a TODO entry
+      )
     )
 #+END_SRC
 
@@ -970,19 +911,11 @@ up the location and files for that.
 (setq org-archive-location (concat org-metadir "archive.org::date-tree"))
 (setq org-default-notes-file (concat org-directory "GTD.org"))
 (setq diary-file (concat org-metadir "DIARY"))
-#+END_SRC
 
-Finally, run some things when entering orgmode.
-
-#+BEGIN_SRC emacs-lisp
-(add-hook 'org-mode-hook 'turn-on-auto-fill)
-#+END_SRC
-
-I want to activate org-mode automatically on =*.org= files, this is
-probably already the case, but making it explicit can't hurt.
-
-#+BEGIN_SRC emacs-lisp
-  (add-to-list 'auto-mode-alist '("\\.org\\'"      . org-mode))
+;; Some other modules I want
+(use-package org-present)           ;; Make presentations in org format
+(use-package org-agenda-property)   ;; Display org properties in the agenda view
+(use-package org-capture-pop-frame) ;; Captures in a new frame
 #+END_SRC
 
 ** Capturing information
@@ -997,7 +930,7 @@ starts life originally as a captured item. I use it for:
 Make sure org-capture is available:
 
 #+BEGIN_SRC emacs-lisp
-(use-package org-capture)
+(use-package org-capture :ensure nil)
 #+END_SRC
 
 Here are the templates used for them.
@@ -1047,11 +980,11 @@ delete the other windows which may be in the frame.
 
 #+BEGIN_SRC emacs-lisp
   (defun mrb/make-capture-frame ()
-    "Create a new frame for org-capture to use."
-    (select-frame (make-frame '((name . "capture")
-                                (width . 115) (height . 15)
-                                (menu-bar-lines . 0) (tool-bar-lines . 0))))
-    )
+    "Create a new frame for capture purposes."
+    (interactive)
+    (make-frame '((name . "capture")
+                  (width . 115) (height . 15)
+                  (menu-bar-lines . 0) (tool-bar-lines . 0))))
 
   (defadvice org-capture-finalize (after delete-capture-frame activate)
     "Advise org-capture-finalize to close the frame if it is the capture frame"
@@ -1074,22 +1007,22 @@ be easily bound to keys.
   (defun mrb/capture-todo ()
     "Capture a TODO item"
     (interactive)
-    (mrb/make-capture-frame)
-    (org-capture nil "t")
-    )
+    (with-selected-frame
+        (mrb/make-capture-frame)
+      (org-capture nil "t")))
 
   (defun mrb/capture-buy ()
     "Capture a BUY item"
     (interactive)
-    (mrb/make-capture-frame)
-    (org-capture nil "b")
-    )
+    (with-selected-frame
+        (mrb/make-capture-frame)
+      (org-capture nil "b")))
+
   (defun mrb/make-journal-entry ()
     "Create a journal entry"
     (interactive)
-    (setq org-descriptive-links t)
-    (org-capture nil "j")
-  )
+    ;;(setq org-descriptive-links t)
+    (org-capture nil "j"))
 #+END_SRC
 
 These capture functions are called from shell scripts in the operating
@@ -1126,21 +1059,6 @@ enter tags, so I define a shortcut to define tags while capturing.
 Capturing dents for status updates in statusnet are done the
 same. Their config is in the section [[Statusnet]]
 
-Capturing of screenshots is provided by the org-screenshot library.
-
-#+BEGIN_SRC emacs-lisp
-  (use-package org-screenshot)
-
-  (defun mrb/capture-screenshot()
-    "Capture a screenshot"
-    (interactive)
-    ;; Always create the standard attach dir if there is none
-    (org-attach-dir t)
-
-    ;; Don't hide the emacs frame, it's silly
-    (org-screenshot t ""))
-#+END_SRC
-
 ** Workflow
 Orgmode used a couple of thing which enable you to steer the workflow
 for items. Item states are the most prominent ones. Org-mode uses
@@ -1165,6 +1083,7 @@ Adapt the colors of the states I use a bit:
     ("COLLECT"   . (:foreground "MediumSeaGreen"   :weight bold))
     ("SOLVE"     . (:foreground "orange red"    :weight bold))
     ("READ"      . (:foreground "MediumPurple1" :weight bold))
+    ("PLAN"      . (:foreground "OliveDrab3" :weight bold))
   ))
 #+END_SRC
 
@@ -1191,7 +1110,7 @@ without having a confirmation (because we archive the whole subtree),
 so for now, I'm building in the confirmation.
 
 #+BEGIN_SRC emacs-lisp
-  (use-package org-habit)
+  (use-package org-habit :ensure nil)
 
   ;; I need a modified version of org-is-habit, which takes inheritance
   ;; in to account
@@ -1288,10 +1207,13 @@ inserted must not be active, otherwise they'll appear all over the
 place in the agenda.
 
 #+BEGIN_SRC emacs-lisp
-  (use-package org-expiry)
+  (use-package org-expiry
+    :ensure nil
+    :load-path "~/dat/src/emacs/packages/org-mode/contrib/lisp/"
 
-  (setq org-expiry-created-property-name "CREATED")
-  (setq org-expiry-inactive-timestamps   t)
+    :init
+    (setq org-expiry-created-property-name "CREATED")
+    (setq org-expiry-inactive-timestamps   t))
 #+END_SRC
 
 So, to create the timestamp I need a little helper function which
@@ -1318,14 +1240,17 @@ Now that function is used to insert the proprty when:
     "Insert a CREATED property using org-expiry.el for TODO entries"
     (mrb/insert-created-timestamp)
   )
+
+  ;; FIXME: this causes the TODO capture to resize, which may be normal?
   (ad-activate 'org-insert-todo-heading)
 
-  (use-package org-capture)
+  (use-package org-capture :ensure nil)
   (defadvice org-capture (after mrb/created-timestamp-advice activate)
     "Insert a CREATED property using org-expiry.el for TODO entries"
     (when (member (org-get-todo-state) org-todo-keywords-1)
       (mrb/insert-created-timestamp)))
   (ad-activate 'org-capture)
+  ;;(ad-deactivate 'org-capture)
 #+END_SRC
 
 Related to the above, with some regularity I want to record
@@ -1554,7 +1479,7 @@ Specific settings for babel and literate programming within org-mode
      org-babel-interpreters (quote ("emacs-lisp" "python" "ditaa" "sql" "sh" "R" "haskell" "js" "calc" "mathomatic"))
   )
   ;; Activate Babel languages
-  (use-package ob-gnuplot)
+  (use-package ob-gnuplot :ensure nil)
   (org-babel-do-load-languages
    'org-babel-load-languages
    '( (ditaa . t) (sql . t) (sh . t) (emacs-lisp t) (lisp t)
@@ -1711,123 +1636,23 @@ and HTML as destination format
     (interactive)
     (org-export-as-html 3 nil nil nil t))
 #+END_SRC
-** Blogging with org-mode                                                                              :blog:
-Having most of my writings in org-mode it makes sense to add just a
-little bit more to be able to push that content to my blogging
-platform; wordpress. Fortunately, there's some elisp for that in the
-form of org2blog, which publishes orgmode files as wordpress articles
-or pages.
-
-
-*** Org2Blog configuration for Wordpress
-Note: this section can probably be archived as I am not using
-wordpress anymore.
-
-I use my own repositories mostly
+** Journaling
+While the capture method is useful I found myself not using it very
+much. Not sure why, but I'm going to try =org-journal= and see it that
+is a better fit.
 
 #+BEGIN_SRC emacs-lisp
-  (use-package org2blog-autoloads)
-#+END_SRC
+  (use-package org-journal
 
-The configuration of org2blog is a matter of setting some
-variables. First let get some of the basics out of the way.
-
-#+BEGIN_SRC elisp
-  (setq
-   org2blog/wp-server-weblog-id ""
-   org2blog/wp-default-title "<Untitled>"
-   org2blog/wp-default-categories ""
-   org2blog/wp-confirm-post t)
-#+END_SRC
-
-Each blog-entry has it's own file, but is really nothing different
-from a normal org-mode file. To be able to have wordpress and orgmode
-work together, org2blog could insert some properties into the file,
-but I choose to have these in a so called /tracking-file/ which is a
-convenient outline of all blog entries. Bij making the header a link
-to the file, it makes a convenient system.
-
-#+BEGIN_SRC emacs-lisp
-  (setq
-   org2blog/wp-track-posts (list "~/dat/blogs/blogs.org" "To be filed properly")
-  )
-#+END_SRC
-
-This leaves use with the blogs to configure; the name, url and
-username are probably the required entries for each blog. I added the
-tracker file, which is the same as the global value. Authentication
-to the blogs is done interactively by default.
-
-#+BEGIN_SRC emacs-lisp
-  (setq org2blog/wp-blog-alist
-        '(("cobra"
-           :url "http://cobra.mrblog.nl/xmlrpc.php"
-           :username "mrb"
-           :track-posts ("~/dat/blogs/blogs.org" "cobra.mrblog.nl")
-           )
-          ("hsd"
-           :url "http://test.hsdev.com/xmlrpc.php"
-           :username "mrb"
-           :track-posts ("~/dat/blogs/blogs.org" "hsdev.com")
-           )))
-
-#+END_SRC
-*** Using org-mode for Jekyll based sites
-Using jekyll and orgmode together is a bit more low level, because
-jekyll as such is not a blogging solution, it can just parse files
-from one format to html.
-
-As there are quite a few different setups possible, it's probably
-smart to write a few paragraphs on how to set things up.
-
-As usual, I want it to be as simple as possible at first. One thing
-that is sort of fixed is the directory structure that jekyll expects
-and I that as a starting point.  Typically there is a =_posts=
-subdirectory there which will hold the sourse files that jekyll will
-need to convert into content for the website.
-
-Typically in org-mode, after writing a subtree, which is one blog post
-in this case, a call to =org-jekyll-export-current-entry= is
-called. This will try to deduce which project org-mode must use to
-publish the entry, based on the filename, i.e. is the file in or
-below the ':base-directory' of one the publishing projects and has the
-proper extension and so on.
-
-I chose to simplify this and use the org-mode files directly as source
-files in the jekyll directory structure and use =org-ruby= to convert
-the files with a jekyll plugin. This dramatically simplifies the
-process. The files written are actually valid org files, be it that
-the header is a bit strange and should really be an org header with
-properties.
-
-
-To support this process, I'm using the =jekyll-el= package as a base.
-Given the unmodified package, just setting the variables defined in
-there gets it configured for my situation:
-
-#+BEGIN_SRC emacs-lisp
-  (use-package jekyll
-    :config
+    :init
     (progn
-      (setq jekyll-directory "~/dat/blogs/mrblog/sites/main/")
-      (setq jekyll-post-ext ".org")
+      (setq org-journal-dir "~/dat/org/journal/")
 
-      (defun file-string (file)
-        "Read the contents of a file and return as a string."
-        (with-temp-buffer
-          (insert-file-contents file)
-          (buffer-string)))
+      (add-to-list 'org-agenda-files org-journal-dir)
 
-      (setq jekyll-post-template
-            (file-string
-             (concat jekyll-directory jekyll-posts-dir "_posttemplate.org")))))
+      ;; Match the journal files (FIXME: make this relocatable
+      (setq org-agenda-file-regexp "\\`[^.].*\\.org\\'|[0-9]+")))
 #+END_SRC
-
-The only special thing here is that I save the template in a file, so
-it's easier to change. On a call to =jekyll-draft-post= a title is asked
-and a buffer is filled with this title properly filled in, plus the
-filename is attached to the the buffer in the proper location. A
-simple save creates the draft as a file.
 
 ** Old configuration
 Below is what was contained in the old configuration. I will slowly
@@ -2133,12 +1958,10 @@ migrate this into more literal sections
   (bind-key "C-c s" 'mrb/shortenurl-replace-at-point org-mode-map)
   ;; END shorten url functionality
 
-  ;;(add-to-list 'load-path "~/dat/src/emacs/packages/org-bom/")
-  ;;(use-package org-bom)
-
   ;; archive entries into a date-tree
-  ;; (setq org-archive-location "%s_archive::date-tree")
-  (defadvice org-archive-subtree
+  ;; Keep the commented line around, it is convenient during testing
+  ;;(advice-remove 'org-archive-subtree 'org-archive-subtree-to-data-tree)q
+  (defadvice org-archive-subtree		;
     (around org-archive-subtree-to-data-tree activate)
     "org-archive-subtree to date-tree"
     (if
@@ -2275,7 +2098,7 @@ migrate this into more literal sections
   ;; (mrb/install-monitor remote-org-mobile-file 30)
 
   ;; Mail facilities related to org-mode
-  (use-package org-mime)
+  (use-package org-mime :ensure nil)
 
   ;; Small bit to mail an org subtree
   (defun mrb/mail-subtree-from-org ()
@@ -2313,7 +2136,7 @@ automatically on saving and opening. This uses the EasyPG library to
 get to my GPG key.
 
 #+BEGIN_SRC emacs-lisp
-(use-package org-crypt)
+(use-package org-crypt :ensure nil)
 (org-crypt-use-before-save-magic)
 (setq org-crypt-tag-matcher "encrypt")
 (setq org-crypt-key user-gpg-encrypt-key)
@@ -2330,30 +2153,6 @@ inherited by mistake.
 (add-to-list 'org-tags-exclude-from-inheritance (quote "crypt"))
 #+END_SRC
 
-** Commiting automatically
-I have lost a number of changes in the past because I reverted a
-file, made a mistake or whatever. Some of these mistakes can be
-reverted easily if saves are automatically committed
-
-Rather than using an after save hook, there is a minor
-git-auto-commit mode package which does just what I need.
-
-There is not much to configure for this minor mode. There are a couple
-of ways to enable it:
-1. file-local variable (put it in the file to be autocommitted)
-2. directory-local variable (make a =.dir-locals.el= file); this
-   enables it for all files in the directory
-3. as a hook
-
-I'm using the first method on relevant files. The disadvantage of
-this method is that you have to think about it for each file, so
-perhaps a =.dir-locals.el= is a better solution.
-
-I am considering using a generic hook again to enable the method and
-either using =git commit --amend= and commit squashing if working on
-more structured commits. For files that I really do not want
-autocommit to run I can use a file local variable to disable the hook
-(or the minor mode)
 * Key and mouse bindings
 Keyboard binding are the primary way to interact for me. I have been
 struggling with consistent keyboard shorcuts and how to integrate
@@ -2574,6 +2373,7 @@ runs smex, but limits the commands to make sense for the current
 major mode only.
 
 #+BEGIN_SRC emacs-lisp
+  (use-package smex)
   (bind-key "C-c M-x" 'execute-extended-command)
   (bind-key "M-x" 'smex)
   (bind-key "M-X" 'smex-major-mode-commands)
@@ -2927,9 +2727,7 @@ over in many cases. Here's a simplistic approach to get me started:
 This is probably incomplete or wrong even in some cases, but it's a start.
 
 #+BEGIN_SRC emacs-lisp
-  (use-package company
-    :config
-    (add-to-list 'company-backends 'company-emoji))
+  (use-package company)
 
   ;; Remap normal indent-for-tab-command
   (bind-key [remap indent-for-tab-command]
@@ -3061,11 +2859,13 @@ herself to find a match, in 90% of the cases, I just want to create a
 new file.
 
 #+BEGIN_SRC emacs-lisp
-(use-package ido)
-(ido-mode t)
-(setq ido-enable-flex-matching t) ;; enable fuzzy matching
-(setq ido-auto-merge-work-directories-length -1) ;; disable auto-merge
-(ido-everywhere)
+  (use-package ido
+    :config
+    (ido-mode t)
+    (setq ido-enable-flex-matching t) ;; enable fuzzy matching
+    (setq ido-auto-merge-work-directories-length -1) ;; disable auto-merge
+    (set-face-attribute 'ido-first-match nil :background "sea green" :foreground "black")
+    (ido-everywhere))
 #+END_SRC
 
 Normally, ido presents choices as a horizontal list which is kind of
@@ -3073,11 +2873,13 @@ messy, especially when working in projects which have standard files
 in many directories.
 
 #+BEGIN_SRC emacs-lisp
-(use-package ido-vertical-mode)
-(ido-vertical-mode)
+(use-package ido-vertical-mode
+  :config
+  (ido-vertical-mode))
 
-(use-package ido-hacks)
-(ido-hacks-mode)
+(use-package ido-hacks
+  :config
+  (ido-hacks-mode))
 #+END_SRC
 
 By selecting a piece of text, wrap-region can quote or otherwise
@@ -3086,8 +2888,9 @@ an option to configure in exception, which I have commented out as
 I've found none applicable yet.
 
 #+BEGIN_SRC emacs-lisp
-(use-package wrap-region)
-(wrap-region-global-mode 1)
+(use-package wrap-region
+  :config
+  (wrap-region-global-mode 1))
 ;; (add-to-list 'wrap-region-except-modes 'conflicting-mode)
 #+END_SRC
 
@@ -3144,14 +2947,10 @@ is in use, but we'll see.
 #+BEGIN_SRC emacs-lisp
   (use-package avy
     :config
-    (set-face-attribute
-     'avy-lead-face nil
-     :inherit isearch-lazy-highlight
-     :background "black"
-     :foreground "tomato")
+    (set-face-attribute 'avy-lead-face nil
+     :inherit isearch-lazy-highlight :background "black" :foreground "tomato")
     :bind
-    ("s-j" . avy-goto-word-or-subword-1)
-    )
+    ("s-j" . avy-goto-word-or-subword-1))
 #+END_SRC
 
 The effectiveness is also dependent on a quick and easy keyboard
@@ -3222,7 +3021,7 @@ and hopefully one will float to the top as being *the one*
 
     ; Always put one in the Sent folder on sending
     ;; Gcc takes care of this now.
-    ;;message-default-mail-headers "Bcc: mrb+Sent@hsdev.com\n"
+    message-default-mail-headers "Bcc: mrb+Sent@hsdev.com\n"
     mail-yank-prefix ">> "
   )
   ;; Automatically sign outgoing messages, be part of the solution here,
@@ -3450,18 +3249,22 @@ information I don't need to see. Let's make a simple map which can map
 these technical names to somewhat friendlier ones.
 
 #+BEGIN_SRC emacs-lisp
-  ;; Replace the group name with a user function evaluation, so I can
-  ;; map the name to something more friendly.
-  (setq gnus-group-line-format"%M%S%p%P%5y:%B%(%uG%)\n")
+    ;; Replace the group name with a user function evaluation, so I can
+    ;; map the name to something more friendly.
+    (setq gnus-group-line-format"%M%S%p%P%5y:%B%(%uG%)\n")
 
-  (setq group-name-map '
-        (("nnvirtual:Discussions" . "INBOX+Sent")))
+    (setq group-name-map '
+          (("nnvirtual:Discussions" . "INBOX+Sent")
+           ("nntp+news.gmane.org:gmane.emacs.devel" . "gmane.emacs.devel")
+           ("nntp+news.gmane.org:gmane.emacs.orgmode" . "gmane.emacs.orgmode")
+           ("nntp+news.gmane.org:gmane.mail.sylpheed.claws.general" . "gmane.mail.sylpheed.claws.general")
+           ("nntp+news.ziggozakelijk.nl:gnu.emacs.gnus" . "gnu.emacs.gnus")))
 
-  (defun gnus-user-format-function-G (arg)
-    (let ((mapped-name (assoc gnus-tmp-group group-name-map)))
-      (if (null mapped-name)
-          gnus-tmp-group
-        (cdr mapped-name))))
+    (defun gnus-user-format-function-G (arg)
+      (let ((mapped-name (assoc gnus-tmp-group group-name-map)))
+        (if (null mapped-name)
+            gnus-tmp-group
+          (cdr mapped-name))))
 #+END_SRC
 
 The sort order by real name seems to fit mostly; revisit later when
@@ -3676,6 +3479,7 @@ https://github.com/aperezdc/notmuch-addrlookup-c
 Installation would be quite easy:
 
 #+BEGIN_SRC elisp
+   ;;(use-package notmuch) ;; needed? or auto?
    (use-package notmuch-address
      :config
      (progn
@@ -3784,11 +3588,13 @@ The only pump.io elisp implementation does almost everything like I
 want it to be, including key bindings.
 
 #+BEGIN_SRC emacs-lisp
-  ;;(use-package pumpio-interface)
-
-  ;; Configure for qua.name
-  (setq pumpio-pod "http://qua.name")
-
+  (use-package pumpio-interface
+    :load-path "~/dat/src/pump.io.related/pumpio-el/src/"
+    :ensure oauth
+    :config
+    ;; Configure for qua.name
+    (setq pumpio-pod "https://status.qua.name")
+  )
 
   ;; I'm using a floating frame in awesome WM for dents
   (defun mrb/make-pump-frame ()
@@ -3828,6 +3634,8 @@ XMPP related settings, including interfacing it to other systems
 
 #+BEGIN_SRC emacs-lisp
     (use-package jabber
+      :ensure nil
+      :load-path "~/dat/src/emacs/packages/jabber.el/"
       :init
       ;; My accounts
       ;; The ',' makes sure the user-xmpp-account gets evaluated
@@ -3885,11 +3693,11 @@ XMPP related settings, including interfacing it to other systems
          )
 
 
-        ;; C-j is the prefix for all jabber command in the C-x map (so, C-x C-j precede all commands for jabber)
-        ;; The default C-x map for emacs has a C-j entry which binds it to
-        ;; dired-jump. This gets in the way of all the keyboard shortcuts for
-        ;; jabber, so lets re-call the definition here, so we are sure we get
-        ;; them.
+        ;; C-j is the prefix for all jabber command in the C-x map (so,
+        ;; C-x C-j precede all commands for jabber) The default C-x map
+        ;; for emacs has a C-j entry which binds it to dired-jump. This
+        ;; gets in the way of all the keyboard shortcuts for jabber, so
+        ;; lets re-call the definition here, so we are sure we get them.
 
         (bind-key "C-j" jabber-global-keymap ctl-x-map)
 
@@ -3922,7 +3730,9 @@ XMPP related settings, including interfacing it to other systems
   )
 
       :bind
-      ("C-c C-SPC" . jabber-activity-switch-to))
+      (("C-c C-SPC" . jabber-activity-switch-to)
+       :map jabber-global-keymap
+       ("C-j" . jabber-muc-join)))
 
 #+END_SRC
 ** Twister
@@ -3938,40 +3748,40 @@ hopefully one day consolidating all these entry points into a
 consistent interface to rule them all.
 
 #+BEGIN_SRC emacs-lisp
-  (add-to-list 'load-path "/home/mrb/dat/src/twister/twister.el")
-  (use-package twister)
-  (setq twister-user "mrb")
+  (use-package twister
+    :load-path "~/dat/src/twister/twister.el"
+    :ensure nil
+    :bind (:map twister-post-mode-map
+           ("C-i" . company-complete ))
+    :config
+    (setq twister-user "mrb")
 
-  (defun mrb/capture-twist()
-    "Create a new frame an run twister postnote"
-    (interactive)
+    (defun mrb/capture-twist()
+      "Create a new frame an run twister postnote"
+      (interactive)
 
-    (select-frame (make-frame '((name . "twister")
-                                (width . 80) (height . 15)
-                                (menu-bar-lines .0)
-                                (tool-bar-lines .0))))
+      (select-frame (make-frame '((name . "twister")
+                                  (width . 80) (height . 15)
+                                  (menu-bar-lines .0)
+                                  (tool-bar-lines .0))))
 
-    (twister-create-post)
+      (twister-create-post)
 
-    ;; And once we're there, make sure we are alone
-    (delete-other-windows))
+      ;; And once we're there, make sure we are alone
+      (delete-other-windows))
 
-  ;; Make sure we close our frame after we close the post
-  (defadvice twister-close-post (after delete-twister-frame activate)
-    "Advise to close the frame"
-    (if (equal "twister" (frame-parameter nil 'name))
-        (delete-frame)))
+    ;; Make sure we close our frame after we close the post
+    (defadvice twister-close-post (after delete-twister-frame activate)
+      "Advise to close the frame"
+      (if (equal "twister" (frame-parameter nil 'name))
+          (delete-frame)))
 
-  ;; I normally want to close the post after posting Note: this is not
-  ;; at all a duh! Another advise could be to just clear the window and
-  ;; have it ready for another twist
-  (defadvice twister-post-region (after close-twister-post activate)
-    "Advise to close the post"
-    (twister-close-post))
-
-  ;; Change the default keybinding to company mode completion
-  ;; C-i is the same as TAB
-  (bind-key "C-i" 'company-complete twister-post-mode-map)
+    ;; I normally want to close the post after posting Note: this is not
+    ;; at all a duh! Another advise could be to just clear the window and
+    ;; have it ready for another twist
+    (defadvice twister-post-region (after close-twister-post activate)
+      "Advise to close the post"
+      (twister-close-post)))
 #+END_SRC
 
 And, like the others, a commandline interface
@@ -3987,8 +3797,8 @@ In an attempt to do even more in emacs, i've installed `elfeed' and
 imported my feeds from RSSyl
 
 #+BEGIN_SRC emacs-lisp
-  (use-package vlc)  ;; Needs my little hack from https://github.com/mrvrb/vlc.el
-  (use-package async) ;; This is for elfeed, why not add it as dependency there?
+  (use-package vlc :ensure nil)  ;; Needs my little hack from https://github.com/mrvrb/vlc.el
+  ;(use-package async) ;; This is for elfeed, why not add it as dependency there?
   (use-package elfeed
     :init
     (progn
@@ -4109,13 +3919,6 @@ i want.
   ;; FIXME: recently Emacs crashes on this (ipv6 problem), so we don't don it automatically anymore.
   ;;(run-at-time 180 1800 (lambda () (unless elfeed-waiting (elfeed-update))))
 #+END_SRC
-** Telegram
-There's no telegram client in emacs lisp (yet), but I do have a little
-mode I use when giving telegram support. It's in my own repository on github.
-
-#+BEGIN_SRC emacs-lisp
-  (use-package tsupport)
-#+END_SRC
 * Development settings
 Some settings which aid in development tasks.
 
@@ -4148,6 +3951,11 @@ it only for /some/ modes and not globally.
 
 [2014-06-20 vr] Retrying ws-butler mode (see [[Visual]] )
 [2014-12-23 di] Retrying ws-butler mode (see [[Visual]] )
+** Generic
+Lets try to use ggtags everywhere.
+#+BEGIN_SRC emacs-lisp
+(use-package ggtags)
+#+END_SRC
 ** Emacs-Lisp
 Settings specific to using emacs lisp
 ** Haskell
@@ -4160,14 +3968,13 @@ and showing syntax errors.
   (use-package haskell-mode
     :init
     (progn
-      (add-to-list 'auto-mode-alist '("\\.hs\\'". haskell-mode))
       (add-hook 'haskell-mode-hook 'interactive-haskell-mode)
       (add-hook 'haskell-mode-hook 'turn-on-haskell-doc-mode)
       (add-hook 'haskell-mode-hook 'turn-on-haskell-indent))
 
+    :mode "\‌\.hs\\'"
     :config
-    (progn
-      (setq haskell-font-lock-symbols t)))
+    (setq haskell-font-lock-symbols t))
 #+END_SRC
 
 Because the haskell environment can be different for each project, we
@@ -4177,10 +3984,10 @@ if the specific build environment is not taken into account. The
 package flycheck-haskell automatically adjusts flycheck.
 
 #+BEGIN_SRC emacs-lisp
-  (use-package flycheck-haskell)
-
-  (eval-after-load 'flycheck
-    '(add-hook 'flycheck-mode-hook #'flycheck-haskell-setup))
+  (use-package flycheck-haskell
+    :config
+    (eval-after-load 'flycheck
+      '(add-hook 'flycheck-mode-hook #'flycheck-haskell-setup)))
 #+END_SRC
 
 For creating web apps I use yesod, which is supported by a number of
@@ -4188,11 +3995,10 @@ packages
 #+BEGIN_SRC emacs-lisp
   ;; Yesod's html like files
   (use-package hamlet-mode)
+  (use-package zeal-at-point
+     :bind
+     ("s-d" . zeal-at-point))
 
-  ;; TODO: this is not Haskell specific
-  (use-package zeal-at-point)
-  (bind-key "s-d" 'zeal-at-point)
-  ;;
 #+END_SRC
 ** Python
 Python is an indent aware language, wich saves quite a bit of fiddling
@@ -4205,7 +4011,8 @@ code.
 
 #+BEGIN_SRC emacs-lisp
   (use-package elpy
-    :init (elpy-enable))
+    :init
+    (elpy-enable))
 
   (add-hook 'python-mode-hook
             (lambda ()
@@ -4283,16 +4090,12 @@ git as the revision control system. In emacs that translates to useing
 magit, so let's begin with bringing that in.
 
 #+BEGIN_SRC emacs-lisp
-  (add-to-list 'load-path "~/.emacs.d/el-get/magit/lisp")
   (use-package magit
-    ;; the 'MRev' text in the modeline is useless
-    ;;:diminish magit-autorevert-mode
-
     :bind
      ("C-c m" . magit-status)
 
     :init
-     ;;(fullframe magit-status magit-mode-quit-window)
+     (fullframe magit-status magit-mode-quit-window)
 
     :config
     (progn
@@ -4303,15 +4106,39 @@ magit, so let's begin with bringing that in.
       (setq magit-last-seen-setup-instructions "1.4.0")))
 #+END_SRC
 
-* To organize and properly configure
-License templates
+*** Commiting automatically
+I have lost a number of changes in the past because I reverted a
+file, made a mistake or whatever. Some of these mistakes can be
+reverted easily if saves are automatically committed
+
+Rather than using an after save hook, there is a minor
+git-auto-commit mode package which does just what I need.
+
+There is not much to configure for this minor mode. There are a couple
+of ways to enable it:
+1. file-local variable (put it in the file to be autocommitted)
+2. directory-local variable (make a =.dir-locals.el= file); this
+   enables it for all files in the directory
+3. as a hook
+
+I'm using the first method on relevant files. The disadvantage of
+this method is that you have to think about it for each file, so
+perhaps a =.dir-locals.el= is a better solution.
+
+I am considering using a generic hook again to enable the method and
+either using =git commit --amend= and commit squashing if working on
+more structured commits. For files that I really do not want
+autocommit to run I can use a file local variable to disable the hook
+(or the minor mode)
 
 #+BEGIN_SRC emacs-lisp
-(use-package xlicense)
-(setq license-directory (concat emacs-directory "licenses"))
-(add-to-list 'license-types '(agpl . "AGPL"))
-(setenv "ORGANIZATION" user-organisation)
+(use-package git-auto-commit-mode )
 #+END_SRC
+*** Misc
+#+BEGIN_SRC emacs-lisp
+(use-package gist)
+#+END_SRC
+* To organize and properly configure
 
 Make sure erase works properly, even though I don't understand this,
 apparently this is what I need.

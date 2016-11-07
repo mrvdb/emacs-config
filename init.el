@@ -2,8 +2,8 @@
 ;;; Commentary:
 ;; Emacs initialisation starting point
 ;;
-;; I want to have as little in here as possible. The configuration is
-;; org-babel based. This means the bootstrap here is to load a proper
+;; I want to have as little in here as possible.  The configuration is
+;; org-babel based.  This means the bootstrap here is to load a proper
 ;; (part of) org-mode and be on our way.
 
 ;;; Code:
@@ -13,7 +13,7 @@
 ;; installed packages.  Don't delete this line.  If you don't want it,
 ;; just comment it out by adding a semicolon to the start of the line.
 ;; You may delete these explanatory comments.
-(package-initialize)
+;(package-initialize)
 
 (add-to-list 'load-path "~/dat/src/emacs/packages/org-mode/lisp/")
 
