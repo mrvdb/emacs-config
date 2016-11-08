@@ -150,49 +150,48 @@ First of all, define the package archives I need; for now, just the
 default gnu augmented with the melpa repository. I use setq because I
 want *this* entry to be the definitive one, not adding to a list.
 #+BEGIN_SRC emacs-lisp
-    (require 'package)
-    (package-initialize)
+  (require 'package)
+  (package-initialize)
 
-    (add-to-list 'package-archives
-                 '("melpa" . "http://melpa.org/packages/") t)
-    (add-to-list 'package-archives
-                 '("melpa-stable" . "https://stable.melpa.org/packages/") t)
-    (add-to-list 'package-archives
-                 '("gnu" . "http://elpa.gnu.org/packages/") t)
+  (add-to-list 'package-archives
+               '("melpa" . "http://melpa.org/packages/") t)
+  (add-to-list 'package-archives
+               '("melpa-stable" . "https://stable.melpa.org/packages/") t)
+  (add-to-list 'package-archives
+               '("gnu" . "http://elpa.gnu.org/packages/") t)
 
 
-    ;; Transitioning to use-package Eventually this sections just needs to
-    ;; load use-package, the rest should be distributed with the actual
-    ;; configuration of the packages.
-    (add-to-list 'load-path "~/dat/src/emacs/packages/use-package/")
-    (eval-when-compile
-      (require 'use-package))
-    ;; Default is to have elpa provide the package
-    (setq use-package-always-ensure t)
+  ;; Transitioning to use-package Eventually this sections just needs to
+  ;; load use-package, the rest should be distributed with the actual
+  ;; configuration of the packages.
+  (add-to-list 'load-path "~/dat/src/emacs/packages/use-package/")
+  (eval-when-compile
+    (require 'use-package))
+  ;; Default is to have elpa provide the package
+  (setq use-package-always-ensure t)
+  (setq use-package-verbose t)
 
-    (use-package cl-lib )
+  (use-package cl-lib )
 
-    (use-package flycheck )      ;; flycheck vs flymake?
+  (use-package fullframe  )    ;; show results of certain commands fullframe
 
-    (use-package fullframe  )    ;; show results of certain commands fullframe
+  (use-package guide-key )
 
-    (use-package guide-key )
+  (use-package hideshow-org )
+  (use-package hideshowvis )
 
-    (use-package hideshow-org )
-    (use-package hideshowvis )
+  (use-package json-rpc )
+  (use-package litable  )      ;; Real time evaluation (move to develop?)
+  (use-package mark-multiple )
 
-    (use-package json-rpc )
-    (use-package litable  )      ;; Real time evaluation (move to develop?)
-    (use-package mark-multiple )
+  (use-package paredit  )
+  (use-package rainbow-mode )  ;; show colornumbers/names as colors
+  (use-package edit-server )
 
-    (use-package paredit  )
-    (use-package rainbow-mode )  ;; show colornumbers/names as colors
-    (use-package edit-server )
-
-    (use-package fixed-point-completion
-      :load-path "~/dat/src/emacs/packages/fixed-point-completion/"
-      :ensure nil)
-    (use-package ghc )           ;; move to haskell?
+  (use-package fixed-point-completion
+    :load-path "~/dat/src/emacs/packages/fixed-point-completion/"
+    :ensure nil)
+  (use-package ghc )           ;; move to haskell?
 #+END_SRC
 
 * Personal information
@@ -324,15 +323,14 @@ Make life easier if we have sudo, so we can just edit the files and be
 done with them if possible
 
 #+BEGIN_SRC emacs-lisp
-  (add-to-list 'load-path "~/dat/src/emacs/packages/sudo-save/")
-  (use-package sudo-save :ensure nil)
+  (use-package sudo-save
+    :ensure nil
+    :load-path "~/dat/src/emacs/packages/sudo-save/")
 #+END_SRC
 
 Using pdf-tools for PDF handling
 #+BEGIN_SRC emacs-lisp
   (use-package pdf-tools
-
-
     :init
     (pdf-tools-install))
 #+END_SRC
@@ -418,7 +416,6 @@ and call that when we are done with our visual (X) init.
 #+BEGIN_SRC emacs-lisp
   (defun mrb/unicode-font-corrections()
     (interactive)
-
     (message "Turning emojis on")
     ;(emoji-fontset-enable "Symbola")
   )
@@ -799,7 +796,9 @@ on a line which is commented out in the proper syntax for that mode.
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
-  (add-hook 'after-init-hook #'global-flycheck-mode)
+  (use-package flycheck
+    :config
+    (add-hook 'after-init-hook #'global-flycheck-mode))
 
   ;; Extension mappings for several modes
   (use-package markdown-mode
@@ -915,7 +914,7 @@ up the location and files for that.
 ;; Some other modules I want
 (use-package org-present)           ;; Make presentations in org format
 (use-package org-agenda-property)   ;; Display org properties in the agenda view
-(use-package org-capture-pop-frame) ;; Captures in a new frame
+
 #+END_SRC
 
 ** Capturing information
@@ -927,10 +926,19 @@ starts life originally as a captured item. I use it for:
 3. Journaling entries;
 4. Statusnet Updates;
 
-Make sure org-capture is available:
+The =org-capture-pop-frame= makes sure all captures are in separate
+frames.
 
 #+BEGIN_SRC emacs-lisp
 (use-package org-capture :ensure nil)
+(use-package org-capture-pop-frame
+  :config
+  (setq ocpf-frame-parameters
+   '((name . "capture")
+     (width . 115)
+     (height . 15)
+     (tool-bar-lines . 0)
+     (menu-bar-lines . 0))))
 #+END_SRC
 
 Here are the templates used for them.
@@ -940,9 +948,9 @@ Here are the templates used for them.
    org-capture-templates
    (quote (
            ("b" "Buy"
-            entry (id "new-todo-receiver") "* BUY %? :buy:\n" :prepend t)
+            entry (id "new-todo-receiver") "* BUY%? :buy:\n" :prepend t)
            ("t" "Todo"
-            entry (id "new-todo-receiver") "* TODO %?\n%i" :prepend t)
+            entry (id "new-todo-receiver") "* TODO%?\n%i" :prepend t)
            ("j" "Journal"
             entry (file+datetree (concat org-directory "journal.org"))
             "* ___________________________________________________________ *%U* ___\n\n%?\n")
@@ -965,41 +973,6 @@ Here are the templates used for them.
    )
 #+END_SRC
 
-The concept I use for capturing is that a window is opened in the
-center of the screen, on top of all windows, on all workspaces, so it
-shows up whenever I press the shortcut key for it. The exception to
-this rule is journaling entries, which go into a regular Emacs frame.
-
-So, the first thing I need is a way to create a capturing frame and
-proper arrangement for finalising the capturing; the frame should be
-deleted. The frame should also be deleted if the capture is destroyed
-for some reason. The two =defadvice= snippets take care of this. Also,
-by default org-capture splits the screen; we do not need that as we
-have a dedicated frame for it, so on entering capture mode we just
-delete the other windows which may be in the frame.
-
-#+BEGIN_SRC emacs-lisp
-  (defun mrb/make-capture-frame ()
-    "Create a new frame for capture purposes."
-    (interactive)
-    (make-frame '((name . "capture")
-                  (width . 115) (height . 15)
-                  (menu-bar-lines . 0) (tool-bar-lines . 0))))
-
-  (defadvice org-capture-finalize (after delete-capture-frame activate)
-    "Advise org-capture-finalize to close the frame if it is the capture frame"
-    (if (equal "capture" (frame-parameter nil 'name))
-        (delete-frame)))
-
-  (defadvice org-capture-destroy (after delete-capture-frame activate)
-    "Advise org-capture-destroy to close the frame if it is the capture frame"
-    (if (equal "capture" (frame-parameter nil 'name))
-        (delete-frame)))
-
-  (add-hook 'org-capture-mode-hook 'delete-other-windows)
-  (add-hook 'org-capture-mode-hook '(lambda () (setq mode-line-format nil)))
-#+END_SRC
-
 Define functions for each piece of information captured, so they can
 be easily bound to keys.
 
@@ -1007,16 +980,12 @@ be easily bound to keys.
   (defun mrb/capture-todo ()
     "Capture a TODO item"
     (interactive)
-    (with-selected-frame
-        (mrb/make-capture-frame)
-      (org-capture nil "t")))
+    (org-capture nil "t"))
 
   (defun mrb/capture-buy ()
     "Capture a BUY item"
     (interactive)
-    (with-selected-frame
-        (mrb/make-capture-frame)
-      (org-capture nil "b")))
+    (org-capture nil "b"))
 
   (defun mrb/make-journal-entry ()
     "Create a journal entry"
@@ -1317,7 +1286,8 @@ string, which will then be used instead of the standard 3 dots, or a
 face which will then be used to render the standard 3 dots.
 
 #+BEGIN_SRC emacs-lisp
-(setq org-ellipsis "...")
+(setq org-ellipsis "…")
+
 #+END_SRC
 
 There are a couple of ways within org to emphasize text inline
@@ -2482,8 +2452,9 @@ pointer is over and that we are scrolling 1 line at a time. I don't
 use any modifiers with the scroll wheel.
 
 #+BEGIN_SRC emacs-lisp
-(setq mouse-wheel-follow-mouse 't)
-(setq mouse-wheel-scroll-amount '(1 ((shift) . 1)))
+  (setq mouse-wheel-follow-mouse 't)
+  (setq mouse-wheel-scroll-amount '(1 ((shift) . 1)))
+  (setq focus-follows-mouse t) ;; i3wm changes focus automatically
 #+END_SRC
 * Terminals, Character encodings and emulation
 My policy is to use Emacs for as many things and use as little
@@ -2726,30 +2697,6 @@ over in many cases. Here's a simplistic approach to get me started:
 
 This is probably incomplete or wrong even in some cases, but it's a start.
 
-#+BEGIN_SRC emacs-lisp
-  (use-package company)
-
-  ;; Remap normal indent-for-tab-command
-  (bind-key [remap indent-for-tab-command]
-    'company-indent-for-tab-command company-mode-map)
-
-  ;; Save the normal completion functions temporarily
-  (defvar completion-at-point-functions-saved nil)
-
-  ;; Hook company completion into all normal completion functions, so it
-  ;; just is enabled everywhere
-  (defun company-indent-for-tab-command (&optional arg)
-    (interactive "P")
-    (let ((completion-at-point-functions-saved completion-at-point-functions)
-          (completion-at-point-functions '(company-complete-common-wrapper)))
-      (indent-for-tab-command arg)))
-
-  (defun company-complete-common-wrapper ()
-    (let ((completion-at-point-functions completion-at-point-functions-saved))
-      (company-complete-common)))
-
-#+END_SRC
-
 This way, TAB always does completion or indent, unless company-mode is
 not active.
 
@@ -2768,7 +2715,6 @@ Content that I want:
   is the cursor in most cases.
 - maybe: spelling suggestions
 - nick completion in irc channels
--
 
 Candidates:
 - auto-complete :: http://cx4a.org/software/auto-complete/
@@ -2779,14 +2725,7 @@ migrating to company-mode now, as it seems a lot faster and a lot
 easier to write backends for. Also, company mode gets more praise from
 emacs users, but I recall having problems with it. Anyway, let's
 enable company-mode everywhere for everything except for some modes
-which we know lead to problems:
-
-#+BEGIN_SRC emacs-lisp
-  (setq company-global-modes
-        '(not magit-status-mode
-              help-mode))
-  (add-hook 'after-init-hook 'global-company-mode)
-#+END_SRC
+which we know lead to problems.
 
 The capf backend uses 'completion-at-point-functions' as source for
 candidates, which is what emacs by default does, so I want that in my
@@ -2805,19 +2744,43 @@ The default keybindings needs changing too; moving the selection up
 and down is mapped to C-p and C-n, just like moving the cursor in
 normal text.
 
-#+BEGIN_SRC emacs-lisp
-(bind-key  "C-n" 'company-select-next company-active-map)
-(bind-key  "C-p" 'company-select-previous company-active-map)
-#+END_SRC
-
 Having the completion pop up automatically is annoying in most cases,
 so I disable that and when the popup is there, don't require a match.
 
 #+BEGIN_SRC emacs-lisp
-  (setq company-idle-delay nil)
-  (setq company-require-match 'never)
+  (use-package company
+    :bind
+    (:map company-active-map
+          ("C-n" . company-select-next)
+          ("C-p" . company-select-previous)
+     :map company-mode-map
+          ;; Remap normal indent-for-tab-command
+          ([remap indent-for-tab-command] . company-indent-for-tab-command))
 
+    :config
+    (setq company-idle-delay nil
+          company-require-match 'never)
+    (setq company-global-modes
+          '(not magit-status-mode
+                help-mode))
+    (add-hook 'after-init-hook 'global-company-mode)
+
+    ;; Save the normal completion functions temporarily
+    (defvar completion-at-point-functions-saved nil)
+
+    ;; Hook company completion into all normal completion functions, so it
+    ;; just is enabled everywhere
+    (defun company-indent-for-tab-command (&optional arg)
+      (interactive "P")
+      (let ((completion-at-point-functions-saved completion-at-point-functions)
+            (completion-at-point-functions '(company-complete-common-wrapper)))
+        (indent-for-tab-command arg)))
+
+    (defun company-complete-common-wrapper ()
+      (let ((completion-at-point-functions completion-at-point-functions-saved))
+        (company-complete-common))))
 #+END_SRC
+
 ** Ad 4. Mode specialisation
 There's always exceptions to the rule; with Emacs doubly so. Here's
 the relevant exceptions for my configuration.
@@ -2838,8 +2801,9 @@ predictable by showing it in the same place and making sure I can get
 rid of it easily.
 
 #+BEGIN_SRC emacs-lisp
-(use-package popwin)
-(setq display-buffer-function 'popwin:display-buffer)
+  (use-package popwin
+    :config
+    (setq display-buffer-function 'popwin:display-buffer))
 #+END_SRC
 ** Ad 6. Guaranteed response-time
 I haven't found a solution for this yet, but also have not found it to
@@ -2873,13 +2837,14 @@ messy, especially when working in projects which have standard files
 in many directories.
 
 #+BEGIN_SRC emacs-lisp
-(use-package ido-vertical-mode
-  :config
-  (ido-vertical-mode))
+  (use-package ido-vertical-mode
+    :config
+    (setq ido-vertical-define-keys 'C-n-C-p-up-down-left-right)
+    (ido-vertical-mode))
 
-(use-package ido-hacks
-  :config
-  (ido-hacks-mode))
+  (use-package ido-hacks
+    :config
+    (ido-hacks-mode))
 #+END_SRC
 
 By selecting a piece of text, wrap-region can quote or otherwise
@@ -3633,108 +3598,107 @@ edit -e '(mrb/capture-pump)'
 XMPP related settings, including interfacing it to other systems
 
 #+BEGIN_SRC emacs-lisp
-    (use-package jabber
-      :ensure nil
-      :load-path "~/dat/src/emacs/packages/jabber.el/"
-      :init
-      ;; My accounts
-      ;; The ',' makes sure the user-xmpp-account gets evaluated
-      (setq jabber-account-list
-            `((,user-xmpp-account (:connection-type . starttls))))
+  (use-package jabber
+    :ensure nil
+    :load-path "~/dat/src/emacs/packages/jabber.el/"
+    :init
+    ;; My accounts
+    ;; The ',' makes sure the user-xmpp-account gets evaluated
+    (setq jabber-account-list
+          `((,user-xmpp-account (:connection-type . starttls))))
 
-      :config
-      (progn
-        ;; Show some info in the modeline
-        (jabber-mode-line-mode 1)
+    :config
+    ;; Show some info in the modeline
+    (jabber-mode-line-mode 1)
 
-        ;; Configuration variables
-        (setq
-         jabber-show-offline-contacts nil
-         jabber-default-priority 30
-         jabber-alert-message-hooks (quote
-                                     (jabber-message-libnotify
-                                      jabber-message-echo
-                                      jabber-message-awesome
-                                      jabber-message-wave
-                                      jabber-message-scroll))
-         jabber-message-alert-same-buffer nil
-         jabber-roster-show-bindings nil
-         jabber-auto-reconnect t
-         jabber-chat-buffer-format "*-chat-%n-*"
-         jabber-groupchat-buffer-format "*-groupchat-%n-*"
-         jabber-muc-colorize-foreign t
-         jabber-muc-colorize-local t
-         jabber-muc-disable-disco-check t
-         jabber-muc-private-buffer-format "*-muc-priv-%g-%n-*"
-         jit-lock-stealth-time 16
-         jabber-show-resources 'sometimes
-         jabber-resource-line-format "         %j/%r%S [%p]"
-         jabber-roster-buffer "*-roster-*"
-         jabber-roster-line-format "  %u %a %-25n - %S"
-         jabber-roster-show-title nil
-         jabber-roster-subscription-display (quote
-                                             (("none" . "   ")
-                                              ("from" . "← ")
-                                              ("to" . " →")
-                                              ("both" . "←→")))
-         jabber-socks5-proxies (quote ("proxy.hsdev.com"))
-         jabber-vcard-avatars-retrieve nil
-         jabber-muc-disable-disco-check t
-         jabber-muc-colorize-foreign t
-         jabber-muc-colorize-local t
-         jabber-muc-nick-saturation 0.35 ;; empirical value, suitable for my theme
-         jabber-muc-nick-value 0.75
+    ;; Configuration variables
+    (setq
+     jabber-show-offline-contacts nil
+     jabber-default-priority 30
+     jabber-alert-message-hooks (quote
+                                 (jabber-message-libnotify
+                                  jabber-message-echo
+                                  jabber-message-awesome
+                                  jabber-message-wave
+                                  jabber-message-scroll))
+     jabber-message-alert-same-buffer nil
+     jabber-roster-show-bindings nil
+     jabber-auto-reconnect t
+     jabber-chat-buffer-format "*-chat-%n-*"
+     jabber-groupchat-buffer-format "*-groupchat-%n-*"
+     jabber-muc-colorize-foreign t
+     jabber-muc-colorize-local t
+     jabber-muc-disable-disco-check t
+     jabber-muc-private-buffer-format "*-muc-priv-%g-%n-*"
+     jit-lock-stealth-time 16
+     jabber-show-resources 'sometimes
+     jabber-resource-line-format "         %j/%r%S [%p]"
+     jabber-roster-buffer "*-roster-*"
+     jabber-roster-line-format "  %u %a %-25n - %S"
+     jabber-roster-show-title nil
+     jabber-roster-subscription-display (quote
+                                         (("none" . "   ")
+                                          ("from" . "← ")
+                                          ("to" . " →")
+                                          ("both" . "←→")))
+     jabber-socks5-proxies (quote ("proxy.hsdev.com"))
+     jabber-vcard-avatars-retrieve nil
+     jabber-muc-disable-disco-check t
+     jabber-muc-colorize-foreign t
+     jabber-muc-colorize-local t
+     jabber-muc-nick-saturation 0.35 ;; empirical value, suitable for my theme
+     jabber-muc-nick-value 0.75
 
-         ;; Make the MUCs
-         jabber-muc-show-affiliation-changes nil
-         jabber-muc-show-enter-presence nil
-         jabber-muc-show-leave-messages nil
-         jabber-muc-show-role-changes nil
-         )
+     ;; Make the MUCs
+     jabber-muc-show-affiliation-changes nil
+     jabber-muc-show-enter-presence nil
+     jabber-muc-show-leave-messages nil
+     jabber-muc-show-role-changes nil)
 
 
-        ;; C-j is the prefix for all jabber command in the C-x map (so,
-        ;; C-x C-j precede all commands for jabber) The default C-x map
-        ;; for emacs has a C-j entry which binds it to dired-jump. This
-        ;; gets in the way of all the keyboard shortcuts for jabber, so
-        ;; lets re-call the definition here, so we are sure we get them.
+     ;; Do not steal my focus in the mini buffer
+    ;; Message alert hooks
+    (define-jabber-alert echo "Show a message in the echo area"
+      (lambda (msg)
+        (unless (minibuffer-prompt)
+          (message "%s" msg))))
 
-        (bind-key "C-j" jabber-global-keymap ctl-x-map)
+    ;; Define a company backend
+    (defun company-jabber(command &optional arg &rest ignored)
+      (interactive (list 'interactive))
+      (cl-case command
+        ;; If called interactively, start the backend
+        (interactive (company-begin-backend 'company-jabber-muc-backend))
+        ;; Try to get the prefix in jabber-chat-mode
+        (prefix (and (eq major-mode 'jabber-chat-mode)
+                     (company-grab-symbol)))
+        ;; Getting candidates, remove non-matches from list
+        (candidates
+         (cl-remove-if-not
+          (lambda (c) (string-prefix-p arg c))
+          (jabber-muc-nicknames)))
+        ;; We have inserted candidate in the buffer, augment it with ': '
+        (post-completion (insert ": "))))
 
-        ;; Do not steal my focus in the mini buffer
-        ;; Message alert hooks
-        (define-jabber-alert echo "Show a message in the echo area"
-          (lambda (msg)
-            (unless (minibuffer-prompt)
-              (message "%s" msg))))
+    (add-to-list 'company-backends 'company-jabber)
 
-        ;; Define a company backend
-        (defun company-jabber(command &optional arg &rest ignored)
-          (interactive (list 'interactive))
-          (cl-case command
-            ;; If called interactively, start the backend
-            (interactive (company-begin-backend 'company-jabber-muc-backend))
-            ;; Try to get the prefix in jabber-chat-mode
-            (prefix (and (eq major-mode 'jabber-chat-mode)
-                         (company-grab-symbol)))
-            ;; Getting candidates, remove non-matches from list
-            (candidates
-             (cl-remove-if-not
-              (lambda (c) (string-prefix-p arg c))
-              (jabber-muc-nicknames)))
-            ;; We have inserted candidate in the buffer, augment it with ': '
-            (post-completion (insert ": "))))
-        (add-to-list 'company-backends 'company-jabber)
-        (bind-key "<tab>" 'company-complete jabber-chat-mode-map)
-
-  )
-
-      :bind
-      (("C-c C-SPC" . jabber-activity-switch-to)
-       :map jabber-global-keymap
-       ("C-j" . jabber-muc-join)))
-
+    ;; C-j is the prefix for all jabber command in the C-x map (so,
+    ;; C-x C-j precede all commands for jabber) The default C-x map
+    ;; for emacs has a C-j entry which binds it to dired-jump. This
+    ;; gets in the way of all the keyboard shortcuts for jabber, so
+    ;; lets re-call the definition here, so we are sure we get them.
+    :bind
+    (("C-c C-SPC" . jabber-activity-switch-to)
+     :map jabber-chat-mode-map
+     ("<tab>" . company-complete)
+     :map ctl-x-map
+     ("C-j" . jabber-global-keymap)
+     :map jabber-global-keymap
+     ("C-j" . jabber-muc-join)))
 #+END_SRC
+
+#+RESULTS:
+
 ** Twister
 Twister is a p2p microblogging application based on
 1. Bitcoin - for user registration and authentication
