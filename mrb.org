@@ -214,7 +214,7 @@ other places too.
   (setq user-domain       "hsdev.com")
   (setq user-organisation "HS-Development BV")
   (setq user-xmpp-account (concat user-mail-address "/" system-name))
-  (setq user-gpg-encrypt-key "FEAA7ADD")
+  (setq user-gpg-encrypt-key "0x235E5C8CF5E8DFFB")
 #+END_SRC
 
 
