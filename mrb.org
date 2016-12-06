@@ -3943,6 +3943,10 @@ and showing syntax errors.
 
     :mode "\‌\.hs\\'"
     :config
+
+    ;; Replace ⇒ with ⇉ q
+    (delete '("=>" . "⇒") haskell-font-lock-symbols-alist)
+    (add-to-list 'haskell-font-lock-symbols-alist '("=>" . "⇉"))
     (setq haskell-font-lock-symbols t))
 #+END_SRC
 
