@@ -845,15 +845,29 @@ on a line which is commented out in the proper syntax for that mode.
     :commands (csv-mode)
     :mode "\\.csv\\'")
 
+  (use-package javascript-mode
+    :ensure nil  ;; built in
+    :commands (javascript-mode)
+    :mode "\\.js\\'")
 
-  ;; Second, specify the extension to function mappings
-  (add-to-list 'auto-mode-alist '("\\.js\\'"       . javascript-mode))
-  (add-to-list 'auto-mode-alist '("\\.patch\\'"    . diff-mode))
-  (add-to-list 'auto-mode-alist '("\\.zsh\\'"      . sh-mode))
+  (use-package diff-mode
+    :ensure nil  ;; built in
+    :commands (diff-mode)
+    :mode "\\.patch\\'")
+
+  (use-package sh-mode
+    :ensure nil ;; built in
+    :commands (sh-mode)
+    :mode "\\.zsh\\'")
 
   ;; Open scratch buffer by default in the mode we are in at the moment
   ;; with C-u prefix a mode will be asked to use
   (use-package scratch)
+  ;; Don't throw away scratch buffer
+  (use-package persistent-scratch
+    :ensure t
+    :config
+    (persistent-scratch-setup-default))
 
   ;; Turn on eldoc for modes which support it
   (dolist
@@ -956,24 +970,7 @@ Here are the templates used for them.
             entry (id "new-todo-receiver") "* TODO%?\n%i" :prepend t)
            ("j" "Journal"
             entry (file+datetree (concat org-directory "journal.org"))
-            "* ___________________________________________________________ *%U* ___\n\n%?\n")
-           ("w" "Weigh-In"
-            entry (file+headline (concat org-directory "diet.org") "Daily Logs")
-            "* CAL-IN Diet for day %t
-  %^{Weight}p
-  | Food / Exercise | Calories | Quantity | Total |
-  |-----------------+----------+----------+-------|
-  | %?              |          |          |       |
-  |-----------------+----------+----------+-------|
-  | Total           |          |          |       |
-  |-----------------+----------+----------+-------|
-  #+TBLFM: $4=$2*$3;%.0f::$LR4=vsum(@2$4..@-I$4)
-
-  "
-            :prepend t :empty-lines 1)
-           )
-          )
-   )
+            "* ___________________________________________________________ *%U* ___\n\n%?\n"))))
 #+END_SRC
 
 Define functions for each piece of information captured, so they can
