@@ -994,7 +994,7 @@ be easily bound to keys.
     "Create a journal entry"
     (interactive)
     ;;(setq org-descriptive-links t)
-    (org-capture nil "j"))
+    (org-journal-new-entry))
 #+END_SRC
 
 These capture functions are called from shell scripts in the operating
@@ -1619,12 +1619,14 @@ is a better fit.
 
     :init
     (progn
-      (setq org-journal-dir "~/dat/org/journal/")
+      ;; The expand-file-name is needed, which is odd, because for single
+      ;; files this is not needed.
+      (setq org-journal-dir (expand-file-name "~/dat/org/journal/"))
 
       (add-to-list 'org-agenda-files org-journal-dir)
 
-      ;; Match the journal files (FIXME: make this relocatable
-      (setq org-agenda-file-regexp "\\`[^.].*\\.org\\'|[0-9]+")))
+      ;; Match the journal files (FIXME: make this independent of earlier assignments)
+      (setq org-agenda-file-regexp "[0-9]+")))
 #+END_SRC
 
 ** Old configuration
@@ -2419,7 +2421,7 @@ Orgmode specific keybindings.
   (bind-key "C-c a" 'org-agenda)
   (bind-key "C-c b" 'org-iswitchb)
   (bind-key "C-c l" 'org-store-link)
-  (bind-key "C-c j" 'mrb/make-journal-entry)
+  (bind-key "C-c j" 'org-journal-new-entry)
   (bind-key "C-c p" 'org-plot/gnuplot)
 #+END_SRC
 ** Other key and mouse related settings
