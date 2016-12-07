@@ -741,6 +741,9 @@ is a likely event).
   ;; #' means:
   (run-with-idle-timer mrb/save-idle-time 'always #'mrb/save-timer-callback)
 #+END_SRC
+
+Also, save the location in files between sessions.
+
 #+BEGIN_SRC emacs-lisp
   ;; Minibuffer prompt is a prompt, don't enter it as text.
   (setq minibuffer-prompt-properties (quote (read-only t point-entered minibuffer-avoid-prompt face minibuffer-prompt)))
@@ -749,6 +752,31 @@ is a likely event).
   (use-package saveplace
     :init
     (setq-default save-place t))
+#+END_SRC
+
+The C-x-w shortcut write a file to a new location (and adjusts the
+buffer), but leaves the old file lingering. The next defun moves a
+file in a neater way.
+
+#+BEGIN_SRC emacs-lisp
+  (defun mrb/move-file (new-location)
+    "Write this file to NEW-LOCATION, and delete the old one."
+    (interactive (list (if buffer-file-name
+                           (read-file-name "Move file to: ")
+                         (read-file-name "Move file to: "
+                                         default-directory
+                                         (expand-file-name (file-name-nondirectory (buffer-name))
+                                                           default-directory)))))
+    (when (file-exists-p new-location)
+      (delete-file new-location))
+    (let ((old-location (buffer-file-name)))
+      (write-file new-location t)
+      (when (and old-location
+                 (file-exists-p new-location))
+        (delete-file old-location))))
+
+  ;; Bind it to the usual shortcut
+  (bind-key "C-x C-w" 'mrb/move-file)
 #+END_SRC
 * Modes
 Customisation setting for specific modes. Most of the modes I use have
