@@ -73,6 +73,7 @@ This has a number of attractive properties:
 *** Hardware											    :hardware:
 **** http://www.readynas.com/?feed=rss2
 **** https://www.yubico.com/feed/								    :security:
+**** http://everyday-carry.com/rss
 *** People
 **** http://julien.danjou.info/blog/index.xml							      :people:
 **** https://mrblog.nl/feed 									   :people:me:
@@ -83,6 +84,8 @@ This has a number of attractive properties:
 **** http://blog.sarine.nl/feed/index.xml
 **** http://heikkil.github.io/rss.xml
 **** https://www.jwz.org/blog/feed/
+**** http://www.blaenkdenum.com/rss.xml
+**** http://localhost:8000/feed/atom.xml
 *** Automotive
 **** http://feeds.feedburner.com/TheChicane							   :oldschool:
 **** http://www.gearjournal.com/feed/
@@ -97,3 +100,4 @@ This has a number of attractive properties:
 **** http://feeds2.feedburner.com/TheArtOfManliness
 **** http://www.geocaching.com/blog/feed/
 **** http://vimeo.com/mrvdb/subscriptions/videos/rss/5d94482c63b00132e107359e3740cd5d62bb60d3	 :video:vimeo:
+**** https://unsplash.com/rss

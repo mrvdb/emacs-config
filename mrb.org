@@ -253,6 +253,9 @@ and run =el-get-install= with the package name.
               (:name company-emoji          :type github :pkgname "dunn/company-emoji")
               (:name emoji-fontset          :type github :pkgname "zonuexe/emoji-fontset.el")
               (:name gnorb                  :type github :pkgname "girzel/gnorb")
+              (:name nnreddit               :type github :pkgname "paul-issartel/nnreddit")
+              (:name selectric              :type github :pkgname "rbanffy/selectric-mode")
+              (:name selected               :type github :pkgname "Kungsgeten/selected.el")
             )
       )
 
@@ -265,8 +268,8 @@ and run =el-get-install= with the package name.
                   smart-tab yaml-mode
                   hideshow-org hideshowvis
                   oauth flim haskell-mode ghc-mod s f
-                  flycheck pkg-info perspective ido-vertical-mode jekyll-el org2blog
-                  identica-mode php-mode company-mode csv-mode notmuch use-package
+                  flycheck pkg-info perspective ido-vertical-mode ido-hacks jekyll-el org2blog
+                  php-mode company-mode csv-mode notmuch use-package
                   git-timemachine eimp litable diminish paredit fullframe wanderlust avy
                   adaptive-wrap elpy ggtags fill-column-indicator plantuml-mode free-keys
                   pdf-tools hamlet-mode zeal-at-point flycheck-haskell seq)
@@ -1576,7 +1579,43 @@ thing to do, which is not the case.
    org-refile-allow-creating-parent-nodes (quote confirm)
    org-refile-targets (quote ((org-agenda-files :maxlevel . 10 )))
    org-refile-use-outline-path 'file
+   org-outline-path-complete-in-steps nil
 )
+#+END_SRC
+
+The list of headers to refile to is, in the standard config, basically
+everything. I limit it above to a maximum depth of 10, but then
+still. By using =org-refile-target-verify-function= we can fine-tune
+the decision whether to use a header as target or not.
+The following conditions have been implemented:
+
+1. The header must /not/ be a DONE item;
+2. The header needs to have children.
+
+The latter is the most important one and will prevent creating
+'gathering' items to tasks themselves.
+
+#+BEGIN_SRC emacs-lisp
+  (defun mrb/has-DONE-keyword()
+    "Return t when the heading at point has a `DONE' like keyword"
+    (member (nth 2 (org-heading-components)) org-done-keywords))
+
+  (defun mrb/verify-refile-target()
+    "Decide if a target header can be used as a refile target
+  Conditions to return t:
+  - header must not have one of the DONE keywords
+  - it must be a parent of something already"
+    ;; interactive during testing
+    (interactive)
+
+    (and
+     ; exclude done keyword headers
+     (not (mrb/has-DONE-keyword))
+     ; must have a child
+     (save-excursion (org-goto-first-child))))
+
+
+  (setq org-refile-target-verify-function 'mrb/verify-refile-target)
 #+END_SRC
 ** Exporting to other formats
 Orgmode can export to a variety of formats, I mainly use LaTeX (PDF)
@@ -2107,9 +2146,10 @@ migrate this into more literal sections
                  (org-extract-archive-heading
                   (org-get-local-archive-location)))
         (let* ((dct (decode-time (org-current-time)))
-               (y (nth 5 dct))
-               (m (nth 4 dct))
-               (d (nth 3 dct))
+               (today (calendar-current-date))
+               (y (calendar-extract-year today))
+               (m (calendar-extract-month today))
+               (d (calendar-extract-day today))
                (this-buffer (current-buffer))
                (location (org-get-local-archive-location))
                (afile (org-extract-archive-file location))
@@ -2121,9 +2161,7 @@ migrate this into more literal sections
             (error "Invalid `org-archive-location'"))
           (save-excursion
             (switch-to-buffer (find-file-noselect afile))
-            (org-datetree-find-year-create y)
-            (org-datetree-find-month-create y m)
-            (org-datetree-find-day-create y m d)
+            (org-datetree-find-date-create today)
             (widen)
             (switch-to-buffer this-buffer))
           ad-do-it)
@@ -2422,7 +2460,7 @@ accepts all kinds of key specifications, including strings.
   (bind-key "RET" 'newline-and-indent)
 
   ;; Comment code lines, command reacts based on the major mode.
-  (bind-key "s-/" 'comment-or-uncomment-region)
+  (bind-key "s-/" 'comment-dwim)
 
   (bind-key "s-s" 'save-buffer)
 
@@ -3037,6 +3075,9 @@ in many directories.
 #+BEGIN_SRC emacs-lisp
 (use-package ido-vertical-mode)
 (ido-vertical-mode)
+
+(use-package ido-hacks)
+(ido-hacks-mode)
 #+END_SRC
 
 By selecting a piece of text, wrap-region can quote or otherwise
@@ -3058,6 +3099,25 @@ which expands a selection by semantic analysis can not be left out
     :bind
     (("s-\\" . er/expand-region)
      ("s-|"  . er/contract-region)))
+#+END_SRC
+
+Once we have a region, it may be nice to have a special keymap to bind
+keys and do specific actions. I use the =selected= package for that.
+
+#+BEGIN_SRC emacs-lisp
+(use-package selected
+  :commands selected-minor-mode
+  :bind (:map selected-keymap
+              ;; For all modes
+              ("s" . write-region)
+
+              ;; Copied from example
+              ("q" . selected-off)
+              ("u" . upcase-region)
+              ("d" . downcase-region)
+              ("w" . count-words-region)
+              ("m" . apply-macro-to-region-lines)))
+
 #+END_SRC
 
 The multiple cursors package is often used for repetitive editting.
@@ -3121,16 +3181,17 @@ seems to be the '-t' option to the =ssh= program.
 #+END_SRC
 
 * Browser integration
-My default browser, as set in the OS, is chromium. Yet, emacs needs
-an explicit mention, otherwise it will start firefox. Not sure why
-that is.
+My default browser, as set in the OS, should be started automatically
+on opening =http:= like stuff and =html= files. The only link to the
+/outside world/ is specifying that =xdg-open= should figure out what
+program to use.
 
 #+BEGIN_SRC emacs-lisp
 (setq browse-url-browser-function (quote browse-url-generic))
 (setq browse-url-generic-program "xdg-open")
 #+END_SRC
 
-Entering information in text areas in the browsert, provided it is of
+Entering information in text areas in the browser, provided it is of
 the chrome family, can be delegated to emacs with the 'edit with
 emacs' extension. This requires the 'edit-server' package in emacs.
 
@@ -3351,7 +3412,7 @@ So, let's begin by enabling imap as the selection method.
   (require 'nnir)
   (setq gnus-select-method
         '(nnimap "hsd"
-                 (nnimap-address "x200s")
+                 (nnimap-address "127.0.0.1")
                  (nnimap-server-port 993)
                  (nnimap-stream ssl)
                  (nnir-search-engine imap)))
@@ -3377,7 +3438,45 @@ have set to a value to my liking.
 
 #+END_SRC
 
+Perhaps it makes sens to segment the customizations per GNUS view.
+
+**** Groups
+The first view when GNUS starts is the group view. The defaults are
+mostly good.
+
+I want a way to control the displayed names of the groups and their
+sorting order. The default names are technical and have all sorts of
+information I don't need to see. Let's make a simple map which can map
+these technical names to somewhat friendlier ones.
+
+#+BEGIN_SRC emacs-lisp
+  ;; Replace the group name with a user function evaluation, so I can
+  ;; map the name to something more friendly.
+  (setq gnus-group-line-format"%M%S%p%P%5y:%B%(%uG%)\n")
+
+  (setq group-name-map '
+        (("nnvirtual:Discussions" . "INBOX+Sent")))
+
+  (defun gnus-user-format-function-G (arg)
+    (let ((mapped-name (assoc gnus-tmp-group group-name-map)))
+      (if (null mapped-name)
+          gnus-tmp-group
+        (cdr mapped-name))))
+#+END_SRC
+
+The sort order by real name seems to fit mostly; revisit later when
+needed.
+
+#+BEGIN_SRC emacs-lisp
+  (setq gnus-group-sort-function 'gnus-group-sort-by-real-name)
+#+END_SRC
+
+**** Summary
 Let's make the summary line to my liking.
+
+The summary view is the place where the context of mails is visible,
+a.k.a. /threads/. Let's render them as nicely as possible.
+
 #+BEGIN_SRC emacs-lisp
   (setq-default
        gnus-summary-thread-gathering-function 'gnus-gather-threads-by-references
@@ -3411,8 +3510,11 @@ Let's make the summary line to my liking.
   ;; insert user-date
 
   (setq gnus-summary-line-format
-        (concat "%*%U%R %B %~(max-right 30)~(pad-right 30)n "
-                "%(%~(max-right 80)~(pad-right 80)s%) %-115= %&user-date;\n"))
+        (concat "%*%U%R %B %(%s %-80= %) "
+                "%~(max-right 35)~(pad-right 35)n %-115= %&user-date;\n"))
+
+  ;; Make sure that it is visible if the thread is missing articles
+  (setq gnus-summary-make-false-root 'dummy)
 
 #+END_SRC
 
@@ -3463,6 +3565,7 @@ I like to have alternate striping in the summary view:
 
 #+END_SRC
 
+**** Article
 Some article customizations:
 
 #+BEGIN_SRC emacs-lisp
@@ -3470,10 +3573,39 @@ Some article customizations:
   (setq gnus-treat-hide-signature t)
 
   ;; All sent mail on server, grouped by year and mark them read
+  (setq gnus-message-archive-method
+        '(nnimap "hsd"))
   (setq gnus-message-archive-group
-        (format-time-string "nnimap+hsd:INBOX.Sent.-%Y"))
+        (format-time-string "INBOX.Sent.-%Y"))
   (setq gnus-gcc-mark-as-read t)
 #+END_SRC
+
+Displaying HTML email is a weak point, but we can improve a bit on shr
+by not displaying background colors.
+
+#+BEGIN_SRC emacs-lisp
+;; Code from https://ryuslash.org/posts/Stop-shr-from-using-background-color.html
+  (defun oni:shr-colorize-remove-last-arg (args)
+    "If ARGS has more than 3 items, remove the last one."
+    (if (> (length args) 3)
+        (butlast args)
+      args))
+
+  (with-eval-after-load 'shr
+    (advice-add #'shr-colorize-region :filter-args
+                #'oni:shr-colorize-remove-last-arg))
+
+#+END_SRC
+
+If =shr= fails we can always use the web-browser (typically =K H=) but
+don't keep asking for the temp HTML to be removed
+
+#+BEGIN_SRC emacs-lisp
+
+
+  (setq gnus-article-browse-delete-temp t)
+#+END_SRC
+**** Compose
 
 Configure the defaults for composition:
 
@@ -3493,22 +3625,7 @@ Configure the defaults for composition:
   (add-to-list 'message-hidden-headers "^Face")
 #+END_SRC
 
-Displaying HTML email is a weak point, but we can improve a bit on shr
-by not displaying background colors.
-#+BEGIN_SRC emacs-lisp
-;; Code from https://ryuslash.org/posts/Stop-shr-from-using-background-color.html
-  (defun oni:shr-colorize-remove-last-arg (args)
-    "If ARGS has more than 3 items, remove the last one."
-    (if (> (length args) 3)
-        (butlast args)
-      args))
-
-  (with-eval-after-load 'shr
-    (advice-add #'shr-colorize-region :filter-args
-                #'oni:shr-colorize-remove-last-arg))
-
-#+END_SRC
-
+**** Misc
 Email expiry is probably worth doing a separate section about, because
 that is the only way to actually have stuff deleted (?)
 
@@ -3532,7 +3649,17 @@ that is the only way to actually have stuff deleted (?)
   (setq nnmail-expiry-wait-function 'mrb/expiry-wait)
 #+END_SRC
 
+#+BEGIN_SRC emacs-lisp
+  ;; Get rid of messge that I should compile gnus
+  (gnus-byte-compile 'gnus)
+#+END_SRC
 
+There is a nnreddit backedn I'd like to play with.
+#+BEGIN_SRC emacs-lisp
+  (add-to-list 'gnus-secondary-select-methods
+               '(nnreddit ""))
+
+#+END_SRC
 *** Notmuch
 Not having used GNUS enough to be comfortable, notmuch seems a route
 which can be taken somewhat easier. The compose part of emails is,
@@ -3649,74 +3776,6 @@ bug)
    )
 
 #+END_SRC
-** Statusnet
-Statusnet, or perhaps microblog in general settings
-
-
-#+BEGIN_SRC emacs-lisp
-  ; Identica comes directly from its git repository
-  (use-package longlines)
-  (setq
-   statusnet-server "o.mrblog.nl"
-   statusnet-access-url "http://o.mrblog.nl/api/oauth/access_token"
-   statusnet-authorize-url "http://o.mrblog.nl/api/oauth/authorize"
-   statusnet-request-url "http://o.mrblog.nl/api/oauth/request_token"
-   identica-username "mrb"
-   identica-display-success-messages nil
-   identica-soft-wrap-status t
-   identica-status-format "%i %s %r: %t"
-   identica-timer-interval 120
-   identica-update-status-method (quote minibuffer)
-   identica-oldest-first nil
-   identica-soft-wrap-status nil
-   identica-urlshortening-service (quote isgd)
-   identica-enable-striping t
-   identica-enable-highlighting t
-  )
-
-
-  (bind-key "C-c ip" 'identica-update-status-interactive)
-  (bind-key "C-c id" 'identica-direct-message-interactive)
-  (bind-key "C-c is" 'identica-shortenurl-replace-at-point)
-  (bind-key "C-c d"  'mrb/make-dent-frame)
-
-
-  ;; I'm using a floating frame in awesome WM for dents
-  (defun mrb/make-dent-frame ()
-    "Create a new frame and run identica-update status."
-    (interactive)
-    ;; Create and select the frame
-    (select-frame (make-frame '((name . "dent")
-                  (width . 80) (height . 15)
-                  (menu-bar-lines . 0) (tool-bar-lines . 0))))
-    ;; Capture a Todo entry, force edit-window method
-    (identica-update-status 'edit-buffer)
-
-    ;; Once there, make sure we're the only one
-    (delete-other-windows)
-  )
-
-  ;; Make sure we remove our frame too
-  (defadvice identica-update-status-from-edit-buffer-send
-    (after delete-dent-frame-on-send activate)
-    "Advise to close the frame"
-    (if (equal "dent" (frame-parameter nil 'name))
-        (delete-frame))
-  )
-  (defadvice identica-update-status-from-edit-buffer-cancel
-    (after delete-dent-frame-on-cancel activate)
-    "Advise to close the frame"
-    (if (equal "dent" (frame-parameter nil 'name))
-        (delete-frame))
-  )
-#+END_SRC
-
-Denting interface from the commandline goes to here:
-
-#+BEGIN_SRC sh :exports code :tangle ~/bin/capture-dent.sh :shebang #!/bin/sh
-edit -e '(mrb/make-dent-frame)'
-#+END_SRC
-
 ** Pump.io
 Similar to capturing TODO and BUY entries, there's a way to captur
 pump.io entries too.
