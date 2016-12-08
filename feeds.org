@@ -19,7 +19,6 @@ This has a number of attractive properties:
 *** Humor											       :humor:
 **** http://feeds.feedburner.com/GeekAndPoke
 **** http://blag.xkcd.com/feed/ 
-**** http://extechops.net/full-episode-feeds/daily-show.rss					       :video:
 **** http://feeds.feedburner.com/oatmealfeed							       :comic:
 **** https://xkcd.com/atom.xml									       :comic:
 **** http://what-if.xkcd.com/feed.atom							       :comic:science:
@@ -54,6 +53,7 @@ This has a number of attractive properties:
 **** http://www.yesodweb.com/feed
 **** http://planet.haskell.org/atom.xml
 **** http://aherrmann.github.io/atom.xml
+**** http://blog.geargrams.com/comments/feed/
 **** Emacs											       :emacs:
 ***** http://whattheemacsd.com/atom.xml
 ***** http://www.garron.me/en/atom.xml							       :people:jekyll:
@@ -90,8 +90,11 @@ This has a number of attractive properties:
 **** http://feeds.feedburner.com/TheChicane							   :oldschool:
 **** http://www.gearjournal.com/feed/
 **** http://www.garagejournal.com/feed/
+*** Outdoors
+**** http://www.hikeitlikeit.com/feed
+**** http://backcountrybanter.com/feed/
+**** http://toc.hipcast.com/rss/audio2.xml
 *** Other
-**** http://forums.segwaychat.com/external.php?type=RSS
 **** http://planet.jabber.org/rss20.xml
 **** http://feeds.twit.tv/sn_video_large
 **** http://www.thetoolanddieguy.com/feed							   :machining:
