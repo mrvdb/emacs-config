@@ -161,12 +161,12 @@ want *this* entry to be the definitive one, not adding to a list.
                '("gnu" . "http://elpa.gnu.org/packages/") t)
 
 
-  ;; Transitioning to use-package Eventually this sections just needs to
-  ;; load use-package, the rest should be distributed with the actual
-  ;; configuration of the packages.
-  (add-to-list 'load-path "~/dat/src/emacs/packages/use-package/")
-  (eval-when-compile
-    (require 'use-package))
+
+  ;; Bootstrap use-package
+  (unless (package-installed-p 'use-package)
+    (package-refresh-contents)
+    (package-install 'use-package))
+
   ;; Default is to have elpa provide the package
   (setq use-package-always-ensure t)
   (setq use-package-verbose t)
