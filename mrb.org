@@ -3915,6 +3915,13 @@ i want.
   ;; FIXME: recently Emacs crashes on this (ipv6 problem), so we don't don it automatically anymore.
   ;;(run-at-time 180 1800 (lambda () (unless elfeed-waiting (elfeed-update))))
 #+END_SRC
+** IRC
+The IRC over XMPP doesn't work at the moment, so I need me some ERC
+again.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package erc-hl-nicks)
+#+END_SRC
 * Development settings
 Some settings which aid in development tasks.
 
