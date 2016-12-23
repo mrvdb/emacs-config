@@ -1653,7 +1653,7 @@ is a better fit.
 
       ;; Match the journal files (FIXME: make this independent of earlier assignments)
       (setq org-agenda-file-regexp "[0-9]+")
-      (setq org-journal-enable-encryption t)))
+      (setq org-journal-enable-encryption nil)))
 #+END_SRC
 
 ** Old configuration
