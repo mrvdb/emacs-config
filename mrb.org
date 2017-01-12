@@ -1266,7 +1266,11 @@ recording incremental progress or information on them.
     (org-insert-time-stamp (current-time) nil 1 ))
 
   ;; Bind to C-c , analogous to C-c . which inserts an active timestamp
-  (bind-key "C-c ," 'mrb/org-insert-inactive-timestamp org-mode-map)
+  ;; this overrules the priority commands, so do this on org-load hook
+  (add-hook
+   'org-load-hook
+   (lambda ()
+     (bind-key "C-c ," 'mrb/org-insert-inactive-timestamp org-mode-map)))
 #+END_SRC
 
 ** Scheduling items
