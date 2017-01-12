@@ -167,6 +167,9 @@ default gnu augmented with the melpa repository.
     ;; Default is to have elpa provide the package
     (setq use-package-always-ensure t)
     (setq use-package-verbose t)
+    ;; If running as daemon, just load shite
+    (if (daemonp)
+      (setq use-package-always-demand t))
 
     ;; Location where I keep custom packages
     ;; This is a function because :load-path in use-package expects a string,symbol or function
