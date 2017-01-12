@@ -323,6 +323,12 @@ section.
     (lambda ()
       (goto-address-mode 1)))
   (global-goto-address-mode t)
+
+  ;; Allow prettify wherever
+  ;; To add replacements for some mode:
+  ;; (add-hook 'some-mode-hook (lambda () (push '(">=" . ?≥) prettify-symbols-alist)))
+  (global-prettify-symbols-mode t)
+
 #+END_SRC
 
 Make life easier if we have sudo, so we can just edit the files and be
