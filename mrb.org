@@ -963,6 +963,7 @@ up the location and files for that.
 
 #+BEGIN_SRC emacs-lisp
 (setq org-directory "~/dat/org/")
+(setq org-agenda-files (concat org-directory ".agenda_files"))
 (setq org-metadir (concat org-directory "_orgmeta/"))
 (setq org-archive-location (concat org-metadir "archive.org::date-tree"))
 (setq org-default-notes-file (concat org-directory "GTD.org"))
