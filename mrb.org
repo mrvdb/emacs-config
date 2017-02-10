@@ -3947,6 +3947,9 @@ again.
 
 #+BEGIN_SRC emacs-lisp
   (use-package erc-hl-nicks)
+
+  (setq erc-track-enable-keybindings t)
+  (setq erc-nick "mrvdb")
 #+END_SRC
 * Development settings
 Some settings which aid in development tasks.
