@@ -2509,6 +2509,7 @@ pointer is over and that we are scrolling 1 line at a time. I don't
 use any modifiers with the scroll wheel.
 
 #+BEGIN_SRC emacs-lisp
+  (xterm-mouse-mode)
   (setq mouse-wheel-follow-mouse 't)
   (setq mouse-wheel-scroll-amount '(1 ((shift) . 1)))
   (setq focus-follows-mouse t) ;; i3wm changes focus automatically
