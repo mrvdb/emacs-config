@@ -1255,7 +1255,7 @@ cursor munging to make sure it is used comfortably during editing.
   )
 #+END_SRC
 
-Now that function is used to insert the proprty when:
+Now that function is used to insert the property when:
 1. creating a TODO heading, using an advice to =insert-todo-heading=
 2. capturing an item, but only when it is a TODO item (i.e. has a
    defined keyword)
@@ -1266,7 +1266,6 @@ Now that function is used to insert the proprty when:
     (mrb/insert-created-timestamp)
   )
 
-  ;; FIXME: this causes the TODO capture to resize, which may be normal?
   (ad-activate 'org-insert-todo-heading)
 
   (use-package org-capture :ensure nil)
