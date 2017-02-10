@@ -749,8 +749,11 @@ is a likely event).
     "Callback function that runs when emacs is idle for
   `mrb/save-idle-time' seconds. Typically we save files here"
 
-    (message "save-timer ran out, saving all orgmode files")
-    (org-save-all-org-buffers))
+    ; FIXME: this messes up my journalling settings where autosave
+    ;        is explicitly
+    ;(message "save-timer ran out, saving all orgmode files")
+    ;(org-save-all-org-buffers)
+)
 
   ;; Activate the timer
   ;; #' means:
