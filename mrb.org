@@ -1672,11 +1672,13 @@ is a better fit.
       ;; files this is not needed.
       (setq org-journal-dir (expand-file-name "~/dat/org/journal/"))
 
-      (add-to-list 'org-agenda-files org-journal-dir)
+      (setq org-journal-time-format "[%R]%n")
 
       ;; Match the journal files (FIXME: make this independent of earlier assignments)
-      (setq org-agenda-file-regexp "[0-9]+")
-      (setq org-journal-enable-encryption nil)))
+      (setq org-agenda-file-regexp "^[0-9]+")
+      ;; I want to have encryption, but how do TODO items bubble up then in the agenda
+      (setq org-journal-enable-encryption nil)
+      (setq org-crypt-disable-auto-save t)))
 #+END_SRC
 
 ** Old configuration
