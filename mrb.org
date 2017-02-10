@@ -246,9 +246,13 @@ for now and just store passwords in the gpg agent store only,
 i.e. authinfo.gpg using public key encryption aimed at my key.
 
 #+BEGIN_SRC emacs-lisp
-;; Use only authinfo.gpg for password storage
-(setq auth-sources '("~/.authinfo.gpg"))
-(setq auth-source-gpg-encrypt-to (list user-mail-address))
+  ;; Use only authinfo.gpg for password storage
+  (use-package auth-password-store
+    :init
+    (auth-pass-enable))
+  ;; Make sure it's the only mechanism
+  (setq auth-sources '(password-store))
+  (setq auth-source-gpg-encrypt-to (list user-mail-address))
 #+END_SRC
 
 ** Encrypting information
