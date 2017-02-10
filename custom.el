@@ -56,8 +56,6 @@
 		  ((org-agenda-overriding-header "Buying list (tagged)")))
        (tags-todo "-inactive/BUY"
 		  ((org-agenda-overriding-header "Buying list (keyword)"))))
-      ((org-agenda-dim-blocked-tasks
-	(quote invisible)))
       nil)
      ("p" "Active project list" tags-todo "-ignore-inactive+LEVEL>1-TODO=\"DONE\"-TODO=\"CANCELLED\""
       ((org-agenda-overriding-header "Active project list")
