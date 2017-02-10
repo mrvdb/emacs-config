@@ -472,6 +472,9 @@ default settings.
 
 
 #+BEGIN_SRC emacs-lisp
+  ;; Zenburn background is too light
+  (set-face-attribute 'default nil :background "gray14")
+
   ;; Zenburn underlines date face in org, no go
   (set-face-attribute 'org-date nil :underline nil)
 
