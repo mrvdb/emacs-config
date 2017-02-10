@@ -47,7 +47,6 @@ This has a number of attractive properties:
 **** http://nva-openerp.blogspot.com/feeds/posts/default						:odoo:
 **** http://esr.ibiblio.org/?feed=atom&tag=gpsd								:gpsd:
 **** http://planet.claws-mail.org/rss20.xml
-**** http://feeds.facerepo.com/rss/faces/faces.rss?faceType=facer&faceType=watchmaker&shape=round&sortOrder=newest
 **** http://blog.prosody.im/feed/atom.xml
 **** https://odoo-community.org/blog_rss.xml								:odoo:
 **** http://www.yesodweb.com/feed

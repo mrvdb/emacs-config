@@ -12,7 +12,7 @@
  '(compilation-scroll-output t)
  '(custom-safe-themes
    (quote
-    ("4e753673a37c71b07e3026be75dc6af3efbac5ce335f3707b7d6a110ecb636a3" "94dfc2b6a8ac8b651f9aab66bc83bd5601f47166d86ee6d2d32de7dfb881185c" "13de1e95bbc7475e680e50333e9418becef53cb7f41ab632261efd13f9a4f57d" "acd48beaecc038c0c990e8ac11a4a80e72f6b57a3c43f4b97d8f69ade64ff294" "a0fdc9976885513b03b000b57ddde04621d94c3a08f3042d1f6e2dbc336d25c7" "8aebf25556399b58091e533e455dd50a6a9cba958cc4ebb0aab175863c25b9a4" "a8245b7cc985a0610d71f9852e9f2767ad1b852c2bdea6f4aadc12cce9c4d6d0" "e4e97731f52a5237f37ceb2423cb327778c7d3af7dc831788473d4a76bcc9760" "3c9d994e18db86ae397d077b6324bfdc445ecc7dc81bb9d528cd9bba08c1dac1" "08cfa7b21bb5c1d5d86c3ec51705439acb300bf8e92eaaba46f8ec387e505923" "63222f9c4cc924778e29a349cd110ad5739b0a3589c4c399117dbaddf875d209" "5c95e6818b3bbb0d079921952f4a509661c599fb1cfb0330606ce5cb892c312e" "3cc6c42bee60b0a031be65497e630b3ffaaaa41ffc1f41b9f7863ee484688640" "471877df61bcd989ba4c0a5097654684fcfe918e124d46f811b533e44df34f53" "a37600b047da389eccc4a17b5f165d512fb1d32f18d93cffb28154b5f4eb4437" "54266114287ef8abeda6a3df605deffe777957ba994750da6b8595fe90e932f0" "39fb431548791db3e64b047524a65be40a41f14779f4087255c7ad759f329d73" "51b018973bd206cbe49185abcba0c2f2e9da0a88c36d3f039cf97d946921e4f6" "e7f43be7b03c0ac4a927724fe242c4befb40b11403fb655a15b42f5e86f4ce1e" "bfcb55c7cf76f7fe4fa7eb067425b7d2f58af27b6a193f07b0351429faf2eb91" "52b5da0a421b020e2d3429f1d4929089d18a56e8e43fe7470af2cea5a6c96443" "e15fde341e7fc4b7f4dfb225031d3e3b39c215a72d71cb9d77f055e3de885a29" "bd50e3b2dea5d01950991bc230583fdab93f3fd7af6a7c62421c370e347226ec" "d6a00ef5e53adf9b6fe417d2b4404895f26210c52bb8716971be106550cea257" "fc5fcb6f1f1c1bc01305694c59a1a861b008c534cae8d0e48e4d5e81ad718bc6" "81805c86e126018f339211bb3f03e1c9eae30adfbe72832bd02f89ca0cbe5885" "f23144cd3b2cfd4d873f16bef36a246d55616658aff372ec87d96cd1330ebafd" "bf7ed640479049f1d74319ed004a9821072c1d9331bc1147e01d22748c18ebdf" "702ed17ae44a6f3cb71ed2e5bf5edeec06a771c80eb61b265ebf8a658edd2462" "b2382ac6b8a922aee932d81ef846e83ab4c950198986849c622e60996b698c71" "ebb23762f3569b2d146b6091a6ed22cac44c4e53e8a33d9ff2bc3b90cc9e58e8" "819d81fabb0bde707a0f34cdd66e3bc1960273e8283e912a310e446ce3c44620" "363772e75d98d439856d08c013ae280ca55958db6ed073c43081ddba4404bef8" default)))
+    ("9d91458c4ad7c74cf946bd97ad085c0f6a40c370ac0a1cbeb2e3879f15b40553" "3d47d88c86c30150c9a993cc14c808c769dad2d4e9d0388a24fee1fbf61f0971" "f5ad3af69f2b6b7c547208b8708d4fa7928b5697ca0845633d1d67c2d145952a" "14f0fbf6f7851bfa60bf1f30347003e2348bf7a1005570fd758133c87dafe08f" "486759384769d44b22bb46072726c2cfb3ccc3d49342e5af1854784d505ffc01" "4e753673a37c71b07e3026be75dc6af3efbac5ce335f3707b7d6a110ecb636a3" "94dfc2b6a8ac8b651f9aab66bc83bd5601f47166d86ee6d2d32de7dfb881185c" "13de1e95bbc7475e680e50333e9418becef53cb7f41ab632261efd13f9a4f57d" "acd48beaecc038c0c990e8ac11a4a80e72f6b57a3c43f4b97d8f69ade64ff294" "a0fdc9976885513b03b000b57ddde04621d94c3a08f3042d1f6e2dbc336d25c7" "8aebf25556399b58091e533e455dd50a6a9cba958cc4ebb0aab175863c25b9a4" "a8245b7cc985a0610d71f9852e9f2767ad1b852c2bdea6f4aadc12cce9c4d6d0" "e4e97731f52a5237f37ceb2423cb327778c7d3af7dc831788473d4a76bcc9760" "3c9d994e18db86ae397d077b6324bfdc445ecc7dc81bb9d528cd9bba08c1dac1" "08cfa7b21bb5c1d5d86c3ec51705439acb300bf8e92eaaba46f8ec387e505923" "63222f9c4cc924778e29a349cd110ad5739b0a3589c4c399117dbaddf875d209" "5c95e6818b3bbb0d079921952f4a509661c599fb1cfb0330606ce5cb892c312e" "3cc6c42bee60b0a031be65497e630b3ffaaaa41ffc1f41b9f7863ee484688640" "471877df61bcd989ba4c0a5097654684fcfe918e124d46f811b533e44df34f53" "a37600b047da389eccc4a17b5f165d512fb1d32f18d93cffb28154b5f4eb4437" "54266114287ef8abeda6a3df605deffe777957ba994750da6b8595fe90e932f0" "39fb431548791db3e64b047524a65be40a41f14779f4087255c7ad759f329d73" "51b018973bd206cbe49185abcba0c2f2e9da0a88c36d3f039cf97d946921e4f6" "e7f43be7b03c0ac4a927724fe242c4befb40b11403fb655a15b42f5e86f4ce1e" "bfcb55c7cf76f7fe4fa7eb067425b7d2f58af27b6a193f07b0351429faf2eb91" "52b5da0a421b020e2d3429f1d4929089d18a56e8e43fe7470af2cea5a6c96443" "e15fde341e7fc4b7f4dfb225031d3e3b39c215a72d71cb9d77f055e3de885a29" "bd50e3b2dea5d01950991bc230583fdab93f3fd7af6a7c62421c370e347226ec" "d6a00ef5e53adf9b6fe417d2b4404895f26210c52bb8716971be106550cea257" "fc5fcb6f1f1c1bc01305694c59a1a861b008c534cae8d0e48e4d5e81ad718bc6" "81805c86e126018f339211bb3f03e1c9eae30adfbe72832bd02f89ca0cbe5885" "f23144cd3b2cfd4d873f16bef36a246d55616658aff372ec87d96cd1330ebafd" "bf7ed640479049f1d74319ed004a9821072c1d9331bc1147e01d22748c18ebdf" "702ed17ae44a6f3cb71ed2e5bf5edeec06a771c80eb61b265ebf8a658edd2462" "b2382ac6b8a922aee932d81ef846e83ab4c950198986849c622e60996b698c71" "ebb23762f3569b2d146b6091a6ed22cac44c4e53e8a33d9ff2bc3b90cc9e58e8" "819d81fabb0bde707a0f34cdd66e3bc1960273e8283e912a310e446ce3c44620" "363772e75d98d439856d08c013ae280ca55958db6ed073c43081ddba4404bef8" default)))
  '(dired-bind-jump nil)
  '(doc-view-resolution 200)
  '(epg-gpg-program "/usr/bin/gpg2")
@@ -25,6 +25,7 @@
  '(font-lock-maximum-size nil)
  '(goto-address-url-mouse-face (quote default))
  '(gud-gdb-command-name "gdb --annotate=1")
+ '(haskell-interactive-popup-errors nil)
  '(ido-vertical-define-keys (quote C-n-C-p-up-down-left-right))
  '(ispell-use-framepop-p t)
  '(mail-signature nil)
@@ -55,8 +56,6 @@
 		  ((org-agenda-overriding-header "Buying list (tagged)")))
        (tags-todo "-inactive/BUY"
 		  ((org-agenda-overriding-header "Buying list (keyword)"))))
-      ((org-agenda-dim-blocked-tasks
-	(quote invisible)))
       nil)
      ("p" "Active project list" tags-todo "-ignore-inactive+LEVEL>1-TODO=\"DONE\"-TODO=\"CANCELLED\""
       ((org-agenda-overriding-header "Active project list")
@@ -100,7 +99,7 @@
 		   (org-agenda-dim-blocked-tasks t)
 		   (org-agenda-group-by-property "Group"))))
       nil nil)
-     ("n" "Next Action List [hides blocked/inactive/waiting/INBOX-ed]" tags-todo "+SCHEDULED=\"\"+DEADLINE=\"\"-BLOCKED=\"t\"-inactive-habit/-WAITING-INFO-HOWTO"
+     ("n" "Next Action List [hides blocked/inactive/waiting/INBOX-ed]" tags-todo "+SCHEDULED=\"\"+DEADLINE=\"\"-BLOCKED=\"t\"-inactive-habit-ARCHIVE/-WAITING-INFO-HOWTO"
       ((org-agenda-overriding-header "Next Action List")
        (org-agenda-dim-blocked-tasks
 	(quote invisible))
@@ -132,11 +131,10 @@
        (org-agenda-sorting-strategy
 	(quote
 	 (effort-down))))))))
- '(org-agenda-files
-   (quote
-    ("~/dat/blogs/mrblog/about/issues.org" "~/dat/org/_calendars/afval.org" "~/dat/org/projects/geocaching.org" "~/dat/org/_calendars/marcel.org" "~/dat/org/projects/reprap.org" "~/dat/org/ideas.org" "~/dat/org/GTD.org" "~/dat/org/orgmode.org" "~/dat/org/projects/cobra.org" "~/dat/org/habits.org" "~/dat/blogs/blogs.org" "~/dat/org/projects/keuken.org" "~/dat/org/_calendars/sylvia.org" "~/dat/org/_calendars/planner.org" "~/dat/org/projects/homesteading.org" "~/dat/org/projects/outdoors.org")))
  '(org-agenda-ignore-properties (quote (effort appt category)))
- '(org-agenda-text-search-extra-files (quote (agenda-archives)))
+ '(org-agenda-text-search-extra-files
+   (quote
+    (agenda-archives "~/dat/org/_orgmeta/archive-2016.org" "~/dat/org/_orgmeta/archive-2015.org" "~/dat/org/_orgmeta/archive-2014.org" "~/dat/org/_orgmeta/archive-2013.org" "~/dat/org/_orgmeta/archive-2012.org" "~/dat/org/_orgmeta/archive-2011.org")))
  '(org-agenda-todo-ignore-scheduled (quote future))
  '(org-beamer-outline-frame-options nil)
  '(org-beamer-outline-frame-title "Onderwerpen")
@@ -231,7 +229,7 @@
  '(org-use-fast-tag-selection (quote auto))
  '(package-selected-packages
    (quote
-    (jabber-autoloads oauth jabber ghc ghc-mod ghc-mode smex fixed-point-completion org-journal pass rainbow-mode csv-mode adaptive-wrap)))
+    (auth-password-store xterm-keybinder magithub ws-butler erc-hl-nicks zerodark-theme pdf-tools intero atomic-chrome persistent-scratch--autosave-timer persistent-scratch jabber-autoloads oauth jabber ghc ghc-mod ghc-mode smex fixed-point-completion org-journal pass rainbow-mode csv-mode adaptive-wrap)))
  '(pdf-misc-print-programm "/usr/bin/gtklp")
  '(reb-re-syntax (quote string))
  '(safe-local-variable-values
@@ -282,7 +280,6 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:inherit nil :stipple nil :background "gray14" :foreground "#dcdccc" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 110 :width normal :foundry "unknown" :family "DejaVu Sans Mono"))))
  '(company-scrollbar-bg ((((class color) (min-colors 89)) (:background "#151515"))))
  '(company-tooltip ((((class color) (min-colors 89)) (:foreground "#ffffff" :background "#151515"))))
  '(company-tooltip-common ((((class color) (min-colors 89)) (:foreground "#cf6a4c" :background "#151515"))))

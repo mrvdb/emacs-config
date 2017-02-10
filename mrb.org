@@ -147,8 +147,7 @@ And edit the file obviously.
 Package handling, do this early so emacs knows where to find things.
 
 First of all, define the package archives I need; for now, just the
-default gnu augmented with the melpa repository. I use setq because I
-want *this* entry to be the definitive one, not adding to a list.
+default gnu augmented with the melpa repository.
 #+BEGIN_SRC emacs-lisp
   (require 'package)
   (package-initialize)
@@ -159,25 +158,34 @@ want *this* entry to be the definitive one, not adding to a list.
                '("melpa-stable" . "https://stable.melpa.org/packages/") t)
   (add-to-list 'package-archives
                '("gnu" . "http://elpa.gnu.org/packages/") t)
+  (add-to-list 'package-archives
+	         '("org" . "http://orgmode.org/elpa/") t)
 
+  ;; Bootstrap use-package
+  (unless (package-installed-p 'use-package)
+    (package-refresh-contents)
+    (package-install 'use-package))
 
-  ;; Transitioning to use-package Eventually this sections just needs to
-  ;; load use-package, the rest should be distributed with the actual
-  ;; configuration of the packages.
-  (add-to-list 'load-path "~/dat/src/emacs/packages/use-package/")
-  (eval-when-compile
-    (require 'use-package))
   ;; Default is to have elpa provide the package
   (setq use-package-always-ensure t)
   (setq use-package-verbose t)
+  ;; If running as daemon, just load shite
+  (if (daemonp)
+    (setq use-package-always-demand t))
+
+  ;; Location where I keep custom packages
+  ;; This is a function because :load-path in use-package expects a string,symbol or function
+  ;; Does this actually work? It didn't for orgmode
+  (defun custom-package-location (subpath)
+    (concat "/home/mrb/dat/src/emacs/packages/" subpath))
 
   (use-package cl-lib )
 
   (use-package fullframe  )    ;; show results of certain commands fullframe
 
-  (use-package guide-key )
+  (use-package guide-key )     ;; Not sure what this does
 
-  (use-package hideshow-org )
+  (use-package hideshow-org )  ;; Move to org?
   (use-package hideshowvis )
 
   (use-package json-rpc )
@@ -189,8 +197,9 @@ want *this* entry to be the definitive one, not adding to a list.
   (use-package edit-server )
 
   (use-package fixed-point-completion
-    :load-path "~/dat/src/emacs/packages/fixed-point-completion/"
+    :load-path (lambda () (list (custom-package-location  "fixed-point-completion/")))
     :ensure nil)
+
   (use-package ghc )           ;; move to haskell?
 #+END_SRC
 
@@ -237,9 +246,13 @@ for now and just store passwords in the gpg agent store only,
 i.e. authinfo.gpg using public key encryption aimed at my key.
 
 #+BEGIN_SRC emacs-lisp
-;; Use only authinfo.gpg for password storage
-(setq auth-sources '("~/.authinfo.gpg"))
-(setq auth-source-gpg-encrypt-to (list user-mail-address))
+  ;; Use only authinfo.gpg for password storage
+  (use-package auth-password-store
+    :init
+    (auth-pass-enable))
+  ;; Make sure it's the only mechanism
+  (setq auth-sources '(password-store))
+  (setq auth-source-gpg-encrypt-to (list user-mail-address))
 #+END_SRC
 
 ** Encrypting information
@@ -317,6 +330,12 @@ section.
     (lambda ()
       (goto-address-mode 1)))
   (global-goto-address-mode t)
+
+  ;; Allow prettify wherever
+  ;; To add replacements for some mode:
+  ;; (add-hook 'some-mode-hook (lambda () (push '(">=" . ?≥) prettify-symbols-alist)))
+  (global-prettify-symbols-mode t)
+
 #+END_SRC
 
 Make life easier if we have sudo, so we can just edit the files and be
@@ -460,6 +479,9 @@ default settings.
 
 
 #+BEGIN_SRC emacs-lisp
+  ;; Zenburn background is too light
+  (set-face-attribute 'default nil :background "gray14")
+
   ;; Zenburn underlines date face in org, no go
   (set-face-attribute 'org-date nil :underline nil)
 
@@ -734,8 +756,11 @@ is a likely event).
     "Callback function that runs when emacs is idle for
   `mrb/save-idle-time' seconds. Typically we save files here"
 
-    (message "save-timer ran out, saving all orgmode files")
-    (org-save-all-org-buffers))
+    ; FIXME: this messes up my journalling settings where autosave
+    ;        is explicitly
+    ;(message "save-timer ran out, saving all orgmode files")
+    ;(org-save-all-org-buffers)
+)
 
   ;; Activate the timer
   ;; #' means:
@@ -910,6 +935,7 @@ on a line which is commented out in the proper syntax for that mode.
        (list 'nxml-mode))
     (add-hook the_mode 'turn-off-auto-fill))
 
+  (add-hook 'conf-xdefaults-mode-hook 'rainbow-mode)
 #+END_SRC
 * Org-mode
 Orgmode configuraton is probably the largest part of my Emacs
@@ -934,6 +960,7 @@ function.
   (use-package org
     :load-path "~/dat/src/emacs/packages/org-mode/lisp/"
     :ensure nil
+    :pin org
     :mode ("\\.txt\\'" "\\.org\'")
     :config
     (add-hook 'org-mode-hook 'turn-on-auto-fill)
@@ -951,6 +978,7 @@ up the location and files for that.
 
 #+BEGIN_SRC emacs-lisp
 (setq org-directory "~/dat/org/")
+(setq org-agenda-files (concat org-directory ".agenda_files"))
 (setq org-metadir (concat org-directory "_orgmeta/"))
 (setq org-archive-location (concat org-metadir "archive.org::date-tree"))
 (setq org-default-notes-file (concat org-directory "GTD.org"))
@@ -1227,7 +1255,7 @@ cursor munging to make sure it is used comfortably during editing.
   )
 #+END_SRC
 
-Now that function is used to insert the proprty when:
+Now that function is used to insert the property when:
 1. creating a TODO heading, using an advice to =insert-todo-heading=
 2. capturing an item, but only when it is a TODO item (i.e. has a
    defined keyword)
@@ -1238,7 +1266,6 @@ Now that function is used to insert the proprty when:
     (mrb/insert-created-timestamp)
   )
 
-  ;; FIXME: this causes the TODO capture to resize, which may be normal?
   (ad-activate 'org-insert-todo-heading)
 
   (use-package org-capture :ensure nil)
@@ -1260,7 +1287,11 @@ recording incremental progress or information on them.
     (org-insert-time-stamp (current-time) nil 1 ))
 
   ;; Bind to C-c , analogous to C-c . which inserts an active timestamp
-  (bind-key "C-c ," 'mrb/org-insert-inactive-timestamp org-mode-map)
+  ;; this overrules the priority commands, so do this on org-load hook
+  (add-hook
+   'org-load-hook
+   (lambda ()
+     (bind-key "C-c ," 'mrb/org-insert-inactive-timestamp org-mode-map)))
 #+END_SRC
 
 ** Scheduling items
@@ -1340,10 +1371,11 @@ subscript all the time.
 #+END_SRC
 
 Related to that is the display of links. I want them to be explicit
-most of the time to avoid confusion
+most of the time to avoid confusion, but the 'fancy' display is easier
+at first:
 
 #+BEGIN_SRC emacs-lisp
-  (setq org-descriptive-links nil)
+  (setq org-descriptive-links t)
 #+END_SRC
 
 For most of the source blocks I want Emacs to render those blocks in
@@ -1412,7 +1444,10 @@ needs to be hidden.
 Settings which are just applicable for the org-mode agenda view.
 
 #+BEGIN_SRC emacs-lisp
-  (use-package keywiz)
+  (use-package keywiz
+    :load-path (lambda () (list (custom-package-location  "keywiz/")))
+    :ensure nil)
+
   (use-package cl)
 
   ;; Helper function to build a set of functions and their
@@ -1430,7 +1465,7 @@ Settings which are just applicable for the org-mode agenda view.
                                    (where-is-internal sym)))))
           ;;  Politically incorrect, but clearer version of the above:
           ;;    (let ((keys (delete-if-not 'keywiz-key-press-event-p
-          ;;                               (where-is-internal sym))))
+          ;;                               (where-is-internal sym)))))
           (and keys
                (push (list sym keys) keywiz-cached-commands))))))
 
@@ -1648,10 +1683,13 @@ is a better fit.
       ;; files this is not needed.
       (setq org-journal-dir (expand-file-name "~/dat/org/journal/"))
 
-      (add-to-list 'org-agenda-files org-journal-dir)
+      (setq org-journal-time-format "[%R]%n")
 
       ;; Match the journal files (FIXME: make this independent of earlier assignments)
-      (setq org-agenda-file-regexp "[0-9]+")))
+      (setq org-agenda-file-regexp "^[0-9]+")
+      ;; I want to have encryption, but how do TODO items bubble up then in the agenda
+      (setq org-journal-enable-encryption nil)
+      (setq org-crypt-disable-auto-save t)))
 #+END_SRC
 
 ** Old configuration
@@ -2482,6 +2520,7 @@ pointer is over and that we are scrolling 1 line at a time. I don't
 use any modifiers with the scroll wheel.
 
 #+BEGIN_SRC emacs-lisp
+  (xterm-mouse-mode)
   (setq mouse-wheel-follow-mouse 't)
   (setq mouse-wheel-scroll-amount '(1 ((shift) . 1)))
   (setq focus-follows-mouse t) ;; i3wm changes focus automatically
@@ -3912,6 +3951,16 @@ i want.
   ;; Automatically update the feeds every now and then
   ;; FIXME: recently Emacs crashes on this (ipv6 problem), so we don't don it automatically anymore.
   ;;(run-at-time 180 1800 (lambda () (unless elfeed-waiting (elfeed-update))))
+#+END_SRC
+** IRC
+The IRC over XMPP doesn't work at the moment, so I need me some ERC
+again.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package erc-hl-nicks)
+
+  (setq erc-track-enable-keybindings t)
+  (setq erc-nick "mrvdb")
 #+END_SRC
 * Development settings
 Some settings which aid in development tasks.
