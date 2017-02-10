@@ -231,7 +231,7 @@
  '(org-use-fast-tag-selection (quote auto))
  '(package-selected-packages
    (quote
-    (ws-butler erc-hl-nicks zerodark-theme pdf-tools intero atomic-chrome persistent-scratch--autosave-timer persistent-scratch jabber-autoloads oauth jabber ghc ghc-mod ghc-mode smex fixed-point-completion org-journal pass rainbow-mode csv-mode adaptive-wrap)))
+    (xterm-keybinder magithub ws-butler erc-hl-nicks zerodark-theme pdf-tools intero atomic-chrome persistent-scratch--autosave-timer persistent-scratch jabber-autoloads oauth jabber ghc ghc-mod ghc-mode smex fixed-point-completion org-journal pass rainbow-mode csv-mode adaptive-wrap)))
  '(pdf-misc-print-programm "/usr/bin/gtklp")
  '(reb-re-syntax (quote string))
  '(safe-local-variable-values

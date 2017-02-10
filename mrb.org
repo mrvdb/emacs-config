@@ -149,55 +149,58 @@ Package handling, do this early so emacs knows where to find things.
 First of all, define the package archives I need; for now, just the
 default gnu augmented with the melpa repository.
 #+BEGIN_SRC emacs-lisp
-    (require 'package)
-    (package-initialize)
+  (require 'package)
+  (package-initialize)
 
-    (add-to-list 'package-archives
-                 '("melpa" . "http://melpa.org/packages/") t)
-    (add-to-list 'package-archives
-                 '("melpa-stable" . "https://stable.melpa.org/packages/") t)
-    (add-to-list 'package-archives
-                 '("gnu" . "http://elpa.gnu.org/packages/") t)
+  (add-to-list 'package-archives
+               '("melpa" . "http://melpa.org/packages/") t)
+  (add-to-list 'package-archives
+               '("melpa-stable" . "https://stable.melpa.org/packages/") t)
+  (add-to-list 'package-archives
+               '("gnu" . "http://elpa.gnu.org/packages/") t)
+  (add-to-list 'package-archives
+	         '("org" . "http://orgmode.org/elpa/") t)
 
-    ;; Bootstrap use-package
-    (unless (package-installed-p 'use-package)
-      (package-refresh-contents)
-      (package-install 'use-package))
+  ;; Bootstrap use-package
+  (unless (package-installed-p 'use-package)
+    (package-refresh-contents)
+    (package-install 'use-package))
 
-    ;; Default is to have elpa provide the package
-    (setq use-package-always-ensure t)
-    (setq use-package-verbose t)
-    ;; If running as daemon, just load shite
-    (if (daemonp)
-      (setq use-package-always-demand t))
+  ;; Default is to have elpa provide the package
+  (setq use-package-always-ensure t)
+  (setq use-package-verbose t)
+  ;; If running as daemon, just load shite
+  (if (daemonp)
+    (setq use-package-always-demand t))
 
-    ;; Location where I keep custom packages
-    ;; This is a function because :load-path in use-package expects a string,symbol or function
-    (defun custom-package-location (subpath)
-      (concat "/home/mrb/dat/src/emacs/packages/" subpath))
+  ;; Location where I keep custom packages
+  ;; This is a function because :load-path in use-package expects a string,symbol or function
+  ;; Does this actually work? It didn't for orgmode
+  (defun custom-package-location (subpath)
+    (concat "/home/mrb/dat/src/emacs/packages/" subpath))
 
-    (use-package cl-lib )
+  (use-package cl-lib )
 
-    (use-package fullframe  )    ;; show results of certain commands fullframe
+  (use-package fullframe  )    ;; show results of certain commands fullframe
 
-    (use-package guide-key )     ;; Not sure what this does
+  (use-package guide-key )     ;; Not sure what this does
 
-    (use-package hideshow-org )  ;; Move to org?
-    (use-package hideshowvis )
+  (use-package hideshow-org )  ;; Move to org?
+  (use-package hideshowvis )
 
-    (use-package json-rpc )
-    (use-package litable  )      ;; Real time evaluation (move to develop?)
-    (use-package mark-multiple )
+  (use-package json-rpc )
+  (use-package litable  )      ;; Real time evaluation (move to develop?)
+  (use-package mark-multiple )
 
-    (use-package paredit  )
-    (use-package rainbow-mode )  ;; show colornumbers/names as colors
-    (use-package edit-server )
+  (use-package paredit  )
+  (use-package rainbow-mode )  ;; show colornumbers/names as colors
+  (use-package edit-server )
 
-    (use-package fixed-point-completion
-      :load-path (lambda () (list (custom-package-location  "fixed-point-completion/")))
-      :ensure nil)
+  (use-package fixed-point-completion
+    :load-path (lambda () (list (custom-package-location  "fixed-point-completion/")))
+    :ensure nil)
 
-    (use-package ghc )           ;; move to haskell?
+  (use-package ghc )           ;; move to haskell?
 #+END_SRC
 
 * Personal information
