@@ -931,6 +931,7 @@ on a line which is commented out in the proper syntax for that mode.
        (list 'nxml-mode))
     (add-hook the_mode 'turn-off-auto-fill))
 
+  (add-hook 'conf-xdefaults-mode-hook 'rainbow-mode)
 #+END_SRC
 * Org-mode
 Orgmode configuraton is probably the largest part of my Emacs
