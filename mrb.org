@@ -985,7 +985,6 @@ up the location and files for that.
 (setq diary-file (concat org-metadir "DIARY"))
 
 ;; Some other modules I want
-(use-package org-present)           ;; Make presentations in org format
 (use-package org-agenda-property)   ;; Display org properties in the agenda view
 
 #+END_SRC
@@ -1618,6 +1617,12 @@ and HTML as destination format
           --visit=MyFile --funcall org-export-body as-html-batch"
     (interactive)
     (org-export-as-html 3 nil nil nil t))
+#+END_SRC
+
+Support exporting to epub format
+
+#+BEGIN_SRC emacs-lisp
+(use-package ox-epub)
 #+END_SRC
 ** Journaling
 While the capture method is useful I found myself not using it very
