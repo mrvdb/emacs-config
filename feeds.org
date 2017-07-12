@@ -69,10 +69,13 @@ This has a number of attractive properties:
 ***** http://www.howardism.org/index.xml							      :people:
 ***** http://emacshorrors.com/feed.atom
 ***** https://emacs.wordpress.com/feed/
+**** http://wordpress.panaceas.org/wp/index.php/comments/feed/
 *** Hardware											    :hardware:
 **** http://www.readynas.com/?feed=rss2
 **** https://www.yubico.com/feed/								    :security:
 **** http://everyday-carry.com/rss
+**** https://xiaomi.eu/community/forums/xiaomi-mimix.151/index.rss
+**** https://xiaomi.eu/community/forums/miui-weekly-rom-releases.103/index.rss
 *** People
 **** http://julien.danjou.info/blog/index.xml							      :people:
 **** https://mrblog.nl/feed 									   :people:me:
@@ -82,9 +85,9 @@ This has a number of attractive properties:
 **** http://feeds.feedburner.com/wyome								      :people:
 **** http://blog.sarine.nl/feed/index.xml
 **** http://heikkil.github.io/rss.xml
-**** https://www.jwz.org/blog/feed/
 **** http://www.blaenkdenum.com/rss.xml
 **** http://localhost:8000/feed/atom.xml
+**** https://asthetrailturns.com/feed/
 *** Automotive
 **** http://feeds.feedburner.com/TheChicane							   :oldschool:
 **** http://www.gearjournal.com/feed/
@@ -93,6 +96,8 @@ This has a number of attractive properties:
 **** http://www.hikeitlikeit.com/feed
 **** http://backcountrybanter.com/feed/
 **** http://toc.hipcast.com/rss/audio2.xml
+**** https://ultralightandcomfortable.com/feed
+**** http://hikinginfinland.com/atom.xml
 *** Other
 **** http://planet.jabber.org/rss20.xml
 **** http://feeds.twit.tv/sn_video_large
