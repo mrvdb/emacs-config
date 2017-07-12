@@ -76,6 +76,7 @@ CANCELLED. Other than the CANCELLED keyword, this is pretty much the
 default sequence. When cancelling I force myself to enter some reason
 for it.
 #+SEQ_TODO: TODO | DONE CANCELLED(@)
+#+SEQ_TODO: PLAN | DONE CANCELLED(@)
 
 Since buying stuff is abundant and warrants keeping track of,
 especially because I’m ordering lots of small things, I have defined a
