@@ -748,7 +748,7 @@ warrants this (for example if I think going back to an earlier version
 is a likely event).
 
 #+BEGIN_SRC emacs-lisp
-  (defconst mrb/save-idle-time 30
+  (defconst mrb/save-idle-time 15
     "Time emacs needs to be idle to trigger the save idle timer")
 
   ;; This function does the actual useful thing
@@ -758,8 +758,8 @@ is a likely event).
 
     ; FIXME: this messes up my journalling settings where autosave
     ;        is explicitly
-    ;(message "save-timer ran out, saving all orgmode files")
-    ;(org-save-all-org-buffers)
+    (message "save-timer ran out, saving all orgmode files")
+    (org-save-all-org-buffers)
 )
 
   ;; Activate the timer
