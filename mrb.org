@@ -1462,7 +1462,7 @@ Specific settings for babel and literate programming within org-mode
   (use-package ob-gnuplot :ensure nil)
   (org-babel-do-load-languages
    'org-babel-load-languages
-   '( (ditaa . t) (sql . t) (sh . t) (emacs-lisp t) (lisp t)
+   '( (ditaa . t) (sql . t) (shell . t) (emacs-lisp t) (lisp t)
      (css t) (awk t) (js t) (lisp t) (org t) (plantuml t) (gnuplot . t)
      (haskell t) (js t) (calc t) (mathomatic t)))
 #+END_SRC
