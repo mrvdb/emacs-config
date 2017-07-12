@@ -149,8 +149,6 @@ Package handling, do this early so emacs knows where to find things.
 First of all, define the package archives I need; for now, just the
 default gnu augmented with the melpa repository.
 #+BEGIN_SRC emacs-lisp
-  (require 'package)
-  (package-initialize)
 
   (add-to-list 'package-archives
                '("melpa" . "http://melpa.org/packages/") t)
