@@ -3021,7 +3021,6 @@ and hopefully one will float to the top as being *the one*
   (setq password-cache-expiry 28800) ; default is 16 seconds, which is ridiculously low
   (use-package smtpmail)
 
-  (add-hook 'message-mode-hook 'visual-line-mode 'append)
 
   (require 'org-contacts)
 
@@ -3037,38 +3036,52 @@ get awesome to properly place the windows because it's hard to match
 on the varying name that xprop delivers, so. we make our own window.
 
 #+BEGIN_SRC emacs-lisp
-  (defun mrb/make-mailcompose-frame (&optional mailto-url)
-    "Create a new frame and run mail-compose, use mailto URI if it
-  is given."
-    (interactive)
+    (defun mrb/message-mode-hook ()
+      "This configures message mode and thus notmuch-message mode"
 
-    ;; Create and select the frame, awesome wm takes care of the
-    ;; placement and floating it on top of all other windows.
-    ;; FIXME: the sizes should not be absolute
-    (select-frame (make-frame
-                   '((name . "mailcompose")
-                     (width . 100 ) (height . 48)
-                     (menu-bar-lines . 0) (tool-bar-lines . 0))))
+      (visual-line-mode)
+      (auto-fill-mode -1)
+      (font-lock-add-keywords
+       nil
+       '(("^[ \t]*>[ \t]*>[ \t]*>.*$"
+          (0 'message-multiply-quoted-text-face))
+         ("^[ \t]*>[ \t]*>.*$"
+          (0 'message-double-quoted-text-face)))))
+
+    (add-hook 'notmuch-message-mode-hook 'mrb/message-mode-hook)
+
+    (defun mrb/make-mailcompose-frame (&optional mailto-url)
+      "Create a new frame and run mail-compose, use mailto URI if it
+    is given."
+      (interactive)
+
+      ;; Create and select the frame, awesome wm takes care of the
+      ;; placement and floating it on top of all other windows.
+      ;; FIXME: the sizes should not be absolute
+      (select-frame (make-frame
+                     '((name . "mailcompose")
+                       (width . 100 ) (height . 48)
+                       (menu-bar-lines . 0) (tool-bar-lines . 0))))
 
 
-    ;; If we have a mailto argument, parse and use it
-    (if (and (stringp mailto-url)
-             (string-match "\\`mailto:" mailto-url))
-        (browse-url-mail mailto-url)
-      ;; No mailto, argument, just run compose mail
-      (compose-mail))
+      ;; If we have a mailto argument, parse and use it
+      (if (and (stringp mailto-url)
+               (string-match "\\`mailto:" mailto-url))
+          (browse-url-mail mailto-url)
+        ;; No mailto, argument, just run compose mail
+        (compose-mail))
 
-      ;; Delete other windows from the frame we are composing it in.
-    (delete-other-windows))
+        ;; Delete other windows from the frame we are composing it in.
+      (delete-other-windows))
 
-    (defadvice message-kill-buffer (after delete-mailcompose-frame activate)
-      "Advise message-kill-buffer to close the frame if it is the capture frame"
-      (if (equal "mailcompose" (frame-parameter nil 'name))
-          (delete-frame)))
-    (defadvice message-send-and-exit (after delete-mailcompose-frame activate)
-      "Advise message-send-and-exit to close the frame if it is the capture frame"
-      (if (equal "mailcompose" (frame-parameter nil 'name))
-          (delete-frame)))
+      (defadvice message-kill-buffer (after delete-mailcompose-frame activate)
+        "Advise message-kill-buffer to close the frame if it is the capture frame"
+        (if (equal "mailcompose" (frame-parameter nil 'name))
+            (delete-frame)))
+      (defadvice message-send-and-exit (after delete-mailcompose-frame activate)
+        "Advise message-send-and-exit to close the frame if it is the capture frame"
+        (if (equal "mailcompose" (frame-parameter nil 'name))
+            (delete-frame)))
 #+END_SRC
 
 To be able to use the =mailcompose-frame= function as a mailto handler we need to be
@@ -3105,9 +3118,6 @@ contents from claws. I define some stuff here that makes sure I get
 into the proper configuration when that gets called:
 
 #+BEGIN_SRC emacs-lisp
-  ;; Files opened from the tmp folder of claws are messages
-  (pushnew '("/home/mrb/.claws-mail/tmp/" . message-mode) auto-mode-alist)
-
   (require 'org-faces)
   ;; First quote level
   (set-face-attribute 'message-cited-text nil :inherit 'org-level-1)
@@ -3124,11 +3134,7 @@ into the proper configuration when that gets called:
 
   (add-hook 'message-mode-hook
             (lambda ()
-              (font-lock-add-keywords nil
-                                      '(("^[ \t]*>[ \t]*>[ \t]*>.*$"
-                                         (0 'message-multiply-quoted-text-face))
-                                        ("^[ \t]*>[ \t]*>.*$"
-                                         (0 'message-double-quoted-text-face))))))
+
   ;;
   ;; TODO
   ;; - hide other files from sight?
@@ -3409,6 +3415,7 @@ First, let's activate notmuch itself.
   (use-package notmuch
     :load-path "/usr/share/emacs/site-lisp"
     :ensure nil
+    :commands notmuch-message-mode
     :config
     (progn
       (setq
