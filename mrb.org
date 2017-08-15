@@ -3021,7 +3021,7 @@ and hopefully one will float to the top as being *the one*
   (setq password-cache-expiry 28800) ; default is 16 seconds, which is ridiculously low
   (use-package smtpmail)
 
-  ;;(add-hook 'message-mode-hook 'orgstruct++-mode 'append)
+  (add-hook 'message-mode-hook 'orgstruct++-mode 'append)
   (add-hook 'message-mode-hook 'turn-on-auto-fill 'append)
   (require 'org-contacts)
 
@@ -3568,14 +3568,11 @@ XMPP related settings, including interfacing it to other systems
   (use-package jabber
     :ensure nil
     :load-path "~/dat/src/emacs/packages/jabber.el/"
-    :commands (jabber-connect-all)
     :init
     ;; My accounts
     ;; The ',' makes sure the user-xmpp-account gets evaluated
     (setq jabber-account-list
-          `((,user-xmpp-account
-             (:network-server . "hsdev.com")
-             (:connection-type . starttls))))
+          `((,user-xmpp-account (:connection-type . starttls))))
 
     :config
     ;; Show some info in the modeline
@@ -3731,106 +3728,104 @@ In an attempt to do even more in emacs, i've installed `elfeed' and
 imported my feeds from RSSyl
 
 #+BEGIN_SRC emacs-lisp
-    (use-package vlc :ensure nil)  ;; Needs my little hack from https://github.com/mrvrb/vlc.el
-    ;(use-package async) ;; This is for elfeed, why not add it as dependency there?
-    (use-package elfeed
-      :init
-      (progn
-	(bind-key "C-c f" 'elfeed)
-	(setf url-queue-timeout 30)
-	(setq elfeed-db-directory "~/dat/.elfeed")
-	;; Emacs bug https://debbugs.gnu.org/cgi/bugreport.cgi?bug=27617 workaround
-	(setq cl--random-state (cl--make-random-state (cl--random-time))))
-      :config
-      (progn
-	(defun mrb/elfeed-search-toggle-tag(tag)
-          (let ((entries (elfeed-search-selected)))
-            (cl-loop for entry in entries do
-                     (if (elfeed-tagged-p tag entry)
-			 (elfeed-untag entry tag)
-                       (elfeed-tag entry tag)))
-            (mapc #'elfeed-search-update-entry entries)
-            (unless (use-region-p) (forward-line))))
+  (use-package vlc :ensure nil)  ;; Needs my little hack from https://github.com/mrvrb/vlc.el
+  ;(use-package async) ;; This is for elfeed, why not add it as dependency there?
+  (use-package elfeed
+    :init
+    (progn
+      (bind-key "C-c f" 'elfeed)
+      (setf url-queue-timeout 30)
+      (setq elfeed-db-directory "~/dat/.elfeed"))
+    :config
+    (progn
+      (defun mrb/elfeed-search-toggle-tag(tag)
+        (let ((entries (elfeed-search-selected)))
+          (cl-loop for entry in entries do
+                   (if (elfeed-tagged-p tag entry)
+                       (elfeed-untag entry tag)
+                     (elfeed-tag entry tag)))
+          (mapc #'elfeed-search-update-entry entries)
+          (unless (use-region-p) (forward-line))))
 
-	(defun mrb/elfeed-show-toggle-tag(tag)
-          (interactive)
-          (if (elfeed-tagged-p tag elfeed-show-entry)
-              (elfeed-show-untag tag)
-            (elfeed-show-tag tag)))
+      (defun mrb/elfeed-show-toggle-tag(tag)
+        (interactive)
+        (if (elfeed-tagged-p tag elfeed-show-entry)
+            (elfeed-show-untag tag)
+          (elfeed-show-tag tag)))
 
-	(defun mrb/enqueue-video()
-          "Enqueue the current entry, assuming it is playable, to vlc"
-          (interactive)
-          (vlc/enqueue (elfeed-entry-link elfeed-show-entry)))
+      (defun mrb/enqueue-video()
+        "Enqueue the current entry, assuming it is playable, to vlc"
+        (interactive)
+        (vlc/enqueue (elfeed-entry-link elfeed-show-entry)))
 
-	(defun mrb/play-video()
-          "Play the video in the current entry, bypassing the queeu it first"
-          (interactive)
-          (vlc/add (elfeed-entry-link elfeed-show-entry)))
+      (defun mrb/play-video()
+        "Play the video in the current entry, bypassing the queeu it first"
+        (interactive)
+        (vlc/add (elfeed-entry-link elfeed-show-entry)))
 
-	(defun youtube-get-id (url)
-          "Get the YouTube video ID from URL. Returns nil for invalid URLs."
-          (let* ((obj (url-generic-parse-url url))
-		 (host (url-host obj))
-		 (path (url-filename obj))
-		 (match (string-match-p "[-_a-zA-Z0-9]\\{11\\}" path)))
-            (when (and match (member host youtube-hosts))
-              (substring path match (+ match 11)))))
+      (defun youtube-get-id (url)
+        "Get the YouTube video ID from URL. Returns nil for invalid URLs."
+        (let* ((obj (url-generic-parse-url url))
+               (host (url-host obj))
+               (path (url-filename obj))
+               (match (string-match-p "[-_a-zA-Z0-9]\\{11\\}" path)))
+          (when (and match (member host youtube-hosts))
+            (substring path match (+ match 11)))))
 
-	(defcustom youtube-pl-arguments '("--title" "--no-mtime" )
-          "Arguments to be send to youtube-pl."
-          :group 'external)
+      (defcustom youtube-pl-arguments '("--title" "--no-mtime" )
+        "Arguments to be send to youtube-pl."
+        :group 'external)
 
-	(defvar youtube-hosts '("www.youtube.com" "youtube.com" "youtu.be")
-          "Domain names for YouTube.")
+      (defvar youtube-hosts '("www.youtube.com" "youtube.com" "youtu.be")
+        "Domain names for YouTube.")
 
-	(defun youtube-pl-sentinel (process event)
-          "Responds to completed youtube-dl processes."
-          (let ((buffer (process-buffer process)))
-            (with-current-buffer buffer
-              (when (string-match-p "finished" event)
-		(message "youtube-pl %s completed." (youtube-get-id youtube-pl-url))
-		(kill-buffer buffer))
-              (when (string-match-p "abnormal" event)
-		(message "youtube-pl %s failed." (youtube-get-id youtube-pl-url))))))
+      (defun youtube-pl-sentinel (process event)
+        "Responds to completed youtube-dl processes."
+        (let ((buffer (process-buffer process)))
+          (with-current-buffer buffer
+            (when (string-match-p "finished" event)
+              (message "youtube-pl %s completed." (youtube-get-id youtube-pl-url))
+              (kill-buffer buffer))
+            (when (string-match-p "abnormal" event)
+              (message "youtube-pl %s failed." (youtube-get-id youtube-pl-url))))))
 
-	(defun mrb/play-youtube-video (url)
-          "Play the video at URL with youtube-pl. Returns the buffer
-           that will show progress output. The buffer is killed if the
-           play completes successfully."
-          (interactive (list (read-from-minibuffer "URL: " (x-get-selection-value))))
-          (let ((id (youtube-get-id url)))
-            (when id
-              (let* ((process-name (format "youtube-pl-%s" id))
-                     (buffer-name (format "*youtube-pl %s*" id))
-                     (buffer (get-buffer-create buffer-name)))
-		(unless (get-buffer-process buffer)
-                  (with-current-buffer buffer
-                    (erase-buffer)
-                    ;(youtube-dl-mode)
-                    (setq youtube-pl-url url)
-                    ;(setq default-directory
-                    ;      (concat (directory-file-name youtube-dl-directory) "/"))
-                    (set-process-sentinel
-                     (apply #'start-process process-name buffer "youtube-pl"
-                            (append youtube-pl-arguments (list "--" id)))
-                     'youtube-pl-sentinel)))
-		buffer))))
+      (defun mrb/play-youtube-video (url)
+        "Play the video at URL with youtube-pl. Returns the buffer
+         that will show progress output. The buffer is killed if the
+         play completes successfully."
+        (interactive (list (read-from-minibuffer "URL: " (x-get-selection-value))))
+        (let ((id (youtube-get-id url)))
+          (when id
+            (let* ((process-name (format "youtube-pl-%s" id))
+                   (buffer-name (format "*youtube-pl %s*" id))
+                   (buffer (get-buffer-create buffer-name)))
+              (unless (get-buffer-process buffer)
+                (with-current-buffer buffer
+                  (erase-buffer)
+                  ;(youtube-dl-mode)
+                  (setq youtube-pl-url url)
+                  ;(setq default-directory
+                  ;      (concat (directory-file-name youtube-dl-directory) "/"))
+                  (set-process-sentinel
+                   (apply #'start-process process-name buffer "youtube-pl"
+                          (append youtube-pl-arguments (list "--" id)))
+                   'youtube-pl-sentinel)))
+              buffer))))
 
-	(bind-key "w" '(lambda () (interactive) (mrb/elfeed-show-toggle-tag 'watchlater)) elfeed-show-mode-map)
-	(bind-key "w" '(lambda () (interactive) (mrb/elfeed-search-toggle-tag 'watchlater)) elfeed-search-mode-map)
-	(bind-key "e" '(lambda () (interactive) (mrb/enqueue-video)) elfeed-show-mode-map)
-	(bind-key "v" '(lambda () (interactive) (mrb/play-video)) elfeed-show-mode-map)
+      (bind-key "w" '(lambda () (interactive) (mrb/elfeed-show-toggle-tag 'watchlater)) elfeed-show-mode-map)
+      (bind-key "w" '(lambda () (interactive) (mrb/elfeed-search-toggle-tag 'watchlater)) elfeed-search-mode-map)
+      (bind-key "e" '(lambda () (interactive) (mrb/enqueue-video)) elfeed-show-mode-map)
+      (bind-key "v" '(lambda () (interactive) (mrb/play-video)) elfeed-show-mode-map)
 
 
-	;; New entry hook allows meta information manipulation
-	;; without directly having to change elfeed-feeds
-	(add-hook 'elfeed-new-entry-hook
-                  (elfeed-make-tagger :feed-url "youtube\\.com"
-                                      :add '(video youtube)))
-	(add-hook 'elfeed-new-entry-hook
-                  (elfeed-make-tagger :feed-url "vimeo\\.com"
-                                      :add '(video vimeo)))))
+      ;; New entry hook allows meta information manipulation
+      ;; without directly having to change elfeed-feeds
+      (add-hook 'elfeed-new-entry-hook
+                (elfeed-make-tagger :feed-url "youtube\\.com"
+                                    :add '(video youtube)))
+      (add-hook 'elfeed-new-entry-hook
+                (elfeed-make-tagger :feed-url "vimeo\\.com"
+                                    :add '(video vimeo)))))
 #+END_SRC
 
 Elfeed allows to interactively subscribe to a feed (defaulting to
@@ -3884,6 +3879,19 @@ because I run in server mode (doable), but its global mode is way to
 global, because it just applies to all buffers, which lead to errors
 on non-file buffers; for example because they are read-only.
 
+A better solution seems to be ethan-space or ws-trim.el. The first
+seems to be the least intrusive, as it keeps files which do not have
+trailing spaces clean and highlights 'dirty' ones in the hope that I
+notice and remove them. ws-trim.el can have different levels of
+intrusiveness. I'm installing ethan-space for now.
+
+[2014-05-20 di] worked with ethan-wspace for a while and it's pretty
+annoying. 80% of the space it is displaying as being /wrong/ is
+harmless. I have uninstalled it for now, I may reconsider installing
+it only for /some/ modes and not globally.
+
+[2014-06-20 vr] Retrying ws-butler mode (see [[Visual]] )
+[2014-12-23 di] Retrying ws-butler mode (see [[Visual]] )
 ** Generic
 Lets try to use ggtags everywhere.
 #+BEGIN_SRC emacs-lisp
