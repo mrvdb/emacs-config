@@ -3409,15 +3409,17 @@ https://github.com/aperezdc/notmuch-addrlookup-c
 Installation would be quite easy:
 
 #+BEGIN_SRC elisp
-   ;;(use-package notmuch) ;; needed? or auto?
-   (use-package notmuch-address
-     :config
-     (progn
-       (setq notmuch-address-command "/usr/local/bin/notmuch-addrlookup"
-             notmuch-fcc-dirs nil
-             notmuch-poll-script nil)
-       (notmuch-address-message-insinuate)
-       (message "Notmuch address completion loaded...")))
+  (use-package notmuch
+    :load-path "/usr/share/emacs/site-lisp"
+    :ensure nil
+    :config
+    (progn
+      (setq
+       notmuch-fcc-dirs nil
+       notmuch-poll-script nil)
+       (add-to-list 'auto-mode-alist '("mrb@t510.hsdev.com" . message-mode))
+    ))
+
 #+END_SRC
 
 but this only activates the completion after notmuch has loaded, so it
