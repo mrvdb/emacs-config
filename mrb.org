@@ -3021,8 +3021,8 @@ and hopefully one will float to the top as being *the one*
   (setq password-cache-expiry 28800) ; default is 16 seconds, which is ridiculously low
   (use-package smtpmail)
 
-  (add-hook 'message-mode-hook 'orgstruct++-mode 'append)
-  (add-hook 'message-mode-hook 'turn-on-auto-fill 'append)
+  (add-hook 'message-mode-hook 'visual-line-mode 'append)
+
   (require 'org-contacts)
 
   ;; While I'm pretty sure that bluntly rebinding tab is not
@@ -3400,13 +3400,10 @@ with the capture like frame, basically done. The one thing which was a
 bit messy was the address completion which was supposed to go to an
 LDAP directory tied to an ODOO instance.
 
-The cop-out intermediate solution is address completion by a small
-utility which searches the notmuch database for email-addresses used
-before, which is likely to be a match in 90% of the cases.
+The cop-out intermediate solution is address completion by notmuch
+itself, which has proven to work fine so far.
 
-https://github.com/aperezdc/notmuch-addrlookup-c
-
-Installation would be quite easy:
+First, let's activate notmuch itself.
 
 #+BEGIN_SRC elisp
   (use-package notmuch
@@ -3417,19 +3414,11 @@ Installation would be quite easy:
       (setq
        notmuch-fcc-dirs nil
        notmuch-poll-script nil)
-       (add-to-list 'auto-mode-alist '("mrb@t510.hsdev.com" . message-mode))
-    ))
+       (add-to-list 'auto-mode-alist '("mrb@t510.hsdev.com" . notmuch-message-mode))
 
+    ))
 #+END_SRC
 
-but this only activates the completion after notmuch has loaded, so it
-seems we need to put a similar piece of code on a lower level. This
-can work because notmuch is a database on the OS level.
-
-Ideally, i'd want to use inline completion with company mode, but I
-haven't figured out yet how to do that. So, for the time being, I'll
-use the ido completion I use in many other places as the selection
-function.
 
 #+BEGIN_SRC elisp
   (defun mrb/notmuch-address-selection-function (prompt addressess first)
@@ -3439,78 +3428,6 @@ function.
 
   (setq notmuch-address-selection-function
         'mrb/notmuch-address-selection-function)
-
-#+END_SRC
-*** Wanderlust
-The configuration file for wanderlust is typically =~/.wl= but I want
-to have emacs stuff below .emacs.d, so let's start by customizing it.
-#+BEGIN_SRC emacs-lisp
-(setq wl-init-file (concat emacs-directory "wl.el"))
-#+END_SRC
-
-That file won't exist initially, but I'm going to generate it just
-like the main emacs configuration, with org-babel. The SRC type must
-not be emacs-lisp, otherwise the init (using =org-babel-load-file=)
-will load the file instead of the main configuration file (arguably a
-bug)
-
-#+BEGIN_SRC lisp :exports code :tangle ~/.emacs.d/wl.el
-  (setq
-
-   ;; Servers
-   elmo-imap4-default-server "localhost"
-   elmo-imap4-default-authenticate-type 'clear
-   elmo-imap4-default-stream-type "starttls"
-   elmo-imap4-default-user "mrb"
-   elmo-imap4-use-modified-utf7 t
-
-   wl-smtp-posting-server "localhost"
-   wl-smtp-posting-port 24
-
-   elmo-nntp-default-server "news.ziggozakelijk.nl"
-   wl-nntp-posting-server elmo-nntp-default-server
-
-   wl-insert-message-id nil
-   wl-local-domain "hsdev.com"
-   wl-stay-folder-window t
-   wl-folder-window-width 25
-   wl-folder-desktop-name "Main"
-   wl-draft-use-frame t
-   wl-auto-check-folder-name 'none
-
-   ;; Ignore all headers, then enable what I want
-   wl-message-ignored-field-list '("^.*:")
-   wl-message-visible-field-list
-   '("^\\(To\\|Cc\\):"
-     "^Subject:"
-     "^\\(From\\|Reply-To\\):"
-     "^\\(Posted\\|Date\\):")
-
-   ;; Make sure forwarded message use proper prefixing
-   wl-forward-subject-prefix "Fwd: "
-
-   ;; Summary line format
-   wl-summary-line-format "%T%P%M/%D(%W)%h:%m %t%[%17(%c %f%) %] %s"
-
-   ;; Don't ever thread on subject
-   wl-summary-search-parent-by-subject-regexp nil
-
-   ;; Show 'To:' instead of 'From:' in summary for some folders
-   ;; FIXME: could not get this to work
-   wl-use-petname nil
-   wl-summary-showto-folder-regexp ".*Sent.*"
-   wl-user-mail-address-list '(
-                               "marcel@hsdev.com"
-                               "mvanderboom@gmail.com")
-   ;; Make sure threads with new are expanded (does not scale)
-   wl-thread-insert-opened t
-
-   wl-default-folder "%INBOX"
-   wl-trash-folder "%INBOX.Trash"
-
-   wl-ask-range nil
-   )
-
 #+END_SRC
 ** Pump.io
 Similar to capturing TODO and BUY entries, there's a way to captur
@@ -3845,21 +3762,7 @@ i want.
 #+END_SRC
 
 
-#+BEGIN_SRC emacs-lisp
-  ;; Automatically update the feeds every now and then
-  ;; FIXME: recently Emacs crashes on this (ipv6 problem), so we don't don it automatically anymore.
-  ;;(run-at-time 180 1800 (lambda () (unless elfeed-waiting (elfeed-update))))
-#+END_SRC
-** IRC
-The IRC over XMPP doesn't work at the moment, so I need me some ERC
-again.
 
-#+BEGIN_SRC emacs-lisp
-  (use-package erc-hl-nicks)
-
-  (setq erc-track-enable-keybindings t)
-  (setq erc-nick "mrvdb")
-#+END_SRC
 * Development settings
 Some settings which aid in development tasks.
 
@@ -3919,8 +3822,6 @@ My personal style will be called =mrb= and basing it on the =linux= style.
           (other . "mrb")))
 #+END_SRC
 
-** Emacs-Lisp
-Settings specific to using emacs lisp
 ** Haskell
 I am just starting out with haskell, but the two things that are
 probably needed in any case are a mode to use when editting Haskell
