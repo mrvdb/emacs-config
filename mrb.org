@@ -3907,6 +3907,28 @@ Lets try to use ggtags everywhere.
 #+BEGIN_SRC emacs-lisp
 (use-package ggtags)
 #+END_SRC
+
+
+** Coding styles
+Different projects use different coding styles. The ones I need I'll
+gather here for now.
+
+My personal style will be called =mrb= and basing it on the =linux= style.
+#+BEGIN_SRC emacs-lisp
+
+  ;; The
+  (c-add-style "mrb"
+               '("k&r"
+                 (indent-tabs-mode . nil)
+                 (c-basic-offset . 2)))
+
+  ;; Make my style the default
+  (setq c-default-style
+        '((java-mode . "java")
+          (awk-mode . "awk")
+          (other . "mrb")))
+#+END_SRC
+
 ** Emacs-Lisp
 Settings specific to using emacs lisp
 ** Haskell
