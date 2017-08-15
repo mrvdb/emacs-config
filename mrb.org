@@ -3152,11 +3152,8 @@ So, let's begin by enabling imap as the selection method.
   ;;(require 'gnorb)
   (require 'nnir)
   (setq gnus-select-method
-        '(nnimap "hsd"
-                 (nnimap-address "127.0.0.1")
-                 (nnimap-server-port 993)
-                 (nnimap-stream ssl)
-                 (nnir-search-engine imap)))
+        '(nnmaildir "hsd"
+                 (directory "~/Maildir/")))
 #+END_SRC
 
 This, in combination with a line in .authinfo.gpg which holds the
@@ -3196,11 +3193,7 @@ these technical names to somewhat friendlier ones.
     (setq gnus-group-line-format"%M%S%p%P%5y:%B%(%uG%)\n")
 
     (setq group-name-map '
-          (("nnvirtual:Discussions" . "INBOX+Sent")
-           ("nntp+news.gmane.org:gmane.emacs.devel" . "gmane.emacs.devel")
-           ("nntp+news.gmane.org:gmane.emacs.orgmode" . "gmane.emacs.orgmode")
-           ("nntp+news.gmane.org:gmane.mail.sylpheed.claws.general" . "gmane.mail.sylpheed.claws.general")
-           ("nntp+news.ziggozakelijk.nl:gnu.emacs.gnus" . "gnu.emacs.gnus")))
+          (("nnvirtual:Discussions" . "INBOX+Sent")))
 
     (defun gnus-user-format-function-G (arg)
       (let ((mapped-name (assoc gnus-tmp-group group-name-map)))
@@ -3399,12 +3392,7 @@ that is the only way to actually have stuff deleted (?)
   (gnus-byte-compile 'gnus)
 #+END_SRC
 
-There is a nnreddit backedn I'd like to play with.
-#+BEGIN_SRC emacs-lisp
-  (add-to-list 'gnus-secondary-select-methods
-               '(nnreddit ""))
 
-#+END_SRC
 *** Notmuch
 Not having used GNUS enough to be comfortable, notmuch seems a route
 which can be taken somewhat easier. The compose part of emails is,
