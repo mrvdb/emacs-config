@@ -3833,17 +3833,19 @@ gather here for now.
 My personal style will be called =mrb= and basing it on the =linux= style.
 #+BEGIN_SRC emacs-lisp
 
-  ;; The
+  ;; Basing it on k&r, no real reason, does it really matter?
   (c-add-style "mrb"
                '("k&r"
                  (indent-tabs-mode . nil)
-                 (c-basic-offset . 2)))
+                 (c-basic-offset . 2)
+                 (c-cleanup-list . (scope-operator
+                                    space-before-funcall))))
 
   ;; Make my style the default
   (setq c-default-style
         '((java-mode . "java")
-          (awk-mode . "awk")
-          (other . "mrb")))
+          (awk-mode  . "awk")
+          (other     . "mrb")))
 #+END_SRC
 
 ** Haskell
