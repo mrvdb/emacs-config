@@ -3132,8 +3132,15 @@ into the proper configuration when that gets called:
     '((t (:inherit org-level-3)))
     "Face for quotations in email")
 
+
   (add-hook 'message-mode-hook
             (lambda ()
+              (font-lock-add-keywords nil
+                                      '(("^[ \t]*>[ \t]*>[ \t]*>.*$"
+                                         (0 'message-multiply-quoted-text-face))
+                                        ("^[ \t]*>[ \t]*>.*$"
+                                         (0 'message-double-quoted-text-face))))))
+
 
   ;;
   ;; TODO
