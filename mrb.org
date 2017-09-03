@@ -3429,6 +3429,7 @@ First, let's activate notmuch itself.
        notmuch-fcc-dirs nil
        notmuch-poll-script nil)
        (add-to-list 'auto-mode-alist '("mrb@t510.hsdev.com" . notmuch-message-mode))
+       (add-to-list 'auto-mode-alist '("mrb@hsdev.com" . notmuch-message-mode))
 
     ))
 #+END_SRC
