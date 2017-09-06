@@ -3418,7 +3418,7 @@ itself, which has proven to work fine so far.
 
 First, let's activate notmuch itself.
 
-#+BEGIN_SRC elisp
+#+BEGIN_SRC emacs-lisp
   (use-package notmuch
     :load-path "/usr/share/emacs/site-lisp"
     :ensure nil
@@ -3435,7 +3435,7 @@ First, let's activate notmuch itself.
 #+END_SRC
 
 
-#+BEGIN_SRC elisp
+#+BEGIN_SRC emacs-lisp
   (defun mrb/notmuch-address-selection-function (prompt addressess first)
     "Use `ido-completing-read' to select one of the addresses."
     (ido-completing-read prompt (cons first addressess)
@@ -3792,7 +3792,6 @@ i want.
       (elfeed-org))
     )
 #+END_SRC
-
 
 
 * Development settings
