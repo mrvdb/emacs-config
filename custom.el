@@ -252,7 +252,6 @@
  '(show-paren-mode t)
  '(show-paren-priority 98)
  '(sieve-manage-authenticators (quote (plain digest-md5 cram-md5 scram-md5 ntlm login)))
- '(sieve-manage-default-port "2000")
  '(sql-postgres-options (quote ("-P" "pager=off" "-p 5434")))
  '(sql-server "dbserver.hsdev.com")
  '(typo-quotation-marks
