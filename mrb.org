@@ -994,7 +994,7 @@ starts life originally as a captured item. I use it for:
 1. TODO items;
 2. BUY items;
 3. Journaling entries;
-4. Statusnet Updates;
+
 
 The =org-capture-pop-frame= makes sure all captures are in separate
 frames.
@@ -1060,10 +1060,6 @@ emacsclient --eval '(mrb/capture-todo)'
 emacsclient --eval '(mrb/capture-buy)'
 #+END_SRC
 
-#+BEGIN_SRC sh :exports code :tangle ~/bin/capture-twist.sh :shebang #!/bin/sh
-emacsclient --eval '(mrb/capture-twist)'
-#+END_SRC
-
 By default C-c C-c ends the capture, but is normally the shortcut to
 enter tags, so I define a shortcut to define tags while capturing.
 
@@ -1077,9 +1073,6 @@ enter tags, so I define a shortcut to define tags while capturing.
 
   (bind-key "C-c C-t" 'mrb/add-tags-in-capture org-capture-mode-map)
 #+END_SRC
-
-Capturing dents for status updates in statusnet are done the
-same. Their config is in the section [[Statusnet]]
 
 ** Workflow
 Orgmode used a couple of thing which enable you to steer the workflow
@@ -1414,7 +1407,6 @@ on the item or on the file.
           ("Personal"      "~/dat/org/images/personal.png" nil nil :ascent center)
           ("Task"          "~/dat/org/images/stock_todo.png" nil nil :ascent center)
           ("Org"           "~/dat/org/images/org-mode-unicorn.png" nil nil :ascent center)
-          ("Statusnet"     "~/dat/org/images/statusnet.png" nil nil :ascent center)
           ("Systeem"       "~/dat/org/images/systeembeheer.png" nil nil :ascent center)
           ("Wordpress"     "~/dat/org/images/wordpress.png" nil nil :ascent center)
   ))
@@ -3460,55 +3452,6 @@ accessed by the sieve-manage package. For some reason I can't get the
 
 which basically goes over the whole sieve script and removes the '^M'
 characters from the buffer.
-** Pump.io
-Similar to capturing TODO and BUY entries, there's a way to captur
-pump.io entries too.
-
-The only pump.io elisp implementation does almost everything like I
-want it to be, including key bindings.
-
-#+BEGIN_SRC emacs-lisp
-  (use-package pumpio-interface
-    :load-path "~/dat/src/pump.io.related/pumpio-el/src/"
-    :ensure oauth
-    :config
-    ;; Configure for qua.name
-    (setq pumpio-pod "https://status.qua.name")
-  )
-
-  ;; I'm using a floating frame in awesome WM for dents
-  (defun mrb/make-pump-frame ()
-    "Create a new frame and run pump postnote"
-    (interactive)
-    ;; Create and select the frame
-    (select-frame (make-frame '((name . "pump")
-                                (width . 80) (height . 15)
-                                (menu-bar-lines . 0) (tool-bar-lines . 0)))))
-
-  (defun mrb/capture-pump ()
-    "Capture a pump note"
-    (interactive)
-
-    (mrb/make-pump-frame)
-    (pmpio-ctrl-post-note)
-
-    ;; Once there, make sure we're the only one
-    (delete-other-windows)
-  )
-
-  ;; Make sure we close our frame
-  (defadvice pmpio-ctrl-close-new-note (after delete-pump-frame activate)
-    "Advise to close the frame"
-    (if (equal "pump" (frame-parameter nil 'name))
-        (delete-frame)))
-#+END_SRC
-
-Commandline interface for posting a pump.io notices goes here:
-
-#+BEGIN_SRC sh :exports code :tangle ~/bin/capture-pump.sh :shebang #!/bin/sh
-edit -e '(mrb/capture-pump)'
-#+END_SRC
-
 ** XMPP
 XMPP related settings, including interfacing it to other systems
 
