@@ -1018,9 +1018,9 @@ Here are the templates used for them.
    org-capture-templates
    (quote (
            ("b" "Buy"
-            entry (id "new-todo-receiver") "* BUY%? :buy:\n" :prepend t)
+            entry (id "new-todo-receiver") "* BUY %? :buy:\n" :prepend t)
            ("t" "Todo"
-            entry (id "new-todo-receiver") "* TODO%?\n%i" :prepend t)
+            entry (id "new-todo-receiver") "* TODO %?\n%i" :prepend t)
            ("j" "Journal"
             entry (file+datetree (concat org-directory "journal.org"))
             "* ___________________________________________________________ *%U* ___\n\n%?\n"))))
@@ -1248,7 +1248,6 @@ cursor munging to make sure it is used comfortably during editing.
     (org-expiry-insert-created)
     (org-back-to-heading)
     (org-end-of-line)
-    (insert " ")
   )
 #+END_SRC
 
