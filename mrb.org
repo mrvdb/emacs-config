@@ -1666,7 +1666,9 @@ migrate this into more literal sections
 
    org-agenda-log-mode-items (quote (closed clock state))
    org-agenda-skip-deadline-prewarning-if-scheduled t
-   org-blank-before-new-entry (quote ((heading) (plain-list-item)))
+   ;; Auto detect blank line need, this is the default, but I explicitly set thi
+   ;; because it needs to be this or my capturing breaks due to org-capture popup
+   org-blank-before-new-entry (quote ((heading . auto) (plain-list-item . auto)))
    org-export-htmlize-output-type (quote css)
    org-fast-tag-selection-single-key (quote expert)
    org-file-apps
