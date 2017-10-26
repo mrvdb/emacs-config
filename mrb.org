@@ -1470,13 +1470,14 @@ at the top, in many cases that would mean it is the most imminent
 thing to do, which is not the case.
 
 #+BEGIN_SRC emacs-lisp
-(setq
+  (setq
    org-reverse-note-order nil    ; File at the bottom of an entry
    org-refile-allow-creating-parent-nodes (quote confirm)
    org-refile-targets (quote ((org-agenda-files :maxlevel . 10 )))
    org-refile-use-outline-path 'file
    org-outline-path-complete-in-steps nil
-)
+   org-refile-use-cache t
+   )
 #+END_SRC
 
 The list of headers to refile to is, in the standard config, basically
