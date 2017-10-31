@@ -875,7 +875,7 @@ on a line which is commented out in the proper syntax for that mode.
 
   (use-package css-mode
     :commands (css-mode)
-    :mode "\\.css\\'"
+    :mode "\\.css|\\.mss\\'"
     :config
     (add-hook 'css-mode-hook 'rainbow-mode))
 
