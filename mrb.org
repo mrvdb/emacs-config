@@ -888,7 +888,7 @@ on a line which is commented out in the proper syntax for that mode.
 
   (use-package yaml-mode
     :commands (yaml-mode)
-    :mode "\\.yml\\'")
+    :mode "\\.yml|\\.mml\\'")
 
   (use-package eimp
     :config
