@@ -1019,7 +1019,7 @@ starts life originally as a captured item. I use it for:
 3. Journaling entries;
 
 
-The =org-capture-pop-frame= makes sure all captures are in separate
+The =org-capture-pop-frame= package makes sure all captures are in separate
 frames.
 
 #+BEGIN_SRC emacs-lisp
