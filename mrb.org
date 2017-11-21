@@ -2880,10 +2880,6 @@ in many directories.
     :config
     (setq ido-vertical-define-keys 'C-n-C-p-up-down-left-right)
     (ido-vertical-mode))
-
-  (use-package ido-hacks
-    :config
-    (ido-hacks-mode))
 #+END_SRC
 
 By selecting a piece of text, wrap-region can quote or otherwise
