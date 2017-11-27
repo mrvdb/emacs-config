@@ -220,7 +220,7 @@ other places too.
   (setq user-mail-address "marcel@hsdev.com")
   (setq user-domain       "hsdev.com")
   (setq user-organisation "HS-Development BV")
-  (setq user-xmpp-account (concat user-mail-address "/" system-name))
+  (setq user-xmpp-account (concat user-mail-address "/" (system-name)))
   (setq user-gpg-encrypt-key "0x235E5C8CF5E8DFFB")
 #+END_SRC
 
@@ -293,7 +293,7 @@ section.
    delete-by-moving-to-trash t
 
    ; use clipboard
-   x-select-enable-clipboard t
+   select-enable-clipboard t
 
    display-warning-minimum-level 'error
    large-file-warning-threshold nil
