@@ -731,6 +731,66 @@ extra care here.
   ;; And we need to run those settings *now* too, when we are not in server mode
   (mrb/run-client-settings)
 #+END_SRC
+** Context dependent visualisation
+Next to the information registered in the theme which controls the
+overall look and feel, there is additional visualisation which depend
+on context dependent factors, such as:
+
+- the user spells a word wrong
+- the syntax of a certain phrase is wrong grammatically, depending on
+  what language the user is writing in
+- the status of a certain region is changing, depdendent on certain
+  rules
+
+*** Flycheck
+Flycheck is a syntax checking package which seems to have better
+support than flymake, which is built-in. I've no configuration for
+flymake specifically, but some packages enable it automatically (elpy
+for example). Where applicable, I gather the necessary disable actions
+here first.
+
+#+BEGIN_SRC emacs-lisp
+  ;; Remove flymake from elpy configuration
+  (delete 'elpy-module-flymake elpy-modules)
+#+END_SRC
+
+Now we can start configuring flycheck
+
+#+BEGIN_SRC emacs-lisp
+  (use-package flycheck
+    :init (global-flycheck-mode)
+    :ensure flycheck-pos-tip
+    :config
+    (add-hook 'after-init-hook #'global-flycheck-mode)
+    (with-eval-after-load 'flycheck
+      (flycheck-pos-tip-mode)))
+#+END_SRC
+
+Currently actively configured are:
+- javscript :: eslint with a config file
+-
+
+Flyspell is similar to flycheck but for text languages. I'm setting
+some of the flyspell faces to the flycheck faces so they are
+consistent
+
+#+BEGIN_SRC emacs-lisp
+  ;; flyspell errors look the same as flycheck-errors
+  (set-face-attribute 'flyspell-incorrect nil :inherit 'flycheck-error)
+
+  ;; flyspell-duplicate  as warnings
+  ;; Do I want this at all?, seems overkill
+  (setq flyspell-mark-duplications-flag nil)  ;; This does not seem to help
+  (set-face-attribute 'flyspell-duplicate nil :inherit 'flycheck-warning)
+#+END_SRC
+
+Still on the wish-list:
+- activate flyspell automatically for all text-modes?
+- language detection (English and Dutch mainly)
+- check for language pythons, which was troublesome before
+- evaluate usage in org source blocks (many checks do not apply)
+-
+
 * Buffers and files
 How do I deal with all those buffers?
 
@@ -871,11 +931,6 @@ on a line which is commented out in the proper syntax for that mode.
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
-  (use-package flycheck
-    :config
-
-    ;; Enable it everywhere until further notice
-    (add-hook 'after-init-hook #'global-flycheck-mode))
 
   ;; Extension mappings for several modes
   (use-package markdown-mode
