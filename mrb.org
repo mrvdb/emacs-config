@@ -555,13 +555,13 @@ And enable the minor mode globally.
 
   ;; When I am not typing, the cursor should become more visible, so I
   ;; don't lose it.
-  ;;(makunbound 'mrb-cursor-color)
-  (setq mrb-cursor-color "springgreen")
+  (makunbound 'mrb-cursor-color)
+  (setq mrb-cursor-color "red")
 
   ;; Default frame properties frame position, color, etc
   (setq default-frame-alist
         '((cursor-type . (bar . 1))
-          (cursor-color . "springgreen") ;; TODO: this should be redundant (.Xresources has it)
+          (cursor-color . "red") ;; TODO: this should be redundant (.Xresources has it)
           (height . 60)
           (width . 100)
   ))
