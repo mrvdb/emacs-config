@@ -924,7 +924,7 @@ on a line which is commented out in the proper syntax for that mode.
     (interactive)
     (let ((m (symbol-name (buffer-majormode))))
       (save-excursion
-        (beginning-of-buffer)
+        (goto-char (point-min))
         (insert "-*- mode:"
                 (substring m 0 (string-match "-mode" m))
                 " -*-")
@@ -1609,7 +1609,7 @@ and HTML as destination format
    org-export-docbook-xsl-fo-proc-command "fop %i %o"
    org-export-docbook-xslt-proc-command "xsltproc --output %o %s %i"
    org-export-htmlize-output-type (quote css)
-   org-export-htmlized-org-css-url "orgmode.css"
+   org-org-htmlized-css-url "orgmode.css"
    org-latex-pdf-process
    (quote
     ("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
@@ -2907,7 +2907,7 @@ be a problem that needs solving in practice so far.
 * Editing control
 
 I like to do things interactively where I can. The package =ido= is part
-of emacs and is more or less a defacto standard within the emacs
+of emacs and is more or less a defacto standard within the Emacs
 community. The basic promise is that when finding files, switching
 buffers or otherwise completing things in the command area, ido takes
 over and make that completion a better experience. One of these this
@@ -3762,7 +3762,7 @@ imported my feeds from RSSyl
         "Play the video at URL with youtube-pl. Returns the buffer
          that will show progress output. The buffer is killed if the
          play completes successfully."
-        (interactive (list (read-from-minibuffer "URL: " (x-get-selection-value))))
+        (interactive (list (read-from-minibuffer "URL: " (gui-get-primary-selection))))
         (let ((id (youtube-get-id url)))
           (when id
             (let* ((process-name (format "youtube-pl-%s" id))
@@ -4110,14 +4110,14 @@ there may be occasions where is pays to have a slight difference in
 configuration on different machines.
 
 #+BEGIN_SRC emacs-lisp
-  (when (string= system-name "x200s")
+  (when (string= (system-name) "x200s")
     (progn
       ;; Stuff that needs to happen for machine named "x200s"
       (set-frame-font "DejaVu Sans Mono")
 
       ))
 
-  (when (string= system-name "t510")
+  (when (string= (system-name) "t510")
     (progn
       ;; Stuff for the "t510" configuration
 
