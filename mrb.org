@@ -775,13 +775,15 @@ some of the flyspell faces to the flycheck faces so they are
 consistent
 
 #+BEGIN_SRC emacs-lisp
-  ;; flyspell errors look the same as flycheck-errors
-  (set-face-attribute 'flyspell-incorrect nil :inherit 'flycheck-error)
+    (use-package flyspell
+      :config
+      ;; flyspell errors look the same as flycheck-errors
+      (set-face-attribute 'flyspell-incorrect nil :inherit 'flycheck-error)
 
-  ;; flyspell-duplicate  as warnings
-  ;; Do I want this at all?, seems overkill
-  (setq flyspell-mark-duplications-flag nil)  ;; This does not seem to help
-  (set-face-attribute 'flyspell-duplicate nil :inherit 'flycheck-warning)
+      ;; flyspell-duplicate  as warnings
+      ;; Do I want this at all?, seems overkill
+      (setq flyspell-mark-duplications-flag nil)  ;; This does not seem to help
+      (set-face-attribute 'flyspell-duplicate nil :inherit 'flycheck-warning))
 #+END_SRC
 
 Still on the wish-list:
@@ -789,7 +791,6 @@ Still on the wish-list:
 - language detection (English and Dutch mainly)
 - check for language pythons, which was troublesome before
 - evaluate usage in org source blocks (many checks do not apply)
--
 
 * Buffers and files
 How do I deal with all those buffers?
