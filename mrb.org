@@ -751,7 +751,7 @@ here first.
 
 #+BEGIN_SRC emacs-lisp
   ;; Remove flymake from elpy configuration
-  (delete 'elpy-module-flymake elpy-modules)
+  ;;(delete 'elpy-module-flymake elpy-modules)
 #+END_SRC
 
 Now we can start configuring flycheck
@@ -3934,6 +3934,8 @@ code.
   (use-package elpy
     :init
     (elpy-enable))
+
+  (delete 'elpy-module-flymake elpy-modules)
 
   (add-hook 'python-mode-hook
             (lambda ()
