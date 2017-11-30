@@ -29,8 +29,9 @@
 ;; Exception 1:
 ;; Apparently when disabled functions get enabled, Emacs puts them here
 ;;
+
+;;; init.el ends here
+(put 'dired-find-alternate-file 'disabled nil)
 (put 'narrow-to-region 'disabled nil)
 (put 'downcase-region 'disabled nil)
 (put 'upcase-region 'disabled nil)
-
-;;; init.el ends here
