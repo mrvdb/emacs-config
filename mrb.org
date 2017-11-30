@@ -711,14 +711,10 @@ extra care here.
                         :weight 'normal :background mrb-bg-region)
 
     ;; Probably move this to somewhere else ?
+    ;; I probably want the global mode and register exceptions
     (use-package ws-butler
       :init
-      (progn
-        (add-hook 'lisp-mode-hook         'ws-butler-mode)
-        (add-hook 'emacs-lisp-mode-hook   'ws-butler-mode)
-        (add-hook 'python-mode-hook       'ws-butler-mode)
-        (add-hook 'org-mode-hook          'ws-butler-mode)
-        (add-hook 'nxml-mode-hook         'ws-butler-mode)))
+      (ws-butler-global-mode))
 
     (mrb/unicode-font-corrections))
 
