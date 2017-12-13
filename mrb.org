@@ -3808,8 +3808,15 @@ i want.
       (elfeed-org))
     )
 #+END_SRC
+** IRC
+#+BEGIN_SRC emacs-lisp
+    (use-package erc
+      :config
+      (setq
+       erc-nick "mrvdb"
+       erc-track-enable-keybindings t))
 
-
+#+END_SRC
 * Development settings
 Some settings which aid in development tasks.
 
