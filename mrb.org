@@ -1762,7 +1762,7 @@ migrate this into more literal sections
    org-log-redeadline (quote note)
    org-log-reschedule (quote time)
    org-modules (quote
-                (org-info org-jsinfo org-habit
+                (org-info org-habit
                           org-inlinetask org-irc
                           org-toc org-mac-iCal org-mouse))
    org-remember-default-headline ""
