@@ -3693,8 +3693,6 @@ In an attempt to do even more in emacs, i've installed `elfeed' and
 imported my feeds from RSSyl
 
 #+BEGIN_SRC emacs-lisp
-  (use-package vlc :ensure nil)  ;; Needs my little hack from https://github.com/mrvrb/vlc.el
-  ;(use-package async) ;; This is for elfeed, why not add it as dependency there?
   (use-package elfeed
     :init
     (progn
@@ -3718,64 +3716,6 @@ imported my feeds from RSSyl
             (elfeed-show-untag tag)
           (elfeed-show-tag tag)))
 
-      (defun mrb/enqueue-video()
-        "Enqueue the current entry, assuming it is playable, to vlc"
-        (interactive)
-        (vlc/enqueue (elfeed-entry-link elfeed-show-entry)))
-
-      (defun mrb/play-video()
-        "Play the video in the current entry, bypassing the queeu it first"
-        (interactive)
-        (vlc/add (elfeed-entry-link elfeed-show-entry)))
-
-      (defun youtube-get-id (url)
-        "Get the YouTube video ID from URL. Returns nil for invalid URLs."
-        (let* ((obj (url-generic-parse-url url))
-               (host (url-host obj))
-               (path (url-filename obj))
-               (match (string-match-p "[-_a-zA-Z0-9]\\{11\\}" path)))
-          (when (and match (member host youtube-hosts))
-            (substring path match (+ match 11)))))
-
-      (defcustom youtube-pl-arguments '("--title" "--no-mtime" )
-        "Arguments to be send to youtube-pl."
-        :group 'external)
-
-      (defvar youtube-hosts '("www.youtube.com" "youtube.com" "youtu.be")
-        "Domain names for YouTube.")
-
-      (defun youtube-pl-sentinel (process event)
-        "Responds to completed youtube-dl processes."
-        (let ((buffer (process-buffer process)))
-          (with-current-buffer buffer
-            (when (string-match-p "finished" event)
-              (message "youtube-pl %s completed." (youtube-get-id youtube-pl-url))
-              (kill-buffer buffer))
-            (when (string-match-p "abnormal" event)
-              (message "youtube-pl %s failed." (youtube-get-id youtube-pl-url))))))
-
-      (defun mrb/play-youtube-video (url)
-        "Play the video at URL with youtube-pl. Returns the buffer
-         that will show progress output. The buffer is killed if the
-         play completes successfully."
-        (interactive (list (read-from-minibuffer "URL: " (gui-get-primary-selection))))
-        (let ((id (youtube-get-id url)))
-          (when id
-            (let* ((process-name (format "youtube-pl-%s" id))
-                   (buffer-name (format "*youtube-pl %s*" id))
-                   (buffer (get-buffer-create buffer-name)))
-              (unless (get-buffer-process buffer)
-                (with-current-buffer buffer
-                  (erase-buffer)
-                  ;(youtube-dl-mode)
-                  (setq youtube-pl-url url)
-                  ;(setq default-directory
-                  ;      (concat (directory-file-name youtube-dl-directory) "/"))
-                  (set-process-sentinel
-                   (apply #'start-process process-name buffer "youtube-pl"
-                          (append youtube-pl-arguments (list "--" id)))
-                   'youtube-pl-sentinel)))
-              buffer))))
 
       (bind-key "w" '(lambda () (interactive) (mrb/elfeed-show-toggle-tag 'watchlater)) elfeed-show-mode-map)
       (bind-key "w" '(lambda () (interactive) (mrb/elfeed-search-toggle-tag 'watchlater)) elfeed-search-mode-map)
