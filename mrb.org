@@ -1422,7 +1422,16 @@ delimiters, but rather render the text.
 (setq org-hide-emphasis-markers t)
 #+END_SRC
 
-A similar thing can be done with pretty entity characters (like '\delta'
+One of the emphasis markers is for ~inline code~ (delimited by ~). I
+never use that in that way, but I need an emaphasis marker in tables
+which does stand out more than *bold*. So, I'm adjusting the =org-code=
+face a bit.
+
+#+BEGIN_SRC
+(set-face-attribute 'org-code nil :foreground "purple" :weight 'bold)
+#+END_SRC
+
+Similar to inline emphasis is the /rewriting/ with pretty entity characters (like '\delta'
 for example). These characters can be added to the text by adding a
 '\' before a symbol name ('delta' in the example).  I make an
 exception for the sub- and superscript characters. This happens a lot
