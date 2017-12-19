@@ -3770,19 +3770,6 @@ because I run in server mode (doable), but its global mode is way to
 global, because it just applies to all buffers, which lead to errors
 on non-file buffers; for example because they are read-only.
 
-A better solution seems to be ethan-space or ws-trim.el. The first
-seems to be the least intrusive, as it keeps files which do not have
-trailing spaces clean and highlights 'dirty' ones in the hope that I
-notice and remove them. ws-trim.el can have different levels of
-intrusiveness. I'm installing ethan-space for now.
-
-[2014-05-20 di] worked with ethan-wspace for a while and it's pretty
-annoying. 80% of the space it is displaying as being /wrong/ is
-harmless. I have uninstalled it for now, I may reconsider installing
-it only for /some/ modes and not globally.
-
-[2014-06-20 vr] Retrying ws-butler mode (see [[Visual]] )
-[2014-12-23 di] Retrying ws-butler mode (see [[Visual]] )
 ** Generic
 Lets try to use ggtags everywhere.
 #+BEGIN_SRC emacs-lisp
