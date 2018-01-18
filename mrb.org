@@ -4025,7 +4025,7 @@ configuration on different machines.
   (when (string= (system-name) "x200s")
     (progn
       ;; Stuff that needs to happen for machine named "x200s"
-      (set-frame-font "DejaVu Sans Mono")
+      (set-frame-font "Hack")
 
       ))
 
