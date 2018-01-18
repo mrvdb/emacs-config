@@ -98,6 +98,7 @@ This has a number of attractive properties:
 **** http://toc.hipcast.com/rss/audio2.xml
 **** https://ultralightandcomfortable.com/feed
 **** http://hikinginfinland.com/atom.xml
+**** http://ultralightphotography.net/feed/
 *** Other
 **** http://planet.jabber.org/rss20.xml
 **** http://feeds.twit.tv/sn_video_large
