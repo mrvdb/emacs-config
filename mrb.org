@@ -156,13 +156,7 @@ default gnu augmented with the melpa repository.
                '("melpa-stable" . "https://stable.melpa.org/packages/") t)
   (add-to-list 'package-archives
                '("gnu" . "http://elpa.gnu.org/packages/") t)
-  (add-to-list 'package-archives
-	         '("org" . "http://orgmode.org/elpa/") t)
 
-  ;; Bootstrap use-package
-  (unless (package-installed-p 'use-package)
-    (package-refresh-contents)
-    (package-install 'use-package))
 
   ;; Default is to have elpa provide the package
   (setq use-package-always-ensure t)
@@ -1020,18 +1014,14 @@ Basically where to find stuff and what to load.
 We do not have to load the main orgmode location, because we already
 did that on the main initialisation to get org-babel started.
 
-#+BEGIN_SRC emacs-lisp
-   (add-to-list 'load-path "~/dat/src/emacs/packages/org-mode/contrib/babel/langs/")
-#+END_SRC
-
 Also make sure we never load org from internal, this can happen when
 functions were defined in the included org version and not anymore in
 newer versions. We want an error, not a silent load of the older
 function.
 
+#+COMMENT This duplicates the one in init.el, problems?
 #+BEGIN_SRC emacs-lisp
   (use-package org
-    :load-path "~/dat/src/emacs/packages/org-mode/lisp/"
     :ensure nil
     :pin org
     :mode ("\\.txt\\'" "\\.org\'")
@@ -1292,14 +1282,14 @@ that item was created. I use the contributed =org-expiry= for that and
 adjust it a bit.
 
 I want the property to be name 'CREATED' (I don't remeber what the
-org-expirty default name is, but it is different) and the timestamps
+org-expiry default name is, but it is different) and the timestamps
 inserted must not be active, otherwise they'll appear all over the
 place in the agenda.
 
 #+BEGIN_SRC emacs-lisp
   (use-package org-expiry
     :ensure nil
-    :load-path "~/dat/src/emacs/packages/org-mode/contrib/lisp/"
+    :load-path "~/dat/src/emacs/packages/org-extra/"
 
     :init
     (setq org-expiry-created-property-name "CREATED")
@@ -1537,9 +1527,9 @@ Specific settings for babel and literate programming within org-mode
   (use-package ob-gnuplot :ensure nil)
   (org-babel-do-load-languages
    'org-babel-load-languages
-   '( (ditaa . t) (sql . t) (shell . t) (emacs-lisp t) (lisp t)
+   '( (ditaa . t) (sql . t) (emacs-lisp t) (lisp t)
      (css t) (awk t) (js t) (lisp t) (org t) (plantuml t) (gnuplot . t)
-     (haskell t) (js t) (calc t) (mathomatic t)))
+     (haskell t) (js t) (calc t)))
 #+END_SRC
 
 ** Refiling
@@ -2152,7 +2142,7 @@ migrate this into more literal sections
   ;; (mrb/install-monitor remote-org-mobile-file 30)
 
   ;; Mail facilities related to org-mode
-  (use-package org-mime :ensure nil)
+  (use-package org-mime)
 
   ;; Small bit to mail an org subtree
   (defun mrb/mail-subtree-from-org ()
@@ -3080,8 +3070,6 @@ and hopefully one will float to the top as being *the one*
   (setq password-cache-expiry 28800) ; default is 16 seconds, which is ridiculously low
   (use-package smtpmail)
 
-
-  (require 'org-contacts)
 
   ;; While I'm pretty sure that bluntly rebinding tab is not
   ;; the proper way to do this, it's the only thing i got working.
