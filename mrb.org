@@ -1,4 +1,4 @@
-#+SETUPFILE: "~/dat/org/etc/org-config.org"
+#+SETUPFILE: "~/.emacs.d/org-config.org"
 #+TITLE: Emacs configuration
 #+DESCRIPTION: An org-babel based emacs configuration
 #+LANGUAGE:  en
