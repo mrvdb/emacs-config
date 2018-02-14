@@ -3566,11 +3566,30 @@ imported my feeds from RSSyl
             (elfeed-show-untag tag)
           (elfeed-show-tag tag)))
 
+      ;; TODO: mrb/elfeed-enqueue-video
+      (defun mrb/elfeed-play-with-mpv ()
+        "Play elfeed link in mpv"
+        (interactive)
+        (start-process "elfeed-mpv" nil
+                       "mpv"
+                       (elfeed-entry-link elfeed-show-entry)))
+
+      (defun mrb/elfeed-add-to-playlist ()
+        "Add to already playing mpv"
+        (interactive)
+        (start-process "elfeed-mpvremote" nil
+                       "mpvremote"
+                       "add"
+                       (elfeed-entry-link elfeed-show-entry)))
+
+
+
 
       (bind-key "w" '(lambda () (interactive) (mrb/elfeed-show-toggle-tag 'watchlater)) elfeed-show-mode-map)
       (bind-key "w" '(lambda () (interactive) (mrb/elfeed-search-toggle-tag 'watchlater)) elfeed-search-mode-map)
-      (bind-key "e" '(lambda () (interactive) (mrb/enqueue-video)) elfeed-show-mode-map)
-      (bind-key "v" '(lambda () (interactive) (mrb/play-video)) elfeed-show-mode-map)
+      (bind-key "e" '(lambda () (interactive) (mrb/elfeed-add-to-playlist)) elfeed-show-mode-map)
+      (bind-key "v" '(lambda () (interactive) (mrb/elfeed-play-with-mpv)) elfeed-show-mode-map)
+
 
 
       ;; New entry hook allows meta information manipulation
