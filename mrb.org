@@ -1001,8 +1001,14 @@ function.
     :ensure nil
     :pin org
     :mode ("\\.txt\\'" "\\.org\'")
-    :bind (:map org-mode-map
-                ("C-c ," . 'mrb/org-insert-inactive-timestamp))
+    :bind (("C-c g" . 'mrb/gtd)
+           :map org-mode-map
+           ("C-c ," . 'mrb/org-insert-inactive-timestamp)
+           ("C-c a" . 'org-agenda)
+           ("C-c b" . 'org-iswitchb)
+           ("C-c l" . 'org-store-link)
+           ("C-c j" . 'org-journal-new-entry)
+           ("C-c p" . 'org-plot/gnuplot))
     :config
     (add-hook 'org-mode-hook 'turn-on-auto-fill)
 
@@ -2454,17 +2460,6 @@ the previous definition.
   (bind-key "<S-s-up>"    'windmove-up)
   (bind-key "<S-s-down>"  'windmove-down)
 
-#+END_SRC
-*** Org-mode
-Orgmode specific keybindings.
-
-#+BEGIN_SRC emacs-lisp
-  (bind-key "C-c g" 'mrb/gtd)
-  (bind-key "C-c a" 'org-agenda)
-  (bind-key "C-c b" 'org-iswitchb)
-  (bind-key "C-c l" 'org-store-link)
-  (bind-key "C-c j" 'org-journal-new-entry)
-  (bind-key "C-c p" 'org-plot/gnuplot)
 #+END_SRC
 ** Other key and mouse related settings
 Emacs has, like for everything else, a peculiar idea on scrolling and
