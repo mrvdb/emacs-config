@@ -1001,6 +1001,7 @@ function.
     :ensure nil
     :pin org
     :mode ("\\.txt\\'" "\\.org\'")
+    :after (org-capture)
     :bind (("C-c g" . 'mrb/gtd)
            :map org-mode-map
            ("C-c ,"   . 'mrb/org-insert-inactive-timestamp)
@@ -2378,10 +2379,11 @@ runs smex, but limits the commands to make sense for the current
 major mode only.
 
 #+BEGIN_SRC emacs-lisp
-  (use-package smex)
-  (bind-key "C-c M-x" 'execute-extended-command)
-  (bind-key "M-x" 'smex)
-  (bind-key "M-X" 'smex-major-mode-commands)
+  (use-package smex
+    :bind
+    (("C-c M-x" . 'execute-extended-command)
+     ("M-x"     . 'smex)
+     ("M-X"     . 'smex-major-mode-commands)))
 #+END_SRC
 
 **** COMMENT Special keys
@@ -3178,12 +3180,13 @@ organize these bits, so I'm starting by just a section of variable I
 have set to a value to my liking.
 
 #+BEGIN_SRC emacs-lisp
-  (bind-key "C-c n" 'gnus)
-  (setq
-   gnus-asynchronous 1 ;; Try to use asynchronous calls, probably Ok because the IMAP server is local
-   gnus-completing-read-function 'gnus-ido-completing-read ;; I use ido completion in the command area everywhere
-   )
-
+  (use-package gnus
+    :bind (("C-c n" . 'gnus))
+    :config
+    (setq
+     gnus-asynchronous 1 ;; Try to use asynchronous calls, probably Ok because the IMAP server is local
+     gnus-completing-read-function 'gnus-ido-completing-read ;; I use ido completion in the command area everywhere
+     ))
 #+END_SRC
 
 Perhaps it makes sens to segment the customizations per GNUS view.
@@ -3523,9 +3526,16 @@ imported my feeds from RSSyl
   (use-package elfeed
     :init
     (progn
-      (bind-key "C-c f" 'elfeed)
       (setf url-queue-timeout 30)
       (setq elfeed-db-directory "~/dat/.elfeed"))
+    :bind (("C-c f" . 'elfeed)
+           :map elfeed-show-mode-map
+           ("w" . 'mrb/elfeed-show-toggle-watchlater)
+           ("e" . 'mrb/elfeed-add-to-playlist)
+           ("v" . 'mrb/elfeed-play-with-mpv)
+           :map elfeed-search-mode-map
+           ("w" . 'mrb/elfeed-search-toggle-watchlater))
+
     :config
     (progn
       (defun mrb/elfeed-search-toggle-tag(tag)
@@ -3537,11 +3547,17 @@ imported my feeds from RSSyl
           (mapc #'elfeed-search-update-entry entries)
           (unless (use-region-p) (forward-line))))
 
+      (defun mrb/elfeed-search-togggle-watchlater()
+         (mrb/elfeed-search-toggle-tag 'watchlater))
+
       (defun mrb/elfeed-show-toggle-tag(tag)
         (interactive)
         (if (elfeed-tagged-p tag elfeed-show-entry)
             (elfeed-show-untag tag)
           (elfeed-show-tag tag)))
+
+      (defun mrb/elfeed-show-togggle-watchlater()
+         (mrb/elfeed-show-toggle-tag 'watchlater))
 
       ;; TODO: mrb/elfeed-enqueue-video
       (defun mrb/elfeed-play-with-mpv ()
@@ -3558,16 +3574,6 @@ imported my feeds from RSSyl
                        "mpvremote"
                        "add"
                        (elfeed-entry-link elfeed-show-entry)))
-
-
-
-
-      (bind-key "w" '(lambda () (interactive) (mrb/elfeed-show-toggle-tag 'watchlater)) elfeed-show-mode-map)
-      (bind-key "w" '(lambda () (interactive) (mrb/elfeed-search-toggle-tag 'watchlater)) elfeed-search-mode-map)
-      (bind-key "e" '(lambda () (interactive) (mrb/elfeed-add-to-playlist)) elfeed-show-mode-map)
-      (bind-key "v" '(lambda () (interactive) (mrb/elfeed-play-with-mpv)) elfeed-show-mode-map)
-
-
 
       ;; New entry hook allows meta information manipulation
       ;; without directly having to change elfeed-feeds
