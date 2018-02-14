@@ -1003,12 +1003,28 @@ function.
     :mode ("\\.txt\\'" "\\.org\'")
     :bind (("C-c g" . 'mrb/gtd)
            :map org-mode-map
-           ("C-c ," . 'mrb/org-insert-inactive-timestamp)
-           ("C-c a" . 'org-agenda)
-           ("C-c b" . 'org-iswitchb)
-           ("C-c l" . 'org-store-link)
-           ("C-c j" . 'org-journal-new-entry)
-           ("C-c p" . 'org-plot/gnuplot))
+           ("C-c ,"   . 'mrb/org-insert-inactive-timestamp)
+           ("C-c a"   . 'org-agenda)
+           ("C-c b"   . 'org-iswitchb)
+           ("C-c l"   . 'org-store-link)
+           ("C-c j"   . 'org-journal-new-entry)
+           ("C-c p"   . 'org-plot/gnuplot)
+           ("s-."     . 'org-todo)
+           ("C-s-."   . 'mrb/force-org-todo)
+           ("C-."     . 'mrb/org-schedule-for-today)
+           ("s-t"     . 'org-schedule)
+           ("M-p"     . 'org-set-property)
+           ("C-s-s"   . 'org-save-all-org-buffers)
+           ("C-x m"   . 'mrb/construct-mail)
+           :map org-agenda-mode-map
+           ("s-."   . 'org-agenda-todo)
+           ("C-s-." . 'mrb/force-org-agenda-todo)
+           ("C-."   . 'mrb/org-agenda-schedule-for-today)
+           ("s-t"   . 'org-agenda-schedule)
+           ("M-p"   . 'org-set-property)
+           ("C-x m" . 'mrb/construct-mail)
+           :map org-capture-mode-map
+           ("C-c C-t" . mrb/add-tags-in-capture))
     :config
     (add-hook 'org-mode-hook 'turn-on-auto-fill)
 
@@ -1112,8 +1128,6 @@ enter tags, so I define a shortcut to define tags while capturing.
     (save-excursion
       (org-back-to-heading)
       (org-set-tags)))
-
-  (bind-key "C-c C-t" 'mrb/add-tags-in-capture org-capture-mode-map)
 #+END_SRC
 
 ** Workflow
@@ -1229,8 +1243,6 @@ keep the active file as clean as possible.
 
 Thus, the normal sequence would be:
 #+BEGIN_SRC emacs-lisp
-  (bind-key "s-." 'org-todo org-mode-map)
-
   (defun mrb/force-org-todo()
     (interactive)
     ;; Disable blocking temporarily
@@ -1242,10 +1254,6 @@ Thus, the normal sequence would be:
     ;; Disable blocking temporily
     (let ((org-inhibit-blocking t))
       (org-agenda-todo)))
-
-  (bind-key "C-s-." 'mrb/force-org-todo org-mode-map)
-  (bind-key "C-s-." 'mrb/force-org-agenda-todo org-agenda-mode-map)
-  (bind-key "s-."   'org-agenda-todo org-agenda-mode-map)
 #+END_SRC
 
 ** Registering creation time of todo items
@@ -1337,14 +1345,12 @@ thing like: "yeah, do this today"
     (interactive)
     (org-schedule nil
                   (format-time-string "%Y-%m-%d")))
-  (bind-key "C-." 'mrb/org-schedule-for-today org-mode-map)
 
   (defun mrb/org-agenda-schedule-for-today()
     "Schedule the current item in the agenda for today"
     (interactive)
     (org-agenda-schedule nil
                          (format-time-string "%Y-%m-%d")))
-  (bind-key "C-." 'mrb/org-agenda-schedule-for-today org-agenda-mode-map)
 #+END_SRC
 
 ** Visual settings
@@ -1641,7 +1647,6 @@ and HTML as destination format
 
   ; Make sure we export in css mode, meaning no inline css crap
   (setq org-export-htmlize-output-type 'css)
-  (bind-key "C-c C-e" 'mrb/org-export-body-as-html org-mode-map)
 
   (defun mrb/org-export-body-as-html-batch ()
     "Call `org-export-as-html', may be used in batch processing as
@@ -1746,18 +1751,6 @@ migrate this into more literal sections
    ;;(add-to-list 'org-tags-exclude-from-inheritance (quote "fix"))
    (add-to-list 'org-tags-exclude-from-inheritance (quote "sell"))
    ;;(add-to-list 'org-tags-exclude-from-inheritance (quote "build"))
-
-
-   ; Keybindings which only make sense when having an orgmode file
-   (bind-key "C-c t" 'org-set-tags org-mode-map)
-   (bind-key "C-c e" 'org-export-dispatch org-mode-map)
-
-   ; Map \cmd{}t to schedule in both task and agenda-view
-   (bind-key "s-t" 'org-schedule org-mode-map)
-   (bind-key "s-t" 'org-agenda-schedule org-agenda-mode-map)
-   (bind-key "M-p" 'org-set-property org-mode-map)
-   (bind-key "M-p" 'org-set-property org-agenda-mode-map)
-   (bind-key "C-s-s" 'org-save-all-org-buffers org-mode-map)
 
    ; Dynamic behaviour
    (defun mrb/gtd()
@@ -2129,9 +2122,7 @@ migrate this into more literal sections
      (if useOrgTree
          (mrb/mail-subtree-from-org)
        (mrb/make-mailcompose-frame)))
-   ;; Bind it to \C-xm in org-mode only
-   (bind-key "C-x m" 'mrb/construct-mail org-mode-map)
-   (bind-key "C-x m" 'mrb/construct-mail org-agenda-mode-map)
+
    ;; But not for all others, because the org subtree will never be there
    (bind-key "C-x m" 'mrb/make-mailcompose-frame)
 
