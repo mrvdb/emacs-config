@@ -1071,10 +1071,7 @@ Here are the templates used for them.
            ("b" "Buy"
             entry (id "new-todo-receiver") "* BUY %? :buy:\n" :prepend t)
            ("t" "Todo"
-            entry (id "new-todo-receiver") "* TODO %?\n%i" :prepend t :empty-lines 1)
-           ("j" "Journal"
-            entry (file+datetree (concat org-directory "journal.org"))
-            "* ___________________________________________________________ *%U* ___\n\n%?\n"))))
+            entry (id "new-todo-receiver") "* TODO %?\n%i" :prepend t :empty-lines 1))))
 #+END_SRC
 
 Define functions for each piece of information captured, so they can
@@ -1090,12 +1087,6 @@ be easily bound to keys.
     "Capture a BUY item"
     (interactive)
     (org-capture nil "b"))
-
-  (defun mrb/make-journal-entry ()
-    "Create a journal entry"
-    (interactive)
-    ;;(setq org-descriptive-links t)
-    (org-journal-new-entry))
 #+END_SRC
 
 These capture functions are called from shell scripts in the operating
