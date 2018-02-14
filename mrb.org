@@ -3117,7 +3117,8 @@ contents from claws. I define some stuff here that makes sure I get
 into the proper configuration when that gets called:
 
 #+BEGIN_SRC emacs-lisp
-  (require 'org-faces)
+  (use-package org-faces
+  :ensure nil)
   ;; First quote level
   (set-face-attribute 'message-cited-text nil :inherit 'org-level-1)
 
