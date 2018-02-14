@@ -1001,8 +1001,12 @@ function.
     :ensure nil
     :pin org
     :mode ("\\.txt\\'" "\\.org\'")
+    :bind (:map org-mode-map
+                ("C-c ," . 'mrb/org-insert-inactive-timestamp))
     :config
     (add-hook 'org-mode-hook 'turn-on-auto-fill)
+
+
     (use-package org-datetree :ensure nil)        ;; Allows for archiving and refiling in a date organised tree
     (use-package org-mobile   :ensure nil)        ;;
     (use-package org-protocol :ensure nil
@@ -1315,13 +1319,6 @@ recording incremental progress or information on them.
   (defun mrb/org-insert-inactive-timestamp ()
     (interactive)
     (org-insert-time-stamp (current-time) nil 1 ))
-
-  ;; Bind to C-c , analogous to C-c . which inserts an active timestamp
-  ;; this overrules the priority commands, so do this on org-load hook
-  (add-hook
-   'org-load-hook
-   (lambda ()
-     (bind-key "C-c ," 'mrb/org-insert-inactive-timestamp org-mode-map)))
 #+END_SRC
 
 ** Scheduling items
