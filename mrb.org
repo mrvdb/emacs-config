@@ -150,7 +150,7 @@ First of all, define the package archives I need; for now, just the
 default gnu augmented with the melpa repository.
 #+BEGIN_SRC emacs-lisp
 
-  (add-to-list 'package-archives
+(add-to-list 'package-archives
                '("melpa" . "http://melpa.org/packages/") t)
   (add-to-list 'package-archives
                '("melpa-stable" . "https://stable.melpa.org/packages/") t)
@@ -166,10 +166,7 @@ default gnu augmented with the melpa repository.
     (setq use-package-always-demand t))
 
   ;; Location where I keep custom packages
-  ;; This is a function because :load-path in use-package expects a string,symbol or function
-  ;; Does this actually work? It didn't for orgmode
-  (defun custom-package-location (subpath)
-    (concat "/home/mrb/dat/src/emacs/packages/" subpath))
+  (setq custom-package-directory (concat emacs-directory "lisp/"))
 
   (use-package cl-lib )
 
@@ -189,8 +186,7 @@ default gnu augmented with the melpa repository.
   (use-package edit-server )
 
   (use-package fixed-point-completion
-    :load-path (lambda () (list (custom-package-location  "fixed-point-completion/")))
-    :ensure nil)
+    :load-path (lambda () (concat custom-package-directory "fixed-point-completion/")))
 
   (use-package ghc )           ;; move to haskell?
 #+END_SRC
@@ -559,6 +555,7 @@ And enable the minor mode globally.
   ))
 
   (use-package cursor-chg
+    :load-path (lambda () (concat custom-package-directory "cursor-chg/"))
     :config
     (progn
       (change-cursor-mode 0)        ; On for overwrite/read-only/input mode
