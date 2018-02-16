@@ -175,13 +175,7 @@ default gnu augmented with the melpa repository.
   (use-package guide-key )     ;; Not sure what this does
 
   (use-package hideshow-org )  ;; Move to org?
-  (use-package hideshowvis )
 
-  (use-package json-rpc )
-  (use-package litable  )      ;; Real time evaluation (move to develop?)
-  (use-package mark-multiple )
-
-  (use-package paredit  )
   (use-package rainbow-mode )  ;; show colornumbers/names as colors
   (use-package edit-server )
 
@@ -331,7 +325,7 @@ done with them if possible
 #+BEGIN_SRC emacs-lisp
   (use-package sudo-save
     :ensure nil
-    :load-path "~/dat/src/emacs/packages/sudo-save/")
+    :load-path (lambda () (concat custom-package-directory "sudo-save/")))
 #+END_SRC
 
 Using pdf-tools for PDF handling
