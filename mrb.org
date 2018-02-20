@@ -397,26 +397,26 @@ based on a copy of latin-ltx.el
 
 #+BEGIN_SRC emacs-lisp
   ;; Register a new input method
-  (register-input-method
-   "MyTeX" "UTF-8" 'quail-use-package
-   "\\" "Personalized TeX input method"
-   "~/.emacs.d/mytex-inputmethod")
+  ;; (register-input-method
+  ;;  "MyTeX" "UTF-8" 'quail-use-package
+  ;;  "\\" "Personalized TeX input method"
+  ;;  "~/.emacs.d/mytex-inputmethod")
 
-  (defun mrb/set-input-method()
-    (interactive)
-    (setq default-input-method "MyTeX")
-    ;; Toggle only if it not active yet
-    (if (not current-input-method)
-        (toggle-input-method)))
+  ;; (defun mrb/set-input-method()
+  ;;   (interactive)
+  ;;   (setq default-input-method "MyTeX")
+  ;;   ;; Toggle only if it not active yet
+  ;;   (if (not current-input-method)
+  ;;       (toggle-input-method)))
 
-  (add-hook 'set-language-environment-hook 'mrb/set-input-method)
-  ;; And now we can set it
-  (set-language-environment "UTF-8")
+  ;; (add-hook 'set-language-environment-hook 'mrb/set-input-method)
+  ;; ;; And now we can set it
+  ;; (set-language-environment "UTF-8")
 
   ;; So we have it active at this point, but for new buffers it's still
   ;; not active, let's do that for the most common modes I use
   ;; FIXME: this works ok-ish, but is not a very clean solution I think.
-  (add-hook 'text-mode-hook 'mrb/set-input-method)
+  ;;(add-hook 'text-mode-hook 'mrb/set-input-method)
   ;; Orgmode is derived from outline-mode -> text-mode so this should already work.
 #+END_SRC
 
