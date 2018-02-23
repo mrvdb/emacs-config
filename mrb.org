@@ -3013,9 +3013,7 @@ and hopefully one will float to the top as being *the one*
   (use-package smtpmail)
 
 
-  ;; While I'm pretty sure that bluntly rebinding tab is not
-  ;; the proper way to do this, it's the only thing i got working.
-  (bind-key "<tab>" 'company-complete message-mode-map)
+
 #+END_SRC
 
 Composing mail is often an /out of band/ activity, like creating a dent
@@ -3030,19 +3028,7 @@ on the varying name that xprop delivers, so. we make our own window.
   (defun mrb/get-display-lines-height ()
     (/ (x-display-pixel-height) (frame-char-height)))
 
-  (defun mrb/message-mode-hook ()
-    "This configures message mode and thus notmuch-message mode"
 
-    (visual-line-mode)
-    (auto-fill-mode -1)
-    (font-lock-add-keywords
-     nil
-     '(("^[ \t]*>[ \t]*>[ \t]*>.*$"
-        (0 'message-multiply-quoted-text-face))
-       ("^[ \t]*>[ \t]*>.*$"
-        (0 'message-double-quoted-text-face)))))
-
-  (add-hook 'notmuch-message-mode-hook 'mrb/message-mode-hook)
 
   (defun mrb/make-mailcompose-frame (&optional mailto-url)
     "Create a new frame and run mail-compose, use mailto URI if it
@@ -3112,10 +3098,11 @@ contents from claws. I define some stuff here that makes sure I get
 into the proper configuration when that gets called:
 
 #+BEGIN_SRC emacs-lisp
-  (use-package org-faces
-  :ensure nil)
+  (use-package org-faces :ensure nil)
+
   ;; First quote level
-  (set-face-attribute 'message-cited-text nil :inherit 'org-level-1)
+  ;; FIXME: message-cited-text is not known yet??
+  ;; (set-face-attribute 'message-cited-text nil :inherit 'org-level-1)
 
   ;; Face for second level of quoting
   (defface message-double-quoted-text-face
@@ -3415,19 +3402,37 @@ itself, which has proven to work fine so far.
 First, let's activate notmuch itself.
 
 #+BEGIN_SRC emacs-lisp
+  (defun mrb/message-mode-hook ()
+    "This configures message mode and thus notmuch-message mode."
+
+    (visual-line-mode)
+    (auto-fill-mode -1)
+    (font-lock-add-keywords
+     nil
+     '(("^[ \t]*>[ \t]*>[ \t]*>.*$"
+        (0 'message-multiply-quoted-text-face))
+       ("^[ \t]*>[ \t]*>.*$"
+        (0 'message-double-quoted-text-face)))))
+
+
   (use-package notmuch
     :load-path "/usr/share/emacs/site-lisp"
     :ensure nil
     :commands notmuch-message-mode
+    :init
+    (add-to-list 'auto-mode-alist '("mrb@t510.hsdev.com" . notmuch-message-mode))
+    (add-to-list 'auto-mode-alist '("mrb@hsdev.com" . notmuch-message-mode))
+
+    :bind (:map message-mode-map
+                ("<tab>" . company-complete))
     :config
     (progn
       (setq
        notmuch-fcc-dirs nil
        notmuch-poll-script nil)
-       (add-to-list 'auto-mode-alist '("mrb@t510.hsdev.com" . notmuch-message-mode))
-       (add-to-list 'auto-mode-alist '("mrb@hsdev.com" . notmuch-message-mode))
 
-    ))
+      (add-hook 'notmuch-message-mode-hook 'mrb/message-mode-hook)
+      ))
 #+END_SRC
 
 
