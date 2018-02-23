@@ -2985,35 +2985,29 @@ So, I'm having a setup where multiple mail handling packages may exist
 and hopefully one will float to the top as being *the one*
 
 #+BEGIN_SRC emacs-lisp
+  (use-package smtpmail
+    :config
+    (setq
+     ;; Sending it
+     smtpmail-default-smtp-server "localhost"
+     smtpmail-smtp-service 25
+     smtpmail-local-domain user-domain
+     smtpmail-sendto-domain user-domain))
+
   (setq
-   ; User agent style is message mode (gnus, but independent of it)
-    mail-user-agent 'gnus-user-agent
+  ;; User agent style is message mode (gnus, but independent of it)
+  mail-user-agent 'gnus-user-agent
 
-    ; Sending it
-    smtpmail-default-smtp-server "localhost"
-    smtpmail-smtp-service 25 ;; I used to use anubis for pre-processing, 24 is private mail port
-    smtpmail-local-domain user-domain
-    smtpmail-sendto-domain user-domain
-    send-mail-function 'smtpmail-send-it                 ; This is for mail
-    message-send-mail-function 'message-smtpmail-send-it ; This is for gnus
+  send-mail-function 'smtpmail-send-it                 ; This is for mail
+  message-send-mail-function 'message-smtpmail-send-it ; This is for gnus
 
-    ; Always put one in the Sent folder on sending
-    ;; Gcc takes care of this now.
-    message-default-mail-headers "Bcc: mrb+Sent@hsdev.com\n"
-    mail-yank-prefix ">> "
-  )
-  ;; Automatically sign outgoing messages, be part of the solution here,
-  ;; not the problem
-  ;; TODO: where can I toggle this on/off while composing?
-  ;; TODO: I want to do this in anubis, so this can probably go
-  ;;(setq smime-keys (quote (( user-mail-address "~/keys/comodo-2012-06-12.pem" nil))))
-  ;;(add-hook 'message-send-hook 'mml-secure-message-sign-smime)
+  ;; Always put one in the Sent folder on sending
+  ;; Gcc takes care of this now.
+  message-default-mail-headers "Bcc: mrb+Sent@hsdev.com\n"
+  mail-yank-prefix ">> ")
+
   (setq password-cache t)            ; default is true, so no need to set this actually
   (setq password-cache-expiry 28800) ; default is 16 seconds, which is ridiculously low
-  (use-package smtpmail)
-
-
-
 #+END_SRC
 
 Composing mail is often an /out of band/ activity, like creating a dent
@@ -3027,8 +3021,6 @@ on the varying name that xprop delivers, so. we make our own window.
   ;; determine sizes of windows
   (defun mrb/get-display-lines-height ()
     (/ (x-display-pixel-height) (frame-char-height)))
-
-
 
   (defun mrb/make-mailcompose-frame (&optional mailto-url)
     "Create a new frame and run mail-compose, use mailto URI if it
@@ -3388,7 +3380,6 @@ that is the only way to actually have stuff deleted (?)
   (gnus-byte-compile 'gnus)
 #+END_SRC
 
-
 *** Notmuch
 Not having used GNUS enough to be comfortable, notmuch seems a route
 which can be taken somewhat easier. The compose part of emails is,
@@ -3420,6 +3411,7 @@ First, let's activate notmuch itself.
     :ensure nil
     :commands notmuch-message-mode
     :init
+    ;; Make sure that we enter notmuch-message mode on compose from astroid
     (add-to-list 'auto-mode-alist '("mrb@t510.hsdev.com" . notmuch-message-mode))
     (add-to-list 'auto-mode-alist '("mrb@hsdev.com" . notmuch-message-mode))
 
