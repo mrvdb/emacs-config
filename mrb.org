@@ -149,8 +149,7 @@ Package handling, do this early so emacs knows where to find things.
 First of all, define the package archives I need; for now, just the
 default gnu augmented with the melpa repository.
 #+BEGIN_SRC emacs-lisp
-
-(add-to-list 'package-archives
+  (add-to-list 'package-archives
                '("melpa" . "http://melpa.org/packages/") t)
   (add-to-list 'package-archives
                '("melpa-stable" . "https://stable.melpa.org/packages/") t)
@@ -163,26 +162,22 @@ default gnu augmented with the melpa repository.
   (setq use-package-verbose t)
   ;; If running as daemon, just load shite
   (if (daemonp)
-    (setq use-package-always-demand t))
+      (setq use-package-always-demand t))
 
   ;; Location where I keep custom packages
   (setq custom-package-directory (concat emacs-directory "lisp/"))
 
   (use-package cl-lib )
 
+  ;; Some leftovers I need to move to a more logical place
   (use-package fullframe  )    ;; show results of certain commands fullframe
-
   (use-package guide-key )     ;; Not sure what this does
-
   (use-package hideshow-org )  ;; Move to org?
-
   (use-package rainbow-mode )  ;; show colornumbers/names as colors
   (use-package edit-server )
 
   (use-package fixed-point-completion
     :load-path (lambda () (concat custom-package-directory "fixed-point-completion/")))
-
-  (use-package ghc )           ;; move to haskell?
 #+END_SRC
 
 * Personal information
@@ -3570,7 +3565,6 @@ Lets try to use ggtags everywhere.
 (use-package ggtags)
 #+END_SRC
 
-
 ** Coding styles
 Different projects use different coding styles. The ones I need I'll
 gather here for now.
@@ -3600,6 +3594,7 @@ source (*.hs files) and the ghc-mod package to help with completion
 and showing syntax errors.
 
 #+BEGIN_SRC emacs-lisp
+  (use-package ghc)
   (use-package haskell-mode
     :init
     (progn
@@ -3732,6 +3727,7 @@ magit, so let's begin with bringing that in.
 
 #+BEGIN_SRC emacs-lisp
   (use-package magit
+    :after (fullframe)
     :bind
      ("C-c m" . magit-status)
 
