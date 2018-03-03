@@ -18,9 +18,9 @@
 	     '("org" . "http://orgmode.org/elpa/") t)
 
 ;; Bootstrap use-package
-  (unless (package-installed-p 'use-package)
-    (package-refresh-contents)
-    (package-install 'use-package))
+(unless (package-installed-p 'use-package)
+  (package-refresh-contents)
+  (package-install 'use-package))
 
 ;; Load in the main org file which starts up configuration This will
 ;; lead to an mrb.el file automatically, so that can't exist in the
