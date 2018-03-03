@@ -172,7 +172,6 @@ default gnu augmented with the melpa repository.
   ;; Some leftovers I need to move to a more logical place
   (use-package fullframe  )    ;; show results of certain commands fullframe
   (use-package guide-key )     ;; Not sure what this does
-  (use-package hideshow-org )  ;; Move to org?
   (use-package rainbow-mode )  ;; show colornumbers/names as colors
   (use-package edit-server )
 
@@ -3565,6 +3564,19 @@ Lets try to use ggtags everywhere.
 (use-package ggtags)
 #+END_SRC
 
+Not specific to development, but extra useful, is folding of text
+sections. Origami mode seems to be the generic solution for
+it. Initially, let's not be too greedy with the keybindings and do it
+by mode. M-Tab seems to be the natural choice for me.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package origami
+    :config
+    (setq origami-show-fold-header t)
+    :bind (:map python-mode-map
+                ("M-<tab>" . origami-toggle-node)))
+
+#+END_SRC
 ** Coding styles
 Different projects use different coding styles. The ones I need I'll
 gather here for now.
@@ -3654,11 +3666,7 @@ code.
             (lambda ()
               (toggle-truncate-lines t)
               ;; Manage code navigation
-              (ggtags-mode 1)
-              ;; Allow folding of code blocks
-              (hs-minor-mode 1)
-              ;; Show it in the fringe
-              (hideshowvis-enable)))
+              (ggtags-mode 1)))
 #+END_SRC
 ** GIT integration
 This section is a temporary place to store some git related
