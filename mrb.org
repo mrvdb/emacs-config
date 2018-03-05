@@ -283,6 +283,8 @@ section.
    complex-buffers-menu-p t
    next-line-add-newlines nil
    kill-whole-line t
+
+   auto-window-vscroll nil
   )
 
   ;; Only require to type 'y' or 'n' instead of 'yes' or 'no' when prompted
