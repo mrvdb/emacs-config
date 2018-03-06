@@ -3392,6 +3392,8 @@ First, let's activate notmuch itself.
   (defun mrb/message-mode-hook ()
     "This configures message mode and thus notmuch-message mode."
 
+    ;; Make sure the separator is just the standard, nothing fancy
+    (set (make-local-variable 'mail-header-separator) "")
     (visual-line-mode)
     (auto-fill-mode -1)
     (font-lock-add-keywords
