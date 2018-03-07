@@ -2184,6 +2184,17 @@ The right alt and the right <menu> key should be the same as the left
 alt and the super key, but I haven't gotten around to configuring
 that yet.
 
+Furthermore, because I still can't remember keys, after pressing a
+prefix key like =C-c= the package =which-keys= can show me a formatted
+menu with the combinations of keys that can follow it.
+
+#+BEGIN_SRC emacs-lisp
+; which keys shows menu with completions of prefix-key
+(use-package which-key
+  :config
+  (setq which-key-idle-delay 2.0)
+  (which-key-mode))
+#+END_SRC
 ** First, unsetting the keys I don't want.
 Let's begin with killing some bindings which are in my way, notably
 the standard right mouse click behaviour. This is because I want it
