@@ -3031,6 +3031,8 @@ and hopefully one will float to the top as being *the one*
   ;; Always put one in the Sent folder on sending
   ;; Gcc takes care of this now.
   message-default-mail-headers "Bcc: mrb+Sent@hsdev.com\n"
+  ;; Don't use a special header separator
+  mail-header-separator ""
   mail-yank-prefix ">> ")
 
   (setq password-cache t)            ; default is true, so no need to set this actually
@@ -3050,8 +3052,7 @@ on the varying name that xprop delivers, so. we make our own window.
     (/ (x-display-pixel-height) (frame-char-height)))
 
   (defun mrb/make-mailcompose-frame (&optional mailto-url)
-    "Create a new frame and run mail-compose, use mailto URI if it
-  is given."
+    "Create a new frame and run mail-compose, use mailto URI if it is given."
     (interactive)
 
     ;; Create and select the frame, awesome wm takes care of the
@@ -3067,8 +3068,8 @@ on the varying name that xprop delivers, so. we make our own window.
     (if (and (stringp mailto-url)
              (string-match "\\`mailto:" mailto-url))
         (browse-url-mail mailto-url)
-      ;; No mailto, argument, just run compose mail
-      (compose-mail))
+      ;; No mailto, argument, just run compose mail in notmuch mua
+      (notmuch-mua-new-mail))
 
       ;; Delete other windows from the frame we are composing it in.
     (delete-other-windows))
