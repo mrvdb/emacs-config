@@ -58,11 +58,6 @@ And edit the file obviously.
 #+BEGIN_SRC sh :exports code :tangle ~/bin/edit :shebang #!/bin/bash
   #set -x
 
-  # This is an improved version of my edit script. The original one is
-  # still available as edit.old. This one does not use any window
-  # manager trickery to see if the daemon is already there. This one
-  # just starts it if it is not already there.
-  #
   # This script should provide the following functionality:
   # - start emacs if it hasn't already started
   # - open a frame if emacs is there, but no frames are visible yet
@@ -2207,31 +2202,6 @@ find out a better way for this.
 (global-unset-key (kbd "<mouse-3>"))
 #+END_SRC
 
-Because I use the spacebar in a bit of a special way; an extra control
-key, this complicates things a bit. To be able to do this I use xcape,
-which takes control keys and allows them to insert normal characters
-when they are not used with other keys.
-For this, I have defined the space bar in Xmodmap to be a control key
-with keycode 0x1234. Without xcape, the behaviour would be that there
-is no more spacebar on the keyboard.
-The configuration of xcape says: 'when the control key 0x1234 is
-pressed by itself, insert a space'
-
-The problem is that emacs then still thinks the key is undefined, so
-we let it do nothing in emacs, just to prevent an annoying message in
-the echo area each time we push the spacebar.
-
-#+BEGIN_SRC emacs-lisp
-;; We want the spacebar itself to do nothing
-(global-set-key [key-4660] 'ignore)
-
-;; Put more cases here when we encounter them
-#+END_SRC
-
-This small change requires quite a bit of tweaking because you don't
-want this to be in way, ever. The only customization I had to make was
-the shortening of the timeout from 50ms to 35ms to make it work for
-me.
 
 ** Setting keys
 Binding keys if fine and all, but remembering them later is rather
@@ -2385,7 +2355,7 @@ major mode only.
      ("M-X"     . 'smex-major-mode-commands)))
 #+END_SRC
 
-**** COMMENT Special keys
+**** Special keys
 For some special keys I have defined some commands. Special keys are
 those keys that may not be on every keyboard, within reason. I
 consider the function keys also as special, although they do not fit
@@ -3134,21 +3104,6 @@ into the proper configuration when that gets called:
     '((t (:inherit org-level-3)))
     "Face for quotations in email")
 
-
-  (add-hook 'message-mode-hook
-            (lambda ()
-              (font-lock-add-keywords nil
-                                      '(("^[ \t]*>[ \t]*>[ \t]*>.*$"
-                                         (0 'message-multiply-quoted-text-face))
-                                        ("^[ \t]*>[ \t]*>.*$"
-                                         (0 'message-double-quoted-text-face))))))
-
-
-  ;;
-  ;; TODO
-  ;; - hide other files from sight?
-  ;; - remove the modeline?
-
 #+END_SRC
 
 *** GNUS
@@ -3437,8 +3392,6 @@ First, let's activate notmuch itself.
 
 
   (use-package notmuch
-    :load-path "/usr/share/emacs/site-lisp"
-    :ensure nil
     :commands notmuch-message-mode
     :init
     ;; Make sure that we enter notmuch-message mode on compose from astroid
@@ -3448,13 +3401,11 @@ First, let's activate notmuch itself.
     :bind (:map message-mode-map
                 ("<tab>" . company-complete))
     :config
-    (progn
-      (setq
+    (setq
        notmuch-fcc-dirs nil
        notmuch-poll-script nil)
 
-      (add-hook 'notmuch-message-mode-hook 'mrb/message-mode-hook)
-      ))
+    (add-hook 'message-mode-hook 'mrb/message-mode-hook))
 #+END_SRC
 
 
