@@ -2994,11 +2994,11 @@ and hopefully one will float to the top as being *the one*
 
 #+BEGIN_SRC emacs-lisp
   (use-package smtpmail
+    :init
+    (setq smtpmail-default-smtp-server "localhost"
+          smtpmail-service 25)
     :config
     (setq
-     ;; Sending it
-     smtpmail-default-smtp-server "localhost"
-     smtpmail-smtp-service 25
      smtpmail-local-domain user-domain
      smtpmail-sendto-domain user-domain))
 
