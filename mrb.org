@@ -806,6 +806,8 @@ Also, save the location in files between sessions.
 #+BEGIN_SRC emacs-lisp
   ;; Minibuffer prompt is a prompt, don't enter it as text.
   (setq minibuffer-prompt-properties (quote (read-only t point-entered minibuffer-avoid-prompt face minibuffer-prompt)))
+  ;; Don't echo keystrokes in the minibuffer, prefix will be hinted on after 2 seconds or so.
+  (setq echo-keystrokes 0)
 
   ;; Save places in buffers between sessions
   (use-package saveplace
@@ -2932,8 +2934,14 @@ is in use, but we'll see.
 #+BEGIN_SRC emacs-lisp
   (use-package avy
     :config
+    (setq avy-style 'at-full)
+    (setq avy-background t)
     (set-face-attribute 'avy-lead-face nil
-     :inherit isearch-lazy-highlight :background "black" :foreground "tomato")
+                        :inherit isearch-lazy-highlight :background "gold" :foreground "black")
+    (set-face-attribute 'avy-lead-face-0 nil
+                        :inherit isearch-lazy-highlight :background "gold" :foreground "black")
+    (set-face-attribute 'avy-background-face nil
+                        :inherit isearch-lazy-highlight :background "black" :foreground nil)
     :bind
     ("s-j" . avy-goto-word-or-subword-1))
 #+END_SRC
