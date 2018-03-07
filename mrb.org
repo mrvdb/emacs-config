@@ -3859,18 +3859,20 @@ there may be occasions where is pays to have a slight difference in
 configuration on different machines.
 
 #+BEGIN_SRC emacs-lisp
-  (when (string= (system-name) "x200s")
-    (progn
-      ;; Stuff that needs to happen for machine named "x200s"
-      (set-frame-font "Hack")
-
-      ))
-
-  (when (string= (system-name) "t510")
-    (progn
-      ;; Stuff for the "t510" configuration
-
-      ))
+  (pcase (system-name)
+    ("x200s" (progn
+               ;; Stuff for the x200s machine
+               (set-frame-font "Hack")
+               ))
+    ("t510"  (progn
+               ;; Stuff for the x200s machine
+               ))
+    ("flip"  (progn
+               ;; Stuf for the flip machine
+               ))
+    (_       (progn
+               ;; Stuff for non-mathing machine names
+               )))
 #+END_SRC
 
 * Finale
