@@ -2964,13 +2964,25 @@ program to use.
 (setq browse-url-generic-program "xdg-open")
 #+END_SRC
 
-Entering information in text areas in the browser, provided it is of
-the chrome family, can be delegated to emacs with the 'edit with
-emacs' extension. This requires the 'edit-server' package in emacs.
+Entering information in text areas in the browser can be delegated to
+emacs with the 'atomic-chrome' package. An extension in the browser
+sends text into emacs where we can edit as usual. I don't think
+embedding emacs in the textarea itself is supported which would be
+even nicer (no context switch)
+Depending on the url where the text comes from, we can have the buffer
+switch to a certain mode; the default mode is text-mode.
 
 #+BEGIN_SRC emacs-lisp
-(use-package edit-server)
-(edit-server-start)
+  (use-package atomic-chrome
+    :requires gfm-mode
+    :config
+    (atomic-chrome-start-server)
+    (setq
+     atomic-chrome-default-major-mode 'text-mode
+     atomic-chrome-buffer-open-style 'split
+     atomic-chrome-url-major-mode-alist '(
+                                          ("github\\.com" . gfm-mode)
+                                          ("redmine" . textile-mode))))
 #+END_SRC
 * Messaging and chatting
 ** Mail
