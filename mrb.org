@@ -2989,27 +2989,23 @@ and hopefully one will float to the top as being *the one*
     :config
     (setq
      smtpmail-local-domain user-domain
-     smtpmail-sendto-domain user-domain))
-
-  (setq
-  ;; User agent style is message mode (gnus, but independent of it)
-  mail-user-agent 'gnus-user-agent
-
-  send-mail-function 'smtpmail-send-it                 ; This is for mail
-  message-send-mail-function 'message-smtpmail-send-it ; This is for gnus
-
-  ;; Always put one in the Sent folder on sending
-  ;; Gcc takes care of this now.
-  message-default-mail-headers "Bcc: mrb+Sent@hsdev.com\n"
-  ;; Don't use a special header separator
-  mail-header-separator ""
-  mail-yank-prefix ">> ")
+     smtpmail-sendto-domain user-domain
+     ;; User agent style is message mode (gnus, but independent of it)
+     mail-user-agent 'gnus-user-agent
+     send-mail-function 'smtpmail-send-it                 ;; This is for mail
+     message-send-mail-function 'message-smtpmail-send-it ;; This is for gnus
+     ;; Always put one in the Sent folder on sending
+     message-default-mail-headers "Bcc: mrb+Sent@hsdev.com\n"
+     ;; Don't use a special header separator
+     mail-header-separator ""
+     ;; FIXME: document why this needs to be '>> ' instead of '> '
+     mail-yank-prefix ">> "))
 
   (setq password-cache t)            ; default is true, so no need to set this actually
   (setq password-cache-expiry 28800) ; default is 16 seconds, which is ridiculously low
 #+END_SRC
 
-Composing mail is often an /out of band/ activity, like creating a dent
+Composing mail is often an /out of band/ activity, like creating a tweet
 or a capture, so I would like to have roughly the same behaviour. This
 is by default provided by compose-mail-other-frame, but I could not
 get awesome to properly place the windows because it's hard to match
@@ -3082,28 +3078,24 @@ same as the mailto handler.
 edit -e '(mrb/make-mailcompose-frame)'
 #+END_SRC
 
-I've also configured claws in such a way that it can embed an editor
-in the compose screen, which means that it gets a temporary file with
-contents from claws. I define some stuff here that makes sure I get
-into the proper configuration when that gets called:
 
 #+BEGIN_SRC emacs-lisp
-  (use-package org-faces :ensure nil)
+  (use-package message
+    :ensure nil  ;; Needed because it's internal??
+    :requires org-faces
+    :config
+    ;; First quote level
+    (set-face-attribute 'message-cited-text nil :inherit 'org-level-1)
 
-  ;; First quote level
-  ;; FIXME: message-cited-text is not known yet??
-  ;; (set-face-attribute 'message-cited-text nil :inherit 'org-level-1)
+    ;; Face for second level of quoting
+    (defface message-double-quoted-text-face
+      '((t (:inherit org-level-2)))
+      "Second level quotations in email")
 
-  ;; Face for second level of quoting
-  (defface message-double-quoted-text-face
-    '((t (:inherit org-level-2)))
-    "Face for quotations in email")
-
-  ;; Face for third and higher level of quoting
-  (defface message-multiply-quoted-text-face
-    '((t (:inherit org-level-3)))
-    "Face for quotations in email")
-
+    ;; Face for third and higher level of quoting
+    (defface message-multiply-quoted-text-face
+      '((t (:inherit org-level-3)))
+      "Third level quotations in email"))
 #+END_SRC
 
 *** GNUS
@@ -3379,10 +3371,27 @@ First, let's activate notmuch itself.
   (defun mrb/message-mode-hook ()
     "This configures message mode and thus notmuch-message mode."
 
+    ;; We have to make sure that the messages we produce are format=flowed
+    ;; compatible. For this, the following is needed:
+    ;;
+    ;; - mml-enable-flowed must be set to true
+    ;; -- for that to work use-hard-newlines must be set
+    ;; - fill-flowed-encode-column must be set to 66
+    ;; - ws-butler must be inactive so there will be no conflicts
+    (use-hard-newlines t 'always)
+    (setq mml-enable-flowed t)
+    (add-to-list 'ws-butler-global-exempt-modes 'message-mode)
+
+    ;; Set the fill column on encoding (send)
+    (setq fill-flowed-encode-column 66)
+
+    ;; Set the fill column for displaying to window width?
+
     ;; Make sure the separator is just the standard, nothing fancy
+    ;; This is probably redundant as I have this set globally too
     (set (make-local-variable 'mail-header-separator) "")
-    (visual-line-mode)
-    (auto-fill-mode -1)
+
+    ;; Add some color to quotes
     (font-lock-add-keywords
      nil
      '(("^[ \t]*>[ \t]*>[ \t]*>.*$"
