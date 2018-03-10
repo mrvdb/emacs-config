@@ -1661,7 +1661,7 @@ is a better fit.
       ;; files this is not needed.
       (setq org-journal-dir (expand-file-name "~/dat/org/journal/"))
 
-      (setq org-journal-time-format "[%R]%n")
+      (setq org-journal-time-format "[%R] ")
 
       ;; Match the journal files (FIXME: make this independent of earlier assignments)
       (setq org-agenda-file-regexp "^[0-9]+\\.org")
