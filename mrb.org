@@ -3570,7 +3570,9 @@ by mode. M-Tab seems to be the natural choice for me.
     :config
     (setq origami-show-fold-header t)
     :bind (:map python-mode-map
-                ("M-<tab>" . origami-toggle-node)))
+           ("M-<tab>" . origami-toggle-node)
+           :map emacs-lisp-mode-map
+           ("M-<tab>" . origami-toggle-node)))
 
 #+END_SRC
 ** Coding styles
