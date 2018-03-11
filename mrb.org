@@ -1012,6 +1012,59 @@ function.
     :config
     (add-hook 'org-mode-hook 'turn-on-auto-fill)
 
+    (setq
+     org-use-fast-todo-selection t
+
+     ;; We support task dependencies
+     org-enforce-todo-dependencies t
+     ;; but relax checkbox constraints
+     org-enforce-todo-checkbox-dependencies nil
+
+     ;; We dont do priorities
+     org-enable-priority-commands nil
+
+     ;; Agenda settings
+     org-agenda-include-diary t
+     org-agenda-start-with-log-mode t
+     org-agenda-todo-ignore-scheduled "future"
+
+     ;; Habits
+     org-habit-show-habits-only-for-today nil
+
+     ;; Pressing enter on a link should activate it
+     org-return-follows-link t
+     org-support-shift-select (quote always)
+
+     org-agenda-log-mode-items (quote (closed clock state))
+     org-agenda-skip-deadline-prewarning-if-scheduled t
+     ;; Auto detect blank line need, this is the default, but I explicitly set thi
+     ;; because it needs to be this or my capturing breaks due to org-capture popup
+     org-blank-before-new-entry (quote ((heading . auto) (plain-list-item . auto)))
+     org-export-htmlize-output-type (quote css)
+     org-fast-tag-selection-single-key (quote expert)
+     org-file-apps
+     (quote
+      ((auto-mode . emacs)
+       ("\\.dia\\'" . "dia %s")
+       ("\\.mm\\'" . default)
+       ("\\.pdf\\'" . default)))
+     org-fontify-done-headline t
+     org-goto-interface (quote outline-path-completion)
+     ;; non nil is just direct children, what an ODD name!!!!
+     org-hierarchical-todo-statistics nil
+     org-provide-todo-statistics t
+     org-log-into-drawer t
+     org-log-redeadline (quote note)
+     org-log-reschedule (quote time)
+     org-modules (quote
+                  (org-info org-habit
+                            org-inlinetask org-irc
+                            org-toc org-mac-iCal org-mouse))
+     org-remember-default-headline ""
+     org-special-ctrl-a/e t
+     org-stuck-projects (quote ("-inactive/TODO" ("TODO" "WAITING") nil ""))
+     org-track-ordered-property-with-tag nil
+     )
 
     (use-package org-datetree :ensure nil)        ;; Allows for archiving and refiling in a date organised tree
     (use-package org-mobile   :ensure nil)        ;;
@@ -1676,60 +1729,6 @@ Below is what was contained in the old configuration. I will slowly
 migrate this into more literal sections
 
 #+BEGIN_SRC emacs-lisp
-   (setq
-    org-use-fast-todo-selection t
-
-    ; We support task dependencies
-    org-enforce-todo-dependencies t
-    ; but relax checkbox constraints
-    org-enforce-todo-checkbox-dependencies nil
-
-    ; We dont do priorities
-    org-enable-priority-commands nil
-
-    ; Agenda settings
-    org-agenda-include-diary t
-    org-agenda-start-with-log-mode t
-    org-agenda-todo-ignore-scheduled "future"
-
-    ; Habits
-    org-habit-show-habits-only-for-today nil
-
-    ; Pressing enter on a link should activate it
-    org-return-follows-link t
-    org-support-shift-select (quote always)
-
-    org-agenda-log-mode-items (quote (closed clock state))
-    org-agenda-skip-deadline-prewarning-if-scheduled t
-    ;; Auto detect blank line need, this is the default, but I explicitly set thi
-    ;; because it needs to be this or my capturing breaks due to org-capture popup
-    org-blank-before-new-entry (quote ((heading . auto) (plain-list-item . auto)))
-    org-export-htmlize-output-type (quote css)
-    org-fast-tag-selection-single-key (quote expert)
-    org-file-apps
-    (quote
-     ((auto-mode . emacs)
-     ("\\.dia\\'" . "dia %s")
-     ("\\.mm\\'" . default)
-     ("\\.pdf\\'" . default)))
-    org-fontify-done-headline t
-    org-goto-interface (quote outline-path-completion)
-    ;; non nil is just direct children, what an ODD name!!!!
-    org-hierarchical-todo-statistics nil
-    org-provide-todo-statistics t
-    org-log-into-drawer t
-    org-log-redeadline (quote note)
-    org-log-reschedule (quote time)
-    org-modules (quote
-                 (org-info org-habit
-                           org-inlinetask org-irc
-                           org-toc org-mac-iCal org-mouse))
-    org-remember-default-headline ""
-    org-special-ctrl-a/e t
-    org-stuck-projects (quote ("-inactive/TODO" ("TODO" "WAITING") nil ""))
-    org-track-ordered-property-with-tag nil
-   )
-
    ;; Bit of a leftover from reorganising bits, do this later
    ;;(add-to-list 'org-tags-exclude-from-inheritance (quote "fix"))
    (add-to-list 'org-tags-exclude-from-inheritance (quote "sell"))
@@ -1741,7 +1740,6 @@ migrate this into more literal sections
      (interactive)
      (find-file org-default-notes-file)
    )
-
 
    (defun mrb/is-project-p ()
      "This function returns true if the entry is considered a project.
@@ -3565,7 +3563,6 @@ it. Initially, let's not be too greedy with the keybindings and do it
 by mode. M-Tab seems to be the natural choice for me.
 
 #+BEGIN_SRC emacs-lisp
-  ;;
   (use-package origami
     :config
     (setq origami-show-fold-header t)
@@ -3604,8 +3601,8 @@ source (*.hs files) and the ghc-mod package to help with completion
 and showing syntax errors.
 
 #+BEGIN_SRC emacs-lisp
-  (use-package ghc)
   (use-package haskell-mode
+    :requires ghc
     :init
     (progn
       (add-hook 'haskell-mode-hook 'interactive-haskell-mode)
@@ -3656,15 +3653,14 @@ code.
 #+BEGIN_SRC emacs-lisp
   (use-package elpy
     :init
-    (elpy-enable))
-
-  (delete 'elpy-module-flymake elpy-modules)
-
-  (add-hook 'python-mode-hook
-            (lambda ()
-              (toggle-truncate-lines t)
-              ;; Manage code navigation
-              (ggtags-mode 1)))
+    (elpy-enable)
+    :config
+    (delete 'elpy-module-flymake elpy-modules)
+    (add-hook 'python-mode-hook
+              (lambda ()
+                (toggle-truncate-lines t)
+                ;; Manage code navigation
+                (ggtags-mode 1))))
 #+END_SRC
 ** GIT integration
 This section is a temporary place to store some git related
