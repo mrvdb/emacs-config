@@ -1656,20 +1656,19 @@ is a better fit.
   (use-package org-journal
 
     :init
-    (progn
-      ;; The expand-file-name is needed, which is odd, because for single
-      ;; files this is not needed.
-      (setq org-journal-dir (expand-file-name "~/dat/org/journal/"))
+    ;; The expand-file-name is needed, which is odd, because for single
+    ;; files this is not needed.
+    (setq
+     org-journal-dir (expand-file-name "~/dat/org/journal/")
+     org-journal-time-format "[%R] "
 
-      (setq org-journal-time-format "[%R] ")
+     ;; Match the journal files (FIXME: make this independent of earlier assignments)
+     org-agenda-file-regexp "^[0-9]+\\.org"
+     org-journal-file-format  "%Y%m%d.org"
 
-      ;; Match the journal files (FIXME: make this independent of earlier assignments)
-      (setq org-agenda-file-regexp "^[0-9]+\\.org")
-      (setq org-journal-file-format  "%Y%m%d.org")
-
-      ;; I want to have encryption, but how do TODO items bubble up then in the agenda
-      (setq org-journal-enable-encryption nil)
-      (setq org-crypt-disable-auto-save t)))
+    ;; I want to have encryption, but how do TODO items bubble up then in the agenda
+    org-journal-enable-encryption nil
+    org-crypt-disable-auto-save t))
 #+END_SRC
 
 ** Old configuration
