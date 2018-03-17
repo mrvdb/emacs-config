@@ -192,10 +192,10 @@ document. Most of the variables I just made up, but some are used in
 other places too.
 
 #+BEGIN_SRC emacs-lisp
-  (setq user-full-name    "Marcel van der Boom")
-  (setq user-mail-address "marcel@hsdev.com")
-  (setq user-domain       "hsdev.com")
-  (setq user-organisation "HS-Development BV")
+  (setq user-full-name       "Marcel van der Boom")
+  (setq user-mail-address    "marcel@hsdev.com")
+  (setq user-domain          "hsdev.com")
+  (setq user-organisation    "HS-Development BV")
   (setq user-gpg-encrypt-key "0x235E5C8CF5E8DFFB")
 #+END_SRC
 
@@ -222,10 +222,11 @@ i.e. authinfo.gpg using public key encryption aimed at my key.
   ;; Use only authinfo.gpg for password storage
   (use-package auth-password-store
     :init
-    (auth-pass-enable))
-  ;; Make sure it's the only mechanism
-  (setq auth-sources '(password-store))
-  (setq auth-source-gpg-encrypt-to (list user-mail-address))
+    (auth-pass-enable)
+    :config
+    ;; Make sure it's the only mechanism
+    (setq auth-sources '(password-store))
+    (setq auth-source-gpg-encrypt-to (list user-mail-address)))
 #+END_SRC
 
 ** Encrypting information
