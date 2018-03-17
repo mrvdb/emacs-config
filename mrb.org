@@ -3383,6 +3383,11 @@ imported my feeds from RSSyl
       (defun mrb/elfeed-play-with-mpv ()
         "Play elfeed link in mpv"
         (interactive)
+        (notifications-notify
+         :title "Elfeed action"
+         :body "Enqueued video in MPV playlist"
+         :app-name "Elfeed")
+
         (start-process "elfeed-mpv" nil
                        "mpv"
                        (elfeed-entry-link elfeed-show-entry)))
