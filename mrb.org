@@ -3372,7 +3372,7 @@ imported my feeds from RSSyl
           (unless (use-region-p) (forward-line))))
 
       (defun mrb/elfeed-search-togggle-watchlater()
-         (mrb/elfeed-search-toggle-tag 'watchlater))
+        (mrb/elfeed-search-toggle-tag 'watchlater))
 
       (defun mrb/elfeed-show-toggle-tag(tag)
         (interactive)
@@ -3381,7 +3381,7 @@ imported my feeds from RSSyl
           (elfeed-show-tag tag)))
 
       (defun mrb/elfeed-show-togggle-watchlater()
-         (mrb/elfeed-show-toggle-tag 'watchlater))
+        (mrb/elfeed-show-toggle-tag 'watchlater))
 
       ;; TODO: mrb/elfeed-enqueue-video
       (defun mrb/elfeed-play-with-mpv ()
@@ -3389,7 +3389,7 @@ imported my feeds from RSSyl
         (interactive)
         (notifications-notify
          :title "Elfeed action"
-         :body "Enqueued video in MPV playlist"
+         :body "Playing video with MPV"
          :app-name "Elfeed")
 
         (start-process "elfeed-mpv" nil
@@ -3399,6 +3399,11 @@ imported my feeds from RSSyl
       (defun mrb/elfeed-add-to-playlist ()
         "Add to already playing mpv"
         (interactive)
+        (notifications-notify
+         :title "Elfeed action"
+         :body "Enqueued video in MPV playlist"
+         :app-name "Elfeed")
+
         (start-process "elfeed-mpvremote" nil
                        "mpvremote"
                        "add"
