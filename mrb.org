@@ -498,7 +498,7 @@ default settings.
                       :foreground "light goldenrod")
 
   ;; Make clickable things in help screens stand out
-  (set-face-attribute 'button  nil :foreground "light salmon" :weight semi-bold)
+  (set-face-attribute 'button  nil :foreground "light salmon" :weight 'semi-bold)
 #+END_SRC
 
 I enable hightlighting matching parentheses in many levels
