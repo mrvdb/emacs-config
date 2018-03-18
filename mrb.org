@@ -2719,8 +2719,14 @@ new file.
   (use-package ido
     :config
     (ido-mode t)
-    (setq ido-enable-flex-matching t) ;; enable fuzzy matching
-    (setq ido-auto-merge-work-directories-length -1) ;; disable auto-merge
+    (setq
+     ;; enable fuzzy matching
+     ido-enable-flex-matching t
+     ;; when buffer is in another frame, ask to jump or not
+     ido-default-buffer-method 'maybe-frame
+     ;; disable auto-merge
+     ido-auto-merge-work-directories-length -1)
+
     (set-face-attribute 'ido-first-match nil :background "sea green" :foreground "black")
     (ido-everywhere))
 #+END_SRC
