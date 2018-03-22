@@ -472,14 +472,15 @@ starting with the =base16-nord= theme and see where this leaves me.
      :config
      ;; Do config here and finally load the theme
      (setq base16-distinct-fringe-background nil
-           base16-highlight-mode-line 'box)
+           base16-highlight-mode-line 'contrast
+           base16-theme-256-color-source "terminal")
 
      (load-theme 'base16-nord t)
 
      ;; Define variable that I can use in other sections
      (defvar mrb/base16-colors base16-nord-colors)
 
-     ;; Define a map of facenames to theme-colorname
+     ;; Define a map of facenames/keywords to theme-colorname
      (setq mrb/theme-color-map
            '(("button"                       . :base0C)
              ("show-paren-match-bg"          . :base01)
@@ -488,16 +489,28 @@ starting with the =base16-nord= theme and see where this leaves me.
              ("magit-diff-added-highlight"   . :base0E)
              ("magit-diff-removed-highlight" . :base0B)
              ("magit-diff-added"             . :base0E)
-             ("magit-diff-removed"           . :base0B)))
+             ("magit-diff-removed"           . :base0B)
+             ("org-headline-done"            . :base03)
+             ("TODO"                         . :base08)
+             ("DONE"                         . :base0E)
+             ("WAITING"                      . :base0B)
+             ("CANCELLED"                    . :base01)
+             ("BUY"                          . :base0C)
+             ("HOWTO"                        . :base0A)
+             ("INFO"                         . :base0D)
+             ("COLLECT"                      . :base0E)
+             ("SOLVE"                        . :base07)
+             ("READ"                         . :base0F)
+             ("PLAN"                         . :base04)))
 
      ;; And a function to get to them
-     (defun mrb/themecolor(facename)
+     (defun mrb/themecolor(key)
        ;; returns the color within the theme for faces which are not yet
        ;; defined in it.
        ;; The colors in the theme are defined 'base00` to `base0F`
        (interactive)
        (plist-get mrb/base16-colors
-                  (cdr (assoc facename mrb/theme-color-map)))))
+                  (cdr (assoc key mrb/theme-color-map)))))
 #+END_SRC
 
 
@@ -507,6 +520,10 @@ starting with the =base16-nord= theme and see where this leaves me.
 
   ;; Make clickable things in help screens stand out
   (set-face-attribute 'button  nil :foreground (mrb/themecolor "button") :weight 'semi-bold)
+
+  ;; Headline for done states less noticeable
+  (set-face-attribute 'org-headline-done nil :foreground (mrb/themecolor "org-headline-done"))
+
 #+END_SRC
 
 I enable highlighting matching parentheses in many levels
@@ -1190,17 +1207,19 @@ should be kept in sync.
 Adapt the colors of the states I use a bit:
 
 #+BEGIN_SRC emacs-lisp
-  (setq org-todo-keyword-faces '(
-    ("DONE"      . (:foreground "#afd8af"     :weight bold))
-    ("WAITING"   . (:foreground "dark salmon" :weight bold))
-    ("CANCELLED" . (:foreground "dim gray"    :weight bold))
-    ("BUY"       . (:foreground "goldenrod"   :weight bold))
-    ("HOWTO"     . (:foreground "SkyBlue3"    :weight bold))
-    ("INFO"      . (:foreground "khaki1"      :weight bold))
-    ("COLLECT"   . (:foreground "MediumSeaGreen"   :weight bold))
-    ("SOLVE"     . (:foreground "orange red"    :weight bold))
-    ("READ"      . (:foreground "MediumPurple1" :weight bold))
-    ("PLAN"      . (:foreground "OliveDrab3" :weight bold))
+  ;; FIXME: change to themecolors
+  (setq org-todo-keyword-faces `(
+    ("TODO"      . (:foreground ,(mrb/themecolor "TODO") :weight bold))
+    ("DONE"      . (:foreground ,(mrb/themecolor "DONE") :weight bold))
+    ("WAITING"   . (:foreground ,(mrb/themecolor "WAITING") :weight bold))
+    ("CANCELLED" . (:foreground ,(mrb/themecolor "CANCELLED")    :weight bold))
+    ("BUY"       . (:foreground ,(mrb/themecolor "BUY")   :weight bold))
+    ("HOWTO"     . (:foreground ,(mrb/themecolor "HOWTO")    :weight bold))
+    ("INFO"      . (:foreground ,(mrb/themecolor "INFO")       :weight bold))
+    ("COLLECT"   . (:foreground ,(mrb/themecolor "COLLECT")   :weight bold))
+    ("SOLVE"     . (:foreground ,(mrb/themecolor "SOLVE")     :weight bold))
+    ("READ"      . (:foreground ,(mrb/themecolor "READ")  :weight bold))
+    ("PLAN"      . (:foreground ,(mrb/themecolor "PLAN")  :weight bold))
   ))
 #+END_SRC
 
