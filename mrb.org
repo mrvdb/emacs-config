@@ -497,7 +497,10 @@ starting with the =base16-nord= theme and see where this leaves me.
              ("COLLECT"                      . :base0E)
              ("SOLVE"                        . :base07)
              ("READ"                         . :base0F)
-             ("PLAN"                         . :base04)))
+             ("PLAN"                         . :base04)
+             ("elfeed-search-tag-face"       . :base0E)
+             ("elfeed-search-feed-face"      . :base0D)
+             ("elfeed-search-date-face"      . :base0A)))
 
      ;; And a function to get to them
      (defun mrb/themecolor(key)
@@ -3370,11 +3373,7 @@ imported my feeds from RSSyl
 
 #+BEGIN_SRC emacs-lisp
   (use-package elfeed
-    :requires notifications
-    :init
-    (progn
-      (setf url-queue-timeout 30)
-      (setq elfeed-db-directory "~/dat/.elfeed"))
+    :commands elfeed
     :bind (("C-c f" . 'elfeed)
            :map elfeed-show-mode-map
            ("w" . 'mrb/elfeed-show-toggle-watchlater)
@@ -3382,64 +3381,71 @@ imported my feeds from RSSyl
            ("v" . 'mrb/elfeed-play-with-mpv)
            :map elfeed-search-mode-map
            ("w" . 'mrb/elfeed-search-toggle-watchlater))
+    :init
+    (setf url-queue-timeout 30)
+    (setq elfeed-db-directory "~/dat/.elfeed")
 
     :config
-    (progn
-      (defun mrb/elfeed-search-toggle-tag(tag)
-        (let ((entries (elfeed-search-selected)))
-          (cl-loop for entry in entries do
-                   (if (elfeed-tagged-p tag entry)
-                       (elfeed-untag entry tag)
-                     (elfeed-tag entry tag)))
-          (mapc #'elfeed-search-update-entry entries)
-          (unless (use-region-p) (forward-line))))
+    ;; Adjust faces to themes
+    (set-face-attribute 'elfeed-search-tag-face nil :foreground (mrb/themecolor "elfeed-search-tag-face"))
+    (set-face-attribute 'elfeed-search-feed-face nil :foreground (mrb/themecolor "elfeed-search-feed-face"))
+    (set-face-attribute 'elfeed-search-date-face nil :foreground (mrb/themecolor "elfeed-search-date-face"))
 
-      (defun mrb/elfeed-search-togggle-watchlater()
-        (mrb/elfeed-search-toggle-tag 'watchlater))
+    (defun mrb/elfeed-search-toggle-tag(tag)
+      (let ((entries (elfeed-search-selected)))
+        (cl-loop for entry in entries do
+                 (if (elfeed-tagged-p tag entry)
+                     (elfeed-untag entry tag)
+                   (elfeed-tag entry tag)))
+        (mapc #'elfeed-search-update-entry entries)
+        (unless (use-region-p) (forward-line))))
 
-      (defun mrb/elfeed-show-toggle-tag(tag)
-        (interactive)
-        (if (elfeed-tagged-p tag elfeed-show-entry)
-            (elfeed-show-untag tag)
-          (elfeed-show-tag tag)))
+    (defun mrb/elfeed-search-togggle-watchlater()
+      (mrb/elfeed-search-toggle-tag 'watchlater))
 
-      (defun mrb/elfeed-show-togggle-watchlater()
-        (mrb/elfeed-show-toggle-tag 'watchlater))
+    (defun mrb/elfeed-show-toggle-tag(tag)
+      (interactive)
+      (if (elfeed-tagged-p tag elfeed-show-entry)
+          (elfeed-show-untag tag)
+        (elfeed-show-tag tag)))
 
-      ;; TODO: mrb/elfeed-enqueue-video
-      (defun mrb/elfeed-play-with-mpv ()
-        "Play elfeed link in mpv"
-        (interactive)
-        (notifications-notify
-         :title "Elfeed action"
-         :body "Playing video with MPV"
-         :app-name "Elfeed")
+    (defun mrb/elfeed-show-togggle-watchlater()
+      (mrb/elfeed-show-toggle-tag 'watchlater))
 
-        (start-process "elfeed-mpv" nil
-                       "mpv"
-                       (elfeed-entry-link elfeed-show-entry)))
+    ;; TODO: mrb/elfeed-enqueue-video
+    (defun mrb/elfeed-play-with-mpv ()
+      "Play elfeed link in mpv"
+      (interactive)
+      (notifications-notify
+       :title "Elfeed action"
+       :body "Playing video with MPV"
+       :app-name "Elfeed")
 
-      (defun mrb/elfeed-add-to-playlist ()
-        "Add to already playing mpv"
-        (interactive)
-        (notifications-notify
-         :title "Elfeed action"
-         :body "Enqueued video in MPV playlist"
-         :app-name "Elfeed")
+      (start-process "elfeed-mpv" nil
+                     "mpv"
+                     (elfeed-entry-link elfeed-show-entry)))
 
-        (start-process "elfeed-mpvremote" nil
-                       "mpvremote"
-                       "add"
-                       (elfeed-entry-link elfeed-show-entry)))
+    (defun mrb/elfeed-add-to-playlist ()
+      "Add to already playing mpv"
+      (interactive)
+      (notifications-notify
+       :title "Elfeed action"
+       :body "Enqueued video in MPV playlist"
+       :app-name "Elfeed")
 
-      ;; New entry hook allows meta information manipulation
-      ;; without directly having to change elfeed-feeds
-      (add-hook 'elfeed-new-entry-hook
-                (elfeed-make-tagger :feed-url "youtube\\.com"
-                                    :add '(video youtube)))
-      (add-hook 'elfeed-new-entry-hook
-                (elfeed-make-tagger :feed-url "vimeo\\.com"
-                                    :add '(video vimeo)))))
+      (start-process "elfeed-mpvremote" nil
+                     "mpvremote"
+                     "add"
+                     (elfeed-entry-link elfeed-show-entry)))
+
+    ;; New entry hook allows meta information manipulation
+    ;; without directly having to change elfeed-feeds
+    (add-hook 'elfeed-new-entry-hook
+              (elfeed-make-tagger :feed-url "youtube\\.com"
+                                  :add '(video youtube)))
+    (add-hook 'elfeed-new-entry-hook
+              (elfeed-make-tagger :feed-url "vimeo\\.com"
+                                  :add '(video vimeo))))
 #+END_SRC
 
 Elfeed allows to interactively subscribe to a feed (defaulting to
