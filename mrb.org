@@ -456,54 +456,60 @@ I generally use dark backgrounds, so let's tell Emacs that.
 (setq-default frame-background-mode 'dark)
 #+END_SRC
 
-Set the zenburn theme, slightly corrected for a darker
-background color. The default one is too light in daylight conditions.
+I'm moving to the [[https://github.com/arcticicestudio/nord][Nord color palette]]. This palette defines 16 colors.
+
+There is a base16 theme which uses exactly these colors and there are
+varieties which use the 16 colors and some derivatives of it.
+
+Although I think the 16 color system is a bit simplistic and, for
+emacs at least, I will need to customize more later on, the main lure
+of this system is that I can use the same set for many of my programs
+I use (emacs, xterm, i3, dunst etc.) which sounds attractive. So, I'm
+starting with the =base16-nord= theme and see where this leaves me.
 
 #+BEGIN_SRC emacs-lisp
-  (use-package zenburn-theme
-    :config
-    (load-theme 'zenburn))
+   (use-package base16-theme
+     :config
+     ;; Do config here and finally load the theme
+     (setq base16-distinct-fringe-background nil
+           base16-highlight-mode-line 'box)
+
+     (load-theme 'base16-nord t)
+
+     ;; Define variable that I can use in other sections
+     (defvar mrb/base16-colors base16-nord-colors)
+
+     ;; Define a map of facenames to theme-colorname
+     (setq mrb/theme-color-map
+           '(("button"                       . :base0C)
+             ("show-paren-match-bg"          . :base01)
+             ("region-bg"                    . :base03)
+             ("default-cursor"               . :base0B)
+             ("magit-diff-added-highlight"   . :base0E)
+             ("magit-diff-removed-highlight" . :base0B)
+             ("magit-diff-added"             . :base0E)
+             ("magit-diff-removed"           . :base0B)))
+
+     ;; And a function to get to them
+     (defun mrb/themecolor(facename)
+       ;; returns the color within the theme for faces which are not yet
+       ;; defined in it.
+       ;; The colors in the theme are defined 'base00` to `base0F`
+       (interactive)
+       (plist-get mrb/base16-colors
+                  (cdr (assoc facename mrb/theme-color-map)))))
 #+END_SRC
 
-The zenburn theme does not fit for everything so I have a number of
-corrections. I do it like this because zenburn is more complete than
-ujelly and otherwise I'd have a large set of faces defined in a wrong
-color.
-
-First, the default background of zenburn is to wooshy for me and I
-like the purple background that Ubuntu uses for the terminal. This
-happens to mix rather well with the other Zenburn colors, so I'm using
-that. The actual config for this is in the custom-set-faces section of
-my =custom.el= file which I found to be the most reliable for the
-default settings.
-
 
 #+BEGIN_SRC emacs-lisp
-  ;; Zenburn background is too light
-  (set-face-attribute 'default nil :background "gray14")
-
-  ;; Zenburn underlines date face in org, no go
+  ;; No underlining for date face in org
   (set-face-attribute 'org-date nil :underline nil)
 
-  ;; Adjust the faces for the modeline
-  (set-face-attribute 'mode-line nil :foreground "white" :background "grey40" :box nil)
-  (set-face-attribute 'mode-line-inactive nil :box nil :underline nil :overline "grey40")
-
-  (set-face-attribute 'isearch nil :background "sea green" :foreground "black")
-
-
-  (set-face-attribute 'lazy-highlight nil :inherit isearch-lazy-highlight
-                      :background "black" :foreground "tomato")
-
-  ;; Set the face for the fring to have the normal backbround.
-  (set-face-attribute 'fringe nil :background (face-attribute 'default :background)
-                      :foreground "light goldenrod")
-
   ;; Make clickable things in help screens stand out
-  (set-face-attribute 'button  nil :foreground "light salmon" :weight 'semi-bold)
+  (set-face-attribute 'button  nil :foreground (mrb/themecolor "button") :weight 'semi-bold)
 #+END_SRC
 
-I enable hightlighting matching parentheses in many levels
+I enable highlighting matching parentheses in many levels
 globally. I do not know of a situation where not knowing which
 bracket or parenthesis goes with which is not a useful thing.
 
@@ -513,20 +519,22 @@ used. The last entry here does not get highlighted, so my config is
 valid for 5 levels, not 6.
 
 #+BEGIN_SRC emacs-lisp
-(setq hl-paren-colors (quote ("firebrick" "lightgreen" "orange" "cyan" "yellow" "blue")))
-#+END_SRC
-
-And enable the minor mode globally.
-
-#+BEGIN_SRC emacs-lisp
   (use-package highlight-parentheses
-     :config
-     (define-globalized-minor-mode global-highlight-parentheses-mode
-       highlight-parentheses-mode
-       (lambda ()
-         (highlight-parentheses-mode t)))
-     (global-highlight-parentheses-mode t)
-  )
+    :init
+    (setq hl-paren-colors
+          `(,(plist-get mrb/base16-colors :base0B)
+            ,(plist-get mrb/base16-colors :base0E)
+            ,(plist-get mrb/base16-colors :base0C)
+            ,(plist-get mrb/base16-colors :base0F)
+            ,(plist-get mrb/base16-colors :base0D)
+            ,(plist-get mrb/base16-colors :base0A)))
+    :config
+    (define-globalized-minor-mode global-highlight-parentheses-mode
+      highlight-parentheses-mode
+      (lambda ()
+        (highlight-parentheses-mode t)))
+    (global-highlight-parentheses-mode t))
+
   ;; no splash screen
   (setq inhibit-startup-screen  t)
   (setq inhibit-startup-message t)
@@ -538,12 +546,12 @@ And enable the minor mode globally.
   ;; When I am not typing, the cursor should become more visible, so I
   ;; don't lose it.
   (makunbound 'mrb-cursor-color)
-  (setq mrb-cursor-color "red")
+  (setq mrb-cursor-color (mrb/themecolor "default-cursor"))
 
   ;; Default frame properties frame position, color, etc
   (setq default-frame-alist
-        '((cursor-type . (bar . 1))
-          (cursor-color . "red") ;; TODO: this should be redundant (.Xresources has it)
+        `((cursor-type . (bar . 1))
+          (cursor-color . ,(mrb/themecolor "default-cursor")) ;; TODO: this should be redundant (.Xresources has it)
           (height . 60)
           (width . 100)
   ))
@@ -551,22 +559,15 @@ And enable the minor mode globally.
   (use-package cursor-chg
     :load-path (lambda () (concat custom-package-directory "cursor-chg/"))
     :config
-    (progn
-      (change-cursor-mode 0)        ; On for overwrite/read-only/input mode
-      (toggle-cursor-type-when-idle 1)   ; On when idle
-      (setq curchg-default-cursor-color mrb-cursor-color)
-      (setq curchg-default-cursor-type (quote bar\ \.\ 1))))
-
+    (change-cursor-mode 0)        ; On for overwrite/read-only/input mode
+    (toggle-cursor-type-when-idle 1)   ; On when idle
+    (setq curchg-default-cursor-color (mrb/themecolor "default-cursor"))
+    (setq curchg-default-cursor-type (quote bar\ \.\ 1)))
 
   ;; Parenthesis matching
   (show-paren-mode 1)
   (setq show-paren-style (quote expression))
   (setq show-paren-delay 0)
-
-  ;; variables for the hightlighting of regions
-  (defvar mrb-bg-paren-match "gray22")
-  (defvar mrb-bg-region "gray35")
-
 
   ;; Defer fontification a little bit, so we could gain a bit in scroll speed
   (setq jit-lock-defer-time 0.02)
@@ -662,13 +663,12 @@ extra care here.
 
     (set-face-attribute 'show-paren-match nil
                         :inherit nil :foreground nil
-                        :weight 'normal :background mrb-bg-paren-match)
-
+                        :weight 'normal :background (mrb/themecolor "show-paren-match-bg"))
 
     ;; Set regions so we keep the normal font locking
     (set-face-attribute 'region nil
                         :inherit nil :foreground nil
-                        :weight 'normal :background mrb-bg-region)
+                        :weight 'normal :background (mrb/themecolor "region-bg"))
 
     ;; Probably move this to somewhere else ?
     ;; I probably want the global mode and register exceptions
@@ -3661,6 +3661,18 @@ magit, so let's begin with bringing that in.
       ;; (set-face-attribute 'magit-diff-added-highlight nil
       ;;                     :inherit nil
       ;;                     :foreground nil :background mrb-bg-paren-match)
+      (set-face-attribute 'magit-diff-added-highlight nil
+                          :foreground nil :inherit nil
+                          :background (mrb/themecolor "magit-diff-added-highlight"))
+      (set-face-attribute 'magit-diff-removed-highlight nil
+                          :foreground nil :inherit nil
+                          :background (mrb/themecolor "magit-diff-removed-highlight"))
+      (set-face-attribute 'magit-diff-added nil
+                          :foreground nil :inherit nil
+                          :background (mrb/themecolor "magit-diff-added"))
+      (set-face-attribute 'magit-diff-removed nil
+                          :foreground nil :inherit nil
+                          :background (mrb/themecolor "magit-diff-removed"))
       (setq magit-last-seen-setup-instructions "1.4.0")))
 #+END_SRC
 
