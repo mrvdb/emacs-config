@@ -90,17 +90,17 @@ And edit the file obviously.
   if [ $WEARE == "edit" ]; then
       XARGS=$XARGS' --no-wait'
   fi
-  EMACSCLIENT="`which emacsclient` $XARGS"
+  EC="`which emacsclient` $XARGS"
 
   # Number of current visible frames,
   # Emacs daemon always has a visible frame called F1 which is erm, not visible.
   visible_frames() {
-      $EMACSCLIENT --alternate-editor="" --eval '(length (visible-frame-list))' 2>/dev/null
+      $EC --alternate-editor="" --eval '(length (visible-frame-list))' 2>/dev/null
   }
 
   # Change the focus to emacs
   change_focus() {
-      $EMACSCLIENT --eval "(select-frame-set-input-focus (selected-frame))" > /dev/null
+      $EC --eval "(select-frame-set-input-focus (selected-frame))" > /dev/null
   }
 
   # Editting stdin, part 1: save the input to a file
@@ -123,18 +123,14 @@ And edit the file obviously.
   # This will start a server if not running
   test "$(visible_frames)" -eq "1" && change_focus
 
-  XARGS=$@
-  if [ "X$XARGS" == "X" ]; then
-      XARGS='~/untitled'
-  fi
   if [ "$(visible_frames)" -lt  "2" ]; then
       # need to create a frame
       # -c $@ with no args just opens the scratch buffer
-      $EMACSCLIENT --create-frame "$XARGS" && change_focus
+       $EC --create-frame "$@" && change_focus
   else
       # there is already a visible frame besides the daemon, change focus
       # -n $@ errors if there are no args
-      test  "$#" -ne "0" && $EMACSCLIENT "$XARGS"
+      test  "$#" -ne "0" && $EC "$@"
   fi
 #+END_SRC
 
