@@ -2281,6 +2281,13 @@ major mode only.
      ("M-X"     . 'smex-major-mode-commands)))
 #+END_SRC
 
+**** What should have been in emacs
+Sometimes there are /logical gaps/ in emacs' keybinding. I put them here
+
+#+BEGIN_SRC emacs-lisp
+  (bind-keys :map help-map
+            ("A" . describe-face))
+#+END_SRC
 **** Special keys
 For some special keys I have defined some commands. Special keys are
 those keys that may not be on every keyboard, within reason. I
