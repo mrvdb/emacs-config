@@ -669,7 +669,7 @@ from external or, more importantly Magit) will try to run this code
 and magit will fail if there's an error in the next section. Take
 extra care here.
 #+BEGIN_SRC emacs-lisp
-  (defun mrb/run-client-settings()
+  (defun mrb/run-client-settings(&optional args)
     (interactive)
 
     (message "Running client settings which server may not have applied")
@@ -703,11 +703,11 @@ extra care here.
 
     (mrb/unicode-font-corrections))
 
-
-  ;; This seems to work if we start up emacs using filename on cli and
-  ;; server was not running yet. It does however not work if we just
-  ;; startup emacs (through my edit script) without a filename on the cli
-  (add-hook 'server-visit-hook 'mrb/run-client-settings)
+  ;; Run our client settings after we make a frame This is probably
+  ;; overkill to do on every frame, but it covers the situation where
+  ;; `server-visit-hook` won't work because we started emacs without a
+  ;; file. This config covers all situations.
+  (add-hook 'after-make-frame-functions 'mrb/run-client-settings)
 
   ;; And we need to run those settings *now* too, when we are not in server mode
   (mrb/run-client-settings)
