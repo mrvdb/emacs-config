@@ -2123,6 +2123,7 @@ menu with the combinations of keys that can follow it.
   (setq which-key-idle-delay 2.0)
   (which-key-mode))
 #+END_SRC
+
 ** First, unsetting the keys I don't want.
 Let's begin with killing some bindings which are in my way, notably
 the standard right mouse click behaviour. This is because I want it
@@ -2132,7 +2133,6 @@ find out a better way for this.
 #+BEGIN_SRC emacs-lisp
 (global-unset-key (kbd "<mouse-3>"))
 #+END_SRC
-
 
 ** Setting keys
 Binding keys if fine and all, but remembering them later is rather
@@ -3059,8 +3059,8 @@ to it.
 So, let's begin by enabling imap as the selection method.
 
 #+BEGIN_SRC emacs-lisp
-  ;;(require 'gnorb)
-  (require 'nnir)
+  (use-package nnir
+    :ensure nil) ;; No need to go load it
   (setq gnus-select-method
         '(nnmaildir "hsd"
                  (directory "~/Maildir/")))
@@ -3407,8 +3407,8 @@ imported my feeds from RSSyl
            :map elfeed-search-mode-map
            ("w" . 'mrb/elfeed-search-toggle-watchlater))
     :init
-    (setf url-queue-timeout 30)
-    (setq elfeed-db-directory "~/dat/.elfeed")
+    (setf url-queue-timeout 30
+          elfeed-db-directory "~/dat/.elfeed")
 
     :config
     ;; Adjust faces to themes
@@ -3482,11 +3482,10 @@ i want.
 
 #+BEGIN_SRC emacs-lisp
   (use-package elfeed-org
+    :after elfeed
     :init
-    (progn
-      (setq rmh-elfeed-org-files (list (concat emacs-directory "feeds.org")))
-      (elfeed-org))
-    )
+    (setq rmh-elfeed-org-files (list (concat emacs-directory "feeds.org")))
+    (elfeed-org))
 #+END_SRC
 ** IRC
 #+BEGIN_SRC emacs-lisp
