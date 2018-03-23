@@ -464,64 +464,73 @@ I use (emacs, xterm, i3, dunst etc.) which sounds attractive. So, I'm
 starting with the =base16-nord= theme and see where this leaves me.
 
 #+BEGIN_SRC emacs-lisp
-   (use-package base16-theme
-     :config
-     ;; Do config here and finally load the theme
-     (setq base16-distinct-fringe-background nil
-           base16-highlight-mode-line 'contrast
-           base16-theme-256-color-source "terminal")
+  (use-package base16-theme
+    :config
+    ;; Do config here and finally load the theme
+    (setq base16-distinct-fringe-background nil
+          base16-highlight-mode-line 'contrast
+          base16-theme-256-color-source "terminal")
 
-     (load-theme 'base16-nord t)
+    (load-theme 'base16-nord t)
 
-     ;; Define variable that I can use in other sections
-     (defvar mrb/base16-colors base16-nord-colors)
+    ;; Define variable that I can use in other sections
+    (defvar mrb/base16-colors base16-nord-colors)
 
-     ;; Define a map of facenames/keywords to theme-colorname
-     (setq mrb/theme-color-map
-           '(("button"                       . :base0C)
-             ("show-paren-match-bg"          . :base01)
-             ("region-bg"                    . :base03)
-             ("default-cursor"               . :base0B)
-             ("magit-diff-added-highlight"   . :base0E)
-             ("magit-diff-removed-highlight" . :base0B)
-             ("magit-diff-added"             . :base0E)
-             ("magit-diff-removed"           . :base0B)
-             ("org-headline-done"            . :base03)
-             ("TODO"                         . :base08)
-             ("DONE"                         . :base0E)
-             ("WAITING"                      . :base0B)
-             ("CANCELLED"                    . :base01)
-             ("BUY"                          . :base0C)
-             ("HOWTO"                        . :base0A)
-             ("INFO"                         . :base0D)
-             ("COLLECT"                      . :base0E)
-             ("SOLVE"                        . :base07)
-             ("READ"                         . :base0F)
-             ("PLAN"                         . :base04)
-             ("elfeed-search-tag-face"       . :base0E)
-             ("elfeed-search-feed-face"      . :base0D)
-             ("elfeed-search-date-face"      . :base0A)))
+    ;; Define a map of facenames/keywords to theme-colorname
+    (setq mrb/theme-color-map
+          '(("button"                       . :base0C)
+            ("show-paren-match-bg"          . :base01)
+            ("region-bg"                    . :base03)
+            ("default-cursor"               . :base0B)
+            ("magit-diff-added-highlight"   . :base0E)
+            ("magit-diff-removed-highlight" . :base0B)
+            ("magit-diff-added"             . :base0E)
+            ("magit-diff-removed"           . :base0B)
+            ("org-headline-done"            . :base03)
+            ("TODO"                         . :base08)
+            ("DONE"                         . :base0E)
+            ("WAITING"                      . :base0B)
+            ("CANCELLED"                    . :base01)
+            ("BUY"                          . :base0C)
+            ("HOWTO"                        . :base0A)
+            ("INFO"                         . :base0D)
+            ("COLLECT"                      . :base0E)
+            ("SOLVE"                        . :base07)
+            ("READ"                         . :base0F)
+            ("PLAN"                         . :base04)
+            ("elfeed-search-tag-face"       . :base0E)
+            ("elfeed-search-feed-face"      . :base0D)
+            ("elfeed-search-date-face"      . :base0A)))
 
-     ;; And a function to get to them
-     (defun mrb/themecolor(key)
-       ;; returns the color within the theme for faces which are not yet
-       ;; defined in it.
-       ;; The colors in the theme are defined 'base00` to `base0F`
-       (interactive)
-       (plist-get mrb/base16-colors
-                  (cdr (assoc key mrb/theme-color-map)))))
+    ;; And a function to get to them
+    (defun mrb/themecolor(key)
+      "Get the theme color for `key`, which mab be some string or the name of a face"
+      (interactive)
+      (plist-get mrb/base16-colors
+                 (cdr (assoc
+                       (if (symbolp key) (symbol-name key)
+                         (if (stringp key) key))
+                       mrb/theme-color-map))))
+
+    (defun mrb/themeface(face &rest args)
+      "Map `face` onto the theme rendering. Basically a shorthand for `set-face-attribute`"
+
+      (if (facep face)
+          ;; face can be used directly
+          (apply 'set-face-attribute face nil :foreground (mrb/themecolor face) args))
+      ;; Return the color value in all cases
+      (mrb/themecolor face)))
 #+END_SRC
-
 
 #+BEGIN_SRC emacs-lisp
   ;; No underlining for date face in org
   (set-face-attribute 'org-date nil :underline nil)
 
   ;; Make clickable things in help screens stand out
-  (set-face-attribute 'button  nil :foreground (mrb/themecolor "button") :weight 'semi-bold)
+  (mrb/themeface 'button :weight 'semi-bold)
 
   ;; Headline for done states less noticeable
-  (set-face-attribute 'org-headline-done nil :foreground (mrb/themecolor "org-headline-done"))
+  (mrb/themeface 'org-headline-done)
 
 #+END_SRC
 
@@ -562,12 +571,12 @@ valid for 5 levels, not 6.
   ;; When I am not typing, the cursor should become more visible, so I
   ;; don't lose it.
   (makunbound 'mrb-cursor-color)
-  (setq mrb-cursor-color (mrb/themecolor "default-cursor"))
+  (setq mrb-cursor-color (mrb/themeface "default-cursor"))
 
   ;; Default frame properties frame position, color, etc
   (setq default-frame-alist
         `((cursor-type . (bar . 1))
-          (cursor-color . ,(mrb/themecolor "default-cursor")) ;; TODO: this should be redundant (.Xresources has it)
+          (cursor-color . ,(mrb/themeface "default-cursor")) ;; TODO: this should be redundant (.Xresources has it)
           (height . 60)
           (width . 100)
   ))
@@ -577,7 +586,7 @@ valid for 5 levels, not 6.
     :config
     (change-cursor-mode 0)        ; On for overwrite/read-only/input mode
     (toggle-cursor-type-when-idle 1)   ; On when idle
-    (setq curchg-default-cursor-color (mrb/themecolor "default-cursor"))
+    (setq curchg-default-cursor-color (mrb/themeface "default-cursor"))
     (setq curchg-default-cursor-type (quote bar\ \.\ 1)))
 
   ;; Parenthesis matching
@@ -1208,17 +1217,17 @@ Adapt the colors of the states I use a bit:
 #+BEGIN_SRC emacs-lisp
   ;; FIXME: change to themecolors
   (setq org-todo-keyword-faces `(
-    ("TODO"      . (:foreground ,(mrb/themecolor "TODO") :weight bold))
-    ("DONE"      . (:foreground ,(mrb/themecolor "DONE") :weight bold))
-    ("WAITING"   . (:foreground ,(mrb/themecolor "WAITING") :weight bold))
-    ("CANCELLED" . (:foreground ,(mrb/themecolor "CANCELLED")    :weight bold))
-    ("BUY"       . (:foreground ,(mrb/themecolor "BUY")   :weight bold))
-    ("HOWTO"     . (:foreground ,(mrb/themecolor "HOWTO")    :weight bold))
-    ("INFO"      . (:foreground ,(mrb/themecolor "INFO")       :weight bold))
-    ("COLLECT"   . (:foreground ,(mrb/themecolor "COLLECT")   :weight bold))
-    ("SOLVE"     . (:foreground ,(mrb/themecolor "SOLVE")     :weight bold))
-    ("READ"      . (:foreground ,(mrb/themecolor "READ")  :weight bold))
-    ("PLAN"      . (:foreground ,(mrb/themecolor "PLAN")  :weight bold))
+    ("TODO"      . (:foreground ,(mrb/themeface "TODO") :weight bold))
+    ("DONE"      . (:foreground ,(mrb/themeface "DONE") :weight bold))
+    ("WAITING"   . (:foreground ,(mrb/themeface "WAITING") :weight bold))
+    ("CANCELLED" . (:foreground ,(mrb/themeface "CANCELLED")    :weight bold))
+    ("BUY"       . (:foreground ,(mrb/themeface "BUY")   :weight bold))
+    ("HOWTO"     . (:foreground ,(mrb/themeface "HOWTO")    :weight bold))
+    ("INFO"      . (:foreground ,(mrb/themeface "INFO")       :weight bold))
+    ("COLLECT"   . (:foreground ,(mrb/themeface "COLLECT")   :weight bold))
+    ("SOLVE"     . (:foreground ,(mrb/themeface "SOLVE")     :weight bold))
+    ("READ"      . (:foreground ,(mrb/themeface "READ")  :weight bold))
+    ("PLAN"      . (:foreground ,(mrb/themeface "PLAN")  :weight bold))
   ))
 #+END_SRC
 
@@ -3387,9 +3396,9 @@ imported my feeds from RSSyl
 
     :config
     ;; Adjust faces to themes
-    (set-face-attribute 'elfeed-search-tag-face nil :foreground (mrb/themecolor "elfeed-search-tag-face"))
-    (set-face-attribute 'elfeed-search-feed-face nil :foreground (mrb/themecolor "elfeed-search-feed-face"))
-    (set-face-attribute 'elfeed-search-date-face nil :foreground (mrb/themecolor "elfeed-search-date-face"))
+    (mrb/themeface 'elfeed-search-tag-face)
+    (mrb/themeface 'elfeed-search-feed-face)
+    (mrb/themeface 'elfeed-search-date-face)
 
     (defun mrb/elfeed-search-toggle-tag(tag)
       (let ((entries (elfeed-search-selected)))
