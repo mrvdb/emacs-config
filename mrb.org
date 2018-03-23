@@ -2807,18 +2807,21 @@ Once we have a region, it may be nice to have a special keymap to bind
 keys and do specific actions. I use the =selected= package for that.
 
 #+BEGIN_SRC emacs-lisp
-(use-package selected
-  :commands selected-minor-mode
-  :bind (:map selected-keymap
-              ;; For all modes
-              ("s" . write-region)
+  (use-package selected
+    :commands selected-minor-mode
+    :bind (:map selected-keymap
+                ;; For all modes
+                ("s" . write-region)
 
-              ;; Copied from example
-              ("q" . selected-off)
-              ("u" . upcase-region)
-              ("d" . downcase-region)
-              ("w" . count-words-region)
-              ("m" . apply-macro-to-region-lines)))
+                ;; Copied from example
+                ("q" . selected-off)
+                ("u" . upcase-region)
+                ("d" . downcase-region)
+                ("w" . count-words-region)
+                ("m" . apply-macro-to-region-lines))
+    :config
+    (selected-global-mode))
+
 
 #+END_SRC
 
