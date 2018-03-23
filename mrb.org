@@ -500,7 +500,9 @@ starting with the =base16-nord= theme and see where this leaves me.
             ("PLAN"                         . :base04)
             ("elfeed-search-tag-face"       . :base0E)
             ("elfeed-search-feed-face"      . :base0D)
-            ("elfeed-search-date-face"      . :base0A)))
+            ("elfeed-search-date-face"      . :base0A)
+            ("ido-bg"                       . :base0B)
+            ("ido-first-match"              . :base00)))
 
     ;; And a function to get to them
     (defun mrb/themecolor(key)
@@ -2763,7 +2765,8 @@ new file.
      ;; disable auto-merge
      ido-auto-merge-work-directories-length -1)
 
-    (set-face-attribute 'ido-first-match nil :background "sea green" :foreground "black")
+     ;; Match selected with theme
+     (mrb/themeface 'ido-first-match :background (mrb/themecolor "ido-bg"))
     (ido-everywhere))
 #+END_SRC
 
