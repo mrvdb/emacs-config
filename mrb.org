@@ -975,6 +975,11 @@ on a line which is commented out in the proper syntax for that mode.
     :commands (sh-mode)
     :mode "\\.zsh\\'")
 
+  (use-package conf-mode
+    :ensure nil
+    :config
+    (add-hook 'conf-mode-hook 'rainbow-mode))
+
   ;; Open scratch buffer by default in the mode we are in at the moment
   ;; with C-u prefix a mode will be asked to use
   (use-package scratch)
@@ -996,8 +1001,6 @@ on a line which is commented out in the proper syntax for that mode.
       (the_mode
        (list 'nxml-mode))
     (add-hook the_mode 'turn-off-auto-fill))
-
-  (add-hook 'conf-xdefaults-mode-hook 'rainbow-mode)
 #+END_SRC
 * Org-mode
 Orgmode configuraton is probably the largest part of my Emacs
