@@ -470,49 +470,48 @@ starting with the =base16-nord= theme and see where this leaves me.
     (setq base16-distinct-fringe-background nil
           base16-highlight-mode-line 'contrast
           base16-theme-256-color-source "terminal")
-
     (load-theme 'base16-nord t)
 
     ;; Define our adjustments to faces
     (setq base16-adjustments
-        '(;; No underlining for date face in org
-          (org-date                     :underline nil)
-          ;; Make clickable things in help screens stand out
-          (button                       :foreground base0C :weight semi-bold)
-          ;; Headlines for DONE states should be less noticeable
-          (org-headline-done            :foreground base03)
-          (show-paren-match             :foreground nil :background base01 :inherit nil :weight normal)
-          ;; Set regions so we keep the normal font locking
-          (region                       :foreground nil :background base03 :inherit nil :weight normal)
-          ;; Magit
-          (magit-diff-added-highlight   :foreground base0E)
-          (magit-diff-removed-highlight :foreground base0B)
-          (magit-diff-added             :foreground base0E)
-          (magit-diff-removed           :foreground base0B)
-          ;; Elfeed
-          (elfeed-search-tag-face       :foreground base0E)
-          (elfeed-search-feed-face      :foreground base0D)
-          (elfeed-search-date-face      :foreground base0A)
-          ;; IDO
-          (ido-first-match              :foreground base00 :background base0B)
+          '(;; No underlining for date face in org
+            (org-date                     :underline nil)
+            ;; Make clickable things in help screens stand out
+            (button                       :foreground base0C :weight semi-bold)
+            ;; Headlines for DONE states should be less noticeable
+            (org-headline-done            :foreground base03)
 
-          ;; flyspell errors/dupes look the same as flycheck-errors/warnings
-          (flyspell-incorrect           :inherit flycheck-error)
-          (flyspell-duplicate           :inherit f:foreground base00 :weight warning)
+            (show-paren-match             :foreground nil :background base01 :inherit nil :weight normal)
+            ;; Set regions so we keep the normal font locking
+            (region                       :foreground nil :background base03 :inherit nil :weight normal)
+            ;; Magit
+            (magit-diff-added-highlight   :foreground base0E)
+            (magit-diff-removed-highlight :foreground base0B)
+            (magit-diff-added             :foreground base0E)
+            (magit-diff-removed           :foreground base0B)
+            ;; Elfeed
+            (elfeed-search-tag-face       :foreground base0E)
+            (elfeed-search-feed-face      :foreground base0D)
+            (elfeed-search-date-face      :foreground base0A)
+            ;; IDO
+            (ido-first-match              :foreground base00 :background base0B)
 
-          ;; Orgmode
-          (mrb/org-todo-keyword-TODO      :foreground base08 :weight bold)
-          (mrb/org-todo-keyword-DONE      :foreground base0E :weight bold)
-          (mrb/org-todo-keyword-WAITING   :foreground base0B :weight bold)
-          (mrb/org-todo-keyword-CANCELLED :foreground base01 :weight bold)
-          (mrb/org-todo-keyword-BUY       :foreground base0C :weight bold)
-          (mrb/org-todo-keyword-HOWTO     :foreground base0A :weight bold)
-          (mrb/org-todo-keyword-INFO      :foreground base0D :weight bold)
-          (mrb/org-todo-keyword-COLLECT   :foreground base0E :weight bold)
-          (mrb/org-todo-keyword-SOLVE     :foreground base07 :weight bold)
-          (mrb/org-todo-keyword-READ      :foreground base0F :weight bold)
-          (mrb/org-todo-keyword-PLAN      :foreground base04 :weight bold)
-))
+            ;; flyspell errors/dupes look the same as flycheck-errors/warnings
+            (flyspell-incorrect           :inherit flycheck-error)
+            (flyspell-duplicate           :inherit f:foreground base00 :weight warning)
+
+            ;; Orgmode
+            (mrb/org-todo-keyword-TODO      :foreground base08 :weight bold)
+            (mrb/org-todo-keyword-DONE      :foreground base0E :weight bold)
+            (mrb/org-todo-keyword-WAITING   :foreground base0B :weight bold)
+            (mrb/org-todo-keyword-CANCELLED :foreground base01 :weight bold)
+            (mrb/org-todo-keyword-BUY       :foreground base0C :weight bold)
+            (mrb/org-todo-keyword-HOWTO     :foreground base0A :weight bold)
+            (mrb/org-todo-keyword-INFO      :foreground base0D :weight bold)
+            (mrb/org-todo-keyword-COLLECT   :foreground base0E :weight bold)
+            (mrb/org-todo-keyword-SOLVE     :foreground base07 :weight bold)
+            (mrb/org-todo-keyword-READ      :foreground base0F :weight bold)
+            (mrb/org-todo-keyword-PLAN      :foreground base04 :weight bold)))
 
     ;; Apply these adjustments in the same way that the theme is defined
     ;; FIME: these should be applied with the client-settings
@@ -521,35 +520,7 @@ starting with the =base16-nord= theme and see where this leaves me.
     (base16-set-faces 'base16-nord base16-nord-colors base16-adjustments)
 
     ;; Define variable that I can use in other sections
-    (defvar mrb/base16-colors base16-nord-colors)
-
-    ;; Define a map of facenames/keywords to theme-colorname
-    ;; FIXME: try to reuse `base16-set-faces(theme-name colors faces)`
-    ;;        for this. It is pretty similar.
-    ;; FIXME: if this is the table of all faces we should probably do this at the very end
-    (setq mrb/theme-color-map
-          '(;; Some non-faces settings
-            ("default-cursor"               . :base0B)))
-
-
-    ;; And a function to get to them
-    (defun mrb/themecolor(key)
-      "Get the theme color for `key`, which mab be some string or the name of a face"
-      (interactive)
-      (plist-get mrb/base16-colors
-                 (cdr (assoc
-                       (if (symbolp key) (symbol-name key)
-                         (if (stringp key) key))
-                       mrb/theme-color-map))))
-
-    (defun mrb/themeface(face &rest args)
-      "Map `face` onto the theme rendering. Basically a shorthand for `set-face-attribute`"
-
-      (if (facep face)
-          ;; face can be used directly
-          (apply 'set-face-attribute face nil :foreground (mrb/themecolor face) args))
-      ;; Return the color value in all cases
-      (mrb/themecolor face)))
+    (defvar mrb/base16-colors base16-nord-colors))
 #+END_SRC
 
 I enable highlighting matching parentheses in many levels
@@ -1226,7 +1197,8 @@ should be kept in sync.
 Adapt the colors of the states I use a bit:
 
 #+BEGIN_SRC emacs-lisp
-  ;; FIXME: change to themecolors
+  ;; Define face specs for our keywords, so they can be used in the
+  ;; theme adjustment like standard faces
   (defface mrb/org-todo-keyword-TODO      nil "")
   (defface mrb/org-todo-keyword-DONE      nil "")
   (defface mrb/org-todo-keyword-WAITING   nil "")
@@ -1253,9 +1225,6 @@ Adapt the colors of the states I use a bit:
     ("PLAN"      . mrb/org-todo-keyword-PLAN)
   ))
 #+END_SRC
-
-#+RESULTS:
-: ((TODO . mrb/org-todo-keyword-TODO) (DONE . mrb/org-todo-keyword-DONE) (WAITING . mrb/org-todo-keyword-WAITING) (CANCELLED . mrb/org-todo-keyword-CANCELLED) (BUY . mrb/org-todo-keyword-BUY) (HOWTO . mrb/org-todo-keyword-HOWTO) (INFO . mrb/org-todo-keyword-INFO) (COLLECT . mrb/org-todo-keyword-COLLECT) (SOLVE . mrb/org-todo-keyword-SOLVE) (READ . mrb/org-todo-keyword-READ) (PLAN . mrb/org-todo-keyword-PLAN))
 
 Make sure we keep a clean tag slate when changing tag state. This
 means that when I move to an active state, remove inactive tags; if
