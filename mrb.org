@@ -490,7 +490,7 @@ starting with the =base16-nord= theme and see where this leaves me.
 
             (show-paren-match             :foreground nil :background base01 :inherit nil :weight normal)
             ;; Set regions so we keep the normal font locking
-            (region                       :foreground nil :background base03 :inherit nil :weight normal)
+            (region                       :foreground nil :background base02 :inherit nil :weight normal)
             ;; Magit
             (magit-diff-added-highlight   :foreground base0E)
             (magit-diff-removed-highlight :foreground base0B)
@@ -505,7 +505,7 @@ starting with the =base16-nord= theme and see where this leaves me.
 
             ;; flyspell errors/dupes look the same as flycheck-errors/warnings
             (flyspell-incorrect           :inherit flycheck-error)
-            (flyspell-duplicate           :inherit f:foreground base00 :weight warning)
+            (flyspell-duplicate           :inherit flycheck-warning :foreground base00)
 
             ;; Orgmode
             (mrb/org-todo-keyword-TODO      :foreground base08 :weight bold)
