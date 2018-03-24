@@ -535,6 +535,7 @@ valid for 5 levels, not 6.
     :after base16-theme
     :init
     (setq hl-paren-colors
+          ;; FIXME: reformulate this in terms of face-attributes of outline faces
           `(,(plist-get mrb/base16-colors :base0B)
             ,(plist-get mrb/base16-colors :base0E)
             ,(plist-get mrb/base16-colors :base0C)
@@ -556,26 +557,22 @@ valid for 5 levels, not 6.
   ;; check speed consequences of this
   (setq column-number-mode t)
 
-  ;; When I am not typing, the cursor should become more visible, so I
-  ;; don't lose it.
-  (makunbound 'mrb-cursor-color)
-  (setq mrb-cursor-color "yellow")
+  ;; Modeline
+  (use-package spaceline
+    :config
+    (require 'spaceline-config)
+
+    ;; I want the cursor the same as the highlight face of the modeline
+    (setq mrb-cursor-color
+          (face-attribute 'spaceline-highlight-face :background))
+
+    (spaceline-emacs-theme))
 
   ;; Default frame properties frame position, color, etc
   (setq default-frame-alist
-        `((cursor-type . (bar . 1))
-          (cursor-color . ,mrb-cursor-color) ;; TODO: this should be redundant (.Xresources has it)
-          (height . 60)
-          (width . 100)
-  ))
-
-  (use-package cursor-chg
-    :load-path (lambda () (concat custom-package-directory "cursor-chg/"))
-    :config
-    (change-cursor-mode 0)        ; On for overwrite/read-only/input mode
-    (toggle-cursor-type-when-idle 1)   ; On when idle
-    (setq curchg-default-cursor-color mrb-cursor-color)
-    (setq curchg-default-cursor-type (quote bar\ \.\ 1)))
+        `((cursor-type . box )
+          (cursor-color . ,mrb-cursor-color)
+          (height . 60) (width . 100)))
 
   ;; Parenthesis matching
   (show-paren-mode 1)
