@@ -32,6 +32,8 @@ Source:
     (setq var "string" 'quoted :property 0 -1 +1 0.01 ))
 #+END_SRC
 
+[2018-03-24 za] Date display
+
 Orgmode:
 ** TODO Todo item
 :PROPERTIES:
