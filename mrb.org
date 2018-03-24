@@ -473,36 +473,64 @@ starting with the =base16-nord= theme and see where this leaves me.
 
     (load-theme 'base16-nord t)
 
+    ;; Define our adjustments to faces
+    (setq base16-adjustments
+        '(;; No underlining for date face in org
+          (org-date                     :underline nil)
+          ;; Make clickable things in help screens stand out
+          (button                       :foreground base0C :weight semi-bold)
+          ;; Headlines for DONE states should be less noticeable
+          (org-headline-done            :foreground base03)
+          (show-paren-match             :foreground nil :background base01 :inherit nil :weight normal)
+          ;; Set regions so we keep the normal font locking
+          (region                       :foreground nil :background base03 :inherit nil :weight normal)
+          ;; Magit
+          (magit-diff-added-highlight   :foreground base0E)
+          (magit-diff-removed-highlight :foreground base0B)
+          (magit-diff-added             :foreground base0E)
+          (magit-diff-removed           :foreground base0B)
+          ;; Elfeed
+          (elfeed-search-tag-face       :foreground base0E)
+          (elfeed-search-feed-face      :foreground base0D)
+          (elfeed-search-date-face      :foreground base0A)
+          ;; IDO
+          (ido-first-match              :foreground base00 :background base0B)
+
+          ;; flyspell errors/dupes look the same as flycheck-errors/warnings
+          (flyspell-incorrect           :inherit flycheck-error)
+          (flyspell-duplicate           :inherit f:foreground base00 :weight warning)
+
+          ;; Orgmode
+          (mrb/org-todo-keyword-TODO      :foreground base08 :weight bold)
+          (mrb/org-todo-keyword-DONE      :foreground base0E :weight bold)
+          (mrb/org-todo-keyword-WAITING   :foreground base0B :weight bold)
+          (mrb/org-todo-keyword-CANCELLED :foreground base01 :weight bold)
+          (mrb/org-todo-keyword-BUY       :foreground base0C :weight bold)
+          (mrb/org-todo-keyword-HOWTO     :foreground base0A :weight bold)
+          (mrb/org-todo-keyword-INFO      :foreground base0D :weight bold)
+          (mrb/org-todo-keyword-COLLECT   :foreground base0E :weight bold)
+          (mrb/org-todo-keyword-SOLVE     :foreground base07 :weight bold)
+          (mrb/org-todo-keyword-READ      :foreground base0F :weight bold)
+          (mrb/org-todo-keyword-PLAN      :foreground base04 :weight bold)
+))
+
+    ;; Apply these adjustments in the same way that the theme is defined
+    ;; FIME: these should be applied with the client-settings
+    ;; Add hook or include in mrb/client-settings?
+
+    (base16-set-faces 'base16-nord base16-nord-colors base16-adjustments)
+
     ;; Define variable that I can use in other sections
     (defvar mrb/base16-colors base16-nord-colors)
 
     ;; Define a map of facenames/keywords to theme-colorname
+    ;; FIXME: try to reuse `base16-set-faces(theme-name colors faces)`
+    ;;        for this. It is pretty similar.
+    ;; FIXME: if this is the table of all faces we should probably do this at the very end
     (setq mrb/theme-color-map
-          '(("button"                       . :base0C)
-            ("show-paren-match-bg"          . :base01)
-            ("region-bg"                    . :base03)
-            ("default-cursor"               . :base0B)
-            ("magit-diff-added-highlight"   . :base0E)
-            ("magit-diff-removed-highlight" . :base0B)
-            ("magit-diff-added"             . :base0E)
-            ("magit-diff-removed"           . :base0B)
-            ("org-headline-done"            . :base03)
-            ("TODO"                         . :base08)
-            ("DONE"                         . :base0E)
-            ("WAITING"                      . :base0B)
-            ("CANCELLED"                    . :base01)
-            ("BUY"                          . :base0C)
-            ("HOWTO"                        . :base0A)
-            ("INFO"                         . :base0D)
-            ("COLLECT"                      . :base0E)
-            ("SOLVE"                        . :base07)
-            ("READ"                         . :base0F)
-            ("PLAN"                         . :base04)
-            ("elfeed-search-tag-face"       . :base0E)
-            ("elfeed-search-feed-face"      . :base0D)
-            ("elfeed-search-date-face"      . :base0A)
-            ("ido-bg"                       . :base0B)
-            ("ido-first-match"              . :base00)))
+          '(;; Some non-faces settings
+            ("default-cursor"               . :base0B)))
+
 
     ;; And a function to get to them
     (defun mrb/themecolor(key)
@@ -524,18 +552,6 @@ starting with the =base16-nord= theme and see where this leaves me.
       (mrb/themecolor face)))
 #+END_SRC
 
-#+BEGIN_SRC emacs-lisp
-  ;; No underlining for date face in org
-  (set-face-attribute 'org-date nil :underline nil)
-
-  ;; Make clickable things in help screens stand out
-  (mrb/themeface 'button :weight 'semi-bold)
-
-  ;; Headline for done states less noticeable
-  (mrb/themeface 'org-headline-done)
-
-#+END_SRC
-
 I enable highlighting matching parentheses in many levels
 globally. I do not know of a situation where not knowing which
 bracket or parenthesis goes with which is not a useful thing.
@@ -547,6 +563,7 @@ valid for 5 levels, not 6.
 
 #+BEGIN_SRC emacs-lisp
   (use-package highlight-parentheses
+    :after base16-theme
     :init
     (setq hl-paren-colors
           `(,(plist-get mrb/base16-colors :base0B)
@@ -573,12 +590,12 @@ valid for 5 levels, not 6.
   ;; When I am not typing, the cursor should become more visible, so I
   ;; don't lose it.
   (makunbound 'mrb-cursor-color)
-  (setq mrb-cursor-color (mrb/themeface "default-cursor"))
+  (setq mrb-cursor-color "yellow")
 
   ;; Default frame properties frame position, color, etc
   (setq default-frame-alist
         `((cursor-type . (bar . 1))
-          (cursor-color . ,(mrb/themeface "default-cursor")) ;; TODO: this should be redundant (.Xresources has it)
+          (cursor-color . ,mrb-cursor-color) ;; TODO: this should be redundant (.Xresources has it)
           (height . 60)
           (width . 100)
   ))
@@ -588,7 +605,7 @@ valid for 5 levels, not 6.
     :config
     (change-cursor-mode 0)        ; On for overwrite/read-only/input mode
     (toggle-cursor-type-when-idle 1)   ; On when idle
-    (setq curchg-default-cursor-color (mrb/themeface "default-cursor"))
+    (setq curchg-default-cursor-color mrb-cursor-color)
     (setq curchg-default-cursor-type (quote bar\ \.\ 1)))
 
   ;; Parenthesis matching
@@ -688,15 +705,6 @@ extra care here.
     ;; just overwriting the whole section. The trick here is to specify
     ;; nil in the foreground attribute
 
-    (set-face-attribute 'show-paren-match nil
-                        :inherit nil :foreground nil
-                        :weight 'normal :background (mrb/themecolor "show-paren-match-bg"))
-
-    ;; Set regions so we keep the normal font locking
-    (set-face-attribute 'region nil
-                        :inherit nil :foreground nil
-                        :weight 'normal :background (mrb/themecolor "region-bg"))
-
     ;; Probably move this to somewhere else ?
     ;; I probably want the global mode and register exceptions
     (use-package ws-butler
@@ -760,13 +768,11 @@ consistent
 #+BEGIN_SRC emacs-lisp
     (use-package flyspell
       :config
-      ;; flyspell errors look the same as flycheck-errors
-      (set-face-attribute 'flyspell-incorrect nil :inherit 'flycheck-error)
 
       ;; flyspell-duplicate  as warnings
       ;; Do I want this at all?, seems overkill
       (setq flyspell-mark-duplications-flag nil)  ;; This does not seem to help
-      (set-face-attribute 'flyspell-duplicate nil :inherit 'flycheck-warning))
+)
 #+END_SRC
 
 Still on the wish-list:
@@ -1221,20 +1227,35 @@ Adapt the colors of the states I use a bit:
 
 #+BEGIN_SRC emacs-lisp
   ;; FIXME: change to themecolors
+  (defface mrb/org-todo-keyword-TODO      nil "")
+  (defface mrb/org-todo-keyword-DONE      nil "")
+  (defface mrb/org-todo-keyword-WAITING   nil "")
+  (defface mrb/org-todo-keyword-CANCELLED nil "")
+  (defface mrb/org-todo-keyword-BUY       nil "")
+  (defface mrb/org-todo-keyword-HOWTO     nil "")
+  (defface mrb/org-todo-keyword-INFO      nil "")
+  (defface mrb/org-todo-keyword-COLLECT   nil "")
+  (defface mrb/org-todo-keyword-SOLVE     nil "")
+  (defface mrb/org-todo-keyword-READ      nil "")
+  (defface mrb/org-todo-keyword-PLAN      nil "")
+
   (setq org-todo-keyword-faces `(
-    ("TODO"      . (:foreground ,(mrb/themeface "TODO") :weight bold))
-    ("DONE"      . (:foreground ,(mrb/themeface "DONE") :weight bold))
-    ("WAITING"   . (:foreground ,(mrb/themeface "WAITING") :weight bold))
-    ("CANCELLED" . (:foreground ,(mrb/themeface "CANCELLED")    :weight bold))
-    ("BUY"       . (:foreground ,(mrb/themeface "BUY")   :weight bold))
-    ("HOWTO"     . (:foreground ,(mrb/themeface "HOWTO")    :weight bold))
-    ("INFO"      . (:foreground ,(mrb/themeface "INFO")       :weight bold))
-    ("COLLECT"   . (:foreground ,(mrb/themeface "COLLECT")   :weight bold))
-    ("SOLVE"     . (:foreground ,(mrb/themeface "SOLVE")     :weight bold))
-    ("READ"      . (:foreground ,(mrb/themeface "READ")  :weight bold))
-    ("PLAN"      . (:foreground ,(mrb/themeface "PLAN")  :weight bold))
+    ("TODO"      . mrb/org-todo-keyword-TODO)
+    ("DONE"      . mrb/org-todo-keyword-DONE)
+    ("WAITING"   . mrb/org-todo-keyword-WAITING)
+    ("CANCELLED" . mrb/org-todo-keyword-CANCELLED)
+    ("BUY"       . mrb/org-todo-keyword-BUY)
+    ("HOWTO"     . mrb/org-todo-keyword-HOWTO)
+    ("INFO"      . mrb/org-todo-keyword-INFO)
+    ("COLLECT"   . mrb/org-todo-keyword-COLLECT)
+    ("SOLVE"     . mrb/org-todo-keyword-SOLVE)
+    ("READ"      . mrb/org-todo-keyword-READ)
+    ("PLAN"      . mrb/org-todo-keyword-PLAN)
   ))
 #+END_SRC
+
+#+RESULTS:
+: ((TODO . mrb/org-todo-keyword-TODO) (DONE . mrb/org-todo-keyword-DONE) (WAITING . mrb/org-todo-keyword-WAITING) (CANCELLED . mrb/org-todo-keyword-CANCELLED) (BUY . mrb/org-todo-keyword-BUY) (HOWTO . mrb/org-todo-keyword-HOWTO) (INFO . mrb/org-todo-keyword-INFO) (COLLECT . mrb/org-todo-keyword-COLLECT) (SOLVE . mrb/org-todo-keyword-SOLVE) (READ . mrb/org-todo-keyword-READ) (PLAN . mrb/org-todo-keyword-PLAN))
 
 Make sure we keep a clean tag slate when changing tag state. This
 means that when I move to an active state, remove inactive tags; if
@@ -2769,7 +2790,6 @@ new file.
      ido-auto-merge-work-directories-length -1)
 
      ;; Match selected with theme
-     (mrb/themeface 'ido-first-match :background (mrb/themecolor "ido-bg"))
     (ido-everywhere))
 #+END_SRC
 
@@ -2854,12 +2874,6 @@ is in use, but we'll see.
     :config
     (setq avy-style 'at-full)
     (setq avy-background t)
-    (set-face-attribute 'avy-lead-face nil
-                        :inherit isearch-lazy-highlight :background "gold" :foreground "black")
-    (set-face-attribute 'avy-lead-face-0 nil
-                        :inherit isearch-lazy-highlight :background "gold" :foreground "black")
-    (set-face-attribute 'avy-background-face nil
-                        :inherit isearch-lazy-highlight :background "black" :foreground nil)
     :bind
     ("s-j" . avy-goto-word-or-subword-1))
 #+END_SRC
@@ -3411,11 +3425,6 @@ imported my feeds from RSSyl
           elfeed-db-directory "~/dat/.elfeed")
 
     :config
-    ;; Adjust faces to themes
-    (mrb/themeface 'elfeed-search-tag-face)
-    (mrb/themeface 'elfeed-search-feed-face)
-    (mrb/themeface 'elfeed-search-date-face)
-
     (defun mrb/elfeed-search-toggle-tag(tag)
       (let ((entries (elfeed-search-selected)))
         (cl-loop for entry in entries do
@@ -3701,24 +3710,7 @@ magit, so let's begin with bringing that in.
      (fullframe magit-status magit-mode-quit-window)
 
     :config
-    (progn
-      ;; Make sure that highlighted regions in magit keep their syntax
-      ;; (set-face-attribute 'magit-diff-added-highlight nil
-      ;;                     :inherit nil
-      ;;                     :foreground nil :background mrb-bg-paren-match)
-      (set-face-attribute 'magit-diff-added-highlight nil
-                          :foreground nil :inherit nil
-                          :background (mrb/themecolor "magit-diff-added-highlight"))
-      (set-face-attribute 'magit-diff-removed-highlight nil
-                          :foreground nil :inherit nil
-                          :background (mrb/themecolor "magit-diff-removed-highlight"))
-      (set-face-attribute 'magit-diff-added nil
-                          :foreground nil :inherit nil
-                          :background (mrb/themecolor "magit-diff-added"))
-      (set-face-attribute 'magit-diff-removed nil
-                          :foreground nil :inherit nil
-                          :background (mrb/themecolor "magit-diff-removed"))
-      (setq magit-last-seen-setup-instructions "1.4.0")))
+    (setq magit-last-seen-setup-instructions "1.4.0"))
 #+END_SRC
 
 *** Commiting automatically
