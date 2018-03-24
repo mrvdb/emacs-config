@@ -473,6 +473,7 @@ starting with the =base16-nord= theme and see where this leaves me.
     (load-theme 'base16-nord t)
 
     ;; Define our adjustments to faces
+    ;; This should be the only place where we adjust our faces
     (setq base16-adjustments
           '(;; No underlining for date face in org
             (org-date                     :underline nil)
@@ -513,10 +514,7 @@ starting with the =base16-nord= theme and see where this leaves me.
             (mrb/org-todo-keyword-READ      :foreground base0F :weight bold)
             (mrb/org-todo-keyword-PLAN      :foreground base04 :weight bold)))
 
-    ;; Apply these adjustments in the same way that the theme is defined
-    ;; FIME: these should be applied with the client-settings
-    ;; Add hook or include in mrb/client-settings?
-
+    ;; Apply our adjustment using the theme function
     (base16-set-faces 'base16-nord base16-nord-colors base16-adjustments)
 
     ;; Define variable that I can use in other sections
