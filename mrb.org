@@ -727,10 +727,9 @@ Now we can start configuring flycheck
 
 #+BEGIN_SRC emacs-lisp
   (use-package flycheck
-    :init (global-flycheck-mode)
+    ;; Use popup to show flycheck message
     :ensure flycheck-pos-tip
     :config
-    (add-hook 'after-init-hook #'global-flycheck-mode)
     (with-eval-after-load 'flycheck
       (flycheck-pos-tip-mode)))
 #+END_SRC
