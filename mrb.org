@@ -472,67 +472,71 @@ I use (emacs, xterm, i3, dunst etc.) which sounds attractive. So, I'm
 starting with the =base16-nord= theme and see where this leaves me.
 
 #+BEGIN_SRC emacs-lisp
-  (use-package base16-theme
-    :config
-    ;; Do config here and finally load the theme
-    (setq base16-distinct-fringe-background nil
-          base16-highlight-mode-line 'contrast
-          base16-theme-256-color-source "terminal")
-    (load-theme 'base16-nord t)
+    (use-package base16-theme
+      :config
+      ;; Do config here and finally load the theme
+      (setq base16-distinct-fringe-background nil
+            base16-highlight-mode-line 'contrast
+            base16-theme-256-color-source "terminal")
+      (load-theme 'base16-nord t)
 
-    ;; Define our adjustments to faces
-    ;; This should be the only place where we adjust our faces
-    ;; For reference, these are the theme colors
-    ;; base00 #2e3440 base01 #3b4252 base02 #434c5e base03 #4c566a
-    ;; base04 #d8dee9 base05 #e5e9f0 base06 #eceff4
-    ;; base07 #8fbcbb base08 #88c0d0 base09 #81a1c1 base0A #5e81ac
-    ;; base0B #bf616a base0C #d08770 base0D #ebcb8b base0E #a3be8c base0F #b48ead
+      ;; Define our adjustments to faces
+      ;; This should be the only place where we adjust our faces
+      ;; For reference, these are the theme colors
+      ;; base00 #2e3440 base01 #3b4252 base02 #434c5e base03 #4c566a
+      ;; base04 #d8dee9 base05 #e5e9f0 base06 #eceff4
+      ;; base07 #8fbcbb base08 #88c0d0 base09 #81a1c1 base0A #5e81ac
+      ;; base0B #bf616a base0C #d08770 base0D #ebcb8b base0E #a3be8c base0F #b48ead
 
-    (setq base16-adjustments
-          '(;; No underlining for date face in org
-            (org-date                     :foreground base07 :underline nil)
-            ;; Make clickable things in help screens stand out
-            (button                       :foreground base0C :weight semi-bold)
-            ;; Headlines for DONE states should be less noticeable
-            (org-headline-done            :foreground base03)
+      (setq base16-adjustments
+            '(
+              ;; Make clickable things in help screens stand out
+              (button                       :foreground base0C :weight semi-bold)
 
-            (show-paren-match             :foreground nil :background base01 :inherit nil :weight normal)
-            ;; Set regions so we keep the normal font locking
-            (region                       :foreground nil :background base02 :inherit nil :weight normal)
-            ;; Magit
-            (magit-diff-added-highlight   :foreground base0E)
-            (magit-diff-removed-highlight :foreground base0B)
-            (magit-diff-added             :foreground base0E)
-            (magit-diff-removed           :foreground base0B)
-            ;; Elfeed
-            (elfeed-search-tag-face       :foreground base0E)
-            (elfeed-search-feed-face      :foreground base0D)
-            (elfeed-search-date-face      :foreground base0A)
-            ;; IDO
-            (ido-first-match              :foreground base00 :background base0B)
+              (show-paren-match             :foreground nil :background base01 :inherit nil :weight normal)
+              ;; Set regions so we keep the normal font locking
+              (region                       :foreground nil :background base02 :inherit nil :weight normal)
+              ;; Magit
+              (magit-diff-added-highlight   :foreground base0E)
+              (magit-diff-removed-highlight :foreground base0B)
+              (magit-diff-added             :foreground base0E)
+              (magit-diff-removed           :foreground base0B)
+              ;; Elfeed
+              (elfeed-search-tag-face       :foreground base0E)
+              (elfeed-search-feed-face      :foreground base0D)
+              (elfeed-search-date-face      :foreground base0A)
+              ;; IDO
+              (ido-first-match              :foreground base00 :background base0B)
 
-            ;; flyspell errors/dupes look the same as flycheck-errors/warnings
-            (flyspell-incorrect           :inherit flycheck-error)
-            (flyspell-duplicate           :inherit flycheck-warning :foreground base00)
+              ;; flyspell errors/dupes look the same as flycheck-errors/warnings
+              (flyspell-incorrect           :inherit flycheck-error)
+              (flyspell-duplicate           :inherit flycheck-warning :foreground base00)
 
-            ;; Orgmode
-            (mrb/org-todo-keyword-TODO      :foreground base08 :weight bold)
-            (mrb/org-todo-keyword-DONE      :foreground base0E :weight bold)
-            (mrb/org-todo-keyword-WAITING   :foreground base0B :weight bold)
-            (mrb/org-todo-keyword-CANCELLED :foreground base01 :weight bold)
-            (mrb/org-todo-keyword-BUY       :foreground base0C :weight bold)
-            (mrb/org-todo-keyword-HOWTO     :foreground base0A :weight bold)
-            (mrb/org-todo-keyword-INFO      :foreground base0D :weight bold)
-            (mrb/org-todo-keyword-COLLECT   :foreground base0E :weight bold)
-            (mrb/org-todo-keyword-SOLVE     :foreground base07 :weight bold)
-            (mrb/org-todo-keyword-READ      :foreground base0F :weight bold)
-            (mrb/org-todo-keyword-PLAN      :foreground base04 :weight bold)))
+              ;; Orgmode
+              (mrb/org-todo-keyword-TODO      :foreground base08 :weight bold)
+              (mrb/org-todo-keyword-DONE      :foreground base0E :weight bold)
+              (mrb/org-todo-keyword-WAITING   :foreground base0B :weight bold)
+              (mrb/org-todo-keyword-CANCELLED :foreground base01 :weight bold)
+              (mrb/org-todo-keyword-BUY       :foreground base0C :weight bold)
+              (mrb/org-todo-keyword-HOWTO     :foreground base0A :weight bold)
+              (mrb/org-todo-keyword-INFO      :foreground base0D :weight bold)
+              (mrb/org-todo-keyword-COLLECT   :foreground base0E :weight bold)
+              (mrb/org-todo-keyword-SOLVE     :foreground base07 :weight bold)
+              (mrb/org-todo-keyword-READ      :foreground base0F :weight bold)
+              (mrb/org-todo-keyword-PLAN      :foreground base04 :weight bold)
+              ;; Headlines for DONE states should be less noticeable
+              (org-headline-done              :foreground base03)
+              ;; No underlining for date face in org
+              (org-date                       :foreground base07 :underline nil)
+              ;; the default org-level-4 is the same as comment-face, i.e. not very readable
+              ;; luckily 0F is free to use
+              (org-level-4                    :foreground base0F)))
 
-    ;; Apply our adjustment using the theme function
-    (base16-set-faces 'base16-nord base16-nord-colors base16-adjustments)
+      ;; Apply our adjustment using the theme function
+      (base16-set-faces 'base16-nord base16-nord-colors base16-adjustments)
 
-    ;; Define variable that I can use in other sections
-    (defvar mrb/base16-colors base16-nord-colors))
+      ;; Define variable that I can use in other sections
+      (defvar mrb/base16-colors base16-nord-colors))
 #+END_SRC
 
 I enable highlighting matching parentheses in many levels
@@ -1131,15 +1135,17 @@ The =org-capture-pop-frame= package makes sure all captures are in separate
 frames.
 
 #+BEGIN_SRC emacs-lisp
-(use-package org-capture :ensure nil)
-(use-package org-capture-pop-frame
-  :config
-  (setq ocpf-frame-parameters
-   '((name . "capture")
-     (width . 115)
-     (height . 15)
-     (tool-bar-lines . 0)
-     (menu-bar-lines . 0))))
+  (use-package org-capture
+    :diminish
+    :ensure nil)
+  (use-package org-capture-pop-frame
+    :config
+    (setq ocpf-frame-parameters
+     '((name . "capture")
+       (width . 115)
+       (height . 15)
+       (tool-bar-lines . 0)
+       (menu-bar-lines . 0))))
 #+END_SRC
 
 Here are the templates used for them.
