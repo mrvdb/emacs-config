@@ -292,7 +292,11 @@ section.
   ; Use auto revert mode globally
   ; This is save because emacs tracks if the file is saved in the editting buffer
   ; and if so, it will not revert to the saved file.
-  (global-auto-revert-mode t)
+  (use-package autorevert
+    :diminish auto-revert-mode
+    :ensure nil
+    :config
+    (global-auto-revert-mode t))
   ;; Also for dired
   (setq global-auto-revert-non-file-buffers t)
 
@@ -2810,7 +2814,7 @@ keys and do specific actions. I use the =selected= package for that.
 
 #+BEGIN_SRC emacs-lisp
   (use-package selected
-    :diminish
+    :diminish selected-minor-mode
     :commands selected-minor-mode
     :bind (:map selected-keymap
                 ;; For all modes
@@ -3719,7 +3723,8 @@ autocommit to run I can use a file local variable to disable the hook
 (or the minor mode)
 
 #+BEGIN_SRC emacs-lisp
-(use-package git-auto-commit-mode )
+  (use-package git-auto-commit-mode
+    :diminish)
 #+END_SRC
 *** Misc
 #+BEGIN_SRC emacs-lisp
