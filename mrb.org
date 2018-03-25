@@ -1087,6 +1087,7 @@ function.
      org-special-ctrl-a/e t
      org-stuck-projects (quote ("-inactive/TODO" ("TODO" "WAITING") nil ""))
      org-track-ordered-property-with-tag nil
+     org-startup-indented t
      )
 
     (use-package org-datetree :ensure nil)        ;; Allows for archiving and refiling in a date organised tree
