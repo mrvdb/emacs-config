@@ -166,7 +166,11 @@ default gnu augmented with the melpa repository.
   ;; Some leftovers I need to move to a more logical place
   (use-package fullframe  )    ;; show results of certain commands fullframe
   (use-package guide-key )     ;; Not sure what this does
-  (use-package rainbow-mode )  ;; show colornumbers/names as colors
+
+  ;; Show color of #RRBBGG texts
+  (use-package rainbow-mode
+    :diminish)
+
   (use-package edit-server )
 
   (use-package fixed-point-completion
@@ -538,6 +542,7 @@ valid for 5 levels, not 6.
 
 #+BEGIN_SRC emacs-lisp
   (use-package highlight-parentheses
+    :diminish
     :after base16-theme
     :init
     (setq hl-paren-colors
@@ -680,6 +685,7 @@ extra care here.
     ;; Probably move this to somewhere else ?
     ;; I probably want the global mode and register exceptions
     (use-package ws-butler
+      :diminish
       :init
       (ws-butler-global-mode))
 
@@ -2110,6 +2116,7 @@ menu with the combinations of keys that can follow it.
 #+BEGIN_SRC emacs-lisp
 ; which keys shows menu with completions of prefix-key
 (use-package which-key
+  :diminish
   :config
   (setq which-key-idle-delay 2.0)
   (which-key-mode))
@@ -2674,6 +2681,7 @@ so I disable that and when the popup is there, don't require a match.
 
 #+BEGIN_SRC emacs-lisp
   (use-package company
+    :diminish
     :bind
     (:map company-active-map
           ("C-n" . company-select-next)
@@ -2781,6 +2789,7 @@ I've found none applicable yet.
 
 #+BEGIN_SRC emacs-lisp
 (use-package wrap-region
+  :diminish
   :config
   (wrap-region-global-mode 1))
 ;; (add-to-list 'wrap-region-except-modes 'conflicting-mode)
@@ -2801,6 +2810,7 @@ keys and do specific actions. I use the =selected= package for that.
 
 #+BEGIN_SRC emacs-lisp
   (use-package selected
+    :diminish
     :commands selected-minor-mode
     :bind (:map selected-keymap
                 ;; For all modes
