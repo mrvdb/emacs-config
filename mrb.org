@@ -1772,6 +1772,22 @@ is a better fit.
     org-crypt-disable-auto-save t))
 #+END_SRC
 
+Particularly in journaling, but also in org-mode in general I want to
+be able to quickly insert screenshots. Rather, images in general but
+90% of my usecase is really screenshots.
+
+There's a package =org-attach-screenshot= which matches my usecase 99%
+so let's use that
+
+#+BEGIN_SRC emacs-lisp
+  (use-package org-attach-screenshot
+    :bind (("C-c i" . org-attach-screenshot)))
+#+END_SRC
+
+The 1% I was referring to above is that the original package
+exclusively supports org-mode. I patched it, which was trivial to
+support org-mode and all its derived modes. (org-journal in my case)
+
 ** Old configuration
 Below is what was contained in the old configuration. I will slowly
 migrate this into more literal sections
