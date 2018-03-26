@@ -1,4 +1,4 @@
-#+SETUPFILE: "~/dat/org/etc/org-config.org"
+#+SETUPFILE: "~/.emacs.d/org-config.org"
 #+TITLE: Emacs configuration
 #+DESCRIPTION: An org-babel based emacs configuration
 #+LANGUAGE:  en
@@ -58,11 +58,6 @@ And edit the file obviously.
 #+BEGIN_SRC sh :exports code :tangle ~/bin/edit :shebang #!/bin/bash
   #set -x
 
-  # This is an improved version of my edit script. The original one is
-  # still available as edit.old. This one does not use any window
-  # manager trickery to see if the daemon is already there. This one
-  # just starts it if it is not already there.
-  #
   # This script should provide the following functionality:
   # - start emacs if it hasn't already started
   # - open a frame if emacs is there, but no frames are visible yet
@@ -95,17 +90,17 @@ And edit the file obviously.
   if [ $WEARE == "edit" ]; then
       XARGS=$XARGS' --no-wait'
   fi
-  EMACSCLIENT="`which emacsclient` $XARGS"
+  EC="`which emacsclient` $XARGS"
 
   # Number of current visible frames,
   # Emacs daemon always has a visible frame called F1 which is erm, not visible.
   visible_frames() {
-      $EMACSCLIENT --alternate-editor="" --eval '(length (visible-frame-list))' 2>/dev/null
+      $EC --alternate-editor="" --eval '(length (visible-frame-list))' 2>/dev/null
   }
 
   # Change the focus to emacs
   change_focus() {
-      $EMACSCLIENT --eval "(select-frame-set-input-focus (selected-frame))" > /dev/null
+      $EC --eval "(select-frame-set-input-focus (selected-frame))" > /dev/null
   }
 
   # Editting stdin, part 1: save the input to a file
@@ -128,18 +123,14 @@ And edit the file obviously.
   # This will start a server if not running
   test "$(visible_frames)" -eq "1" && change_focus
 
-  XARGS=$@
-  if [ "X$XARGS" == "X" ]; then
-      XARGS='~/untitled'
-  fi
   if [ "$(visible_frames)" -lt  "2" ]; then
       # need to create a frame
       # -c $@ with no args just opens the scratch buffer
-      $EMACSCLIENT --create-frame "$XARGS" && change_focus
+       $EC --create-frame "$@" && change_focus
   else
       # there is already a visible frame besides the daemon, change focus
       # -n $@ errors if there are no args
-      test  "$#" -ne "0" && $EMACSCLIENT "$XARGS"
+      test  "$#" -ne "0" && $EC "$@"
   fi
 #+END_SRC
 
@@ -149,58 +140,41 @@ Package handling, do this early so emacs knows where to find things.
 First of all, define the package archives I need; for now, just the
 default gnu augmented with the melpa repository.
 #+BEGIN_SRC emacs-lisp
-  (require 'package)
-  (package-initialize)
-
   (add-to-list 'package-archives
                '("melpa" . "http://melpa.org/packages/") t)
   (add-to-list 'package-archives
                '("melpa-stable" . "https://stable.melpa.org/packages/") t)
   (add-to-list 'package-archives
                '("gnu" . "http://elpa.gnu.org/packages/") t)
-  (add-to-list 'package-archives
-	         '("org" . "http://orgmode.org/elpa/") t)
 
-  ;; Bootstrap use-package
-  (unless (package-installed-p 'use-package)
-    (package-refresh-contents)
-    (package-install 'use-package))
 
-  ;; Default is to have elpa provide the package
-  (setq use-package-always-ensure t)
-  (setq use-package-verbose t)
-  ;; If running as daemon, just load shite
-  (if (daemonp)
-    (setq use-package-always-demand t))
+  ;; Use-package is certain to be installed (init.el) does it.
+  (use-package use-package
+    :config
+    ;; Default is to have elpa provide the package
+    (setq use-package-always-ensure t)
+    (setq use-package-verbose t)
+    ;; If running as daemon, just load shite
+    (if (daemonp)
+        (setq use-package-always-demand t))
 
-  ;; Location where I keep custom packages
-  ;; This is a function because :load-path in use-package expects a string,symbol or function
-  ;; Does this actually work? It didn't for orgmode
-  (defun custom-package-location (subpath)
-    (concat "/home/mrb/dat/src/emacs/packages/" subpath))
+    ;; Location where I keep custom packages
+    (setq custom-package-directory (concat emacs-directory "lisp/")))
 
   (use-package cl-lib )
 
+  ;; Some leftovers I need to move to a more logical place
   (use-package fullframe  )    ;; show results of certain commands fullframe
-
   (use-package guide-key )     ;; Not sure what this does
 
-  (use-package hideshow-org )  ;; Move to org?
-  (use-package hideshowvis )
+  ;; Show color of #RRBBGG texts
+  (use-package rainbow-mode
+    :diminish)
 
-  (use-package json-rpc )
-  (use-package litable  )      ;; Real time evaluation (move to develop?)
-  (use-package mark-multiple )
-
-  (use-package paredit  )
-  (use-package rainbow-mode )  ;; show colornumbers/names as colors
   (use-package edit-server )
 
   (use-package fixed-point-completion
-    :load-path (lambda () (list (custom-package-location  "fixed-point-completion/")))
-    :ensure nil)
-
-  (use-package ghc )           ;; move to haskell?
+    :load-path (lambda () (concat custom-package-directory "fixed-point-completion/")))
 #+END_SRC
 
 * Personal information
@@ -218,11 +192,10 @@ document. Most of the variables I just made up, but some are used in
 other places too.
 
 #+BEGIN_SRC emacs-lisp
-  (setq user-full-name    "Marcel van der Boom")
-  (setq user-mail-address "marcel@hsdev.com")
-  (setq user-domain       "hsdev.com")
-  (setq user-organisation "HS-Development BV")
-  (setq user-xmpp-account (concat user-mail-address "/" system-name))
+  (setq user-full-name       "Marcel van der Boom")
+  (setq user-mail-address    "marcel@hsdev.com")
+  (setq user-domain          "hsdev.com")
+  (setq user-organisation    "HS-Development BV")
   (setq user-gpg-encrypt-key "0x235E5C8CF5E8DFFB")
 #+END_SRC
 
@@ -249,10 +222,11 @@ i.e. authinfo.gpg using public key encryption aimed at my key.
   ;; Use only authinfo.gpg for password storage
   (use-package auth-password-store
     :init
-    (auth-pass-enable))
-  ;; Make sure it's the only mechanism
-  (setq auth-sources '(password-store))
-  (setq auth-source-gpg-encrypt-to (list user-mail-address))
+    (auth-pass-enable)
+    :config
+    ;; Make sure it's the only mechanism
+    (setq auth-sources '(password-store))
+    (setq auth-source-gpg-encrypt-to (list user-mail-address)))
 #+END_SRC
 
 ** Encrypting information
@@ -295,7 +269,7 @@ section.
    delete-by-moving-to-trash t
 
    ; use clipboard
-   x-select-enable-clipboard t
+   select-enable-clipboard t
 
    display-warning-minimum-level 'error
    large-file-warning-threshold nil
@@ -308,6 +282,8 @@ section.
    complex-buffers-menu-p t
    next-line-add-newlines nil
    kill-whole-line t
+
+   auto-window-vscroll nil
   )
 
   ;; Only require to type 'y' or 'n' instead of 'yes' or 'no' when prompted
@@ -316,7 +292,11 @@ section.
   ; Use auto revert mode globally
   ; This is save because emacs tracks if the file is saved in the editting buffer
   ; and if so, it will not revert to the saved file.
-  (global-auto-revert-mode t)
+  (use-package autorevert
+    :diminish auto-revert-mode
+    :ensure nil
+    :config
+    (global-auto-revert-mode t))
   ;; Also for dired
   (setq global-auto-revert-non-file-buffers t)
 
@@ -344,14 +324,38 @@ done with them if possible
 #+BEGIN_SRC emacs-lisp
   (use-package sudo-save
     :ensure nil
-    :load-path "~/dat/src/emacs/packages/sudo-save/")
+    :load-path (lambda () (concat custom-package-directory "sudo-save/")))
 #+END_SRC
 
 Using pdf-tools for PDF handling
 #+BEGIN_SRC emacs-lisp
   (use-package pdf-tools
-    :init
-    (pdf-tools-install))
+   :pin manual ;; manually update
+   :after (pdf-annot)
+   :bind (:map pdf-view-mode-map
+          ("h"   . 'pdf-annot-add-highlight-markup-annotation)
+          ("t"   . 'pdf-annot-add-text-annotation)
+          ("D"   . 'pdf-annot-delete)
+          ("C-s" . 'isearch-forward)
+          :map pdf-annot-edit-contents-minor-mode-map
+          ("<return>"   . 'pdf-annot-edit-contents-commit)
+          ("<S-return>" .  'newline))
+
+   :config
+   ;; All this came from http://pragmaticemacs.com/emacs/even-more-pdf-tools-tweaks/
+
+   ;; open pdfs scaled to fit page
+   (setq-default pdf-view-display-size 'fit-page)
+   ;; automatically annotate highlights
+   (setq pdf-annot-activate-created-annotations t)
+
+   ;; turn off cua so copy works
+   (add-hook 'pdf-view-mode-hook (lambda () (cua-mode 0)))
+   ;; more fine-grained zooming
+   (setq pdf-view-resize-factor 1.1))
+  ;; Activate it
+  ;; Why can't this be inside the use-package clause?
+  (pdf-tools-install)
 #+END_SRC
 * Internationalisation and multi-language features
 If anything multi-language should work, UTF-8 encoding is a must, so
@@ -394,26 +398,26 @@ based on a copy of latin-ltx.el
 
 #+BEGIN_SRC emacs-lisp
   ;; Register a new input method
-  (register-input-method
-   "MyTeX" "UTF-8" 'quail-use-package
-   "\\" "Personalized TeX input method"
-   "~/.emacs.d/mytex-inputmethod")
+  ;; (register-input-method
+  ;;  "MyTeX" "UTF-8" 'quail-use-package
+  ;;  "\\" "Personalized TeX input method"
+  ;;  "~/.emacs.d/mytex-inputmethod")
 
-  (defun mrb/set-input-method()
-    (interactive)
-    (setq default-input-method "MyTeX")
-    ;; Toggle only if it not active yet
-    (if (not current-input-method)
-        (toggle-input-method)))
+  ;; (defun mrb/set-input-method()
+  ;;   (interactive)
+  ;;   (setq default-input-method "MyTeX")
+  ;;   ;; Toggle only if it not active yet
+  ;;   (if (not current-input-method)
+  ;;       (toggle-input-method)))
 
-  (add-hook 'set-language-environment-hook 'mrb/set-input-method)
-  ;; And now we can set it
-  (set-language-environment "UTF-8")
+  ;; (add-hook 'set-language-environment-hook 'mrb/set-input-method)
+  ;; ;; And now we can set it
+  ;; (set-language-environment "UTF-8")
 
   ;; So we have it active at this point, but for new buffers it's still
   ;; not active, let's do that for the most common modes I use
   ;; FIXME: this works ok-ish, but is not a very clean solution I think.
-  (add-hook 'text-mode-hook 'mrb/set-input-method)
+  ;;(add-hook 'text-mode-hook 'mrb/set-input-method)
   ;; Orgmode is derived from outline-mode -> text-mode so this should already work.
 #+END_SRC
 
@@ -456,51 +460,86 @@ I generally use dark backgrounds, so let's tell Emacs that.
 (setq-default frame-background-mode 'dark)
 #+END_SRC
 
-Set the zenburn theme, slightly corrected for a darker
-background color. The default one is too light in daylight conditions.
+I'm moving to the [[https://github.com/arcticicestudio/nord][Nord color palette]]. This palette defines 16 colors.
+
+There is a base16 theme which uses exactly these colors and there are
+varieties which use the 16 colors and some derivatives of it.
+
+Although I think the 16 color system is a bit simplistic and, for
+emacs at least, I will need to customize more later on, the main lure
+of this system is that I can use the same set for many of my programs
+I use (emacs, xterm, i3, dunst etc.) which sounds attractive. So, I'm
+starting with the =base16-nord= theme and see where this leaves me.
 
 #+BEGIN_SRC emacs-lisp
-  (use-package zenburn-theme
-    :config
-    (load-theme 'zenburn))
+    (use-package base16-theme
+      :config
+      ;; Do config here and finally load the theme
+      (setq base16-distinct-fringe-background nil
+            base16-highlight-mode-line 'contrast
+            base16-theme-256-color-source "terminal")
+      (load-theme 'base16-nord t)
+
+      ;; Define our adjustments to faces
+      ;; This should be the only place where we adjust our faces
+      ;; For reference, these are the theme colors
+      ;; base00 #2e3440 base01 #3b4252 base02 #434c5e base03 #4c566a
+      ;; base04 #d8dee9 base05 #e5e9f0 base06 #eceff4
+      ;; base07 #8fbcbb base08 #88c0d0 base09 #81a1c1 base0A #5e81ac
+      ;; base0B #bf616a base0C #d08770 base0D #ebcb8b base0E #a3be8c base0F #b48ead
+
+      (setq base16-adjustments
+            '(
+              ;; Make clickable things in help screens stand out
+              (button                       :foreground base0C :weight semi-bold)
+
+              (show-paren-match             :foreground nil :background base01 :inherit nil :weight normal)
+              ;; Set regions so we keep the normal font locking
+              (region                       :foreground nil :background base02 :inherit nil :weight normal)
+              ;; Magit
+              (magit-diff-added-highlight   :foreground base0E)
+              (magit-diff-removed-highlight :foreground base0B)
+              (magit-diff-added             :foreground base0E)
+              (magit-diff-removed           :foreground base0B)
+              ;; Elfeed
+              (elfeed-search-tag-face       :foreground base0E)
+              (elfeed-search-feed-face      :foreground base0D)
+              (elfeed-search-date-face      :foreground base0A)
+              ;; IDO
+              (ido-first-match              :foreground base00 :background base0B)
+
+              ;; flyspell errors/dupes look the same as flycheck-errors/warnings
+              (flyspell-incorrect           :inherit flycheck-error)
+              (flyspell-duplicate           :inherit flycheck-warning :foreground base00)
+
+              ;; Orgmode
+              (mrb/org-todo-keyword-TODO      :foreground base08 :weight bold)
+              (mrb/org-todo-keyword-DONE      :foreground base0E :weight bold)
+              (mrb/org-todo-keyword-WAITING   :foreground base0B :weight bold)
+              (mrb/org-todo-keyword-CANCELLED :foreground base01 :weight bold)
+              (mrb/org-todo-keyword-BUY       :foreground base0C :weight bold)
+              (mrb/org-todo-keyword-HOWTO     :foreground base0A :weight bold)
+              (mrb/org-todo-keyword-INFO      :foreground base0D :weight bold)
+              (mrb/org-todo-keyword-COLLECT   :foreground base0E :weight bold)
+              (mrb/org-todo-keyword-SOLVE     :foreground base07 :weight bold)
+              (mrb/org-todo-keyword-READ      :foreground base0F :weight bold)
+              (mrb/org-todo-keyword-PLAN      :foreground base04 :weight bold)
+              ;; Headlines for DONE states should be less noticeable
+              (org-headline-done              :foreground base03)
+              ;; No underlining for date face in org
+              (org-date                       :foreground base07 :underline nil)
+              ;; the default org-level-4 is the same as comment-face, i.e. not very readable
+              ;; luckily 0F is free to use
+              (org-level-4                    :foreground base0F)))
+
+      ;; Apply our adjustment using the theme function
+      (base16-set-faces 'base16-nord base16-nord-colors base16-adjustments)
+
+      ;; Define variable that I can use in other sections
+      (defvar mrb/base16-colors base16-nord-colors))
 #+END_SRC
 
-The zenburn theme does not fit for everything so I have a number of
-corrections. I do it like this because zenburn is more complete than
-ujelly and otherwise I'd have a large set of faces defined in a wrong
-color.
-
-First, the default background of zenburn is to wooshy for me and I
-like the purple background that Ubuntu uses for the terminal. This
-happens to mix rather well with the other Zenburn colors, so I'm using
-that. The actual config for this is in the custom-set-faces section of
-my =custom.el= file which I found to be the most reliable for the
-default settings.
-
-
-#+BEGIN_SRC emacs-lisp
-  ;; Zenburn background is too light
-  (set-face-attribute 'default nil :background "gray14")
-
-  ;; Zenburn underlines date face in org, no go
-  (set-face-attribute 'org-date nil :underline nil)
-
-  ;; Adjust the faces for the modeline
-  (set-face-attribute 'mode-line nil :foreground "white" :background "grey40" :box nil)
-  (set-face-attribute 'mode-line-inactive nil :box nil :underline nil :overline "grey40")
-
-  (set-face-attribute 'isearch nil :background "sea green" :foreground "black")
-
-
-  (set-face-attribute 'lazy-highlight nil :inherit isearch-lazy-highlight
-                      :background "black" :foreground "tomato")
-
-  ;; Set the face for the fring to have the normal backbround.
-  (set-face-attribute 'fringe nil :background (face-attribute 'default :background)
-                      :foreground "light goldenrod")
-#+END_SRC
-
-I enable hightlighting matching parentheses in many levels
+I enable highlighting matching parentheses in many levels
 globally. I do not know of a situation where not knowing which
 bracket or parenthesis goes with which is not a useful thing.
 
@@ -510,20 +549,25 @@ used. The last entry here does not get highlighted, so my config is
 valid for 5 levels, not 6.
 
 #+BEGIN_SRC emacs-lisp
-(setq hl-paren-colors (quote ("firebrick" "lightgreen" "orange" "cyan" "yellow" "blue")))
-#+END_SRC
-
-And enable the minor mode globally.
-
-#+BEGIN_SRC emacs-lisp
   (use-package highlight-parentheses
-     :config
-     (define-globalized-minor-mode global-highlight-parentheses-mode
-       highlight-parentheses-mode
-       (lambda ()
-         (highlight-parentheses-mode t)))
-     (global-highlight-parentheses-mode t)
-  )
+    :diminish
+    :after base16-theme
+    :init
+    (setq hl-paren-colors
+          ;; FIXME: reformulate this in terms of face-attributes of outline faces
+          `(,(plist-get mrb/base16-colors :base0B)
+            ,(plist-get mrb/base16-colors :base0E)
+            ,(plist-get mrb/base16-colors :base0C)
+            ,(plist-get mrb/base16-colors :base0F)
+            ,(plist-get mrb/base16-colors :base0D)
+            ,(plist-get mrb/base16-colors :base0A)))
+    :config
+    (define-globalized-minor-mode global-highlight-parentheses-mode
+      highlight-parentheses-mode
+      (lambda ()
+        (highlight-parentheses-mode t)))
+    (global-highlight-parentheses-mode t))
+
   ;; no splash screen
   (setq inhibit-startup-screen  t)
   (setq inhibit-startup-message t)
@@ -532,37 +576,27 @@ And enable the minor mode globally.
   ;; check speed consequences of this
   (setq column-number-mode t)
 
-  ;; When I am not typing, the cursor should become more visible, so I
-  ;; don't lose it.
-  ;;(makunbound 'mrb-cursor-color)
-  (setq mrb-cursor-color "springgreen")
+  ;; Modeline
+  (use-package spaceline
+    :config
+    (require 'spaceline-config)
+
+    ;; I want the cursor the same as the highlight face of the modeline
+    (setq mrb-cursor-color
+          (face-attribute 'spaceline-highlight-face :background))
+
+    (spaceline-emacs-theme))
 
   ;; Default frame properties frame position, color, etc
   (setq default-frame-alist
-        '((cursor-type . (bar . 1))
-          (cursor-color . "springgreen") ;; TODO: this should be redundant (.Xresources has it)
-          (height . 60)
-          (width . 100)
-  ))
-
-  (use-package cursor-chg
-    :config
-    (progn
-      (change-cursor-mode 0)        ; On for overwrite/read-only/input mode
-      (toggle-cursor-type-when-idle 1)   ; On when idle
-      (setq curchg-default-cursor-color mrb-cursor-color)
-      (setq curchg-default-cursor-type (quote bar\ \.\ 1))))
-
+        `((cursor-type . box )
+          (cursor-color . ,mrb-cursor-color)
+          (height . 60) (width . 100)))
 
   ;; Parenthesis matching
   (show-paren-mode 1)
   (setq show-paren-style (quote expression))
   (setq show-paren-delay 0)
-
-  ;; variables for the hightlighting of regions
-  (defvar mrb-bg-paren-match "gray22")
-  (defvar mrb-bg-region "gray35")
-
 
   ;; Defer fontification a little bit, so we could gain a bit in scroll speed
   (setq jit-lock-defer-time 0.02)
@@ -626,29 +660,6 @@ buffer, which is a step closer to what i want.
 Now, the modes that want to use this, should enable adaptive-wrap
 minor mode.
 
-#+BEGIN_SRC emacs-lisp
-  (defun mrb/jabber-chat-mode-hook ()
-    "Function that collects things to do when a chat-buffer is openend"
-
-    ;; First, set the adaptive wrap extra indent to skip the '[HH:MM] ' string, i.e. 9 places
-    (setq adaptive-wrap-extra-indent 8)
-
-    ;; and enable the minor mode
-    (adaptive-wrap-prefix-mode 1)
-
-    ;; And now we can happily stop truncating lines and show continuation lines
-    (setq truncate-lines nil)
-
-    ;; Make our lines nicer and break at word boundaries
-    (visual-line-mode 1)
-
-    ;; Make the system stuff a little less intrusive
-    (set-face-attribute 'jabber-chat-prompt-system nil :foreground "dark gray" :weight 'bold))
-
-  (add-hook 'jabber-chat-mode-hook 'mrb/jabber-chat-mode-hook)
-
-#+END_SRC
-
 ** Client dependent settings
 Because most of my usage involves having a long lasting emacs daemon,
 some settings only come into scope once a client connects to that
@@ -662,7 +673,7 @@ from external or, more importantly Magit) will try to run this code
 and magit will fail if there's an error in the next section. Take
 extra care here.
 #+BEGIN_SRC emacs-lisp
-  (defun mrb/run-client-settings()
+  (defun mrb/run-client-settings(&optional args)
     (interactive)
 
     (message "Running client settings which server may not have applied")
@@ -679,37 +690,82 @@ extra care here.
     ;; just overwriting the whole section. The trick here is to specify
     ;; nil in the foreground attribute
 
-    (set-face-attribute 'show-paren-match nil
-                        :inherit nil :foreground nil
-                        :weight 'normal :background mrb-bg-paren-match)
-
-
-    ;; Set regions so we keep the normal font locking
-    (set-face-attribute 'region nil
-                        :inherit nil :foreground nil
-                        :weight 'normal :background mrb-bg-region)
-
     ;; Probably move this to somewhere else ?
+    ;; I probably want the global mode and register exceptions
     (use-package ws-butler
+      :diminish
       :init
-      (progn
-        (add-hook 'lisp-mode-hook         'ws-butler-mode)
-        (add-hook 'emacs-lisp-mode-hook   'ws-butler-mode)
-        (add-hook 'python-mode-hook       'ws-butler-mode)
-        (add-hook 'org-mode-hook          'ws-butler-mode)
-        (add-hook 'nxml-mode-hook         'ws-butler-mode)))
+      (ws-butler-global-mode))
 
     (mrb/unicode-font-corrections))
 
-
-  ;; This seems to work if we start up emacs using filename on cli and
-  ;; server was not running yet. It does however not work if we just
-  ;; startup emacs (through my edit script) without a filename on the cli
-  (add-hook 'server-visit-hook 'mrb/run-client-settings)
+  ;; Run our client settings after we make a frame This is probably
+  ;; overkill to do on every frame, but it covers the situation where
+  ;; `server-visit-hook` won't work because we started emacs without a
+  ;; file. This config covers all situations.
+  (add-hook 'after-make-frame-functions 'mrb/run-client-settings)
 
   ;; And we need to run those settings *now* too, when we are not in server mode
   (mrb/run-client-settings)
 #+END_SRC
+** Context dependent visualisation
+Next to the information registered in the theme which controls the
+overall look and feel, there is additional visualisation which depend
+on context dependent factors, such as:
+
+- the user spells a word wrong
+- the syntax of a certain phrase is wrong grammatically, depending on
+  what language the user is writing in
+- the status of a certain region is changing, depdendent on certain
+  rules
+
+*** Flycheck
+Flycheck is a syntax checking package which seems to have better
+support than flymake, which is built-in. I've no configuration for
+flymake specifically, but some packages enable it automatically (elpy
+for example). Where applicable, I gather the necessary disable actions
+here first.
+
+#+BEGIN_SRC emacs-lisp
+  ;; Remove flymake from elpy configuration
+  ;;(delete 'elpy-module-flymake elpy-modules)
+#+END_SRC
+
+Now we can start configuring flycheck
+
+#+BEGIN_SRC emacs-lisp
+  (use-package flycheck
+    ;; Use popup to show flycheck message
+    :ensure flycheck-pos-tip
+    :config
+    (with-eval-after-load 'flycheck
+      (flycheck-pos-tip-mode)))
+#+END_SRC
+
+Currently actively configured are:
+- javscript :: eslint with a config file
+-
+
+Flyspell is similar to flycheck but for text languages. I'm setting
+some of the flyspell faces to the flycheck faces so they are
+consistent
+
+#+BEGIN_SRC emacs-lisp
+    (use-package flyspell
+      :config
+
+      ;; flyspell-duplicate  as warnings
+      ;; Do I want this at all?, seems overkill
+      (setq flyspell-mark-duplications-flag nil)  ;; This does not seem to help
+)
+#+END_SRC
+
+Still on the wish-list:
+- activate flyspell automatically for all text-modes?
+- language detection (English and Dutch mainly)
+- check for language pythons, which was troublesome before
+- evaluate usage in org source blocks (many checks do not apply)
+
 * Buffers and files
 How do I deal with all those buffers?
 
@@ -748,7 +804,7 @@ warrants this (for example if I think going back to an earlier version
 is a likely event).
 
 #+BEGIN_SRC emacs-lisp
-  (defconst mrb/save-idle-time 30
+  (defconst mrb/save-idle-time 15
     "Time emacs needs to be idle to trigger the save idle timer")
 
   ;; This function does the actual useful thing
@@ -758,8 +814,8 @@ is a likely event).
 
     ; FIXME: this messes up my journalling settings where autosave
     ;        is explicitly
-    ;(message "save-timer ran out, saving all orgmode files")
-    ;(org-save-all-org-buffers)
+    (message "save-timer ran out, saving all orgmode files")
+    (org-save-all-org-buffers)
 )
 
   ;; Activate the timer
@@ -772,6 +828,8 @@ Also, save the location in files between sessions.
 #+BEGIN_SRC emacs-lisp
   ;; Minibuffer prompt is a prompt, don't enter it as text.
   (setq minibuffer-prompt-properties (quote (read-only t point-entered minibuffer-avoid-prompt face minibuffer-prompt)))
+  ;; Don't echo keystrokes in the minibuffer, prefix will be hinted on after 2 seconds or so.
+  (setq echo-keystrokes 0)
 
   ;; Save places in buffers between sessions
   (use-package saveplace
@@ -842,7 +900,7 @@ on a line which is commented out in the proper syntax for that mode.
     (interactive)
     (let ((m (symbol-name (buffer-majormode))))
       (save-excursion
-        (beginning-of-buffer)
+        (goto-char (point-min))
         (insert "-*- mode:"
                 (substring m 0 (string-match "-mode" m))
                 " -*-")
@@ -850,11 +908,6 @@ on a line which is commented out in the proper syntax for that mode.
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
-  (use-package flycheck
-    :config
-
-    ;; Enable it everywhere until further notice
-    (add-hook 'after-init-hook #'global-flycheck-mode))
 
   ;; Extension mappings for several modes
   (use-package markdown-mode
@@ -871,7 +924,7 @@ on a line which is commented out in the proper syntax for that mode.
 
   (use-package css-mode
     :commands (css-mode)
-    :mode "\\.css\\'"
+    :mode "\\.css|\\.mss\\'"
     :config
     (add-hook 'css-mode-hook 'rainbow-mode))
 
@@ -884,7 +937,7 @@ on a line which is commented out in the proper syntax for that mode.
 
   (use-package yaml-mode
     :commands (yaml-mode)
-    :mode "\\.yml\\'")
+    :mode "\\.yml|\\.mml\\'")
 
   (use-package eimp
     :config
@@ -913,6 +966,11 @@ on a line which is commented out in the proper syntax for that mode.
     :commands (sh-mode)
     :mode "\\.zsh\\'")
 
+  (use-package conf-mode
+    :ensure nil
+    :config
+    (add-hook 'conf-mode-hook 'rainbow-mode))
+
   ;; Open scratch buffer by default in the mode we are in at the moment
   ;; with C-u prefix a mode will be asked to use
   (use-package scratch)
@@ -934,8 +992,6 @@ on a line which is commented out in the proper syntax for that mode.
       (the_mode
        (list 'nxml-mode))
     (add-hook the_mode 'turn-off-auto-fill))
-
-  (add-hook 'conf-xdefaults-mode-hook 'rainbow-mode)
 #+END_SRC
 * Org-mode
 Orgmode configuraton is probably the largest part of my Emacs
@@ -947,23 +1003,100 @@ Basically where to find stuff and what to load.
 We do not have to load the main orgmode location, because we already
 did that on the main initialisation to get org-babel started.
 
-#+BEGIN_SRC emacs-lisp
-   (add-to-list 'load-path "~/dat/src/emacs/packages/org-mode/contrib/babel/langs/")
-#+END_SRC
-
 Also make sure we never load org from internal, this can happen when
 functions were defined in the included org version and not anymore in
 newer versions. We want an error, not a silent load of the older
 function.
 
+#+COMMENT This duplicates the one in init.el, problems?
 #+BEGIN_SRC emacs-lisp
   (use-package org
-    :load-path "~/dat/src/emacs/packages/org-mode/lisp/"
     :ensure nil
     :pin org
     :mode ("\\.txt\\'" "\\.org\'")
+    :after (org-capture)
+    :bind (("C-c g" . 'mrb/gtd)
+           ("C-c a"   . 'org-agenda)
+           ("C-c b"   . 'org-iswitchb)
+           ("C-c j"   . 'org-journal-new-entry)
+           ("C-s-s"   . 'org-save-all-org-buffers)
+           ("C-x m"   . 'mrb/construct-mail)
+           :map org-mode-map
+           ("C-c ,"   . 'mrb/org-insert-inactive-timestamp)
+           ("C-c l"   . 'org-store-link)
+           ("C-c p"   . 'org-plot/gnuplot)
+           ("s-."     . 'org-todo)
+           ("C-s-."   . 'mrb/force-org-todo)
+           ("C-."     . 'mrb/org-schedule-for-today)
+           ("s-t"     . 'org-schedule)
+           ("M-p"     . 'org-set-property)
+           :map org-agenda-mode-map
+           ("s-."   . 'org-agenda-todo)
+           ("C-s-." . 'mrb/force-org-agenda-todo)
+           ("C-."   . 'mrb/org-agenda-schedule-for-today)
+           ("s-t"   . 'org-agenda-schedule)
+           ("M-p"   . 'org-set-property)
+           ("C-x m" . 'mrb/construct-mail)
+           :map org-capture-mode-map
+           ("C-c C-t" . mrb/add-tags-in-capture))
     :config
     (add-hook 'org-mode-hook 'turn-on-auto-fill)
+
+    (setq
+     org-use-fast-todo-selection t
+
+     ;; We support task dependencies
+     org-enforce-todo-dependencies t
+     ;; but relax checkbox constraints
+     org-enforce-todo-checkbox-dependencies nil
+
+     ;; We dont do priorities
+     org-enable-priority-commands nil
+
+     ;; Agenda settings
+     org-agenda-include-diary t
+     org-agenda-start-with-log-mode t
+     org-agenda-todo-ignore-scheduled "future"
+
+     ;; Habits
+     org-habit-show-habits-only-for-today nil
+
+     ;; Pressing enter on a link should activate it
+     org-return-follows-link t
+     org-support-shift-select (quote always)
+
+     org-agenda-log-mode-items (quote (closed clock state))
+     org-agenda-skip-deadline-prewarning-if-scheduled t
+     ;; Auto detect blank line need, this is the default, but I explicitly set thi
+     ;; because it needs to be this or my capturing breaks due to org-capture popup
+     org-blank-before-new-entry (quote ((heading . auto) (plain-list-item . auto)))
+     org-export-htmlize-output-type (quote css)
+     org-fast-tag-selection-single-key (quote expert)
+     org-file-apps
+     (quote
+      ((auto-mode . emacs)
+       ("\\.dia\\'" . "dia %s")
+       ("\\.mm\\'" . default)
+       ("\\.pdf\\'" . default)))
+     org-fontify-done-headline t
+     org-goto-interface (quote outline-path-completion)
+     ;; non nil is just direct children, what an ODD name!!!!
+     org-hierarchical-todo-statistics nil
+     org-provide-todo-statistics t
+     org-log-into-drawer t
+     org-log-redeadline (quote note)
+     org-log-reschedule (quote time)
+     org-modules (quote
+                  (org-info org-habit
+                            org-inlinetask org-irc
+                            org-toc org-mac-iCal org-mouse))
+     org-remember-default-headline ""
+     org-special-ctrl-a/e t
+     org-stuck-projects (quote ("-inactive/TODO" ("TODO" "WAITING") nil ""))
+     org-track-ordered-property-with-tag nil
+     org-startup-indented t
+     )
+
     (use-package org-datetree :ensure nil)        ;; Allows for archiving and refiling in a date organised tree
     (use-package org-mobile   :ensure nil)        ;;
     (use-package org-protocol :ensure nil
@@ -985,7 +1118,6 @@ up the location and files for that.
 (setq diary-file (concat org-metadir "DIARY"))
 
 ;; Some other modules I want
-(use-package org-present)           ;; Make presentations in org format
 (use-package org-agenda-property)   ;; Display org properties in the agenda view
 
 #+END_SRC
@@ -997,21 +1129,23 @@ starts life originally as a captured item. I use it for:
 1. TODO items;
 2. BUY items;
 3. Journaling entries;
-4. Statusnet Updates;
 
-The =org-capture-pop-frame= makes sure all captures are in separate
+
+The =org-capture-pop-frame= package makes sure all captures are in separate
 frames.
 
 #+BEGIN_SRC emacs-lisp
-(use-package org-capture :ensure nil)
-(use-package org-capture-pop-frame
-  :config
-  (setq ocpf-frame-parameters
-   '((name . "capture")
-     (width . 115)
-     (height . 15)
-     (tool-bar-lines . 0)
-     (menu-bar-lines . 0))))
+  (use-package org-capture
+    :diminish
+    :ensure nil)
+  (use-package org-capture-pop-frame
+    :config
+    (setq ocpf-frame-parameters
+     '((name . "capture")
+       (width . 115)
+       (height . 15)
+       (tool-bar-lines . 0)
+       (menu-bar-lines . 0))))
 #+END_SRC
 
 Here are the templates used for them.
@@ -1021,12 +1155,9 @@ Here are the templates used for them.
    org-capture-templates
    (quote (
            ("b" "Buy"
-            entry (id "new-todo-receiver") "* BUY%? :buy:\n" :prepend t)
+            entry (id "new-todo-receiver") "* BUY %? :buy:\n" :prepend t)
            ("t" "Todo"
-            entry (id "new-todo-receiver") "* TODO%?\n%i" :prepend t)
-           ("j" "Journal"
-            entry (file+datetree (concat org-directory "journal.org"))
-            "* ___________________________________________________________ *%U* ___\n\n%?\n"))))
+            entry (id "new-todo-receiver") "* TODO %?\n%i" :prepend t :empty-lines 1))))
 #+END_SRC
 
 Define functions for each piece of information captured, so they can
@@ -1042,12 +1173,6 @@ be easily bound to keys.
     "Capture a BUY item"
     (interactive)
     (org-capture nil "b"))
-
-  (defun mrb/make-journal-entry ()
-    "Create a journal entry"
-    (interactive)
-    ;;(setq org-descriptive-links t)
-    (org-journal-new-entry))
 #+END_SRC
 
 These capture functions are called from shell scripts in the operating
@@ -1063,10 +1188,6 @@ emacsclient --eval '(mrb/capture-todo)'
 emacsclient --eval '(mrb/capture-buy)'
 #+END_SRC
 
-#+BEGIN_SRC sh :exports code :tangle ~/bin/capture-twist.sh :shebang #!/bin/sh
-emacsclient --eval '(mrb/capture-twist)'
-#+END_SRC
-
 By default C-c C-c ends the capture, but is normally the shortcut to
 enter tags, so I define a shortcut to define tags while capturing.
 
@@ -1077,12 +1198,7 @@ enter tags, so I define a shortcut to define tags while capturing.
     (save-excursion
       (org-back-to-heading)
       (org-set-tags)))
-
-  (bind-key "C-c C-t" 'mrb/add-tags-in-capture org-capture-mode-map)
 #+END_SRC
-
-Capturing dents for status updates in statusnet are done the
-same. Their config is in the section [[Statusnet]]
 
 ** Workflow
 Orgmode used a couple of thing which enable you to steer the workflow
@@ -1098,17 +1214,32 @@ should be kept in sync.
 Adapt the colors of the states I use a bit:
 
 #+BEGIN_SRC emacs-lisp
-  (setq org-todo-keyword-faces '(
-    ("DONE"      . (:foreground "#afd8af"     :weight bold))
-    ("WAITING"   . (:foreground "dark salmon" :weight bold))
-    ("CANCELLED" . (:foreground "dim gray"    :weight bold))
-    ("BUY"       . (:foreground "goldenrod"   :weight bold))
-    ("HOWTO"     . (:foreground "SkyBlue3"    :weight bold))
-    ("INFO"      . (:foreground "khaki1"      :weight bold))
-    ("COLLECT"   . (:foreground "MediumSeaGreen"   :weight bold))
-    ("SOLVE"     . (:foreground "orange red"    :weight bold))
-    ("READ"      . (:foreground "MediumPurple1" :weight bold))
-    ("PLAN"      . (:foreground "OliveDrab3" :weight bold))
+  ;; Define face specs for our keywords, so they can be used in the
+  ;; theme adjustment like standard faces
+  (defface mrb/org-todo-keyword-TODO      nil "")
+  (defface mrb/org-todo-keyword-DONE      nil "")
+  (defface mrb/org-todo-keyword-WAITING   nil "")
+  (defface mrb/org-todo-keyword-CANCELLED nil "")
+  (defface mrb/org-todo-keyword-BUY       nil "")
+  (defface mrb/org-todo-keyword-HOWTO     nil "")
+  (defface mrb/org-todo-keyword-INFO      nil "")
+  (defface mrb/org-todo-keyword-COLLECT   nil "")
+  (defface mrb/org-todo-keyword-SOLVE     nil "")
+  (defface mrb/org-todo-keyword-READ      nil "")
+  (defface mrb/org-todo-keyword-PLAN      nil "")
+
+  (setq org-todo-keyword-faces `(
+    ("TODO"      . mrb/org-todo-keyword-TODO)
+    ("DONE"      . mrb/org-todo-keyword-DONE)
+    ("WAITING"   . mrb/org-todo-keyword-WAITING)
+    ("CANCELLED" . mrb/org-todo-keyword-CANCELLED)
+    ("BUY"       . mrb/org-todo-keyword-BUY)
+    ("HOWTO"     . mrb/org-todo-keyword-HOWTO)
+    ("INFO"      . mrb/org-todo-keyword-INFO)
+    ("COLLECT"   . mrb/org-todo-keyword-COLLECT)
+    ("SOLVE"     . mrb/org-todo-keyword-SOLVE)
+    ("READ"      . mrb/org-todo-keyword-READ)
+    ("PLAN"      . mrb/org-todo-keyword-PLAN)
   ))
 #+END_SRC
 
@@ -1197,8 +1328,6 @@ keep the active file as clean as possible.
 
 Thus, the normal sequence would be:
 #+BEGIN_SRC emacs-lisp
-  (bind-key "s-." 'org-todo org-mode-map)
-
   (defun mrb/force-org-todo()
     (interactive)
     ;; Disable blocking temporarily
@@ -1210,10 +1339,6 @@ Thus, the normal sequence would be:
     ;; Disable blocking temporily
     (let ((org-inhibit-blocking t))
       (org-agenda-todo)))
-
-  (bind-key "C-s-." 'mrb/force-org-todo org-mode-map)
-  (bind-key "C-s-." 'mrb/force-org-agenda-todo org-agenda-mode-map)
-  (bind-key "s-."   'org-agenda-todo org-agenda-mode-map)
 #+END_SRC
 
 ** Registering creation time of todo items
@@ -1227,14 +1352,14 @@ that item was created. I use the contributed =org-expiry= for that and
 adjust it a bit.
 
 I want the property to be name 'CREATED' (I don't remeber what the
-org-expirty default name is, but it is different) and the timestamps
+org-expiry default name is, but it is different) and the timestamps
 inserted must not be active, otherwise they'll appear all over the
 place in the agenda.
 
 #+BEGIN_SRC emacs-lisp
   (use-package org-expiry
     :ensure nil
-    :load-path "~/dat/src/emacs/packages/org-mode/contrib/lisp/"
+    :load-path "~/dat/src/emacs/packages/org-extra/"
 
     :init
     (setq org-expiry-created-property-name "CREATED")
@@ -1251,7 +1376,6 @@ cursor munging to make sure it is used comfortably during editing.
     (org-expiry-insert-created)
     (org-back-to-heading)
     (org-end-of-line)
-    (insert " ")
   )
 #+END_SRC
 
@@ -1285,13 +1409,6 @@ recording incremental progress or information on them.
   (defun mrb/org-insert-inactive-timestamp ()
     (interactive)
     (org-insert-time-stamp (current-time) nil 1 ))
-
-  ;; Bind to C-c , analogous to C-c . which inserts an active timestamp
-  ;; this overrules the priority commands, so do this on org-load hook
-  (add-hook
-   'org-load-hook
-   (lambda ()
-     (bind-key "C-c ," 'mrb/org-insert-inactive-timestamp org-mode-map)))
 #+END_SRC
 
 ** Scheduling items
@@ -1313,14 +1430,12 @@ thing like: "yeah, do this today"
     (interactive)
     (org-schedule nil
                   (format-time-string "%Y-%m-%d")))
-  (bind-key "C-." 'mrb/org-schedule-for-today org-mode-map)
 
   (defun mrb/org-agenda-schedule-for-today()
     "Schedule the current item in the agenda for today"
     (interactive)
     (org-agenda-schedule nil
                          (format-time-string "%Y-%m-%d")))
-  (bind-key "C-." 'mrb/org-agenda-schedule-for-today org-agenda-mode-map)
 #+END_SRC
 
 ** Visual settings
@@ -1358,7 +1473,16 @@ delimiters, but rather render the text.
 (setq org-hide-emphasis-markers t)
 #+END_SRC
 
-A similar thing can be done with pretty entity characters (like '\delta'
+One of the emphasis markers is for ~inline code~ (delimited by ~). I
+never use that in that way, but I need an emaphasis marker in tables
+which does stand out more than *bold*. So, I'm adjusting the =org-code=
+face a bit.
+
+#+BEGIN_SRC
+(set-face-attribute 'org-code nil :foreground "purple" :weight 'bold)
+#+END_SRC
+
+Similar to inline emphasis is the /rewriting/ with pretty entity characters (like '\delta'
 for example). These characters can be added to the text by adding a
 '\' before a symbol name ('delta' in the example).  I make an
 exception for the sub- and superscript characters. This happens a lot
@@ -1418,7 +1542,6 @@ on the item or on the file.
           ("Personal"      "~/dat/org/images/personal.png" nil nil :ascent center)
           ("Task"          "~/dat/org/images/stock_todo.png" nil nil :ascent center)
           ("Org"           "~/dat/org/images/org-mode-unicorn.png" nil nil :ascent center)
-          ("Statusnet"     "~/dat/org/images/statusnet.png" nil nil :ascent center)
           ("Systeem"       "~/dat/org/images/systeembeheer.png" nil nil :ascent center)
           ("Wordpress"     "~/dat/org/images/wordpress.png" nil nil :ascent center)
   ))
@@ -1444,56 +1567,6 @@ needs to be hidden.
 Settings which are just applicable for the org-mode agenda view.
 
 #+BEGIN_SRC emacs-lisp
-  (use-package keywiz
-    :load-path (lambda () (list (custom-package-location  "keywiz/")))
-    :ensure nil)
-
-  (use-package cl)
-
-  ;; Helper function to build a set of functions and their
-  (defun mrb/load-keybindings ()
-    "Since we don't want to have to pass through a keywiz game each time..."
-    (setq keywiz-cached-commands nil)
-    (do-all-symbols (sym)
-      (when (and (commandp sym)
-                 (not (memq sym '(self-insert-command
-                                  digit-argument undefined))))
-        (let ((keys (apply 'nconc (mapcar
-                                   (lambda (key)
-                                     (when (keywiz-key-press-event-p key)
-                                       (list key)))
-                                   (where-is-internal sym)))))
-          ;;  Politically incorrect, but clearer version of the above:
-          ;;    (let ((keys (delete-if-not 'keywiz-key-press-event-p
-          ;;                               (where-is-internal sym)))))
-          (and keys
-               (push (list sym keys) keywiz-cached-commands))))))
-
-  ;; Load em up
-  (mrb/load-keybindings)
-
-  ;; Might be good to use this in org-agenda...
-  (defun mrb/random-keybinding ()
-    "Describe a random keybinding."
-    (interactive)
-    (let* ((command (keywiz-random keywiz-cached-commands))
-           (doc (and command (documentation (first command)))))
-        (if command
-            (concat (symbol-name (first command)) " "
-                    "(" (mapconcat 'key-description (cadr command) ", ") ")"
-                    (if doc
-                        (concat ": " (substring doc 0 (string-match "\n" doc)))
-                      ""))
-          "")))
-
-
-  ;; Call this function in a multipart agenda command.
-  (defun mrb/org-agenda-show-tip (arg)
-    (interactive)
-    (let ((inhibit-read-only t))
-      (insert "A random keybinding for inspiration:\n  ")
-      (insert (mrb/random-keybinding) "\n")))
-
   ;; Show properties in agenda view
   (use-package org-agenda-property)
   (setq org-agenda-property-list '("LOCATION" "Responsible"))
@@ -1515,9 +1588,9 @@ Specific settings for babel and literate programming within org-mode
   (use-package ob-gnuplot :ensure nil)
   (org-babel-do-load-languages
    'org-babel-load-languages
-   '( (ditaa . t) (sql . t) (sh . t) (emacs-lisp t) (lisp t)
+   '( (ditaa . t) (sql . t) (emacs-lisp t) (lisp t)
      (css t) (awk t) (js t) (lisp t) (org t) (plantuml t) (gnuplot . t)
-     (haskell t) (js t) (calc t) (mathomatic t)))
+     (haskell t) (js t) (calc t)))
 #+END_SRC
 
 ** Refiling
@@ -1532,13 +1605,14 @@ at the top, in many cases that would mean it is the most imminent
 thing to do, which is not the case.
 
 #+BEGIN_SRC emacs-lisp
-(setq
+  (setq
    org-reverse-note-order nil    ; File at the bottom of an entry
    org-refile-allow-creating-parent-nodes (quote confirm)
    org-refile-targets (quote ((org-agenda-files :maxlevel . 10 )))
    org-refile-use-outline-path 'file
    org-outline-path-complete-in-steps nil
-)
+   org-refile-use-cache t
+   )
 #+END_SRC
 
 The list of headers to refile to is, in the standard config, basically
@@ -1591,7 +1665,7 @@ and HTML as destination format
    org-export-docbook-xsl-fo-proc-command "fop %i %o"
    org-export-docbook-xslt-proc-command "xsltproc --output %o %s %i"
    org-export-htmlize-output-type (quote css)
-   org-export-htmlized-org-css-url "orgmode.css"
+   org-org-htmlized-css-url "orgmode.css"
    org-latex-pdf-process
    (quote
     ("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
@@ -1658,7 +1732,6 @@ and HTML as destination format
 
   ; Make sure we export in css mode, meaning no inline css crap
   (setq org-export-htmlize-output-type 'css)
-  (bind-key "C-c C-e" 'mrb/org-export-body-as-html org-mode-map)
 
   (defun mrb/org-export-body-as-html-batch ()
     "Call `org-export-as-html', may be used in batch processing as
@@ -1669,6 +1742,12 @@ and HTML as destination format
     (interactive)
     (org-export-as-html 3 nil nil nil t))
 #+END_SRC
+
+Support exporting to epub format
+
+#+BEGIN_SRC emacs-lisp
+(use-package ox-epub)
+#+END_SRC
 ** Journaling
 While the capture method is useful I found myself not using it very
 much. Not sure why, but I'm going to try =org-journal= and see it that
@@ -1678,18 +1757,19 @@ is a better fit.
   (use-package org-journal
 
     :init
-    (progn
-      ;; The expand-file-name is needed, which is odd, because for single
-      ;; files this is not needed.
-      (setq org-journal-dir (expand-file-name "~/dat/org/journal/"))
+    ;; The expand-file-name is needed, which is odd, because for single
+    ;; files this is not needed.
+    (setq
+     org-journal-dir (expand-file-name "~/dat/org/journal/")
+     org-journal-time-format "[%R] "
 
-      (setq org-journal-time-format "[%R]%n")
+     ;; Match the journal files (FIXME: make this independent of earlier assignments)
+     org-agenda-file-regexp "^[0-9]+\\.org"
+     org-journal-file-format  "%Y%m%d.org"
 
-      ;; Match the journal files (FIXME: make this independent of earlier assignments)
-      (setq org-agenda-file-regexp "^[0-9]+")
-      ;; I want to have encryption, but how do TODO items bubble up then in the agenda
-      (setq org-journal-enable-encryption nil)
-      (setq org-crypt-disable-auto-save t)))
+    ;; I want to have encryption, but how do TODO items bubble up then in the agenda
+    org-journal-enable-encryption nil
+    org-crypt-disable-auto-save t))
 #+END_SRC
 
 ** Old configuration
@@ -1697,474 +1777,283 @@ Below is what was contained in the old configuration. I will slowly
 migrate this into more literal sections
 
 #+BEGIN_SRC emacs-lisp
-  (setq
-   org-use-fast-todo-selection t
+   ;; Bit of a leftover from reorganising bits, do this later
+   ;;(add-to-list 'org-tags-exclude-from-inheritance (quote "fix"))
+   (add-to-list 'org-tags-exclude-from-inheritance (quote "sell"))
+   ;;(add-to-list 'org-tags-exclude-from-inheritance (quote "build"))
 
-   ; We support task dependencies
-   org-enforce-todo-dependencies t
-   ; but relax checkbox constraints
-   org-enforce-todo-checkbox-dependencies nil
+   ; Dynamic behaviour
+   (defun mrb/gtd()
+     "Start my GTD system"
+     (interactive)
+     (find-file org-default-notes-file)
+   )
 
-   ; We dont do priorities
-   org-enable-priority-commands nil
+   (defun mrb/is-project-p ()
+     "This function returns true if the entry is considered a project.
+      A project is defined to be:
+      - having a TODO keyword itself (why was this again?);
+      - having at least one todo entry, regardless of their state."
+     (let ((has-todokeyword)
+           (has-subtask)
+           (subtree-end (save-excursion (org-end-of-subtree t)))
+           (is-a-task (member (nth 2 (org-heading-components)) org-todo-keywords-1)))
+       (save-excursion
+         (forward-line 1)
+         (while (and (not has-subtask)
+                     (< (point) subtree-end)
+                     (re-search-forward "^\*+ " subtree-end t))
+           (when (member (org-get-todo-state) org-todo-keywords-1)
+             (setq has-subtask t))))
+       ;; both subtasks and a keyword on the container need to be present.
+       (and is-a-task has-subtask)
+       )
+     )
 
-   ; Agenda settings
-   org-agenda-include-diary t
-   org-agenda-start-with-log-mode t
-   org-agenda-todo-ignore-scheduled "future"
+   ; FIXME: testing for tag presence should be easier than a re-search forward
+   ; FIXME: are we not searching for all 'incomplete' type keywords here?,
+   ;        there must be an org function for that
+   (defun mrb/skip-non-stuck-projects ()
+     "Skip trees that are not stuck projects"
+     (let* ((subtree-end (save-excursion (org-end-of-subtree t)))
+            (has-next (save-excursion
+                        (forward-line 1)
+                        (and (< (point) subtree-end)
+                             (re-search-forward "^*+ \\(TODO\\|BUY\\|WAITING\\)" subtree-end t)))))
+       (if (and (mrb/is-project-p) (not has-next))
+           nil ; a stuck project, has subtasks but no next task
+         subtree-end)))
 
-   ; Habits
-   org-habit-show-habits-only-for-today nil
+   (defun mrb/skip-non-projects ()
+     "Skip trees that are not projects"
+     (let* ((subtree-end (save-excursion (org-end-of-subtree t))))
+       (if (mrb/is-project-p)
+           nil
+         subtree-end)))
 
-   ; Pressing enter on a link should activate it
-   org-return-follows-link t
-   org-support-shift-select (quote always)
+   (defun mrb/skip-projects ()
+     "Skip trees that are projects"
+     (let* ((subtree-end (save-excursion (org-end-of-subtree t))))
+       (if (mrb/is-project-p)
+           subtree-end
+         nil)))
 
-   org-agenda-log-mode-items (quote (closed clock state))
-   org-agenda-skip-deadline-prewarning-if-scheduled t
-   org-blank-before-new-entry (quote ((heading) (plain-list-item)))
-   org-export-htmlize-output-type (quote css)
-   org-fast-tag-selection-single-key (quote expert)
-   org-file-apps
-   (quote
-    ((auto-mode . emacs)
-    ("\\.dia\\'" . "dia %s")
-    ("\\.mm\\'" . default)
-    ("\\.pdf\\'" . default)))
-   org-fontify-done-headline t
-   org-goto-interface (quote outline-path-completion)
-   ;; non nil is just direct children, what an ODD name!!!!
-   org-hierarchical-todo-statistics nil
-   org-provide-todo-statistics t
-   org-log-into-drawer t
-   org-log-redeadline (quote note)
-   org-log-reschedule (quote time)
-   org-modules (quote
-                (org-info org-jsinfo org-habit
-                          org-inlinetask org-irc
-                          org-toc org-mac-iCal org-mouse))
-   org-remember-default-headline ""
-   org-special-ctrl-a/e t
-   org-stuck-projects (quote ("-inactive/TODO" ("TODO" "WAITING") nil ""))
-   org-track-ordered-property-with-tag nil
-  )
+   (defun mrb/save-containing-org-file()
+     "I want to save the containing file in which the item state was
+     changed, but I'd like it to be asynchronous, because it can
+     take a bit and I don't want the system to stop responding.
 
-  ;; Bit of a leftover from reorganising bits, do this later
-  ;;(add-to-list 'org-tags-exclude-from-inheritance (quote "fix"))
-  (add-to-list 'org-tags-exclude-from-inheritance (quote "sell"))
-  ;;(add-to-list 'org-tags-exclude-from-inheritance (quote "build"))
+     To make it worse, git-autocommit-mode may be on for the file
+    which runs on the after-save hook" )
 
+   (add-hook 'org-after-todo-state-change-hook 'mrb/save-containing-org-file)
 
-  ; Keybindings which only make sense when having an orgmode file
-  (bind-key "C-c t" 'org-set-tags org-mode-map)
-  (bind-key "C-c e" 'org-export-dispatch org-mode-map)
+   ; When in agenda mode, show the line we're working on.
+   (add-hook 'org-agenda-mode-hook '(lambda () (hl-line-mode 1)))
 
-  ; Map \cmd{}t to schedule in both task and agenda-view
-  (bind-key "s-t" 'org-schedule org-mode-map)
-  (bind-key "s-t" 'org-agenda-schedule org-agenda-mode-map)
-  (bind-key "M-p" 'org-set-property org-mode-map)
-  (bind-key "M-p" 'org-set-property org-agenda-mode-map)
-  (bind-key "C-s-s" 'org-save-all-org-buffers org-mode-map)
-
-  ; Dynamic behaviour
-  (defun mrb/gtd()
-    "Start my GTD system"
-    (interactive)
-    (find-file org-default-notes-file)
-  )
-
-
-  (defun mrb/is-project-p ()
-    "This function returns true if the entry is considered a project.
-     A project is defined to be:
-     - having a TODO keyword itself (why was this again?);
-     - having at least one todo entry, regardless of their state."
-    (let ((has-todokeyword)
-          (has-subtask)
-          (subtree-end (save-excursion (org-end-of-subtree t)))
-          (is-a-task (member (nth 2 (org-heading-components)) org-todo-keywords-1)))
-      (save-excursion
-        (forward-line 1)
-        (while (and (not has-subtask)
-                    (< (point) subtree-end)
-                    (re-search-forward "^\*+ " subtree-end t))
-          (when (member (org-get-todo-state) org-todo-keywords-1)
-            (setq has-subtask t))))
-      ;; both subtasks and a keyword on the container need to be present.
-      (and is-a-task has-subtask)
-      )
-    )
-
-  ; FIXME: testing for tag presence should be easier than a re-search forward
-  ; FIXME: are we not searching for all 'incomplete' type keywords here?,
-  ;        there must be an org function for that
-  (defun mrb/skip-non-stuck-projects ()
-    "Skip trees that are not stuck projects"
-    (let* ((subtree-end (save-excursion (org-end-of-subtree t)))
-           (has-next (save-excursion
-                       (forward-line 1)
-                       (and (< (point) subtree-end)
-                            (re-search-forward "^*+ \\(TODO\\|BUY\\|WAITING\\)" subtree-end t)))))
-      (if (and (mrb/is-project-p) (not has-next))
-          nil ; a stuck project, has subtasks but no next task
-        subtree-end)))
-
-  (defun mrb/skip-non-projects ()
-    "Skip trees that are not projects"
-    (let* ((subtree-end (save-excursion (org-end-of-subtree t))))
-      (if (mrb/is-project-p)
-          nil
-        subtree-end)))
-
-  (defun mrb/skip-projects ()
-    "Skip trees that are projects"
-    (let* ((subtree-end (save-excursion (org-end-of-subtree t))))
-      (if (mrb/is-project-p)
-          subtree-end
-        nil)))
-
-  (defun mrb/save-containing-org-file()
-    "I want to save the containing file in which the item state was
-    changed, but I'd like it to be asynchronous, because it can
-    take a bit and I don't want the system to stop responding.
-
-    To make it worse, git-autocommit-mode may be on for the file
-   which runs on the after-save hook" )
-
-  (add-hook 'org-after-todo-state-change-hook 'mrb/save-containing-org-file)
-
-  ; When in agenda mode, show the line we're working on.
-  (add-hook 'org-agenda-mode-hook '(lambda () (hl-line-mode 1)))
-
-  ; When a tag change adds the waiting tag, make sure it gets scheduled
-  ; 1 week from now if it is not already.
-  (defun mrb/autoschedule-waiting()
-    ; variable 'tags' contains the values of the tag-string
-    ; If tags has the tag :waiting:, schedule this
-    ;(if includes tags "waiting")
-    (message "Running my own hook")
-    ;(message tags)
-    (org-schedule nil (org-timestring-to-seconds "+1w"))
-  )
-  ; Activate it
-  ;(add-hook 'org-after-tags-change-hook 'mrb/autoschedule-waiting)
+   ; When a tag change adds the waiting tag, make sure it gets scheduled
+   ; 1 week from now if it is not already.
+   (defun mrb/autoschedule-waiting()
+     ; variable 'tags' contains the values of the tag-string
+     ; If tags has the tag :waiting:, schedule this
+     ;(if includes tags "waiting")
+     (message "Running my own hook")
+     ;(message tags)
+     (org-schedule nil (org-timestring-to-seconds "+1w"))
+   )
+   ; Activate it
+   ;(add-hook 'org-after-tags-change-hook 'mrb/autoschedule-waiting)
 
 
 
-  ; Remove empty property drawers
-  (defun mrb/org-remove-empty-propert-drawers ()
-    "*Remove all empty property drawers in current file."
-    (interactive)
-    (unless (eq major-mode 'org-mode)
-      (error "You need to turn on Org mode for this function."))
-    (save-excursion
-      (goto-char (point-min))
-      (while (re-search-forward ":PROPERTIES:" nil t)
-        (save-excursion
-          (org-remove-empty-drawer-at "PROPERTIES" (match-beginning 0))))))
+   ; Remove empty property drawers
+   (defun mrb/org-remove-empty-propert-drawers ()
+     "*Remove all empty property drawers in current file."
+     (interactive)
+     (unless (eq major-mode 'org-mode)
+       (error "You need to turn on Org mode for this function."))
+     (save-excursion
+       (goto-char (point-min))
+       (while (re-search-forward ":PROPERTIES:" nil t)
+         (save-excursion
+           (org-remove-empty-drawer-at "PROPERTIES" (match-beginning 0))))))
 
-  (defun mrb/org-remove-redundant-tags ()
-    "Remove redundant tags of headlines in current buffer.
+   (defun mrb/org-remove-redundant-tags ()
+     "Remove redundant tags of headlines in current buffer.
 
-  A tag is considered redundant if it is local to a headline and
-  inherited by a parent headline."
-    (interactive)
-    (when (eq major-mode 'org-mode)
-      (save-excursion
-        (org-map-entries
-         '(lambda ()
-            (let ((alltags (split-string (or (org-entry-get (point) "ALLTAGS") "") ":"))
-                  local inherited tag)
-              (dolist (tag alltags)
-                (if (get-text-property 0 'inherited tag)
-                    (push tag inherited) (push tag local)))
-              (dolist (tag local)
-                (if (member tag inherited) (org-toggle-tag tag 'off)))))
-         t nil))))
-
-
-  (defvar org-agenda-group-by-property nil
-    "Set this in org-mode agenda views to group tasks by property")
-
-  (defun mrb/org-group-bucket-items (prop items)
-    (let ((buckets ()))
-      (dolist (item items)
-        (let* ((marker (get-text-property 0 'org-marker item))
-               (pvalue (org-entry-get marker prop t))
-               (cell (assoc pvalue buckets)))
-          (if cell
-              (setcdr cell (cons item (rest cell)))
-            (setq buckets (cons (cons pvalue (list item))
-                                buckets)))))
-      (setq buckets (mapcar (lambda (bucket)
-                              (cons (first bucket)
-                                    (reverse (rest bucket))))
-                            buckets))
-      (sort buckets (lambda (i1 i2)
-                      (string< (first i1) (first i2))))))
-
-  (defadvice org-agenda-finalize-entries (around org-group-agenda-finalize
-                                                 (list &optional nosort))
-    "Prepare bucketed agenda entry lists"
-    (if org-agenda-group-by-property
-        ;; bucketed, handle appropriately
-        (let ((text ""))
-          (dolist (bucket (mrb/org-group-bucket-items
-                           org-agenda-group-by-property
-                           list))
-            (let ((header (concat "Property "
-                                  org-agenda-group-by-property
-                                  " is "
-                                  (or (first bucket) "<nil>") ":\n")))
-              (add-text-properties 0 (1- (length header))
-                                   (list 'face 'org-agenda-structure)
-                                   header)
-              (setq text
-                    (concat text header
-                            ;; recursively process
-                            (let ((org-agenda-group-by-property nil))
-                              (org-agenda-finalize-entries
-                               (rest bucket) nosort))
-                            "\n\n"))))
-          (setq ad-return-value text))
-      ad-do-it))
-  (ad-activate 'org-agenda-finalize-entries)
+   A tag is considered redundant if it is local to a headline and
+   inherited by a parent headline."
+     (interactive)
+     (when (eq major-mode 'org-mode)
+       (save-excursion
+         (org-map-entries
+          '(lambda ()
+             (let ((alltags (split-string (or (org-entry-get (point) "ALLTAGS") "") ":"))
+                   local inherited tag)
+               (dolist (tag alltags)
+                 (if (get-text-property 0 'inherited tag)
+                     (push tag inherited) (push tag local)))
+               (dolist (tag local)
+                 (if (member tag inherited) (org-toggle-tag tag 'off)))))
+          t nil))))
 
 
-  ;; Shorten url at point
-  ;; This is a stripped down version of the code in identica-mode
-  (defun mrb/ur1ca-get (api longurl)
-    "Shortens url through ur1.ca free service 'as in freedom'"
-    (let* ((url-request-method "POST")
-          (url-request-extra-headers
-           '(("Content-Type" . "application/x-www-form-urlencoded")))
-          (url-request-data (concat "longurl=" (url-hexify-string longurl)))
-          (buffer (url-retrieve-synchronously api)))
-      (with-current-buffer buffer
-        (goto-char (point-min))
-        (prog1
-            (if (search-forward-regexp "Your .* is: .*>\\(http://ur1.ca/[0-9A-Za-z].*\\)</a>" nil t)
-                (match-string-no-properties 1)
-              (error "URL shortening service failed: %s" longurl))
-        (kill-buffer buffer)))))
+   (defvar org-agenda-group-by-property nil
+     "Set this in org-mode agenda views to group tasks by property")
 
-  (defun mrb/shortenurl-replace-at-point ()
-    "Replace the url at point with a tiny version."
-    (interactive)
-    (let ((url-bounds (bounds-of-thing-at-point 'url)))
-      (when url-bounds
-        (let ((url (mrb/ur1ca-get "http://ur1.ca" (thing-at-point 'url))))
-          (when url
-            (save-restriction
-              (narrow-to-region (first url-bounds) (rest url-bounds))
-              (delete-region (point-min) (point-max))
-              (insert url)))))))
+   (defun mrb/org-group-bucket-items (prop items)
+     (let ((buckets ()))
+       (dolist (item items)
+         (let* ((marker (get-text-property 0 'org-marker item))
+                (pvalue (org-entry-get marker prop t))
+                (cell (assoc pvalue buckets)))
+           (if cell
+               (setcdr cell (cons item (rest cell)))
+             (setq buckets (cons (cons pvalue (list item))
+                                 buckets)))))
+       (setq buckets (mapcar (lambda (bucket)
+                               (cons (first bucket)
+                                     (reverse (rest bucket))))
+                             buckets))
+       (sort buckets (lambda (i1 i2)
+                       (string< (first i1) (first i2))))))
 
-
-  (defvar mrb/org-my-archive-expiry-days 365
-    "The number of days after which a completed task should be auto-archived.
-  This can be 0 for immediate, or a floating point value.")
-
-  (defun mrb/org-my-archive-done-tasks ()
-    (interactive)
-    (save-excursion
-      (goto-char (point-min))
-      (let ((done-regexp
-             (concat "\\* \\(" (regexp-opt org-done-keywords) "\\) "))
-            (state-regexp
-             (concat "- State \"\\(" (regexp-opt org-done-keywords)
-                     "\\)\"\\s-*\\[\\([^]\n]+\\)\\]")))
-        (while (re-search-forward done-regexp nil t)
-          (let ((end (save-excursion
-                       (outline-next-heading)
-                       (point)))
-                begin)
-            (goto-char (line-beginning-position))
-            (setq begin (point))
-            (when (re-search-forward state-regexp end t)
-              (let* ((time-string (match-string 2))
-                     (when-closed (org-parse-time-string time-string)))
-                (if (>= (time-to-number-of-days
-                         (time-subtract (current-time)
-                                        (apply #'encode-time when-closed)))
-                        mrb/org-my-archive-expiry-days)
-                    (org-archive-subtree)))))))))
-
-  (defalias 'archive-done-tasks 'mrb/org-my-archive-done-tasks)
-
-  ;; Map it to Ctrl-C S in orgmode (consider a global key assignment?
-  (bind-key "C-c s" 'mrb/shortenurl-replace-at-point org-mode-map)
-  ;; END shorten url functionality
-
-  ;; archive entries into a date-tree
-  ;; Keep the commented line around, it is convenient during testing
-  ;;(advice-remove 'org-archive-subtree 'org-archive-subtree-to-data-tree)q
-  (defadvice org-archive-subtree		;
-    (around org-archive-subtree-to-data-tree activate)
-    "org-archive-subtree to date-tree"
-    (if
-        (string= "date-tree"
-                 (org-extract-archive-heading
-                  (org-get-local-archive-location)))
-        (let* ((dct (decode-time (org-current-time)))
-               (today (calendar-current-date))
-               (y (calendar-extract-year today))
-               (m (calendar-extract-month today))
-               (d (calendar-extract-day today))
-               (this-buffer (current-buffer))
-               (location (org-get-local-archive-location))
-               (afile (org-extract-archive-file location))
-               (org-archive-location
-                (format "%s::*** %04d-%02d-%02d %s" afile y m d
-                        (format-time-string "%A" (encode-time 0 0 0 d m y)))))
-          (message "afile=%s" afile)
-          (unless afile
-            (error "Invalid `org-archive-location'"))
-          (save-excursion
-            (switch-to-buffer (find-file-noselect afile))
-            (org-datetree-find-date-create today)
-            (widen)
-            (switch-to-buffer this-buffer))
-          ad-do-it)
-      ad-do-it))
-
-  ;;
-  ;; Org-mobile configuration
-  (setq
-   ; Remote org dir
-   ;;org-mobile-directory "/plato.hsdev.com:/home/mrb/data/mobileorg"
-   ; Where to place items which need resolving
-   org-mobile-inbox-for-pull (concat org-metadir "from-mobile.org")
-   ; No id yet, don't see the advantage yet
-   org-mobile-force-id-on-agenda-items nil
-   ; No encryption (yet)
-   org-mobile-use-encryption nil
-   org-mobile-agendas (quote all)
-   org-mobile-files
-   (quote (
-           "~/dat/src/GTD.org"
-           "~/dat/src/habits.org"
-           "~/dat/src/_calendars/meetings.org"))
-   org-mobile-use-encryption nil
-  )
-
-  ;; Define timer variables for pull and push operations
-  (defvar org-mobile-push-timer nil)
-  (defvar org-mobile-pull-timer nil)
-
-  ;; Define notificaters
-  (use-package notifications)
-
-  (defun mrb/org-mobile-notify (type result)
-    (notifications-notify
-     :title (concat type " complete:")
-     :body  (format (concat "Org-mobile-" type ": %s") result)))
-
-  (defun mrb/notify-push (result) (mrb/org-mobile-notify "Push" result))
-  (defun mrb/notify-pull (result) (mrb/org-mobile-notify "Pull" result))
-
-  ;; Fork the work of pushing to mobile
-  (defun mrb/fork-org-mobile-push()
-    (async-start
-     ;; What to do in the child process
-     `(lambda ()
-        ,(async-inject-variables "org-\\(mobile-\\|directory\\)")
-        (org-mobile-push))
-
-     ; What to do when it finishes
-     (lambda (result)
-       (mrb/notify-push result)
-       (message "Push of mobile org complete"))))
-
-  ;; Push to mobile when the idle timer runs out
-  (defun mrb/org-mobile-push-with-delay (secs)
-    (when org-mobile-push-timer
-      (cancel-timer org-mobile-push-timer))
-    (setq org-mobile-push-timer
-          (run-with-idle-timer
-           (* 1 secs) nil 'mrb/fork-org-mobile-push)))
-
-  ;; After saving files, start a 30 seconds idle timer after which we
-  ;; are going to push
-  ;; (add-hook
-  ;;  'after-save-hook
-  ;;  (lambda ()
-  ;;    (when (eq major-mode 'org-mode)
-  ;;      (dolist (file (org-mobile-files-alist))
-  ;;        (if (string= (expand-file-name (first file)) (buffer-file-name))
-  ;;         (mrb/org-mobile-push-with-delay 30))))))
-
-  ;; Fork the work of pushing to mobile
-  (defun mrb/fork-org-mobile-pull ()
-    (async-start
-     ;; What to do in the child process
-     `(lambda ()
-        ,(async-inject-variables "org-\\(mobile-\\|directory\\)")
-        (org-mobile-pull))
-
-     ; What to do when it finishes
-     (lambda (result)
-       (mrb/notify-pull result)
-       (message "Pull of mobile org complete"))))
-
-  ;; Construct the name of the remote file
-  (setq remote-org-mobile-file
-        (file-truename
-         (concat
-          (file-name-as-directory org-mobile-directory)
-          "mobileorg.org")))
-
-  ;; Pull by monitoring the file mobile-org writes to
-  (defun mrb/install-monitor (file secs)
-    ;; Cancel an existing timer, if any
-    (when org-mobile-pull-timer
-      (cancel-timer org-mobile-pull-timer))
-    ;; And set up a new one
-    (setq org-mobile-pull-timer
-          (run-with-timer
-           0 secs
-           (lambda (f p)
-             ;; If the remote file has been changed within out repeat
-             ;; period, we need a new copy
-             (unless (< p (second (time-since (elt (file-attributes f) 5))))
-               (mrb/fork-org-mobile-pull)))
-           file
-           secs)))
-
-  ;; Install a monitor on the remote org file. Don't make the time too
-  ;; short, otherwise the file might nog get pulled in.
-  ;; (mrb/install-monitor remote-org-mobile-file 30)
-
-  ;; Mail facilities related to org-mode
-  (use-package org-mime :ensure nil)
-
-  ;; Small bit to mail an org subtree
-  (defun mrb/mail-subtree-from-org ()
-    (interactive)
-    (if (equal major-mode 'org-agenda-mode)
-        (org-agenda-goto)
-      )
-    ;;TODO: make this also use the mailcompose frame
-    (org-mime-subtree))
-
-  ;; The entry point
-  (defun mrb/construct-mail (useOrgTree)
-    (interactive "P")
-    (if useOrgTree
-        (mrb/mail-subtree-from-org)
-      (mrb/make-mailcompose-frame)))
-  ;; Bind it to \C-xm in org-mode only
-  (bind-key "C-x m" 'mrb/construct-mail org-mode-map)
-  (bind-key "C-x m" 'mrb/construct-mail org-agenda-mode-map)
-  ;; But not for all others, because the org subtree will never be there
-  (bind-key "C-x m" 'mrb/make-mailcompose-frame)
+   (defadvice org-agenda-finalize-entries (around org-group-agenda-finalize
+                                                  (list &optional nosort))
+     "Prepare bucketed agenda entry lists"
+     (if org-agenda-group-by-property
+         ;; bucketed, handle appropriately
+         (let ((text ""))
+           (dolist (bucket (mrb/org-group-bucket-items
+                            org-agenda-group-by-property
+                            list))
+             (let ((header (concat "Property "
+                                   org-agenda-group-by-property
+                                   " is "
+                                   (or (first bucket) "<nil>") ":\n")))
+               (add-text-properties 0 (1- (length header))
+                                    (list 'face 'org-agenda-structure)
+                                    header)
+               (setq text
+                     (concat text header
+                             ;; recursively process
+                             (let ((org-agenda-group-by-property nil))
+                               (org-agenda-finalize-entries
+                                (rest bucket) nosort))
+                             "\n\n"))))
+           (setq ad-return-value text))
+       ad-do-it))
+   (ad-activate 'org-agenda-finalize-entries)
 
 
-  (use-package stripe-buffer)
-  (defun mrb/enable-org-table-striping ()
-    (interactive)
-    (stripe-org-tables-enable))
-  ;; TODO I want to have this in the agenda mode to
+   ;; Shorten url at point
+  (use-package url-shortener
+   :config
+   (setq goo-api-key "AIzaSyDXpfGokg-TNqg3HwxO54bVQNnNXP0sygE"))
+
+   (defun mrb/shortenurl-replace-at-point ()
+     "Replace the url at point with a tiny version."
+     (interactive)
+     (let ((long-url (thing-at-point 'url)))
+       (when long-url
+         (goo-shorten long-url))))
+
+
+   (defvar mrb/org-my-archive-expiry-days 365
+     "The number of days after which a completed task should be auto-archived.
+   This can be 0 for immediate, or a floating point value.")
+
+   (defun mrb/org-my-archive-done-tasks ()
+     (interactive)
+     (save-excursion
+       (goto-char (point-min))
+       (let ((done-regexp
+              (concat "\\* \\(" (regexp-opt org-done-keywords) "\\) "))
+             (state-regexp
+              (concat "- State \"\\(" (regexp-opt org-done-keywords)
+                      "\\)\"\\s-*\\[\\([^]\n]+\\)\\]")))
+         (while (re-search-forward done-regexp nil t)
+           (let ((end (save-excursion
+                        (outline-next-heading)
+                        (point)))
+                 begin)
+             (goto-char (line-beginning-position))
+             (setq begin (point))
+             (when (re-search-forward state-regexp end t)
+               (let* ((time-string (match-string 2))
+                      (when-closed (org-parse-time-string time-string)))
+                 (if (>= (time-to-number-of-days
+                          (time-subtract (current-time)
+                                         (apply #'encode-time when-closed)))
+                         mrb/org-my-archive-expiry-days)
+                     (org-archive-subtree)))))))))
+
+   (defalias 'archive-done-tasks 'mrb/org-my-archive-done-tasks)
+
+   ;; Map it to Ctrl-C S in orgmode (consider a global key assignment?
+   (bind-key "C-c s" 'mrb/shortenurl-replace-at-point org-mode-map)
+   ;; END shorten url functionality
+
+   ;; archive entries into a date-tree
+   ;; Keep the commented line around, it is convenient during testing
+   ;;(advice-remove 'org-archive-subtree 'org-archive-subtree-to-data-tree)q
+   (defadvice org-archive-subtree                ;
+     (around org-archive-subtree-to-data-tree activate)
+     "org-archive-subtree to date-tree"
+     (if
+         (string= "date-tree"
+                  (org-extract-archive-heading
+                   (org-get-local-archive-location)))
+         (let* ((dct (decode-time (org-current-time)))
+                (today (calendar-current-date))
+                (y (calendar-extract-year today))
+                (m (calendar-extract-month today))
+                (d (calendar-extract-day today))
+                (this-buffer (current-buffer))
+                (location (org-get-local-archive-location))
+                (afile (org-extract-archive-file location))
+                (org-archive-location
+                 (format "%s::*** %04d-%02d-%02d %s" afile y m d
+                         (format-time-string "%A" (encode-time 0 0 0 d m y)))))
+           (message "afile=%s" afile)
+           (unless afile
+             (error "Invalid `org-archive-location'"))
+           (save-excursion
+             (switch-to-buffer (find-file-noselect afile))
+             (org-datetree-find-date-create today)
+             (widen)
+             (switch-to-buffer this-buffer))
+           ad-do-it)
+       ad-do-it))
+
+   ;; Mail facilities related to org-mode
+   (use-package org-mime)
+
+   ;; Small bit to mail an org subtree
+   (defun mrb/mail-subtree-from-org ()
+     (interactive)
+     (if (equal major-mode 'org-agenda-mode)
+         (org-agenda-goto)
+       )
+     ;;TODO: make this also use the mailcompose frame
+     (org-mime-subtree))
+
+   ;; The entry point
+   (defun mrb/construct-mail (useOrgTree)
+     (interactive "P")
+     (if useOrgTree
+         (mrb/mail-subtree-from-org)
+       (mrb/make-mailcompose-frame)))
+
+   ;; But not for all others, because the org subtree will never be there
+   (bind-key "C-x m" 'mrb/make-mailcompose-frame)
+
+
+   (use-package stripe-buffer)
+   (defun mrb/enable-org-table-striping ()
+     (interactive)
+     (stripe-org-tables-enable))
+   ;; TODO I want to have this in the agenda mode to
 #+END_SRC
 
 ** Encrypting information in org-mode
@@ -2230,6 +2119,19 @@ The right alt and the right <menu> key should be the same as the left
 alt and the super key, but I haven't gotten around to configuring
 that yet.
 
+Furthermore, because I still can't remember keys, after pressing a
+prefix key like =C-c= the package =which-keys= can show me a formatted
+menu with the combinations of keys that can follow it.
+
+#+BEGIN_SRC emacs-lisp
+; which keys shows menu with completions of prefix-key
+(use-package which-key
+  :diminish
+  :config
+  (setq which-key-idle-delay 2.0)
+  (which-key-mode))
+#+END_SRC
+
 ** First, unsetting the keys I don't want.
 Let's begin with killing some bindings which are in my way, notably
 the standard right mouse click behaviour. This is because I want it
@@ -2239,32 +2141,6 @@ find out a better way for this.
 #+BEGIN_SRC emacs-lisp
 (global-unset-key (kbd "<mouse-3>"))
 #+END_SRC
-
-Because I use the spacebar in a bit of a special way; an extra control
-key, this complicates things a bit. To be able to do this I use xcape,
-which takes control keys and allows them to insert normal characters
-when they are not used with other keys.
-For this, I have defined the space bar in Xmodmap to be a control key
-with keycode 0x1234. Without xcape, the behaviour would be that there
-is no more spacebar on the keyboard.
-The configuration of xcape says: 'when the control key 0x1234 is
-pressed by itself, insert a space'
-
-The problem is that emacs then still thinks the key is undefined, so
-we let it do nothing in emacs, just to prevent an annoying message in
-the echo area each time we push the spacebar.
-
-#+BEGIN_SRC emacs-lisp
-;; We want the spacebar itself to do nothing
-(global-set-key [key-4660] 'ignore)
-
-;; Put more cases here when we encounter them
-#+END_SRC
-
-This small change requires quite a bit of tweaking because you don't
-want this to be in way, ever. The only customization I had to make was
-the shortening of the timeout from 50ms to 35ms to make it work for
-me.
 
 ** Setting keys
 Binding keys if fine and all, but remembering them later is rather
@@ -2411,13 +2287,21 @@ runs smex, but limits the commands to make sense for the current
 major mode only.
 
 #+BEGIN_SRC emacs-lisp
-  (use-package smex)
-  (bind-key "C-c M-x" 'execute-extended-command)
-  (bind-key "M-x" 'smex)
-  (bind-key "M-X" 'smex-major-mode-commands)
+  (use-package smex
+    :bind
+    (("C-c M-x" . 'execute-extended-command)
+     ("M-x"     . 'smex)
+     ("M-X"     . 'smex-major-mode-commands)))
 #+END_SRC
 
-**** COMMENT Special keys
+**** What should have been in emacs
+Sometimes there are /logical gaps/ in emacs' keybinding. I put them here
+
+#+BEGIN_SRC emacs-lisp
+  (bind-keys :map help-map
+            ("A" . describe-face))
+#+END_SRC
+**** Special keys
 For some special keys I have defined some commands. Special keys are
 those keys that may not be on every keyboard, within reason. I
 consider the function keys also as special, although they do not fit
@@ -2475,17 +2359,6 @@ the previous definition.
   (bind-key "<S-s-up>"    'windmove-up)
   (bind-key "<S-s-down>"  'windmove-down)
 
-#+END_SRC
-*** Org-mode
-Orgmode specific keybindings.
-
-#+BEGIN_SRC emacs-lisp
-  (bind-key "C-c g" 'mrb/gtd)
-  (bind-key "C-c a" 'org-agenda)
-  (bind-key "C-c b" 'org-iswitchb)
-  (bind-key "C-c l" 'org-store-link)
-  (bind-key "C-c j" 'org-journal-new-entry)
-  (bind-key "C-c p" 'org-plot/gnuplot)
 #+END_SRC
 ** Other key and mouse related settings
 Emacs has, like for everything else, a peculiar idea on scrolling and
@@ -2818,6 +2691,7 @@ so I disable that and when the popup is there, don't require a match.
 
 #+BEGIN_SRC emacs-lisp
   (use-package company
+    :diminish
     :bind
     (:map company-active-map
           ("C-n" . company-select-next)
@@ -2881,7 +2755,7 @@ be a problem that needs solving in practice so far.
 * Editing control
 
 I like to do things interactively where I can. The package =ido= is part
-of emacs and is more or less a defacto standard within the emacs
+of emacs and is more or less a defacto standard within the Emacs
 community. The basic promise is that when finding files, switching
 buffers or otherwise completing things in the command area, ido takes
 over and make that completion a better experience. One of these this
@@ -2895,9 +2769,15 @@ new file.
   (use-package ido
     :config
     (ido-mode t)
-    (setq ido-enable-flex-matching t) ;; enable fuzzy matching
-    (setq ido-auto-merge-work-directories-length -1) ;; disable auto-merge
-    (set-face-attribute 'ido-first-match nil :background "sea green" :foreground "black")
+    (setq
+     ;; enable fuzzy matching
+     ido-enable-flex-matching t
+     ;; when buffer is in another frame, ask to jump or not
+     ido-default-buffer-method 'maybe-frame
+     ;; disable auto-merge
+     ido-auto-merge-work-directories-length -1)
+
+     ;; Match selected with theme
     (ido-everywhere))
 #+END_SRC
 
@@ -2910,10 +2790,6 @@ in many directories.
     :config
     (setq ido-vertical-define-keys 'C-n-C-p-up-down-left-right)
     (ido-vertical-mode))
-
-  (use-package ido-hacks
-    :config
-    (ido-hacks-mode))
 #+END_SRC
 
 By selecting a piece of text, wrap-region can quote or otherwise
@@ -2923,6 +2799,7 @@ I've found none applicable yet.
 
 #+BEGIN_SRC emacs-lisp
 (use-package wrap-region
+  :diminish
   :config
   (wrap-region-global-mode 1))
 ;; (add-to-list 'wrap-region-except-modes 'conflicting-mode)
@@ -2942,18 +2819,22 @@ Once we have a region, it may be nice to have a special keymap to bind
 keys and do specific actions. I use the =selected= package for that.
 
 #+BEGIN_SRC emacs-lisp
-(use-package selected
-  :commands selected-minor-mode
-  :bind (:map selected-keymap
-              ;; For all modes
-              ("s" . write-region)
+  (use-package selected
+    :diminish selected-minor-mode
+    :commands selected-minor-mode
+    :bind (:map selected-keymap
+                ;; For all modes
+                ("s" . write-region)
 
-              ;; Copied from example
-              ("q" . selected-off)
-              ("u" . upcase-region)
-              ("d" . downcase-region)
-              ("w" . count-words-region)
-              ("m" . apply-macro-to-region-lines)))
+                ;; Copied from example
+                ("q" . selected-off)
+                ("u" . upcase-region)
+                ("d" . downcase-region)
+                ("w" . count-words-region)
+                ("m" . apply-macro-to-region-lines))
+    :config
+    (selected-global-mode))
+
 
 #+END_SRC
 
@@ -2981,8 +2862,8 @@ is in use, but we'll see.
 #+BEGIN_SRC emacs-lisp
   (use-package avy
     :config
-    (set-face-attribute 'avy-lead-face nil
-     :inherit isearch-lazy-highlight :background "black" :foreground "tomato")
+    (setq avy-style 'at-full)
+    (setq avy-background t)
     :bind
     ("s-j" . avy-goto-word-or-subword-1))
 #+END_SRC
@@ -3024,13 +2905,25 @@ program to use.
 (setq browse-url-generic-program "xdg-open")
 #+END_SRC
 
-Entering information in text areas in the browser, provided it is of
-the chrome family, can be delegated to emacs with the 'edit with
-emacs' extension. This requires the 'edit-server' package in emacs.
+Entering information in text areas in the browser can be delegated to
+emacs with the 'atomic-chrome' package. An extension in the browser
+sends text into emacs where we can edit as usual. I don't think
+embedding emacs in the textarea itself is supported which would be
+even nicer (no context switch)
+Depending on the url where the text comes from, we can have the buffer
+switch to a certain mode; the default mode is text-mode.
 
 #+BEGIN_SRC emacs-lisp
-(use-package edit-server)
-(edit-server-start)
+  (use-package atomic-chrome
+    :requires gfm-mode
+    :config
+    (atomic-chrome-start-server)
+    (setq
+     atomic-chrome-default-major-mode 'text-mode
+     atomic-chrome-buffer-open-style 'split
+     atomic-chrome-url-major-mode-alist '(
+                                          ("github\\.com" . gfm-mode)
+                                          ("redmine" . textile-mode))))
 #+END_SRC
 * Messaging and chatting
 ** Mail
@@ -3041,114 +2934,60 @@ So, I'm having a setup where multiple mail handling packages may exist
 and hopefully one will float to the top as being *the one*
 
 #+BEGIN_SRC emacs-lisp
-  (setq
-   ; User agent style is message mode (gnus, but independent of it)
-    mail-user-agent 'gnus-user-agent
+  (use-package smtpmail
+    :init
+    (setq smtpmail-default-smtp-server "localhost"
+          smtpmail-service 25)
+    :config
+    (setq
+     smtpmail-local-domain user-domain
+     smtpmail-sendto-domain user-domain
+     ;; User agent style is message mode (gnus, but independent of it)
+     mail-user-agent 'gnus-user-agent
+     send-mail-function 'smtpmail-send-it                 ;; This is for mail
+     message-send-mail-function 'message-smtpmail-send-it ;; This is for gnus
+     ;; Always put one in the Sent folder on sending
+     message-default-mail-headers "Bcc: mrb+Sent@hsdev.com\n"
+     ;; Don't use a special header separator
+     mail-header-separator ""
+     ;; FIXME: document why this needs to be '>> ' instead of '> '
+     mail-yank-prefix ">> "))
 
-    ; Sending it
-    smtpmail-default-smtp-server "localhost"
-    smtpmail-smtp-service 25 ;; I used to use anubis for pre-processing, 24 is private mail port
-    smtpmail-local-domain user-domain
-    smtpmail-sendto-domain user-domain
-    send-mail-function 'smtpmail-send-it                 ; This is for mail
-    message-send-mail-function 'message-smtpmail-send-it ; This is for gnus
-
-    ; Always put one in the Sent folder on sending
-    ;; Gcc takes care of this now.
-    message-default-mail-headers "Bcc: mrb+Sent@hsdev.com\n"
-    mail-yank-prefix ">> "
-  )
-  ;; Automatically sign outgoing messages, be part of the solution here,
-  ;; not the problem
-  ;; TODO: where can I toggle this on/off while composing?
-  ;; TODO: I want to do this in anubis, so this can probably go
-  ;;(setq smime-keys (quote (( user-mail-address "~/keys/comodo-2012-06-12.pem" nil))))
-  ;;(add-hook 'message-send-hook 'mml-secure-message-sign-smime)
   (setq password-cache t)            ; default is true, so no need to set this actually
   (setq password-cache-expiry 28800) ; default is 16 seconds, which is ridiculously low
-  (use-package smtpmail)
-
-  (add-hook 'message-mode-hook 'orgstruct++-mode 'append)
-  (add-hook 'message-mode-hook 'turn-on-auto-fill 'append)
-  (require 'org-contacts)
-
-  ;; While I'm pretty sure that bluntly rebinding tab is not
-  ;; the proper way to do this, it's the only thing i got working.
-  (bind-key "<tab>" 'company-complete message-mode-map)
 #+END_SRC
 
-Composing mail is often an /out of band/ activity, like creating a dent
+Composing mail is often an /out of band/ activity, like creating a tweet
 or a capture, so I would like to have roughly the same behaviour. This
 is by default provided by compose-mail-other-frame, but I could not
 get awesome to properly place the windows because it's hard to match
 on the varying name that xprop delivers, so. we make our own window.
 
 #+BEGIN_SRC emacs-lisp
+  ;; Get the number of lines on this display, so we can
+  ;; determine sizes of windows
+  (defun mrb/get-display-lines-height ()
+    (/ (x-display-pixel-height) (frame-char-height)))
+
   (defun mrb/make-mailcompose-frame (&optional mailto-url)
-    "Create a new frame and run mail-compose, use mailto URI if it
-  is given."
+    "Create a new frame and run mail-compose, use mailto URI if it is given."
     (interactive)
 
     ;; Create and select the frame, awesome wm takes care of the
     ;; placement and floating it on top of all other windows.
     ;; FIXME: the sizes should not be absolute
     (select-frame (make-frame
-                   '((name . "mailcompose")
-                     (width . 100 ) (height . 48)
+                   `((name . "mailcompose")
+                     (width . 100 ) (height . ,(+ 10 (/ (mrb/get-display-lines-height) 2)))
                      (menu-bar-lines . 0) (tool-bar-lines . 0))))
 
 
     ;; If we have a mailto argument, parse and use it
     (if (and (stringp mailto-url)
              (string-match "\\`mailto:" mailto-url))
-        (progn
-          (use-package rfc2368)
-          (use-package rfc2047)
-          (use-package mailheader)
-
-          (let ((hdr-alist (rfc2368-parse-mailto-url mailto-url))
-                (body "")
-                to subject
-                ;; In addtion to To, Subject and body these headers are
-                ;; allowed:
-                (allowed-xtra-hdrs '(cc bcc in-reply-to)))
-            (with-temp-buffer
-              ;; Extract body if it is defined
-              (when (assoc "Body" hdr-alist)
-                (dolist (hdr hdr-alist)
-                  (when (equal "Body" (first hdr))
-                    (insert (format "%s\n:" (rest hdr)))))
-                (rfc2047-decode-region (point-min) (point-max))
-                (setq body (buffer-substring-no-properties
-                            (point-min) (point-max)))
-                (erase-buffer))
-
-              ;; Extract headers
-              (dolist (hdr hdr-alist)
-                (unless (equal "Body" (first hdr))
-                  (insert (format "%s: %s\n" (first hdr) (rest hdr)))))
-              (rfc2047-decode-region (point-min) (point-max))
-              (goto-char (point-min))
-              (setq hdr-alist (mail-header-extract-no-properties)))
-
-            (setq to (or (rest (assq 'to hdr-alist)) "")
-                  subject (or (rest (assq 'subject hdr-alist)) "")
-                  hdr-alist
-                  (remove nil (mapcar
-                               #'(lambda (item)
-                                   (when (memq (first item) allowed-xtra-hdrs)
-                                     (cons (capitalize (symbol-name (first item)))
-                                           (rest item))))
-                               hdr-alist)))
-
-
-            ;; Fill it
-            (compose-mail to subject hdr-alist nil nil
-                          (list (lambda (string)
-                                  (insert string))
-                                body))))
-      ;; No mailto, argument, just run compose mail
-      (compose-mail))
+        (browse-url-mail mailto-url)
+      ;; No mailto, argument, just run compose mail in notmuch mua
+      (notmuch-mua-new-mail))
 
       ;; Delete other windows from the frame we are composing it in.
     (delete-other-windows))
@@ -3191,41 +3030,24 @@ same as the mailto handler.
 edit -e '(mrb/make-mailcompose-frame)'
 #+END_SRC
 
-I've also configured claws in such a way that it can embed an editor
-in the compose screen, which means that it gets a temporary file with
-contents from claws. I define some stuff here that makes sure I get
-into the proper configuration when that gets called:
 
 #+BEGIN_SRC emacs-lisp
-  ;; Files opened from the tmp folder of claws are messages
-  (pushnew '("/home/mrb/.claws-mail/tmp/" . message-mode) auto-mode-alist)
+  (use-package message
+    :ensure nil  ;; Needed because it's internal??
+    :requires org-faces
+    :config
+    ;; First quote level
+    (set-face-attribute 'message-cited-text nil :inherit 'org-level-1)
 
-  (require 'org-faces)
-  ;; First quote level
-  (set-face-attribute 'message-cited-text nil :inherit 'org-level-1)
+    ;; Face for second level of quoting
+    (defface message-double-quoted-text-face
+      '((t (:inherit org-level-2)))
+      "Second level quotations in email")
 
-  ;; Face for second level of quoting
-  (defface message-double-quoted-text-face
-    '((t (:inherit org-level-2)))
-    "Face for quotations in email")
-
-  ;; Face for third and higher level of quoting
-  (defface message-multiply-quoted-text-face
-    '((t (:inherit org-level-3)))
-    "Face for quotations in email")
-
-  (add-hook 'message-mode-hook
-            (lambda ()
-              (font-lock-add-keywords nil
-                                      '(("^[ \t]*>[ \t]*>[ \t]*>.*$"
-                                         (0 'message-multiply-quoted-text-face))
-                                        ("^[ \t]*>[ \t]*>.*$"
-                                         (0 'message-double-quoted-text-face))))))
-  ;;
-  ;; TODO
-  ;; - hide other files from sight?
-  ;; - remove the modeline?
-
+    ;; Face for third and higher level of quoting
+    (defface message-multiply-quoted-text-face
+      '((t (:inherit org-level-3)))
+      "Third level quotations in email"))
 #+END_SRC
 
 *** GNUS
@@ -3241,14 +3063,11 @@ to it.
 So, let's begin by enabling imap as the selection method.
 
 #+BEGIN_SRC emacs-lisp
-  ;;(require 'gnorb)
-  (require 'nnir)
+  (use-package nnir
+    :ensure nil) ;; No need to go load it
   (setq gnus-select-method
-        '(nnimap "hsd"
-                 (nnimap-address "127.0.0.1")
-                 (nnimap-server-port 993)
-                 (nnimap-stream ssl)
-                 (nnir-search-engine imap)))
+        '(nnmaildir "hsd"
+                 (directory "~/Maildir/")))
 #+END_SRC
 
 This, in combination with a line in .authinfo.gpg which holds the
@@ -3263,12 +3082,13 @@ organize these bits, so I'm starting by just a section of variable I
 have set to a value to my liking.
 
 #+BEGIN_SRC emacs-lisp
-  (bind-key "C-c n" 'gnus)
-  (setq
-   gnus-asynchronous 1 ;; Try to use asynchronous calls, probably Ok because the IMAP server is local
-   gnus-completing-read-function 'gnus-ido-completing-read ;; I use ido completion in the command area everywhere
-   )
-
+  (use-package gnus
+    :bind (("C-c n" . 'gnus))
+    :config
+    (setq
+     gnus-asynchronous 1 ;; Try to use asynchronous calls, probably Ok because the IMAP server is local
+     gnus-completing-read-function 'gnus-ido-completing-read ;; I use ido completion in the command area everywhere
+     ))
 #+END_SRC
 
 Perhaps it makes sens to segment the customizations per GNUS view.
@@ -3288,11 +3108,7 @@ these technical names to somewhat friendlier ones.
     (setq gnus-group-line-format"%M%S%p%P%5y:%B%(%uG%)\n")
 
     (setq group-name-map '
-          (("nnvirtual:Discussions" . "INBOX+Sent")
-           ("nntp+news.gmane.org:gmane.emacs.devel" . "gmane.emacs.devel")
-           ("nntp+news.gmane.org:gmane.emacs.orgmode" . "gmane.emacs.orgmode")
-           ("nntp+news.gmane.org:gmane.mail.sylpheed.claws.general" . "gmane.mail.sylpheed.claws.general")
-           ("nntp+news.ziggozakelijk.nl:gnu.emacs.gnus" . "gnu.emacs.gnus")))
+          (("nnvirtual:Discussions" . "INBOX+Sent")))
 
     (defun gnus-user-format-function-G (arg)
       (let ((mapped-name (assoc gnus-tmp-group group-name-map)))
@@ -3491,12 +3307,6 @@ that is the only way to actually have stuff deleted (?)
   (gnus-byte-compile 'gnus)
 #+END_SRC
 
-There is a nnreddit backedn I'd like to play with.
-#+BEGIN_SRC emacs-lisp
-  (add-to-list 'gnus-secondary-select-methods
-               '(nnreddit ""))
-
-#+END_SRC
 *** Notmuch
 Not having used GNUS enough to be comfortable, notmuch seems a route
 which can be taken somewhat easier. The compose part of emails is,
@@ -3504,36 +3314,63 @@ with the capture like frame, basically done. The one thing which was a
 bit messy was the address completion which was supposed to go to an
 LDAP directory tied to an ODOO instance.
 
-The cop-out intermediate solution is address completion by a small
-utility which searches the notmuch database for email-addresses used
-before, which is likely to be a match in 90% of the cases.
+The cop-out intermediate solution is address completion by notmuch
+itself, which has proven to work fine so far.
 
-https://github.com/aperezdc/notmuch-addrlookup-c
+First, let's activate notmuch itself.
 
-Installation would be quite easy:
+#+BEGIN_SRC emacs-lisp
+  (defun mrb/message-mode-hook ()
+    "This configures message mode and thus notmuch-message mode."
 
-#+BEGIN_SRC elisp
-   ;;(use-package notmuch) ;; needed? or auto?
-   (use-package notmuch-address
-     :config
-     (progn
-       (setq notmuch-address-command "/usr/local/bin/notmuch-addrlookup"
-             notmuch-fcc-dirs nil
-             notmuch-poll-script nil)
-       (notmuch-address-message-insinuate)
-       (message "Notmuch address completion loaded...")))
+    ;; We have to make sure that the messages we produce are format=flowed
+    ;; compatible. For this, the following is needed:
+    ;;
+    ;; - mml-enable-flowed must be set to true
+    ;; -- for that to work use-hard-newlines must be set
+    ;; - fill-flowed-encode-column must be set to 66
+    ;; - ws-butler must be inactive so there will be no conflicts
+    (use-hard-newlines t 'always)
+    (setq mml-enable-flowed t)
+    (add-to-list 'ws-butler-global-exempt-modes 'message-mode)
+
+    ;; Set the fill column on encoding (send)
+    (setq fill-flowed-encode-column 66)
+
+    ;; Set the fill column for displaying to window width?
+
+    ;; Make sure the separator is just the standard, nothing fancy
+    ;; This is probably redundant as I have this set globally too
+    (set (make-local-variable 'mail-header-separator) "")
+
+    ;; Add some color to quotes
+    (font-lock-add-keywords
+     nil
+     '(("^[ \t]*>[ \t]*>[ \t]*>.*$"
+        (0 'message-multiply-quoted-text-face))
+       ("^[ \t]*>[ \t]*>.*$"
+        (0 'message-double-quoted-text-face)))))
+
+
+  (use-package notmuch
+    :commands notmuch-message-mode
+    :init
+    ;; Make sure that we enter notmuch-message mode on compose from astroid
+    (add-to-list 'auto-mode-alist '("mrb@t510.hsdev.com" . notmuch-message-mode))
+    (add-to-list 'auto-mode-alist '("mrb@hsdev.com" . notmuch-message-mode))
+
+    :bind (:map message-mode-map
+                ("<tab>" . company-complete))
+    :config
+    (setq
+       notmuch-fcc-dirs nil
+       notmuch-poll-script nil)
+
+    (add-hook 'message-mode-hook 'mrb/message-mode-hook))
 #+END_SRC
 
-but this only activates the completion after notmuch has loaded, so it
-seems we need to put a similar piece of code on a lower level. This
-can work because notmuch is a database on the OS level.
 
-Ideally, i'd want to use inline completion with company mode, but I
-haven't figured out yet how to do that. So, for the time being, I'll
-use the ido completion I use in many other places as the selection
-function.
-
-#+BEGIN_SRC elisp
+#+BEGIN_SRC emacs-lisp
   (defun mrb/notmuch-address-selection-function (prompt addressess first)
     "Use `ido-completing-read' to select one of the addresses."
     (ido-completing-read prompt (cons first addressess)
@@ -3541,393 +3378,98 @@ function.
 
   (setq notmuch-address-selection-function
         'mrb/notmuch-address-selection-function)
-
 #+END_SRC
-*** Wanderlust
-The configuration file for wanderlust is typically =~/.wl= but I want
-to have emacs stuff below .emacs.d, so let's start by customizing it.
-#+BEGIN_SRC emacs-lisp
-(setq wl-init-file (concat emacs-directory "wl.el"))
-#+END_SRC
-
-That file won't exist initially, but I'm going to generate it just
-like the main emacs configuration, with org-babel. The SRC type must
-not be emacs-lisp, otherwise the init (using =org-babel-load-file=)
-will load the file instead of the main configuration file (arguably a
-bug)
-
-#+BEGIN_SRC lisp :exports code :tangle ~/.emacs.d/wl.el
-  (setq
-
-   ;; Servers
-   elmo-imap4-default-server "localhost"
-   elmo-imap4-default-authenticate-type 'clear
-   elmo-imap4-default-stream-type "starttls"
-   elmo-imap4-default-user "mrb"
-   elmo-imap4-use-modified-utf7 t
-
-   wl-smtp-posting-server "localhost"
-   wl-smtp-posting-port 24
-
-   elmo-nntp-default-server "news.ziggozakelijk.nl"
-   wl-nntp-posting-server elmo-nntp-default-server
-
-   wl-insert-message-id nil
-   wl-local-domain "hsdev.com"
-   wl-stay-folder-window t
-   wl-folder-window-width 25
-   wl-folder-desktop-name "Main"
-   wl-draft-use-frame t
-   wl-auto-check-folder-name 'none
-
-   ;; Ignore all headers, then enable what I want
-   wl-message-ignored-field-list '("^.*:")
-   wl-message-visible-field-list
-   '("^\\(To\\|Cc\\):"
-     "^Subject:"
-     "^\\(From\\|Reply-To\\):"
-     "^\\(Posted\\|Date\\):")
-
-   ;; Make sure forwarded message use proper prefixing
-   wl-forward-subject-prefix "Fwd: "
-
-   ;; Summary line format
-   wl-summary-line-format "%T%P%M/%D(%W)%h:%m %t%[%17(%c %f%) %] %s"
-
-   ;; Don't ever thread on subject
-   wl-summary-search-parent-by-subject-regexp nil
-
-   ;; Show 'To:' instead of 'From:' in summary for some folders
-   ;; FIXME: could not get this to work
-   wl-use-petname nil
-   wl-summary-showto-folder-regexp ".*Sent.*"
-   wl-user-mail-address-list '(
-                               "marcel@hsdev.com"
-                               "mvanderboom@gmail.com")
-   ;; Make sure threads with new are expanded (does not scale)
-   wl-thread-insert-opened t
-
-   wl-default-folder "%INBOX"
-   wl-trash-folder "%INBOX.Trash"
-
-   wl-ask-range nil
-   )
-
-#+END_SRC
-** Pump.io
-Similar to capturing TODO and BUY entries, there's a way to captur
-pump.io entries too.
-
-The only pump.io elisp implementation does almost everything like I
-want it to be, including key bindings.
+*** Sieve
+Cyrus sieve is used on the server to filter our mail and this is
+accessed by the sieve-manage package. For some reason I can't get the
+'^M' characters out of the process, so here's a hack for that
 
 #+BEGIN_SRC emacs-lisp
-  (use-package pumpio-interface
-    :load-path "~/dat/src/pump.io.related/pumpio-el/src/"
-    :ensure oauth
-    :config
-    ;; Configure for qua.name
-    (setq pumpio-pod "https://status.qua.name")
-  )
-
-  ;; I'm using a floating frame in awesome WM for dents
-  (defun mrb/make-pump-frame ()
-    "Create a new frame and run pump postnote"
+  (defun dos2unix ()
+    "Replace DOS eolns CR LF with Unix eolns CR"
     (interactive)
-    ;; Create and select the frame
-    (select-frame (make-frame '((name . "pump")
-                                (width . 80) (height . 15)
-                                (menu-bar-lines . 0) (tool-bar-lines . 0)))))
+      (goto-char (point-min))
+      (while (search-forward "\r" nil t) (replace-match "")))
 
-  (defun mrb/capture-pump ()
-    "Capture a pump note"
-    (interactive)
-
-    (mrb/make-pump-frame)
-    (pmpio-ctrl-post-note)
-
-    ;; Once there, make sure we're the only one
-    (delete-other-windows)
-  )
-
-  ;; Make sure we close our frame
-  (defadvice pmpio-ctrl-close-new-note (after delete-pump-frame activate)
-    "Advise to close the frame"
-    (if (equal "pump" (frame-parameter nil 'name))
-        (delete-frame)))
+  (add-hook 'sieve-mode-hook 'dos2unix)
 #+END_SRC
 
-Commandline interface for posting a pump.io notices goes here:
-
-#+BEGIN_SRC sh :exports code :tangle ~/bin/capture-pump.sh :shebang #!/bin/sh
-edit -e '(mrb/capture-pump)'
-#+END_SRC
-
-** XMPP
-XMPP related settings, including interfacing it to other systems
-
-#+BEGIN_SRC emacs-lisp
-  (use-package jabber
-    :ensure nil
-    :load-path "~/dat/src/emacs/packages/jabber.el/"
-    :init
-    ;; My accounts
-    ;; The ',' makes sure the user-xmpp-account gets evaluated
-    (setq jabber-account-list
-          `((,user-xmpp-account (:connection-type . starttls))))
-
-    :config
-    ;; Show some info in the modeline
-    (jabber-mode-line-mode 1)
-
-    ;; Configuration variables
-    (setq
-     jabber-show-offline-contacts nil
-     jabber-default-priority 30
-     jabber-alert-message-hooks (quote
-                                 (jabber-message-libnotify
-                                  jabber-message-echo
-                                  jabber-message-awesome
-                                  jabber-message-wave
-                                  jabber-message-scroll))
-     jabber-message-alert-same-buffer nil
-     jabber-roster-show-bindings nil
-     jabber-auto-reconnect t
-     jabber-chat-buffer-format "*-chat-%n-*"
-     jabber-groupchat-buffer-format "*-groupchat-%n-*"
-     jabber-muc-colorize-foreign t
-     jabber-muc-colorize-local t
-     jabber-muc-disable-disco-check t
-     jabber-muc-private-buffer-format "*-muc-priv-%g-%n-*"
-     jit-lock-stealth-time 16
-     jabber-show-resources 'sometimes
-     jabber-resource-line-format "         %j/%r%S [%p]"
-     jabber-roster-buffer "*-roster-*"
-     jabber-roster-line-format "  %u %a %-25n - %S"
-     jabber-roster-show-title nil
-     jabber-roster-subscription-display (quote
-                                         (("none" . "   ")
-                                          ("from" . "← ")
-                                          ("to" . " →")
-                                          ("both" . "←→")))
-     jabber-socks5-proxies (quote ("proxy.hsdev.com"))
-     jabber-vcard-avatars-retrieve nil
-     jabber-muc-disable-disco-check t
-     jabber-muc-colorize-foreign t
-     jabber-muc-colorize-local t
-     jabber-muc-nick-saturation 0.35 ;; empirical value, suitable for my theme
-     jabber-muc-nick-value 0.75
-
-     ;; Make the MUCs
-     jabber-muc-show-affiliation-changes nil
-     jabber-muc-show-enter-presence nil
-     jabber-muc-show-leave-messages nil
-     jabber-muc-show-role-changes nil)
-
-
-     ;; Do not steal my focus in the mini buffer
-    ;; Message alert hooks
-    (define-jabber-alert echo "Show a message in the echo area"
-      (lambda (msg)
-        (unless (minibuffer-prompt)
-          (message "%s" msg))))
-
-    ;; Define a company backend
-    (defun company-jabber(command &optional arg &rest ignored)
-      (interactive (list 'interactive))
-      (cl-case command
-        ;; If called interactively, start the backend
-        (interactive (company-begin-backend 'company-jabber-muc-backend))
-        ;; Try to get the prefix in jabber-chat-mode
-        (prefix (and (eq major-mode 'jabber-chat-mode)
-                     (company-grab-symbol)))
-        ;; Getting candidates, remove non-matches from list
-        (candidates
-         (cl-remove-if-not
-          (lambda (c) (string-prefix-p arg c))
-          (jabber-muc-nicknames)))
-        ;; We have inserted candidate in the buffer, augment it with ': '
-        (post-completion (insert ": "))))
-
-    (add-to-list 'company-backends 'company-jabber)
-
-    ;; C-j is the prefix for all jabber command in the C-x map (so,
-    ;; C-x C-j precede all commands for jabber) The default C-x map
-    ;; for emacs has a C-j entry which binds it to dired-jump. This
-    ;; gets in the way of all the keyboard shortcuts for jabber, so
-    ;; lets re-call the definition here, so we are sure we get them.
-    :bind
-    (("C-c C-SPC" . jabber-activity-switch-to)
-     :map jabber-chat-mode-map
-     ("<tab>" . company-complete)
-     :map ctl-x-map
-     ("C-j" . jabber-global-keymap)
-     :map jabber-global-keymap
-     ("C-j" . jabber-muc-join)))
-#+END_SRC
-
-#+RESULTS:
-
-** Twister
-Twister is a p2p microblogging application based on
-1. Bitcoin - for user registration and authentication
-2. Distributed Hash Tables - for KV storage and tracker location for:
-3. Bittorrent - manage followers(leechers/seeders) for notification
-
-http://twister.net.co has all the info
-
-I want this to behave the same as my other microblog postings,
-hopefully one day consolidating all these entry points into a
-consistent interface to rule them all.
-
-#+BEGIN_SRC emacs-lisp
-  (use-package twister
-    :load-path "~/dat/src/twister/twister.el"
-    :ensure nil
-    :bind (:map twister-post-mode-map
-           ("C-i" . company-complete ))
-    :config
-    (setq twister-user "mrb")
-
-    (defun mrb/capture-twist()
-      "Create a new frame an run twister postnote"
-      (interactive)
-
-      (select-frame (make-frame '((name . "twister")
-                                  (width . 80) (height . 15)
-                                  (menu-bar-lines .0)
-                                  (tool-bar-lines .0))))
-
-      (twister-create-post)
-
-      ;; And once we're there, make sure we are alone
-      (delete-other-windows))
-
-    ;; Make sure we close our frame after we close the post
-    (defadvice twister-close-post (after delete-twister-frame activate)
-      "Advise to close the frame"
-      (if (equal "twister" (frame-parameter nil 'name))
-          (delete-frame)))
-
-    ;; I normally want to close the post after posting Note: this is not
-    ;; at all a duh! Another advise could be to just clear the window and
-    ;; have it ready for another twist
-    (defadvice twister-post-region (after close-twister-post activate)
-      "Advise to close the post"
-      (twister-close-post)))
-#+END_SRC
-
-And, like the others, a commandline interface
-
-#+BEGIN_SRC sh :exports code :tangle ~/bin/capture-twist.sh :shebang #!/bin/sh
-edit -e '(mrb/capture-twist)'
-#+END_SRC
-
-The keybinding for the separate posting frame is configured with
-bindkeys on my system.
+which basically goes over the whole sieve script and removes the '^M'
+characters from the buffer
 ** Elfeed
 In an attempt to do even more in emacs, i've installed `elfeed' and
 imported my feeds from RSSyl
 
 #+BEGIN_SRC emacs-lisp
-  (use-package vlc :ensure nil)  ;; Needs my little hack from https://github.com/mrvrb/vlc.el
-  ;(use-package async) ;; This is for elfeed, why not add it as dependency there?
   (use-package elfeed
+    :commands elfeed
+    :bind (("C-c f" . 'elfeed)
+           :map elfeed-show-mode-map
+           ("w" . 'mrb/elfeed-show-toggle-watchlater)
+           ("e" . 'mrb/elfeed-add-to-playlist)
+           ("v" . 'mrb/elfeed-play-with-mpv)
+           :map elfeed-search-mode-map
+           ("w" . 'mrb/elfeed-search-toggle-watchlater))
     :init
-    (progn
-      (bind-key "C-c f" 'elfeed)
-      (setf url-queue-timeout 30)
-      (setq elfeed-db-directory "~/dat/.elfeed"))
+    (setf url-queue-timeout 30
+          elfeed-db-directory "~/dat/.elfeed")
+
     :config
-    (progn
-      (defun mrb/elfeed-search-toggle-tag(tag)
-        (let ((entries (elfeed-search-selected)))
-          (cl-loop for entry in entries do
-                   (if (elfeed-tagged-p tag entry)
-                       (elfeed-untag entry tag)
-                     (elfeed-tag entry tag)))
-          (mapc #'elfeed-search-update-entry entries)
-          (unless (use-region-p) (forward-line))))
+    (defun mrb/elfeed-search-toggle-tag(tag)
+      (let ((entries (elfeed-search-selected)))
+        (cl-loop for entry in entries do
+                 (if (elfeed-tagged-p tag entry)
+                     (elfeed-untag entry tag)
+                   (elfeed-tag entry tag)))
+        (mapc #'elfeed-search-update-entry entries)
+        (unless (use-region-p) (forward-line))))
 
-      (defun mrb/elfeed-show-toggle-tag(tag)
-        (interactive)
-        (if (elfeed-tagged-p tag elfeed-show-entry)
-            (elfeed-show-untag tag)
-          (elfeed-show-tag tag)))
+    (defun mrb/elfeed-search-togggle-watchlater()
+      (mrb/elfeed-search-toggle-tag 'watchlater))
 
-      (defun mrb/enqueue-video()
-        "Enqueue the current entry, assuming it is playable, to vlc"
-        (interactive)
-        (vlc/enqueue (elfeed-entry-link elfeed-show-entry)))
+    (defun mrb/elfeed-show-toggle-tag(tag)
+      (interactive)
+      (if (elfeed-tagged-p tag elfeed-show-entry)
+          (elfeed-show-untag tag)
+        (elfeed-show-tag tag)))
 
-      (defun mrb/play-video()
-        "Play the video in the current entry, bypassing the queeu it first"
-        (interactive)
-        (vlc/add (elfeed-entry-link elfeed-show-entry)))
+    (defun mrb/elfeed-show-togggle-watchlater()
+      (mrb/elfeed-show-toggle-tag 'watchlater))
 
-      (defun youtube-get-id (url)
-        "Get the YouTube video ID from URL. Returns nil for invalid URLs."
-        (let* ((obj (url-generic-parse-url url))
-               (host (url-host obj))
-               (path (url-filename obj))
-               (match (string-match-p "[-_a-zA-Z0-9]\\{11\\}" path)))
-          (when (and match (member host youtube-hosts))
-            (substring path match (+ match 11)))))
+    ;; TODO: mrb/elfeed-enqueue-video
+    (defun mrb/elfeed-play-with-mpv ()
+      "Play elfeed link in mpv"
+      (interactive)
+      (notifications-notify
+       :title "Elfeed action"
+       :body "Playing video with MPV"
+       :app-name "Elfeed")
 
-      (defcustom youtube-pl-arguments '("--title" "--no-mtime" )
-        "Arguments to be send to youtube-pl."
-        :group 'external)
+      (start-process "elfeed-mpv" nil
+                     "mpv"
+                     (elfeed-entry-link elfeed-show-entry)))
 
-      (defvar youtube-hosts '("www.youtube.com" "youtube.com" "youtu.be")
-        "Domain names for YouTube.")
+    (defun mrb/elfeed-add-to-playlist ()
+      "Add to already playing mpv"
+      (interactive)
+      (notifications-notify
+       :title "Elfeed action"
+       :body "Enqueued video in MPV playlist"
+       :app-name "Elfeed")
 
-      (defun youtube-pl-sentinel (process event)
-        "Responds to completed youtube-dl processes."
-        (let ((buffer (process-buffer process)))
-          (with-current-buffer buffer
-            (when (string-match-p "finished" event)
-              (message "youtube-pl %s completed." (youtube-get-id youtube-pl-url))
-              (kill-buffer buffer))
-            (when (string-match-p "abnormal" event)
-              (message "youtube-pl %s failed." (youtube-get-id youtube-pl-url))))))
+      (start-process "elfeed-mpvremote" nil
+                     "mpvremote"
+                     "add"
+                     (elfeed-entry-link elfeed-show-entry)))
 
-      (defun mrb/play-youtube-video (url)
-        "Play the video at URL with youtube-pl. Returns the buffer
-         that will show progress output. The buffer is killed if the
-         play completes successfully."
-        (interactive (list (read-from-minibuffer "URL: " (x-get-selection-value))))
-        (let ((id (youtube-get-id url)))
-          (when id
-            (let* ((process-name (format "youtube-pl-%s" id))
-                   (buffer-name (format "*youtube-pl %s*" id))
-                   (buffer (get-buffer-create buffer-name)))
-              (unless (get-buffer-process buffer)
-                (with-current-buffer buffer
-                  (erase-buffer)
-                  ;(youtube-dl-mode)
-                  (setq youtube-pl-url url)
-                  ;(setq default-directory
-                  ;      (concat (directory-file-name youtube-dl-directory) "/"))
-                  (set-process-sentinel
-                   (apply #'start-process process-name buffer "youtube-pl"
-                          (append youtube-pl-arguments (list "--" id)))
-                   'youtube-pl-sentinel)))
-              buffer))))
-
-      (bind-key "w" '(lambda () (interactive) (mrb/elfeed-show-toggle-tag 'watchlater)) elfeed-show-mode-map)
-      (bind-key "w" '(lambda () (interactive) (mrb/elfeed-search-toggle-tag 'watchlater)) elfeed-search-mode-map)
-      (bind-key "e" '(lambda () (interactive) (mrb/enqueue-video)) elfeed-show-mode-map)
-      (bind-key "v" '(lambda () (interactive) (mrb/play-video)) elfeed-show-mode-map)
-
-
-      ;; New entry hook allows meta information manipulation
-      ;; without directly having to change elfeed-feeds
-      (add-hook 'elfeed-new-entry-hook
-                (elfeed-make-tagger :feed-url "youtube\\.com"
-                                    :add '(video youtube)))
-      (add-hook 'elfeed-new-entry-hook
-                (elfeed-make-tagger :feed-url "vimeo\\.com"
-                                    :add '(video vimeo)))))
+    ;; New entry hook allows meta information manipulation
+    ;; without directly having to change elfeed-feeds
+    (add-hook 'elfeed-new-entry-hook
+              (elfeed-make-tagger :feed-url "youtube\\.com"
+                                  :add '(video youtube)))
+    (add-hook 'elfeed-new-entry-hook
+              (elfeed-make-tagger :feed-url "vimeo\\.com"
+                                  :add '(video vimeo))))
 #+END_SRC
 
 Elfeed allows to interactively subscribe to a feed (defaulting to
@@ -3939,28 +3481,19 @@ i want.
 
 #+BEGIN_SRC emacs-lisp
   (use-package elfeed-org
+    :after elfeed
     :init
-    (progn
-      (setq rmh-elfeed-org-files (list (concat emacs-directory "feeds.org")))
-      (elfeed-org))
-    )
-#+END_SRC
-
-
-#+BEGIN_SRC emacs-lisp
-  ;; Automatically update the feeds every now and then
-  ;; FIXME: recently Emacs crashes on this (ipv6 problem), so we don't don it automatically anymore.
-  ;;(run-at-time 180 1800 (lambda () (unless elfeed-waiting (elfeed-update))))
+    (setq rmh-elfeed-org-files (list (concat emacs-directory "feeds.org")))
+    (elfeed-org))
 #+END_SRC
 ** IRC
-The IRC over XMPP doesn't work at the moment, so I need me some ERC
-again.
-
 #+BEGIN_SRC emacs-lisp
-  (use-package erc-hl-nicks)
+    (use-package erc
+      :config
+      (setq
+       erc-nick "mrvdb"
+       erc-track-enable-keybindings t))
 
-  (setq erc-track-enable-keybindings t)
-  (setq erc-nick "mrvdb")
 #+END_SRC
 * Development settings
 Some settings which aid in development tasks.
@@ -3981,26 +3514,49 @@ because I run in server mode (doable), but its global mode is way to
 global, because it just applies to all buffers, which lead to errors
 on non-file buffers; for example because they are read-only.
 
-A better solution seems to be ethan-space or ws-trim.el. The first
-seems to be the least intrusive, as it keeps files which do not have
-trailing spaces clean and highlights 'dirty' ones in the hope that I
-notice and remove them. ws-trim.el can have different levels of
-intrusiveness. I'm installing ethan-space for now.
-
-[2014-05-20 di] worked with ethan-wspace for a while and it's pretty
-annoying. 80% of the space it is displaying as being /wrong/ is
-harmless. I have uninstalled it for now, I may reconsider installing
-it only for /some/ modes and not globally.
-
-[2014-06-20 vr] Retrying ws-butler mode (see [[Visual]] )
-[2014-12-23 di] Retrying ws-butler mode (see [[Visual]] )
 ** Generic
 Lets try to use ggtags everywhere.
 #+BEGIN_SRC emacs-lisp
 (use-package ggtags)
 #+END_SRC
-** Emacs-Lisp
-Settings specific to using emacs lisp
+
+Not specific to development, but extra useful, is folding of text
+sections. Origami mode seems to be the generic solution for
+it. Initially, let's not be too greedy with the keybindings and do it
+by mode. M-Tab seems to be the natural choice for me.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package origami
+    :config
+    (setq origami-show-fold-header t)
+    :bind (:map python-mode-map
+           ("M-<tab>" . origami-toggle-node)
+           :map emacs-lisp-mode-map
+           ("M-<tab>" . origami-toggle-node)))
+
+#+END_SRC
+** Coding styles
+Different projects use different coding styles. The ones I need I'll
+gather here for now.
+
+My personal style will be called =mrb= and basing it on the =linux= style.
+#+BEGIN_SRC emacs-lisp
+
+  ;; Basing it on k&r, no real reason, does it really matter?
+  (c-add-style "mrb"
+               '("k&r"
+                 (indent-tabs-mode . nil)
+                 (c-basic-offset . 2)
+                 (c-cleanup-list . (scope-operator
+                                    space-before-funcall))))
+
+  ;; Make my style the default
+  (setq c-default-style
+        '((java-mode . "java")
+          (awk-mode  . "awk")
+          (other     . "mrb")))
+#+END_SRC
+
 ** Haskell
 I am just starting out with haskell, but the two things that are
 probably needed in any case are a mode to use when editting Haskell
@@ -4009,6 +3565,7 @@ and showing syntax errors.
 
 #+BEGIN_SRC emacs-lisp
   (use-package haskell-mode
+    :requires ghc
     :init
     (progn
       (add-hook 'haskell-mode-hook 'interactive-haskell-mode)
@@ -4059,17 +3616,14 @@ code.
 #+BEGIN_SRC emacs-lisp
   (use-package elpy
     :init
-    (elpy-enable))
-
-  (add-hook 'python-mode-hook
-            (lambda ()
-              (toggle-truncate-lines t)
-              ;; Manage code navigation
-              (ggtags-mode 1)
-              ;; Allow folding of code blocks
-              (hs-minor-mode 1)
-              ;; Show it in the fringe
-              (hideshowvis-enable)))
+    (elpy-enable)
+    :config
+    (delete 'elpy-module-flymake elpy-modules)
+    (add-hook 'python-mode-hook
+              (lambda ()
+                (toggle-truncate-lines t)
+                ;; Manage code navigation
+                (ggtags-mode 1))))
 #+END_SRC
 ** GIT integration
 This section is a temporary place to store some git related
@@ -4138,6 +3692,7 @@ magit, so let's begin with bringing that in.
 
 #+BEGIN_SRC emacs-lisp
   (use-package magit
+    :after (fullframe)
     :bind
      ("C-c m" . magit-status)
 
@@ -4145,12 +3700,7 @@ magit, so let's begin with bringing that in.
      (fullframe magit-status magit-mode-quit-window)
 
     :config
-    (progn
-      ;; Make sure that highlighted regions in magit keep their syntax
-      ;; (set-face-attribute 'magit-diff-added-highlight nil
-      ;;                     :inherit nil
-      ;;                     :foreground nil :background mrb-bg-paren-match)
-      (setq magit-last-seen-setup-instructions "1.4.0")))
+    (setq magit-last-seen-setup-instructions "1.4.0"))
 #+END_SRC
 
 *** Commiting automatically
@@ -4179,7 +3729,8 @@ autocommit to run I can use a file local variable to disable the hook
 (or the minor mode)
 
 #+BEGIN_SRC emacs-lisp
-(use-package git-auto-commit-mode )
+  (use-package git-auto-commit-mode
+    :diminish)
 #+END_SRC
 *** Misc
 #+BEGIN_SRC emacs-lisp
@@ -4234,18 +3785,20 @@ there may be occasions where is pays to have a slight difference in
 configuration on different machines.
 
 #+BEGIN_SRC emacs-lisp
-  (when (string= system-name "x200s")
-    (progn
-      ;; Stuff that needs to happen for machine named "x200s"
-      (set-frame-font "DejaVu Sans Mono")
-
-      ))
-
-  (when (string= system-name "t510")
-    (progn
-      ;; Stuff for the "t510" configuration
-
-      ))
+  (pcase (system-name)
+    ("x200s" (progn
+               ;; Stuff for the x200s machine
+               (set-frame-font "Hack")
+               ))
+    ("t510"  (progn
+               ;; Stuff for the x200s machine
+               ))
+    ("flip"  (progn
+               ;; Stuf for the flip machine
+               ))
+    (_       (progn
+               ;; Stuff for non-mathing machine names
+               )))
 #+END_SRC
 
 * Finale

@@ -13,14 +13,20 @@
 ;; installed packages.  Don't delete this line.  If you don't want it,
 ;; just comment it out by adding a semicolon to the start of the line.
 ;; You may delete these explanatory comments.
-;(package-initialize)
+(package-initialize)
+(add-to-list 'package-archives
+	     '("org" . "http://orgmode.org/elpa/") t)
 
-(add-to-list 'load-path "~/dat/src/emacs/packages/org-mode/lisp/")
+;; Bootstrap use-package
+(unless (package-installed-p 'use-package)
+  (package-refresh-contents)
+  (package-install 'use-package))
 
 ;; Load in the main org file which starts up configuration This will
 ;; lead to an mrb.el file automatically, so that can't exist in the
 ;; current directory for this to work.
-(require 'org)
+(use-package org)
+
 (org-babel-load-file "~/.emacs.d/mrb.org")
 
 ;; END init.el
@@ -29,8 +35,9 @@
 ;; Exception 1:
 ;; Apparently when disabled functions get enabled, Emacs puts them here
 ;;
+
+;;; init.el ends here
+(put 'dired-find-alternate-file 'disabled nil)
 (put 'narrow-to-region 'disabled nil)
 (put 'downcase-region 'disabled nil)
 (put 'upcase-region 'disabled nil)
-
-;;; init.el ends here

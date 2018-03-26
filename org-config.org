@@ -13,6 +13,82 @@ The disadvantage is that it needs to be in every org-mode, which can
 sometimes be a nuisance (for example, it needs to be in every blog
 posting i write in orgmode if they are contained in separate files)
 
+* INFO Color tests [18%] [2/11]                                                                         :tags:
+
+When moving to a new theme, use this subsection to test configuration
+of orgmode colors. This paragraph is the test for plain text and
+inline markings such as *bold* and /italic/ =code= and _underline_ and +striked+
+
+- listmarker :: first
+- listmarker :: last
+- plain link :: http://hsdev.com
+
+Source:
+#+BEGIN_SRC emacs-lisp
+  (defun function (par1 &optional par2)
+    "Documentation for the function"
+    (interactive)
+    ;; Comment line
+    (setq var "string" 'quoted :property 0 -1 +1 0.01 ))
+#+END_SRC
+
+[2018-03-24 za] Date display
+
+Orgmode:
+** TODO Todo item
+:PROPERTIES:
+:CREATED:  [2018-03-22 do 13:45]
+:END:
+** DONE Item when done
+:PROPERTIES:
+:CREATED:  [2018-03-22 do 13:46]
+:END:
+** WAITING Item waiting on someone else
+:PROPERTIES:
+:CREATED:  [2018-03-22 do 13:46]
+:END:
+** CANCELLED Cancelled item
+:PROPERTIES:
+:CREATED:  [2018-03-22 do 13:46]
+:END:
+** BUY Something to buy
+:PROPERTIES:
+:CREATED:  [2018-03-22 do 13:46]
+:END:
+** HOWTO Explanation
+:PROPERTIES:
+:CREATED:  [2018-03-22 do 13:46]
+:END:
+** INFO General info
+:PROPERTIES:
+:CREATED:  [2018-03-22 do 13:47]
+:END:
+** COLLECT Get a geocache
+:PROPERTIES:
+:CREATED:  [2018-03-22 do 13:47]
+:END:
+** SOLVE Solve a geocache
+:PROPERTIES:
+:CREATED:  [2018-03-22 do 13:47]
+:END:
+** READ a book
+:PROPERTIES:
+:CREATED:  [2018-03-22 do 13:47]
+:END:
+** PLAN something
+:PROPERTIES:
+:CREATED:  [2018-03-22 do 13:47]
+:END:
+
+** org-level-3
+*** org-level-4
+**** org-level-5
+***** org-level-6
+****** org-level-7
+******* org-level-8
+******** org-level-1
+********* org-level-2
+
 * General configuration
 This section contains general settings.
 
@@ -76,6 +152,7 @@ CANCELLED. Other than the CANCELLED keyword, this is pretty much the
 default sequence. When cancelling I force myself to enter some reason
 for it.
 #+SEQ_TODO: TODO | DONE CANCELLED(@)
+#+SEQ_TODO: PLAN | DONE CANCELLED(@)
 
 Since buying stuff is abundant and warrants keeping track of,
 especially because I’m ordering lots of small things, I have defined a
@@ -117,8 +194,9 @@ verbose howto on some systems management thing. They have in common
 thay I want to be able to look them up by type later on. So, I define
 some keywords, and give them fitting colors.
 
-#+SEQ_TODO: | INFO
-#+SEQ_TODO: | HOWTO
+#+SEQ_TODO: INFO |
+#+SEQ_TODO: HOWTO |
+#+SEQ_TODO: SOLVE COLLECT | DONE
 
 Keep track of some reading efforts with a simple sequence
 
