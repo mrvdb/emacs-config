@@ -605,6 +605,9 @@ valid for 5 levels, not 6.
   (use-package rainbow-delimiters
     :config
     (add-hook 'lisp-mode 'rainbow-delimiters-mode))
+
+  ;; Make underlining nicer
+  (setq  underline-minimum-offset 3)
 #+END_SRC
 
 ** Lines
