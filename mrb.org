@@ -1775,12 +1775,12 @@ is a better fit.
     org-crypt-disable-auto-save t))
 #+END_SRC
 
-Particularly in journaling, but also in org-mode in general I want to
+Particularly in journaling, but also in org-mode in general, I want to
 be able to quickly insert screenshots. Rather, images in general but
 90% of my usecase is really screenshots.
 
 There's a package =org-attach-screenshot= which matches my usecase 99%
-so let's use that
+so let's use that and worry about extending it to images later on.
 
 #+BEGIN_SRC emacs-lisp
   (use-package org-attach-screenshot
