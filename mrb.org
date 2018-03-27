@@ -220,9 +220,9 @@ i.e. authinfo.gpg using public key encryption aimed at my key.
 
 #+BEGIN_SRC emacs-lisp
   ;; Use only authinfo.gpg for password storage
-  (use-package auth-password-store
+  (use-package auth-source-pass
     :init
-    (auth-pass-enable)
+    (auth-source-pass-enable)
     :config
     ;; Make sure it's the only mechanism
     (setq auth-sources '(password-store))
@@ -329,20 +329,19 @@ done with them if possible
 
 Using pdf-tools for PDF handling
 #+BEGIN_SRC emacs-lisp
-  (use-package pdf-tools
-   :pin manual ;; manually update
-   :after (pdf-annot)
-   :bind (:map pdf-view-mode-map
-          ("h"   . 'pdf-annot-add-highlight-markup-annotation)
-          ("t"   . 'pdf-annot-add-text-annotation)
-          ("D"   . 'pdf-annot-delete)
-          ("C-s" . 'isearch-forward)
-          :map pdf-annot-edit-contents-minor-mode-map
-          ("<return>"   . 'pdf-annot-edit-contents-commit)
-          ("<S-return>" .  'newline))
+(use-package pdf-tools
+  :after (pdf-annot)
+  :bind (:map pdf-view-mode-map
+         ("h"   . 'pdf-annot-add-highlight-markup-annotation)
+         ("t"   . 'pdf-annot-add-text-annotation)
+         ("D"   . 'pdf-annot-delete)
+         ("C-s" . 'isearch-forward)
+         :map pdf-annot-edit-contents-minor-mode-map
+         ("<return>"   . 'pdf-annot-edit-contents-commit)
+         ("<S-return>" .  'newline))
 
-   :config
-   ;; All this came from http://pragmaticemacs.com/emacs/even-more-pdf-tools-tweaks/
+  :config
+  ;; All thi   s came from http://pragmaticemacs.com/emacs/even-more-pdf-tools-tweaks/
 
    ;; open pdfs scaled to fit page
    (setq-default pdf-view-display-size 'fit-page)
@@ -1372,8 +1371,7 @@ place in the agenda.
 #+BEGIN_SRC emacs-lisp
   (use-package org-expiry
     :ensure nil
-    :load-path "~/dat/src/emacs/packages/org-extra/"
-
+    :load-path (lambda () (concat custom-package-directory "org-expiry/"))
     :init
     (setq org-expiry-created-property-name "CREATED")
     (setq org-expiry-inactive-timestamps   t))
@@ -2525,6 +2523,7 @@ To be able to open multiple files (so we can use $* as argument
 instead of just $1) we need to advice find-file-other-window to support this.
 
 #+BEGIN_SRC emacs-lisp
+  (require 'cl)
   (defadvice find-file-other-window (around find-files activate)
     "Also find all files within a list of files. Thsi even works recursively."
     (if (listp filename)
