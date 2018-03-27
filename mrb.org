@@ -576,16 +576,26 @@ valid for 5 levels, not 6.
   ;; check speed consequences of this
   (setq column-number-mode t)
 
-  ;; Modeline
-  (use-package spaceline
+  ;; We'll dabble in evil mode for a bit
+  ;; the C-z key will serve me for a while I suspect.
+  (use-package evil
     :config
-    (require 'spaceline-config)
+    (evil-mode))
 
+  ;; Modeline
+  (use-package spaceline-config
+    :ensure spaceline
+    :ensure eyebrowse
+    :ensure persp-mode
+    :ensure window-numbering
+
+    :config
     ;; I want the cursor the same as the highlight face of the modeline
     (setq mrb-cursor-color
           (face-attribute 'spaceline-highlight-face :background))
 
-    (spaceline-emacs-theme))
+    ;; We use the spacemacs theme, which gives us the state indicator
+    (spaceline-spacemacs-theme))
 
   ;; Default frame properties frame position, color, etc
   (setq default-frame-alist
