@@ -576,16 +576,26 @@ valid for 5 levels, not 6.
   ;; check speed consequences of this
   (setq column-number-mode t)
 
-  ;; Modeline
-  (use-package spaceline
+  ;; We'll dabble in evil mode for a bit
+  ;; the C-z key will serve me for a while I suspect.
+  (use-package evil
     :config
-    (require 'spaceline-config)
+    (evil-mode))
 
+  ;; Modeline
+  (use-package spaceline-config
+    :ensure spaceline
+    :ensure eyebrowse
+    :ensure persp-mode
+    :ensure window-numbering
+
+    :config
     ;; I want the cursor the same as the highlight face of the modeline
     (setq mrb-cursor-color
           (face-attribute 'spaceline-highlight-face :background))
 
-    (spaceline-emacs-theme))
+    ;; We use the spacemacs theme, which gives us the state indicator
+    (spaceline-spacemacs-theme))
 
   ;; Default frame properties frame position, color, etc
   (setq default-frame-alist
@@ -605,6 +615,9 @@ valid for 5 levels, not 6.
   (use-package rainbow-delimiters
     :config
     (add-hook 'lisp-mode 'rainbow-delimiters-mode))
+
+  ;; Make underlining nicer
+  (setq  underline-minimum-offset 3)
 #+END_SRC
 
 ** Lines
@@ -1771,6 +1784,22 @@ is a better fit.
     org-journal-enable-encryption nil
     org-crypt-disable-auto-save t))
 #+END_SRC
+
+Particularly in journaling, but also in org-mode in general, I want to
+be able to quickly insert screenshots. Rather, images in general but
+90% of my usecase is really screenshots.
+
+There's a package =org-attach-screenshot= which matches my usecase 99%
+so let's use that and worry about extending it to images later on.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package org-attach-screenshot
+    :bind (("C-c i" . org-attach-screenshot)))
+#+END_SRC
+
+The 1% I was referring to above is that the original package
+exclusively supports org-mode. I patched it, which was trivial to
+support org-mode and all its derived modes. (org-journal in my case)
 
 ** Old configuration
 Below is what was contained in the old configuration. I will slowly
