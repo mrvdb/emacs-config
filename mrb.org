@@ -3429,8 +3429,12 @@ characters from the buffer
 In an attempt to do even more in emacs, i've installed `elfeed' and
 imported my feeds from RSSyl
 
+
 #+BEGIN_SRC emacs-lisp
+  (use-package notifications)
+
   (use-package elfeed
+    :after notifications
     :commands elfeed
     :bind (("C-c f" . 'elfeed)
            :map elfeed-show-mode-map
