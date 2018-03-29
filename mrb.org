@@ -3501,7 +3501,10 @@ imported my feeds from RSSyl
                                   :add '(video youtube)))
     (add-hook 'elfeed-new-entry-hook
               (elfeed-make-tagger :feed-url "vimeo\\.com"
-                                  :add '(video vimeo))))
+                                  :add '(video vimeo)))
+
+    (add-hook 'elfeed-search-mode-hook 'evil-emacs-state)
+    (add-hook 'elfeed-show-mode-hook 'evil-emacs-state))
 #+END_SRC
 
 Elfeed allows to interactively subscribe to a feed (defaulting to
