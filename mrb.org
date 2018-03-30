@@ -2819,52 +2819,6 @@ in many directories.
     (ido-vertical-mode))
 #+END_SRC
 
-By selecting a piece of text, wrap-region can quote or otherwise
-delimit that region automatically. I enable this globally. There is
-an option to configure in exception, which I have commented out as
-I've found none applicable yet.
-
-#+BEGIN_SRC emacs-lisp
-(use-package wrap-region
-  :diminish
-  :config
-  (wrap-region-global-mode 1))
-;; (add-to-list 'wrap-region-except-modes 'conflicting-mode)
-#+END_SRC
-
-Creating regions can be done in many different ways and expand region
-which expands a selection by semantic analysis can not be left out
-
-#+BEGIN_SRC emacs-lisp
-  (use-package expand-region
-    :bind
-    (("s-\\" . er/expand-region)
-     ("s-|"  . er/contract-region)))
-#+END_SRC
-
-Once we have a region, it may be nice to have a special keymap to bind
-keys and do specific actions. I use the =selected= package for that.
-
-#+BEGIN_SRC emacs-lisp
-  (use-package selected
-    :diminish selected-minor-mode
-    :commands selected-minor-mode
-    :bind (:map selected-keymap
-                ;; For all modes
-                ("s" . write-region)
-
-                ;; Copied from example
-                ("q" . selected-off)
-                ("u" . upcase-region)
-                ("d" . downcase-region)
-                ("w" . count-words-region)
-                ("m" . apply-macro-to-region-lines))
-    :config
-    (selected-global-mode))
-
-
-#+END_SRC
-
 The multiple cursors package is often used for repetitive editting.
 
 #+BEGIN_SRC emacs-lisp
