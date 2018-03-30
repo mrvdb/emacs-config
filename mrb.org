@@ -3053,7 +3053,8 @@ on the varying name that xprop delivers, so. we make our own window.
      (id:<message id>)"
     (interactive)
     (mrb/make-mailframe)
-    (notmuch-mua-new-forward-messages (list mids)))
+    (notmuch-mua-new-forward-messages (list mids))
+    (delete-other-windows))
 #+END_SRC
 
 To be able to use the =mailcompose-frame= function as a mailto handler we need to be
