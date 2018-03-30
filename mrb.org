@@ -165,14 +165,15 @@ default gnu augmented with the melpa repository.
 
   ;; Some leftovers I need to move to a more logical place
   (use-package fullframe  )    ;; show results of certain commands fullframe
-  (use-package guide-key )     ;; Not sure what this does
+  (use-package guide-key )     ;; when pressing a prefix key, show the rest after a timeout
 
   ;; Show color of #RRBBGG texts
   (use-package rainbow-mode
     :diminish)
 
-  (use-package edit-server )
+  (use-package edit-server ) ;; Do I still need this? Is is the counterpart to a plugin in browser?
 
+  ;;; Not sure if this is still needed if i configure help/ido/etc.
   (use-package fixed-point-completion
     :load-path (lambda () (concat custom-package-directory "fixed-point-completion/")))
 #+END_SRC
@@ -322,12 +323,15 @@ Make life easier if we have sudo, so we can just edit the files and be
 done with them if possible
 
 #+BEGIN_SRC emacs-lisp
+  ;;; There is a sudo-edit package which seems more maintained, shoud I use that?
   (use-package sudo-save
     :ensure nil
     :load-path (lambda () (concat custom-package-directory "sudo-save/")))
 #+END_SRC
 
-Using pdf-tools for PDF handling
+Using pdf-tools for PDF handling. This is a lot better than
+docview. I'm a bit annoyed that they are not one package, they are
+very similar.
 #+BEGIN_SRC emacs-lisp
 (use-package pdf-tools
   :after (pdf-annot)
