@@ -593,7 +593,7 @@ valid for 5 levels, not 6.
     (setq mrb-cursor-color
           (face-attribute 'spaceline-highlight-face :background))
 
-    ;; We use the spacemacs theme, which gives us the state indicator
+    ;; We use the spacemacs theme, which gives us the evil state indicator
     (spaceline-spacemacs-theme))
 
   ;; Default frame properties frame position, color, etc
@@ -3571,11 +3571,11 @@ i want.
 #+END_SRC
 ** IRC
 #+BEGIN_SRC emacs-lisp
-    (use-package erc
-      :config
-      (setq
-       erc-nick "mrvdb"
-       erc-track-enable-keybindings t))
+  (use-package erc
+    :config
+    (setq
+     erc-nick "mrvdb"
+     erc-track-enable-keybindings t))
 
 #+END_SRC
 * Development settings
