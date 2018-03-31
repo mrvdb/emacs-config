@@ -1151,7 +1151,12 @@ frames.
 #+BEGIN_SRC emacs-lisp
   (use-package org-capture
     :diminish
-    :ensure nil)
+    :after evil
+    :ensure nil
+    :config
+    ; Need to use hook here, org-capture-mode is not a major mode
+    (add-hook 'org-capture-mode-hook 'evil-insert-state)
+    )
   (use-package org-capture-pop-frame
     :config
     (setq ocpf-frame-parameters
