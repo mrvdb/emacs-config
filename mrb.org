@@ -2862,6 +2862,8 @@ of packages obsolete (=avy-jump=, =expand region=, possbibly
   (use-package evil-collection
     :after evil
     :config
+    ;; Exclude list of modes
+    (delete 'elfeed evil-collection-mode-list)
     (evil-collection-init))
 
   ;; Add notion of doing an acount with the stuff surrounding a text object
@@ -3504,8 +3506,10 @@ imported my feeds from RSSyl
                                   :add '(video youtube)))
     (add-hook 'elfeed-new-entry-hook
               (elfeed-make-tagger :feed-url "vimeo\\.com"
-                                  :add '(video vimeo))))
+                                  :add '(video vimeo)))
 
+    (add-to-list 'evil-emacs-state-modes 'elfeed-search-mode)
+    (add-to-list 'evil-emacs-state-modes 'elfeed-show-mode))
 #+END_SRC
 
 Elfeed allows to interactively subscribe to a feed (defaulting to
