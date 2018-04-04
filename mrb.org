@@ -1739,36 +1739,6 @@ and HTML as destination format
   ;; {% endraw %}
 #+END_SRC
 
-#+BEGIN_SRC emacs-lisp
-  ; Exporting and Publishing related settings
-
-  ; Apart from the normal export menu, I need something that exports
-  ; just the body, so the resulting html is suitable to be used inside a
-  ; blogging system like wordpress for example
-
-  ; This puts the body inside a buffer called  blog-entry
-  (defun mrb/org-export-body-as-html ()
-    (interactive)
-    (org-export-as-html 3 nil nil "blog-entry" t))
-
-  ; Make sure we export in css mode, meaning no inline css crap
-  (setq org-export-htmlize-output-type 'css)
-
-  (defun mrb/org-export-body-as-html-batch ()
-    "Call `org-export-as-html', may be used in batch processing as
-  emacs   --batch
-          --load=$HOME/lib/emacs/org.el
-          --eval \"(setq org-export-headline-levels 2)\"
-          --visit=MyFile --funcall org-export-body as-html-batch"
-    (interactive)
-    (org-export-as-html 3 nil nil nil t))
-#+END_SRC
-
-Support exporting to epub format
-
-#+BEGIN_SRC emacs-lisp
-(use-package ox-epub)
-#+END_SRC
 ** Journaling
 While the capture method is useful I found myself not using it very
 much. Not sure why, but I'm going to try =org-journal= and see it that
