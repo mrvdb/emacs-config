@@ -6,7 +6,6 @@
  ;; If there is more than one, they won't work right.
  '(ansi-color-names-vector
    ["#3F3F3F" "#CC9393" "#7F9F7F" "#F0DFAF" "#8CD0D3" "#DC8CC3" "#93E0E3" "#DCDCCC"])
- '(battery-mode-line-format "[%b%p%%~%mmin]")
  '(column-number-mode t)
  '(command-frequency-autosave-mode t)
  '(compilation-scroll-output t)
@@ -38,10 +37,6 @@
  '(mail-signature nil)
  '(markdown-css-path "/home/mrb/.markdown.css")
  '(mu4e-attachment-dir "/home/mrb/Downloads")
- '(notmuch-saved-searches
-   (quote
-    ((:name "inbox" :query "tag:inbox")
-     (:name "unread" :query "tag:unread"))))
  '(nxml-heading-element-name-regexp "\\|.*")
  '(nxml-section-element-name-regexp "\\|file\\|.+")
  '(ocpf-frame-parameters
@@ -234,7 +229,11 @@
      ("BUY"
       ("buy" . t)))))
  '(org-use-fast-tag-selection (quote auto))
- '(pdf-misc-print-programm "/usr/bin/gtklp")
+ '(package-selected-packages
+   (quote
+    (smooth-scrolling evil-indent-textobject evil-org writeroom-mode helm-config evil-surround engine-mode evil-collection window-numbering persp-mode persp eyebrowse eyebrowse-mode evil-tutor evil org-attach-screenshot auto-revert smartparens crm-custom ido-completing-read+ elfeed-org elfeed airline-themes spaceline-config spaceline powerline zerodark-theme zenburn-theme zeal-at-point yaml-mode xterm-keybinder ws-butler wrap-region which-key visual-fill-column use-package url-shortener stripe-buffer smex selected scratch rainbow-mode rainbow-delimiters php-mode persistent-scratch pdf-tools pass paredit ox-epub origami org-mime org-journal org-capture-pop-frame org-agenda-property oauth notmuch nord-theme multiple-cursors messages-are-flowing markdown-mode magit-org-todos lua-mode jabber isgd intero ido-vertical-mode highlight-parentheses helm-dash hamlet-mode guide-key gnuplot-mode gnuplot git-auto-commit-mode gist ghub+ ghc ggtags fullframe frames-only-mode font-lock+ flycheck-pos-tip flycheck-haskell exwm expand-region erc-hl-nicks erc-colorize elpy eimp edit-server diminish csv-mode base16-theme avy auth-password-store atomic-chrome apache-mode ag adaptive-wrap)))
+ '(pdf-misc-print-programm "/usr/bin/lpr")
+ '(pdf-view-midnight-colors (quote ("#DCDCCC" . "#383838")))
  '(reb-re-syntax (quote string))
  '(safe-local-variable-values
    (quote
