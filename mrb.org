@@ -1424,9 +1424,9 @@ timestamps, for example for documenting longer during tasks and
 recording incremental progress or information on them.
 
 #+BEGIN_SRC emacs-lisp
-  (defun mrb/org-insert-inactive-timestamp ()
-    (interactive)
-    (org-insert-time-stamp (current-time) nil 1 ))
+  (defun mrb/org-insert-inactive-timestamp (&optional with-hm)
+    (interactive "P")
+    (org-insert-time-stamp (current-time) with-hm 1 ))
 #+END_SRC
 
 ** Scheduling items
