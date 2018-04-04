@@ -1143,6 +1143,7 @@ starts life originally as a captured item. I use it for:
 1. TODO items;
 2. BUY items;
 3. Journaling entries;
+4. Logbook entries.
 
 
 The =org-capture-pop-frame= package makes sure all captures are in separate
@@ -1155,8 +1156,8 @@ frames.
     :ensure nil
     :config
     ; Need to use hook here, org-capture-mode is not a major mode
-    (add-hook 'org-capture-mode-hook 'evil-insert-state)
-    )
+    (add-hook 'org-capture-mode-hook 'evil-insert-state))
+
   (use-package org-capture-pop-frame
     :config
     (setq ocpf-frame-parameters
@@ -1170,13 +1171,15 @@ frames.
 Here are the templates used for them.
 
 #+BEGIN_SRC emacs-lisp
-  (setq
-   org-capture-templates
-   (quote (
-           ("b" "Buy"
-            entry (id "new-todo-receiver") "* BUY %? :buy:\n" :prepend t)
-           ("t" "Todo"
-            entry (id "new-todo-receiver") "* TODO %?\n%i" :prepend t :empty-lines 1))))
+    (setq
+     org-capture-templates
+     (quote (
+             ("b" "Buy"
+              entry (id "new-todo-receiver") "* BUY %? :buy:\n%i" :prepend t)
+             ("t" "Todo"
+              entry (id "new-todo-receiver") "* TODO %?\n%i" :prepend t :empty-lines 1)
+             ("z" "Ziggo logbook entry"
+              item (id "ziggo-logbook") " %U %?\n%i"))))
 #+END_SRC
 
 Define functions for each piece of information captured, so they can
