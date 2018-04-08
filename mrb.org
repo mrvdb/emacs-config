@@ -3408,7 +3408,6 @@ imported my feeds from RSSyl
     :bind (("C-c f" . 'elfeed)
            :map elfeed-show-mode-map
            ("w" . 'mrb/elfeed-show-toggle-watchlater)
-           ("e" . 'mrb/elfeed-add-to-playlist)
            ("v" . 'mrb/elfeed-play-with-mpv)
            :map elfeed-search-mode-map
            ("w" . 'mrb/elfeed-search-toggle-watchlater))
@@ -3448,21 +3447,9 @@ imported my feeds from RSSyl
        :app-name "Elfeed")
 
       (start-process "elfeed-mpv" nil
-                     "mpv"
+                     "umpv"
                      (elfeed-entry-link elfeed-show-entry)))
 
-    (defun mrb/elfeed-add-to-playlist ()
-      "Add to already playing mpv"
-      (interactive)
-      (notifications-notify
-       :title "Elfeed action"
-       :body "Enqueued video in MPV playlist"
-       :app-name "Elfeed")
-
-      (start-process "elfeed-mpvremote" nil
-                     "mpvremote"
-                     "add"
-                     (elfeed-entry-link elfeed-show-entry)))
 
     ;; New entry hook allows meta information manipulation
     ;; without directly having to change elfeed-feeds
