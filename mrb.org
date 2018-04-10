@@ -556,25 +556,6 @@ used. The last entry here does not get highlighted, so my config is
 valid for 5 levels, not 6.
 
 #+BEGIN_SRC emacs-lisp
-  (use-package highlight-parentheses
-    :diminish
-    :after base16-theme
-    :init
-    (setq hl-paren-colors
-          ;; FIXME: reformulate this in terms of face-attributes of outline faces
-          `(,(plist-get mrb/base16-colors :base0B)
-            ,(plist-get mrb/base16-colors :base0E)
-            ,(plist-get mrb/base16-colors :base0C)
-            ,(plist-get mrb/base16-colors :base0F)
-            ,(plist-get mrb/base16-colors :base0D)
-            ,(plist-get mrb/base16-colors :base0A)))
-    :config
-    (define-globalized-minor-mode global-highlight-parentheses-mode
-      highlight-parentheses-mode
-      (lambda ()
-        (highlight-parentheses-mode t)))
-    (global-highlight-parentheses-mode t))
-
   ;; no splash screen
   (setq inhibit-startup-screen  t)
   (setq inhibit-startup-message t)
@@ -582,8 +563,6 @@ valid for 5 levels, not 6.
 
   ;; check speed consequences of this
   (setq column-number-mode t)
-
-
 
   ;; Modeline
   (use-package spaceline-config
@@ -608,16 +587,13 @@ valid for 5 levels, not 6.
 
   ;; Parenthesis matching
   (show-paren-mode 1)
-  (setq show-paren-style (quote expression))
+  ;; Show paren if it is visible, region otherwise
+  (setq show-paren-style (quote mixed))
   (setq show-paren-delay 0)
 
   ;; Defer fontification a little bit, so we could gain a bit in scroll speed
   (setq jit-lock-defer-time 0.02)
 
-  ;; Make colorful balanced parentheses etc. in different modes
-  (use-package rainbow-delimiters
-    :config
-    (add-hook 'lisp-mode 'rainbow-delimiters-mode))
 
   ;; Make underlining nicer
   (setq  underline-minimum-offset 3)
@@ -2695,9 +2671,10 @@ so I disable that and when the popup is there, don't require a match.
     :config
     (setq company-idle-delay nil
           company-require-match 'never)
+    ;; List modes for which company mode must be turned on.
     (setq company-global-modes
-          '(not magit-status-mode
-                help-mode))
+          '(python-mode
+            emacs-lisp-mode))
     (add-hook 'after-init-hook 'global-company-mode)
 
     ;; Save the normal completion functions temporarily
