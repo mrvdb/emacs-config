@@ -536,7 +536,8 @@ starting with the =base16-nord= theme and see where this leaves me.
               (org-date                       :foreground base07 :underline nil)
               ;; the default org-level-4 is the same as comment-face, i.e. not very readable
               ;; luckily 0F is free to use
-              (org-level-4                    :foreground base0F)))
+              (org-level-4                    :foreground base0F)
+              (org-verbatim                   :foreground base07)))
 
       ;; Apply our adjustment using the theme function
       (base16-set-faces 'base16-nord base16-nord-colors base16-adjustments)
