@@ -2712,10 +2712,12 @@ The =popwin= package make this behaviour a bit more
 predictable by showing it in the same place and making sure I can get
 rid of it easily.
 
+As popwin is a dependency of which-key, we already have it.
+
 #+BEGIN_SRC emacs-lisp
   (use-package popwin
     :config
-    (setq display-buffer-function 'popwin:display-buffer))
+    (popwin-mode 1))
 #+END_SRC
 ** Ad 6. Guaranteed response-time
 I haven't found a solution for this yet, but also have not found it to
