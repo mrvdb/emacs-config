@@ -3700,7 +3700,7 @@ autocommit to run I can use a file local variable to disable the hook
 
 #+BEGIN_SRC emacs-lisp
   (use-package git-auto-commit-mode
-    :diminish)
+    :diminish "Auto-committed")
 #+END_SRC
 *** Misc
 #+BEGIN_SRC emacs-lisp
