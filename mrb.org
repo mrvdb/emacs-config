@@ -2091,12 +2091,16 @@ prefix key like =C-c= the package =which-keys= can show me a formatted
 menu with the combinations of keys that can follow it.
 
 #+BEGIN_SRC emacs-lisp
-; which keys shows menu with completions of prefix-key
-(use-package which-key
-  :diminish
-  :config
-  (setq which-key-idle-delay 2.0)
-  (which-key-mode))
+  ; which keys shows menu with completions of prefix-key
+  (use-package which-key
+    :after evil
+    :diminish
+    :config
+    (setq which-key-idle-delay 2.0
+          ;; Experimental: also complete for evil operators like d,y,g etc.)
+          which-key-allow-evil-operators t
+          which-key-show-operator-state-maps t)
+    (which-key-mode))
 #+END_SRC
 
 ** First, unsetting the keys I don't want.
