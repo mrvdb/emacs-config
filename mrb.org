@@ -165,7 +165,6 @@ default gnu augmented with the melpa repository.
 
   ;; Some leftovers I need to move to a more logical place
   (use-package fullframe  )    ;; show results of certain commands fullframe
-  (use-package guide-key )     ;; when pressing a prefix key, show the rest after a timeout
 
   ;; Show color of #RRBBGG texts
   (use-package rainbow-mode
@@ -173,9 +172,6 @@ default gnu augmented with the melpa repository.
 
   (use-package edit-server ) ;; Do I still need this? Is is the counterpart to a plugin in browser?
 
-  ;;; Not sure if this is still needed if i configure help/ido/etc.
-  (use-package fixed-point-completion
-    :load-path (lambda () (concat custom-package-directory "fixed-point-completion/")))
 #+END_SRC
 
 * Personal information
@@ -318,7 +314,7 @@ section.
   ;; Allow prettify wherever
   ;; To add replacements for some mode:
   ;; (add-hook 'some-mode-hook (lambda () (push '(">=" . ?≥) prettify-symbols-alist)))
-  (global-prettify-symbols-mode t)
+  ;;(global-prettify-symbols-mode t)
 
 #+END_SRC
 
@@ -585,15 +581,18 @@ valid for 5 levels, not 6.
           (cursor-color . ,mrb-cursor-color)
           (height . 60) (width . 100)))
 
-  ;; Parenthesis matching
-  (show-paren-mode 1)
-  ;; Show paren if it is visible, region otherwise
-  (setq show-paren-style (quote mixed))
-  (setq show-paren-delay 0)
+  (use-package paren
+    :ensure nil ; Built in package
+
+    :config
+    ;; Parenthesis matching
+    (show-paren-mode 1)
+    ;; Show paren if it is visible, region otherwise
+    (setq show-paren-style (quote mixed)
+          show-paren-delay 0))
 
   ;; Defer fontification a little bit, so we could gain a bit in scroll speed
   (setq jit-lock-defer-time 0.02)
-
 
   ;; Make underlining nicer
   (setq  underline-minimum-offset 3)
@@ -1089,7 +1088,6 @@ function.
      )
 
     (use-package org-datetree :ensure nil)        ;; Allows for archiving and refiling in a date organised tree
-    (use-package org-mobile   :ensure nil)        ;;
     (use-package org-protocol :ensure nil
       :config
       (setq org-protocol-default-template-key "t");; If nothing is specified, create a TODO entry
@@ -1762,266 +1760,255 @@ Below is what was contained in the old configuration. I will slowly
 migrate this into more literal sections
 
 #+BEGIN_SRC emacs-lisp
-      ;; Bit of a leftover from reorganising bits, do this later
-      ;;(add-to-list 'org-tags-exclude-from-inheritance (quote "fix"))
-      (add-to-list 'org-tags-exclude-from-inheritance (quote "sell"))
-      ;;(add-to-list 'org-tags-exclude-from-inheritance (quote "build"))
+  ;; Bit of a leftover from reorganising bits, do this later
+  (add-to-list 'org-tags-exclude-from-inheritance (quote "sell"))
 
-      ; Dynamic behaviour
-      (defun mrb/gtd()
-        "Start my GTD system"
-        (interactive)
-        (find-file org-default-notes-file)
+  ;; Dynamic behaviour
+  (defun mrb/gtd()
+    "Start my GTD system"
+    (interactive)
+    (find-file org-default-notes-file))
+
+  (defun mrb/is-project-p ()
+    "This function returns true if the entry is considered a project.
+      A project is defined to be:
+      - having a TODO keyword itself (why was this again?);
+      - having at least one todo entry, regardless of their state."
+    (let ((has-todokeyword)
+          (has-subtask)
+          (subtree-end (save-excursion (org-end-of-subtree t)))
+          (is-a-task (member (nth 2 (org-heading-components)) org-todo-keywords-1)))
+      (save-excursion
+        (forward-line 1)
+        (while (and (not has-subtask)
+                    (< (point) subtree-end)
+                    (re-search-forward "^\*+ " subtree-end t))
+          (when (member (org-get-todo-state) org-todo-keywords-1)
+            (setq has-subtask t))))
+      ;; both subtasks and a keyword on the container need to be present.
+      (and is-a-task has-subtask)))
+
+  ;; FIXME: testing for tag presence should be easier than a re-search forward
+  ;; FIXME: are we not searching for all 'incomplete' type keywords here?,
+  ;;        there must be an org function for that
+  (defun mrb/skip-non-stuck-projects ()
+    "Skip trees that are not stuck projects"
+    (let* ((subtree-end (save-excursion (org-end-of-subtree t)))
+           (has-next (save-excursion
+                       (forward-line 1)
+                       (and (< (point) subtree-end)
+                            (re-search-forward "^*+ \\(TODO\\|BUY\\|WAITING\\)" subtree-end t)))))
+      (if (and (mrb/is-project-p) (not has-next))
+          nil ; a stuck project, has subtasks but no next task
+        subtree-end)))
+
+  (defun mrb/skip-non-projects ()
+    "Skip trees that are not projects"
+    (let* ((subtree-end (save-excursion (org-end-of-subtree t))))
+      (if (mrb/is-project-p)
+          nil
+        subtree-end)))
+
+  (defun mrb/skip-projects ()
+    "Skip trees that are projects"
+    (let* ((subtree-end (save-excursion (org-end-of-subtree t))))
+      (if (mrb/is-project-p)
+          subtree-end
+        nil)))
+
+  (defun mrb/save-containing-org-file()
+    "I want to save the containing file in which the item state was
+     changed, but I'd like it to be asynchronous, because it can
+     take a bit and I don't want the system to stop responding.
+
+     To make it worse, git-autocommit-mode may be on for the file
+    which runs on the after-save hook" )
+
+  (add-hook 'org-after-todo-state-change-hook 'mrb/save-containing-org-file)
+
+  ;; When in agenda mode, show the line we're working on.
+  (add-hook 'org-agenda-mode-hook '(lambda () (hl-line-mode 1)))
+
+  ;; Remove empty property drawers
+  (defun mrb/org-remove-empty-propert-drawers ()
+    "*Remove all empty property drawers in current file."
+    (interactive)
+    (unless (eq major-mode 'org-mode)
+      (error "You need to turn on Org mode for this function."))
+    (save-excursion
+      (goto-char (point-min))
+      (while (re-search-forward ":PROPERTIES:" nil t)
+        (save-excursion
+          (org-remove-empty-drawer-at "PROPERTIES" (match-beginning 0))))))
+
+  (defun mrb/org-remove-redundant-tags ()
+    "Remove redundant tags of headlines in current buffer.
+
+   A tag is considered redundant if it is local to a headline and
+   inherited by a parent headline."
+    (interactive)
+    (when (eq major-mode 'org-mode)
+      (save-excursion
+        (org-map-entries
+         '(lambda ()
+            (let ((alltags (split-string (or (org-entry-get (point) "ALLTAGS") "") ":"))
+                  local inherited tag)
+              (dolist (tag alltags)
+                (if (get-text-property 0 'inherited tag)
+                    (push tag inherited) (push tag local)))
+              (dolist (tag local)
+                (if (member tag inherited) (org-toggle-tag tag 'off)))))
+         t nil))))
+
+
+  (defvar org-agenda-group-by-property nil
+    "Set this in org-mode agenda views to group tasks by property")
+
+  (defun mrb/org-group-bucket-items (prop items)
+    (let ((buckets ()))
+      (dolist (item items)
+        (let* ((marker (get-text-property 0 'org-marker item))
+               (pvalue (org-entry-get marker prop t))
+               (cell (assoc pvalue buckets)))
+          (if cell
+              (setcdr cell (cons item (rest cell)))
+            (setq buckets (cons (cons pvalue (list item))
+                                buckets)))))
+      (setq buckets (mapcar (lambda (bucket)
+                              (cons (first bucket)
+                                    (reverse (rest bucket))))
+                            buckets))
+      (sort buckets (lambda (i1 i2)
+                      (string< (first i1) (first i2))))))
+
+  (defadvice org-agenda-finalize-entries (around org-group-agenda-finalize
+                                                 (list &optional nosort))
+    "Prepare bucketed agenda entry lists"
+    (if org-agenda-group-by-property
+        ;; bucketed, handle appropriately
+        (let ((text ""))
+          (dolist (bucket (mrb/org-group-bucket-items
+                           org-agenda-group-by-property
+                           list))
+            (let ((header (concat "Property "
+                                  org-agenda-group-by-property
+                                  " is "
+                                  (or (first bucket) "<nil>") ":\n")))
+              (add-text-properties 0 (1- (length header))
+                                   (list 'face 'org-agenda-structure)
+                                   header)
+              (setq text
+                    (concat text header
+                            ;; recursively process
+                            (let ((org-agenda-group-by-property nil))
+                              (org-agenda-finalize-entries
+                               (rest bucket) nosort))
+                            "\n\n"))))
+          (setq ad-return-value text))
+      ad-do-it))
+  (ad-activate 'org-agenda-finalize-entries)
+
+
+  ;; Shorten url at point
+  ;; FIXME: I got an email this service will stop in March 2019
+  (use-package url-shortener
+    :config
+    (setq goo-api-key "AIzaSyDXpfGokg-TNqg3HwxO54bVQNnNXP0sygE")
+    (defun mrb/shortenurl-replace-at-point ()
+      "Replace the url at point with a tiny version."
+      (interactive)
+      (let ((long-url (thing-at-point 'url)))
+        (when long-url
+          (goo-shorten long-url))))
+    :bind
+    (:map org-mode-map
+          ("C-c s" . mrb/shortenurl-replace-at-point)))
+
+
+  (defvar mrb/org-my-archive-expiry-days 365
+    "The number of days after which a completed task should be auto-archived.
+   This can be 0 for immediate, or a floating point value.")
+
+  (defun mrb/org-my-archive-done-tasks ()
+    (interactive)
+    (save-excursion
+      (goto-char (point-min))
+      (let ((done-regexp
+             (concat "\\* \\(" (regexp-opt org-done-keywords) "\\) "))
+            (state-regexp
+             (concat "- State \"\\(" (regexp-opt org-done-keywords)
+                     "\\)\"\\s-*\\[\\([^]\n]+\\)\\]")))
+        (while (re-search-forward done-regexp nil t)
+          (let ((end (save-excursion
+                       (outline-next-heading)
+                       (point)))
+                begin)
+            (goto-char (line-beginning-position))
+            (setq begin (point))
+            (when (re-search-forward state-regexp end t)
+              (let* ((time-string (match-string 2))
+                     (when-closed (org-parse-time-string time-string)))
+                (if (>= (time-to-number-of-days
+                         (time-subtract (current-time)
+                                        (apply #'encode-time when-closed)))
+                        mrb/org-my-archive-expiry-days)
+                    (org-archive-subtree)))))))))
+
+  (defalias 'archive-done-tasks 'mrb/org-my-archive-done-tasks)
+
+  ;; archive entries into a date-tree
+  ;; Keep the commented line around, it is convenient during testing
+  ;;(advice-remove 'org-archive-subtree 'org-archive-subtree-to-data-tree)q
+  (defadvice org-archive-subtree                ;
+      (around org-archive-subtree-to-data-tree activate)
+    "org-archive-subtree to date-tree"
+    (if
+        (string= "date-tree"
+                 (org-extract-archive-heading
+                  (org-get-local-archive-location)))
+        (let* ((dct (decode-time (org-current-time)))
+               (today (calendar-current-date))
+               (y (calendar-extract-year today))
+               (m (calendar-extract-month today))
+               (d (calendar-extract-day today))
+               (this-buffer (current-buffer))
+               (location (org-get-local-archive-location))
+               (afile (org-extract-archive-file location))
+               (org-archive-location
+                (format "%s::*** %04d-%02d-%02d %s" afile y m d
+                        (format-time-string "%A" (encode-time 0 0 0 d m y)))))
+          (message "afile=%s" afile)
+          (unless afile
+            (error "Invalid `org-archive-location'"))
+          (save-excursion
+            (switch-to-buffer (find-file-noselect afile))
+            (org-datetree-find-date-create today)
+            (widen)
+            (switch-to-buffer this-buffer))
+          ad-do-it)
+      ad-do-it))
+
+  ;; Mail facilities related to org-mode
+  (use-package org-mime)
+
+  ;; Small bit to mail an org subtree
+  (defun mrb/mail-subtree-from-org ()
+    (interactive)
+    (if (equal major-mode 'org-agenda-mode)
+        (org-agenda-goto)
       )
+    ;;TODO: make this also use the mailcompose frame
+    (org-mime-subtree))
 
-      (defun mrb/is-project-p ()
-        "This function returns true if the entry is considered a project.
-         A project is defined to be:
-         - having a TODO keyword itself (why was this again?);
-         - having at least one todo entry, regardless of their state."
-        (let ((has-todokeyword)
-              (has-subtask)
-              (subtree-end (save-excursion (org-end-of-subtree t)))
-              (is-a-task (member (nth 2 (org-heading-components)) org-todo-keywords-1)))
-          (save-excursion
-            (forward-line 1)
-            (while (and (not has-subtask)
-                        (< (point) subtree-end)
-                        (re-search-forward "^\*+ " subtree-end t))
-              (when (member (org-get-todo-state) org-todo-keywords-1)
-                (setq has-subtask t))))
-          ;; both subtasks and a keyword on the container need to be present.
-          (and is-a-task has-subtask)
-          )
-        )
+  ;; The entry point
+  (defun mrb/construct-mail (useOrgTree)
+    (interactive "P")
+    (if useOrgTree
+        (mrb/mail-subtree-from-org)
+      (mrb/make-mailcompose-frame)))
 
-      ; FIXME: testing for tag presence should be easier than a re-search forward
-      ; FIXME: are we not searching for all 'incomplete' type keywords here?,
-      ;        there must be an org function for that
-      (defun mrb/skip-non-stuck-projects ()
-        "Skip trees that are not stuck projects"
-        (let* ((subtree-end (save-excursion (org-end-of-subtree t)))
-               (has-next (save-excursion
-                           (forward-line 1)
-                           (and (< (point) subtree-end)
-                                (re-search-forward "^*+ \\(TODO\\|BUY\\|WAITING\\)" subtree-end t)))))
-          (if (and (mrb/is-project-p) (not has-next))
-              nil ; a stuck project, has subtasks but no next task
-            subtree-end)))
-
-      (defun mrb/skip-non-projects ()
-        "Skip trees that are not projects"
-        (let* ((subtree-end (save-excursion (org-end-of-subtree t))))
-          (if (mrb/is-project-p)
-              nil
-            subtree-end)))
-
-      (defun mrb/skip-projects ()
-        "Skip trees that are projects"
-        (let* ((subtree-end (save-excursion (org-end-of-subtree t))))
-          (if (mrb/is-project-p)
-              subtree-end
-            nil)))
-
-      (defun mrb/save-containing-org-file()
-        "I want to save the containing file in which the item state was
-        changed, but I'd like it to be asynchronous, because it can
-        take a bit and I don't want the system to stop responding.
-
-        To make it worse, git-autocommit-mode may be on for the file
-       which runs on the after-save hook" )
-
-      (add-hook 'org-after-todo-state-change-hook 'mrb/save-containing-org-file)
-
-      ; When in agenda mode, show the line we're working on.
-      (add-hook 'org-agenda-mode-hook '(lambda () (hl-line-mode 1)))
-
-      ; Remove empty property drawers
-      (defun mrb/org-remove-empty-propert-drawers ()
-        "*Remove all empty property drawers in current file."
-        (interactive)
-        (unless (eq major-mode 'org-mode)
-          (error "You need to turn on Org mode for this function."))
-        (save-excursion
-          (goto-char (point-min))
-          (while (re-search-forward ":PROPERTIES:" nil t)
-            (save-excursion
-              (org-remove-empty-drawer-at "PROPERTIES" (match-beginning 0))))))
-
-      (defun mrb/org-remove-redundant-tags ()
-        "Remove redundant tags of headlines in current buffer.
-
-      A tag is considered redundant if it is local to a headline and
-      inherited by a parent headline."
-        (interactive)
-        (when (eq major-mode 'org-mode)
-          (save-excursion
-            (org-map-entries
-             '(lambda ()
-                (let ((alltags (split-string (or (org-entry-get (point) "ALLTAGS") "") ":"))
-                      local inherited tag)
-                  (dolist (tag alltags)
-                    (if (get-text-property 0 'inherited tag)
-                        (push tag inherited) (push tag local)))
-                  (dolist (tag local)
-                    (if (member tag inherited) (org-toggle-tag tag 'off)))))
-             t nil))))
-
-
-      (defvar org-agenda-group-by-property nil
-        "Set this in org-mode agenda views to group tasks by property")
-
-      (defun mrb/org-group-bucket-items (prop items)
-        (let ((buckets ()))
-          (dolist (item items)
-            (let* ((marker (get-text-property 0 'org-marker item))
-                   (pvalue (org-entry-get marker prop t))
-                   (cell (assoc pvalue buckets)))
-              (if cell
-                  (setcdr cell (cons item (rest cell)))
-                (setq buckets (cons (cons pvalue (list item))
-                                    buckets)))))
-          (setq buckets (mapcar (lambda (bucket)
-                                  (cons (first bucket)
-                                        (reverse (rest bucket))))
-                                buckets))
-          (sort buckets (lambda (i1 i2)
-                          (string< (first i1) (first i2))))))
-
-      (defadvice org-agenda-finalize-entries (around org-group-agenda-finalize
-                                                     (list &optional nosort))
-        "Prepare bucketed agenda entry lists"
-        (if org-agenda-group-by-property
-            ;; bucketed, handle appropriately
-            (let ((text ""))
-              (dolist (bucket (mrb/org-group-bucket-items
-                               org-agenda-group-by-property
-                               list))
-                (let ((header (concat "Property "
-                                      org-agenda-group-by-property
-                                      " is "
-                                      (or (first bucket) "<nil>") ":\n")))
-                  (add-text-properties 0 (1- (length header))
-                                       (list 'face 'org-agenda-structure)
-                                       header)
-                  (setq text
-                        (concat text header
-                                ;; recursively process
-                                (let ((org-agenda-group-by-property nil))
-                                  (org-agenda-finalize-entries
-                                   (rest bucket) nosort))
-                                "\n\n"))))
-              (setq ad-return-value text))
-          ad-do-it))
-      (ad-activate 'org-agenda-finalize-entries)
-
-
-      ;; Shorten url at point
-     (use-package url-shortener
-      :config
-      (setq goo-api-key "AIzaSyDXpfGokg-TNqg3HwxO54bVQNnNXP0sygE")
-      (defun mrb/shortenurl-replace-at-point ()
-        "Replace the url at point with a tiny version."
-        (interactive)
-        (let ((long-url (thing-at-point 'url)))
-          (when long-url
-            (goo-shorten long-url))))
-      :bind
-      (:map org-mode-map
-            ("C-c s" . mrb/shortenurl-replace-at-point)))
-
-
-      (defvar mrb/org-my-archive-expiry-days 365
-        "The number of days after which a completed task should be auto-archived.
-      This can be 0 for immediate, or a floating point value.")
-
-      (defun mrb/org-my-archive-done-tasks ()
-        (interactive)
-        (save-excursion
-          (goto-char (point-min))
-          (let ((done-regexp
-                 (concat "\\* \\(" (regexp-opt org-done-keywords) "\\) "))
-                (state-regexp
-                 (concat "- State \"\\(" (regexp-opt org-done-keywords)
-                         "\\)\"\\s-*\\[\\([^]\n]+\\)\\]")))
-            (while (re-search-forward done-regexp nil t)
-              (let ((end (save-excursion
-                           (outline-next-heading)
-                           (point)))
-                    begin)
-                (goto-char (line-beginning-position))
-                (setq begin (point))
-                (when (re-search-forward state-regexp end t)
-                  (let* ((time-string (match-string 2))
-                         (when-closed (org-parse-time-string time-string)))
-                    (if (>= (time-to-number-of-days
-                             (time-subtract (current-time)
-                                            (apply #'encode-time when-closed)))
-                            mrb/org-my-archive-expiry-days)
-                        (org-archive-subtree)))))))))
-
-      (defalias 'archive-done-tasks 'mrb/org-my-archive-done-tasks)
-
-        ;; archive entries into a date-tree
-      ;; Keep the commented line around, it is convenient during testing
-      ;;(advice-remove 'org-archive-subtree 'org-archive-subtree-to-data-tree)q
-      (defadvice org-archive-subtree                ;
-        (around org-archive-subtree-to-data-tree activate)
-        "org-archive-subtree to date-tree"
-        (if
-            (string= "date-tree"
-                     (org-extract-archive-heading
-                      (org-get-local-archive-location)))
-            (let* ((dct (decode-time (org-current-time)))
-                   (today (calendar-current-date))
-                   (y (calendar-extract-year today))
-                   (m (calendar-extract-month today))
-                   (d (calendar-extract-day today))
-                   (this-buffer (current-buffer))
-                   (location (org-get-local-archive-location))
-                   (afile (org-extract-archive-file location))
-                   (org-archive-location
-                    (format "%s::*** %04d-%02d-%02d %s" afile y m d
-                            (format-time-string "%A" (encode-time 0 0 0 d m y)))))
-              (message "afile=%s" afile)
-              (unless afile
-                (error "Invalid `org-archive-location'"))
-              (save-excursion
-                (switch-to-buffer (find-file-noselect afile))
-                (org-datetree-find-date-create today)
-                (widen)
-                (switch-to-buffer this-buffer))
-              ad-do-it)
-          ad-do-it))
-
-      ;; Mail facilities related to org-mode
-      (use-package org-mime)
-
-      ;; Small bit to mail an org subtree
-      (defun mrb/mail-subtree-from-org ()
-        (interactive)
-        (if (equal major-mode 'org-agenda-mode)
-            (org-agenda-goto)
-          )
-        ;;TODO: make this also use the mailcompose frame
-        (org-mime-subtree))
-
-      ;; The entry point
-      (defun mrb/construct-mail (useOrgTree)
-        (interactive "P")
-        (if useOrgTree
-            (mrb/mail-subtree-from-org)
-          (mrb/make-mailcompose-frame)))
-
-      ;; But not for all others, because the org subtree will never be there
-      (bind-key "C-x m" 'mrb/make-mailcompose-frame)
-
-
-      (use-package stripe-buffer)
-      (defun mrb/enable-org-table-striping ()
-        (interactive)
-        (stripe-org-tables-enable))
-      ;; TODO I want to have this in the agenda mode to
+  ;; But not for all others, because the org subtree will never be there
+  (bind-key "C-x m" 'mrb/make-mailcompose-frame)
 #+END_SRC
 
 ** Encrypting information in org-mode
@@ -2031,10 +2018,12 @@ automatically on saving and opening. This uses the EasyPG library to
 get to my GPG key.
 
 #+BEGIN_SRC emacs-lisp
-(use-package org-crypt :ensure nil)
-(org-crypt-use-before-save-magic)
-(setq org-crypt-tag-matcher "encrypt")
-(setq org-crypt-key user-gpg-encrypt-key)
+  (use-package org-crypt
+    :ensure nil
+    :config
+    (org-crypt-use-before-save-magic)
+    (setq org-crypt-tag-matcher "encrypt")
+    (setq org-crypt-key user-gpg-encrypt-key))
 #+END_SRC
 
 We do not want to inherit this tag automatically, as its behaviour is
@@ -2668,18 +2657,17 @@ so I disable that and when the popup is there, don't require a match.
     :bind
     (:map company-active-map
           ("C-n" . company-select-next)
-          ("C-p" . company-select-previous)
+          ("C-p" . company-select-previous) ; FIXME Evil binding?
      :map company-mode-map
           ;; Remap normal indent-for-tab-command
           ([remap indent-for-tab-command] . company-indent-for-tab-command))
 
     :config
     (setq company-idle-delay nil
-          company-require-match 'never)
-    ;; List modes for which company mode must be turned on.
-    (setq company-global-modes
-          '(python-mode
-            emacs-lisp-mode))
+          company-require-match 'never
+          ;; List modes for which company mode must be turned on.
+          company-global-modes '(python-mode emacs-lisp-mode))
+    ;; And this turns them actually on
     (add-hook 'after-init-hook 'global-company-mode)
 
     ;; Save the normal completion functions temporarily
@@ -2702,14 +2690,6 @@ so I disable that and when the popup is there, don't require a match.
 There's always exceptions to the rule; with Emacs doubly so. Here's
 the relevant exceptions for my configuration.
 
-#+BEGIN_SRC emacs-lisp
-
-  ;; This does not work for some reason?
-  ;; (use-package eshell
-  ;;   :init
-  ;;   (bind-key "<tab>"  'company-complete  eshell-mode-map))
-
-#+END_SRC
 ** Ad 5. Open completion window predictably
 If there is a need to open a **Completions** window, let's at least do
 it predictably, so I know what and where to expect it.
@@ -3697,12 +3677,12 @@ magit, so let's begin with bringing that in.
 #+END_SRC
 
 *** Commiting automatically
-I have lost a number of changes in the past because I reverted a
-file, made a mistake or whatever. Some of these mistakes can be
-reverted easily if saves are automatically committed
+I have lost a number of changes in the past because I reverted a file,
+made a mistake or whatever. Some of these mistakes can be reverted
+easily if saves are automatically committed
 
-Rather than using an after save hook, there is a minor
-git-auto-commit mode package which does just what I need.
+Rather than using an after save hook, there is a minor git-auto-commit
+mode package which does just what I need.
 
 There is not much to configure for this minor mode. There are a couple
 of ways to enable it:
@@ -3711,9 +3691,9 @@ of ways to enable it:
    enables it for all files in the directory
 3. as a hook
 
-I'm using the first method on relevant files. The disadvantage of
-this method is that you have to think about it for each file, so
-perhaps a =.dir-locals.el= is a better solution.
+I'm using the first method on relevant files. The disadvantage of this
+method is that you have to think about it for each file, so perhaps a
+=.dir-locals.el= is a better solution.
 
 I am considering using a generic hook again to enable the method and
 either using =git commit --amend= and commit squashing if working on
