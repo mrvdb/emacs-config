@@ -1723,7 +1723,7 @@ is a better fit.
 
 #+BEGIN_SRC emacs-lisp
   (use-package org-journal
-
+    :after evil
     :init
     ;; The expand-file-name is needed, which is odd, because for single
     ;; files this is not needed.
@@ -1737,7 +1737,8 @@ is a better fit.
 
     ;; I want to have encryption, but how do TODO items bubble up then in the agenda
     org-journal-enable-encryption nil
-    org-crypt-disable-auto-save t))
+    org-crypt-disable-auto-save t)
+    (add-to-list 'evil-insert-state-modes 'org-journal-mode))
 #+END_SRC
 
 Particularly in journaling, but also in org-mode in general, I want to
