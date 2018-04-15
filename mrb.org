@@ -1150,11 +1150,11 @@ Here are the templates used for them.
      org-capture-templates
      (quote (
              ("b" "Buy"
-              entry (id "new-todo-receiver") "* BUY %? :buy:\n%i" :prepend t)
+              entry (id "new-todo-receiver") "* BUY %? :buy:\n%i\n" :prepend t)
              ("t" "Todo"
-              entry (id "new-todo-receiver") "* TODO %?\n%i" :prepend t :empty-lines 1)
+              entry (id "new-todo-receiver") "* TODO %?\n%i\n" :prepend t :empty-lines 1)
              ("z" "Ziggo logbook entry"
-              item (id "ziggo-logbook") " %U %?\n%i"))))
+              item (id "ziggo-logbook") " %U %?\n%i\n"))))
 #+END_SRC
 
 Define functions for each piece of information captured, so they can
