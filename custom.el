@@ -245,6 +245,14 @@
  '(sieve-manage-authenticators (quote (plain digest-md5 cram-md5 scram-md5 ntlm login)))
  '(sql-postgres-options (quote ("-P" "pager=off" "-p 5434")))
  '(sql-server "dbserver.hsdev.com")
+ '(twittering-status-format
+   "%i %s, %RT{(%FACE[bold]{RT} by %s)} %@:
+%FOLD[  ]{%T |%L%r%QT{
+┌────
+%FOLD[|]{%i %s, %RT{(%FACE[bold]{RT} by %s)} %@:
+%FOLD[  ]{%T |%L%r}}
+└────}}
+ ")
  '(warning-suppress-types (quote ((undo))))
  '(x-select-enable-clipboard-manager nil))
 (custom-set-faces
