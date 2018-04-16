@@ -1733,6 +1733,8 @@ is a better fit.
      org-agenda-file-regexp "^[0-9]+\\.org"
      org-journal-file-format  "%Y%m%d.org"
 
+     org-journal-date-format "%A, %e-%m-%Y"
+
     ;; I want to have encryption, but how do TODO items bubble up then in the agenda
     org-journal-enable-encryption nil
     org-crypt-disable-auto-save t)
