@@ -2793,6 +2793,7 @@ of packages obsolete (=avy-jump=, =expand region=, possbibly
     :after evil
     :config
     ;; Exclude list of modes
+    (delete 'notmuch evil-collection-mode-list)
     (delete 'elfeed evil-collection-mode-list)
     (evil-collection-init))
 
@@ -3329,7 +3330,9 @@ First, let's activate notmuch itself.
        notmuch-fcc-dirs nil
        notmuch-poll-script nil)
 
-    (add-hook 'message-mode-hook 'mrb/message-mode-hook))
+    (add-hook 'message-mode-hook 'mrb/message-mode-hook)
+    (add-to-list 'evil-emacs-state-modes 'notmuch-hello-mode)
+    (add-to-list 'evil-emacs-state-modes 'notmuch-search-mode))
 #+END_SRC
 
 
