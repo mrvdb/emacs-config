@@ -535,7 +535,14 @@ starting with the =base16-nord= theme and see where this leaves me.
               ;; the default org-level-4 is the same as comment-face, i.e. not very readable
               ;; luckily 0F is free to use
               (org-level-4                    :foreground base0F)
-              (org-verbatim                   :foreground base07)))
+              (org-verbatim                   :foreground base07)
+              ;; Set space-line state colors
+              (space-line-evil-normal         :background base0B)
+              (space-line-evil-insert         :background base0D)
+              (space-line-evil-emacs          :background base0E)
+              (space-line-evil-motion         :background base09)
+              (space-line-evil-visual         :background base07)
+              (space-line-evil-replace        :background base0F)))
 
       ;; Apply our adjustment using the theme function
       (base16-set-faces 'base16-nord base16-nord-colors base16-adjustments)
@@ -579,10 +586,16 @@ valid for 5 levels, not 6.
     ;; Make the highlight in the modeline dependent on the evil state
     (setq spaceline-highlight-face-func 'spaceline-highlight-face-evil-state)
 
-    ;; And I want the cursor to follow that
-    ;; FIXME: this aint complete yet
-    (setq mrb-cursor-color
-          (face-attribute 'spaceline-highlight-face :background))
+    ;; And I want the cursor to follow that, but I don't know how to do that
+    ;; automatically, so here's the mapping.
+    ;; FIXME: rewrite to automatic
+    (setq evil-normal-state-cursor  '("#bf616a" box)
+          evil-insert-state-cursor  '("#ebcb8b" box)
+          evil-emacs-state-cursor   '("#a3be8c" box)
+          evil-motion-state-cursor  '("#81a1c1" box)
+          evil-visual-state-cursor  '("#8fbcbb" box)
+          evil-replace-state-cursor '("#b48ead" box))
+
 
     ;; Define a segment for the tracking package
     (spaceline-define-segment tracking
@@ -595,7 +608,6 @@ valid for 5 levels, not 6.
     ;;Default frame properties frame position, color, etc
     (setq default-frame-alist
         `((cursor-type . box )
-          (cursor-color . ,mrb-cursor-color)
           (height . 60) (width . 100))))
 
   (use-package paren
