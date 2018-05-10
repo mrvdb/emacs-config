@@ -562,26 +562,41 @@ valid for 5 levels, not 6.
   ;; check speed consequences of this
   (setq column-number-mode t)
 
+  ;; Track changes to buffers
+  (use-package tracking
+    :config
+    (tracking-mode 1))
+
   ;; Modeline
   (use-package spaceline-config
+    :after tracking
     :ensure spaceline
     :ensure eyebrowse
     :ensure persp-mode
     :ensure window-numbering
 
     :config
-    ;; I want the cursor the same as the highlight face of the modeline
+    ;; Make the highlight in the modeline dependent on the evil state
+    (setq spaceline-highlight-face-func 'spaceline-highlight-face-evil-state)
+
+    ;; And I want the cursor to follow that
+    ;; FIXME: this aint complete yet
     (setq mrb-cursor-color
           (face-attribute 'spaceline-highlight-face :background))
 
-    ;; We use the spacemacs theme, which gives us the evil state indicator
-    (spaceline-spacemacs-theme))
+    ;; Define a segment for the tracking package
+    (spaceline-define-segment tracking
+      "Segment to show if buffers need attention, similar to erc-track, but using mcirc tracking library"
+      tracking-mode-line-buffers)
 
-  ;; Default frame properties frame position, color, etc
-  (setq default-frame-alist
+    ;; We use the spacemacs theme, which gives us the evil state indicator
+    (spaceline-spacemacs-theme 'tracking)
+
+    ;;Default frame properties frame position, color, etc
+    (setq default-frame-alist
         `((cursor-type . box )
           (cursor-color . ,mrb-cursor-color)
-          (height . 60) (width . 100)))
+          (height . 60) (width . 100))))
 
   (use-package paren
     :ensure nil ; Built in package
@@ -3459,6 +3474,34 @@ i want.
      erc-track-enable-keybindings t))
 
 #+END_SRC
+
+I'm experimenting with Weechat now, mostly because it has multiple
+clients and can make my IRC experience a bit more like Telegram,
+i.e. regardless of client, the chat state remains the same.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package weechat
+    :ensure nil ;; We have it patched (issue #50), so do not retrieve again
+    :config
+    (progn
+      (setq weechat-host-default "chat.hsdev.com"
+            weechat-port-default 8443
+            weechat-mode-default 'ssl
+            weechat-auto-monitor-buffers t   ;; Auto monitor all buffers for now
+            weechat-tracking-types '(:message :highlight))
+
+      (add-to-list 'weechat-modules 'weechat-notifications)
+      (add-to-list 'weechat-modules 'weechat-tracking)
+    ;; Make a convenient connect function
+    (defun mrb/chat()
+      (interactive)
+      (weechat-connect
+       weechat-host-default
+       weechat-port-default
+       nil
+       weechat-mode-default))))
+#+END_SRC
+
 ** Twitter
 There seems to be a defacto standard for twitter in emacs, which is
 =twittering-mode=. I have made a simple configuration for it, all of
