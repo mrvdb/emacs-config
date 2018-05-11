@@ -3494,24 +3494,39 @@ i.e. regardless of client, the chat state remains the same.
 #+BEGIN_SRC emacs-lisp
   (use-package weechat
     :ensure nil ;; We have it patched (issue #50), so do not retrieve again
+    :after tracking
     :config
-    (progn
-      (setq weechat-host-default "chat.hsdev.com"
-            weechat-port-default 8443
-            weechat-mode-default 'ssl
-            weechat-auto-monitor-buffers t   ;; Auto monitor all buffers for now
-            weechat-tracking-types '(:message :highlight))
+    (require 'weechat-tracking)
+    (require 'weechat-notifications)
+    (require 'weechat-image)
+    (setq weechat-host-default "chat.hsdev.com"
+          weechat-port-default 8443
+          weechat-mode-default 'ssl
+          weechat-auto-monitor-buffers t   ;; Auto monitor all buffers for now
+          weechat-tracking-types '(:message :highlight)
+          weechat-image-max-height 300
+          weechat-image-resize t
+          weechat-color-list '(unspecified
+                               "#2e3440" "#4c566a" "#d08770" "#bf616a"
+                               "#d8dee9" "#a3be8c" "#e5e9f0"
+                               "#ebcb8b" "#81a1c1" "#5e81ac"
+                               "#eceff4" "#b48ead" "#88c0d0"
+                               "#8fbcbb" "#3b4252"
+                               "#434c5e"))
 
       (add-to-list 'weechat-modules 'weechat-notifications)
       (add-to-list 'weechat-modules 'weechat-tracking)
-    ;; Make a convenient connect function
-    (defun mrb/chat()
-      (interactive)
-      (weechat-connect
-       weechat-host-default
-       weechat-port-default
-       nil
-       weechat-mode-default))))
+      (add-to-list 'weechat-modules 'weechat-image)
+      (add-hook 'weechat-mode-hook 'visual-line-mode)
+
+      ;; Make a convenient connect function
+      (defun mrb/chat()
+        (interactive)
+        (weechat-connect
+         weechat-host-default
+         weechat-port-default
+         nil
+         weechat-mode-default)))
 #+END_SRC
 
 ** Twitter
