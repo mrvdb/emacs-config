@@ -498,6 +498,7 @@ starting with the =base16-nord= theme and see where this leaves me.
               (button                       :foreground base0C :weight semi-bold)
 
               (show-paren-match             :foreground base00 :background base0F :inherit nil :weight normal)
+              (show-paren-mismatch          :foreground base00 :background base0B :inherit nil :weight normal)
               ;; Set regions so we keep the normal font locking
               (region                       :foreground nil :background base02 :inherit nil :weight normal)
               ;; Magit
