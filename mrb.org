@@ -2800,6 +2800,7 @@ of packages obsolete (=avy-jump=, =expand region=, possbibly
 
 #+BEGIN_SRC emacs-lisp
   (use-package evil
+    :diminish undo-tree-mode
     :init
     (setq evil-want-integration nil) ; Need this for evil-collection, no idea what it does.
     :config
