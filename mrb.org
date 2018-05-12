@@ -344,7 +344,7 @@ very similar.
          ("<S-return>" .  'newline))
 
   :config
-  ;; All thi   s came from http://pragmaticemacs.com/emacs/even-more-pdf-tools-tweaks/
+  ;; All this came from http://pragmaticemacs.com/emacs/even-more-pdf-tools-tweaks/
 
    ;; open pdfs scaled to fit page
    (setq-default pdf-view-display-size 'fit-page)
@@ -930,65 +930,52 @@ on a line which is commented out in the proper syntax for that mode.
 
   ;; Extension mappings for several modes
   (use-package markdown-mode
-    :commands (markdown-mode)
-    :mode "\\.markdown|\\.md\\'")
+    :mode ("\\.markdown\\" "\\.md\\'"))
 
   (use-package gnuplot-mode
-    :commands (gnuplot)
     :mode "\\.gp\\'")
 
   (use-package php-mode
-    :commands (php-mode)
     :mode "\\.php\\'")
 
   (use-package css-mode
-    :commands (css-mode)
-    :mode "\\.css|\\.mss\\'"
-    :config
-    (add-hook 'css-mode-hook 'rainbow-mode))
+    :mode ("\\.css\\'" "\\.mss\\'"))
 
   (use-package apache-mode
-    :commands (apache-mode)
     :mode "\\.htaccess\\'")
 
   (use-package rainbow-mode
-    :commands (rainbow-mode))
+    :hook (conf-mode css-mode))
 
   (use-package yaml-mode
-    :commands (yaml-mode)
-    :mode "\\.yml|\\.mml\\'")
+    :mode ("\\.yml\\'" "\\.mml\\'"))
 
   (use-package eimp
-    :config
-    (add-hook 'image-mode-hook 'eimp-mode))
+    :hook image-mode)
 
   (use-package lua-mode
-    :commands (lua-mode)
     :mode "\\.lua\\'")
 
   (use-package csv-mode
-    :commands (csv-mode)
     :mode "\\.csv\\'")
 
   (use-package js-mode
     :ensure nil  ;; built in
-    :commands (javascript-mode)
     :mode "\\.js\\'")
 
   (use-package diff-mode
     :ensure nil  ;; built in
-    :commands (diff-mode)
     :mode "\\.patch\\'")
 
   (use-package sh-mode
     :ensure nil ;; built in
-    :commands (sh-mode)
     :mode "\\.zsh\\'")
 
   (use-package conf-mode
-    :ensure nil
-    :config
-    (add-hook 'conf-mode-hook 'rainbow-mode))
+    :ensure nil)
+
+  (use-package adoc-mode
+    :mode ("\\.asciidoc\\'" "\\.adoc\\'"))
 
   ;; Open scratch buffer by default in the mode we are in at the moment
   ;; with C-u prefix a mode will be asked to use
