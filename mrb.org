@@ -2762,9 +2762,23 @@ in many directories.
 
 #+BEGIN_SRC emacs-lisp
   (use-package ido-vertical-mode
+    :after ido
     :config
     (setq ido-vertical-define-keys 'C-n-C-p-up-down-left-right)
     (ido-vertical-mode))
+#+END_SRC
+
+Now, this still leaves some functions that won't use ido which
+could. For that, we have ido-completing-read+ or ido-ubiquitous
+mode. This basically overrides =completing-read= with a version that
+uses ido. This may be harmfull sometimes. If it is, use the builtin
+blacklist to exclude such cases.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package ido-completing-read+
+    :after ido
+    :config
+    (ido-ubiquitous-mode 1))
 #+END_SRC
 
 The multiple cursors package is often used for repetitive editting.
