@@ -1024,7 +1024,7 @@ function.
     :after (org-capture)
     :bind (("C-c g" . 'mrb/gtd)
            ("C-c a"   . 'org-agenda)
-           ("C-c b"   . 'org-iswitchb)
+           ("C-c b"   . 'org-switchb)
            ("C-c j"   . 'org-journal-new-entry)
            ("C-s-s"   . 'org-save-all-org-buffers)
            ("C-x m"   . 'mrb/construct-mail)
@@ -1101,8 +1101,7 @@ function.
      org-special-ctrl-a/e t
      org-stuck-projects (quote ("-inactive/TODO" ("TODO" "WAITING") nil ""))
      org-track-ordered-property-with-tag nil
-     org-startup-indented t
-     )
+     org-startup-indented t)
 
     (use-package org-datetree :ensure nil)        ;; Allows for archiving and refiling in a date organised tree
     (use-package org-protocol :ensure nil
