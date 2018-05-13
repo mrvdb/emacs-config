@@ -2820,8 +2820,16 @@ of packages obsolete (=avy-jump=, =expand region=, possbibly
 
   ;; Add notion of doing an acount with the stuff surrounding a text object
   (use-package evil-surround
+    :after evil
     :config
     (global-evil-surround-mode 1))
+
+  ;; Add notion of commenting something as action
+  (use-package evil-commentary
+    :diminish evil-commentary-mode
+    :after evil
+    :config
+    (evil-commentary-mode))
 #+END_SRC
 
 *** Avy
