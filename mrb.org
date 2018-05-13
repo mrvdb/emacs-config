@@ -2992,19 +2992,24 @@ on the varying name that xprop delivers, so. we make our own window.
 
   (defun  mrb/make-mailreply-frame (mid &optional all)
     "Create a frame in which we reply to message id `mid`.
-     which is of the form 'id:<mid>'"
+       which is of the form 'id:<mid>'"
     (interactive)
     (mrb/make-mailframe)
+    ;; AFAICT notmuch adds '+replied' automatically through this, which is exaclty what I want
     (notmuch-mua-new-reply mid)
     (delete-other-windows))
 
-  (defun mrb/make-mailforward-frame (mids)
-    "Create a frame in which we forward all messages in the list
-    `mids`. The argument is a list of strings having the format:
-     (id:<message id>)"
+  (defun mrb/make-mailforward-frame (mid)
+    "Create a frame in which we forward message with id `MID`
+       (id:<message id>)"
     (interactive)
     (mrb/make-mailframe)
-    (notmuch-mua-new-forward-messages (list mids))
+    ;; notmuch forward takes a list of mids
+    (notmuch-mua-new-forward-messages (list mid))
+    ;; notmuch does not automatically tag forwarded messages FIXME: this
+    ;; works, but does it unconditionally, I just want it when it
+    ;; actually was sent out
+    (notmuch-tag mid '("+passed"))
     (delete-other-windows))
 #+END_SRC
 
