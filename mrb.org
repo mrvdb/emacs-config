@@ -687,6 +687,17 @@ buffer, which is a step closer to what i want.
 Now, the modes that want to use this, should enable adaptive-wrap
 minor mode.
 
+Line-numbering is off by default, it tends to slow things down, but if
+I want it on, I almost always want them relative
+
+#+BEGIN_SRC emacs-lisp
+  (use-package display-line-numbers
+    :config
+    (setq
+     display-line-numbers-type 'relative)
+    (display-line-numbers-mode -1))
+#+END_SRC
+
 ** Client dependent settings
 Because most of my usage involves having a long lasting emacs daemon,
 some settings only come into scope once a client connects to that
