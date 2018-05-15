@@ -19,7 +19,7 @@
 
 ;; Bootstrap use-package
 (unless (package-installed-p 'use-package)
-  (package-refresh-contents)
+  (package-refresh-contents) ;; Just to make sure (note that refresh only runs if use-package is NOT installed)
   (package-install 'use-package))
 
 ;; Load in the main org file which starts up configuration This will
