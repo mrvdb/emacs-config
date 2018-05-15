@@ -166,11 +166,6 @@ default gnu augmented with the melpa repository.
   ;; Some leftovers I need to move to a more logical place
   (use-package fullframe  )    ;; show results of certain commands fullframe
 
-  ;; Show color of #RRBBGG texts
-  (use-package rainbow-mode
-    :diminish)
-
-  (use-package edit-server ) ;; Do I still need this? Is is the counterpart to a plugin in browser?
 
 #+END_SRC
 
@@ -213,7 +208,7 @@ is broken, I can't authenticate to services I need.
 I have a gpg-agent daemon configured which manages gpg and ssh keys,
 protected by one password. Let's make the system as simple as we can
 for now and just store passwords in the gpg agent store only,
-i.e. authinfo.gpg using public key encryption aimed at my key.
+i.e. the password-store program.
 
 #+BEGIN_SRC emacs-lisp
   ;; Use only authinfo.gpg for password storage
@@ -633,6 +628,10 @@ valid for 5 levels, not 6.
 
   ;; Make underlining nicer
   (setq  underline-minimum-offset 3)
+
+    ;; Show color of #RRBBGG texts
+  (use-package rainbow-mode
+    :diminish)
 #+END_SRC
 
 ** Lines
@@ -2281,6 +2280,7 @@ major mode only.
      ("M-X"     . 'smex-major-mode-commands))
     :config
     (setq
+     ;; This makes all the difference in speed!!!
      smex-auto-update nil))
 #+END_SRC
 
