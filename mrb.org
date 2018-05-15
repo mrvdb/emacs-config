@@ -573,6 +573,9 @@ valid for 5 levels, not 6.
   ;; Track changes to buffers
   (use-package tracking
     :config
+    (setq
+     tracking-max-mode-line-entries 1
+     tracking-shorten-buffer-names-p nil)
     (tracking-mode 1))
 
   ;; Modeline
