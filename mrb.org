@@ -2873,6 +2873,7 @@ anymore.
 
 #+BEGIN_SRC emacs-lisp
   (use-package tramp
+    :config
     (setq default-tramp-method "ssh"))
 #+END_SRC
 * Browser integration
