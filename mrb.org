@@ -2278,7 +2278,10 @@ major mode only.
     :bind
     (("C-c M-x" . 'execute-extended-command)
      ("M-x"     . 'smex)
-     ("M-X"     . 'smex-major-mode-commands)))
+     ("M-X"     . 'smex-major-mode-commands))
+    :config
+    (setq
+     smex-auto-update nil))
 #+END_SRC
 
 **** What should have been in emacs
