@@ -163,10 +163,6 @@ default gnu augmented with the melpa repository.
 
   (use-package cl-lib )
 
-  ;; Some leftovers I need to move to a more logical place
-  (use-package fullframe  )    ;; show results of certain commands fullframe
-
-
 #+END_SRC
 
 * Personal information
@@ -564,77 +560,80 @@ used. The last entry here does not get highlighted, so my config is
 valid for 5 levels, not 6.
 
 #+BEGIN_SRC emacs-lisp
-  ;; no splash screen
-  (setq inhibit-startup-screen  t)
-  (setq inhibit-startup-message t)
-  (setq initial-scratch-message nil)
+    ;; no splash screen
+    (setq inhibit-startup-screen  t)
+    (setq inhibit-startup-message t)
+    (setq initial-scratch-message nil)
 
-  ;; check speed consequences of this
-  (setq column-number-mode t)
+    ;; check speed consequences of this
+    (setq column-number-mode t)
 
-  ;; Track changes to buffers
-  (use-package tracking
-    :config
-    (setq
-     tracking-max-mode-line-entries 1
-     tracking-shorten-buffer-names-p nil)
-    (tracking-mode 1))
+    ;; Track changes to buffers
+    (use-package tracking
+      :config
+      (setq
+       tracking-max-mode-line-entries 1
+       tracking-shorten-buffer-names-p nil)
+      (tracking-mode 1))
 
-  ;; Modeline
-  (use-package spaceline-config
-    :after tracking
-    :ensure spaceline
-    :ensure eyebrowse
-    :ensure persp-mode
-    :ensure window-numbering
+    ;; Modeline
+    (use-package spaceline-config
+      :after tracking
+      :ensure spaceline
+      :ensure eyebrowse
+      :ensure persp-mode
+      :ensure window-numbering
 
-    :config
-    ;; Make the highlight in the modeline dependent on the evil state
-    (setq spaceline-highlight-face-func 'spaceline-highlight-face-evil-state)
+      :config
+      ;; Make the highlight in the modeline dependent on the evil state
+      (setq spaceline-highlight-face-func 'spaceline-highlight-face-evil-state)
 
-    ;; And I want the cursor to follow that, but I don't know how to do that
-    ;; automatically, so here's the mapping.
-    ;; FIXME: rewrite to automatic
-    (setq evil-normal-state-cursor  '("#bf616a" box)
-          evil-insert-state-cursor  '("#ebcb8b" box)
-          evil-emacs-state-cursor   '("#a3be8c" box)
-          evil-motion-state-cursor  '("#81a1c1" box)
-          evil-visual-state-cursor  '("#8fbcbb" box)
-          evil-replace-state-cursor '("#b48ead" box))
+      ;; And I want the cursor to follow that, but I don't know how to do that
+      ;; automatically, so here's the mapping.
+      ;; FIXME: rewrite to automatic
+      (setq evil-normal-state-cursor  '("#bf616a" box)
+            evil-insert-state-cursor  '("#ebcb8b" box)
+            evil-emacs-state-cursor   '("#a3be8c" box)
+            evil-motion-state-cursor  '("#81a1c1" box)
+            evil-visual-state-cursor  '("#8fbcbb" box)
+            evil-replace-state-cursor '("#b48ead" box))
 
 
-    ;; Define a segment for the tracking package
-    (spaceline-define-segment tracking
-      "Segment to show if buffers need attention, similar to erc-track, but using mcirc tracking library"
-      tracking-mode-line-buffers)
+      ;; Define a segment for the tracking package
+      (spaceline-define-segment tracking
+        "Segment to show if buffers need attention, similar to erc-track, but using mcirc tracking library"
+        tracking-mode-line-buffers)
 
-    ;; We use the spacemacs theme, which gives us the evil state indicator
-    (spaceline-spacemacs-theme 'tracking)
+      ;; We use the spacemacs theme, which gives us the evil state indicator
+      (spaceline-spacemacs-theme 'tracking)
 
-    ;;Default frame properties frame position, color, etc
-    (setq default-frame-alist
-        `((cursor-type . box )
-          (height . 60) (width . 100))))
+      ;;Default frame properties frame position, color, etc
+      (setq default-frame-alist
+          `((cursor-type . box )
+            (height . 60) (width . 100))))
 
-  (use-package paren
-    :ensure nil ; Built in package
+    (use-package paren
+      :ensure nil ; Built in package
 
-    :config
-    ;; Parenthesis matching
-    (show-paren-mode 1)
-    ;; Show paren if it is visible, region otherwise
-    (setq show-paren-style (quote mixed)
-          show-paren-delay 0))
+      :config
+      ;; Parenthesis matching
+      (show-paren-mode 1)
+      ;; Show paren if it is visible, region otherwise
+      (setq show-paren-style (quote mixed)
+            show-paren-delay 0))
 
-  ;; Defer fontification a little bit, so we could gain a bit in scroll speed
-  (setq jit-lock-defer-time 0.02)
+    ;; Defer fontification a little bit, so we could gain a bit in scroll speed
+    (setq jit-lock-defer-time 0.02)
 
-  ;; Make underlining nicer
-  (setq  underline-minimum-offset 3)
+    ;; Make underlining nicer
+    (setq  underline-minimum-offset 3)
 
-    ;; Show color of #RRBBGG texts
-  (use-package rainbow-mode
-    :diminish)
+      ;; Show color of #RRBBGG texts
+    (use-package rainbow-mode
+      :diminish)
+
+    ;; Give commands the option to display fullscreen (so far, magit-status only)
+    (use-package fullframe  )
 #+END_SRC
 
 ** Lines
