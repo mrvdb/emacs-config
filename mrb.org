@@ -938,7 +938,7 @@ on a line which is commented out in the proper syntax for that mode.
 
   ;; Extension mappings for several modes
   (use-package markdown-mode
-    :mode ("\\.markdown\\" "\\.md\\'"))
+    :mode ("\\.markdown\\'" "\\.md\\'"))
 
   (use-package gnuplot-mode
     :mode "\\.gp\\'")
