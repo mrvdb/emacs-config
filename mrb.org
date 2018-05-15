@@ -2815,7 +2815,7 @@ emacs, is the ultimate navigational package.
 Evil mode is a Emulated VI Layer on top of emacs. Arguably the
 strenght of vi is in its composeability of text editting commands. I
 want to try this out as a component in Emacs.
-I'm not planning on leaving emacs because it's strengths and my long
+I'm not planning on leaving emacs because its strengths and my long
 history with it is not something I want to lose, but it seems to me
 that having evil-mode as the base navigational logic can make a number
 of packages obsolete (=avy-jump=, =expand region=, possbibly
@@ -2841,7 +2841,7 @@ of packages obsolete (=avy-jump=, =expand region=, possbibly
     (delete 'elfeed evil-collection-mode-list)
     (evil-collection-init))
 
-  ;; Add notion of doing an acount with the stuff surrounding a text object
+  ;; Add notion of doing an action with the stuff surrounding a text object
   (use-package evil-surround
     :after evil
     :config
