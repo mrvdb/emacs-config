@@ -2855,33 +2855,6 @@ of packages obsolete (=avy-jump=, =expand region=, possbibly
     (evil-commentary-mode))
 #+END_SRC
 
-*** Avy
-
-#+BEGIN_SRC emacs-lisp
-  (use-package avy
-    :config
-    (setq avy-style 'at-full)
-    (setq avy-background t)
-    :bind
-    ("s-j" . avy-goto-word-or-subword-1))
-#+END_SRC
-
-The effectiveness is also dependent on a quick and easy keyboard
-shortcut. Avy has 3 modes:
-1. char mode
-2. word mode
-3. line mode
-
-which respectively search for the existence of a character, the
-beginning of a word and the beginning of a line. The mode keeps
-highlighting jump locations until there is a unique match before it
-jumps.
-The =word mode= is typically 90% of the usage, so that should get the
-main keyboard shortcut, while the two others can get the usual C-u
-treatment.
-
-I used to use =ace-jump-mode=, which does exactly the same, but that
-package seems to be unmaintained. Avy is a reimplementation.
 * Remote editing
 As my default shell is =zsh= tramp does not work out of the box for
 me. It gets confused by my prompt, so on top of my =.zshrc= file I have
