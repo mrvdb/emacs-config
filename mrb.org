@@ -2883,13 +2883,24 @@ treatment.
 I used to use =ace-jump-mode=, which does exactly the same, but that
 package seems to be unmaintained. Avy is a reimplementation.
 * Remote editing
-Somehow I found that 'sshx' method works, but 'ssh' does not. At some
-point I'll need to find out why that is. The only thing different
-seems to be the '-t' option to the =ssh= program.
+As my default shell is =zsh= tramp does not work out of the box for
+me. It gets confused by my prompt, so on top of my =.zshrc= file I have
+the following line:
+
+#+BEGIN_SRC sh
+# Immediately bail out if we are coming in with a dumb terminal
+# which, in my case, mostly means TRAMP is asking for someting.
+[[ $TERM == "dumb" ]] && unsetopt zle && PS1='$ ' && return
+#+END_SRC
+
+Once that is in place files can be opened with
+=/ssh:/host:/path/to/file= syntax. Surprisingly, the syntax I got used
+to in the past (i.e. =/host:/path/to/file=) does not work for my
+anymore.
 
 #+BEGIN_SRC emacs-lisp
-(setq default-tramp-method "ssh")
-
+  (use-package tramp
+    (setq default-tramp-method "ssh"))
 #+END_SRC
 * Browser integration
 My default browser, as set in the OS, should be started automatically
