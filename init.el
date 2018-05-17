@@ -8,6 +8,11 @@
 
 ;;; Code:
 
+;; Some performance tweaks
+;; These two lines prevent a stuttering cursor for me, in most cases
+;; FIXME: this sets gc to 500Mb / but in idle 5 seconds Obviously wrong!!
+(setq gc-cons-threashold 500000000)
+(run-with-idle-timer 5 t #'garbage-collect)
 
 ;; Added by Package.el.  This must come before configurations of
 ;; installed packages.  Don't delete this line.  If you don't want it,
