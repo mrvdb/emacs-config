@@ -1012,12 +1012,14 @@ on a line which is commented out in the proper syntax for that mode.
       (list 'emacs-lisp-mode-hook 'lisp-interaction-mode-hook 'ielm-mode-hook 'python-mode))
     (add-hook the_mode 'turn-on-eldoc-mode))
 
-  ;; Autofill should be off for a couple of modes, but mostly on
+  ; Autofill should be off for a couple of modes, but mostly on
   (auto-fill-mode 1)
-  (dolist
-      (the_mode
-       (list 'nxml-mode))
-    (add-hook the_mode 'turn-off-auto-fill))
+
+  (use-package nxml-mode
+    :ensure nil ;; builtin mode
+    :config
+    (add-hook 'nxml-mode-hook '(lambda () (set-input-method nil)))
+    (add-hook 'nxml-mode-hook 'turn-off-auto-fill))
 #+END_SRC
 * Org-mode
 Orgmode configuraton is probably the largest part of my Emacs
