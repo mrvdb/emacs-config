@@ -971,7 +971,8 @@ on a line which is commented out in the proper syntax for that mode.
     :mode ("\\.yml\\'" "\\.mml\\'"))
 
   (use-package eimp
-    :hook image-mode)
+    :config
+    (add-hook 'image-mode-hook #'eimp-mode))
 
   (use-package lua-mode
     :mode "\\.lua\\'")
