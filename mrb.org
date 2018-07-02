@@ -324,7 +324,7 @@ docview. I'm a bit annoyed that they are not one package, they are
 very similar.
 #+BEGIN_SRC emacs-lisp
 (use-package pdf-tools
-  :after (pdf-annot)
+  :after (pdf-annot fullframe)
   :bind (:map pdf-view-mode-map
          ("h"   . 'pdf-annot-add-highlight-markup-annotation)
          ("t"   . 'pdf-annot-add-text-annotation)
@@ -337,7 +337,8 @@ very similar.
   :config
   ;; All this came from http://pragmaticemacs.com/emacs/even-more-pdf-tools-tweaks/
 
-   ;; open pdfs scaled to fit page
+   ;; open pdfs scaled to fit page in full frame window
+   (fullframe pdf-view-mode quit-window)
    (setq-default pdf-view-display-size 'fit-page)
    ;; automatically annotate highlights
    (setq pdf-annot-activate-created-annotations t)
