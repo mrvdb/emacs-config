@@ -3056,9 +3056,10 @@ edit -e '(mrb/make-mailcompose-frame)'
 
 #+BEGIN_SRC emacs-lisp
   (use-package message
-    :ensure nil  ;; Needed because it's internal??
+    :ensure nil  ;; Emacs included, no need to go look for it
     :requires org-faces
     :config
+    (setq message-cite-function 'message-cite-original-without-signature)
     ;; First quote level
     (set-face-attribute 'message-cited-text nil :inherit 'org-level-1)
 
@@ -3376,6 +3377,7 @@ First, let's activate notmuch itself.
 
 
   (use-package notmuch
+    :after message
     :commands notmuch-message-mode
     :init
     ;; Make sure that we enter notmuch-message mode on compose from astroid
@@ -3387,11 +3389,20 @@ First, let's activate notmuch itself.
     :config
     (setq
        notmuch-fcc-dirs nil
-       notmuch-poll-script nil)
+       notmuch-poll-script nil
+       notmuch-search-oldest-first nil ; Show newest messages first
+       notmuch-show-part-button-default-action 'notmuch-show-view-part
+       notmuch-show-relative-dates nil
+       ;; Same cite function as message mode, configuration is there in detail
+       notmuch-mua-cite-function message-cite-function)
 
     (add-hook 'message-mode-hook 'mrb/message-mode-hook)
     (add-to-list 'evil-emacs-state-modes 'notmuch-hello-mode)
     (add-to-list 'evil-emacs-state-modes 'notmuch-search-mode))
+    ;; Don't mess with spaces for now
+    (add-to-list 'ws-butler-global-exempt-modes 'message-mode)
+    (add-to-list 'ws-butler-global-exempt-modes 'notmuch-message-mode)
+
 #+END_SRC
 
 
