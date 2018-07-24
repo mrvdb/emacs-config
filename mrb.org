@@ -542,7 +542,10 @@ starting with the =base16-nord= theme and see where this leaves me.
             (space-line-evil-replace        :background base0F)
 
             ;; line numbers current line, tone it down a bit
-            (line-number-current-line       :background base03)))
+            (line-number-current-line       :background base03)
+
+            ;; Notmuch faces
+            (notmuch-message-summary-face :foreground base01 :background base08)))
 
     ;; Apply our adjustment using the theme function
     (base16-set-faces 'base16-nord base16-nord-colors base16-adjustments)
