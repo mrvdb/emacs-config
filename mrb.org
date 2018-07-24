@@ -3347,64 +3347,119 @@ itself, which has proven to work fine so far.
 First, let's activate notmuch itself.
 
 #+BEGIN_SRC emacs-lisp
-  (defun mrb/message-mode-hook ()
-    "This configures message mode and thus notmuch-message mode."
+    (defun mrb/message-mode-hook ()
+      "This configures message mode and thus notmuch-message mode."
 
-    ;; We have to make sure that the messages we produce are format=flowed
-    ;; compatible. For this, the following is needed:
-    ;;
-    ;; - mml-enable-flowed must be set to true
-    ;; -- for that to work use-hard-newlines must be set
-    ;; - fill-flowed-encode-column must be set to 66
-    ;; - ws-butler must be inactive so there will be no conflicts
-    (use-hard-newlines t 'always)
-    (setq mml-enable-flowed t)
-    (add-to-list 'ws-butler-global-exempt-modes 'message-mode)
+      ;; We have to make sure that the messages we produce are format=flowed
+      ;; compatible. For this, the following is needed:
+      ;;
+      ;; - mml-enable-flowed must be set to true
+      ;; -- for that to work use-hard-newlines must be set
+      ;; - fill-flowed-encode-column must be set to 66
+      ;; - ws-butler must be inactive so there will be no conflicts
+      ;; FIXME: seems this does more harm than good (ugly sent out messages)
+      ;;(use-hard-newlines t 'always)
+      ;;(setq mml-enable-flowed t)
+      ;; Set the fill column on encoding (send)
+      ;;(setq fill-flowed-encode-column 66)
+      ;; END FIXME
 
-    ;; Set the fill column on encoding (send)
-    (setq fill-flowed-encode-column 66)
+      ;; Make sure the separator is just the standard, nothing fancy
+      ;; This is probably redundant as I have this set globally too
+      (set (make-local-variable 'mail-header-separator) "")
 
-    ;; Set the fill column for displaying to window width?
-
-    ;; Make sure the separator is just the standard, nothing fancy
-    ;; This is probably redundant as I have this set globally too
-    (set (make-local-variable 'mail-header-separator) "")
-
-    ;; Add some color to quotes
-    (font-lock-add-keywords
-     nil
-     '(("^[ \t]*>[ \t]*>[ \t]*>.*$"
-        (0 'message-multiply-quoted-text-face))
-       ("^[ \t]*>[ \t]*>.*$"
-        (0 'message-double-quoted-text-face)))))
+      ;; Add some color to quotes
+      (font-lock-add-keywords
+       nil
+       '(("^[ \t]*>[ \t]*>[ \t]*>.*$"
+          (0 'message-multiply-quoted-text-face))
+         ("^[ \t]*>[ \t]*>.*$"
+          (0 'message-double-quoted-text-face)))))
 
 
-  (use-package notmuch
-    :after message
-    :commands notmuch-message-mode
-    :init
-    ;; Make sure that we enter notmuch-message mode on compose from astroid
-    (add-to-list 'auto-mode-alist '("mrb@t510.hsdev.com" . notmuch-message-mode))
-    (add-to-list 'auto-mode-alist '("mrb@hsdev.com" . notmuch-message-mode))
+    (use-package notmuch
+      :after message
+      :commands notmuch-message-mode
+      :init
+      ;; Make sure that we enter notmuch-message mode on compose from astroid
+      (add-to-list 'auto-mode-alist '("mrb@t510.hsdev.com" . notmuch-message-mode))
+      (add-to-list 'auto-mode-alist '("mrb@hsdev.com" . notmuch-message-mode))
 
-    :bind (:map message-mode-map
-                ("<tab>" . company-complete))
-    :config
-    (setq
-       notmuch-fcc-dirs nil
-       notmuch-poll-script nil
-       notmuch-search-oldest-first nil ; Show newest messages first
-       notmuch-show-part-button-default-action 'notmuch-show-view-part
-       notmuch-show-relative-dates nil
-       ;; Same cite function as message mode, configuration is there in detail
-       notmuch-mua-cite-function message-cite-function)
+      :bind (:map message-mode-map
+                  ("<tab>" . company-complete)
+                  :map notmuch-common-keymap
+                  ("/" . notmuch-search)
+                  :map notmuch-search-mode-map
+                  ("d" . mrb/nm-toggle-deleted)
+                  ("s" . mrb/nm-toggle-spam)
+                  ("h" . mrb/nm-toggle-ham)
+                  :map notmuch-tree-mode-map
+                  ("d" . mrb/nm-toggle-deleted)
+                  ("s" . mrb/nm-toggle-spam)
+                  ("h" . mrb/nm-toggle-hame)
+                  :map notmuch-show-mode-map
+                  ("d" . mrb/nm-toggle-deleted)
+                  ("s" . mrb/nm-toggle-spam)
+                  ("h" . mrb/nm-toggle-ham))
+      :config
+      (setq
+         notmuch-fcc-dirs nil            ; no fcc, i use bcc mrb+Sent
+         notmuch-poll-script nil         ; use `notmuch new` natively. FIXME: does not work for me
+         notmuch-search-oldest-first nil ; Show newest messages first
+         notmuch-show-part-button-default-action 'notmuch-show-view-part
+         notmuch-show-relative-dates nil
+         ;; Same cite function as message mode, configuration is there in detail
+         notmuch-mua-cite-function message-cite-function
+         notmuch-saved-searches (quote
+                                 ((:name "unread" :query "tag:unread" :key "u")
+                                  (:name "drafts" :query "tag:draft" :key "d")
+                                  (:name "all mail" :query "*" :key "a")
+                                  (:name "INBOX" :query "query:INBOX" :key "i")
+                                  (:name "TODO" :query "query:TODO" :key "$"))))
 
-    (add-hook 'message-mode-hook 'mrb/message-mode-hook)
-    (add-to-list 'evil-emacs-state-modes 'notmuch-hello-mode)
-    (add-to-list 'evil-emacs-state-modes 'notmuch-search-mode))
-    ;; Don't mess with spaces for now
-    (add-to-list 'ws-butler-global-exempt-modes 'message-mode)
-    (add-to-list 'ws-butler-global-exempt-modes 'notmuch-message-mode)
+      ;; I keep the operations simple here, as the notmuch-hooks in the
+      ;; filesystem will further process (for example: deleted message
+      ;; also get '-inbox -unread' etc.  We just have to do the
+      ;; functional stuff here and let notmuch hooks handle the rest, so
+      ;; other clients to notmuch will share the same view of the mail
+      ;; message meta-database.
+      (defun mrb/nm-toggle-deleted ()
+        (interactive)
+        (mrb/nm-toggle-tag "deleted"))
+
+      (defun mrb/nm-toggle-spam ()
+        (interactive)
+        (mrb/nm-toggle-tag "spam"))
+
+      (defun mrb/nm-toggle-ham ()
+        (interactive)
+        (mrb/nm-toggle-tag "ham"))
+
+      ;; Create argument for toggle based on current membership
+      (defun nm-tag-toggle (tag currenttags)
+        (list (concat (if (member tag currenttags)
+                          "-" "+") tag)))
+
+      (defun mrb/nm-toggle-tag (tag)
+        (interactive)
+        (when (equal major-mode 'notmuch-search-mode)
+          (notmuch-search-tag (nm-tag-toggle tag (notmuch-search-get-tags))))
+
+        (when (equal major-mode 'notmuch-tree-mode)
+          (notmuch-tree-tag (nm-tag-toggle tag (notmuch-tree-get-tags))))
+
+        (when (equal major-mode 'notmuch-show-mode)
+          (notmuch-show-tag (nm-tag-toggle tag (notmuch-show-get-tags))))))
+
+
+      ;; end use-package notmuch)
+
+      (add-hook 'message-mode-hook 'mrb/message-mode-hook)
+      (add-to-list 'evil-emacs-state-modes 'notmuch-hello-mode)
+      (add-to-list 'evil-emacs-state-modes 'notmuch-search-mode))
+      ;; Don't mess with spaces for now
+      (add-to-list 'ws-butler-global-exempt-modes 'message-mode)
+      (add-to-list 'ws-butler-global-exempt-modes 'notmuch-message-mode)
 
 #+END_SRC
 
