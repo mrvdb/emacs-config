@@ -848,13 +848,13 @@ warrants this (for example if I think going back to an earlier version
 is a likely event).
 
 #+BEGIN_SRC emacs-lisp
-  (defconst mrb/save-idle-time 15
+  (defconst mrb/idle-timer 15
     "Time emacs needs to be idle to trigger the save idle timer")
 
   ;; This function does the actual useful thing
   (defun mrb/save-timer-callback()
     "Callback function that runs when emacs is idle for
-  `mrb/save-idle-time' seconds. Typically we save files here"
+  `mrb/idle-timer' seconds. Typically we save files here"
 
     ; FIXME: this messes up my journalling settings where autosave
     ;        is explicitly
@@ -863,7 +863,7 @@ is a likely event).
 
   ;; Activate the timer
   ;; #' means:
-  (run-with-idle-timer mrb/save-idle-time 'always #'mrb/save-timer-callback)
+  (run-with-idle-timer mrb/idle-timer 'always #'mrb/save-timer-callback)
 #+END_SRC
 
 Also, save the location in files between sessions.
@@ -2301,7 +2301,9 @@ major mode only.
     :config
     (setq
      ;; This makes all the difference in speed!!!
-     smex-auto-update nil))
+     smex-auto-update nil)
+    ;; But needs a cache update
+    (run-with-idle-timer mrb/idle-timer 'always #'smex-rebuild-cache))
 #+END_SRC
 
 **** What should have been in emacs
