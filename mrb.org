@@ -3391,6 +3391,7 @@ First, let's activate notmuch itself.
                     ("<tab>" . company-complete)
                     :map notmuch-common-keymap
                     ("/" . notmuch-search)
+                ("C-c l" . org-store-link)
                     :map notmuch-search-mode-map
                     ("d" . mrb/nm-toggle-deleted)
                     ("s" . mrb/nm-toggle-spam)
