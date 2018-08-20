@@ -1479,25 +1479,31 @@ thing like: "yeah, do this today"
 
 For most of the calendaring I use google calendering which integrates
 nicely with org-mode through the =org-gcal= package.
-A systemd timer takes care of fetching new entries. For now, the sync
+A timer takes care of fetching new entries. For now, the sync
 is only one way (google \rarr org-mode) and not the other way around.
 
 #+BEGIN_SRC emacs-lisp
   (defun orgcal (file)
     (concat "~/dat/org/_calendars/" file))
 
+  (defun mrb/gcal-fetch()
+    (interactive)
+    (org-gcal-sync nil t t))
+
   (use-package org-gcal
     :config
     (setq
-     ;; 60 days in the past, 90 days into the future
-     org-gcal-up-days 60
+     ;; 30 days in the past, 90 days into the future
+     org-gcal-up-days 30
      org-gcal-down-days 90
      org-gcal-client-id "897495986604-hchkmahh315dle855haoabe2sh11bvds.apps.googleusercontent.com"
      org-gcal-client-secret "a39Yw1Y-9hapwPZAbbY6Fdsm"
      org-gcal-file-alist `(("mvanderboom@gmail.com"  . ,(orgcal "marcel.org"))
                            ("qbb7fokc5qjl8dbfr5ol5sikqc@group.calendar.google.com"  . ,(orgcal "afval.org"))
                            ("hpjq29s4ma912rr504n1vj0of8@group.calendar.google.com" . ,(orgcal "planner.org"))
-                           ("sylviadeswart@gmail.com" . ,(orgcal "sylvia.org")))))
+                           ("sylviadeswart@gmail.com" . ,(orgcal "sylvia.org"))))
+
+    (run-with-idle-timer 120 'always #'mrb/gcal-fetch))
 
 
 #+END_SRC
