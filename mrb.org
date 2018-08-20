@@ -3379,7 +3379,7 @@ itself, which has proven to work fine so far.
 First, let's activate notmuch itself.
 
 #+BEGIN_SRC emacs-lisp
-  (defun mrb/message-mode-hook ()
+  defun mrb/message-mode-hook ()
     "This configures message mode and thus notmuch-message mode."
 
     ;; We have to make sure that the messages we produce are format=flowed
@@ -3424,6 +3424,7 @@ First, let's activate notmuch itself.
                 ("C-c l" . org-store-link)
                 :map notmuch-search-mode-map
                 ("d" . mrb/nm-toggle-deleted)
+                ("<delete>" . mrb/nm-toggle-deleted)
                 ("s" . mrb/nm-toggle-spam)
                 ("h" . mrb/nm-toggle-ham)
                 :map notmuch-tree-mode-map
