@@ -3379,7 +3379,7 @@ itself, which has proven to work fine so far.
 First, let's activate notmuch itself.
 
 #+BEGIN_SRC emacs-lisp
-  defun mrb/message-mode-hook ()
+  (defun mrb/message-mode-hook ()
     "This configures message mode and thus notmuch-message mode."
 
     ;; We have to make sure that the messages we produce are format=flowed
