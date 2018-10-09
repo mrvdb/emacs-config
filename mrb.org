@@ -1493,6 +1493,7 @@ is only one way (google \rarr org-mode) and not the other way around.
   (use-package org-gcal
     :config
     (setq
+     org-gcal-auto-archive nil
      ;; 30 days in the past, 90 days into the future
      org-gcal-up-days 30
      org-gcal-down-days 90
