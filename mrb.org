@@ -2325,6 +2325,7 @@ major mode only.
 
 #+BEGIN_SRC emacs-lisp
   (use-package smex
+    :commands smex-rebuild-cache
     :bind
     (("C-c M-x" . 'execute-extended-command)
      ("M-x"     . 'smex)
@@ -2334,6 +2335,8 @@ major mode only.
      ;; This makes all the difference in speed!!!
      smex-auto-update nil)
     ;; But needs a cache update
+    ;; Run it, so =smex-data= gets populated
+    (smex-rebuild-cache)
     (run-with-idle-timer mrb/idle-timer 'always #'smex-rebuild-cache))
 #+END_SRC
 
