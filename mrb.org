@@ -1580,6 +1580,14 @@ past, but I think it has been solved recently.
 (setq org-src-fontify-natively t)
 #+END_SRC
 
+For the headings at each level a =*= is normally used. As we're in
+unicode worls now, we can do a bit better.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package org-bullets)
+  (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
+#+END_SRC
+
 A couple of settings to steer the column in which the tags and habits
 appear in the frame:
 
