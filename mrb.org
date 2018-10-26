@@ -1809,16 +1809,23 @@ is a better fit.
     ;; files this is not needed.
     (setq
      org-journal-dir (expand-file-name "~/dat/org/journal/")
-     org-journal-time-format "[%R] "
+
 
      ;; Match the journal files (FIXME: make this independent of earlier assignments)
      org-agenda-file-regexp "^[0-9]+\\.org"
      org-journal-file-format  "%Y%m%d.org"
 
+
+     ;; Put day on top of file, uses `org-journal-date-format`
      org-journal-date-format "%A, %e-%m-%Y"
+     org-journal-date-prefix "#+TITLE: "
+     ;; New entries go at the bottom, make sure we are at top level
+     org-journal-time-format "[%R] "
+     org-journal-time-prefix "* "
 
      ;; Carry over TODO items and items explicitly marked
      org-journal-carryover-items "+CARRYOVER=\"yes\"|+TODO=\"TODO\""
+
 
     ;; I want to have encryption, but how do TODO items bubble up then in the agenda
     org-journal-enable-encryption nil
