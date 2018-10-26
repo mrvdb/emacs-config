@@ -112,20 +112,17 @@
      ("D" "Items ready for archiving" todo "DONE"
       ((org-agenda-overriding-header "Items ready for archiving")
        (org-agenda-group-by-property "CREATED")))
-     ("T" "Today's list" tags "+CATEGORY=\"INBOX\"+LEVEL=2"
-      ((org-agenda-overriding-header "INBOX: These items should be refiles or completed")
-       (org-agenda-prefix-format "  ")))
      ("g" "AGENDA"
       ((agenda ""
 	       ((org-agenda-filter-preset
 		 (quote
 		  ("-inactive")))
 		(org-agenda-span
-		 (quote day))))
-       (todo "COLLECT" nil))
-      ((org-agenda-dim-blocked-tasks
-	(quote invisible))
-       (org-agenda-archives-mode t)))
+		 (quote day))
+		(org-agenda-overriding-header "")))
+       (tags-todo "carryover"
+		  ((org-agenda-overriding-header "Carry along list"))))
+      ((org-agenda-archives-mode t)))
      ("$" "Expected revenue" tags "Effort<>\"\""
       ((org-agenda-overriding-columns-format "%40ITEM %10Effort")
        (org-agenda-sorting-strategy
