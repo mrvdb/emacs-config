@@ -1817,6 +1817,9 @@ is a better fit.
 
      org-journal-date-format "%A, %e-%m-%Y"
 
+     ;; Carry over TODO items and items explicitly marked
+     org-journal-carryover-items "+CARRYOVER=\"yes\"|+TODO=\"TODO\""
+
     ;; I want to have encryption, but how do TODO items bubble up then in the agenda
     org-journal-enable-encryption nil
     org-crypt-disable-auto-save t)
