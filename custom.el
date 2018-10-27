@@ -36,6 +36,7 @@
  '(ispell-use-framepop-p t)
  '(mail-signature nil)
  '(markdown-css-path "/home/mrb/.markdown.css")
+ '(mm-text-html-renderer (quote shr))
  '(nxml-heading-element-name-regexp "\\|.*")
  '(nxml-section-element-name-regexp "\\|file\\|.+")
  '(ocpf-frame-parameters
@@ -239,6 +240,9 @@
      (buffer-auto-save-file-name))))
  '(scad-keywords (quote ("return" "true" "false" "include")))
  '(sgml-xml-mode t)
+ '(shr-bullet "• ")
+ '(shr-use-colors nil)
+ '(shr-width 72)
  '(sieve-manage-authenticators (quote (plain digest-md5 cram-md5 scram-md5 ntlm login)))
  '(sql-postgres-options (quote ("-P" "pager=off" "-p 5434")))
  '(sql-server "dbserver.hsdev.com")
