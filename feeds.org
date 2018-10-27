@@ -107,12 +107,8 @@ This has a number of attractive properties:
      Torbjörn Åhman
 **** https://www.youtube.com/feeds/videos.xml?channel_id=UCjqqRC_Y-7acAEjKyo23e4A
      Kai Sackmann
-**** https://www.youtube.com/feeds/videos.xml?channel_id=UCyVYK8gO95N3S8BsqjGk5lw
-     Hiking - Topic
 **** https://www.youtube.com/feeds/videos.xml?channel_id=UCw3UZn1tcVe7pH3R6C3Gcng
      Abom79
-**** https://www.youtube.com/feeds/videos.xml?channel_id=UC6nSFpj9HTCZ5t-N3Rm3-HA
-     Vsauce
 **** https://www.youtube.com/feeds/videos.xml?channel_id=UCAL3JXZSzSm8AlZyD3nQdBA
      Primitive Technology
 **** https://www.youtube.com/feeds/videos.xml?channel_id=UC0ssR2R6_54NRc8hT6XeP8w
@@ -139,8 +135,6 @@ This has a number of attractive properties:
      mrpete222
 **** https://www.youtube.com/feeds/videos.xml?channel_id=UCm2A0MkU9e_0oVizHxaNZPQ
      Lint Hikes
-**** https://www.youtube.com/feeds/videos.xml?channel_id=UCuFJaKZoZDKB-aC7o8Zk-dg
-     BasementShopGuy
 **** https://www.youtube.com/feeds/videos.xml?channel_id=UCflCAfeAHN9z3urRsOJY-zQ
      Tarptent
 **** https://www.youtube.com/feeds/videos.xml?channel_id=UCiqcdUZJG6qRqCaqfD60wjg
@@ -149,8 +143,6 @@ This has a number of attractive properties:
      Alexander Seling
 **** https://www.youtube.com/feeds/videos.xml?channel_id=UCorf3SIH8zyQnfNCdMRNFnQ
      Build Something Cool
-**** https://www.youtube.com/feeds/videos.xml?channel_id=UCDpIuvpK1rL530tb5nI3Pfg
-     Bridge City Tool Works
 **** https://www.youtube.com/feeds/videos.xml?channel_id=UCjFqcJQXGZ6T6sxyFB-5i6A
      Every Frame a Painting
 **** https://www.youtube.com/feeds/videos.xml?channel_id=UC4m26t8xttu-VWi56I3PMMA
@@ -173,38 +165,18 @@ This has a number of attractive properties:
      DIY Packraft
 **** https://www.youtube.com/feeds/videos.xml?channel_id=UC88lKBvNPaJoJTADRNFMKWw
      Backpacking Light
-**** https://www.youtube.com/feeds/videos.xml?channel_id=UCOfQ4Ufy4s7GJB3h9VieY1Q
-     THATLAZYMACHINIST
 **** https://www.youtube.com/feeds/videos.xml?channel_id=UCBJycsmduvYEL83R_U4JriQ
      Marques Brownlee
-**** https://www.youtube.com/feeds/videos.xml?channel_id=UCIZ67pX7CzthddsGCHWvBtw
-     Allen Powell
-**** https://www.youtube.com/feeds/videos.xml?channel_id=UC-HojzRYn9JlYEqT2n1inEA
-     Neil Underwood
-**** https://www.youtube.com/feeds/videos.xml?channel_id=UC3aILHxDPaRH8fHO5JcE6qQ
-     IB TAT
 **** https://www.youtube.com/feeds/videos.xml?channel_id=UClVLDhN_Tlll1XxMSllR7PQ
      Fjällräven
-**** https://www.youtube.com/feeds/videos.xml?channel_id=UCwQll2Vb7ndCw--Y4lVORYA
-     Steve Maskery
-**** https://www.youtube.com/feeds/videos.xml?channel_id=UC2rsGwg_rRhVfizwq-NBMHA
-     Dallin Wellington
-**** https://www.youtube.com/feeds/videos.xml?channel_id=UCB36dnqV2JAaLmcXC1NhtEQ
-     machiningmoments
 **** https://www.youtube.com/feeds/videos.xml?channel_id=UCDmxnPem-pPfJQATIkfgY2Q
      Keith Fenner
 **** https://www.youtube.com/feeds/videos.xml?channel_id=UCqp8oXLR84eiryfhNXK-nTA
      Rob Cosman
-**** https://www.youtube.com/feeds/videos.xml?channel_id=UCGNg1tti0Y365XODgmXR5Og
-     TEAM Lab
-**** https://www.youtube.com/feeds/videos.xml?channel_id=UCBE-FO9JUOghSysV9gjTeHw
-     Nixie Pixel
 **** https://www.youtube.com/feeds/videos.xml?channel_id=UC9-y-6csu5WGm29I7JiwpnA
      Computerphile
 **** https://www.youtube.com/feeds/videos.xml?channel_id=UCqpOf_Nl5F4tjwlxOVS6h8A
      TheCameraStoreTV
-**** https://www.youtube.com/feeds/videos.xml?channel_id=UC1ZZj6qiO6bOUEL_bimF_sA
-     tormachlabs
 **** https://www.youtube.com/feeds/videos.xml?channel_id=UCkRMqL3hLrIYhxNCac4vR3w
      Art of Manliness
 **** https://www.youtube.com/feeds/videos.xml?channel_id=UCotwjyJnb-4KW7bmsOoLfkg
@@ -213,10 +185,6 @@ This has a number of attractive properties:
      John Amorosano
 **** https://www.youtube.com/feeds/videos.xml?channel_id=UCuw8B6Uv0cMWtV5vbNpeH_A
      DigitalRev TV
-**** https://www.youtube.com/feeds/videos.xml?channel_id=UC7oREAvodLajK1bOCcwudjA
-     I Am Stankoff
-**** https://www.youtube.com/feeds/videos.xml?channel_id=UC0FmFgJEPrTkwuDyiOEqXLg
-     SWLAMECH84
 **** https://www.youtube.com/feeds/videos.xml?channel_id=UCjrGHSAkAN0ac8aVejwPBvA
      Steve Summers
 **** https://www.youtube.com/feeds/videos.xml?channel_id=UC18exdGWh7piVWisrnDXiZg
@@ -225,8 +193,6 @@ This has a number of attractive properties:
      TechAltar
 **** https://www.youtube.com/feeds/videos.xml?channel_id=UCf6fQ_2r9yiKnTv6_4NnVyA
      Little shop of Fredrik
-**** https://www.youtube.com/feeds/videos.xml?channel_id=UCj_XaV1ss-qdD-lPUtTEcXw
-     SV Seeker
 **** https://www.youtube.com/feeds/videos.xml?channel_id=UCy1hQ6L3z7oVC5a2uC_Izmw
      Fräulein Draussen
 **** https://www.youtube.com/feeds/videos.xml?channel_id=UC6107grRI4m0o2-emgoDnAA
@@ -237,10 +203,6 @@ This has a number of attractive properties:
      xynudu
 **** https://www.youtube.com/feeds/videos.xml?channel_id=UCl3xZ-f3cQhOHvH6f-7-ssQ
      Patagonia
-**** https://www.youtube.com/feeds/videos.xml?channel_id=UCm2STQ_7vDrxrCtksNfrEPA
-     Christopher Schwarz
-**** https://www.youtube.com/feeds/videos.xml?channel_id=UCwcT5yvGqTDXc_X097jDg0g
-     Gary Storrick
 **** https://www.youtube.com/feeds/videos.xml?channel_id=UC7-DodxqMkl2e6XTejadS9Q
      Hugh Laurie
 **** https://www.youtube.com/feeds/videos.xml?channel_id=UCkA3z-lSyEg6ZN-BqMy6wow
@@ -279,8 +241,6 @@ This has a number of attractive properties:
      Steve Ramsey - Woodworking for Mere Mortals
 **** https://www.youtube.com/feeds/videos.xml?channel_id=UCwWhs_6x42TyRM4Wstoq8HA
      The Daily Show with Trevor Noah
-**** https://www.youtube.com/feeds/videos.xml?channel_id=UC-gHgFRKRPG9HxoJc1iXD_w
-     James Kilroy
 **** https://www.youtube.com/feeds/videos.xml?channel_id=UCn4U3aEr6L2nLe1m_3as6JQ
      ROBRENZ
 **** https://www.youtube.com/feeds/videos.xml?channel_id=UCdwBMPgO0C9giaV0BNe8RcQ
@@ -297,10 +257,6 @@ This has a number of attractive properties:
      LastWeekTonight
 **** https://www.youtube.com/feeds/videos.xml?channel_id=UCCFc8IHynJ_scgk9izHpawg
      John Zahorian
-**** https://www.youtube.com/feeds/videos.xml?channel_id=UCbF-DUPWovmNuLvVExfUJzQ
-     braindrainwiki
-**** https://www.youtube.com/feeds/videos.xml?channel_id=UCm-oh2N98mQFIFAb-K_tjOg
-     jacques maurel
 **** https://www.youtube.com/feeds/videos.xml?channel_id=UCHnyfMqiRRG1u-2MsSQLbXA
      Veritasium
 **** https://www.youtube.com/feeds/videos.xml?channel_id=UCZmrMLELmh7DHygRdvJ5KWQ
@@ -319,8 +275,6 @@ This has a number of attractive properties:
      Mathologer
 **** https://www.youtube.com/feeds/videos.xml?channel_id=UCOPchRaujzdm8dgMjDc-bEg
      withaBlonde
-**** https://www.youtube.com/feeds/videos.xml?channel_id=UC8sJGKqCK5rDl-_A1r1D1sw
-     TheViper6506
 **** https://www.youtube.com/feeds/videos.xml?channel_id=UCqq70AnPkj4-UApS_m_6mPw
      weldingtipsandtricks
 **** https://www.youtube.com/feeds/videos.xml?channel_id=UCA5DNsWhNecZAV2WCamfH9A
@@ -333,8 +287,6 @@ This has a number of attractive properties:
      Applied Science
 **** https://www.youtube.com/feeds/videos.xml?channel_id=UCCtRR9qv0qedri9SwN83v1w
      noho91
-**** https://www.youtube.com/feeds/videos.xml?channel_id=UCr4CfqtoPhp4X7FMkksFcyg
-     Steve Ramsey VLOG
 **** https://www.youtube.com/feeds/videos.xml?channel_id=UCY8gSLTqvs38bR9X061jFWw
      Stefan Gotteswinter
 **** https://www.youtube.com/feeds/videos.xml?channel_id=UCNrXedK8vJnv3runR_8-XEg
@@ -359,20 +311,12 @@ This has a number of attractive properties:
      MrMobile [Michael Fisher]
 **** https://www.youtube.com/feeds/videos.xml?channel_id=UClT2UAbC6j7TqOWurVhkuHQ
      Sacha Chua
-**** https://www.youtube.com/feeds/videos.xml?channel_id=UCMyAVYPgP_179gj9OIJZd4A
-     Nixie Vlogs
 **** https://www.youtube.com/feeds/videos.xml?channel_id=UCeQEKFH31vvD-InkTGSvCrA
      brusspup
 **** https://www.youtube.com/feeds/videos.xml?channel_id=UCZC9LGZLfyjrKT4OZne-JNw
      oxtoolco
-**** https://www.youtube.com/feeds/videos.xml?channel_id=UC332k6YMZwYsE2lVnP-AcQw
-     Pete Kuhns
-**** https://www.youtube.com/feeds/videos.xml?channel_id=UCYwsgA-ZhDGHUCb4YFG00xQ
-     New Brit Workshop
 **** https://www.youtube.com/feeds/videos.xml?channel_id=UCRFcp1CyViJEMCSPABUj6Ag
      Wild Confluence
-**** https://www.youtube.com/feeds/videos.xml?channel_id=UCxyVxfB4c2EsOUtLly7ZrYQ
-     Ric Furrer
 **** https://www.youtube.com/feeds/videos.xml?channel_id=UCYSVBa73Qu3Qyz0IqEgsDxQ
      Sackis Outdoor-Gear
 **** https://www.youtube.com/feeds/videos.xml?channel_id=UC885b3fcSEShQdz6-v8KwLg
@@ -383,8 +327,6 @@ This has a number of attractive properties:
      MuellerNick
 **** https://www.youtube.com/feeds/videos.xml?channel_id=UC7-F74OWcaueCm6maLG1zSQ
      Mountain Springs
-**** https://www.youtube.com/feeds/videos.xml?channel_id=UCxkMDXQ5qzYOgXPRnOBrp1w
-     Mike Zamansky
 **** https://www.youtube.com/feeds/videos.xml?channel_id=UCc3EpWncNq5QL0QhwUNQb7w
      Paul Sellers
 **** https://www.youtube.com/feeds/videos.xml?channel_id=UCXltVAfbhnYo6xWWH_E0OhA
@@ -405,8 +347,6 @@ This has a number of attractive properties:
      Clickspring
 **** https://www.youtube.com/feeds/videos.xml?channel_id=UCvBqzzvUBLCs8Y7Axb-jZew
      Sixty Symbols
-**** https://www.youtube.com/feeds/videos.xml?channel_id=UCRaVZ3sssxMKdStuv8Fbrtw
-     Luiz Ally
 **** https://www.youtube.com/feeds/videos.xml?channel_id=UCNC9gjgYrzLfyMQmp31DnjA
      myfordboy
 **** https://www.youtube.com/feeds/videos.xml?channel_id=UCtSTWQI78AQKIkgv1rOVDWg
