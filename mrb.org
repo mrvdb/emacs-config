@@ -1825,6 +1825,8 @@ is a better fit.
 
      ;; Carry over TODO items and items explicitly marked
      org-journal-carryover-items "+CARRYOVER=\"yes\"|+TODO=\"TODO\""
+     ;; and for this to work, we need agenda integration
+     org-journal-enable-agenda-integration t
 
 
     ;; I want to have encryption, but how do TODO items bubble up then in the agenda
