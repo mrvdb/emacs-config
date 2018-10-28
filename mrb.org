@@ -1810,14 +1810,14 @@ is a better fit.
     (setq
      org-journal-dir (expand-file-name "~/dat/org/journal/")
 
-
      ;; Match the journal files (FIXME: make this independent of earlier assignments)
      org-agenda-file-regexp "^[0-9]+\\.org"
      org-journal-file-format  "%Y%m%d.org"
 
-
      ;; Put day on top of file, uses `org-journal-date-format`
      org-journal-date-format "%A, %e-%m-%Y"
+
+     ;; Put day on top of file, uses `org-journal-date-format
      org-journal-date-prefix "#+TITLE: "
      ;; New entries go at the bottom, make sure we are at top level
      org-journal-time-format "[%R] "
