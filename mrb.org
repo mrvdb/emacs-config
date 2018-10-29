@@ -3641,15 +3641,6 @@ i want.
     (elfeed-org))
 #+END_SRC
 ** IRC
-#+BEGIN_SRC emacs-lisp
-  (use-package erc
-    :config
-    (setq
-     erc-nick "mrvdb"
-     erc-track-enable-keybindings t))
-
-#+END_SRC
-
 I'm experimenting with Weechat now, mostly because it has multiple
 clients and can make my IRC experience a bit more like Telegram,
 i.e. regardless of client, the chat state remains the same.

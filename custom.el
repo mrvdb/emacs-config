@@ -17,10 +17,6 @@
     ("-dNOSAFER" "-dNOPAUSE" "-sDEVICE=png16m" "-dTextAlphaBits=4" "-dBATCH" "-dGraphicsAlphaBits=4" "-dQUIET")))
  '(doc-view-resolution 200)
  '(epg-gpg-program "/usr/bin/gpg2")
- '(erc-hide-list (quote ("JOIN" "KICK" "PART" "QUIT")))
- '(erc-modules
-   (quote
-    (completion keep-place networks ring track hl-nicks netsplit fill button match readonly autojoin noncommands irccontrols move-to-prompt stamp menu list)))
  '(eshell-modules-list
    (quote
     (eshell-alias eshell-banner eshell-basic eshell-cmpl eshell-dirs eshell-glob eshell-hist eshell-ls eshell-pred eshell-prompt eshell-rebind eshell-script eshell-term eshell-unix)))
