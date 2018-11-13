@@ -162,7 +162,39 @@ default gnu augmented with the melpa repository.
     (setq custom-package-directory (concat emacs-directory "lisp/")))
 
   (use-package cl-lib )
+#+END_SRC
 
+Now, there's an issue where a variable =package-selected-packages= gets
+written to =custom.el= everytime I try a package. I do not want
+that. The site [[http://www.holgerschurig.de/en/emacs-dont-let-packages-pollute-custom-el/][from holger]] has an answer for that, although it needs a
+slight adaptation (=context= argument is not there anymore)
+
+#+BEGIN_SRC emacs-lisp
+    ;; Override the function that write to selected packages
+    (defun package--save-selected-packages (&optional value)
+      nil)
+#+END_SRC
+
+So, =package-selected-packages= will not stay empty and not written
+out. The first is a bit problematic though, because package-list will
+then show every installed package as =dependency= instead of installed.
+We can correct this by overriding the package ensure function to our
+own and fill the variable to correct the listings.
+
+#+BEGIN_SRC emacs-lisp
+  (defun mrb/use-package-ensure-elpa (name args state &optional no-refresh)
+    ;; Args is a list, but only hase 1 entry?
+    (dolist (ensure args)
+      (let ((package
+             (or (and (eq ensure t) (use-package-as-symbol name))
+                 ensure)))
+        (when package
+          ;; It needs to be selected
+          (add-to-list 'package-selected-packages package))))
+    ;; Execute the default ensure elpa function
+    (use-package-ensure-elpa name args state no-refresh))
+
+  (setq use-package-ensure-function #'mrb/use-package-ensure-elpa)
 #+END_SRC
 
 * Personal information
