@@ -5,17 +5,11 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(ansi-color-names-vector
-   ["#3F3F3F" "#CC9393" "#7F9F7F" "#F0DFAF" "#8CD0D3" "#DC8CC3" "#93E0E3" "#DCDCCC"])
- '(column-number-mode t)
+   ["#2e3440" "#88c0d0" "#bf616a" "#5e81ac" "#ebcb8b" "#a3be8c" "#ebcb8b" "#e5e9f0"])
  '(command-frequency-autosave-mode t)
  '(compilation-scroll-output t)
  '(custom-safe-themes t)
- '(default-input-method "TeX")
  '(dired-bind-jump nil)
- '(doc-view-ghostscript-options
-   (quote
-    ("-dNOSAFER" "-dNOPAUSE" "-sDEVICE=png16m" "-dTextAlphaBits=4" "-dBATCH" "-dGraphicsAlphaBits=4" "-dQUIET")))
- '(doc-view-resolution 200)
  '(epg-gpg-program "/usr/bin/gpg2")
  '(eshell-modules-list
    (quote
@@ -23,7 +17,6 @@
  '(explicit-shell-file-name "/bin/bash")
  '(flyspell-issue-message-flag nil)
  '(font-lock-maximum-size nil)
- '(gist-ask-for-description t)
  '(goto-address-url-mouse-face (quote default))
  '(gud-gdb-command-name "gdb --annotate=1")
  '(guess-language-languages (quote (en de nl)))
