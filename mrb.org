@@ -3861,6 +3861,10 @@ code.
                 ;; Manage code navigation
                 (ggtags-mode 1))))
 #+END_SRC
+** Go
+#+BEGIN_SRC emacs-lisp
+(use-package go-mode)
+#+END_SRC
 ** GIT integration
 This section is a temporary place to store some git related
 settings. I need to reorganize this document a bit so I have a section
