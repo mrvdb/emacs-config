@@ -3040,6 +3040,9 @@ want to use; reading the feature list doesn't cut it.
 So, I'm having a setup where multiple mail handling packages may exist
 and hopefully one will float to the top as being *the one*
 
+*** Sending mail
+Sending mail through smtp, using the smtpmail package
+
 #+BEGIN_SRC emacs-lisp
   (use-package smtpmail
     :init
@@ -3064,6 +3067,7 @@ and hopefully one will float to the top as being *the one*
   (setq password-cache-expiry 28800) ; default is 16 seconds, which is ridiculously low
 #+END_SRC
 
+*** Composing mail
 Composing mail is often an /out of band/ activity, like creating a tweet
 or a capture, so I would like to have roughly the same behaviour. This
 is by default provided by compose-mail-other-frame, but I could not
@@ -3161,13 +3165,30 @@ same as the mailto handler.
 edit -e '(mrb/make-mailcompose-frame)'
 #+END_SRC
 
+*** Other message related settings
+It's not entirely clear which package is exactly responsible for what,
+but there are a few settings which are related to the =message= package
 
 #+BEGIN_SRC emacs-lisp
   (use-package message
     :ensure nil  ;; Emacs included, no need to go look for it
     :requires org-faces
     :config
-    (setq message-cite-function 'message-cite-original-without-signature)
+    (setq
+     ;; When citing, remove the original signature
+     ;; FIXME: often I want to remove a lot more, like the disclaimer
+     message-cite-function 'message-cite-original-without-signature
+
+     ;; Default was '>> ' which does not make sense to me, why?
+     message-yank-prefix "> "
+     ;; No prefix for empty lines
+     message-yank-empty-prefix ""
+
+     ;; How to attribute
+     message-citation-line-format "[%N :]"
+     ;; Make sure we use it
+     message-citation-line-function 'message-insert-formatted-citation-line)
+
     ;; First quote level
     (set-face-attribute 'message-cited-text nil :inherit 'org-level-1)
 
@@ -3518,11 +3539,11 @@ First, let's activate notmuch itself.
        notmuch-show-relative-dates nil
        ;; Same cite function as message mode, configuration is there in detail
        notmuch-mua-cite-function message-cite-function
-       notmuch-saved-searches '((:name "unread" :query "tag:unread" :key "u")
+       notmuch-saved-searches '((:name "unread" :query "tag:unread" :key "u" :search-type tree)
                                 (:name "drafts" :query "tag:draft" :key "d")
                                 (:name "all mail" :query "*" :key "a")
-                                (:name "INBOX" :query "query:INBOX" :key "i")
-                                (:name "TODO" :query "query:TODO" :key "$"))
+                                (:name "INBOX" :query "query:INBOX" :key "i" :search-type tree)
+                                (:name "TODO" :query "query:TODO" :key "$" :search-type tree))
        ;; Favour html parts if we must.
        notmuch-multipart/alternative-discouraged '("text/plain" "text/html"))
 
