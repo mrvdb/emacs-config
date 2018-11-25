@@ -3573,7 +3573,7 @@ and showing syntax errors.
 
 #+BEGIN_SRC emacs-lisp
   (use-package haskell-mode
-    :requires ghc
+    :ensure ghc
     :init
     (progn
       (add-hook 'haskell-mode-hook 'interactive-haskell-mode)
