@@ -3523,6 +3523,26 @@ by mode. M-Tab seems to be the natural choice for me.
            ("M-<tab>" . origami-toggle-node)))
 
 #+END_SRC
+
+Make our source look a bit more attractive by enabling
+=prettify-symbol-mode= in all programming modes
+
+#+BEGIN_SRC emacs-lisp
+  ;; List of replacements, this needs to be a function to eval in hook scope
+  (defun mrb/prettify-symbols()
+    ;; If you want to see the effect: enable prettify-symbols mode
+    (setq prettify-symbols-alist
+        '(
+          ("lambda" . 955)
+          ("->" . 8594)
+          ("=>" . 8658)))
+    (prettify-symbols-mode))
+
+  ;; Add hooks for all programming languages, for now
+  ;; TODO: check for conflict with haskell, which has its own system.
+  (add-hook 'prog-mode-hook 'mrb/prettify-symbols)
+#+END_SRC
+
 ** Coding styles
 Different projects use different coding styles. The ones I need I'll
 gather here for now.
