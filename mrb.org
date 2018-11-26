@@ -241,6 +241,7 @@ i.e. the password-store program.
 #+BEGIN_SRC emacs-lisp
   ;; Use only authinfo.gpg for password storage
   (use-package auth-source-pass
+    :ensure password-store
     :init
     (auth-source-pass-enable)
     :config
@@ -1871,6 +1872,38 @@ The 1% I was referring to above is that the original package
 exclusively supports org-mode. I patched it, which was trivial to
 support org-mode and all its derived modes. (org-journal in my case)
 
+** Publishing
+There's plenty ways to publish orgmode content on the web. I use a
+couple of them sparingly. For most of them I don't need a permanent
+configuration. For the ones that I do need a config, there's this
+section.
+
+*** Writefreely
+Writefreely is a Write.as derivative and published as open
+source.
+
+#+BEGIN_SRC emacs-lisp
+  ;; Still needed:
+  ;; - post as draft by default, this prevents automatic posting by accident for federated collections
+  ;; - save augment -> publish / update automatically, probably a custom hook on minor mode?
+  ;; - wf: have autorefresh GET parameter which monitors updates and
+  ;;       refreshes automatically
+  ;; - set local save dir for the files
+  ;; - gather functions in minor mode? like org-journal an org-derivative?
+  (use-package writefreely
+    :after org
+    :ensure ox-gfm
+    :load-path "~/dat/src/write.as-related/writefreely.el/"
+    :config
+    (setq
+     ;; Set api endpoints for my own install
+     writefreely-instance-url "https://qua.name"
+     writefreely-instance-api-endpoint "https://qua.name/api"
+     writefreely-maybe-publish-created-date t
+     writefreely-auth-token (password-store-get "Qua.name/accesstoken")
+     ;;writefreely-auth-token (password-store-get "Write.as/accesstoken")
+     ))
+#+END_SRC
 ** Old configuration
 Below is what was contained in the old configuration. I will slowly
 migrate this into more literal sections
