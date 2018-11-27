@@ -1845,7 +1845,7 @@ is a better fit.
      org-journal-time-prefix "* "
 
      ;; Carry over TODO items and items explicitly marked
-     org-journal-carryover-items "+CARRYOVER=\"yes\"|+TODO=\"TODO\""
+     org-journal-carryover-items "+carryover|+TODO=\"TODO\""
      ;; and for this to work, we need agenda integration
      org-journal-enable-agenda-integration t
 
