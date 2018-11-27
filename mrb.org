@@ -3265,40 +3265,44 @@ First, let's activate notmuch itself.
     (add-to-list 'auto-mode-alist '("mrb@hsdev.com" . notmuch-message-mode))
 
     :bind      (:map message-mode-map
-                ("<tab>" . company-complete)
-                :map notmuch-common-keymap
-                ("/" . notmuch-search)
-                ("C-c l" . org-store-link)
-                :map notmuch-search-mode-map
-                ("d" . mrb/nm-toggle-deleted)
-                ("<delete>" . mrb/nm-toggle-deleted)
-                ("s" . mrb/nm-toggle-spam)
-                ("h" . mrb/nm-toggle-ham)
-                :map notmuch-tree-mode-map
-                ("d" . mrb/nm-toggle-deleted)
-                ("s" . mrb/nm-toggle-spam)
-                ("h" . mrb/nm-toggle-hame)
-                :map notmuch-show-mode-map
-                ("d" . mrb/nm-toggle-deleted)
-                ("s" . mrb/nm-toggle-spam)
-                ("h" . mrb/nm-toggle-ham))
+                     ("<tab>" . company-complete)
+                     :map notmuch-common-keymap
+                     ("/" . notmuch-search)
+                     ("C-c l" . org-store-link)
+                     :map notmuch-search-mode-map
+                     ("d" . mrb/nm-toggle-deleted)
+                     ("<delete>" . mrb/nm-toggle-deleted)
+                     ("s" . mrb/nm-toggle-spam)
+                     ("h" . mrb/nm-toggle-ham)
+                     :map notmuch-tree-mode-map
+                     ("d" . mrb/nm-toggle-deleted)
+                     ("s" . mrb/nm-toggle-spam)
+                     ("h" . mrb/nm-toggle-hame)
+                     :map notmuch-show-mode-map
+                     ("d" . mrb/nm-toggle-deleted)
+                     ("s" . mrb/nm-toggle-spam)
+                     ("h" . mrb/nm-toggle-ham))
     :config
     (setq
-       notmuch-fcc-dirs nil            ; no fcc, i use bcc mrb+Sent
-       notmuch-draft-folder "Drafts"
-       notmuch-poll-script nil         ; use `notmuch new` natively. FIXME: does not work for me
-       notmuch-search-oldest-first nil ; Show newest messages first
-       notmuch-show-part-button-default-action 'notmuch-show-view-part
-       notmuch-show-relative-dates nil
-       ;; Same cite function as message mode, configuration is there in detail
-       notmuch-mua-cite-function message-cite-function
-       notmuch-saved-searches '((:name "unread" :query "tag:unread" :key "u" :search-type tree)
-                                (:name "drafts" :query "tag:draft" :key "d")
-                                (:name "all mail" :query "*" :key "a")
-                                (:name "INBOX" :query "query:INBOX" :key "i" :search-type tree)
-                                (:name "TODO" :query "query:TODO" :key "$" :search-type tree))
-       ;; Favour html parts if we must.
-       notmuch-multipart/alternative-discouraged '("text/plain" "text/html"))
+     notmuch-fcc-dirs nil            ; no fcc, i use bcc mrb+Sent
+     notmuch-draft-folder "Drafts"
+     notmuch-poll-script nil         ; use `notmuch new` natively. FIXME: does not work for me
+     notmuch-search-oldest-first nil ; Show newest messages first
+     notmuch-show-part-button-default-action 'notmuch-show-view-part
+     notmuch-show-relative-dates nil
+     ;; Same cite function as message mode, configuration is there in detail
+     notmuch-mua-cite-function message-cite-function
+     notmuch-saved-searches '((:name "unread" :query "tag:unread" :key "u" :search-type tree)
+                              (:name "drafts" :query "tag:draft" :key "d")
+                              (:name "all mail" :query "*" :key "a")
+                              (:name "INBOX" :query "query:INBOX" :key "i" :search-type tree)
+                              (:name "TODO" :query "query:TODO" :key "$" :search-type tree))
+     ;; Favour html parts if we must.
+     notmuch-multipart/alternative-discouraged '("text/plain" "text/html"))
+
+    ;; Make sure we have room
+    (fullframe notmuch-tree-mode notmuch-tree-quit)
+
 
     ;; I keep the operations simple here, as the notmuch-hooks in the
     ;; filesystem will further process for example: deleted message
@@ -3336,16 +3340,15 @@ First, let's activate notmuch itself.
 
       (notmuch-refresh-this-buffer)))
 
-    ;; Why are these outside the use-package clause?
+  ;; Why are these outside the use-package clause?
 
-    (add-hook 'message-mode-hook 'mrb/message-mode-hook)
-    (add-to-list 'evil-emacs-state-modes 'notmuch-hello-mode)
-    (add-to-list 'evil-emacs-state-modes 'notmuch-search-mode)
+  (add-hook 'message-mode-hook 'mrb/message-mode-hook)
+  (add-to-list 'evil-emacs-state-modes 'notmuch-hello-mode)
+  (add-to-list 'evil-emacs-state-modes 'notmuch-search-mode)
 
-    ;; Don't mess with spaces for now
-    (add-to-list 'ws-butler-global-exempt-modes 'message-mode)
-    (add-to-list 'ws-butler-global-exempt-modes 'notmuch-message-mode)
-
+  ;; Don't mess with spaces for now
+  (add-to-list 'ws-butler-global-exempt-modes 'message-mode)
+  (add-to-list 'ws-butler-global-exempt-modes 'notmuch-message-mode)
 #+END_SRC
 
 
