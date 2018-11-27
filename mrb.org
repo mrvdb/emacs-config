@@ -3256,7 +3256,8 @@ First, let's activate notmuch itself.
 
   (use-package notmuch
     :after message
-    :commands notmuch-message-mode
+    :load-path "~/dat/mail/notmuch/emacs/"
+    :commands (notmuch-message-mode notmuch)
     :init
     ;; Make sure that we enter notmuch-message mode on compose from astroid
     (add-to-list 'auto-mode-alist '("mrb@t510.hsdev.com" . notmuch-message-mode))
