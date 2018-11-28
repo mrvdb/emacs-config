@@ -3469,22 +3469,6 @@ i.e. regardless of client, the chat state remains the same.
          weechat-mode-default)))
 #+END_SRC
 
-** Twitter
-There seems to be a defacto standard for twitter in emacs, which is
-=twittering-mode=. I have made a simple configuration for it, all of
-which is below, except for the status format, which is saved in
-custom.el for now until it stabilizes.
-
-#+BEGIN_SRC emacs-lisp
-  (use-package twittering-mode
-    :config
-    (setq twittering-connection-type-order '(wget curl urllib-http native urllib-https)
-          twittering-display-remaining t
-          twittering-reverse-mode t
-          twittering-icon-mode t
-          twittering-use-master-password t)
-    )
-#+END_SRC
 * Development settings
 Some settings which aid in development tasks.
 
