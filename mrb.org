@@ -442,8 +442,6 @@ based on a copy of latin-ltx.el
    "MyTeX" "UTF-8" 'quail-use-package
    "\\" "Personalized TeX input method"
    "~/.emacs.d/mytex-inputmethod")
-
-
 #+END_SRC
 
 For even more esoteric characters we have to do some extra work. No
@@ -595,76 +593,76 @@ used. The last entry here does not get highlighted, so my config is
 valid for 5 levels, not 6.
 
 #+BEGIN_SRC emacs-lisp
-      ;; no splash screen
-      (setq inhibit-startup-screen  t)
-      (setq inhibit-startup-message t)
-      (setq initial-scratch-message nil)
+  ;; no splash screen
+  (setq inhibit-startup-screen  t)
+  (setq inhibit-startup-message t)
+  (setq initial-scratch-message nil)
 
-      ;; check speed consequences of this
-      (setq column-number-mode t)
+  ;; check speed consequences of this
+  (setq column-number-mode t)
 
-      ;; Track changes to buffers
-      (use-package tracking
-        :config
-        (setq
-         tracking-max-mode-line-entries 1
-         tracking-shorten-buffer-names-p nil)
-        (tracking-mode 1))
+  ;; Track changes to buffers
+  (use-package tracking
+    :config
+    (setq
+     tracking-max-mode-line-entries 1
+     tracking-shorten-buffer-names-p nil)
+    (tracking-mode 1))
 
-      ;; Modeline
-      (use-package spaceline-config
-        :after tracking
-        :ensure spaceline
-        :ensure eyebrowse
-        :ensure persp-mode
-        :ensure window-numbering
+  ;; Modeline
+  (use-package spaceline-config
+    :after tracking
+    :ensure spaceline
+    :ensure eyebrowse
+    :ensure persp-mode
+    :ensure window-numbering
 
-        :config
-        ;; Make the highlight in the modeline dependent on the evil state
-        (setq spaceline-highlight-face-func 'spaceline-highlight-face-evil-state)
+    :config
+    ;; Make the highlight in the modeline dependent on the evil state
+    (setq spaceline-highlight-face-func 'spaceline-highlight-face-evil-state)
 
-        ;; And I want the cursor to follow that, but I don't know how to do that
-        ;; automatically, so here's the mapping.
-        ;; FIXME: rewrite to automatic
-        (setq mrb/cursor-type '(bar . 5))
-        (setq evil-normal-state-cursor  `("#bf616a" ,mrb/cursor-type)
-              evil-insert-state-cursor  `("#ebcb8b" ,mrb/cursor-type)
-              evil-emacs-state-cursor   `("#a3be8c" ,mrb/cursor-type)
-              evil-motion-state-cursor  `("#81a1c1" ,mrb/cursor-type)
-              evil-visual-state-cursor  `("#8fbcbb" ,mrb/cursor-type)
-              evil-replace-state-cursor `("#b48ead" ,mrb/cursor-type))
-
-
-        ;; Define a segment for the tracking package
-        (spaceline-define-segment tracking
-          "Segment to show if buffers need attention, similar to erc-track, but using mcirc tracking library"
-          tracking-mode-line-buffers)
-
-        ;; We use the spacemacs theme, which gives us the evil state indicator
-        (spaceline-spacemacs-theme 'tracking)
-
-        ;;Default frame properties frame position, color, etc
-        (setq default-frame-alist
-            `((cursor-type . ,mrb/cursor-type )
-              (height . 60) (width . 100))))
-
-      (use-package mic-paren
-        :config
-        (paren-activate))
+    ;; And I want the cursor to follow that, but I don't know how to do that
+    ;; automatically, so here's the mapping.
+    ;; FIXME: rewrite to automatic
+    (setq mrb/cursor-type '(bar . 5))
+    (setq evil-normal-state-cursor  `("#bf616a" ,mrb/cursor-type)
+          evil-insert-state-cursor  `("#ebcb8b" ,mrb/cursor-type)
+          evil-emacs-state-cursor   `("#a3be8c" ,mrb/cursor-type)
+          evil-motion-state-cursor  `("#81a1c1" ,mrb/cursor-type)
+          evil-visual-state-cursor  `("#8fbcbb" ,mrb/cursor-type)
+          evil-replace-state-cursor `("#b48ead" ,mrb/cursor-type))
 
 
-      ;; Defer fontification a little bit, so we could gain a bit in scroll speed
-      (setq jit-lock-defer-time 0.02)
+    ;; Define a segment for the tracking package
+    (spaceline-define-segment tracking
+      "Segment to show if buffers need attention, similar to erc-track, but using mcirc tracking library"
+      tracking-mode-line-buffers)
 
-      ;; Make underlining nicer
-      (setq  underline-minimum-offset 3)
+    ;; We use the spacemacs theme, which gives us the evil state indicator
+    (spaceline-spacemacs-theme 'tracking)
 
-        ;; Show color of #RRBBGG texts
-      (use-package rainbow-mode
-        :diminish)
+    ;;Default frame properties frame position, color, etc
+    (setq default-frame-alist
+        `((cursor-type . ,mrb/cursor-type )
+          (height . 60) (width . 100))))
 
-      ;; Give commands the option to display fullscreen (so far, magit-status only)
-      (use-package fullframe  )
+  (use-package mic-paren
+    :config
+    (paren-activate))
+
+
+  ;; Defer fontification a little bit, so we could gain a bit in scroll speed
+  (setq jit-lock-defer-time 0.02)
+
+  ;; Make underlining nicer
+  (setq  underline-minimum-offset 3)
+
+    ;; Show color of #RRBBGG texts
+  (use-package rainbow-mode
+    :diminish)
+
+  ;; Give commands the option to display fullscreen (so far, magit-status only)
+  (use-package fullframe  )
 #+END_SRC
 
 ** Lines
@@ -822,13 +820,13 @@ some of the flyspell faces to the flycheck faces so they are
 consistent
 
 #+BEGIN_SRC emacs-lisp
-    (use-package flyspell
-      :config
+  (use-package flyspell
+    :config
 
-      ;; flyspell-duplicate  as warnings
-      ;; Do I want this at all?, seems overkill
-      (setq flyspell-mark-duplications-flag nil)  ;; This does not seem to help
-)
+    ;; flyspell-duplicate  as warnings
+    ;; Do I want this at all?, seems overkill
+    (setq flyspell-mark-duplications-flag nil)  ;; This does not seem to help
+    )
 #+END_SRC
 
 Still on the wish-list:
@@ -1171,15 +1169,15 @@ Most of work originates in capturing some task item in orgmode. Set
 up the location and files for that.
 
 #+BEGIN_SRC emacs-lisp
-(setq org-directory "~/dat/org/")
-(setq org-agenda-files (concat org-directory ".agenda_files"))
-(setq org-metadir (concat org-directory "_orgmeta/"))
-(setq org-archive-location (concat org-metadir "archive.org::date-tree"))
-(setq org-default-notes-file (concat org-directory "GTD.org"))
-(setq diary-file (concat org-metadir "DIARY"))
+  (setq org-directory "~/dat/org/")
+  (setq org-agenda-files (concat org-directory ".agenda_files"))
+  (setq org-metadir (concat org-directory "_orgmeta/"))
+  (setq org-archive-location (concat org-metadir "archive.org::date-tree"))
+  (setq org-default-notes-file (concat org-directory "GTD.org"))
+  (setq diary-file (concat org-metadir "DIARY"))
 
-;; Some other modules I want
-(use-package org-agenda-property)   ;; Display org properties in the agenda view
+  ;; Some other modules I want
+  (use-package org-agenda-property)   ;; Display org properties in the agenda view
 
 #+END_SRC
 
@@ -1532,7 +1530,7 @@ is also specified in the org config file that I include. Or rather,
 it is redundant there, because I want it always to be the case.
 
 #+BEGIN_SRC emacs-lisp
-(setq org-hide-leading-stars t)
+  (setq org-hide-leading-stars t)
 #+END_SRC
 
 For the collapsed items in the outline orgmode uses the variable
@@ -1542,8 +1540,7 @@ string, which will then be used instead of the standard 3 dots, or a
 face which will then be used to render the standard 3 dots.
 
 #+BEGIN_SRC emacs-lisp
-(setq org-ellipsis "…")
-
+  (setq org-ellipsis "…")
 #+END_SRC
 
 There are a couple of ways within org to emphasize text inline
@@ -1552,7 +1549,7 @@ enclosing regions with delimiters. I do not want to see these
 delimiters, but rather render the text.
 
 #+BEGIN_SRC emacs-lisp
-(setq org-hide-emphasis-markers t)
+  (setq org-hide-emphasis-markers t)
 #+END_SRC
 
 One of the emphasis markers is for ~inline code~ (delimited by ~). I
@@ -1560,8 +1557,8 @@ never use that in that way, but I need an emaphasis marker in tables
 which does stand out more than *bold*. So, I'm adjusting the =org-code=
 face a bit.
 
-#+BEGIN_SRC
-(set-face-attribute 'org-code nil :foreground "purple" :weight 'bold)
+#+BEGIN_SRC emacs-lisp
+  (set-face-attribute 'org-code nil :foreground "purple" :weight 'bold)
 #+END_SRC
 
 Similar to inline emphasis is the /rewriting/ with pretty entity characters (like '\delta'
@@ -1572,8 +1569,8 @@ in variable names etc. and I a big annoyance if those get rendered to
 subscript all the time.
 
 #+BEGIN_SRC emacs-lisp
-(setq org-pretty-entities 1)
-(setq org-pretty-entities-include-sub-superscripts nil)
+  (setq org-pretty-entities 1)
+  (setq org-pretty-entities-include-sub-superscripts nil)
 #+END_SRC
 
 Related to that is the display of links. I want them to be explicit
@@ -1589,7 +1586,7 @@ their native mode. This had a serious performance problem in the
 past, but I think it has been solved recently.
 
 #+BEGIN_SRC emacs-lisp
-(setq org-src-fontify-natively t)
+  (setq org-src-fontify-natively t)
 #+END_SRC
 
 For the headings at each level a =*= is normally used. As we're in
@@ -2175,8 +2172,8 @@ also add the value "crypt" as that is the org default, so it won't be
 inherited by mistake.
 
 #+BEGIN_SRC emacs-lisp
-(add-to-list 'org-tags-exclude-from-inheritance (quote "encrypt"))
-(add-to-list 'org-tags-exclude-from-inheritance (quote "crypt"))
+  (add-to-list 'org-tags-exclude-from-inheritance (quote "encrypt"))
+  (add-to-list 'org-tags-exclude-from-inheritance (quote "crypt"))
 #+END_SRC
 
 * Key and mouse bindings
@@ -2242,7 +2239,7 @@ to behave in org-mode, which apparently sets this. I should probably
 find out a better way for this.
 
 #+BEGIN_SRC emacs-lisp
-(global-unset-key (kbd "<mouse-3>"))
+  (global-unset-key (kbd "<mouse-3>"))
 #+END_SRC
 
 ** Setting keys
@@ -2252,7 +2249,7 @@ seems that `bind-key' (now part of `use-package') solves this problem,
 so let's use that.
 
 #+BEGIN_SRC emacs-lisp
-(use-package bind-key)
+  (use-package bind-key)
 #+END_SRC
 
 Bind-key can define both global keys as map-based key settings and
@@ -2487,7 +2484,7 @@ more than needed. I think, by default, this is properly configure, but
 I just want to make sure.
 
 #+BEGIN_SRC emacs-lisp
-(setq redisplay-dont-pause t)
+  (setq redisplay-dont-pause t)
 #+END_SRC
 
 When scrolling, I don't tend to think in /half-screens/ like emacs does,
@@ -2497,7 +2494,7 @@ small, or none at all, scroll-margin. Having both at a value of 1 is
 intuitive.
 
 #+BEGIN_SRC emacs-lisp
-(setq scroll-margin 1  scroll-step 1)
+  (setq scroll-margin 1  scroll-step 1)
 #+END_SRC
 
 Make sure that the scroll wheel scrolls the window that the mouse
@@ -2644,16 +2641,16 @@ bash as possible. The next settings take care of some of the things
 to make that happen.
 
 #+BEGIN_SRC emacs-lisp
-;; Do completions, but don't cycle
-(setq eshell-cmpl-cycle-completions nil)
+  ;; Do completions, but don't cycle
+  (setq eshell-cmpl-cycle-completions nil)
 
-;; Completion ignores case
-(setq eshell-cmpl-ignore-case t)
+  ;; Completion ignores case
+  (setq eshell-cmpl-ignore-case t)
 
-;; scroll to the bottom
-(setq eshell-scroll-to-bottom-on-output t)
-(setq eshell-scroll-show-maximum-output t)
-(add-to-list 'eshell-output-filter-functions 'eshell-postoutput-scroll-to-bottom)
+  ;; scroll to the bottom
+  (setq eshell-scroll-to-bottom-on-output t)
+  (setq eshell-scroll-show-maximum-output t)
+  (add-to-list 'eshell-output-filter-functions 'eshell-postoutput-scroll-to-bottom)
 #+END_SRC
 
 Another step closer to a full terminal replacement is to be able to
@@ -2738,7 +2735,7 @@ So, tab tries to indent, which is the main expectation, and if it
 can't it tries to complete stuff.
 
 #+BEGIN_SRC emacs-lisp
-(setq tab-always-indent 'complete)
+  (setq tab-always-indent 'complete)
 #+END_SRC
 
 In a standard emacs installation, TAB indents, depending on mode
@@ -2916,7 +2913,7 @@ blacklist to exclude such cases.
 The multiple cursors package is often used for repetitive editting.
 
 #+BEGIN_SRC emacs-lisp
-(use-package multiple-cursors)
+  (use-package multiple-cursors)
 #+END_SRC
 
 ** Navigation
@@ -3009,8 +3006,8 @@ on opening =http:= like stuff and =html= files. The only link to the
 program to use.
 
 #+BEGIN_SRC emacs-lisp
-(setq browse-url-browser-function (quote browse-url-generic))
-(setq browse-url-generic-program "xdg-open")
+  (setq browse-url-browser-function (quote browse-url-generic))
+  (setq browse-url-generic-program "xdg-open")
 #+END_SRC
 * Messaging and chatting
 ** Mail
@@ -3483,14 +3480,14 @@ which is below, except for the status format, which is saved in
 custom.el for now until it stabilizes.
 
 #+BEGIN_SRC emacs-lisp
-(use-package twittering-mode
-  :config
-  (setq twittering-connection-type-order '(wget curl urllib-http native urllib-https)
-	twittering-display-remaining t
-	twittering-reverse-mode t
-	twittering-icon-mode t
-	twittering-use-master-password t)
-  )
+  (use-package twittering-mode
+    :config
+    (setq twittering-connection-type-order '(wget curl urllib-http native urllib-https)
+          twittering-display-remaining t
+          twittering-reverse-mode t
+          twittering-icon-mode t
+          twittering-use-master-password t)
+    )
 #+END_SRC
 * Development settings
 Some settings which aid in development tasks.
@@ -3514,7 +3511,7 @@ on non-file buffers; for example because they are read-only.
 ** Generic
 Lets try to use ggtags everywhere.
 #+BEGIN_SRC emacs-lisp
-(use-package ggtags)
+  (use-package ggtags)
 #+END_SRC
 
 Not specific to development, but extra useful, is folding of text
@@ -3645,7 +3642,7 @@ code.
 #+END_SRC
 ** Go
 #+BEGIN_SRC emacs-lisp
-(use-package go-mode)
+  (use-package go-mode)
 #+END_SRC
 ** GIT integration
 This section is a temporary place to store some git related
@@ -3655,56 +3652,56 @@ for source code control or something similar to group these settings.
 This particular setting is for eshell git completion:
 
 #+BEGIN_SRC emacs-lisp
-(defun pcmpl-git-commands ()
-  "Return the most common git commands by parsing the git output."
-  (with-temp-buffer
-    (call-process-shell-command "git" nil (current-buffer) nil "help" "--all")
-    (goto-char 0)
-    (search-forward "available git commands in")
-    (let (commands)
-      (while (re-search-forward
-              "^[[:blank:]]+\\([[:word:]-.]+\\)[[:blank:]]*\\([[:word:]-.]+\\)?"
-              nil t)
-        (push (match-string 1) commands)
-        (when (match-string 2)
-          (push (match-string 2) commands)))
-      (sort commands #'string<))))
+  (defun pcmpl-git-commands ()
+    "Return the most common git commands by parsing the git output."
+    (with-temp-buffer
+      (call-process-shell-command "git" nil (current-buffer) nil "help" "--all")
+      (goto-char 0)
+      (search-forward "available git commands in")
+      (let (commands)
+        (while (re-search-forward
+                "^[[:blank:]]+\\([[:word:]-.]+\\)[[:blank:]]*\\([[:word:]-.]+\\)?"
+                nil t)
+          (push (match-string 1) commands)
+          (when (match-string 2)
+            (push (match-string 2) commands)))
+        (sort commands #'string<))))
 
-(defconst pcmpl-git-commands (pcmpl-git-commands)
-  "List of `git' commands.")
+  (defconst pcmpl-git-commands (pcmpl-git-commands)
+    "List of `git' commands.")
 
-(defvar pcmpl-git-ref-list-cmd "git for-each-ref refs/ --format='%(refname)'"
-  "The `git' command to run to get a list of refs.")
+  (defvar pcmpl-git-ref-list-cmd "git for-each-ref refs/ --format='%(refname)'"
+    "The `git' command to run to get a list of refs.")
 
-(defun pcmpl-git-get-refs (type)
-  "Return a list of `git' refs filtered by TYPE."
-  (with-temp-buffer
-    (insert (shell-command-to-string pcmpl-git-ref-list-cmd))
-    (goto-char (point-min))
-    (let (refs)
-      (while (re-search-forward (concat "^refs/" type "/\\(.+\\)$") nil t)
-        (push (match-string 1) refs))
-      (nreverse refs))))
+  (defun pcmpl-git-get-refs (type)
+    "Return a list of `git' refs filtered by TYPE."
+    (with-temp-buffer
+      (insert (shell-command-to-string pcmpl-git-ref-list-cmd))
+      (goto-char (point-min))
+      (let (refs)
+        (while (re-search-forward (concat "^refs/" type "/\\(.+\\)$") nil t)
+          (push (match-string 1) refs))
+        (nreverse refs))))
 
-(defun pcmpl-git-remotes ()
-  "Return a list of remote repositories."
-  (split-string (shell-command-to-string "git remote")))
+  (defun pcmpl-git-remotes ()
+    "Return a list of remote repositories."
+    (split-string (shell-command-to-string "git remote")))
 
-(defun pcomplete/git ()
-  "Completion for `git'."
-  ;; Completion for the command argument.
-  (pcomplete-here* pcmpl-git-commands)
-  (cond
-   ((pcomplete-match "help" 1)
-    (pcomplete-here* pcmpl-git-commands))
-   ((pcomplete-match (regexp-opt '("pull" "push")) 1)
-    (pcomplete-here (pcmpl-git-remotes)))
-   ;; provide branch completion for the command `checkout'.
-   ((pcomplete-match "checkout" 1)
-    (pcomplete-here* (append (pcmpl-git-get-refs "heads")
-                             (pcmpl-git-get-refs "tags"))))
-   (t
-    (while (pcomplete-here (pcomplete-entries))))))
+  (defun pcomplete/git ()
+    "Completion for `git'."
+    ;; Completion for the command argument.
+    (pcomplete-here* pcmpl-git-commands)
+    (cond
+     ((pcomplete-match "help" 1)
+      (pcomplete-here* pcmpl-git-commands))
+     ((pcomplete-match (regexp-opt '("pull" "push")) 1)
+      (pcomplete-here (pcmpl-git-remotes)))
+     ;; provide branch completion for the command `checkout'.
+     ((pcomplete-match "checkout" 1)
+      (pcomplete-here* (append (pcmpl-git-get-refs "heads")
+                               (pcmpl-git-get-refs "tags"))))
+     (t
+      (while (pcomplete-here (pcomplete-entries))))))
 #+END_SRC
 
 *** Magit
@@ -3756,7 +3753,7 @@ autocommit to run I can use a file local variable to disable the hook
 #+END_SRC
 *** Misc
 #+BEGIN_SRC emacs-lisp
-(use-package gist)
+  (use-package gist)
 #+END_SRC
 * Machine specific configurations
 The aim is to have the exact same configuration on each machine, but
