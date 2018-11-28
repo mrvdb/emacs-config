@@ -626,12 +626,13 @@ valid for 5 levels, not 6.
       ;; And I want the cursor to follow that, but I don't know how to do that
       ;; automatically, so here's the mapping.
       ;; FIXME: rewrite to automatic
-      (setq evil-normal-state-cursor  '("#bf616a" box)
-            evil-insert-state-cursor  '("#ebcb8b" box)
-            evil-emacs-state-cursor   '("#a3be8c" box)
-            evil-motion-state-cursor  '("#81a1c1" box)
-            evil-visual-state-cursor  '("#8fbcbb" box)
-            evil-replace-state-cursor '("#b48ead" box))
+      (setq mrb/cursor-type '(bar . 5))
+      (setq evil-normal-state-cursor  `("#bf616a" ,mrb/cursor-type)
+            evil-insert-state-cursor  `("#ebcb8b" ,mrb/cursor-type)
+            evil-emacs-state-cursor   `("#a3be8c" ,mrb/cursor-type)
+            evil-motion-state-cursor  `("#81a1c1" ,mrb/cursor-type)
+            evil-visual-state-cursor  `("#8fbcbb" ,mrb/cursor-type)
+            evil-replace-state-cursor `("#b48ead" ,mrb/cursor-type))
 
 
       ;; Define a segment for the tracking package
@@ -644,7 +645,7 @@ valid for 5 levels, not 6.
 
       ;;Default frame properties frame position, color, etc
       (setq default-frame-alist
-          `((cursor-type . box )
+          `((cursor-type . mrb/cursor-type )
             (height . 60) (width . 100))))
 
     (use-package paren
