@@ -2948,11 +2948,11 @@ of packages obsolete (=avy-jump=, =expand region=, possbibly
 
 
 #+BEGIN_SRC emacs-lisp
-  (setq evil-want-keybinding nil)
   (use-package evil
     :diminish undo-tree-mode
     :init
-    (setq evil-want-integration nil) ; Need this for evil-collection, no idea what it does.
+    (setq evil-want-keybinding nil
+          evil-want-integration nil) ; Need this for evil-collection, no idea what it does.
     :config
     (setq evil-move-cursor-back nil) ; When exiting insert mode do not move cursor!!
 
