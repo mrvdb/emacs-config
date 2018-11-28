@@ -335,18 +335,12 @@ section.
       (goto-address-mode 1)))
   (global-goto-address-mode t)
 
-  ;; Allow prettify wherever
-  ;; To add replacements for some mode:
-  ;; (add-hook 'some-mode-hook (lambda () (push '(">=" . ?≥) prettify-symbols-alist)))
-  ;;(global-prettify-symbols-mode t)
-
 #+END_SRC
 
 Make life easier if we have sudo, so we can just edit the files and be
 done with them if possible
 
 #+BEGIN_SRC emacs-lisp
-  ;;; There is a sudo-edit package which seems more maintained, shoud I use that?
   (use-package sudo-save
     :ensure nil
     :load-path (lambda () (concat custom-package-directory "sudo-save/")))
