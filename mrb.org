@@ -2952,32 +2952,28 @@ of packages obsolete (=avy-jump=, =expand region=, possbibly
 
     ;; I'm still chickening out apparently, but I still need this.
     (setq evil-default-state 'emacs)
-    (evil-mode 1))
+    (evil-mode 1)
 
-  ;; Map as much as possible for all packages when in Normal mode
-  ;; We still can C-z to emacs state when in need
-  (use-package evil-collection
-    :after evil
-    :config
-    ;; Exclude list of modes
-    (delete 'notmuch evil-collection-mode-list)
-    (delete 'elfeed evil-collection-mode-list)
-    (evil-collection-init))
+    ;; Map as much as possible for all packages when in Normal mode
+    ;; We still can C-z to emacs state when in need
+    (use-package evil-collection
+      :config
+      ;; Exclude list of modes
+      (delete 'notmuch evil-collection-mode-list)
+      (delete 'elfeed evil-collection-mode-list)
+      (evil-collection-init))
 
-  ;; Add notion of doing an action with the stuff surrounding a text object
-  (use-package evil-surround
-    :after evil
-    :config
-    (global-evil-surround-mode 1))
+    ;; Add notion of doing an action with the stuff surrounding a text object
+    (use-package evil-surround
+      :config
+      (global-evil-surround-mode 1))
 
-  ;; Add notion of commenting something as action
-  (use-package evil-commentary
-    :diminish evil-commentary-mode
-    :after evil
-    :config
-    (evil-commentary-mode))
+    ;; Add notion of commenting something as action
+    (use-package evil-commentary
+      :diminish evil-commentary-mode
+      :config
+      (evil-commentary-mode)))
 #+END_SRC
-
 * Remote editing
 As my default shell is =zsh= tramp does not work out of the box for
 me. It gets confused by my prompt, so on top of my =.zshrc= file I have
