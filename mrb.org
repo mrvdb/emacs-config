@@ -1,9 +1,12 @@
 #+SETUPFILE: "~/.emacs.d/org-config.org"
-#+TITLE: Emacs configuration
-#+DESCRIPTION: An org-babel based emacs configuration
+#+TITLE: My org-babel based emacs configuration
 #+LANGUAGE:  en
-#+OPTIONS:  H:5 toc:2 creator:nil email:nil author:t timestamp:t tags:nil
+#+OPTIONS:  H:5 toc:1 creator:nil email:nil author:t timestamp:t tags:nil
 #+PROPERTY: results silent
+
+(note: this document was posted automatically with the [[https://github.com/dangom/writefreely.el][writefreely.el]]
+Emacs package. Therefore, some layout issues may occur due to orgmode
+to markdown conversion.
 
 This is my emacs configuration file that is loaded with
 =org-babel-load-file= in the Emacs init file. The intent is to have as
@@ -234,12 +237,12 @@ authentication. The situation which I want to prevent is that if gnome
 is broken, I can't authenticate to services I need.
 
 I have a gpg-agent daemon configured which manages gpg and ssh keys,
-protected by one password. Let's make the system as simple as we can
-for now and just store passwords in the gpg agent store only,
+protected by a hardware key. Let's make the system as simple as we can
+for now and just store passwords in the gpg protected store only,
 i.e. the password-store program.
 
 #+BEGIN_SRC emacs-lisp
-  ;; Use only authinfo.gpg for password storage
+  ;; Use only password-store
   (use-package auth-source-pass
     :ensure password-store
     :init
@@ -254,12 +257,7 @@ i.e. the password-store program.
 I need a way to store some sensitive information without that being
 published, should I decide some day to push this config somewhere.
 
-One solution is to have all these in a separate file, and not publish
-that file. I’m also encrypting the file, as I’m sure I *will* publish
-it by accident some day.
-
-For settings that are made in elisp, load secrets.el.gpg which will
-be encrypted automatically.
+When needed, the gpg key is used to encrypt information.
 
 #+BEGIN_SRC emacs-lisp
   ;; Use my email-address for encryption
@@ -268,10 +266,9 @@ be encrypted automatically.
   (setq-default epa-file-select-keys nil)
 #+END_SRC
 
-Apart from this there is some inline content that is not suitable for
-storing in the secrets file. For org-mode for example, there is a way
-to encrypt sections separately. See [[Encrypting information in org-mode]]
-for the details on the settings for this.
+For org-mode, there is a wayto encrypt sections separately. See
+[[Encrypting information in org-mode]] for the details on the settings for
+this.
 
 Next to inline content in org that needs encryption, there is also
 content that needs encrypting which is more suitable to store in a
@@ -2515,63 +2512,8 @@ This sections describes how terminals and shells are used from within
 Emacs. In an ideal situation I won't be needing any other terminal
 emulator program, other than the ones used directly from Emacs.
 
-At the momen I use two varieties:
-1. Ansi terminal; basically a front-end to =/bin/bash=
-2. Eshell; the all Emacs-Lisp based solution.
+At the moment I only use eshell; the all Emacs-Lisp based solution.
 
-** Ansi term
-
-#+BEGIN_SRC emacs-lisp
-  (defun mrb/use-utf8 ()
-    (set-buffer-process-coding-system 'utf-8-unix 'utf-8-unix))
-  (add-hook 'term-exec-hook 'mrb/use-utf8)
-
-  ;; Define terminal config, I prefer ansi-term
-  (use-package term)
-  (defun mrb/ansi-term (&optional new-buffer-name)
-    "Start a terminal-emulator in a new buffer."
-    (interactive)
-
-    (setq program "/bin/bash")
-
-    ;; Pick the name of the new buffer.
-    (setq term-ansi-buffer-name
-          (if new-buffer-name
-              new-buffer-name
-            (if term-ansi-buffer-base-name
-                (if (eq term-ansi-buffer-base-name t)
-                    (file-name-nondirectory program)
-                  term-ansi-buffer-base-name)
-              "ansi-term")))
-
-    (setq term-ansi-buffer-name (concat "*" term-ansi-buffer-name "*"))
-
-    ;; In order to have more than one term active at a time
-    ;; I'd like to have the term names have the *term-ansi-term<?>* form,
-    ;; for now they have the *term-ansi-term*<?> form but we'll see...
-
-    (setq term-ansi-buffer-name (generate-new-buffer-name term-ansi-buffer-name))
-    (setq term-ansi-buffer-name (term-ansi-make-term term-ansi-buffer-name program))
-
-    (set-buffer term-ansi-buffer-name)
-    (term-mode)
-    (term-char-mode)
-
-    ;; Go there
-    (switch-to-buffer term-ansi-buffer-name))
-
-  ; Aliases
-  (defalias 'at 'mrb/ansi-term)
-
-  ;; When closing the ansi term window, close the useless buffer too
-  (defadvice term-sentinel (around mrb/advice-term-sentinel (proc msg))
-    (if (memq (process-status proc) '(signal exit))
-        (let ((buffer (process-buffer proc)))
-          ad-do-it
-          (kill-buffer buffer))
-      ad-do-it))
-  (ad-activate 'term-sentinel)
-#+END_SRC handling.
 ** Eshell
 Eshell is theoretically the ideal shell; part of emacs, completely
 implemented in lisp and thus available regardless of the underlying
@@ -3764,3 +3706,8 @@ When we are all done with this, provide it.
 (provide 'mrb)
 ;;; mrb ends here
 #+END_SRC
+
+# Local Variables:
+# writefreely-post-id: "wf83bq5jwz"
+# writefreely-post-token: nil
+# End:
