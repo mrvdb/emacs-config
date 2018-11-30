@@ -3647,7 +3647,9 @@ magit, so let's begin with bringing that in.
     ;; This requires specific authentication stuff, see documentation.
     (use-package magithub
       :config
-      (magithub-feature-autoinject t)))
+      (magithub-feature-autoinject t)
+      (setq
+       magithub-clone-default-directory "~/dat/src/")))
 #+END_SRC
 
 *** Commiting automatically
