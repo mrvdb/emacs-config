@@ -3566,6 +3566,17 @@ code.
 #+BEGIN_SRC emacs-lisp
   (use-package go-mode)
 #+END_SRC
+** Scheme
+Geiser is a repl for schemes, of which I try to use one, i.e. guile
+because it also claims to support emacs-lisp
+
+#+BEGIN_SRC emacs-lisp
+(use-package geiser
+  :config
+  (setq
+   geiser-active-implementations '(guile)))
+#+END_SRC
+
 ** GIT integration
 This section is a temporary place to store some git related
 settings. I need to reorganize this document a bit so I have a section
