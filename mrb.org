@@ -3267,6 +3267,15 @@ First, let's activate notmuch itself.
   (setq notmuch-address-selection-function
         'mrb/notmuch-address-selection-function)
 #+END_SRC
+
+Since we use org and notmuch, makes sense to support linking from one
+to the other. The =org-notmuch= package is not part of org nor part of
+notmuch though.
+
+#+BEGIN_SRC emacs-lisp
+(use-package org-notmuch
+  :load-path "~/.emacs.d/lisp/")
+#+END_SRC
 *** Sieve
 Cyrus sieve is used on the server to filter our mail and this is
 accessed by the sieve-manage package. For some reason I can't get the
