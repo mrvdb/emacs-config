@@ -1220,9 +1220,7 @@ Here are the templates used for them.
            ("b" "Buy"
             entry (function mrb/capture-location) "* BUY %? :buy:\n%i\n" :prepend t :empty-lines 1)
            ("t" "Todo"
-            entry (function mrb/capture-location) "* TODO %?\n%i\n" :prepend t :empty-lines 1)
-           ("z" "Ziggo logbook entry"
-            item (id "ziggo-logbook") " %U %?\n%i\n"))))
+            entry (function mrb/capture-location) "* TODO %?\n%i\n" :prepend t :empty-lines 1))))
 
   (defun mrb/capture-location()
     "This function is meant to be used inside
