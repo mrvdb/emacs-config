@@ -32,6 +32,9 @@
 ;; current directory for this to work.
 (use-package org)
 
+;; We have to set the local variables safe for the file (writefreely related)
+(add-to-list 'safe-local-variable-values '(writefreely-post-id . "wf83bq5jwz"))
+(add-to-list 'safe-local-variable-values '(writefreely-post-token))
 (org-babel-load-file "~/.emacs.d/mrb.org")
 
 ;; END init.el

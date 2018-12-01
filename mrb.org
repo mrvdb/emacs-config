@@ -1876,7 +1876,7 @@ quickly.
   ;; - wf: have autorefresh GET parameter which monitors updates and
   ;;       refreshes automatically
   ;; - set local save dir for the files
-  ;; - gather functions in minor mode? like org-journal an org-derivative?
+  ;; Make sure the variables of THIS file are loaded before THIS file is loaded
   (use-package writefreely
     :after org
     :ensure ox-gfm
