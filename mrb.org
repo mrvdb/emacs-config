@@ -143,28 +143,30 @@ Package handling, do this early so emacs knows where to find things.
 First of all, define the package archives I need; for now, just the
 default gnu augmented with the melpa repository.
 #+BEGIN_SRC emacs-lisp
-  (add-to-list 'package-archives
-               '("melpa" . "http://melpa.org/packages/") t)
-  (add-to-list 'package-archives
-               '("melpa-stable" . "https://stable.melpa.org/packages/") t)
-  (add-to-list 'package-archives
-               '("gnu" . "http://elpa.gnu.org/packages/") t)
+    (add-to-list 'package-archives
+                 '("melpa" . "http://melpa.org/packages/") t)
+    (add-to-list 'package-archives
+                 '("melpa-stable" . "https://stable.melpa.org/packages/") t)
+    (add-to-list 'package-archives
+                 '("gnu" . "http://elpa.gnu.org/packages/") t)
 
 
-  ;; Use-package is certain to be installed (init.el) does it.
-  (use-package use-package
-    :config
-    ;; Default is to have elpa provide the package
-    (setq use-package-always-ensure t)
-    (setq use-package-verbose t)
-    ;; If running as daemon, just load shite
-    (if (daemonp)
-        (setq use-package-always-demand t))
+    ;; Use-package is certain to be installed (init.el) does it.
+    (use-package use-package
+      :config
+      ;; Extension to check for system executables
+      (use-package use-package-ensure-system-package)
+      ;; Default is to have elpa provide the package
+      (setq use-package-always-ensure t)
+      (setq use-package-verbose t)
+      ;; If running as daemon, just load shite
+      (if (daemonp)
+          (setq use-package-always-demand t))
 
-    ;; Location where I keep custom packages
-    (setq custom-package-directory (concat emacs-directory "lisp/")))
+      ;; Location where I keep custom packages
+      (setq custom-package-directory (concat emacs-directory "lisp/")))
 
-  (use-package cl-lib )
+      (use-package cl-lib )
 #+END_SRC
 
 Now, there's an issue where a variable =package-selected-packages= gets
