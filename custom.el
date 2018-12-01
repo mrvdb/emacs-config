@@ -218,7 +218,14 @@
  '(reb-re-syntax (quote string))
  '(safe-local-variable-values
    (quote
-    ((TeX-master . t)
+    ((writefreely-post-id . "t34o6ptyty")
+     (writefreely-post-id . "jl860566j7")
+     (writefreely-post-id . "xpuz7k4vf7")
+     (writefreely-post-id . "m52wflcl7q")
+     (writefreely-post-id . "wf83bq5jwz")
+     (writefreely-post-id)
+     (writefreely-post-token)
+     (TeX-master . t)
      (hamlet/basic-offset . 4)
      (haskell-process-use-ghci . t)
      (haskell-indent-spaces . 4)
