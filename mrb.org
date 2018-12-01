@@ -2,7 +2,7 @@
 #+TITLE: My org-babel based emacs configuration
 #+LANGUAGE:  en
 #+OPTIONS:  H:5 toc:1 creator:nil email:nil author:t timestamp:t tags:nil
-#+PROPERTY: results silent
+#+PROPERTY: header-args :results silent
 
 (note: this document was posted automatically with the [[https://github.com/dangom/writefreely.el][writefreely.el]]
 Emacs package. Therefore, some layout issues may occur due to orgmode
@@ -1065,7 +1065,7 @@ functions were defined in the included org version and not anymore in
 newer versions. We want an error, not a silent load of the older
 function.
 
-#+COMMENT This duplicates the one in init.el, problems?
+#+COMMENT: This duplicates the one in init.el, problems?
 #+BEGIN_SRC emacs-lisp
   (use-package org
     :after evil
