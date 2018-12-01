@@ -3573,7 +3573,11 @@ code.
 #+END_SRC
 ** Go
 #+BEGIN_SRC emacs-lisp
-  (use-package go-mode)
+  (use-package go-mode
+    :ensure-system-package godef
+    :config
+    :bind (:map go-mode-map
+                ("C-h f" . godoc-at-point)))
 #+END_SRC
 ** Scheme
 Geiser is a repl for schemes, of which I try to use one, i.e. guile
