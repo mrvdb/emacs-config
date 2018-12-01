@@ -1826,7 +1826,7 @@ is a better fit.
      org-journal-date-format "%A, %e-%m-%Y"
 
      ;; Put day on top of file, uses `org-journal-date-format
-     org-journal-date-prefix "#+TITLE: "
+     org-journal-date-prefix "#+SETUPFILE: ~/.emacs.d/org-config.org\n#+TITLE: "
      ;; New entries go at the bottom, make sure we are at top level
      org-journal-time-format "[%R] "
      org-journal-time-prefix "* "
