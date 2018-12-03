@@ -505,10 +505,10 @@ starting with the =base16-nord= theme and see where this leaves me.
     ;; Define our adjustments to faces
     ;; This should be the only place where we adjust our faces
     ;; For reference, these are the theme colors
-    ;; base00 #2e3440 base01 #3b4252 base02 #434c5e base03 #4c566a
-    ;; base04 #d8dee9 base05 #e5e9f0 base06 #eceff4
-    ;; base07 #8fbcbb base08 #88c0d0 base09 #81a1c1 base0A #5e81ac
-    ;; base0B #bf616a base0C #d08770 base0D #ebcb8b base0E #a3be8c base0F #b48ead
+    ;; base00 '#2e3440 base01 '#3b4252 base02 '#434c5e base03 '#4c566a
+    ;; base04 '#d8dee9 base05 '#e5e9f0 base06 '#eceff4
+    ;; base07 '#8fbcbb base08 '#88c0d0 base09 '#81a1c1 base0A '#5e81ac
+    ;; base0B '#bf616a base0C '#d08770 base0D '#ebcb8b base0E '#a3be8c base0F '#b48ead
 
     (setq base16-adjustments
           '(
@@ -642,8 +642,8 @@ valid for 5 levels, not 6.
 
     ;;Default frame properties frame position, color, etc
     (setq default-frame-alist
-        `((cursor-type . ,mrb/cursor-type )
-          (height . 60) (width . 100))))
+          `((cursor-type . ,mrb/cursor-type )
+            (height . 60) (width . 100))))
 
   (use-package mic-paren
     :config
@@ -656,7 +656,7 @@ valid for 5 levels, not 6.
   ;; Make underlining nicer
   (setq  underline-minimum-offset 3)
 
-    ;; Show color of #RRBBGG texts
+  ;; Show color of '#RRBBGG texts
   (use-package rainbow-mode
     :diminish)
 
@@ -1672,7 +1672,7 @@ Specific settings for babel and literate programming within org-mode
   (use-package ob-gnuplot :ensure nil)
   (org-babel-do-load-languages
    'org-babel-load-languages
-   '( (ditaa . t) (sql . t) (emacs-lisp t) (lisp t)
+   '( (ditaa . t) (sql . t) (emacs-lisp t) (lisp t) (shell t)
      (css t) (awk t) (js t) (lisp t) (org t) (plantuml t) (gnuplot . t)
      (haskell t) (js t) (calc t)))
 #+END_SRC
