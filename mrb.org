@@ -1068,7 +1068,6 @@ function.
 #+COMMENT: This duplicates the one in init.el, problems?
 #+BEGIN_SRC emacs-lisp
   (use-package org
-    :after evil
     :ensure nil
     :pin org
     :mode ("\\.txt\\'" "\\.org\'")
@@ -1154,7 +1153,7 @@ function.
      org-track-ordered-property-with-tag nil
      org-startup-indented t)
 
-     (add-to-list 'evil-emacs-state-modes 'org-mode)
+
 
     (use-package org-datetree :ensure nil)        ;; Allows for archiving and refiling in a date organised tree
     (use-package org-protocol :ensure nil
@@ -1809,7 +1808,6 @@ is a better fit.
 
 #+BEGIN_SRC emacs-lisp
   (use-package org-journal
-    :after evil
     :init
     ;; The expand-file-name is needed, which is odd, because for single
     ;; files this is not needed.
@@ -1837,8 +1835,7 @@ is a better fit.
 
     ;; I want to have encryption, but how do TODO items bubble up then in the agenda
     org-journal-enable-encryption nil
-    org-crypt-disable-auto-save t)
-    (add-to-list 'evil-emacs-state-modes 'org-journal-mode))
+    org-crypt-disable-auto-save t))
 #+END_SRC
 
 Particularly in journaling, but also in org-mode in general, I want to
@@ -2219,12 +2216,9 @@ menu with the combinations of keys that can follow it.
 #+BEGIN_SRC emacs-lisp
   ; which keys shows menu with completions of prefix-key
   (use-package which-key
-    :after evil
     :diminish
     :config
     (setq which-key-idle-delay 2.0
-          ;; Experimental: also complete for evil operators like d,y,g etc.)
-          which-key-allow-evil-operators t
           which-key-show-operator-state-maps t)
     (which-key-mode))
 #+END_SRC
@@ -2870,52 +2864,9 @@ there directly. This makes =within-frame= navigation a 3-key
 operation, which is considerably faster than anything else.
 
 In a more general sense, =evil-mode=, the VI emulation layer on top of
-emacs, is the ultimate navigational package.
+emacs, is the ultimate navigational package. I have tried this for
+about 6 months, but it's not for me yet.
 
-*** Evil mode
-Evil mode is a Emulated VI Layer on top of emacs. Arguably the
-strenght of vi is in its composeability of text editting commands. I
-want to try this out as a component in Emacs.
-I'm not planning on leaving emacs because its strengths and my long
-history with it is not something I want to lose, but it seems to me
-that having evil-mode as the base navigational logic can make a number
-of packages obsolete (=avy-jump=, =expand region=, possbibly
-=multiple-cursors=)
-
-
-#+BEGIN_SRC emacs-lisp
-  (use-package evil
-    :diminish undo-tree-mode
-    :init
-    (setq evil-want-keybinding nil
-          evil-want-integration nil) ; Need this for evil-collection, no idea what it does.
-    :config
-    (setq evil-move-cursor-back nil) ; When exiting insert mode do not move cursor!!
-
-    ;; I'm still chickening out apparently, but I still need this.
-    (setq evil-default-state 'emacs)
-    (evil-mode 1)
-
-    ;; Map as much as possible for all packages when in Normal mode
-    ;; We still can C-z to emacs state when in need
-    (use-package evil-collection
-      :config
-      ;; Exclude list of modes
-      (delete 'notmuch evil-collection-mode-list)
-      (delete 'elfeed evil-collection-mode-list)
-      (evil-collection-init))
-
-    ;; Add notion of doing an action with the stuff surrounding a text object
-    (use-package evil-surround
-      :config
-      (global-evil-surround-mode 1))
-
-    ;; Add notion of commenting something as action
-    (use-package evil-commentary
-      :diminish evil-commentary-mode
-      :config
-      (evil-commentary-mode)))
-#+END_SRC
 * Remote editing
 As my default shell is =zsh= tramp does not work out of the box for
 me. It gets confused by my prompt, so on top of my =.zshrc= file I have
@@ -3249,8 +3200,6 @@ First, let's activate notmuch itself.
   ;; Why are these outside the use-package clause?
 
   (add-hook 'message-mode-hook 'mrb/message-mode-hook)
-  (add-to-list 'evil-emacs-state-modes 'notmuch-hello-mode)
-  (add-to-list 'evil-emacs-state-modes 'notmuch-search-mode)
 
   ;; Don't mess with spaces for now
   (add-to-list 'ws-butler-global-exempt-modes 'message-mode)
@@ -3357,10 +3306,8 @@ imported my feeds from RSSyl
                                   :add '(video youtube)))
     (add-hook 'elfeed-new-entry-hook
               (elfeed-make-tagger :feed-url "vimeo\\.com"
-                                  :add '(video vimeo)))
+                                  :add '(video vimeo))))
 
-    (add-to-list 'evil-emacs-state-modes 'elfeed-search-mode)
-    (add-to-list 'evil-emacs-state-modes 'elfeed-show-mode))
 #+END_SRC
 
 Elfeed allows to interactively subscribe to a feed (defaulting to
