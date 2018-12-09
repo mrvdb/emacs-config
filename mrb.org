@@ -609,6 +609,7 @@ valid for 5 levels, not 6.
     (tracking-mode 1))
 
   ;; Modeline
+  ;; TODO: probably simplify this package, now we do not need evil support
   (use-package spaceline-config
     :after tracking
     :ensure spaceline
@@ -622,15 +623,7 @@ valid for 5 levels, not 6.
 
     ;; And I want the cursor to follow that, but I don't know how to do that
     ;; automatically, so here's the mapping.
-    ;; FIXME: rewrite to automatic
-    (setq mrb/cursor-type '(bar . 5))
-    (setq evil-normal-state-cursor  `("#bf616a" ,mrb/cursor-type)
-          evil-insert-state-cursor  `("#ebcb8b" ,mrb/cursor-type)
-          evil-emacs-state-cursor   `("#a3be8c" ,mrb/cursor-type)
-          evil-motion-state-cursor  `("#81a1c1" ,mrb/cursor-type)
-          evil-visual-state-cursor  `("#8fbcbb" ,mrb/cursor-type)
-          evil-replace-state-cursor `("#b48ead" ,mrb/cursor-type))
-
+    (setq mrb/cursor-type '(bar . 7))
 
     ;; Define a segment for the tracking package
     (spaceline-define-segment tracking
@@ -641,6 +634,7 @@ valid for 5 levels, not 6.
     (spaceline-spacemacs-theme 'tracking)
 
     ;;Default frame properties frame position, color, etc
+    (set-cursor-color "#ff8c00")
     (setq default-frame-alist
           `((cursor-type . ,mrb/cursor-type )
             (height . 60) (width . 100))))
