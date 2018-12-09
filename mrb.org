@@ -623,7 +623,7 @@ valid for 5 levels, not 6.
 
     ;; And I want the cursor to follow that, but I don't know how to do that
     ;; automatically, so here's the mapping.
-    (setq mrb/cursor-type '(bar . 7))
+    (setq mrb/cursor-type '(bar . 3))
 
     ;; Define a segment for the tracking package
     (spaceline-define-segment tracking
