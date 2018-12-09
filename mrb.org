@@ -3571,9 +3571,9 @@ common-lisp is the the =slime= package.
     :config
     (setq
      ;; Choose an implementation
-     inferior-lisp-program "sbcl"
+     inferior-lisp-program "/usr/bin/sbcl"
      slime-lisp-implementations
-     '((sbcl ("sbl" "--core" "sbcl.core-for-slime")))
+     '((sbcl ("sbcl" "--core" "sbcl.core-for-slime")))
      slime-net-coding-system 'utf-8-unix)
 
     ;; Make it nice to work with
@@ -3582,9 +3582,10 @@ common-lisp is the the =slime= package.
     (setq slime-startup-animation nil)
 
     ;; In the REPL slime takes backspace, I want paredit to have it
-    (defun override-sliem-repl-bindings-with-paredit ()
+    (defun override-slime-repl-bindings-with-paredit ()
       (define-key slime-repl-mode-map
         (read-kbd-macro paredit-backward-delete-key) nil))
+
     (add-hook 'slime-repl-mode-hook 'override-slime-repl-bindings-with-paredit)
 
     (add-hook 'slime-repl-mode-hook #'enable-paredit-mode))
