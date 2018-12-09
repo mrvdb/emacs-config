@@ -3425,7 +3425,6 @@ Make our source look a bit more attractive by enabling
   ;; Add hooks for all programming languages, for now
   ;; TODO: check for conflict with haskell, which has its own system.
   (add-hook 'prog-mode-hook 'mrb/prettify-symbols)
-  (add-hook 'geiser-repl-mode-hook 'mrb/prettify-symbols)
 #+END_SRC
 
 ** Coding styles
@@ -3526,16 +3525,82 @@ code.
     :bind (:map go-mode-map
                 ("C-h f" . godoc-at-point)))
 #+END_SRC
-** Scheme
-Geiser is a repl for schemes, of which I try to use one, i.e. guile
-because it also claims to support emacs-lisp
+** Lisp-like
+There are a number of languages which are lisp-like, not in the least
+Emacs lisp itself. It makes sense to group the configuration for these
+languages together. In the first part there will be configuration for
+all lisp-like languages (like the =paredit= configuration for
+example). For each specific implementation there may be augmentations
+to the config, or even a completely separate.
+
+For all of those languages, I want to use paredit which makes
+editting, longer term, a lot more productive.
 
 #+BEGIN_SRC emacs-lisp
-(use-package geiser
-  :config
-  (setq
-   geiser-active-implementations '(guile)))
+  (use-package paredit
+    :config
+    ;; For things like *scratch* buffer
+    (add-hook 'lisp-interaction-mode-hook #'enable-paredit-mode)
+    (add-hook 'emacs-lisp-mode-hook #'enable-paredit-mode)
+    (add-hook 'eval-expression-mode-hook #'enable-paredit-mode)
+    (add-hook 'scheme-mode-hook #'enable-paredit-mode)
+    (add-hook 'lisp-mode-hook #'enable-paredit-mode))
 #+END_SRC
+
+When a mode wants to use paredit, it can use the same constructs as
+above to enable paredit on it modes.
+
+*** Scheme
+[[https://www.nongnu.org/geiser][Geiser]] is, among other things, a repl for schemes. I try to use one,
+mostly for educational purposes. I chose guile because it also claims to
+support emacs-lisp and might be the future vm on which emacs-lisp will
+run. So, let's have it and use paredit in its REPL.
+
+#+BEGIN_SRC emacs-lisp
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (use-package geiser
+    :after paredit
+    :config
+    ;; Just guile for now
+    (setq geiser-active-implementations '(guile))
+    (add-hook 'geiser-repl-mode-hook #'enable-paredit-mode)
+    (add-hook 'geiser-repl-mode-hook 'mrb/prettify-symbols))
+#+END_SRC
+
+*** Common lisp
+The defacto standard for a development environment in Emacs for
+common-lisp is the the =slime= package.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package slime
+    :after paredit
+    :config
+    (setq
+     ;; Choose an implementation
+     inferior-lisp-program "sbcl"
+     slime-lisp-implementations
+     '((sbcl ("sbl" "--core" "sbcl.core-for-slime")))
+     slime-net-coding-system 'utf-8-unix)
+
+    ;; Make it nice to work with
+    (add-to-list 'slime-contribs 'slime-fancy)  ;; This loads a bunch, perhaps split?
+    (add-to-list 'slime-contribs 'slime-banner) ;; Shows what I am connected to
+    (setq slime-startup-animation nil)
+
+    ;; In the REPL slime takes backspace, I want paredit to have it
+    (defun override-sliem-repl-bindings-with-paredit ()
+      (define-key slime-repl-mode-map
+        (read-kbd-macro paredit-backward-delete-key) nil))
+    (add-hook 'slime-repl-mode-hook 'override-slime-repl-bindings-with-paredit)
+
+    (add-hook 'slime-repl-mode-hook #'enable-paredit-mode))
+#+END_SRC
+
+On first glance, it looks like slime is a lot nicer than =geiser= +
+=guile=. I read that =slime= has support for MIT-Scheme as a backend so
+perhaps I should use that instead of guile.
 
 ** GIT integration
 This section is a temporary place to store some git related
