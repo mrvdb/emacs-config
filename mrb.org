@@ -634,10 +634,11 @@ valid for 5 levels, not 6.
     (spaceline-spacemacs-theme 'tracking)
 
     ;;Default frame properties frame position, color, etc
-    (set-cursor-color "#ff8c00")
     (setq default-frame-alist
           `((cursor-type . ,mrb/cursor-type )
-            (height . 60) (width . 100))))
+            (height . 60)
+            (width . 100)
+            (cursor-color . "#ff8c00"))))
 
   (use-package mic-paren
     :config
@@ -3549,9 +3550,6 @@ above to enable paredit on it modes.
 mostly for educational purposes. I chose guile because it also claims to
 support emacs-lisp and might be the future vm on which emacs-lisp will
 run. So, let's have it and use paredit in its REPL.
-
-#+BEGIN_SRC emacs-lisp
-#+END_SRC
 
 #+BEGIN_SRC emacs-lisp
   (use-package geiser
