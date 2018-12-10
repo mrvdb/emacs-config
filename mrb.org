@@ -3533,6 +3533,7 @@ editting, longer term, a lot more productive.
 
 #+BEGIN_SRC emacs-lisp
   (use-package paredit
+    :diminish
     :config
     ;; For things like *scratch* buffer
     (add-hook 'lisp-interaction-mode-hook #'enable-paredit-mode)
