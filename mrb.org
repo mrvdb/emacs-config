@@ -496,7 +496,7 @@ and cursor properties:
               (cursor-color . "DarkOrange")))
 #+END_SRC
 
-I'm moving to the [[https://github.com/arcticicestudio/nord][Nord color palette]]. This palette defines 16 colors.
+I'm using the [[https://github.com/arcticicestudio/nord][Nord color palette]]. This palette defines 16 colors.
 
 There is a base16 theme which uses exactly these colors and there are
 varieties which use the 16 colors and some derivatives of it.
@@ -3547,6 +3547,23 @@ editting, longer term, a lot more productive.
 
 When a mode wants to use paredit, it can use the same constructs as
 above to enable paredit on it modes.
+
+While we're here, let's do paxedit as well; not sure whey these two
+package don't merge. It's the same thing. I'm just gonna treat them as
+one here and enable =paxedit= whenever paredit gets enabled, but I'll be
+a bit conservative with the keybindings first.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package paxedit
+    :ensure paredit
+    :diminish
+    :bind (("M-<right>" . 'paxedit-transpose-forward)
+           ("M-<left>"  . 'paxedit-transpose-backward)
+           ("M-<up>"    . 'paxedit-backward-up)
+           ("M-<down>"  . 'paxedit-backward-end))
+    :config
+    (add-hook 'paredit-mode-hook 'paxedit-mode))
+#+END_SRC
 
 *** Scheme
 [[https://www.nongnu.org/geiser][Geiser]] is, among other things, a repl for schemes. I try to use one,
