@@ -3574,7 +3574,7 @@ common-lisp is the the =slime= package.
      ;; Choose an implementation
      inferior-lisp-program "/usr/bin/sbcl"
      slime-lisp-implementations
-     '((sbcl ("sbcl" "--core" "sbcl.core-for-slime")))
+     '((sbcl ("sbcl" "--core" "/home/mrb/.sbcl/sbcl.core-for-slime")))
      slime-net-coding-system 'utf-8-unix)
 
     ;; Make it nice to work with
