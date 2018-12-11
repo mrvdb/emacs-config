@@ -644,6 +644,7 @@ valid for 5 levels, not 6.
 
   (use-package mic-paren
     :config
+    (setq paren-highlight-at-point nil)
     (paren-activate))
 
 
