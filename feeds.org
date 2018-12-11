@@ -13,7 +13,7 @@ This has a number of attractive properties:
 - Everything else in the tree is ignored. ( this is a good thing )
 
 ** Feeds
-  :PROPERTIES:
+:PROPERTIES:
 :ID:       elfeed
 :END:
 *** Humor                                                                                            :humor:
@@ -80,6 +80,7 @@ This has a number of attractive properties:
 *** People
 **** http://julien.danjou.info/blog/index.xml                                                      :people:
 **** https://mrblog.nl/feed                                                                     :people:me:
+**** https://qua.name/read/feed/                                                                       :me:
 **** http://torvalds-family.blogspot.com/feeds/posts/default                                       :people:
 **** http://esr.ibiblio.org/?feed=atom                                                             :people:
 **** http://feeds.feedburner.com/JuanReyero                                                        :people:
@@ -353,7 +354,7 @@ This has a number of attractive properties:
      aantonop
 *** Photography
 **** http://www.fujifilm.com/rss/newsfeed.xml
-***
+
 *** Other
 **** http://planet.jabber.org/rss20.xml
 **** http://feeds.twit.tv/sn_video_large
