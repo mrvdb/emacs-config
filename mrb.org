@@ -925,6 +925,7 @@ file in a neater way.
 
   ;; Bind it to the usual shortcut
   (bind-key "C-x C-w" 'mrb/move-file)
+  (bind-key "C-S-s" 'write-file)
 #+END_SRC
 * Modes
 Customisation setting for specific modes. Most of the modes I use have
