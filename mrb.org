@@ -3616,64 +3616,9 @@ On first glance, it looks like slime is a lot nicer than =geiser= +
 perhaps I should use that instead of guile.
 
 ** GIT integration
-This section is a temporary place to store some git related
-settings. I need to reorganize this document a bit so I have a section
-for source code control or something similar to group these settings.
-
-This particular setting is for eshell git completion:
-
-#+BEGIN_SRC emacs-lisp
-  (defun pcmpl-git-commands ()
-    "Return the most common git commands by parsing the git output."
-    (with-temp-buffer
-      (call-process-shell-command "git" nil (current-buffer) nil "help" "--all")
-      (goto-char 0)
-      (search-forward "available git commands in")
-      (let (commands)
-        (while (re-search-forward
-                "^[[:blank:]]+\\([[:word:]-.]+\\)[[:blank:]]*\\([[:word:]-.]+\\)?"
-                nil t)
-          (push (match-string 1) commands)
-          (when (match-string 2)
-            (push (match-string 2) commands)))
-        (sort commands #'string<))))
-
-  (defconst pcmpl-git-commands (pcmpl-git-commands)
-    "List of `git' commands.")
-
-  (defvar pcmpl-git-ref-list-cmd "git for-each-ref refs/ --format='%(refname)'"
-    "The `git' command to run to get a list of refs.")
-
-  (defun pcmpl-git-get-refs (type)
-    "Return a list of `git' refs filtered by TYPE."
-    (with-temp-buffer
-      (insert (shell-command-to-string pcmpl-git-ref-list-cmd))
-      (goto-char (point-min))
-      (let (refs)
-        (while (re-search-forward (concat "^refs/" type "/\\(.+\\)$") nil t)
-          (push (match-string 1) refs))
-        (nreverse refs))))
-
-  (defun pcmpl-git-remotes ()
-    "Return a list of remote repositories."
-    (split-string (shell-command-to-string "git remote")))
-
-  (defun pcomplete/git ()
-    "Completion for `git'."
-    ;; Completion for the command argument.
-    (pcomplete-here* pcmpl-git-commands)
-    (cond
-     ((pcomplete-match "help" 1)
-      (pcomplete-here* pcmpl-git-commands))
-     ((pcomplete-match (regexp-opt '("pull" "push")) 1)
-      (pcomplete-here (pcmpl-git-remotes)))
-     ;; provide branch completion for the command `checkout'.
-     ((pcomplete-match "checkout" 1)
-      (pcomplete-here* (append (pcmpl-git-get-refs "heads")
-                               (pcmpl-git-get-refs "tags"))))
-     (t
-      (while (pcomplete-here (pcomplete-entries))))))
-#+END_SRC
+A common factor in all my development is the use of git. For emacs
+this automatically means Magit. I've used eshell in the past but that
+config didn't work out.
 
 *** Magit
 For most, if not all development work (and some other work too) I use
