@@ -50,6 +50,18 @@ a way to have them forcibly compiled.
   )
 #+END_SRC
 
+The config file =mrb.org= gets openened *a lot* because I tend to fiddle
+with this config at least once a day. So, it warrants it's own
+keybinding.
+
+#+BEGIN_SRC emacs-lisp
+  (defun mrb/open-config ()
+    (interactive)
+    (find-file "~/.emacs.d/mrb.org"))
+  ;; I wanted something with '~'
+  (bind-key "C-~" 'mrb/open-config)
+#+END_SRC
+
 Most of the time the editting process starts at the command
 line. Because I use emacs in server mode, this needs a little script.
 The script does two things:
