@@ -35,7 +35,8 @@ first so anything in the configuration I define explicitly overrides
 it.
 
 #+BEGIN_SRC emacs-lisp
-  (setq custom-file (concat emacs-directory "custom.el"))
+  (setq custom-file (concat emacs-directory "custom.el")
+        config-file (concat emacs-directory "mrb.org"))
   (load custom-file)
 #+END_SRC
 
@@ -45,7 +46,7 @@ a way to have them forcibly compiled.
 #+BEGIN_SRC emacs-lisp
   (defun mrb/compile-config ()
     (interactive)
-    (org-babel-load-file (concat emacs-directory "mrb.org"))
+    (org-babel-load-file config-file)
     (byte-recompile-directory emacs-directory 0)
   )
 #+END_SRC
@@ -57,7 +58,7 @@ keybinding.
 #+BEGIN_SRC emacs-lisp
   (defun mrb/open-config ()
     (interactive)
-    (find-file "~/.emacs.d/mrb.org"))
+    (find-file config-file))
   ;; I wanted something with '~'
   (bind-key "C-~" 'mrb/open-config)
 #+END_SRC
