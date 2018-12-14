@@ -72,7 +72,7 @@ The script does two things:
 And edit the file obviously.
 
 #+BEGIN_SRC sh :exports code :tangle ~/bin/edit :shebang #!/bin/bash
-  #set -x
+  # set -x
 
   # This script should provide the following functionality:
   # - start emacs if it hasn't already started
@@ -155,31 +155,32 @@ Package handling, do this early so emacs knows where to find things.
 
 First of all, define the package archives I need; for now, just the
 default gnu augmented with the melpa repository.
+
 #+BEGIN_SRC emacs-lisp
-    (add-to-list 'package-archives
-                 '("melpa" . "http://melpa.org/packages/") t)
-    (add-to-list 'package-archives
-                 '("melpa-stable" . "https://stable.melpa.org/packages/") t)
-    (add-to-list 'package-archives
-                 '("gnu" . "http://elpa.gnu.org/packages/") t)
+  (add-to-list 'package-archives
+               '("melpa" . "http://melpa.org/packages/") t)
+  (add-to-list 'package-archives
+               '("melpa-stable" . "https://stable.melpa.org/packages/") t)
+  (add-to-list 'package-archives
+               '("gnu" . "http://elpa.gnu.org/packages/") t)
 
 
-    ;; Use-package is certain to be installed (init.el) does it.
-    (use-package use-package
-      :config
-      ;; Extension to check for system executables
-      (use-package use-package-ensure-system-package)
-      ;; Default is to have elpa provide the package
-      (setq use-package-always-ensure t)
-      (setq use-package-verbose t)
-      ;; If running as daemon, just load shite
-      (if (daemonp)
-          (setq use-package-always-demand t))
+  ;; Use-package is certain to be installed (init.el) does it.
+  (use-package use-package
+    :config
+    ;; Extension to check for system executables
+    (use-package use-package-ensure-system-package)
+    ;; Default is to have elpa provide the package
+    (setq use-package-always-ensure t)
+    (setq use-package-verbose t)
+    ;; If running as daemon, just load shite
+    (if (daemonp)
+        (setq use-package-always-demand t))
 
-      ;; Location where I keep custom packages
-      (setq custom-package-directory (concat emacs-directory "lisp/")))
+    ;; Location where I keep custom packages
+    (setq custom-package-directory (concat emacs-directory "lisp/")))
 
-      (use-package cl-lib )
+  (use-package cl-lib )
 #+END_SRC
 
 Now, there's an issue where a variable =package-selected-packages= gets
@@ -188,9 +189,8 @@ that. The site [[http://www.holgerschurig.de/en/emacs-dont-let-packages-pollute-
 slight adaptation (=context= argument is not there anymore)
 
 #+BEGIN_SRC emacs-lisp
-    ;; Override the function that write to selected packages
-    (defun package--save-selected-packages (&optional value)
-      nil)
+  ;; Override the function that write to selected packages
+  (defun package--save-selected-packages (&optional value) nil)
 #+END_SRC
 
 So, =package-selected-packages= will not stay empty and not written
@@ -230,13 +230,12 @@ document. Most of the variables I just made up, but some are used in
 other places too.
 
 #+BEGIN_SRC emacs-lisp
-  (setq user-full-name       "Marcel van der Boom")
-  (setq user-mail-address    "marcel@hsdev.com")
-  (setq user-domain          "hsdev.com")
-  (setq user-organisation    "HS-Development BV")
-  (setq user-gpg-encrypt-key "0x235E5C8CF5E8DFFB")
+  (setq user-full-name       "Marcel van der Boom"
+        user-mail-address    "marcel@hsdev.com"
+        user-domain          "hsdev.com"
+        user-organisation    "HS-Development BV"
+        user-gpg-encrypt-key "0x235E5C8CF5E8DFFB")
 #+END_SRC
-
 
 ** Authorization
 Several things I use within Emacs need authorization, such as tramp,
@@ -288,20 +287,18 @@ this.
 Next to inline content in org that needs encryption, there is also
 content that needs encrypting which is more suitable to store in a
 separate file for several reasons.
+
 * Global Generic settings
 Most of what follows should probably be relocated to a better suited
 section.
 
 #+BEGIN_SRC emacs-lisp
   (setq
-
-   ; disable backup files (foo~)
+   ;; disable backup files (foo~)
    backup-inhibited t
-
-   ; move files to the trash instead of rm
+   ;; move files to the trash instead of rm
    delete-by-moving-to-trash t
-
-   ; use clipboard
+   ;; use clipboard
    select-enable-clipboard t
 
    display-warning-minimum-level 'error
@@ -316,8 +313,7 @@ section.
    next-line-add-newlines nil
    kill-whole-line t
 
-   auto-window-vscroll nil
-  )
+   auto-window-vscroll nil)
 
   ;; Map backspace to DEL and delete to C-d
   (if window-system  (normal-erase-is-backspace-mode t))
@@ -325,14 +321,15 @@ section.
   ;; Only require to type 'y' or 'n' instead of 'yes' or 'no' when prompted
   (fset 'yes-or-no-p 'y-or-n-p)
 
-  ; Use auto revert mode globally
-  ; This is save because emacs tracks if the file is saved in the editting buffer
-  ; and if so, it will not revert to the saved file.
+  ;; Use auto revert mode globally
+  ;; This is save because emacs tracks if the file is saved in the editting buffer
+  ;; and if so, it will not revert to the saved file.
   (use-package autorevert
     :diminish auto-revert-mode
     :ensure nil
     :config
     (global-auto-revert-mode t))
+
   ;; Also for dired
   (setq global-auto-revert-non-file-buffers t)
 
@@ -346,7 +343,6 @@ section.
     (lambda ()
       (goto-address-mode 1)))
   (global-goto-address-mode t)
-
 #+END_SRC
 
 Make life easier if we have sudo, so we can just edit the files and be
@@ -390,6 +386,7 @@ very similar.
   ;; Why can't this be inside the use-package clause?
   (pdf-tools-install)
 #+END_SRC
+
 * Internationalisation and multi-language features
 If anything multi-language should work, UTF-8 encoding is a must, so
 let's make sure we try to use that everywhere
@@ -844,7 +841,6 @@ Still on the wish-list:
 - language detection (English and Dutch mainly)
 - check for language pythons, which was troublesome before
 - evaluate usage in org source blocks (many checks do not apply)
-
 * Buffers and files
 How do I deal with all those buffers?
 
