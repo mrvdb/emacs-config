@@ -3621,9 +3621,48 @@ common-lisp is the the =slime= package.
       (define-key slime-repl-mode-map
         (read-kbd-macro paredit-backward-delete-key) nil))
 
+    ;; Override the bindings and enable paredit
     (add-hook 'slime-repl-mode-hook 'override-slime-repl-bindings-with-paredit)
-
     (add-hook 'slime-repl-mode-hook #'enable-paredit-mode))
+
+
+    ;; Trying to get font-locking in the lisp repl
+    ;;
+    ;; Copy the keywords from lisp mode
+    (defvar slime-repl-font-lock-keywords lisp-font-lock-keywords-2)
+
+    ;; Set them up
+    (defun slime-repl-font-lock-setup ()
+      (setq font-lock-defaults
+            '(slime-repl-font-lock-keywords
+              ;; From lisp-mode.el
+              nil nil (("+-*/.<>=!?$%_&~^:@" . "w")) nil
+              (font-lock-syntactic-face-function
+               . lisp-font-lock-syntactic-face-function))))
+
+    ;; Set up fontlocking
+    (add-hook 'slime-repl-mode-hook 'slime-repl-font-lock-setup)
+
+    ;; Correct the REPL prompt
+    (defun slime-repl-font-lock-find-prompt (limit)
+      ;; Rough: (re-search-forward "^\\w*>" limit t)
+      (let (beg end)
+        (when (setq beg (text-property-any
+                         (point) limit 'slime-repl-prompt t))
+          (setq end (or (text-property-any
+                         beg limit 'slime-repl-prompt nil)
+                        limit))
+          (goto-char beg)
+          (set-match-data (list beg end))
+          t)))
+
+    (setq slime-repl-font-lock-keywords
+          (cons '(slime-repl-font-lock-find-prompt
+                  . 'slime-repl-prompt-face)
+                slime-repl-font-lock-keywords))
+
+
+
 #+END_SRC
 
 On first glance, it looks like slime is a lot nicer than =geiser= +
