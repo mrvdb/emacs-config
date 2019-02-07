@@ -3696,13 +3696,7 @@ magit, so let's begin with bringing that in.
     :config
     (setq magit-last-seen-setup-instructions "1.4.0")
 
-    ;; Work directly on github/gitlab from within magit
-    ;; This requires specific authentication stuff, see documentation.
-    (use-package magithub
-      :config
-      (magithub-feature-autoinject t)
-      (setq
-       magithub-clone-default-directory "~/dat/src/")))
+    (use-package forge))
 #+END_SRC
 
 *** Commiting automatically
