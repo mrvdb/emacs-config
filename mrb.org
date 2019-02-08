@@ -3179,10 +3179,6 @@ First, let's activate notmuch itself.
      ;; Favour html parts if we must.
      notmuch-multipart/alternative-discouraged '("text/plain" "text/html"))
 
-    ;; Make sure we have room
-    ;;(fullframe notmuch-tree-mode notmuch-tree-quit)
-
-
     ;; I keep the operations simple here, as the notmuch-hooks in the
     ;; filesystem will further process for example: deleted message
     ;; also get '-inbox -unread' etc.  We just have to do the
