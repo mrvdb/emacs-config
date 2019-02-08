@@ -2941,10 +2941,15 @@ Sending mail through smtp, using the smtpmail package
      message-send-mail-function 'message-smtpmail-send-it ;; This is for gnus
      ;; Always put one in the Sent folder on sending
      message-default-mail-headers "Bcc: mrb+Sent@hsdev.com\n"
+
      ;; Don't use a special header separator
      mail-header-separator ""
      ;; FIXME: document why this needs to be '>> ' instead of '> '
-     mail-yank-prefix ">> "))
+     mail-yank-prefix ">> ")
+
+    ;; Add my bcc address to list of safe addresses in bcc for secure messages
+    (require 'mml-sec)
+    (add-to-list 'mml-secure-safe-bcc-list "mrb+Sent@hsdev.com"))
 
   (setq password-cache t)            ; default is true, so no need to set this actually
   (setq password-cache-expiry 28800) ; default is 16 seconds, which is ridiculously low
