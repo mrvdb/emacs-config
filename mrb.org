@@ -3432,6 +3432,7 @@ Make our source look a bit more attractive by enabling
 #+BEGIN_SRC emacs-lisp
   ;; List of replacements, this needs to be a function to eval in hook scope
   (defun mrb/prettify-symbols()
+    (interactive)
     ;; If you want to see the effect: enable prettify-symbols mode
     (setq prettify-symbols-alist
         '(
