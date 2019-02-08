@@ -917,7 +917,7 @@ Also, save the location in files between sessions.
   ;; Save places in buffers between sessions
   (use-package saveplace
     :init
-    (setq-default save-place t))
+    (setq-default save-place-mode t))
 #+END_SRC
 
 The C-x-w shortcut write a file to a new location (and adjusts the
