@@ -1291,7 +1291,7 @@ enter tags, so I define a shortcut to define tags while capturing.
     "Insert tags in a capture window without losing the point"
     (save-excursion
       (org-back-to-heading)
-      (org-set-tags)))
+      (org-set-tags-command)))
 #+END_SRC
 
 ** Workflow
