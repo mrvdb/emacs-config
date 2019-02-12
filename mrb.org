@@ -3745,14 +3745,14 @@ configuration on different machines.
 #+BEGIN_SRC emacs-lisp
   (pcase (system-name)
     ("x200s" (progn
-               ;; Stuff for the x200s machine
+               ;; Stuff for the Lenovo Thinkpad X200s machine
                (set-frame-font "Hack")
                ))
     ("t510"  (progn
-               ;; Stuff for the x200s machine
+               ;; Stuff for the Lenovo Thinkpad T510 machine
                ))
     ("flip"  (progn
-               ;; Stuf for the flip machine
+               ;; Stuff for the Asus C101PA flip machine
                ))
     (_       (progn
                ;; Stuff for non-mathing machine names
