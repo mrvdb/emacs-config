@@ -42,3 +42,14 @@ notmuch-addresses
 bbdb
 games
 /ircrooms.list
+tutorial/
+org-gcal/
+emojis/
+magithub/
+forge-database.sqlite
+hackernews/
+.tutor/
+mastodon.plstore
+/nov-places
+/org-caldav-backup.org
+/.org-id-locations.save
