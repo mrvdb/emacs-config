@@ -3683,8 +3683,14 @@ config didn't work out.
 
 *** Magit
 For most, if not all development work (and some other work too) I use
-git as the revision control system. In emacs that translates to useing
+git as the revision control system. In emacs that translates to using
 magit, so let's begin with bringing that in.
+
+Magit forge is a submodule for magit which helps in managing
+repositories in forges (notably github and gitlab). This looks very
+promising, albeit slow.
+
+Features I'm interested in: issue commenting, pull requests
 
 #+BEGIN_SRC emacs-lisp
   (use-package magit
@@ -3701,7 +3707,8 @@ magit, so let's begin with bringing that in.
     (use-package forge
       :config
       (setq forge-add-pullreq-refspec 'ask
-            forge-pull-notifications t)))
+            forge-pull-notifications t
+            forge-topic-list-limit '(60 . 0))))
 #+END_SRC
 
 *** Commiting automatically
