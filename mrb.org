@@ -1829,7 +1829,7 @@ is a better fit.
     ;; The expand-file-name is needed, which is odd, because for single
     ;; files this is not needed.
     (setq
-     org-journal-dir (expand-file-name "~/dat/org/journal/")
+     org-journal-dir (expand-file-name "/media/data/org/journal/")
 
      ;; Match the journal files (FIXME: make this independent of earlier assignments)
      org-agenda-file-regexp "^[0-9]+\\.org"
