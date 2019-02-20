@@ -109,7 +109,7 @@
 		  ("-inactive")))
 		(org-agenda-span
 		 (quote day))
-		(org-agenda-overriding-header "")))
+		(org-agenda-overriding-header "Day agenda")))
        (tags-todo "carryover"
 		  ((org-agenda-overriding-header "Carry along list"))))
       ((org-agenda-archives-mode t)))
