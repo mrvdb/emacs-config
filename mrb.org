@@ -3675,6 +3675,30 @@ common-lisp is the the =slime= package.
 On first glance, it looks like slime is a lot nicer than =geiser= +
 =guile=. I read that =slime= has support for MIT-Scheme as a backend so
 perhaps I should use that instead of guile.
+** Gcode
+I'm not in the habit of editting gcode, but every now and then I need
+to look at it and I want it reasonably decent. My usecase is just
+sending gcode to my 3D-printer which runs Marlin firmware.
+
+Using =define-generic-mode= is more than enough to define something
+useful for me.
+
+#+begin_src emacs-lisp
+  (require 'generic-x)
+
+  (define-generic-mode marlin-gcode-mode
+    '((";"))   ;; ; starts a comment
+    (apply 'append
+           (mapcar #'(lambda (s) (list (upcase s) (downcase s) (capitalize s)))
+                   '("keywords?" "exist?")))
+    '(("\\([GM]\\)[0-9]+" (1 font-lock-function-name-face))    ; code letters
+      ("\\([ABCDEFHIJKLNOPQRSTUVWXYZ]\\)[-]?[0-9]+" (1 font-lock-string-face)) ; parameter letters
+      ("\\([\-+]?[0-9]*\\.[0-9]+\\)" (1 font-lock-constant-face)) ; 9.9 type numbers
+      ("\\([\-+]?[0-9]+\\)" (1 font-lock-constant-face)))         ; 999 type numbers
+    '("\\.gcode\\'")
+    nil
+    "Mode for marlin g-code files.")
+#+end_src
 
 ** GIT integration
 A common factor in all my development is the use of git. For emacs
