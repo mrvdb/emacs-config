@@ -3699,6 +3699,14 @@ useful for me.
     nil
     "Mode for marlin g-code files.")
 #+end_src
+** Openscad
+Openscad is a script based 3d parametric drawing program. Obviously
+I'm editting those scripts in emacs.
+
+#+begin_src emacs-lisp
+(use-package scad-mode)
+#+end_src
+
 
 ** GIT integration
 A common factor in all my development is the use of git. For emacs
