@@ -3734,13 +3734,15 @@ Features I'm interested in: issue commenting, pull requests
     (fullframe magit-status magit-mode-quit-window)
 
     :config
-    (setq magit-last-seen-setup-instructions "1.4.0")
+    (setq magit-last-seen-setup-instructions "1.4.0"))
 
-    (use-package forge
-      :config
-      (setq forge-add-pullreq-refspec 'ask
-            forge-pull-notifications t
-            forge-topic-list-limit '(60 . 0))))
+
+  (use-package forge
+    :after magit
+    :config
+    (setq forge-add-pullreq-refspec 'ask
+          forge-pull-notifications t
+          forge-topic-list-limit '(60 . 0)))
 #+END_SRC
 
 *** Commiting automatically
