@@ -3073,7 +3073,7 @@ but there are a few settings which are related to the =message= package
      message-yank-empty-prefix ""
 
      ;; How to attribute
-     message-citation-line-format "[%N :]"
+     message-citation-line-format "[%N]:"
      ;; Make sure we use it
      message-citation-line-function 'message-insert-formatted-citation-line)
 
