@@ -1187,7 +1187,7 @@ up the location and files for that.
   (setq org-directory "~/dat/org/")
   (setq org-agenda-files (concat org-directory ".agenda_files"))
   (setq org-metadir (concat org-directory "_orgmeta/"))
-  (setq org-archive-location (concat org-metadir "archive.org::date-tree"))
+  (setq org-archive-location (concat org-metadir "archive.org::datetree/"))
   (setq org-default-notes-file (concat org-directory "GTD.org"))
   (setq diary-file (concat org-metadir "DIARY"))
 
@@ -2105,38 +2105,6 @@ migrate this into more literal sections
                     (org-archive-subtree)))))))))
 
   (defalias 'archive-done-tasks 'mrb/org-my-archive-done-tasks)
-
-  ;; archive entries into a date-tree
-  ;; Keep the commented line around, it is convenient during testing
-  ;;(advice-remove 'org-archive-subtree 'org-archive-subtree-to-data-tree)q
-  (defadvice org-archive-subtree                ;
-      (around org-archive-subtree-to-data-tree activate)
-    "org-archive-subtree to date-tree"
-    (if
-        (string= "date-tree"
-                 (org-extract-archive-heading
-                  (org-get-local-archive-location)))
-        (let* ((dct (decode-time (org-current-time)))
-               (today (calendar-current-date))
-               (y (calendar-extract-year today))
-               (m (calendar-extract-month today))
-               (d (calendar-extract-day today))
-               (this-buffer (current-buffer))
-               (location (org-get-local-archive-location))
-               (afile (org-extract-archive-file location))
-               (org-archive-location
-                (format "%s::*** %04d-%02d-%02d %s" afile y m d
-                        (format-time-string "%A" (encode-time 0 0 0 d m y)))))
-          (message "afile=%s" afile)
-          (unless afile
-            (error "Invalid `org-archive-location'"))
-          (save-excursion
-            (switch-to-buffer (find-file-noselect afile))
-            (org-datetree-find-date-create today)
-            (widen)
-            (switch-to-buffer this-buffer))
-          ad-do-it)
-      ad-do-it))
 
   ;; Mail facilities related to org-mode
   (use-package org-mime)
