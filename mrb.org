@@ -3182,10 +3182,12 @@ First, let's activate notmuch itself.
       (when (equal major-mode 'notmuch-show-mode)
         (notmuch-show-tag (nm-tag-toggle tag (notmuch-show-get-tags))))
 
-      (notmuch-refresh-this-buffer)))
+      (notmuch-refresh-this-buffer))
+
+    ;; When notmuch starts, give it the full frame
+    (fullframe notmuch notmuch-bury-or-kill-this-buffer))
 
   ;; Why are these outside the use-package clause?
-
   (add-hook 'message-mode-hook 'mrb/message-mode-hook)
 
   ;; Don't mess with spaces for now
