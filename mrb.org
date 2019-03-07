@@ -3137,6 +3137,7 @@ First, let's activate notmuch itself.
      notmuch-search-oldest-first nil ; Show newest messages first
      notmuch-show-part-button-default-action 'notmuch-show-view-part
      notmuch-show-relative-dates nil
+     notmuch-crypto-process-mime nil ;; GPG tends to block a long time, so I want it manual
      ;; Same cite function as message mode, configuration is there in detail
      notmuch-mua-cite-function message-cite-function
      notmuch-saved-searches '((:name "unread" :query "tag:unread" :key "u" :search-type tree)
