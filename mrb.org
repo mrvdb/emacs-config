@@ -3220,6 +3220,8 @@ accessed by the sieve-manage package. For some reason I can't get the
 '^M' characters out of the process, so here's a hack for that
 
 #+BEGIN_SRC emacs-lisp
+  (setq sieve-manage-authenticators '(plain digest-md5 cram-md5 scram-md5 ntlm login))
+
   (defun dos2unix ()
     "Replace DOS eolns CR LF with Unix eolns CR"
     (interactive)
@@ -3675,9 +3677,18 @@ Openscad is a script based 3d parametric drawing program. Obviously
 I'm editting those scripts in emacs.
 
 #+begin_src emacs-lisp
-(use-package scad-mode)
+  (use-package scad-mode
+    :config
+    (setq scad-keywords '("return" "true" "false" "include")))
 #+end_src
+** SQL
+SQL has a number of different dialects I use, depending on the
+database software in use.
 
+#+begin_src emacs-lisp
+  (setq sql-server "dbserver.hsdev.com"
+        sql-postgres-options '("-P" "pager=off" "-p 5434"))
+#+end_src
 
 ** GIT integration
 A common factor in all my development is the use of git. For emacs
