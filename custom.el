@@ -48,7 +48,7 @@
        (tags-todo "-inactive/BUY"
 		  ((org-agenda-overriding-header "Buying list (keyword)"))))
       nil)
-     ("p" "Active project list" tags-todo "-ignore-inactive+LEVEL>1-TODO=\"DONE\"-TODO=\"CANCELLED\""
+     ("p" "Active project list" tags-todo "-ignore-inactive+LEVEL>1-TODO=\"DONE\"-TODO=\"CANCELLED\"-TODO=\"INFO\""
       ((org-agenda-overriding-header "Active project list")
        (org-agenda-skip-function
 	(quote mrb/skip-non-projects))
