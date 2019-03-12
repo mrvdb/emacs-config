@@ -68,14 +68,6 @@
 		  ((org-agenda-overriding-header "Unscheduled active items"))))
       ((org-agenda-dim-blocked-tasks
 	(quote invisible))))
-     ("S" "Someday/Maybe List"
-      ((tags "+inactive"
-	     ((org-agenda-overriding-header "Inactive projects")
-	      (org-agenda-skip-function
-	       (quote mrb/skip-non-projects))))
-       (tags-todo "+inactive-BLOCKED=\"t\"/TODO"
-		  ((org-agenda-overriding-header "Inactive TODO items"))))
-      nil nil)
      ("c" "Scheduled overview" tags-todo "SCHEDULED<>\"\"|DEADLINE<>\"\"/TODO"
       ((org-agenda-overriding-header "SCHEDULED")
        (org-agenda-view-columns-initially t)
@@ -95,10 +87,6 @@
        (org-agenda-dim-blocked-tasks
 	(quote invisible))
        (org-agenda-group-by-property "CREATED")))
-     ("x" "List of stuck projects (debug)" tags "-inactive+LEVEL>1-TODO=\"DONE\"-TODO=\"CANCELLED\""
-      ((org-agenda-skip-function
-	(quote mrb/skip-non-stuck-projects))
-       (org-agenda-overriding-header "List of STUCK projects")))
      ("D" "Items ready for archiving" todo "DONE"
       ((org-agenda-overriding-header "Items ready for archiving")
        (org-agenda-group-by-property "CREATED")))
@@ -112,12 +100,7 @@
 		(org-agenda-overriding-header "Day agenda")))
        (tags-todo "carryover"
 		  ((org-agenda-overriding-header "Carry along list"))))
-      ((org-agenda-archives-mode t)))
-     ("$" "Expected revenue" tags "Effort<>\"\""
-      ((org-agenda-overriding-columns-format "%40ITEM %10Effort")
-       (org-agenda-sorting-strategy
-	(quote
-	 (effort-down))))))))
+      nil))))
  '(org-agenda-ignore-properties (quote (effort appt category)))
  '(org-agenda-text-search-extra-files
    (quote
