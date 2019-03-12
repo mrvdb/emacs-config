@@ -201,7 +201,8 @@
  '(reb-re-syntax (quote string))
  '(safe-local-variable-values
    (quote
-    ((writefreely-post-id . "gg3pfn4cb2")
+    ((writefreely-post-id . "3pn4uygr08")
+     (writefreely-post-id . "gg3pfn4cb2")
      (writefreely-post-id . "t34o6ptyty")
      (writefreely-post-id . "jl860566j7")
      (writefreely-post-id . "xpuz7k4vf7")
