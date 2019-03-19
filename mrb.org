@@ -563,8 +563,6 @@ starting with the =base16-nord= theme and see where this leaves me.
             (elfeed-search-tag-face       :foreground base0E)
             (elfeed-search-feed-face      :foreground base0D)
             (elfeed-search-date-face      :foreground base0A)
-            ;; IDO
-            (ido-first-match              :foreground base00 :background base0B)
 
             ;; flyspell errors/dupes look the same as flycheck-errors/warnings
             (flyspell-incorrect           :inherit flycheck-error)
@@ -657,7 +655,11 @@ valid for 5 levels, not 6.
       tracking-mode-line-buffers)
 
     ;; We use the spacemacs theme, which gives us the evil state indicator
-    (spaceline-spacemacs-theme 'tracking))
+    (spaceline-spacemacs-theme 'tracking)
+
+    ;; Enable the helm mode
+    (spaceline-helm-mode)
+    )
 
 
 
@@ -2253,8 +2255,8 @@ accepts all kinds of key specifications, including strings.
 
   (bind-key "s-s" 'save-buffer)
 
-  ;; Kill buffer, FIXME: asks for name, which I dont need
-  (bind-key "s-k" 'ido-kill-buffer)
+  ;; Kill buffer
+  (bind-key "s-k" 'kill-buffer)
 
   ;; Resizing windows
   ;; Introduce a bit of intelligence so the shrink and enlarge know what window I'm in.
@@ -2356,28 +2358,9 @@ effective. If I wasn't already used to it, I'd certainly not consider
 =M-x= as a first candidate. The main objection I have is that the two
 keys are close to eachother, making it hard to press in a typing flow.
 
-I like the incremental matching that smex does, so I am going to
-rebind the M-x keybinding to that, and rebind the original to have
-C-c as a prefix. Using the shift modifier with the M-x command also
-runs smex, but limits the commands to make sense for the current
-major mode only.
+I'm using helm which has a replacement for the =M-x= command, see the
+helm config for details.
 
-#+BEGIN_SRC emacs-lisp
-  (use-package smex
-    :commands smex-rebuild-cache
-    :bind
-    (("C-c M-x" . 'execute-extended-command)
-     ("M-x"     . 'smex)
-     ("M-X"     . 'smex-major-mode-commands))
-    :config
-    (setq
-     ;; This makes all the difference in speed!!!
-     smex-auto-update nil)
-    ;; But needs a cache update
-    ;; Run it, so =smex-data= gets populated
-    (smex-rebuild-cache)
-    (run-with-idle-timer mrb/idle-timer 'always #'smex-rebuild-cache))
-#+END_SRC
 
 **** What should have been in emacs
 Sometimes there are /logical gaps/ in emacs' keybinding. I put them here
@@ -2622,7 +2605,7 @@ processes easily.
   (defun mrb/delete-process-interactive ()
     "Based on an autocompleted list of process, choose one process to kill"
     (interactive)
-    (let ((pname (ido-completing-read "Process Name: "
+    (let ((pname (completing-read "Process Name: "
                                       (mapcar 'process-name (process-list)))))
       (delete-process (get-process pname))))
 #+END_SRC
@@ -2773,63 +2756,27 @@ As popwin is a dependency of which-key, we already have it.
     :config
     (popwin-mode 1))
 #+END_SRC
+
+For most of the completion that is needed which is not inline (for
+which I am using the =company= package, helm seems to be the most
+powerful solution. I used to use ido, but helm seems a lot easier and
+more broad.
+
+#+begin_src emacs-lisp
+(use-package helm
+  :bind
+  (("C-c M-x" . 'execute-extended-command) ;; Save the default
+   ("M-x"     . 'helm-M-x)
+   ("C-x C-f" . 'helm-find-files))
+  :config
+  (helm-mode 1)
+)
+#+end_src
 ** Ad 6. Guaranteed response-time
 I haven't found a solution for this yet, but also have not found it to
 be a problem that needs solving in practice so far.
 
 * Editing control
-
-I like to do things interactively where I can. The package =ido= is part
-of emacs and is more or less a defacto standard within the Emacs
-community. The basic promise is that when finding files, switching
-buffers or otherwise completing things in the command area, ido takes
-over and make that completion a better experience. One of these this
-is so called flex matching, which makes the completion match strings
-which contain the entered characters if it doesn't match directly.
-However, if nothing matches, I don't want ido to go around looking by
-herself to find a match, in 90% of the cases, I just want to create a
-new file.
-
-#+BEGIN_SRC emacs-lisp
-  (use-package ido
-    :config
-    (ido-mode t)
-    (setq
-     ;; enable fuzzy matching
-     ido-enable-flex-matching t
-     ;; when buffer is in another frame, ask to jump or not
-     ido-default-buffer-method 'maybe-frame
-     ;; disable auto-merge
-     ido-auto-merge-work-directories-length -1)
-
-     ;; Match selected with theme
-    (ido-everywhere))
-#+END_SRC
-
-Normally, ido presents choices as a horizontal list which is kind of
-messy, especially when working in projects which have standard files
-in many directories.
-
-#+BEGIN_SRC emacs-lisp
-  (use-package ido-vertical-mode
-    :after ido
-    :config
-    (setq ido-vertical-define-keys 'C-n-C-p-up-down-left-right)
-    (ido-vertical-mode))
-#+END_SRC
-
-Now, this still leaves some functions that won't use ido which
-could. For that, we have ido-completing-read+ or ido-ubiquitous
-mode. This basically overrides =completing-read= with a version that
-uses ido. This may be harmfull sometimes. If it is, use the builtin
-blacklist to exclude such cases.
-
-#+BEGIN_SRC emacs-lisp
-  (use-package ido-completing-read+
-    :after ido
-    :config
-    (ido-ubiquitous-mode 1))
-#+END_SRC
 
 The multiple cursors package is often used for repetitive editting.
 
@@ -3223,8 +3170,8 @@ First, let's activate notmuch itself.
 
 #+BEGIN_SRC emacs-lisp
   (defun mrb/notmuch-address-selection-function (prompt addressess first)
-    "Use `ido-completing-read' to select one of the addresses."
-    (ido-completing-read prompt (cons first addressess)
+    "Use `completing-read' to select one of the addresses."
+    (completing-read prompt (cons first addressess)
                          nil nil nil 'notmuch-address-history))
 
   (setq notmuch-address-selection-function
