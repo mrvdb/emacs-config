@@ -1148,6 +1148,7 @@ function.
      org-blank-before-new-entry (quote ((heading . auto) (plain-list-item . auto)))
      org-export-htmlize-output-type (quote css)
      org-fast-tag-selection-single-key (quote expert)
+     org-use-fast-tag-selection nil
      org-file-apps
      (quote
       ((auto-mode . emacs)
