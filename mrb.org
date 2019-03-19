@@ -3192,22 +3192,25 @@ First, let's activate notmuch itself.
     ;; Refile thread or message
     ;; Depends on ~/bin/mailrefile
     (defun mrb/nm-refile()
-    (interactive)
-    ;; TODO: make this elisp only
-    ;; This uses rofi to select folders
-    ;; Shell out for now to the refile script
-    (save-current-buffer
-      (start-process
-       "mailrefile"
-       "*mailrefile*"
-       "mailrefile"
-       (cond
-        ((equal major-mode 'notmuch-search-mode)
-         (notmuch-search-find-thread-id))
-        ((equal major-mode 'notmuch-tree-mode)
-         (notmuch-tree-get-message-id)))))
-    ;; FIXME: Refresh current view does not refresh display
-    (notmuch-refresh-this-buffer)))
+      (interactive)
+      ;; TODO: make this elisp only
+      ;; This uses rofi to select folders
+      ;; Shell out for now to the refile script
+      (let ((process (start-process
+                      "mailrefile"
+                      "*mailrefile*"
+                      "mailrefile"
+                      (cond
+                       ((equal major-mode 'notmuch-search-mode)
+                        (notmuch-search-find-thread-id))
+                       ((equal major-mode 'notmuch-tree-mode)
+                        (notmuch-tree-get-message-id))))))
+        (set-process-sentinel process 'on-finish-mailrefile)))
+
+    (defun on-finish-mailrefile (process e)
+      "Refresh the notmuch buffer when refiling is done"
+      (when (= 0 (process-exit-status process))
+        (notmuch-refresh-this-buffer))))
 
   ;; Why are these outside the use-package clause?
   (add-hook 'message-mode-hook 'mrb/message-mode-hook)
