@@ -3121,10 +3121,12 @@ First, let's activate notmuch itself.
                      ("<delete>" . mrb/nm-toggle-deleted)
                      ("s" . mrb/nm-toggle-spam)
                      ("h" . mrb/nm-toggle-ham)
+                     ("\\" . mrb/nm-refile)
                      :map notmuch-tree-mode-map
                      ("d" . mrb/nm-toggle-deleted)
                      ("s" . mrb/nm-toggle-spam)
-                     ("h" . mrb/nm-toggle-hame)
+                     ("h" . mrb/nm-toggle-ham)
+                     ("\\" . mrb/nm-refile)
                      :map notmuch-show-mode-map
                      ("d" . mrb/nm-toggle-deleted)
                      ("s" . mrb/nm-toggle-spam)
@@ -3185,7 +3187,27 @@ First, let's activate notmuch itself.
       (notmuch-refresh-this-buffer))
 
     ;; When notmuch starts, give it the full frame
-    (fullframe notmuch notmuch-bury-or-kill-this-buffer))
+    (fullframe notmuch notmuch-bury-or-kill-this-buffer)
+
+    ;; Refile thread or message
+    ;; Depends on ~/bin/mailrefile
+    (defun mrb/nm-refile()
+    (interactive)
+    ;; TODO: make this elisp only
+    ;; This uses rofi to select folders
+    ;; Shell out for now to the refile script
+    (save-current-buffer
+      (start-process
+       "mailrefile"
+       "*mailrefile*"
+       "mailrefile"
+       (cond
+        ((equal major-mode 'notmuch-search-mode)
+         (notmuch-search-find-thread-id))
+        ((equal major-mode 'notmuch-tree-mode)
+         (notmuch-tree-get-message-id)))))
+    ;; FIXME: Refresh current view does not refresh display
+    (notmuch-refresh-this-buffer)))
 
   ;; Why are these outside the use-package clause?
   (add-hook 'message-mode-hook 'mrb/message-mode-hook)
