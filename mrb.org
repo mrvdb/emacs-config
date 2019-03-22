@@ -1122,6 +1122,7 @@ function.
 
     (setq
      org-use-fast-todo-selection t
+     org-use-fast-tag-selection t
 
      ;; We support task dependencies
      org-enforce-todo-dependencies t
@@ -1149,8 +1150,7 @@ function.
      ;; because it needs to be this or my capturing breaks due to org-capture popup
      org-blank-before-new-entry (quote ((heading . auto) (plain-list-item . auto)))
      org-export-htmlize-output-type (quote css)
-     org-fast-tag-selection-single-key (quote expert)
-     org-use-fast-tag-selection nil
+
      org-file-apps
      (quote
       ((auto-mode . emacs)
