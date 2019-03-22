@@ -1097,7 +1097,6 @@ function.
     :bind (("C-c g" . 'mrb/gtd)
            ("C-c a"   . 'org-agenda)
            ("C-c b"   . 'org-switchb)
-           ("C-c j"   . 'org-journal-new-entry)
            ("C-s-s"   . 'org-save-all-org-buffers)
            ("C-x m"   . 'mrb/construct-mail)
            :map org-mode-map
@@ -1831,6 +1830,9 @@ is a better fit.
 
 #+BEGIN_SRC emacs-lisp
   (use-package org-journal
+    :pin melpa-stable
+    :bind
+    (("C-c j"   . 'org-journal-new-entry))
     :init
     ;; The expand-file-name is needed, which is odd, because for single
     ;; files this is not needed.
