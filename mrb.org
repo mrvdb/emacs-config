@@ -3123,8 +3123,10 @@ First, let's activate notmuch itself.
       (mrb/nm-toggle-tag "ham"))
 
     ;; Create argument for toggle based on current membership
+    ;; In any case, remove new since we're handling it.
+    ;; Note that this disables the possibility to toggle the 'new' tag.
     (defun nm-tag-toggle (tag currenttags)
-      (list (concat (if (member tag currenttags)
+      (list "-new" (concat (if (member tag currenttags)
                         "-" "+") tag)))
 
     (defun mrb/nm-toggle-tag (tag)
