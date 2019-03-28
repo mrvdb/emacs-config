@@ -25,7 +25,6 @@
  '(ispell-use-framepop-p t)
  '(mail-signature nil)
  '(markdown-css-path "/home/mrb/.markdown.css")
- '(mm-text-html-renderer (quote shr))
  '(nxml-heading-element-name-regexp "\\|.*")
  '(nxml-section-element-name-regexp "\\|file\\|.+")
  '(ocpf-frame-parameters

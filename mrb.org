@@ -3100,7 +3100,17 @@ First, let's activate notmuch itself.
                               (:name "all mail" :query "*" :key "a")
                               (:name "INBOX" :query "query:INBOX" :key "i" :search-type tree)
                               (:name "TODO" :query "query:TODO" :key "$" :search-type tree))
-     ;; Favour html parts if we must.
+
+     ;; This looks counterintuitive but it works like this:
+     ;; When there is a text/html part and a text/plain part,
+     ;; in almost all of the cases it's better to have me
+     ;; render the text/html part to text in emacs than to show
+     ;; the text/plain part directly. It will usually be full of and
+     ;; with shr rendering the html I get at least a neat representation
+     ;; I saw this break down for me when the two parts are different, but I could
+     ;; argue that the sender is at fault there.
+     mm-text-html-renderer 'shr  ;; this makes sure we have reasonable rendering of html
+     ;;  Now favour the html part over text
      notmuch-multipart/alternative-discouraged '("text/plain" "text/html"))
 
     ;; I keep the operations simple here, as the notmuch-hooks in the
