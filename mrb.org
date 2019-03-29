@@ -3353,6 +3353,21 @@ i.e. regardless of client, the chat state remains the same.
          nil
          weechat-mode-default)))
 #+END_SRC
+** Mastodon
+Not messaging or chatting perse, but a microblog social network.
+
+#+begin_src emacs-lisp
+;; Mastodon in emacs
+(use-package mastodon
+  :config
+  (setq mastodon-instance-url "https://todon.nl"
+	mastodon-auth-source-file "~/.authinfo.gpg")
+
+  ;; Convenience function
+  (defun mrb/capture-toot()
+    (interactive)
+    (mastodon-toot)))
+#+end_src
 
 * Development settings
 Some settings which aid in development tasks.
