@@ -2849,7 +2849,8 @@ and hopefully one will float to the top as being *the one*
 Sending mail through smtp, using the smtpmail package
 
 #+BEGIN_SRC emacs-lisp
-  (use-package smtpmail
+
+ (use-package smtpmail
     :init
     (setq smtpmail-default-smtp-server "localhost"
           smtpmail-service 25)
@@ -2860,21 +2861,13 @@ Sending mail through smtp, using the smtpmail package
      ;; User agent style is message mode
      mail-user-agent 'message-user-agent
      send-mail-function 'smtpmail-send-it                 ;; This is for mail-mode
-     message-send-mail-function 'message-smtpmail-send-it ;; This is for message-mode
-     ;; Always put one in the Sent folder on sending
-     message-default-mail-headers "Bcc: mrb+Sent@hsdev.com\n"
+     message-send-mail-function 'message-smtpmail-send-it) ;; This is for message-mode
+     ;; Add my bcc address to list of safe addresses in bcc for secure messages
+     (require 'mml-sec)
+     (add-to-list 'mml-secure-safe-bcc-list "mrb+Sent@hsdev.com"))
 
-     ;; Don't use a special header separator
-     mail-header-separator ""
-     ;; FIXME: document why this needs to be '>> ' instead of '> '
-     mail-yank-prefix ">> ")
-
-    ;; Add my bcc address to list of safe addresses in bcc for secure messages
-    (require 'mml-sec)
-    (add-to-list 'mml-secure-safe-bcc-list "mrb+Sent@hsdev.com"))
-
-  (setq password-cache t)            ; default is true, so no need to set this actually
-  (setq password-cache-expiry 28800) ; default is 16 seconds, which is ridiculously low
+    (setq password-cache t)            ; default is true, so no need to set this actually
+    (setq password-cache-expiry 28800) ; default is 16 seconds, which is ridiculously low
 #+END_SRC
 
 *** Composing mail
@@ -2989,10 +2982,20 @@ but there are a few settings which are related to the =message= package
      ;; FIXME: often I want to remove a lot more, like the disclaimer
      message-cite-function 'message-cite-original-without-signature
 
-     ;; Default was '>> ' which does not make sense to me, why?
+     ;; Citing/Quoting when replying
+     ;; What I would like:
+     ;; - Add '> ' when quoting message lines
+     ;; - Add '>' when quoting cited lines (uses `message-cite-prefix-regexp` to determine this)
+     ;; - nothing on empty lines
      message-yank-prefix "> "
-     ;; No prefix for empty lines
+     message-yank-cited-prefix ">"
      message-yank-empty-prefix ""
+
+     ;; Always put one in the Sent folder on sending
+     message-default-mail-headers "Bcc: mrb+Sent@hsdev.com\n"
+
+     ;; Don't use a special header separator
+     mail-header-separator ""
 
      ;; How to attribute
      message-citation-line-format "[%N]:"
@@ -3086,10 +3089,10 @@ First, let's activate notmuch itself.
                      ("h" . mrb/nm-toggle-ham))
     :config
     (setq
-     notmuch-fcc-dirs nil            ; no fcc, i use bcc mrb+Sent
+     notmuch-fcc-dirs nil			; no fcc, i use bcc mrb+Sent
      notmuch-draft-folder "Drafts"
-     notmuch-poll-script nil         ; use `notmuch new` natively. FIXME: does not work for me
-     notmuch-search-oldest-first nil ; Show newest messages first
+     notmuch-poll-script nil ; use `notmuch new` natively. FIXME: does not work for me
+     notmuch-search-oldest-first nil	; Show newest messages first
      notmuch-show-part-button-default-action 'notmuch-show-view-part
      notmuch-show-relative-dates nil
      notmuch-crypto-process-mime nil ;; GPG tends to block a long time, so I want it manual
