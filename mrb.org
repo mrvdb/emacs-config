@@ -3139,7 +3139,7 @@ First, let's activate notmuch itself.
     ;; Note that this disables the possibility to toggle the 'new' tag.
     (defun nm-tag-toggle (tag currenttags)
       (list "-new" (concat (if (member tag currenttags)
-                        "-" "+") tag)))
+                               "-" "+") tag)))
 
     (defun mrb/nm-toggle-tag (tag)
       (interactive)
@@ -3430,6 +3430,18 @@ Make our source look a bit more attractive by enabling
   (add-hook 'prog-mode-hook 'mrb/prettify-symbols)
 #+END_SRC
 
+I think most of my documentation needs can be fulfilled with
+=(helm-)dash=
+
+#+begin_src emacs-lisp
+(use-package helm-dash
+  :config
+  (setq helm-dash-browser-func 'eww)
+
+  ;; For now we can make all docsets common, i.e. always availabled
+  (add-to-list 'helm-dash-common-docsets "Emacs Lisp")
+  (add-to-list 'helm-dash-common-docsets "Python 3"))
+#+end_src
 ** Coding styles
 Different projects use different coding styles. The ones I need I'll
 gather here for now.
