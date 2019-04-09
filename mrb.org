@@ -3034,22 +3034,33 @@ First, let's activate notmuch itself.
     ;; We have to make sure that the messages we produce are format=flowed
     ;; compatible. This happens on encoding.
 
+    ;; Compose part first
     ;; No reflowing without having hard newlines
     (use-hard-newlines t 'always)
-    ;; Show them, so I know what can be reflowed
-    (messages-are-flowing-use-and-mark-hard-newlines)
 
+    ;; Use visual line mode and visually break at 66 which
+    ;; is the same as the email encoding on send (see below)
+    (auto-fill-mode 0)
+    ;; Make sure we show the line wrappers in the fringe
+    (setq visual-line-fringe-indicators '(nil right-curly-arrow))
+    (visual-line-mode 1)
+    (setq fill-column 66)
+    (visual-fill-column-mode 1)
+
+    ;; Encoding and sending part
     ;; Set the fill column on encoding (send)
     (setq fill-flowed-encode-column 66)
 
-    ;; This enables the encoding
+    ;; This enables the f=f encoding
     (setq mml-enable-flowed t)
+
+    ;; FIXME: showing f=f is also message mode?
 
     ;; Make sure the separator is just the standard, nothing fancy
     ;; This is probably redundant as I have this set globally too
     (set (make-local-variable 'mail-header-separator) "")
 
-    ;; Add some color to quotes
+    ;; Add some color to quoted lines
     (font-lock-add-keywords
      nil
      '(("^[ \t]*>[ \t]*>[ \t]*>.*$"
