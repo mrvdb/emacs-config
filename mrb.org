@@ -3103,6 +3103,11 @@ First, let's activate notmuch itself.
                               (:name "all mail" :query "*" :key "a")
                               (:name "INBOX" :query "query:INBOX" :key "i" :search-type tree)
                               (:name "TODO" :query "query:TODO" :key "$" :search-type tree))
+     notmuch-tree-result-format '(("date" . "%12s")
+                                  ((("tree" . "%s") ("subject" . "%s")) . " %-64s ")
+                                  ("authors" . "%-25s")
+                                  ("tags" . "(%s)"))
+
 
      ;; This looks counterintuitive but it works like this:
      ;; When there is a text/html part and a text/plain part,
