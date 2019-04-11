@@ -3082,6 +3082,7 @@ First, let's activate notmuch itself.
 
   (use-package notmuch
     :after message
+    :ensure nil
     :load-path "~/dat/src/mail/notmuch/emacs/"
     :commands (notmuch-message-mode notmuch)
     :init
