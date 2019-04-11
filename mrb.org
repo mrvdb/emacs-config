@@ -2780,6 +2780,7 @@ more broad.
 
 #+begin_src emacs-lisp
   (use-package helm
+    :diminish
     :bind
     (("C-c M-x" . 'execute-extended-command) ;; Save the default
      ("M-x"     . 'helm-M-x)                 ;; Replace M-x
