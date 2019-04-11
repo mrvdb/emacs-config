@@ -3479,6 +3479,7 @@ I think most of my documentation needs can be fulfilled with
 
 #+begin_src emacs-lisp
 (use-package helm-dash
+  :after helm
   :config
   (setq helm-dash-browser-func 'eww)
 
