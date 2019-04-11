@@ -1130,6 +1130,7 @@ function.
     (setq
      org-use-fast-todo-selection t
      org-use-fast-tag-selection t
+     org-fast-tag-selection-single-key 'expert
 
      ;; We support task dependencies
      org-enforce-todo-dependencies t
