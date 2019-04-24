@@ -527,100 +527,107 @@ I use (emacs, xterm, i3, dunst etc.) which sounds attractive. So, I'm
 starting with the =base16-nord= theme and see where this leaves me.
 
 #+BEGIN_SRC emacs-lisp
-   (use-package base16-theme
-     :config
-     ;; Do config here and finally load the theme
-     (setq base16-distinct-fringe-background nil
-           base16-highlight-mode-line 'contrast
-           base16-theme-256-color-source "terminal")
-     (load-theme 'base16-nord t)
+  (use-package base16-theme
+    :config
+    ;; Do config here and finally load the theme
+    (setq base16-distinct-fringe-background nil
+          base16-highlight-mode-line 'contrast
+          base16-theme-256-color-source "terminal")
+    (load-theme 'base16-nord t)
 
-     ;; Define our adjustments to faces
-     ;; This should be the only place where we adjust our faces
-     ;; For reference, these are the theme colors
-     ;; base00 '#2e3440 base01 '#3b4252 base02 '#434c5e base03 '#4c566a
-     ;; base04 '#d8dee9 base05 '#e5e9f0 base06 '#eceff4
-     ;; base07 '#8fbcbb base08 '#88c0d0 base09 '#81a1c1 base0A '#5e81ac
-     ;; base0B '#bf616a base0C '#d08770 base0D '#ebcb8b base0E '#a3be8c base0F '#b48ead
+    ;; Define our adjustments to faces
+    ;; This should be the only place where we adjust our faces
+    ;; For reference, these are the theme colors
+    ;; base00 '#2e3440 base01 '#3b4252 base02 '#434c5e base03 '#4c566a
+    ;; base04 '#d8dee9 base05 '#e5e9f0 base06 '#eceff4
+    ;; base07 '#8fbcbb base08 '#88c0d0 base09 '#81a1c1 base0A '#5e81ac
+    ;; base0B '#bf616a base0C '#d08770 base0D '#ebcb8b base0E '#a3be8c base0F '#b48ead
 
-     (setq base16-adjustments
-           '(
-             ;; Comments should not be that dark as base03
-             (font-lock-comment-face       :foreground "LightSkyBlue4")
-             ;; Make clickable things in help screens stand out
-             (button                       :foreground base0C :weight semi-bold)
+    (setq base16-adjustments
+          '(
+            ;; Comments should not be that dark as base03
+            (font-lock-comment-face       :foreground "LightSkyBlue4")
+            ;; Make clickable things in help screens stand out
+            (button                       :foreground base0C :weight semi-bold)
 
-             (show-paren-match             :foreground base06 :background base0A :inherit nil :weight normal)
-             (show-paren-mismatch          :foreground base00 :background base0B :inherit nil :weight normal)
-             ;; Set regions so we keep the normal font locking
-             (region                       :foreground nil :background base01 :inherit nil :weight normal)
-             ;; Magit
-             (magit-diff-added-highlight   :foreground base0E)
-             (magit-diff-removed-highlight :foreground base0B)
-             (magit-diff-added             :foreground base0E)
-             (magit-diff-removed           :foreground base0B)
-             ;; Elfeed
-             (elfeed-search-tag-face       :foreground base0E)
-             (elfeed-search-feed-face      :foreground base0D)
-             (elfeed-search-date-face      :foreground base0A)
+            (show-paren-match             :foreground base06 :background base0A :inherit nil :weight normal)
+            (show-paren-mismatch          :foreground base00 :background base0B :inherit nil :weight normal)
+            ;; Set regions so we keep the normal font locking
+            (region                       :foreground nil :background base01 :inherit nil :weight normal)
+            ;; Magit
+            (magit-diff-added-highlight   :foreground base0E)
+            (magit-diff-removed-highlight :foreground base0B)
+            (magit-diff-added             :foreground base0E)
+            (magit-diff-removed           :foreground base0B)
+            ;; Elfeed
+            (elfeed-search-tag-face       :foreground base0E)
+            (elfeed-search-feed-face      :foreground base0D)
+            (elfeed-search-date-face      :foreground base0A)
 
-             ;; flyspell errors/dupes look the same as flycheck-errors/warnings
-             (flyspell-incorrect           :inherit flycheck-error)
-             (flyspell-duplicate           :inherit flycheck-warning :foreground base00)
+            ;; flyspell errors/dupes look the same as flycheck-errors/warnings
+            (flyspell-incorrect           :inherit flycheck-error)
+            (flyspell-duplicate           :inherit flycheck-warning :foreground base00)
 
-             ;; Orgmode
-             (mrb/org-todo-keyword-TODO      :foreground base08 :weight bold)
-             (mrb/org-todo-keyword-DONE      :foreground base0E :weight bold)
-             (mrb/org-todo-keyword-WAITING   :foreground base0B :weight bold)
-             (mrb/org-todo-keyword-CANCELLED :foreground base01 :weight bold)
-             (mrb/org-todo-keyword-BUY       :foreground base0C :weight bold)
-             (mrb/org-todo-keyword-HOWTO     :foreground base0A :weight bold)
-             (mrb/org-todo-keyword-INFO      :foreground base0D :weight bold)
-             (mrb/org-todo-keyword-COLLECT   :foreground base0E :weight bold)
-             (mrb/org-todo-keyword-SOLVE     :foreground base07 :weight bold)
-             (mrb/org-todo-keyword-READ      :foreground base0F :weight bold)
-             (mrb/org-todo-keyword-PLAN      :foreground base04 :weight bold)
-             ;; Headlines for DONE states should be less noticeable
-             (org-headline-done              :foreground base03)
-             ;; No underlining for date face in org
-             (org-date                       :foreground base07 :underline nil)
-             ;; the default org-level-4 is the same as comment-face, i.e. not very readable
-             ;; luckily 0F is free to use
-             (org-level-4                    :foreground base0F)
-             (org-verbatim                   :foreground base07)
-             ;; Set space-line state colors
-             (space-line-evil-normal         :background base0B)
-             (space-line-evil-insert         :background base0D)
-             (space-line-evil-emacs          :background base0E)
-             (space-line-evil-motion         :background base09)
-             (space-line-evil-visual         :background base07)
-             (space-line-evil-replace        :background base0F)
+            ;; Orgmode
+            (mrb/org-todo-keyword-TODO      :foreground base08 :weight bold)
+            (mrb/org-todo-keyword-DONE      :foreground base0E :weight bold)
+            (mrb/org-todo-keyword-WAITING   :foreground base0B :weight bold)
+            (mrb/org-todo-keyword-CANCELLED :foreground base01 :weight bold)
+            (mrb/org-todo-keyword-BUY       :foreground base0C :weight bold)
+            (mrb/org-todo-keyword-HOWTO     :foreground base0A :weight bold)
+            (mrb/org-todo-keyword-INFO      :foreground base0D :weight bold)
+            (mrb/org-todo-keyword-COLLECT   :foreground base0E :weight bold)
+            (mrb/org-todo-keyword-SOLVE     :foreground base07 :weight bold)
+            (mrb/org-todo-keyword-READ      :foreground base0F :weight bold)
+            (mrb/org-todo-keyword-PLAN      :foreground base04 :weight bold)
+            ;; Headlines for DONE states should be less noticeable
+            (org-headline-done              :foreground base03)
+            ;; No underlining for date face in org
+            (org-date                       :foreground base07 :underline nil)
+            ;; the default org-level-4 is the same as comment-face, i.e. not very readable
+            ;; luckily 0F is free to use
+            (org-level-4                    :foreground base0F)
+            (org-verbatim                   :foreground base07)
+            ;; Set space-line state colors
+            (space-line-evil-normal         :background base0B)
+            (space-line-evil-insert         :background base0D)
+            (space-line-evil-emacs          :background base0E)
+            (space-line-evil-motion         :background base09)
+            (space-line-evil-visual         :background base07)
+            (space-line-evil-replace        :background base0F)
 
-             ;; line numbers current line, tone it down a bit
-             (line-number-current-line       :background base03)
+            ;; line numbers current line, tone it down a bit
+            (line-number-current-line       :background base03)
 
-             ;; Notmuch faces
-             (notmuch-message-summary-face :foreground base01 :background base08)
-             (notmuch-tag-face  :background "#5e81ac" :foreground "#d8dee9" :box (:line-width 1 :color "#eceff4") :height 0.8)
-             (notmuch-tree-match-tag-face :inherit notmuch-tag-face)
-             (notmuch-message-summary-face :background "#5e81ac" :foreground "#d8dee9")
-             (notmuch-search-flagged-face :foreground "#88c0d0")
-             (notmuch-tag-unread :inherit nil :foreground "#ebcb8b" :weight bold)
-             (notmuch-tree-match-author-face :foreground "#88c0d0")
-             (notmuch-tree-match-tag-face :inherit notmuch-tag-face)
+            ;; Notmuch faces
+            (notmuch-message-summary-face :foreground base01 :background base08)
 
-             ;; Modeline faces
-             (mode-line :foreground base01 :background base0D)
-             (header-line :foreground base03 :background base0D)
+            ;; Parent of all tag faces we customize
+            (notmuch-tag-face  :foreground "#a3be8c" :height 100)
+            (notmuch-tree-match-tag-face :inherit notmuch-tag-face)
+            (notmuch-tree-no-match-tag-face :inherit notmuch-tag-face)
+            (notmuch-tag-added :inherit notmuch-tag-face :underline "green")
+            (notmuch-tag-deleted :inherit notmuch-tag-face :underline "red")
+            (notmuch-tag-flagged :foreground "#ebcb8b" :height 150)
 
-             ;; Helm selection
-             (helm-selection :foreground "black" :background "goldenrod2")))
+            (notmuch-message-summary-face :background "#5e81ac" :foreground "#d8dee9")
+            (notmuch-search-flagged-face :foreground "#88c0d0")
+            (notmuch-tag-unread :inherit nil :foreground "#ebcb8b" :weight bold)
+            (notmuch-tree-match-author-face :foreground "#88c0d0")
+            (notmuch-tree-match-tag-face :inherit notmuch-tag-face)
 
-     ;; Apply our adjustment using the theme function
-     (base16-set-faces 'base16-nord base16-nord-colors base16-adjustments)
+            ;; Modeline faces
+            (mode-line :foreground base01 :background base0D)
+            (header-line :foreground base03 :background base0D)
 
-     ;; Define variable that I can use in other sections
-     (defvar mrb/base16-colors base16-nord-colors))
+            ;; Helm selection
+            (helm-selection :foreground "black" :background "goldenrod2")))
+
+    ;; Apply our adjustment using the theme function
+    (base16-set-faces 'base16-nord base16-nord-colors base16-adjustments)
+
+    ;; Define variable that I can use in other sections
+    (defvar mrb/base16-colors base16-nord-colors))
 #+END_SRC
 
 I enable highlighting matching parentheses in many levels
@@ -2952,10 +2959,6 @@ on the varying name that xprop delivers, so. we make our own window.
     (mrb/make-mailframe)
     ;; notmuch forward takes a list of mids
     (notmuch-mua-new-forward-messages (list mid))
-    ;; notmuch does not automatically tag forwarded messages FIXME: this
-    ;; works, but does it unconditionally, I just want it when it
-    ;; actually was sent out
-    (notmuch-tag mid '("+passed"))
     (delete-other-windows))
 #+END_SRC
 
@@ -3048,188 +3051,213 @@ itself, which has proven to work fine so far.
 First, let's activate notmuch itself.
 
 #+BEGIN_SRC emacs-lisp
-  (defun mrb/message-mode-hook ()
-    "This configures message mode and thus notmuch-message mode."
-    ;; We have to make sure that the messages we produce are format=flowed
-    ;; compatible. This happens on encoding.
+    (defun mrb/message-mode-hook ()
+      "This configures message mode and thus notmuch-message mode."
+      ;; We have to make sure that the messages we produce are
+      ;; format=flowed compatible. This happens on encoding when sending
+      ;; it. However, during compose we need to make sure that what we
+      ;; offer to encode is suitable for it.
 
-    ;; Compose part first
-    ;; No reflowing without having hard newlines
-    (use-hard-newlines t 'always)
+      ;; Let's do the compose part first No reflowing is possible without
+      ;; having hard newlines, so lets always enable those
+      (use-hard-newlines t 'always)
 
-    ;; Use visual line mode and visually break at 66 which
-    ;; is the same as the email encoding on send (see below)
-    (auto-fill-mode 0)
-    ;; Make sure we show the line wrappers in the fringe
-    (setq visual-line-fringe-indicators '(nil right-curly-arrow))
-    (visual-line-mode 1)
-    (setq fill-column 66)
-    (visual-fill-column-mode 1)
+      ;; Use visual line mode and visually break at 66 which
+      ;; is the same as the email encoding on send (see below)
+      (visual-line-mode 1)
 
-    ;; Encoding and sending part
-    ;; Set the fill column on encoding (send)
-    (setq fill-flowed-encode-column 66)
+      ;; Auto-fill makes no sense anymore now, and will in fact mess
+      ;; everything up, so make sure it is off.
+      (auto-fill-mode 0)
 
-    ;; This enables the f=f encoding
-    (setq mml-enable-flowed t)
+      ;; Make sure we show the line wrappers in the right fringe area
+      (setq visual-line-fringe-indicators '(nil right-curly-arrow))
 
-    ;; FIXME: showing f=f is also message mode?
+      ;; Adapt fill column to what encoding would do (not actually needed)
+      ;; and make visual-mode adhere to it.
+      ;;(setq fill-column 66)
+      (visual-fill-column-mode 1)
 
-    ;; Make sure the separator is just the standard, nothing fancy
-    ;; This is probably redundant as I have this set globally too
-    (set (make-local-variable 'mail-header-separator) "")
+      ;; Next, do the encoding and sending part
+      ;; Set the fill column on encoding (send)
+      ;; Q: where does the 66 come from, surely it could be a little bit more?
+      (setq fill-flowed-encode-column 66)
 
-    ;; Add some color to quoted lines
-    (font-lock-add-keywords
-     nil
-     '(("^[ \t]*>[ \t]*>[ \t]*>.*$"
-        (0 'message-multiply-quoted-text-face))
-       ("^[ \t]*>[ \t]*>.*$"
-        (0 'message-double-quoted-text-face)))))
+      ;; This enables the f=f encoding
+      (setq mml-enable-flowed t)
+
+      ;; For displaying of f=f messages I'm not sure what is needed.
+      ;; This would be `notmuch-show-mode` ?
+
+      ;; Make sure the separator is just the standard, nothing fancy
+      ;; This is probably redundant as I have this set globally too
+      (set (make-local-variable 'mail-header-separator) "")
+
+      ;; Add some color to quoted lines
+      (font-lock-add-keywords
+       nil
+       '(("^[ \t]*>[ \t]*>[ \t]*>.*$"
+          (0 'message-multiply-quoted-text-face))
+         ("^[ \t]*>[ \t]*>.*$"
+          (0 'message-double-quoted-text-face)))))
 
 
-  (use-package notmuch
-    :after message
-    :ensure nil
-    :load-path "~/dat/src/mail/notmuch/emacs/"
-    :commands (notmuch-message-mode notmuch)
-    :init
-    ;; Make sure that we enter notmuch-message mode on compose from astroid
-    (add-to-list 'auto-mode-alist '("mrb@t510.hsdev.com" . notmuch-message-mode))
-    (add-to-list 'auto-mode-alist '("mrb@hsdev.com" . notmuch-message-mode))
+    (use-package notmuch
+      :after message
+      :ensure nil
+      :load-path "~/dat/src/mail/notmuch/emacs/"
+      :commands (notmuch-message-mode notmuch)
+      :init
+      ;; Make sure that we enter notmuch-message mode on compose from astroid
+      (add-to-list 'auto-mode-alist '("mrb@t510.hsdev.com" . notmuch-message-mode))
+      (add-to-list 'auto-mode-alist '("mrb@hsdev.com" . notmuch-message-mode))
 
-    :bind      (:map message-mode-map
-                     ("<tab>" . company-complete)
-                     :map notmuch-common-keymap
-                     ("/" . notmuch-search)
-                     ("C-c l" . org-store-link)
-                     :map notmuch-search-mode-map
-                     ("d" . mrb/nm-toggle-deleted)
-                     ("<delete>" . mrb/nm-toggle-deleted)
-                     ("s" . mrb/nm-toggle-spam)
-                     ("h" . mrb/nm-toggle-ham)
-                     ("\\" . mrb/nm-refile)
-                     :map notmuch-tree-mode-map
-                     ("d" . mrb/nm-toggle-deleted)
-                     ("s" . mrb/nm-toggle-spam)
-                     ("h" . mrb/nm-toggle-ham)
-                     ("\\" . mrb/nm-refile)
-                     :map notmuch-show-mode-map
-                     ("d" . mrb/nm-toggle-deleted)
-                     ("s" . mrb/nm-toggle-spam)
-                     ("h" . mrb/nm-toggle-ham))
-    :config
-    (setq
-     notmuch-fcc-dirs nil			; no fcc, i use bcc mrb+Sent
-     notmuch-draft-folder "Drafts"
-     notmuch-poll-script nil ; use `notmuch new` natively. FIXME: does not work for me
-     notmuch-search-oldest-first nil	; Show newest messages first
-     notmuch-show-part-button-default-action 'notmuch-show-view-part
-     notmuch-show-relative-dates nil
-     notmuch-crypto-process-mime nil ;; GPG tends to block a long time, so I want it manual
-     ;; Same cite function as message mode, configuration is there in detail
-     notmuch-mua-cite-function message-cite-function
-     notmuch-saved-searches '((:name "unread" :query "tag:unread" :key "u" :search-type tree)
-                              (:name "drafts" :query "tag:draft" :key "d")
-                              (:name "all mail" :query "*" :key "a")
-                              (:name "INBOX" :query "query:INBOX" :key "i" :search-type tree)
-                              (:name "TODO" :query "query:TODO" :key "$" :search-type tree))
-     truncate-string-ellipsis "…"
-     notmuch-tree-result-format '(("date" . "%12s")
-                                  ((("tree" . "%s") ("subject" . "%s")) . "%-64s")
-                                  ("authors" . " %-25s")
-                                  ("tags" . "%s"))
-     notmuch-search-result-format '(("date" . "%12s ")
-                                    ("count" . "%-7s")
-                                    ("subject" . "%-64s")
+      :bind      (:map message-mode-map
+                       ("<tab>" . company-complete)
+                       :map notmuch-common-keymap
+                       ("/" . notmuch-search)
+                       ("C-c l" . org-store-link)
+                       :map notmuch-search-mode-map
+                       ("d" . mrb/nm-toggle-deleted)
+                       ("<delete>" . mrb/nm-toggle-deleted)
+                       ("s" . mrb/nm-toggle-spam)
+                       ("h" . mrb/nm-toggle-ham)
+                       ("\\" . mrb/nm-refile)
+                       :map notmuch-tree-mode-map
+                       ("d" . mrb/nm-toggle-deleted)
+                       ("s" . mrb/nm-toggle-spam)
+                       ("h" . mrb/nm-toggle-ham)
+                       ("\\" . mrb/nm-refile)
+                       :map notmuch-show-mode-map
+                       ("d" . mrb/nm-toggle-deleted)
+                       ("s" . mrb/nm-toggle-spam)
+                       ("h" . mrb/nm-toggle-ham))
+      :config
+      (setq
+       notmuch-fcc-dirs nil			; no fcc, i use bcc mrb+Sent
+       notmuch-draft-folder "Drafts"
+       notmuch-poll-script nil ; use `notmuch new` natively. FIXME: does not work for me
+       notmuch-search-oldest-first nil	; Show newest messages first
+       notmuch-show-part-button-default-action 'notmuch-show-view-part
+       notmuch-show-relative-dates nil
+       notmuch-crypto-process-mime nil ;; GPG tends to block a long time, so I want it manual
+       ;; Same cite function as message mode, configuration is there in detail
+       notmuch-mua-cite-function message-cite-function
+       notmuch-saved-searches '((:name "unread" :query "tag:unread" :key "u" :search-type tree)
+                                (:name "drafts" :query "tag:draft" :key "d")
+                                (:name "all mail" :query "*" :key "a")
+                                (:name "INBOX" :query "query:INBOX" :key "i" :search-type tree)
+                                (:name "TODO" :query "query:TODO" :key "$" :search-type tree))
+       truncate-string-ellipsis "…"
+       notmuch-tree-result-format '(("date" . "%12s")
+                                    ((("tree" . "%s") ("subject" . "%s")) . "%-64s")
                                     ("authors" . " %-25s")
                                     ("tags" . "%s"))
+       notmuch-search-result-format '(("date" . "%12s ")
+                                      ("count" . "%-7s")
+                                      ("subject" . "%-64s")
+                                      ("authors" . " %-25s")
+                                      ("tags" . "%s"))
 
 
-     ;; This looks counterintuitive but it works like this:
-     ;; When there is a text/html part and a text/plain part,
-     ;; in almost all of the cases it's better to have me
-     ;; render the text/html part to text in emacs than to show
-     ;; the text/plain part directly. It will usually be full of and
-     ;; with shr rendering the html I get at least a neat representation
-     ;; I saw this break down for me when the two parts are different, but I could
-     ;; argue that the sender is at fault there.
-     mm-text-html-renderer 'shr  ;; this makes sure we have reasonable rendering of html
-     ;;  Now favour the html part over text
-     notmuch-multipart/alternative-discouraged '("text/plain" "text/html"))
+       ;; This looks counterintuitive but it works like this:
+       ;; When there is a text/html part and a text/plain part,
+       ;; in almost all of the cases it's better to have me
+       ;; render the text/html part to text in emacs than to show
+       ;; the text/plain part directly. It will usually be full of and
+       ;; with shr rendering the html I get at least a neat representation
+       ;; I saw this break down for me when the two parts are different, but I could
+       ;; argue that the sender is at fault there.
+       mm-text-html-renderer 'shr  ;; this makes sure we have reasonable rendering of html
+       ;;  Now favour the html part over text
+       notmuch-multipart/alternative-discouraged '("text/plain" "text/html")
+       notmuch-message-forwarded-tags '("+passed")
 
-    ;; I keep the operations simple here, as the notmuch-hooks in the
-    ;; filesystem will further process for example: deleted message
-    ;; also get '-inbox -unread' etc.  We just have to do the
-    ;; functional stuff here and let notmuch hooks handle the rest, so
-    ;; other clients to notmuch will share the same view of the mail
-    ;; message meta-database.
-    (defun mrb/nm-toggle-deleted ()
-      (interactive)
-      (mrb/nm-toggle-tag "deleted"))
+       ;; Customize tag configuration, visual
+       notmuch-tag-formats
+        '(("unread"
+           (propertize tag
+                       (quote face)
+                       (quote notmuch-tag-unread)))
+          ("flagged" "⭐"
+           (propertize tag
+                       (quote face)
+                       (quote notmuch-tag-flagged)))
+          ("attachment" "📎"))
+      ) ;; End setq
 
-    (defun mrb/nm-toggle-spam ()
-      (interactive)
-      (mrb/nm-toggle-tag "spam"))
+      ;; I keep the operations simple here, as the notmuch-hooks in the
+      ;; filesystem will further process for example: deleted message
+      ;; also get '-inbox -unread' etc.  We just have to do the
+      ;; functional stuff here and let notmuch hooks handle the rest, so
+      ;; other clients to notmuch will share the same view of the mail
+      ;; message meta-database.
+      (defun mrb/nm-toggle-deleted ()
+        (interactive)
+        (mrb/nm-toggle-tag "deleted"))
 
-    (defun mrb/nm-toggle-ham ()
-      (interactive)
-      (mrb/nm-toggle-tag "ham"))
+      (defun mrb/nm-toggle-spam ()
+        (interactive)
+        (mrb/nm-toggle-tag "spam"))
 
-    ;; Create argument for toggle based on current membership
-    ;; In any case, remove new since we're handling it.
-    ;; Note that this disables the possibility to toggle the 'new' tag.
-    (defun nm-tag-toggle (tag currenttags)
-      (list "-new" (concat (if (member tag currenttags)
-                               "-" "+") tag)))
+      (defun mrb/nm-toggle-ham ()
+        (interactive)
+        (mrb/nm-toggle-tag "ham"))
 
-    (defun mrb/nm-toggle-tag (tag)
-      (interactive)
-      (when (equal major-mode 'notmuch-search-mode)
-        (notmuch-search-tag (nm-tag-toggle tag (notmuch-search-get-tags))))
+      ;; Create argument for toggle based on current membership
+      ;; In any case, remove new since we're handling it.
+      ;; Note that this disables the possibility to toggle the 'new' tag.
+      (defun nm-tag-toggle (tag currenttags)
+        (list "-new" (concat (if (member tag currenttags)
+                                 "-" "+") tag)))
 
-      (when (equal major-mode 'notmuch-tree-mode)
-        (notmuch-tree-tag (nm-tag-toggle tag (notmuch-tree-get-tags))))
+      (defun mrb/nm-toggle-tag (tag)
+        (interactive)
+        (when (equal major-mode 'notmuch-search-mode)
+          (notmuch-search-tag (nm-tag-toggle tag (notmuch-search-get-tags))))
 
-      (when (equal major-mode 'notmuch-show-mode)
-        (notmuch-show-tag (nm-tag-toggle tag (notmuch-show-get-tags))))
+        (when (equal major-mode 'notmuch-tree-mode)
+          (notmuch-tree-tag (nm-tag-toggle tag (notmuch-tree-get-tags))))
 
-      (notmuch-refresh-this-buffer))
+        (when (equal major-mode 'notmuch-show-mode)
+          (notmuch-show-tag (nm-tag-toggle tag (notmuch-show-get-tags))))
 
-    ;; When notmuch starts, give it the full frame
-    (fullframe notmuch notmuch-bury-or-kill-this-buffer)
+        (notmuch-refresh-this-buffer))
 
-    ;; Refile thread or message
-    ;; Depends on ~/bin/mailrefile
-    (defun mrb/nm-refile()
-      (interactive)
-      ;; TODO: make this elisp only
-      ;; This uses rofi to select folders
-      ;; Shell out for now to the refile script
-      (let ((process (start-process
-                      "mailrefile"
-                      "*mailrefile*"
-                      "mailrefile"
-                      (cond
-                       ((equal major-mode 'notmuch-search-mode)
-                        (notmuch-search-find-thread-id))
-                       ((equal major-mode 'notmuch-tree-mode)
-                        (notmuch-tree-get-message-id))))))
-        (set-process-sentinel process 'on-finish-mailrefile)))
+      ;; When notmuch starts, give it the full frame
+      (fullframe notmuch notmuch-bury-or-kill-this-buffer)
 
-    (defun on-finish-mailrefile (process e)
-      "Refresh the notmuch buffer when refiling is done"
-      (when (= 0 (process-exit-status process))
-        (notmuch-refresh-this-buffer)))
+      ;; Refile thread or message
+      ;; Depends on ~/bin/mailrefile
+      (defun mrb/nm-refile()
+        (interactive)
+        ;; TODO: make this elisp only
+        ;; This uses rofi to select folders
+        ;; Shell out for now to the refile script
+        (let ((process (start-process
+                        "mailrefile"
+                        "*mailrefile*"
+                        "mailrefile"
+                        (cond
+                         ((equal major-mode 'notmuch-search-mode)
+                          (notmuch-search-find-thread-id))
+                         ((equal major-mode 'notmuch-tree-mode)
+                          (notmuch-tree-get-message-id))))))
+          (set-process-sentinel process 'on-finish-mailrefile)))
 
-    ) ;; use-package notmuch
+      (defun on-finish-mailrefile (process e)
+        "Refresh the notmuch buffer when refiling is done"
+        (when (= 0 (process-exit-status process))
+          (notmuch-refresh-this-buffer)))
 
-  ;; Why are these outside the use-package clause?
-  (add-hook 'message-mode-hook 'mrb/message-mode-hook)
+      ) ;; use-package notmuch
 
-  ;; Don't mess with spaces for now
-  (add-to-list 'ws-butler-global-exempt-modes 'message-mode)
-  (add-to-list 'ws-butler-global-exempt-modes 'notmuch-message-mode)
+    ;; Why are these outside the use-package clause?
+    (add-hook 'message-mode-hook 'mrb/message-mode-hook)
+
+    ;; Don't mess with spaces for now
+    (add-to-list 'ws-butler-global-exempt-modes 'message-mode)
+    (add-to-list 'ws-butler-global-exempt-modes 'notmuch-message-mode)
 #+END_SRC
 
 
