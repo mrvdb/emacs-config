@@ -365,6 +365,7 @@ very similar.
          ("t"   . 'pdf-annot-add-text-annotation)
          ("D"   . 'pdf-annot-delete)
          ("C-s" . 'isearch-forward)
+         ("m"   . 'mrb/mailfile)
          :map pdf-annot-edit-contents-minor-mode-map
          ("<return>"   . 'pdf-annot-edit-contents-commit)
          ("<S-return>" .  'newline))
@@ -2960,6 +2961,22 @@ on the varying name that xprop delivers, so. we make our own window.
     ;; notmuch forward takes a list of mids
     (notmuch-mua-new-forward-messages (list mid))
     (delete-other-windows))
+
+  ;; Compose a mail message from current buffer file
+  ;; typically a pdf is viewed, but it doesn't have to
+  (defun mrb/mailfile()
+    (interactive)
+    (let* ((file (buffer-file-name))
+           (mimetype (mrb/mimetype file)))
+      (notmuch-mua-new-mail)
+      (mml-attach-file file mimetype "" "attachment")))
+
+  ;; We can either use file(1) in the OS or mailcap.
+  ;; The latter is just extension based, which suits me fine
+  ;; in 99% of the cases. (i.e. .pdf)
+  (defun mrb/mimetype(file)
+    (mailcap-extension-to-mime
+     (file-name-extension file t)))
 #+END_SRC
 
 To be able to use the =mailcompose-frame= function as a mailto handler we need to be
