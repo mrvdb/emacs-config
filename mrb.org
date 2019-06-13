@@ -2972,7 +2972,7 @@ on the varying name that xprop delivers, so. we make our own window.
     (let* ((file (buffer-file-name))
            (mimetype (mrb/mimetype file)))
       (notmuch-mua-new-mail)
-      (mml-attach-file file mimetype "" "attachment")))
+      (mml-attach-file file mimetype (concat mimetype " attachment") "attachment")))
 
   ;; We can either use file(1) in the OS or mailcap.
   ;; The latter is just extension based, which suits me fine
