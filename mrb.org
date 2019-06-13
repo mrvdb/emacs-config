@@ -549,59 +549,60 @@ starting with the =base16-nord= theme and see where this leaves me.
             ;; Comments should not be that dark as base03
             (font-lock-comment-face       :foreground "LightSkyBlue4")
             ;; Make clickable things in help screens stand out
-            (button                       :foreground base0C :weight semi-bold)
+            (button                       :foreground "#d08770" :weight semi-bold)
 
-            (show-paren-match             :foreground base06 :background base0A :inherit nil :weight normal)
-            (show-paren-mismatch          :foreground base00 :background base0B :inherit nil :weight normal)
+            (show-paren-match             :foreground "#eceff4" :background "#5e81ac" :inherit nil :weight normal)
+            (show-paren-mismatch          :foreground "#2e3440" :background "#bf616a" :inherit nil :weight normal)
             ;; Set regions so we keep the normal font locking
-            (region                       :foreground nil :background base01 :inherit nil :weight normal)
+            (region                       :foreground nil :background "#3b4252" :inherit nil :weight normal)
             ;; Magit
-            (magit-diff-added-highlight   :foreground base0E)
-            (magit-diff-removed-highlight :foreground base0B)
-            (magit-diff-added             :foreground base0E)
-            (magit-diff-removed           :foreground base0B)
+            (magit-diff-added-highlight   :foreground "#a3be8c")
+            (magit-diff-removed-highlight :foreground "#bf616a")
+            (magit-diff-added             :foreground "#a3be8c")
+            (magit-diff-removed           :foreground "#bf616a")
             ;; Elfeed
-            (elfeed-search-tag-face       :foreground base0E)
-            (elfeed-search-feed-face      :foreground base0D)
-            (elfeed-search-date-face      :foreground base0A)
+            (elfeed-search-tag-face       :foreground "#a3be8c")
+            (elfeed-search-feed-face      :foreground "#ebcb8b")
+            (elfeed-search-date-face      :foreground "#5e81ac")
 
             ;; flyspell errors/dupes look the same as flycheck-errors/warnings
             (flyspell-incorrect           :inherit flycheck-error)
-            (flyspell-duplicate           :inherit flycheck-warning :foreground base00)
+            (flyspell-duplicate           :inherit flycheck-warning :foreground "#2e3440")
 
             ;; Orgmode
-            (mrb/org-todo-keyword-TODO      :foreground base08 :weight bold)
-            (mrb/org-todo-keyword-DONE      :foreground base0E :weight bold)
-            (mrb/org-todo-keyword-WAITING   :foreground base0B :weight bold)
-            (mrb/org-todo-keyword-CANCELLED :foreground base01 :weight bold)
-            (mrb/org-todo-keyword-BUY       :foreground base0C :weight bold)
-            (mrb/org-todo-keyword-HOWTO     :foreground base0A :weight bold)
-            (mrb/org-todo-keyword-INFO      :foreground base0D :weight bold)
-            (mrb/org-todo-keyword-COLLECT   :foreground base0E :weight bold)
-            (mrb/org-todo-keyword-SOLVE     :foreground base07 :weight bold)
-            (mrb/org-todo-keyword-READ      :foreground base0F :weight bold)
-            (mrb/org-todo-keyword-PLAN      :foreground base04 :weight bold)
+            (mrb/org-todo-keyword-TODO      :foreground "#88c0d0" :weight bold)
+            (mrb/org-todo-keyword-DONE      :foreground "#a3be8c" :weight bold)
+            (mrb/org-todo-keyword-WAITING   :foreground "#bf616a" :weight bold)
+            (mrb/org-todo-keyword-CANCELLED :foreground "#3b4252" :weight bold)
+            (mrb/org-todo-keyword-BUY       :foreground "#d08770" :weight bold)
+            (mrb/org-todo-keyword-HOWTO     :foreground "#5e81ac" :weight bold)
+            (mrb/org-todo-keyword-INFO      :foreground "#ebcb8b" :weight bold)
+            (mrb/org-todo-keyword-COLLECT   :foreground "#a3be8c" :weight bold)
+            (mrb/org-todo-keyword-SOLVE     :foreground "#8fbcbb" :weight bold)
+            (mrb/org-todo-keyword-READ      :foreground "#b48ead" :weight bold)
+            (mrb/org-todo-keyword-PLAN      :foreground "#d8dee9" :weight bold)
             ;; Headlines for DONE states should be less noticeable
-            (org-headline-done              :foreground base03)
+            (org-headline-done              :foreground "#4c566a")
             ;; No underlining for date face in org
-            (org-date                       :foreground base07 :underline nil)
+            (org-date                       :foreground "#8fbcbb" :underline nil)
             ;; the default org-level-4 is the same as comment-face, i.e. not very readable
             ;; luckily 0F is free to use
-            (org-level-4                    :foreground base0F)
-            (org-verbatim                   :foreground base07)
+            (org-level-4                    :foreground "#b48ead")
+            (org-verbatim                   :foreground "#8fbcbb")
+            (org-list-dt                    :foreground "#b48ead")
             ;; Set space-line state colors
-            (space-line-evil-normal         :background base0B)
-            (space-line-evil-insert         :background base0D)
-            (space-line-evil-emacs          :background base0E)
-            (space-line-evil-motion         :background base09)
-            (space-line-evil-visual         :background base07)
-            (space-line-evil-replace        :background base0F)
+            (space-line-evil-normal         :background "#bf616a")
+            (space-line-evil-insert         :background "#ebcb8b")
+            (space-line-evil-emacs          :background "#a3be8c")
+            (space-line-evil-motion         :background "#81a1c1")
+            (space-line-evil-visual         :background "#8fbcbb")
+            (space-line-evil-replace        :background "#b48ead")
 
             ;; line numbers current line, tone it down a bit
-            (line-number-current-line       :background base03)
+            (line-number-current-line       :background "#4c566a")
 
             ;; Notmuch faces
-            (notmuch-message-summary-face :foreground base01 :background base08)
+            (notmuch-message-summary-face :foreground "#3b4252" :background "#88c0d0")
 
             ;; Parent of all tag faces we customize
             (notmuch-tag-face  :foreground "#a3be8c" :height 100)
@@ -609,7 +610,7 @@ starting with the =base16-nord= theme and see where this leaves me.
             (notmuch-tree-no-match-tag-face :inherit notmuch-tag-face)
             (notmuch-tag-added :inherit notmuch-tag-face :underline "green")
             (notmuch-tag-deleted :inherit notmuch-tag-face :underline "red")
-            (notmuch-tag-flagged :foreground "#ebcb8b" :height 150)
+            (notmuch-tag-flagged :foreground "#ebcb8b" :height 100)
 
             (notmuch-message-summary-face :background "#5e81ac" :foreground "#d8dee9")
             (notmuch-search-flagged-face :foreground "#88c0d0")
@@ -617,9 +618,12 @@ starting with the =base16-nord= theme and see where this leaves me.
             (notmuch-tree-match-author-face :foreground "#88c0d0")
             (notmuch-tree-match-tag-face :inherit notmuch-tag-face)
 
+            (notmuch-tree-no-match-face :foreground "#4c566a")
+            (notmuch-tree-match-face :foreground "#d8dee9")
+
             ;; Modeline faces
-            (mode-line :foreground base01 :background base0D)
-            (header-line :foreground base03 :background base0D)
+            (mode-line :foreground "#3b4252" :background "#ebcb8b")
+            (header-line :foreground "#4c566a" :background "#ebcb8b")
 
             ;; Helm selection
             (helm-selection :foreground "black" :background "goldenrod2")))
