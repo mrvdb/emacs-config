@@ -3071,213 +3071,213 @@ itself, which has proven to work fine so far.
 First, let's activate notmuch itself.
 
 #+BEGIN_SRC emacs-lisp
-    (defun mrb/message-mode-hook ()
-      "This configures message mode and thus notmuch-message mode."
-      ;; We have to make sure that the messages we produce are
-      ;; format=flowed compatible. This happens on encoding when sending
-      ;; it. However, during compose we need to make sure that what we
-      ;; offer to encode is suitable for it.
+  (defun mrb/message-mode-hook ()
+    "This configures message mode and thus notmuch-message mode."
+    ;; We have to make sure that the messages we produce are
+    ;; format=flowed compatible. This happens on encoding when sending
+    ;; it. However, during compose we need to make sure that what we
+    ;; offer to encode is suitable for it.
 
-      ;; Let's do the compose part first No reflowing is possible without
-      ;; having hard newlines, so lets always enable those
-      (use-hard-newlines t 'always)
+    ;; Let's do the compose part first No reflowing is possible without
+    ;; having hard newlines, so lets always enable those
+    (use-hard-newlines t 'always)
 
-      ;; Use visual line mode and visually break at 66 which
-      ;; is the same as the email encoding on send (see below)
-      (visual-line-mode 1)
+    ;; Use visual line mode and visually break at 66 which
+    ;; is the same as the email encoding on send (see below)
+    (visual-line-mode 1)
 
-      ;; Auto-fill makes no sense anymore now, and will in fact mess
-      ;; everything up, so make sure it is off.
-      (auto-fill-mode 0)
+    ;; Auto-fill makes no sense anymore now, and will in fact mess
+    ;; everything up, so make sure it is off.
+    (auto-fill-mode 0)
 
-      ;; Make sure we show the line wrappers in the right fringe area
-      (setq visual-line-fringe-indicators '(nil right-curly-arrow))
+    ;; Make sure we show the line wrappers in the right fringe area
+    (setq visual-line-fringe-indicators '(nil right-curly-arrow))
 
-      ;; Adapt fill column to what encoding would do (not actually needed)
-      ;; and make visual-mode adhere to it.
-      ;;(setq fill-column 66)
-      (visual-fill-column-mode 1)
+    ;; Adapt fill column to what encoding would do (not actually needed)
+    ;; and make visual-mode adhere to it.
+    (setq visual-fill-column-width 72)
+    (visual-fill-column-mode 1)
 
-      ;; Next, do the encoding and sending part
-      ;; Set the fill column on encoding (send)
-      ;; Q: where does the 66 come from, surely it could be a little bit more?
-      (setq fill-flowed-encode-column 66)
+    ;; Next, do the encoding and sending part
+    ;; Set the fill column on encoding (send)
+    ;; Q: where does the 66 come from, surely it could be a little bit more?
+    (setq fill-flowed-encode-column 66)
 
-      ;; This enables the f=f encoding
-      (setq mml-enable-flowed t)
+    ;; This enables the f=f encoding
+    (setq mml-enable-flowed t)
 
-      ;; For displaying of f=f messages I'm not sure what is needed.
-      ;; This would be `notmuch-show-mode` ?
+    ;; For displaying of f=f messages I'm not sure what is needed.
+    ;; This would be `notmuch-show-mode` ?
 
-      ;; Make sure the separator is just the standard, nothing fancy
-      ;; This is probably redundant as I have this set globally too
-      (set (make-local-variable 'mail-header-separator) "")
+    ;; Make sure the separator is just the standard, nothing fancy
+    ;; This is probably redundant as I have this set globally too
+    (set (make-local-variable 'mail-header-separator) "")
 
-      ;; Add some color to quoted lines
-      (font-lock-add-keywords
-       nil
-       '(("^[ \t]*>[ \t]*>[ \t]*>.*$"
-          (0 'message-multiply-quoted-text-face))
-         ("^[ \t]*>[ \t]*>.*$"
-          (0 'message-double-quoted-text-face)))))
+    ;; Add some color to quoted lines
+    (font-lock-add-keywords
+     nil
+     '(("^[ \t]*>[ \t]*>[ \t]*>.*$"
+        (0 'message-multiply-quoted-text-face))
+       ("^[ \t]*>[ \t]*>.*$"
+        (0 'message-double-quoted-text-face)))))
 
 
-    (use-package notmuch
-      :after message
-      :ensure nil
-      :load-path "~/dat/src/mail/notmuch/emacs/"
-      :commands (notmuch-message-mode notmuch)
-      :init
-      ;; Make sure that we enter notmuch-message mode on compose from astroid
-      (add-to-list 'auto-mode-alist '("mrb@t510.hsdev.com" . notmuch-message-mode))
-      (add-to-list 'auto-mode-alist '("mrb@hsdev.com" . notmuch-message-mode))
+  (use-package notmuch
+    :after message
+    :ensure nil
+    :load-path "~/dat/src/mail/notmuch/emacs/"
+    :commands (notmuch-message-mode notmuch)
+    :init
+    ;; Make sure that we enter notmuch-message mode on compose from astroid
+    (add-to-list 'auto-mode-alist '("mrb@t510.hsdev.com" . notmuch-message-mode))
+    (add-to-list 'auto-mode-alist '("mrb@hsdev.com" . notmuch-message-mode))
 
-      :bind      (:map message-mode-map
-                       ("<tab>" . company-complete)
-                       :map notmuch-common-keymap
-                       ("/" . notmuch-search)
-                       ("C-c l" . org-store-link)
-                       :map notmuch-search-mode-map
-                       ("d" . mrb/nm-toggle-deleted)
-                       ("<delete>" . mrb/nm-toggle-deleted)
-                       ("s" . mrb/nm-toggle-spam)
-                       ("h" . mrb/nm-toggle-ham)
-                       ("\\" . mrb/nm-refile)
-                       :map notmuch-tree-mode-map
-                       ("d" . mrb/nm-toggle-deleted)
-                       ("s" . mrb/nm-toggle-spam)
-                       ("h" . mrb/nm-toggle-ham)
-                       ("\\" . mrb/nm-refile)
-                       :map notmuch-show-mode-map
-                       ("d" . mrb/nm-toggle-deleted)
-                       ("s" . mrb/nm-toggle-spam)
-                       ("h" . mrb/nm-toggle-ham))
-      :config
-      (setq
-       notmuch-fcc-dirs nil			; no fcc, i use bcc mrb+Sent
-       notmuch-draft-folder "Drafts"
-       notmuch-poll-script nil ; use `notmuch new` natively. FIXME: does not work for me
-       notmuch-search-oldest-first nil	; Show newest messages first
-       notmuch-show-part-button-default-action 'notmuch-show-view-part
-       notmuch-show-relative-dates nil
-       notmuch-crypto-process-mime nil ;; GPG tends to block a long time, so I want it manual
-       ;; Same cite function as message mode, configuration is there in detail
-       notmuch-mua-cite-function message-cite-function
-       notmuch-saved-searches '((:name "unread" :query "tag:unread" :key "u" :search-type tree)
-                                (:name "drafts" :query "tag:draft" :key "d")
-                                (:name "all mail" :query "*" :key "a")
-                                (:name "INBOX" :query "query:INBOX" :key "i" :search-type tree)
-                                (:name "TODO" :query "query:TODO" :key "$" :search-type tree))
-       truncate-string-ellipsis "…"
-       notmuch-tree-result-format '(("date" . "%12s")
-                                    ((("tree" . "%s") ("subject" . "%s")) . "%-64s")
+    :bind      (:map message-mode-map
+                     ("<tab>" . company-complete)
+                     :map notmuch-common-keymap
+                     ("/" . notmuch-search)
+                     ("C-c l" . org-store-link)
+                     :map notmuch-search-mode-map
+                     ("d" . mrb/nm-toggle-deleted)
+                     ("<delete>" . mrb/nm-toggle-deleted)
+                     ("s" . mrb/nm-toggle-spam)
+                     ("h" . mrb/nm-toggle-ham)
+                     ("\\" . mrb/nm-refile)
+                     :map notmuch-tree-mode-map
+                     ("d" . mrb/nm-toggle-deleted)
+                     ("s" . mrb/nm-toggle-spam)
+                     ("h" . mrb/nm-toggle-ham)
+                     ("\\" . mrb/nm-refile)
+                     :map notmuch-show-mode-map
+                     ("d" . mrb/nm-toggle-deleted)
+                     ("s" . mrb/nm-toggle-spam)
+                     ("h" . mrb/nm-toggle-ham))
+    :config
+    (setq
+     notmuch-fcc-dirs nil			; no fcc, i use bcc mrb+Sent
+     notmuch-draft-folder "Drafts"
+     notmuch-poll-script nil ; use `notmuch new` natively. FIXME: does not work for me
+     notmuch-search-oldest-first nil	; Show newest messages first
+     notmuch-show-part-button-default-action 'notmuch-show-view-part
+     notmuch-show-relative-dates nil
+     notmuch-crypto-process-mime nil ;; GPG tends to block a long time, so I want it manual
+     ;; Same cite function as message mode, configuration is there in detail
+     notmuch-mua-cite-function message-cite-function
+     notmuch-saved-searches '((:name "unread" :query "tag:unread" :key "u" :search-type tree)
+                              (:name "drafts" :query "tag:draft" :key "d")
+                              (:name "all mail" :query "*" :key "a")
+                              (:name "INBOX" :query "query:INBOX" :key "i" :search-type tree)
+                              (:name "TODO" :query "query:TODO" :key "$" :search-type tree))
+     truncate-string-ellipsis "…"
+     notmuch-tree-result-format '(("date" . "%12s")
+                                  ((("tree" . "%s") ("subject" . "%s")) . "%-64s")
+                                  ("authors" . " %-25s")
+                                  ("tags" . "%s"))
+     notmuch-search-result-format '(("date" . "%12s ")
+                                    ("count" . "%-7s")
+                                    ("subject" . "%-64s")
                                     ("authors" . " %-25s")
                                     ("tags" . "%s"))
-       notmuch-search-result-format '(("date" . "%12s ")
-                                      ("count" . "%-7s")
-                                      ("subject" . "%-64s")
-                                      ("authors" . " %-25s")
-                                      ("tags" . "%s"))
 
 
-       ;; This looks counterintuitive but it works like this:
-       ;; When there is a text/html part and a text/plain part,
-       ;; in almost all of the cases it's better to have me
-       ;; render the text/html part to text in emacs than to show
-       ;; the text/plain part directly. It will usually be full of and
-       ;; with shr rendering the html I get at least a neat representation
-       ;; I saw this break down for me when the two parts are different, but I could
-       ;; argue that the sender is at fault there.
-       mm-text-html-renderer 'shr  ;; this makes sure we have reasonable rendering of html
-       ;;  Now favour the html part over text
-       notmuch-multipart/alternative-discouraged '("text/plain" "text/html")
-       notmuch-message-forwarded-tags '("+passed")
+     ;; This looks counterintuitive but it works like this:
+     ;; When there is a text/html part and a text/plain part,
+     ;; in almost all of the cases it's better to have me
+     ;; render the text/html part to text in emacs than to show
+     ;; the text/plain part directly. It will usually be full of and
+     ;; with shr rendering the html I get at least a neat representation
+     ;; I saw this break down for me when the two parts are different, but I could
+     ;; argue that the sender is at fault there.
+     mm-text-html-renderer 'shr  ;; this makes sure we have reasonable rendering of html
+     ;;  Now favour the html part over text
+     notmuch-multipart/alternative-discouraged '("text/plain" "text/html")
+     notmuch-message-forwarded-tags '("+passed")
 
-       ;; Customize tag configuration, visual
-       notmuch-tag-formats
-        '(("unread"
-           (propertize tag
-                       (quote face)
-                       (quote notmuch-tag-unread)))
-          ("flagged" "⭐"
-           (propertize tag
-                       (quote face)
-                       (quote notmuch-tag-flagged)))
-          ("attachment" "📎"))
-      ) ;; End setq
+     ;; Customize tag configuration, visual
+     notmuch-tag-formats
+      '(("unread"
+         (propertize tag
+                     (quote face)
+                     (quote notmuch-tag-unread)))
+        ("flagged" "⭐"
+         (propertize tag
+                     (quote face)
+                     (quote notmuch-tag-flagged)))
+        ("attachment" "📎"))
+    ) ;; End setq
 
-      ;; I keep the operations simple here, as the notmuch-hooks in the
-      ;; filesystem will further process for example: deleted message
-      ;; also get '-inbox -unread' etc.  We just have to do the
-      ;; functional stuff here and let notmuch hooks handle the rest, so
-      ;; other clients to notmuch will share the same view of the mail
-      ;; message meta-database.
-      (defun mrb/nm-toggle-deleted ()
-        (interactive)
-        (mrb/nm-toggle-tag "deleted"))
+    ;; I keep the operations simple here, as the notmuch-hooks in the
+    ;; filesystem will further process for example: deleted message
+    ;; also get '-inbox -unread' etc.  We just have to do the
+    ;; functional stuff here and let notmuch hooks handle the rest, so
+    ;; other clients to notmuch will share the same view of the mail
+    ;; message meta-database.
+    (defun mrb/nm-toggle-deleted ()
+      (interactive)
+      (mrb/nm-toggle-tag "deleted"))
 
-      (defun mrb/nm-toggle-spam ()
-        (interactive)
-        (mrb/nm-toggle-tag "spam"))
+    (defun mrb/nm-toggle-spam ()
+      (interactive)
+      (mrb/nm-toggle-tag "spam"))
 
-      (defun mrb/nm-toggle-ham ()
-        (interactive)
-        (mrb/nm-toggle-tag "ham"))
+    (defun mrb/nm-toggle-ham ()
+      (interactive)
+      (mrb/nm-toggle-tag "ham"))
 
-      ;; Create argument for toggle based on current membership
-      ;; In any case, remove new since we're handling it.
-      ;; Note that this disables the possibility to toggle the 'new' tag.
-      (defun nm-tag-toggle (tag currenttags)
-        (list "-new" (concat (if (member tag currenttags)
-                                 "-" "+") tag)))
+    ;; Create argument for toggle based on current membership
+    ;; In any case, remove new since we're handling it.
+    ;; Note that this disables the possibility to toggle the 'new' tag.
+    (defun nm-tag-toggle (tag currenttags)
+      (list "-new" (concat (if (member tag currenttags)
+                               "-" "+") tag)))
 
-      (defun mrb/nm-toggle-tag (tag)
-        (interactive)
-        (when (equal major-mode 'notmuch-search-mode)
-          (notmuch-search-tag (nm-tag-toggle tag (notmuch-search-get-tags))))
+    (defun mrb/nm-toggle-tag (tag)
+      (interactive)
+      (when (equal major-mode 'notmuch-search-mode)
+        (notmuch-search-tag (nm-tag-toggle tag (notmuch-search-get-tags))))
 
-        (when (equal major-mode 'notmuch-tree-mode)
-          (notmuch-tree-tag (nm-tag-toggle tag (notmuch-tree-get-tags))))
+      (when (equal major-mode 'notmuch-tree-mode)
+        (notmuch-tree-tag (nm-tag-toggle tag (notmuch-tree-get-tags))))
 
-        (when (equal major-mode 'notmuch-show-mode)
-          (notmuch-show-tag (nm-tag-toggle tag (notmuch-show-get-tags))))
+      (when (equal major-mode 'notmuch-show-mode)
+        (notmuch-show-tag (nm-tag-toggle tag (notmuch-show-get-tags))))
 
-        (notmuch-refresh-this-buffer))
+      (notmuch-refresh-this-buffer))
 
-      ;; When notmuch starts, give it the full frame
-      (fullframe notmuch notmuch-bury-or-kill-this-buffer)
+    ;; When notmuch starts, give it the full frame
+    (fullframe notmuch notmuch-bury-or-kill-this-buffer)
 
-      ;; Refile thread or message
-      ;; Depends on ~/bin/mailrefile
-      (defun mrb/nm-refile()
-        (interactive)
-        ;; TODO: make this elisp only
-        ;; This uses rofi to select folders
-        ;; Shell out for now to the refile script
-        (let ((process (start-process
-                        "mailrefile"
-                        "*mailrefile*"
-                        "mailrefile"
-                        (cond
-                         ((equal major-mode 'notmuch-search-mode)
-                          (notmuch-search-find-thread-id))
-                         ((equal major-mode 'notmuch-tree-mode)
-                          (notmuch-tree-get-message-id))))))
-          (set-process-sentinel process 'on-finish-mailrefile)))
+    ;; Refile thread or message
+    ;; Depends on ~/bin/mailrefile
+    (defun mrb/nm-refile()
+      (interactive)
+      ;; TODO: make this elisp only
+      ;; This uses rofi to select folders
+      ;; Shell out for now to the refile script
+      (let ((process (start-process
+                      "mailrefile"
+                      "*mailrefile*"
+                      "mailrefile"
+                      (cond
+                       ((equal major-mode 'notmuch-search-mode)
+                        (notmuch-search-find-thread-id))
+                       ((equal major-mode 'notmuch-tree-mode)
+                        (notmuch-tree-get-message-id))))))
+        (set-process-sentinel process 'on-finish-mailrefile)))
 
-      (defun on-finish-mailrefile (process e)
-        "Refresh the notmuch buffer when refiling is done"
-        (when (= 0 (process-exit-status process))
-          (notmuch-refresh-this-buffer)))
+    (defun on-finish-mailrefile (process e)
+      "Refresh the notmuch buffer when refiling is done"
+      (when (= 0 (process-exit-status process))
+        (notmuch-refresh-this-buffer)))
 
-      ) ;; use-package notmuch
+    ) ;; use-package notmuch
 
-    ;; Why are these outside the use-package clause?
-    (add-hook 'message-mode-hook 'mrb/message-mode-hook)
+  ;; Why are these outside the use-package clause?
+  (add-hook 'message-mode-hook 'mrb/message-mode-hook)
 
-    ;; Don't mess with spaces for now
-    (add-to-list 'ws-butler-global-exempt-modes 'message-mode)
-    (add-to-list 'ws-butler-global-exempt-modes 'notmuch-message-mode)
+  ;; Don't mess with spaces for now
+  (add-to-list 'ws-butler-global-exempt-modes 'message-mode)
+  (add-to-list 'ws-butler-global-exempt-modes 'notmuch-message-mode)
 #+END_SRC
 
 
