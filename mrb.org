@@ -1078,7 +1078,10 @@ on a line which is commented out in the proper syntax for that mode.
       (list 'emacs-lisp-mode-hook 'lisp-interaction-mode-hook 'ielm-mode-hook 'python-mode))
     (add-hook the_mode 'turn-on-eldoc-mode))
 
-  ; Autofill should be off for a couple of modes, but mostly on
+  ; Autofill should be off for a couple of modes, but mostly on.  I'm
+  ; backpedaling a bit on this, visual-line mode is a lot smarter to use
+  ; in many cases. I'm mainly wanting the fill mode for visual reasons,
+  ; not actual line breaking
   (auto-fill-mode 1)
 
   (use-package nxml-mode
@@ -3532,6 +3535,32 @@ I think most of my documentation needs can be fulfilled with
   (add-to-list 'helm-dash-common-docsets "Emacs Lisp")
   (add-to-list 'helm-dash-common-docsets "Python 3"))
 #+end_src
+
+** Reference & documentation
+While emacs itself has a very nicely documentation system, I still
+don't understand why this is not interpolated into every other mode
+and or language.
+
+Example: =C-h-f= in lisp-mode describes the function to me. If I am in a
+python file, I want it to do exactly the same, but for the python
+function.
+There's a page on emacswiki dealing with this a bit:
+https://www.emacswiki.org/emacs/Context_sensitive_help
+
+*** RFC document reader
+I often need to consult RFC documents, so not having to leave emacs
+for that and be able to use all tools on RFC documents is very
+helpful.
+
+#+begin_src emacs-lisp
+;; Special mode to read rfc documents locally
+(use-package rfc-mode
+  :init
+  (setq rfc-mode-directory (expand-file-name "~/dat/doc/rfc/")
+		rfc-mode-index-path (concat rfc-mode-directory
+									"rfc-index.txt")))
+#+end_src
+
 ** Coding styles
 Different projects use different coding styles. The ones I need I'll
 gather here for now.
