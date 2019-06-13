@@ -26,7 +26,6 @@ This has a number of attractive properties:
 **** http://www.nu.nl/feeds/rss/de-jager.rss                                                        :comic:
 **** http://www.commitstrip.com/en/feed/                                                :comic:programming:
 *** News
-**** http://www.yopmail.com/en/rssfeed.php?login=sajiverup-6473&h=55c32248db074193008707
 *** Cobra                                                                                            :cobra:
 **** http://gd427cobrabuild.blogspot.com/feeds/posts/default
 **** http://buildingmycobra.blogspot.com/feeds/posts/default
@@ -99,7 +98,6 @@ This has a number of attractive properties:
 **** http://backcountrybanter.com/feed/
 **** http://toc.hipcast.com/rss/audio2.xml
 **** https://ultralightandcomfortable.com/feed
-**** http://hikinginfinland.com/atom.xml
 **** http://ultralightphotography.net/feed/
 *** Youtube
 **** https://www.youtube.com/feeds/videos.xml?channel_id=UCDsi7QjvMNWVfceoq83PEBA
