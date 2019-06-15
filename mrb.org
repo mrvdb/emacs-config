@@ -542,7 +542,8 @@ starting with the =base16-nord= theme and see where this leaves me.
             (header-line :foreground "#4c566a" :background "#ebcb8b")
 
             ;; Helm selection
-            (helm-selection :foreground "black" :background "goldenrod2")))
+            (helm-selection :foreground "black" :background "goldenrod2")
+            (fringe :foreground "#a3be8c")))
 
     ;; Apply our adjustment using the theme function
     (base16-set-faces 'base16-nord base16-nord-colors base16-adjustments)
@@ -631,9 +632,14 @@ I recently reversed my stance on this and am now enabling visual line mode every
 To help me see the difference between visual lines and logical lines I let emacs display indicators in the fringe and define a function to help me unfill existing paragraphs.
 
 #+BEGIN_SRC emacs-lisp
-  (global-visual-line-mode)
+  (setq-default truncate-lines nil)
+
+  ;; Similar to mail messages, use vertical bar for wrapped paragaphs
   (setq visual-line-fringe-indicators
-        '(left-curly-arrow right-curly-arrow))
+        '(vertical-bar nil))
+
+  ;; For all text modes use visual-line-mode
+  (add-hook 'text-mode-hook 'visual-line-mode)
 
   ;; From:https://www.emacswiki.org/emacs/UnfillParagraph
   (defun unfill-paragraph (&optional region)
