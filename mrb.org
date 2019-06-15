@@ -333,8 +333,6 @@ section.
   ;; Also for dired
   (setq global-auto-revert-non-file-buffers t)
 
-  ;; Turn on auto-fill minor mode for all text buffers
-  (add-hook 'text-mode-hook 'turn-on-auto-fill)
 
   ;; Should this be here?
   ;; Try to have urls and mailto links clickable everywhere
@@ -706,60 +704,33 @@ valid for 5 levels, not 6.
 #+END_SRC
 
 ** Lines
-The most important element of an editor is probably how lines of text
-are displayed. This warrants its own section.
+The most important element of an editor is probably how lines of text are displayed. This warrants its own section.
 
-My baseline is that each line is displayed on one line if it is one
-line in the file, i.e. has no CR/LF or other line breaking characters
-in it.
-In the cases where it makes sense to /artificially/ break a line, I
-want that to be explicit.
+The problem is that 'line' needs clarification because there can be a difference between a logical line and a visual line. It's sometimes important that things stay on one logical line but are displayed over multiple lines. This mayb be different per mode.
 
-So, the first thing to do is to set what I want for the lines in /all/
-buffers:
-- give each line one line of screen estate, without displaying
-  continuation lines
-- do not make an exception for small windows (yet)
+I recently reversed my stance on this and am now enabling visual line mode everywhere (meaning one logical line can be smeared out over multiple display lines. This also enables word-wrap which breaks lines visually between words instead of at random characters.
 
-With these settings, lines in windows which are longer than the width
-of the window will break at the character boundary. The
-=toggle-truncate-lines= function toggles between the lines on one line
-and breaking them to display over multiple lines. When using that
-toggle, it makes sens to break the lines in the most sensible way:
-
-Visual line mode would be the setting to have lines break at the word
-boundary, but it also has a side-effect of messing with the truncate
-line mode (if it's enabled, the global truncate-lines setting seems to
-have no effect).
+To help me see the difference between visual lines and logical lines I let emacs display indicators in the fringe and define a function to help me unfill existing paragraphs.
 
 #+BEGIN_SRC emacs-lisp
-  (setq-default truncate-lines t)          ;; Truncate lines everywhere
-  (setq truncate-partial-width-windows nil);; also in partial width windows
+  (global-visual-line-mode)
+  (setq visual-line-fringe-indicators
+        '(left-curly-arrow right-curly-arrow))
+
+  ;; From:https://www.emacswiki.org/emacs/UnfillParagraph
+  (defun unfill-paragraph (&optional region)
+    "Takes a multi-line paragraph and makes it into a single line of text."
+    (interactive (progn (barf-if-buffer-read-only) '(t)))
+    (let ((fill-column (point-max))
+          ;; This would override `fill-column' if it's an integer.
+          (emacs-lisp-docstring-fill-column t))
+      (fill-paragraph nil region)))
+
+   ;; Similar to M-q for fill, define M-Q for unfill
+  (bind-key "M-Q" 'unfill-paragraph)
 #+END_SRC
 
-For some modes, truncating still needs to be more subtle. One example
-I have is in chat-modes where there are lines lik:
-
-  [HH:MM] username> The thing that =username= typed into the chat
-
-These lines I want to truncate by default (because I always want to
-read complete sentences. I want them broken at the word boundary and
-from the second line forward the indent should be such that it
-dynamically adjust to line up the text under the 'T' from 'The' (in
-this example)
-
-There exists a package adaptive-wrap which can set one value per
-buffer, which is a step closer to what i want.
-
-#+BEGIN_SRC emacs-lisp
-  (use-package adaptive-wrap )
-#+END_SRC
-
-Now, the modes that want to use this, should enable adaptive-wrap
-minor mode.
-
-Line-numbering is off by default, it tends to slow things down, but if
-I want it on, I almost always want them relative
+Line-numbering is off by default, it tends to slow things down, but if I want it on, I almost always want them relative
 
 #+BEGIN_SRC emacs-lisp
   (use-package display-line-numbers
@@ -1082,12 +1053,6 @@ on a line which is commented out in the proper syntax for that mode.
       (list 'emacs-lisp-mode-hook 'lisp-interaction-mode-hook 'ielm-mode-hook 'python-mode))
     (add-hook the_mode 'turn-on-eldoc-mode))
 
-  ; Autofill should be off for a couple of modes, but mostly on.  I'm
-  ; backpedaling a bit on this, visual-line mode is a lot smarter to use
-  ; in many cases. I'm mainly wanting the fill mode for visual reasons,
-  ; not actual line breaking
-  (auto-fill-mode 1)
-
   (use-package nxml-mode
     :ensure nil ;; builtin mode
     :config
@@ -1140,8 +1105,6 @@ function.
            :map org-capture-mode-map
            ("C-c C-t" . mrb/add-tags-in-capture))
     :config
-    (add-hook 'org-mode-hook 'turn-on-auto-fill)
-
     (setq
      org-use-fast-todo-selection t
      org-use-fast-tag-selection t
@@ -3093,9 +3056,6 @@ First, let's activate notmuch itself.
     ;; Auto-fill makes no sense anymore now, and will in fact mess
     ;; everything up, so make sure it is off.
     (auto-fill-mode 0)
-
-    ;; Make sure we show the line wrappers in the right fringe area
-    (setq visual-line-fringe-indicators '(nil right-curly-arrow))
 
     ;; Adapt fill column to what encoding would do (not actually needed)
     ;; and make visual-mode adhere to it.
