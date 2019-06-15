@@ -4,35 +4,20 @@
 #+OPTIONS:  H:5 toc:1 creator:nil email:nil author:t timestamp:t tags:nil
 #+PROPERTY: header-args :results silent
 
-(note: this document was posted automatically with the [[https://github.com/dangom/writefreely.el][writefreely.el]]
-Emacs package. Therefore, some layout issues may occur due to orgmode
-to markdown conversion.
+(note: this document was posted automatically with the [[https://github.com/dangom/writefreely.el][writefreely.el]] Emacs package. Therefore, some layout issues may occur due to orgmode to markdown conversion.
 
-This is my emacs configuration file that is loaded with
-=org-babel-load-file= in the Emacs init file. The intent is to have as
-much of my Emacs configuration in here as possible. The system works
-as a literal programming system where with a tangle the elisp code
-that actually makes up my configuration is extracted automatically and
-loaded.
+This is my emacs configuration file that is loaded with =org-babel-load-file= in the Emacs init file. The intent is to have as much of my Emacs configuration in here as possible. The system works as a literal programming system where with a tangle the elisp code that actually makes up my configuration is extracted automatically and loaded.
 
-This file was created from many separate elisp files and has not been
-fully sanitized yet. Following the history of that may be interesting
-to some as well. On top of that I have an auto commit hook on save
-running at the moment which does not produce the best hitory
-records. All that will change over time.
+This file was created from many separate elisp files and has not been fully sanitized yet. Following the history of that may be interesting to some as well. On top of that I have an auto commit hook on save running at the moment which does not produce the best hitory records. All that will change over time.
 
 * Preparing for lift-off
-The base of the emacs configuration is in the =~/.emacs.d/= directory,
-so add this to my loadpaths first and give it a name.
+The base of the emacs configuration is in the =~/.emacs.d/= directory, so add this to my loadpaths first and give it a name.
 
 #+BEGIN_SRC emacs-lisp
   (setq emacs-directory "~/.emacs.d/")
 #+END_SRC
 
-The first thing I want to take care of is to make customizations
-possible and stored in a place to my liking. I want to load this
-first so anything in the configuration I define explicitly overrides
-it.
+The first thing I want to take care of is to make customizations possible and stored in a place to my liking. I want to load this first so anything in the configuration I define explicitly overrides it.
 
 #+BEGIN_SRC emacs-lisp
   (setq custom-file (concat emacs-directory "custom.el")
@@ -40,8 +25,7 @@ it.
   (load custom-file)
 #+END_SRC
 
-Now that we have the locations of the configuration determined, I want
-a way to have them forcibly compiled.
+Now that we have the locations of the configuration determined, I want a way to have them forcibly compiled.
 
 #+BEGIN_SRC emacs-lisp
   (defun mrb/compile-config ()
@@ -51,9 +35,7 @@ a way to have them forcibly compiled.
   )
 #+END_SRC
 
-The config file =mrb.org= gets openened *a lot* because I tend to fiddle
-with this config at least once a day. So, it warrants it's own
-keybinding.
+The config file =mrb.org= gets openened *a lot* because I tend to fiddle with this config at least once a day. So, it warrants it's own keybinding.
 
 #+BEGIN_SRC emacs-lisp
   (defun mrb/open-config ()
@@ -63,9 +45,7 @@ keybinding.
   (bind-key "C-~" 'mrb/open-config)
 #+END_SRC
 
-Most of the time the editting process starts at the command
-line. Because I use emacs in server mode, this needs a little script.
-The script does two things:
+Most of the time the editting process starts at the command line. Because I use emacs in server mode, this needs a little script.  The script does two things:
 1. check if we already have the emacs server, if not, start it;
 2. treat input from stdin a little bit special.
 
@@ -153,8 +133,7 @@ And edit the file obviously.
 * Package Management
 Package handling, do this early so emacs knows where to find things.
 
-First of all, define the package archives I need; for now, just the
-default gnu augmented with the melpa repository.
+First of all, define the package archives I need; for now, just the default gnu augmented with the melpa repository.
 
 #+BEGIN_SRC emacs-lisp
   (add-to-list 'package-archives
@@ -183,21 +162,14 @@ default gnu augmented with the melpa repository.
   (use-package cl-lib )
 #+END_SRC
 
-Now, there's an issue where a variable =package-selected-packages= gets
-written to =custom.el= everytime I try a package. I do not want
-that. The site [[http://www.holgerschurig.de/en/emacs-dont-let-packages-pollute-custom-el/][from holger]] has an answer for that, although it needs a
-slight adaptation (=context= argument is not there anymore)
+Now, there's an issue where a variable =package-selected-packages= gets written to =custom.el= everytime I try a package. I do not want that. The site [[http://www.holgerschurig.de/en/emacs-dont-let-packages-pollute-custom-el/][from holger]] has an answer for that, although it needs a slight adaptation (=context= argument is not there anymore)
 
 #+BEGIN_SRC emacs-lisp
   ;; Override the function that write to selected packages
   (defun package--save-selected-packages (&optional value) nil)
 #+END_SRC
 
-So, =package-selected-packages= will not stay empty and not written
-out. The first is a bit problematic though, because package-list will
-then show every installed package as =dependency= instead of installed.
-We can correct this by overriding the package ensure function to our
-own and fill the variable to correct the listings.
+So, =package-selected-packages= will not stay empty and not written out. The first is a bit problematic though, because package-list will then show every installed package as =dependency= instead of installed.  We can correct this by overriding the package ensure function to our own and fill the variable to correct the listings.
 
 #+BEGIN_SRC emacs-lisp
   (defun mrb/use-package-ensure-elpa (name args state &optional no-refresh)
@@ -223,11 +195,7 @@ I'd like to arrange 3 things related to personal information:
 
 So, identification, authorisation and encryption.
 
-Seems like a good idea to start configuration with some details
-about me. The idea being that anything personal goes here and nowhere
-else. For one, this means my name only appears in this section in this
-document. Most of the variables I just made up, but some are used in
-other places too.
+Seems like a good idea to start configuration with some details about me. The idea being that anything personal goes here and nowhere else. For one, this means my name only appears in this section in this document. Most of the variables I just made up, but some are used in other places too.
 
 #+BEGIN_SRC emacs-lisp
   (setq user-full-name       "Marcel van der Boom"
@@ -238,22 +206,11 @@ other places too.
 #+END_SRC
 
 ** Authorization
-Several things I use within Emacs need authorization, such as tramp,
-jabber, erc etc. The authorization can come from several sources;
-ideally as few as possible. Many packages in Emacs have support for a
-=.netrc= like mechanism, others want to use the keyring in GNOME. The
-variables =auth-sources= defines the sources available.
+Several things I use within Emacs need authorization, such as tramp, jabber, erc etc. The authorization can come from several sources; ideally as few as possible. Many packages in Emacs have support for a =.netrc= like mechanism, others want to use the keyring in GNOME. The variables =auth-sources= defines the sources available.
 
-I want to use systems which are desktop independent, so things like
-the gnome keyring are out because they depend on the gnome environment
-being present, which I can not guarantee, nor want to related to
-authentication. The situation which I want to prevent is that if gnome
-is broken, I can't authenticate to services I need.
+I want to use systems which are desktop independent, so things like the gnome keyring are out because they depend on the gnome environment being present, which I can not guarantee, nor want to related to authentication. The situation which I want to prevent is that if gnome is broken, I can't authenticate to services I need.
 
-I have a gpg-agent daemon configured which manages gpg and ssh keys,
-protected by a hardware key. Let's make the system as simple as we can
-for now and just store passwords in the gpg protected store only,
-i.e. the password-store program.
+I have a gpg-agent daemon configured which manages gpg and ssh keys, protected by a hardware key. Let's make the system as simple as we can for now and just store passwords in the gpg protected store only, i.e. the password-store program.
 
 #+BEGIN_SRC emacs-lisp
   ;; Use only password-store
@@ -268,8 +225,7 @@ i.e. the password-store program.
 #+END_SRC
 
 ** Encrypting information
-I need a way to store some sensitive information without that being
-published, should I decide some day to push this config somewhere.
+I need a way to store some sensitive information without that being published, should I decide some day to push this config somewhere.
 
 When needed, the gpg key is used to encrypt information.
 
@@ -280,17 +236,12 @@ When needed, the gpg key is used to encrypt information.
   (setq-default epa-file-select-keys nil)
 #+END_SRC
 
-For org-mode, there is a wayto encrypt sections separately. See
-[[Encrypting information in org-mode]] for the details on the settings for
-this.
+For org-mode, there is a wayto encrypt sections separately. See [[Encrypting information in org-mode]] for the details on the settings for this.
 
-Next to inline content in org that needs encryption, there is also
-content that needs encrypting which is more suitable to store in a
-separate file for several reasons.
+Next to inline content in org that needs encryption, there is also content that needs encrypting which is more suitable to store in a separate file for several reasons.
 
 * Global Generic settings
-Most of what follows should probably be relocated to a better suited
-section.
+Most of what follows should probably be relocated to a better suited section.
 
 #+BEGIN_SRC emacs-lisp
   (setq
@@ -343,8 +294,7 @@ section.
   (global-goto-address-mode t)
 #+END_SRC
 
-Make life easier if we have sudo, so we can just edit the files and be
-done with them if possible
+Make life easier if we have sudo, so we can just edit the files and be done with them if possible
 
 #+BEGIN_SRC emacs-lisp
   (use-package sudo-save
@@ -352,9 +302,7 @@ done with them if possible
     :load-path (lambda () (concat custom-package-directory "sudo-save/")))
 #+END_SRC
 
-Using pdf-tools for PDF handling. This is a lot better than
-docview. I'm a bit annoyed that they are not one package, they are
-very similar.
+Using pdf-tools for PDF handling. This is a lot better than docview. I'm a bit annoyed that they are not one package, they are very similar.
 #+BEGIN_SRC emacs-lisp
 (use-package pdf-tools
   :after (pdf-annot fullframe)
@@ -387,43 +335,24 @@ very similar.
 #+END_SRC
 
 * Internationalisation and multi-language features
-If anything multi-language should work, UTF-8 encoding is a must, so
-let's make sure we try to use that everywhere
+If anything multi-language should work, UTF-8 encoding is a must, so let's make sure we try to use that everywhere
 
 #+BEGIN_SRC emacs-lisp
   (prefer-coding-system 'utf-8)
 #+END_SRC
 
-For conveniently editting accented characters like 'é' and 'è' there
-are quite a few options to reach that result. I have dead characters
-configured as an option in the operating system, but that is far from
-ideal, especially when programming. As I hardly need those characters
-outside of emacs, i can leave that option as needed and optimize Emacs
-to my needs.
+For conveniently editting accented characters like 'é' and 'è' there are quite a few options to reach that result. I have dead characters configured as an option in the operating system, but that is far from ideal, especially when programming. As I hardly need those characters outside of emacs, i can leave that option as needed and optimize Emacs to my needs.
 
-The fallback is C-x 8 C-h which gives specific shortcuts for special
-characters which are available. For the exotic characters that will do
-just fine. For the more common characters the C-x 8 prefix is to
-complex.
+The fallback is C-x 8 C-h which gives specific shortcuts for special characters which are available. For the exotic characters that will do just fine. For the more common characters the C-x 8 prefix is to complex.
 
-After evaluating some systems, the TeX input method suits me the
-best. I'd like to enable that globally by default, which needs two
-things:
+After evaluating some systems, the TeX input method suits me the best. I'd like to enable that globally by default, which needs two things:
 1. enable multi-language editting by default (input-method is only
    active in a multi-language environment)
 2. set the default input-method to tex
 
-There is however a problem, the TeX input method assumes the first
-character / string produced will always be the choice I need, without
-allowing selecting an alternative. This turns out to be due to
-=quail-define-package= which determines the way the completions work.
-The problem is the =DETERMINISTIC= argument of the function, that is set
-to 't'. (8th argument). While I am at it, I also changed the
-=FORGET-LAST-SELECTION= (7th argument) to nil, so the last seleciton is
-remembered.
+There is however a problem, the TeX input method assumes the first character / string produced will always be the choice I need, without allowing selecting an alternative. This turns out to be due to =quail-define-package= which determines the way the completions work.  The problem is the =DETERMINISTIC= argument of the function, that is set to 't'. (8th argument). While I am at it, I also changed the =FORGET-LAST-SELECTION= (7th argument) to nil, so the last seleciton is remembered.
 
-For this to work properly we have to define a whole new input-method
-based on a copy of latin-ltx.el
+For this to work properly we have to define a whole new input-method based on a copy of latin-ltx.el
 
 #+BEGIN_SRC emacs-lisp
   ;; No input method will be active by default, so for each mode where
@@ -461,20 +390,9 @@ based on a copy of latin-ltx.el
 
 #+END_SRC
 
-For even more esoteric characters we have to do some extra work. No
-font provides all Unicode characters. There are packages (like
-unicode-fonts) which aim to create a giant replacement table for
-characters. While I'm sure this works, the characters I tried either
-already worked or didn't change, i.e. still don't work. So, the
-solution I've come up with (with some borrowing here and there
-obviously) is to create a table of my own to which I can add
-characters to use certain fonts which *do* have the characters and be
-done with them.
+For even more esoteric characters we have to do some extra work. No font provides all Unicode characters. There are packages (like unicode-fonts) which aim to create a giant replacement table for characters. While I'm sure this works, the characters I tried either already worked or didn't change, i.e. still don't work. So, the solution I've come up with (with some borrowing here and there obviously) is to create a table of my own to which I can add characters to use certain fonts which *do* have the characters and be done with them.
 
-The problem with applying this function is that we need to be 'done'
-with our visual initialisation or otherwise they'll do nothing (at
-least that I can see). So, let's group our corrections in a function
-and call that when we are done with our visual (X) init.
+The problem with applying this function is that we need to be 'done' with our visual initialisation or otherwise they'll do nothing (at least that I can see). So, let's group our corrections in a function and call that when we are done with our visual (X) init.
 
 #+BEGIN_SRC emacs-lisp
   (defun mrb/unicode-font-corrections()
@@ -848,18 +766,14 @@ Still on the wish-list:
 * Buffers and files
 How do I deal with all those buffers?
 
-For starters, make sure that they have unique buffer names so I don't
-get confused:
+For starters, make sure that they have unique buffer names so I don't get confused:
 
 #+BEGIN_SRC emacs-lisp
   ;; nicer buffer names
   (setq uniquify-buffer-name-style 'forward)
 #+END_SRC
 
-For every file-based buffer, I want auto-save to be on, but not in the
-same location as the file, as that clutters up everything. For that, I
-add to the list of file-name transforms to have (local) files
-autosaved in a designated folder)
+For every file-based buffer, I want auto-save to be on, but not in the same location as the file, as that clutters up everything. For that, I add to the list of file-name transforms to have (local) files autosaved in a designated folder)
 
 #+BEGIN_SRC emacs-lisp
   (setq auto-save-default t)
@@ -871,16 +785,9 @@ autosaved in a designated folder)
                t)
 #+END_SRC
 
-The autosave helps for the minor disasters, my backups help for the
-major disasters. What else is need is a 'normal save' but
-automatic.
+The autosave helps for the minor disasters, my backups help for the major disasters. What else is need is a 'normal save' but automatic.
 
-What I am aiming for here is to not have to think about explicitly
-saving for certain files. Typically when typing stuff in org-mode I
-just want the stuff saved that I have types so far.
-For /some/ files, each save is committed if I think the content
-warrants this (for example if I think going back to an earlier version
-is a likely event).
+What I am aiming for here is to not have to think about explicitly saving for certain files. Typically when typing stuff in org-mode I just want the stuff saved that I have types so far.  For /some/ files, each save is committed if I think the content warrants this (for example if I think going back to an earlier version is a likely event).
 
 #+BEGIN_SRC emacs-lisp
   (defconst mrb/idle-timer 15
@@ -915,9 +822,7 @@ Also, save the location in files between sessions.
     (setq-default save-place-mode t))
 #+END_SRC
 
-The C-x-w shortcut write a file to a new location (and adjusts the
-buffer), but leaves the old file lingering. The next defun moves a
-file in a neater way.
+The C-x-w shortcut write a file to a new location (and adjusts the buffer), but leaves the old file lingering. The next defun moves a file in a neater way.
 
 #+BEGIN_SRC emacs-lisp
   (defun mrb/move-file (new-location)
@@ -941,17 +846,11 @@ file in a neater way.
   (bind-key "C-S-s" 'write-file)
 #+END_SRC
 * Modes
-Customisation setting for specific modes. Most of the modes I use have
-a separate section, so this section is only for other modes.
+Customisation setting for specific modes. Most of the modes I use have a separate section, so this section is only for other modes.
 
-To determine the default major mode; the mode that is started with
-before all the magic starts is determined by buffer-file-name. If we
-have it, the normal routine can be followed. If there is no filename
-yet, the buffer-name is used to determine which mode is needed.
+To determine the default major mode; the mode that is started with before all the magic starts is determined by buffer-file-name. If we have it, the normal routine can be followed. If there is no filename yet, the buffer-name is used to determine which mode is needed.
 
-By looking at the code this may have a side-effect, because the
-buffer-file-name is given a value. Let's try this and see if it gives
-any issues.
+By looking at the code this may have a side-effect, because the buffer-file-name is given a value. Let's try this and see if it gives any issues.
 #+BEGIN_SRC emacs-lisp
   (setq-default major-mode
                 (lambda ()
@@ -961,9 +860,7 @@ any issues.
                       (set-auto-mode)))))
 #+END_SRC
 
-When emacs does not determine the right mode, I sometimes want a
-modestring somewhere in the file. Typically that string gets inserted
-on a line which is commented out in the proper syntax for that mode.
+When emacs does not determine the right mode, I sometimes want a modestring somewhere in the file. Typically that string gets inserted on a line which is commented out in the proper syntax for that mode.
 
 #+BEGIN_SRC emacs-lisp
   (defun mrb/buffer-majormode (&optional buffer-or-name)
@@ -1066,13 +963,9 @@ coding, is spent in org-mode.
 ** Initialisation of Orgmode
 Basically where to find stuff and what to load.
 
-We do not have to load the main orgmode location, because we already
-did that on the main initialisation to get org-babel started.
+We do not have to load the main orgmode location, because we already did that on the main initialisation to get org-babel started.
 
-Also make sure we never load org from internal, this can happen when
-functions were defined in the included org version and not anymore in
-newer versions. We want an error, not a silent load of the older
-function.
+Also make sure we never load org from internal, this can happen when functions were defined in the included org version and not anymore in newer versions. We want an error, not a silent load of the older function.
 
 #+COMMENT: This duplicates the one in init.el, problems?
 #+BEGIN_SRC emacs-lisp
@@ -1171,8 +1064,7 @@ function.
     )
 #+END_SRC
 
-Most of work originates in capturing some task item in orgmode. Set
-up the location and files for that.
+Most of work originates in capturing some task item in orgmode. Set up the location and files for that.
 
 #+BEGIN_SRC emacs-lisp
   (setq org-directory "~/dat/org/")
@@ -1245,8 +1137,7 @@ Here are the templates used for them.
       (goto-char loc)))
 #+END_SRC
 
-Define functions for each piece of information captured, so they can
-be easily bound to keys.
+Define functions for each piece of information captured, so they can be easily bound to keys.
 
 #+BEGIN_SRC emacs-lisp
   (defun mrb/capture-todo ()
@@ -1260,10 +1151,7 @@ be easily bound to keys.
     (org-capture nil "b"))
 #+END_SRC
 
-These capture functions are called from shell scripts in the operating
-system and have a shortcut key assigned to them. The scripts are
-produced directly from this document, in a similar way as the main
-edit script was produced in [[Preparing for lift-off]]
+These capture functions are called from shell scripts in the operating system and have a shortcut key assigned to them. The scripts are produced directly from this document, in a similar way as the main edit script was produced in [[Preparing for lift-off]]
 
 #+BEGIN_SRC sh :exports code :tangle ~/bin/capture-todo.sh :shebang #!/bin/sh
 emacsclient --eval '(mrb/capture-todo)'
@@ -1273,8 +1161,7 @@ emacsclient --eval '(mrb/capture-todo)'
 emacsclient --eval '(mrb/capture-buy)'
 #+END_SRC
 
-By default C-c C-c ends the capture, but is normally the shortcut to
-enter tags, so I define a shortcut to define tags while capturing.
+By default C-c C-c ends the capture, but is normally the shortcut to enter tags, so I define a shortcut to define tags while capturing.
 
 #+BEGIN_SRC emacs-lisp
   (defun mrb/add-tags-in-capture()
@@ -1286,15 +1173,7 @@ enter tags, so I define a shortcut to define tags while capturing.
 #+END_SRC
 
 ** Workflow
-Orgmode used a couple of thing which enable you to steer the workflow
-for items. Item states are the most prominent ones. Org-mode uses
-keyword definitions to denote states on items. I keep an [[file:org-config.org][Orgmode
-configuration file]] (=org-config.org)= file which contains the
-description of the workflow in a formate suitable to include directly
-into orgmode files. The configuration of emacs itself is limited to
-dressing up this configuration with things less suitable to go into
-that config file. The configuration here and the org config file
-should be kept in sync.
+Orgmode used a couple of thing which enable you to steer the workflow for items. Item states are the most prominent ones. Org-mode uses keyword definitions to denote states on items. I keep an [[file:org-config.org][Orgmode configuration file]] (=org-config.org)= file which contains the description of the workflow in a formate suitable to include directly into orgmode files. The configuration of emacs itself is limited to dressing up this configuration with things less suitable to go into that config file. The configuration here and the org config file should be kept in sync.
 
 Adapt the colors of the states I use a bit:
 
@@ -1328,11 +1207,7 @@ Adapt the colors of the states I use a bit:
   ))
 #+END_SRC
 
-Make sure we keep a clean tag slate when changing tag state. This
-means that when I move to an active state, remove inactive tags; if
-something is DONE, remove tags from it and automatically adding a
-'buy' tag when a BUY item is created.
-Note: capturing does not honour this, i.e. when creating a new item.
+Make sure we keep a clean tag slate when changing tag state. This means that when I move to an active state, remove inactive tags; if something is DONE, remove tags from it and automatically adding a 'buy' tag when a BUY item is created.  Note: capturing does not honour this, i.e. when creating a new item.
 
 #+BEGIN_SRC emacs-lisp
   (setq org-todo-state-tags-triggers
@@ -1342,13 +1217,9 @@ Note: capturing does not honour this, i.e. when creating a new item.
                 ("BUY"  ("buy" . t)))))       ; add buy tag when this is a buying action
 #+END_SRC
 
-To keep the TODO list clean we immediately archive the completed
-entry in the archive. The archiving only occurs when an item enters
-the 'DONE' state and the item is not marked as a habit.
+To keep the TODO list clean we immediately archive the completed entry in the archive. The archiving only occurs when an item enters the 'DONE' state and the item is not marked as a habit.
 
-I'm not sure if this works out in practice
-without having a confirmation (because we archive the whole subtree),
-so for now, I'm building in the confirmation.
+I'm not sure if this works out in practice without having a confirmation (because we archive the whole subtree), so for now, I'm building in the confirmation.
 
 #+BEGIN_SRC emacs-lisp
   (use-package org-habit :ensure nil)
@@ -1402,14 +1273,9 @@ so for now, I'm building in the confirmation.
 
 #+END_SRC
 ** Marking items as DONE
-Marking work as completed should be a smooth process to stop getting
-in the way of doing the actual work. A shortcut is defined to mark
-items done in the standard way and have an additional shortcut to mark
-it done should it be blocked.
+Marking work as completed should be a smooth process to stop getting in the way of doing the actual work. A shortcut is defined to mark items done in the standard way and have an additional shortcut to mark it done should it be blocked.
 
-When an item changes to the DONE state, a question is asked if the
-item should be archived, to which the normal answer should be 'Yes' to
-keep the active file as clean as possible.
+When an item changes to the DONE state, a question is asked if the item should be archived, to which the normal answer should be 'Yes' to keep the active file as clean as possible.
 
 Thus, the normal sequence would be:
 #+BEGIN_SRC emacs-lisp
@@ -1427,19 +1293,11 @@ Thus, the normal sequence would be:
 #+END_SRC
 
 ** Registering creation time of todo items
-Over time it gets a bit messy in my orgmode files. I can not remember
-when something was created and thus, by judging the time I didn't do
-anything with the item, decide if it is still important or not.
+Over time it gets a bit messy in my orgmode files. I can not remember when something was created and thus, by judging the time I didn't do anything with the item, decide if it is still important or not.
 
-So, to help with that I created a little glue to make sure each
-actionable item gets a =CREATED= property with the date in it on which
-that item was created. I use the contributed =org-expiry= for that and
-adjust it a bit.
+So, to help with that I created a little glue to make sure each actionable item gets a =CREATED= property with the date in it on which that item was created. I use the contributed =org-expiry= for that and adjust it a bit.
 
-I want the property to be name 'CREATED' (I don't remeber what the
-org-expiry default name is, but it is different) and the timestamps
-inserted must not be active, otherwise they'll appear all over the
-place in the agenda.
+I want the property to be name 'CREATED' (I don't remeber what the org-expiry default name is, but it is different) and the timestamps inserted must not be active, otherwise they'll appear all over the place in the agenda.
 
 #+BEGIN_SRC emacs-lisp
   (use-package org-expiry
@@ -1450,9 +1308,7 @@ place in the agenda.
     (setq org-expiry-inactive-timestamps   t))
 #+END_SRC
 
-So, to create the timestamp I need a little helper function which
-actually inserts it, using org-expiry. There is some additional
-cursor munging to make sure it is used comfortably during editing.
+So, to create the timestamp I need a little helper function which actually inserts it, using org-expiry. There is some additional cursor munging to make sure it is used comfortably during editing.
 
 #+BEGIN_SRC emacs-lisp
   (defun mrb/insert-created-timestamp()
@@ -1485,9 +1341,7 @@ Now that function is used to insert the property when:
   ;;(ad-deactivate 'org-capture)
 #+END_SRC
 
-Related to the above, with some regularity I want to record
-timestamps, for example for documenting longer during tasks and
-recording incremental progress or information on them.
+Related to the above, with some regularity I want to record timestamps, for example for documenting longer during tasks and recording incremental progress or information on them.
 
 #+BEGIN_SRC emacs-lisp
   (defun mrb/org-insert-inactive-timestamp (&optional with-hm)
@@ -1496,17 +1350,9 @@ recording incremental progress or information on them.
 #+END_SRC
 
 ** Scheduling items
-Orgmode has a number of provisions to schedule items, either
-explicitly by setting the SCHEDULE property, inferring a deadline by
-setting the DEADLINE property, thus scheduling the task in an interval
-before the deadline expires.
+Orgmode has a number of provisions to schedule items, either explicitly by setting the SCHEDULE property, inferring a deadline by setting the DEADLINE property, thus scheduling the task in an interval before the deadline expires.
 
-A routine task I am performing, often at the beginning of the day, is
-to make a list of what I want to do that day. This is often ad-hoc and
-thus still on paper most of the time. Over time, I want this to be
-done in orgmode, but that requires the process to be a lot simpler
-than it is now and one of the things is to make it easier to model a
-thing like: "yeah, do this today"
+A routine task I am performing, often at the beginning of the day, is to make a list of what I want to do that day. This is often ad-hoc and thus still on paper most of the time. Over time, I want this to be done in orgmode, but that requires the process to be a lot simpler than it is now and one of the things is to make it easier to model a thing like: "yeah, do this today"
 
 #+BEGIN_SRC emacs-lisp
   (defun mrb/org-schedule-for-today()
@@ -1523,86 +1369,59 @@ thing like: "yeah, do this today"
 #+END_SRC
 
 ** Visual settings
-Having an attractive screen to look at becomes more important if you
-use the system all day long. /Attractive/ is rather subjective
-here. For me it mainly consists of functional things. Anyways, this
-section groups settings for the visual characteristics of orgmode.
+Having an attractive screen to look at becomes more important if you use the system all day long. /Attractive/ is rather subjective here. For me it mainly consists of functional things. Anyways, this section groups settings for the visual characteristics of orgmode.
 
-I want to hide the leading stars in the outliner, and do it *exactly*
-in the background color. This is redundant actually in my case, as it
-is also specified in the org config file that I include. Or rather,
-it is redundant there, because I want it always to be the case.
+I want to hide the leading stars in the outliner, and do it *exactly* in the background color. This is redundant actually in my case, as it is also specified in the org config file that I include. Or rather, it is redundant there, because I want it always to be the case.
 
 #+BEGIN_SRC emacs-lisp
   (setq org-hide-leading-stars t)
 #+END_SRC
 
-For the collapsed items in the outline orgmode uses the variable
-=org-ellipsis= to determine what character-sequence should be used to
-show that the item can be expanded. The variable can contain a
-string, which will then be used instead of the standard 3 dots, or a
-face which will then be used to render the standard 3 dots.
+For the collapsed items in the outline orgmode uses the variable =org-ellipsis= to determine what character-sequence should be used to show that the item can be expanded. The variable can contain a string, which will then be used instead of the standard 3 dots, or a face which will then be used to render the standard 3 dots.
 
 #+BEGIN_SRC emacs-lisp
   (setq org-ellipsis "…")
 #+END_SRC
 
-There are a couple of ways within org to emphasize text inline
-for *bold*, /italics/, underlined etc. These are set in the text by
-enclosing regions with delimiters. I do not want to see these
-delimiters, but rather render the text.
+There are a couple of ways within org to emphasize text inline for *bold*, /italics/, underlined etc. These are set in the text by enclosing regions with delimiters. I do not want to see these delimiters, but rather render the text.
 
 #+BEGIN_SRC emacs-lisp
   (setq org-hide-emphasis-markers t)
 #+END_SRC
 
-One of the emphasis markers is for ~inline code~ (delimited by ~). I
-never use that in that way, but I need an emaphasis marker in tables
-which does stand out more than *bold*. So, I'm adjusting the =org-code=
-face a bit.
+One of the emphasis markers is for ~inline code~ (delimited by ~). I never use that in that way, but I need an emaphasis marker in tables which does stand out more than *bold*. So, I'm adjusting the =org-code= face a bit.
 
 #+BEGIN_SRC emacs-lisp
   (set-face-attribute 'org-code nil :foreground "purple" :weight 'bold)
 #+END_SRC
 
-Similar to inline emphasis is the /rewriting/ with pretty entity characters (like '\delta'
-for example). These characters can be added to the text by adding a
-'\' before a symbol name ('delta' in the example).  I make an
-exception for the sub- and superscript characters. This happens a lot
-in variable names etc. and I a big annoyance if those get rendered to
-subscript all the time.
+Similar to inline emphasis is the /rewriting/ with pretty entity characters (like '\delta' for example). These characters can be added to the text by adding a '\' before a symbol name ('delta' in the example).  I make an exception for the sub- and superscript characters. This happens a lot in variable names etc. and I a big annoyance if those get rendered to subscript all the time.
 
 #+BEGIN_SRC emacs-lisp
   (setq org-pretty-entities 1)
   (setq org-pretty-entities-include-sub-superscripts nil)
 #+END_SRC
 
-Related to that is the display of links. I want them to be explicit
-most of the time to avoid confusion, but the 'fancy' display is easier
-at first:
+Related to that is the display of links. I want them to be explicit most of the time to avoid confusion, but the 'fancy' display is easier at first:
 
 #+BEGIN_SRC emacs-lisp
   (setq org-descriptive-links t)
 #+END_SRC
 
-For most of the source blocks I want Emacs to render those blocks in
-their native mode. This had a serious performance problem in the
-past, but I think it has been solved recently.
+For most of the source blocks I want Emacs to render those blocks in their native mode. This had a serious performance problem in the past, but I think it has been solved recently.
 
 #+BEGIN_SRC emacs-lisp
   (setq org-src-fontify-natively t)
 #+END_SRC
 
-For the headings at each level a =*= is normally used. As we're in
-unicode worls now, we can do a bit better.
+For the headings at each level a =*= is normally used. As we're in unicode worls now, we can do a bit better.
 
 #+BEGIN_SRC emacs-lisp
   (use-package org-bullets)
   (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
 #+END_SRC
 
-A couple of settings to steer the column in which the tags and habits
-appear in the frame:
+A couple of settings to steer the column in which the tags and habits appear in the frame:
 
 #+BEGIN_SRC emacs-lisp
 (setq
@@ -1612,10 +1431,7 @@ appear in the frame:
 )
 #+END_SRC
 
-The item lists can be made a whole lot more attractive by attaching
-some icons based on the category an items belongs to. The category
-assignment itself is done by setting the =CATEGORY= property explicitly
-on the item or on the file.
+The item lists can be made a whole lot more attractive by attaching some icons based on the category an items belongs to. The category assignment itself is done by setting the =CATEGORY= property explicitly on the item or on the file.
 
 #+BEGIN_SRC emacs-lisp
   (setq org-agenda-category-icon-alist
@@ -1638,12 +1454,7 @@ on the item or on the file.
   ))
 #+END_SRC
 
-Showing items in the agenda views reacts to a number of settings. In
-my setup I want blocked tasks hidden, that is the reason for
-blocking. Hide tasks which are DONE already and a deadline is coming
-up, no use showing those; the same goes for tasks which are DONE and
-are scheduled. In short, anything that does not need my attention
-needs to be hidden.
+Showing items in the agenda views reacts to a number of settings. In my setup I want blocked tasks hidden, that is the reason for blocking. Hide tasks which are DONE already and a deadline is coming up, no use showing those; the same goes for tasks which are DONE and are scheduled. In short, anything that does not need my attention needs to be hidden.
 
 #+BEGIN_SRC emacs-lisp
   (setq
@@ -1669,8 +1480,7 @@ Settings which are just applicable for the org-mode agenda view.
                (point-min) (point-max) '(mouse-face t))))
 #+END_SRC
 
-A snippet which resized the agenda to its window whenever its rebuilt
-by orgmode
+A snippet which resized the agenda to its window whenever its rebuilt by orgmode
 
 #+begin_src emacs-lisp
 ;; Goal: have the agenda window sized properly
@@ -1695,15 +1505,9 @@ Specific settings for babel and literate programming within org-mode
 #+END_SRC
 
 ** Refiling
-A big part of organizing information and task is shuffling things
-around. The 'thing' to throw around is a heading and 'refiling' is
-the term org-mode uses for throwing.
+A big part of organizing information and task is shuffling things around. The 'thing' to throw around is a heading and 'refiling' is the term org-mode uses for throwing.
 
-When filing, or capturing we want the items at the bottom of what we
-are filing it into. The main reason for this is that a large part of
-the sections that contain items are ordered. Should we file the item
-at the top, in many cases that would mean it is the most imminent
-thing to do, which is not the case.
+When filing, or capturing we want the items at the bottom of what we are filing it into. The main reason for this is that a large part of the sections that contain items are ordered. Should we file the item at the top, in many cases that would mean it is the most imminent thing to do, which is not the case.
 
 #+BEGIN_SRC emacs-lisp
   (setq
@@ -1716,17 +1520,12 @@ thing to do, which is not the case.
    )
 #+END_SRC
 
-The list of headers to refile to is, in the standard config, basically
-everything. I limit it above to a maximum depth of 10, but then
-still. By using =org-refile-target-verify-function= we can fine-tune
-the decision whether to use a header as target or not.
-The following conditions have been implemented:
+The list of headers to refile to is, in the standard config, basically everything. I limit it above to a maximum depth of 10, but then still. By using =org-refile-target-verify-function= we can fine-tune the decision whether to use a header as target or not.  The following conditions have been implemented:
 
 1. The header must /not/ be a DONE item;
 2. The header needs to have children.
 
-The latter is the most important one and will prevent creating
-'gathering' items to tasks themselves.
+The latter is the most important one and will prevent creating 'gathering' items to tasks themselves.
 
 #+BEGIN_SRC emacs-lisp
   (defun mrb/has-DONE-keyword()
@@ -1751,8 +1550,7 @@ The latter is the most important one and will prevent creating
   (setq org-refile-target-verify-function 'mrb/verify-refile-target)
 #+END_SRC
 ** Exporting to other formats
-Orgmode can export to a variety of formats, I mainly use LaTeX (PDF)
-and HTML as destination format
+Orgmode can export to a variety of formats, I mainly use LaTeX (PDF) and HTML as destination format
 
 #+BEGIN_SRC emacs-lisp
   ;; {% raw %}
@@ -1820,9 +1618,7 @@ and HTML as destination format
 #+END_SRC
 
 ** Journaling
-While the capture method is useful I found myself not using it very
-much. Not sure why, but I'm going to try =org-journal= and see it that
-is a better fit.
+While the capture method is useful I found myself not using it very much. Not sure why, but I'm going to try =org-journal= and see it that is a better fit.
 
 #+BEGIN_SRC emacs-lisp
   (use-package org-journal
@@ -1859,33 +1655,22 @@ is a better fit.
     org-crypt-disable-auto-save t))
 #+END_SRC
 
-Particularly in journaling, but also in org-mode in general, I want to
-be able to quickly insert screenshots. Rather, images in general but
-90% of my usecase is really screenshots.
+Particularly in journaling, but also in org-mode in general, I want to be able to quickly insert screenshots. Rather, images in general but 90% of my usecase is really screenshots.
 
-There's a package =org-attach-screenshot= which matches my usecase 99%
-so let's use that and worry about extending it to images later on.
+There's a package =org-attach-screenshot= which matches my usecase 99% so let's use that and worry about extending it to images later on.
 
 #+BEGIN_SRC emacs-lisp
   (use-package org-attach-screenshot
     :bind (("C-c i" . org-attach-screenshot)))
 #+END_SRC
 
-The 1% I was referring to above is that the original package
-exclusively supports org-mode. I patched it, which was trivial to
-support org-mode and all its derived modes. (org-journal in my case)
+The 1% I was referring to above is that the original package exclusively supports org-mode. I patched it, which was trivial to support org-mode and all its derived modes. (org-journal in my case)
 
 ** Publishing
-There's plenty ways to publish orgmode content on the web. I use a
-couple of them sparingly. For most of them I don't need a permanent
-configuration. For the ones that I do need a config, there's this
-section.
+There's plenty ways to publish orgmode content on the web. I use a couple of them sparingly. For most of them I don't need a permanent configuration. For the ones that I do need a config, there's this section.
 
 *** Writefreely
-Writefreely is a Write.as derivative and published as open
-source. This allows me to just kick out a quick orgmode file with a
-=#+TITLE:= and a =#+DATE:= header and throw it on a blog like site rather
-quickly.
+Writefreely is a Write.as derivative and published as open source. This allows me to just kick out a quick orgmode file with a =#+TITLE:= and a =#+DATE:= header and throw it on a blog like site rather quickly.
 
 #+BEGIN_SRC emacs-lisp
   ;; Still needed:
@@ -1910,8 +1695,7 @@ quickly.
      ))
 #+END_SRC
 ** Old configuration
-Below is what was contained in the old configuration. I will slowly
-migrate this into more literal sections
+Below is what was contained in the old configuration. I will slowly migrate this into more literal sections
 
 #+BEGIN_SRC emacs-lisp
   ;; Bit of a leftover from reorganising bits, do this later
@@ -2134,10 +1918,7 @@ migrate this into more literal sections
 #+END_SRC
 
 ** Encrypting information in org-mode
-I use the /encrypt/ tag for encrypting sections in org-mode (and
-sometimes my journal). The sections get encrypted and decrypted
-automatically on saving and opening. This uses the EasyPG library to
-get to my GPG key.
+I use the /encrypt/ tag for encrypting sections in org-mode (and sometimes my journal). The sections get encrypted and decrypted automatically on saving and opening. This uses the EasyPG library to get to my GPG key.
 
 #+BEGIN_SRC emacs-lisp
   (use-package org-crypt
@@ -2148,11 +1929,7 @@ get to my GPG key.
     (setq org-crypt-key user-gpg-encrypt-key))
 #+END_SRC
 
-We do not want to inherit this tag automatically, as its behaviour is
-already subsection inclusive. When you encrypt a section, everything
-below it is considered content of that section and gets encrypted. I
-also add the value "crypt" as that is the org default, so it won't be
-inherited by mistake.
+We do not want to inherit this tag automatically, as its behaviour is already subsection inclusive. When you encrypt a section, everything below it is considered content of that section and gets encrypted. I also add the value "crypt" as that is the org default, so it won't be inherited by mistake.
 
 #+BEGIN_SRC emacs-lisp
   (add-to-list 'org-tags-exclude-from-inheritance (quote "encrypt"))
@@ -2160,11 +1937,7 @@ inherited by mistake.
 #+END_SRC
 
 * Key and mouse bindings
-Keyboard binding are the primary way to interact for me. I have been
-struggling with consistent keyboard shorcuts and how to integrate
-them with the nother systems on my machine which capture
-shortcut keys. At this time the following applications capture
-shortcut keys:
+Keyboard binding are the primary way to interact for me. I have been struggling with consistent keyboard shorcuts and how to integrate them with the nother systems on my machine which capture shortcut keys. At this time the following applications capture shortcut keys:
 1. the awesome window manager captures keys;
 2. xbindkeys provides a number of key bindings for application
    dependent operations;
@@ -2181,9 +1954,7 @@ Because I am daft, here is the notation for the modifiers:
 - M - :: meta, meaning the (left) alt key in my configuration
 - S - :: shift
 
-To help me out with this when writing about key bindings, the lisp
-function =key-description= can help out, with a little bit of glue
-around it:
+To help me out with this when writing about key bindings, the lisp function =key-description= can help out, with a little bit of glue around it:
 
 #+BEGIN_SRC emacs-lisp
   (defun mrb/insert-key-description ()
@@ -2191,16 +1962,11 @@ around it:
     (interactive)
     (insert (key-description (read-key-sequence "Type a key seqence:"))))
 #+END_SRC
-I like the explicit notation where the name of the key is spelled out
-better, and I'll move all configured keybindings to that eventually.
+I like the explicit notation where the name of the key is spelled out better, and I'll move all configured keybindings to that eventually.
 
-The right alt and the right <menu> key should be the same as the left
-alt and the super key, but I haven't gotten around to configuring
-that yet.
+The right alt and the right <menu> key should be the same as the left alt and the super key, but I haven't gotten around to configuring that yet.
 
-Furthermore, because I still can't remember keys, after pressing a
-prefix key like =C-c= the package =which-keys= can show me a formatted
-menu with the combinations of keys that can follow it.
+Furthermore, because I still can't remember keys, after pressing a prefix key like =C-c= the package =which-keys= can show me a formatted menu with the combinations of keys that can follow it.
 
 #+BEGIN_SRC emacs-lisp
   ; which keys shows menu with completions of prefix-key
@@ -2213,27 +1979,20 @@ menu with the combinations of keys that can follow it.
 #+END_SRC
 
 ** First, unsetting the keys I don't want.
-Let's begin with killing some bindings which are in my way, notably
-the standard right mouse click behaviour. This is because I want it
-to behave in org-mode, which apparently sets this. I should probably
-find out a better way for this.
+Let's begin with killing some bindings which are in my way, notably the standard right mouse click behaviour. This is because I want it to behave in org-mode, which apparently sets this. I should probably find out a better way for this.
 
 #+BEGIN_SRC emacs-lisp
   (global-unset-key (kbd "<mouse-3>"))
 #+END_SRC
 
 ** Setting keys
-Binding keys if fine and all, but remembering them later is rather
-hard, especially if they wander all over the configuration file. It
-seems that `bind-key' (now part of `use-package') solves this problem,
-so let's use that.
+Binding keys if fine and all, but remembering them later is rather hard, especially if they wander all over the configuration file. It seems that `bind-key' (now part of `use-package') solves this problem, so let's use that.
 
 #+BEGIN_SRC emacs-lisp
   (use-package bind-key)
 #+END_SRC
 
-Bind-key can define both global keys as map-based key settings and
-accepts all kinds of key specifications, including strings.
+Bind-key can define both global keys as map-based key settings and accepts all kinds of key specifications, including strings.
 
 #+BEGIN_SRC emacs-lisp
   ; Let marks be set when shift arrowing, everybody does this
@@ -2343,25 +2102,15 @@ accepts all kinds of key specifications, including strings.
 #+END_SRC
 ** Key bindings
 *** Global
-I am running the emacs daemon and sometime when I quit emacs, I want
-it to quit too. This sounds a bit counterintuitive, but as long as my
-emacs config is moving and I am not proficient enough in making sure I
-can apply the changed settings reliably from within emacs, restarting
-emacs is just easier. This saves me from having to kill the emacs
-daemon from the terminal.
+I am running the emacs daemon and sometime when I quit emacs, I want it to quit too. This sounds a bit counterintuitive, but as long as my emacs config is moving and I am not proficient enough in making sure I can apply the changed settings reliably from within emacs, restarting emacs is just easier. This saves me from having to kill the emacs daemon from the terminal.
 
 #+BEGIN_SRC emacs-lisp
   (bind-key "C-x C-q" 'save-buffers-kill-emacs)
 #+END_SRC
 
-Probably the most important key is =M-x= (as set by default). That key
-gives access to other commands within emacs, so it better be
-effective. If I wasn't already used to it, I'd certainly not consider
-=M-x= as a first candidate. The main objection I have is that the two
-keys are close to eachother, making it hard to press in a typing flow.
+Probably the most important key is =M-x= (as set by default). That key gives access to other commands within emacs, so it better be effective. If I wasn't already used to it, I'd certainly not consider =M-x= as a first candidate. The main objection I have is that the two keys are close to eachother, making it hard to press in a typing flow.
 
-I'm using helm which has a replacement for the =M-x= command, see the
-helm config for details.
+I'm using helm which has a replacement for the =M-x= command, see the helm config for details.
 
 
 **** What should have been in emacs
@@ -2372,10 +2121,7 @@ Sometimes there are /logical gaps/ in emacs' keybinding. I put them here
             ("A" . describe-face))
 #+END_SRC
 **** Special keys
-For some special keys I have defined some commands. Special keys are
-those keys that may not be on every keyboard, within reason. I
-consider the function keys also as special, although they do not fit
-the previous definition.
+For some special keys I have defined some commands. Special keys are those keys that may not be on every keyboard, within reason. I consider the function keys also as special, although they do not fit the previous definition.
 
 #+BEGIN_SRC emacs-lisp
   ;; Menu key does M-x, if we have it.
@@ -2431,36 +2177,23 @@ the previous definition.
 
 #+END_SRC
 ** Other key and mouse related settings
-Emacs has, like for everything else, a peculiar idea on scrolling and
-moving from screen to screen.
+Emacs has, like for everything else, a peculiar idea on scrolling and moving from screen to screen.
 
 These settings work better for me.
 
-I have my keyboard repeat rate rather quick; this helps by moving the
-cursor fast. It also means that if I press a key like backspace things
-disappear quite quickly, so it's important that what happens on the
-screen is 'real-time'. The effect I want to prevent is that when
-releasing the backspace key, the cursor keeps on going and deletes way
-more than needed. I think, by default, this is properly configure, but
-I just want to make sure.
+I have my keyboard repeat rate rather quick; this helps by moving the cursor fast. It also means that if I press a key like backspace things disappear quite quickly, so it's important that what happens on the screen is 'real-time'. The effect I want to prevent is that when releasing the backspace key, the cursor keeps on going and deletes way more than needed. I think, by default, this is properly configure, but I just want to make sure.
 
 #+BEGIN_SRC emacs-lisp
   (setq redisplay-dont-pause t)
 #+END_SRC
 
-When scrolling, I don't tend to think in /half-screens/ like emacs does,
-I just want the text in the window to move up or down without having
-to guess where it's going to be. Make sure we scroll 1 line and have a
-small, or none at all, scroll-margin. Having both at a value of 1 is
-intuitive.
+When scrolling, I don't tend to think in /half-screens/ like emacs does, I just want the text in the window to move up or down without having to guess where it's going to be. Make sure we scroll 1 line and have a small, or none at all, scroll-margin. Having both at a value of 1 is intuitive.
 
 #+BEGIN_SRC emacs-lisp
   (setq scroll-margin 1  scroll-step 1)
 #+END_SRC
 
-Make sure that the scroll wheel scrolls the window that the mouse
-pointer is over and that we are scrolling 1 line at a time. I don't
-use any modifiers with the scroll wheel.
+Make sure that the scroll wheel scrolls the window that the mouse pointer is over and that we are scrolling 1 line at a time. I don't use any modifiers with the scroll wheel.
 
 #+BEGIN_SRC emacs-lisp
   (xterm-mouse-mode)
@@ -2469,31 +2202,22 @@ use any modifiers with the scroll wheel.
   (setq focus-follows-mouse t) ;; i3wm changes focus automatically
 #+END_SRC
 * Terminals, Character encodings and emulation
-My policy is to use Emacs for as many things and use as little
-programs as necessary. All this within reason obvously.
+My policy is to use Emacs for as many things and use as little programs as necessary. All this within reason obvously.
 
-This sections describes how terminals and shells are used from within
-Emacs. In an ideal situation I won't be needing any other terminal
-emulator program, other than the ones used directly from Emacs.
+This sections describes how terminals and shells are used from within Emacs. In an ideal situation I won't be needing any other terminal emulator program, other than the ones used directly from Emacs.
 
 At the moment I only use eshell; the all Emacs-Lisp based solution.
 
 ** Eshell
-Eshell is theoretically the ideal shell; part of emacs, completely
-implemented in lisp and thus available regardless of the underlying
-hardware and operating system. In practice, many things won't work as
-expected.
+Eshell is theoretically the ideal shell; part of emacs, completely implemented in lisp and thus available regardless of the underlying hardware and operating system. In practice, many things won't work as expected.
 
-In the window manager (awesome-wm) 'Cmd Enter' launches a terminal,
-similarly within Emacs 'C-c Enter' launches Eshell:
+In the window manager (awesome-wm) 'Cmd Enter' launches a terminal, similarly within Emacs 'C-c Enter' launches Eshell:
 
 #+BEGIN_SRC emacs-lisp
   (bind-key "C-c RET" 'eshell)
 #+END_SRC
 
-First thing I missed in eshell was a the =clear= function, as in
-bash. By defining a function in the "eshell namespace" it gets
-registered as a command automatically.
+First thing I missed in eshell was a the =clear= function, as in bash. By defining a function in the "eshell namespace" it gets registered as a command automatically.
 
 #+BEGIN_SRC emacs-lisp
 (defun eshell/clear ()
@@ -2504,11 +2228,7 @@ registered as a command automatically.
         (delete-region (point-min) (point-max))))
 #+END_SRC
 
-We want to be able to open files from within eshell in the same way as
-we do from the command line shell in the os. For this I have define an
-alias which just uses find-file-other-window.
-To be able to open multiple files (so we can use $* as argument
-instead of just $1) we need to advice find-file-other-window to support this.
+We want to be able to open files from within eshell in the same way as we do from the command line shell in the os. For this I have define an alias which just uses find-file-other-window.  To be able to open multiple files (so we can use $* as argument instead of just $1) we need to advice find-file-other-window to support this.
 
 #+BEGIN_SRC emacs-lisp
   (require 'cl)
@@ -2519,17 +2239,13 @@ instead of just $1) we need to advice find-file-other-window to support this.
       ad-do-it))
 #+END_SRC
 
-Set the main directory for eshell, I do not want in in the default
-place but below the .emacs.d directory where all other configuration
-of emacs stuff is.
+Set the main directory for eshell, I do not want in in the default place but below the .emacs.d directory where all other configuration of emacs stuff is.
 
 #+BEGIN_SRC emacs-lisp
   (setq eshell-directory-name (concat emacs-directory "eshell/"))
 #+END_SRC
 
-A list of functions / filters through which interactive output is
-passed, most of this was copied from the default for adjustment
-here. I have not actually changed anything myself.
+A list of functions / filters through which interactive output is passed, most of this was copied from the default for adjustment here. I have not actually changed anything myself.
 
 #+BEGIN_SRC emacs-lisp
   (setq eshell-output-filter-functions
@@ -2542,9 +2258,7 @@ here. I have not actually changed anything myself.
           eshell-watch-for-password-prompt)))
 #+END_SRC
 
-As I am migrating from bash, I want eshell to behave as much like
-bash as possible. The next settings take care of some of the things
-to make that happen.
+As I am migrating from bash, I want eshell to behave as much like bash as possible. The next settings take care of some of the things to make that happen.
 
 #+BEGIN_SRC emacs-lisp
   ;; Do completions, but don't cycle
@@ -2559,9 +2273,7 @@ to make that happen.
   (add-to-list 'eshell-output-filter-functions 'eshell-postoutput-scroll-to-bottom)
 #+END_SRC
 
-Another step closer to a full terminal replacement is to be able to
-replace lxterminal (my terminal emulator in use now). This requires a
-number of parts:
+Another step closer to a full terminal replacement is to be able to replace lxterminal (my terminal emulator in use now). This requires a number of parts:
 1. something to call from the commandline instead of lxterminal
 2. a lisp function which takes care of the passthrough to eshell,
    creating the frame, etcetera.
@@ -2572,8 +2284,7 @@ The calling part is simpel:
 emacsclient -a "" -n -c -e '(mrb/server-eshell)'
 #+END_SRC
 
-The last bit of that command line is the function to evaluate, which
-was taken from http://ur1.ca/cf1m4 and sligthly adapted.
+The last bit of that command line is the function to evaluate, which was taken from http://ur1.ca/cf1m4 and sligthly adapted.
 
 #+BEGIN_SRC emacs-lisp
   (use-package cl)
@@ -2581,10 +2292,10 @@ was taken from http://ur1.ca/cf1m4 and sligthly adapted.
   (defun mrb/server-eshell ()
     "Command to be called by emacs-client to start a new shell.
 
-  A new eshell will be created. When the frame is closed, the buffer is deleted or the shell exits,
-  then hooks will take care that the other actions happen. For example, when the frame is closed,
-  then the buffer will be deleted and the client disconnected.
-  "
+  A new eshell will be created. When the frame is closed, the buffer is
+  deleted or the shell exits, then hooks will take care that the other
+  actions happen. For example, when the frame is closed, then the buffer
+  will be deleted and the client disconnected."
     (lexical-let ((buf (eshell t))
                   (client (first server-clients))
                   (frame (selected-frame)))
@@ -2600,8 +2311,7 @@ was taken from http://ur1.ca/cf1m4 and sligthly adapted.
       nil))
 #+END_SRC
 ** Process handling
-Sometimes processes get stuck and i want a way to delete those
-processes easily.
+Sometimes processes get stuck and i want a way to delete those processes easily.
 
 #+BEGIN_SRC emacs-lisp
   (defun mrb/delete-process-interactive ()
@@ -2614,49 +2324,31 @@ processes easily.
 * Completion
 I want completion to work as follows:
 
-1. completion functions are always bound to a keybinding involving the
-   TAB-key , with as little modifiers as possible;
-2. completion should *always* produce *something*, even if emacs has no
-   special semantic knowledge of the current mode, it should produce
-   /something/ which makes sense;
+1. completion functions are always bound to a keybinding involving the TAB-key , with as little modifiers as possible;
+2. completion should *always* produce *something*, even if emacs has no special semantic knowledge of the current mode, it should produce /something/ which makes sense;
 3. completion should be inline whenever possible.
-4. for each mode, a specialization is ok, if that improves the
-   situation; I expect to have many specialisations to improve the
-   autocomplete quality;
-5. if a completion window *must* be openened, do this at the same place
-   always and do not mess up other windows.
-6. Completion should behave somewhat like real-time systems. An
-   answer *must* be produced within a certain amount of time. If a
-   completion answer takes longer than the amount of type to type it
-   in full, the system has collapsed, so the time needs to be in the
-   order of one third of the typing time.
+4. for each mode, a specialization is ok, if that improves the situation; I expect to have many specialisations to improve the autocomplete quality;
+5. if a completion window *must* be openened, do this at the same place always and do not mess up other windows.
+6. Completion should behave somewhat like real-time systems. An answer *must* be produced within a certain amount of time. If a completion answer takes longer than the amount of type to type it in full, the system has collapsed, so the time needs to be in the order of one third of the typing time.
 
 The next secions deal with the above requirments
 ** Ad 1. Bind completion always involves TAB-key
-The package =smart-tab= seems to fit this bill, but the thing that I
-care about can be achieved fine without it (I only found this out
-after considerable time using smart-tab).
+The package =smart-tab= seems to fit this bill, but the thing that I care about can be achieved fine without it (I only found this out after considerable time using smart-tab).
 
-So, tab tries to indent, which is the main expectation, and if it
-can't it tries to complete stuff.
+So, tab tries to indent, which is the main expectation, and if it can't it tries to complete stuff.
 
 #+BEGIN_SRC emacs-lisp
   (setq tab-always-indent 'complete)
 #+END_SRC
 
-In a standard emacs installation, TAB indents, depending on mode
-obviously. If indenting would not make sense, a TAB can be inserted or
-completion could start. The funciton =completion-at-point= is used in
-some situations. Ideally the =company-complete= function could take
-over in many cases. Here's a simplistic approach to get me started:
+In a standard emacs installation, TAB indents, depending on mode obviously. If indenting would not make sense, a TAB can be inserted or completion could start. The funciton =completion-at-point= is used in some situations. Ideally the =company-complete= function could take over in many cases. Here's a simplistic approach to get me started:
  1. if in minibuffer, do completion there like we are used to;
  2. if cursor is at the end of a symbol, try to complet it with company;
  3. else, indent according to mode.
 
 This is probably incomplete or wrong even in some cases, but it's a start.
 
-This way, TAB always does completion or indent, unless company-mode is
-not active.
+This way, TAB always does completion or indent, unless company-mode is not active.
 
 ** Ad 2. Completion should always produce something
 Not sure if there is anything to do here.
@@ -2665,12 +2357,10 @@ With inline completion I mean without opening a whole new
 **Completions** window if not needed.
 
 Content that I want:
-- languages: lisp, python, ruby, bash, C/C++ roughtly in that order
-  (function and argument completion)
+- languages: lisp, python, ruby, bash, C/C++ roughtly in that order (function and argument completion)
 - for all languages, function/method signature shorthands
 - speed, slowness is killing here
-- prevent minibuffer distractions, put info where my eyes are and that
-  is the cursor in most cases.
+- prevent minibuffer distractions, put info where my eyes are and that is the cursor in most cases.
 - maybe: spelling suggestions
 - nick completion in irc channels
 
@@ -2678,32 +2368,15 @@ Candidates:
 - auto-complete :: http://cx4a.org/software/auto-complete/
 - company-mode :: http://company-mode.github.io
 
-I had auto-complete installed for a while and this worked fine. I am
-migrating to company-mode now, as it seems a lot faster and a lot
-easier to write backends for. Also, company mode gets more praise from
-emacs users, but I recall having problems with it. Anyway, let's
-enable company-mode everywhere for everything except for some modes
-which we know lead to problems.
+I had auto-complete installed for a while and this worked fine. I am migrating to company-mode now, as it seems a lot faster and a lot easier to write backends for. Also, company mode gets more praise from emacs users, but I recall having problems with it. Anyway, let's enable company-mode everywhere for everything except for some modes which we know lead to problems.
 
-The capf backend uses 'completion-at-point-functions' as source for
-candidates, which is what emacs by default does, so I want that in my
-backend-lists. This backend gets added automatically when emacs
-version is larger than 24.3.50. I'm not sure what the logic is behind
-that, as there is no mention of it not working before that version?
-Assuming that there is a good reason, I'm not going to do anything to
-the backends list for now.
+The capf backend uses 'completion-at-point-functions' as source for candidates, which is what emacs by default does, so I want that in my backend-lists. This backend gets added automatically when emacs version is larger than 24.3.50. I'm not sure what the logic is behind that, as there is no mention of it not working before that version?  Assuming that there is a good reason, I'm not going to do anything to the backends list for now.
 
-The default colors of =company-mode= are horrendous, but I have put
-some corrections by executing a snippet, based on standard
-color-names. The snippet is here:
-http://www.emacswiki.org/CompanyMode#toc7
+The default colors of =company-mode= are horrendous, but I have put some corrections by executing a snippet, based on standard color-names. The snippet is here: http://www.emacswiki.org/CompanyMode#toc7
 
-The default keybindings needs changing too; moving the selection up
-and down is mapped to C-p and C-n, just like moving the cursor in
-normal text.
+The default keybindings needs changing too; moving the selection up and down is mapped to C-p and C-n, just like moving the cursor in normal text.
 
-Having the completion pop up automatically is annoying in most cases,
-so I disable that and when the popup is there, don't require a match.
+Having the completion pop up automatically is annoying in most cases, so I disable that and when the popup is there, don't require a match.
 
 #+BEGIN_SRC emacs-lisp
   (use-package company
@@ -2741,15 +2414,10 @@ so I disable that and when the popup is there, don't require a match.
 #+END_SRC
 
 ** Ad 4. Mode specialisation
-There's always exceptions to the rule; with Emacs doubly so. Here's
-the relevant exceptions for my configuration.
+There's always exceptions to the rule; with Emacs doubly so. Here's the relevant exceptions for my configuration.
 
 ** Ad 5. Open completion window predictably
-If there is a need to open a **Completions** window, let's at least do
-it predictably, so I know what and where to expect it.
-The =popwin= package make this behaviour a bit more
-predictable by showing it in the same place and making sure I can get
-rid of it easily.
+If there is a need to open a **Completions** window, let's at least do it predictably, so I know what and where to expect it.  The =popwin= package make this behaviour a bit more predictable by showing it in the same place and making sure I can get rid of it easily.
 
 As popwin is a dependency of which-key, we already have it.
 
@@ -2759,10 +2427,7 @@ As popwin is a dependency of which-key, we already have it.
     (popwin-mode 1))
 #+END_SRC
 
-For most of the completion that is needed which is not inline (for
-which I am using the =company= package, helm seems to be the most
-powerful solution. I used to use ido, but helm seems a lot easier and
-more broad.
+For most of the completion that is needed which is not inline (for which I am using the =company= package, helm seems to be the most powerful solution. I used to use ido, but helm seems a lot easier and more broad.
 
 #+begin_src emacs-lisp
   (use-package helm
@@ -2777,8 +2442,7 @@ more broad.
   )
 #+end_src
 ** Ad 6. Guaranteed response-time
-I haven't found a solution for this yet, but also have not found it to
-be a problem that needs solving in practice so far.
+I haven't found a solution for this yet, but also have not found it to be a problem that needs solving in practice so far.
 
 * Editing control
 
@@ -2789,24 +2453,14 @@ The multiple cursors package is often used for repetitive editting.
 #+END_SRC
 
 ** Navigation
-Navigating pieces of text effectively is probably the best
-optimization to make in the emacs configuration.
+Navigating pieces of text effectively is probably the best optimization to make in the emacs configuration.
 
-In my browser I use vimium to jump to links with the keyboard. In
-emacs =avy= does something similar. On pressing the hotkey,
-all matches of the first char typed are highlighted (frame wide) by a
-single character. By pressing that characator the cursor is place
-there directly. This makes =within-frame= navigation a 3-key
-operation, which is considerably faster than anything else.
+In my browser I use vimium to jump to links with the keyboard. In emacs =avy= does something similar. On pressing the hotkey, all matches of the first char typed are highlighted (frame wide) by a single character. By pressing that characator the cursor is place there directly. This makes =within-frame= navigation a 3-key operation, which is considerably faster than anything else.
 
-In a more general sense, =evil-mode=, the VI emulation layer on top of
-emacs, is the ultimate navigational package. I have tried this for
-about 6 months, but it's not for me yet.
+In a more general sense, =evil-mode=, the VI emulation layer on top of emacs, is the ultimate navigational package. I have tried this for about 6 months, but it's not for me yet.
 
 * Remote editing
-As my default shell is =zsh= tramp does not work out of the box for
-me. It gets confused by my prompt, so on top of my =.zshrc= file I have
-the following line:
+As my default shell is =zsh= tramp does not work out of the box for me. It gets confused by my prompt, so on top of my =.zshrc= file I have the following line:
 
 #+BEGIN_SRC sh
 # Immediately bail out if we are coming in with a dumb terminal
@@ -2814,10 +2468,7 @@ the following line:
 [[ $TERM == "dumb" ]] && unsetopt zle && PS1='$ ' && return
 #+END_SRC
 
-Once that is in place files can be opened with
-=/ssh:/host:/path/to/file= syntax. Surprisingly, the syntax I got used
-to in the past (i.e. =/host:/path/to/file=) does not work for my
-anymore.
+Once that is in place files can be opened with =/ssh:/host:/path/to/file= syntax. Surprisingly, the syntax I got used to in the past (i.e. =/host:/path/to/file=) does not work for my anymore.
 
 #+BEGIN_SRC emacs-lisp
   (use-package tramp
@@ -2825,10 +2476,7 @@ anymore.
     (setq default-tramp-method "ssh"))
 #+END_SRC
 * Browser integration
-My default browser, as set in the OS, should be started automatically
-on opening =http:= like stuff and =html= files. The only link to the
-/outside world/ is specifying that =xdg-open= should figure out what
-program to use.
+My default browser, as set in the OS, should be started automatically on opening =http:= like stuff and =html= files. The only link to the /outside world/ is specifying that =xdg-open= should figure out what program to use.
 
 #+BEGIN_SRC emacs-lisp
   (setq browse-url-browser-function (quote browse-url-generic))
@@ -2836,11 +2484,7 @@ program to use.
 #+END_SRC
 * Messaging and chatting
 ** Mail
-This section describes a search for the mail setup I want in
-Emacs. There are a few mail related packages and I'm unsure at what I
-want to use; reading the feature list doesn't cut it.
-So, I'm having a setup where multiple mail handling packages may exist
-and hopefully one will float to the top as being *the one*
+This section describes a search for the mail setup I want in Emacs. There are a few mail related packages and I'm unsure at what I want to use; reading the feature list doesn't cut it.  So, I'm having a setup where multiple mail handling packages may exist and hopefully one will float to the top as being *the one*
 
 *** Sending mail
 Sending mail through smtp, using the smtpmail package
@@ -2868,11 +2512,7 @@ Sending mail through smtp, using the smtpmail package
 #+END_SRC
 
 *** Composing mail
-Composing mail is often an /out of band/ activity, like creating a tweet
-or a capture, so I would like to have roughly the same behaviour. This
-is by default provided by compose-mail-other-frame, but I could not
-get awesome to properly place the windows because it's hard to match
-on the varying name that xprop delivers, so. we make our own window.
+Composing mail is often an /out of band/ activity, like creating a tweet or a capture, so I would like to have roughly the same behaviour. This is by default provided by compose-mail-other-frame, but I could not get awesome to properly place the windows because it's hard to match on the varying name that xprop delivers, so. we make our own window.
 
 #+BEGIN_SRC emacs-lisp
   ;; Get the number of lines on this display, so we can
@@ -2949,11 +2589,7 @@ on the varying name that xprop delivers, so. we make our own window.
      (file-name-extension file t)))
 #+END_SRC
 
-To be able to use the =mailcompose-frame= function as a mailto handler we need to be
-able to call it from outside of emacs. Let's define a small shell script that
-does exactly this. The SRC attributes tangle it into my =bin= directory
-where is will be in the path. In the OS, this script will need to be
-set as the default mail handler.
+To be able to use the =mailcompose-frame= function as a mailto handler we need to be able to call it from outside of emacs. Let's define a small shell script that does exactly this. The SRC attributes tangle it into my =bin= directory where is will be in the path. In the OS, this script will need to be set as the default mail handler.
 
 #+BEGIN_SRC sh :exports code :tangle ~/bin/mailto-handler :shebang #!/bin/sh
   # Emacs mailto URI handler
@@ -2971,15 +2607,13 @@ set as the default mail handler.
 
 #+END_SRC
 
-On top of that, I want a manual capture script which is basically the
-same as the mailto handler.
+On top of that, I want a manual capture script which is basically the same as the mailto handler.
 #+BEGIN_SRC sh :exports code :tangle ~/bin/capture-mail.sh :shebang #!/bin/sh
 edit -e '(mrb/make-mailcompose-frame)'
 #+END_SRC
 
 *** Other message related settings
-It's not entirely clear which package is exactly responsible for what,
-but there are a few settings which are related to the =message= package
+It's not entirely clear which package is exactly responsible for what, but there are a few settings which are related to the =message= package
 
 #+BEGIN_SRC emacs-lisp
   (use-package message
@@ -3026,14 +2660,9 @@ but there are a few settings which are related to the =message= package
 #+END_SRC
 
 *** Notmuch
-Not having used GNUS enough to be comfortable, notmuch seems a route
-which can be taken somewhat easier. The compose part of emails is,
-with the capture like frame, basically done. The one thing which was a
-bit messy was the address completion which was supposed to go to an
-LDAP directory tied to an ODOO instance.
+Not having used GNUS enough to be comfortable, notmuch seems a route which can be taken somewhat easier. The compose part of emails is, with the capture like frame, basically done. The one thing which was a bit messy was the address completion which was supposed to go to an LDAP directory tied to an ODOO instance.
 
-The cop-out intermediate solution is address completion by notmuch
-itself, which has proven to work fine so far.
+The cop-out intermediate solution is address completion by notmuch itself, which has proven to work fine so far.
 
 First, let's activate notmuch itself.
 
@@ -3255,18 +2884,14 @@ First, let's activate notmuch itself.
         'mrb/notmuch-address-selection-function)
 #+END_SRC
 
-Since we use org and notmuch, makes sense to support linking from one
-to the other. The =org-notmuch= package is not part of org nor part of
-notmuch though.
+Since we use org and notmuch, makes sense to support linking from one to the other. The =org-notmuch= package is not part of org nor part of notmuch though.
 
 #+BEGIN_SRC emacs-lisp
 (use-package org-notmuch
   :load-path "~/.emacs.d/lisp/")
 #+END_SRC
 *** Sieve
-Cyrus sieve is used on the server to filter our mail and this is
-accessed by the sieve-manage package. For some reason I can't get the
-'^M' characters out of the process, so here's a hack for that
+Cyrus sieve is used on the server to filter our mail and this is accessed by the sieve-manage package. For some reason I can't get the '^M' characters out of the process, so here's a hack for that
 
 #+BEGIN_SRC emacs-lisp
 (use-package sieve
@@ -3283,11 +2908,9 @@ accessed by the sieve-manage package. For some reason I can't get the
   (add-hook 'sieve-mode-hook 'dos2unix)
 #+END_SRC
 
-which basically goes over the whole sieve script and removes the '^M'
-characters from the buffer
+which basically goes over the whole sieve script and removes the '^M' characters from the buffer
 ** Elfeed
-In an attempt to do even more in emacs, i've installed `elfeed' and
-imported my feeds from RSSyl
+In an attempt to do even more in emacs, i've installed `elfeed' and imported my feeds from RSSyl
 
 
 #+BEGIN_SRC emacs-lisp
@@ -3353,12 +2976,7 @@ imported my feeds from RSSyl
 
 #+END_SRC
 
-Elfeed allows to interactively subscribe to a feed (defaulting to
-what is in the clipboard. Managing elfeed-feeds as a variable is kinda
-clumsy, although very flexible. There is a middle ground which fits me
-even better. At the cost of the bare-bone flexibilith of having the
-feeds directly in lisp, I'm using an orgmode file to record the feeds
-i want.
+Elfeed allows to interactively subscribe to a feed (defaulting to what is in the clipboard. Managing elfeed-feeds as a variable is kinda clumsy, although very flexible. There is a middle ground which fits me even better. At the cost of the bare-bone flexibilith of having the feeds directly in lisp, I'm using an orgmode file to record the feeds i want.
 
 #+BEGIN_SRC emacs-lisp
   (use-package elfeed-org
@@ -3368,9 +2986,7 @@ i want.
     (elfeed-org))
 #+END_SRC
 ** IRC
-I'm experimenting with Weechat now, mostly because it has multiple
-clients and can make my IRC experience a bit more like Telegram,
-i.e. regardless of client, the chat state remains the same.
+I'm experimenting with Weechat now, mostly because it has multiple clients and can make my IRC experience a bit more like Telegram, i.e. regardless of client, the chat state remains the same.
 
 #+BEGIN_SRC emacs-lisp
   (use-package weechat
@@ -3428,21 +3044,11 @@ Not messaging or chatting perse, but a microblog social network.
 * Development settings
 Some settings which aid in development tasks.
 
-Trailing whitespace can sneak into files without knowing it. I could
-enable the display of trailing whitespace, but I find that annoying
-to look at. Instead I just remove it just before saving a file.
-One solution is to enable a before-save-hook, which would make me the
-trailing-whitespace police in all projects.
+Trailing whitespace can sneak into files without knowing it. I could enable the display of trailing whitespace, but I find that annoying to look at. Instead I just remove it just before saving a file.  One solution is to enable a before-save-hook, which would make me the trailing-whitespace police in all projects.
 
-Alternatively a package ws-butler exists on github, which solves this
-exact problem. It implements the removal of whitespace on top of the
-highlight-changes-mode which, at least in theory, would remove only
-the trailing whitespace on changes I have made.
+Alternatively a package ws-butler exists on github, which solves this exact problem. It implements the removal of whitespace on top of the highlight-changes-mode which, at least in theory, would remove only the trailing whitespace on changes I have made.
 
-However, this is problematic. It needs a special initialization
-because I run in server mode (doable), but its global mode is way to
-global, because it just applies to all buffers, which lead to errors
-on non-file buffers; for example because they are read-only.
+However, this is problematic. It needs a special initialization because I run in server mode (doable), but its global mode is way to global, because it just applies to all buffers, which lead to errors on non-file buffers; for example because they are read-only.
 
 ** Generic
 Lets try to use ggtags everywhere.
@@ -3450,10 +3056,7 @@ Lets try to use ggtags everywhere.
   (use-package ggtags)
 #+END_SRC
 
-Not specific to development, but extra useful, is folding of text
-sections. Origami mode seems to be the generic solution for
-it. Initially, let's not be too greedy with the keybindings and do it
-by mode. M-Tab seems to be the natural choice for me.
+Not specific to development, but extra useful, is folding of text sections. Origami mode seems to be the generic solution for it. Initially, let's not be too greedy with the keybindings and do it by mode. M-Tab seems to be the natural choice for me.
 
 #+BEGIN_SRC emacs-lisp
   (use-package origami
@@ -3466,8 +3069,7 @@ by mode. M-Tab seems to be the natural choice for me.
 
 #+END_SRC
 
-Make our source look a bit more attractive by enabling
-=prettify-symbol-mode= in all programming modes
+Make our source look a bit more attractive by enabling =prettify-symbol-mode= in all programming modes
 
 #+BEGIN_SRC emacs-lisp
   ;; List of replacements, this needs to be a function to eval in hook scope
@@ -3486,8 +3088,7 @@ Make our source look a bit more attractive by enabling
   (add-hook 'prog-mode-hook 'mrb/prettify-symbols)
 #+END_SRC
 
-I think most of my documentation needs can be fulfilled with
-=(helm-)dash=
+I think most of my documentation needs can be fulfilled with =(helm-)dash=
 
 #+begin_src emacs-lisp
 (use-package helm-dash
@@ -3501,20 +3102,12 @@ I think most of my documentation needs can be fulfilled with
 #+end_src
 
 ** Reference & documentation
-While emacs itself has a very nicely documentation system, I still
-don't understand why this is not interpolated into every other mode
-and or language.
+While emacs itself has a very nicely documentation system, I still don't understand why this is not interpolated into every other mode and or language.
 
-Example: =C-h-f= in lisp-mode describes the function to me. If I am in a
-python file, I want it to do exactly the same, but for the python
-function.
-There's a page on emacswiki dealing with this a bit:
-https://www.emacswiki.org/emacs/Context_sensitive_help
+Example: =C-h-f= in lisp-mode describes the function to me. If I am in a python file, I want it to do exactly the same, but for the python function.  There's a page on emacswiki dealing with this a bit: https://www.emacswiki.org/emacs/Context_sensitive_help
 
 *** RFC document reader
-I often need to consult RFC documents, so not having to leave emacs
-for that and be able to use all tools on RFC documents is very
-helpful.
+I often need to consult RFC documents, so not having to leave emacs for that and be able to use all tools on RFC documents is very helpful.
 
 #+begin_src emacs-lisp
 ;; Special mode to read rfc documents locally
@@ -3526,8 +3119,7 @@ helpful.
 #+end_src
 
 ** Coding styles
-Different projects use different coding styles. The ones I need I'll
-gather here for now.
+Different projects use different coding styles. The ones I need I'll gather here for now.
 
 My personal style will be called =mrb= and basing it on the =linux= style.
 #+BEGIN_SRC emacs-lisp
@@ -3548,10 +3140,7 @@ My personal style will be called =mrb= and basing it on the =linux= style.
 #+END_SRC
 
 ** Haskell
-I am just starting out with haskell, but the two things that are
-probably needed in any case are a mode to use when editting Haskell
-source (*.hs files) and the ghc-mod package to help with completion
-and showing syntax errors.
+I am just starting out with haskell, but the two things that are probably needed in any case are a mode to use when editting Haskell source (*.hs files) and the ghc-mod package to help with completion and showing syntax errors.
 
 #+BEGIN_SRC emacs-lisp
   (use-package haskell-mode
@@ -3571,11 +3160,7 @@ and showing syntax errors.
     (setq haskell-font-lock-symbols t))
 #+END_SRC
 
-Because the haskell environment can be different for each project, we
-need a way to adjust to that for certain things. One such thing is
-flycheck which will give false-negatives when checking haskell files
-if the specific build environment is not taken into account. The
-package flycheck-haskell automatically adjusts flycheck.
+Because the haskell environment can be different for each project, we need a way to adjust to that for certain things. One such thing is flycheck which will give false-negatives when checking haskell files if the specific build environment is not taken into account. The package flycheck-haskell automatically adjusts flycheck.
 
 #+BEGIN_SRC emacs-lisp
   (use-package flycheck-haskell
@@ -3584,8 +3169,7 @@ package flycheck-haskell automatically adjusts flycheck.
       '(add-hook 'flycheck-mode-hook #'flycheck-haskell-setup)))
 #+END_SRC
 
-For creating web apps I use yesod, which is supported by a number of
-packages
+For creating web apps I use yesod, which is supported by a number of packages
 #+BEGIN_SRC emacs-lisp
   ;; Yesod's html like files
   (use-package hamlet-mode)
@@ -3595,13 +3179,9 @@ packages
 
 #+END_SRC
 ** Python
-Python is an indent aware language, wich saves quite a bit of fiddling
-around with parenthes and what have you.
+Python is an indent aware language, wich saves quite a bit of fiddling around with parenthes and what have you.
 
-Having lines truncated is the preferred way in python, usually lines
-will be short enough anyway, but I can't have line automatically
-folding because that disturbs the way I think when looking at python
-code.
+Having lines truncated is the preferred way in python, usually lines will be short enough anyway, but I can't have line automatically folding because that disturbs the way I think when looking at python code.
 
 #+BEGIN_SRC emacs-lisp
   (use-package elpy
@@ -3624,15 +3204,9 @@ code.
                 ("C-h f" . godoc-at-point)))
 #+END_SRC
 ** Lisp-like
-There are a number of languages which are lisp-like, not in the least
-Emacs lisp itself. It makes sense to group the configuration for these
-languages together. In the first part there will be configuration for
-all lisp-like languages (like the =paredit= configuration for
-example). For each specific implementation there may be augmentations
-to the config, or even a completely separate.
+There are a number of languages which are lisp-like, not in the least Emacs lisp itself. It makes sense to group the configuration for these languages together. In the first part there will be configuration for all lisp-like languages (like the =paredit= configuration for example). For each specific implementation there may be augmentations to the config, or even a completely separate.
 
-For all of those languages, I want to use paredit which makes
-editting, longer term, a lot more productive.
+For all of those languages, I want to use paredit which makes editting, longer term, a lot more productive.
 
 #+BEGIN_SRC emacs-lisp
   (use-package paredit
@@ -3646,13 +3220,9 @@ editting, longer term, a lot more productive.
     (add-hook 'lisp-mode-hook #'enable-paredit-mode))
 #+END_SRC
 
-When a mode wants to use paredit, it can use the same constructs as
-above to enable paredit on it modes.
+When a mode wants to use paredit, it can use the same constructs as above to enable paredit on it modes.
 
-While we're here, let's do paxedit as well; not sure whey these two
-package don't merge. It's the same thing. I'm just gonna treat them as
-one here and enable =paxedit= whenever paredit gets enabled, but I'll be
-a bit conservative with the keybindings first.
+While we're here, let's do paxedit as well; not sure whey these two package don't merge. It's the same thing. I'm just gonna treat them as one here and enable =paxedit= whenever paredit gets enabled, but I'll be a bit conservative with the keybindings first.
 
 #+BEGIN_SRC emacs-lisp
   (use-package paxedit
@@ -3667,10 +3237,7 @@ a bit conservative with the keybindings first.
 #+END_SRC
 
 *** Scheme
-[[https://www.nongnu.org/geiser][Geiser]] is, among other things, a repl for schemes. I try to use one,
-mostly for educational purposes. I chose guile because it also claims to
-support emacs-lisp and might be the future vm on which emacs-lisp will
-run. So, let's have it and use paredit in its REPL.
+[[https://www.nongnu.org/geiser][Geiser]] is, among other things, a repl for schemes. I try to use one, mostly for educational purposes. I chose guile because it also claims to support emacs-lisp and might be the future vm on which emacs-lisp will run. So, let's have it and use paredit in its REPL.
 
 #+BEGIN_SRC emacs-lisp
   (use-package geiser
@@ -3683,8 +3250,7 @@ run. So, let's have it and use paredit in its REPL.
 #+END_SRC
 
 *** Common lisp
-The defacto standard for a development environment in Emacs for
-common-lisp is the the =slime= package.
+The defacto standard for a development environment in Emacs for common-lisp is the the =slime= package.
 
 #+BEGIN_SRC emacs-lisp
   (use-package slime
@@ -3751,16 +3317,11 @@ common-lisp is the the =slime= package.
 
 #+END_SRC
 
-On first glance, it looks like slime is a lot nicer than =geiser= +
-=guile=. I read that =slime= has support for MIT-Scheme as a backend so
-perhaps I should use that instead of guile.
+On first glance, it looks like slime is a lot nicer than =geiser= + =guile=. I read that =slime= has support for MIT-Scheme as a backend so perhaps I should use that instead of guile.
 ** Gcode
-I'm not in the habit of editting gcode, but every now and then I need
-to look at it and I want it reasonably decent. My usecase is just
-sending gcode to my 3D-printer which runs Marlin firmware.
+I'm not in the habit of editting gcode, but every now and then I need to look at it and I want it reasonably decent. My usecase is just sending gcode to my 3D-printer which runs Marlin firmware.
 
-Using =define-generic-mode= is more than enough to define something
-useful for me.
+Using =define-generic-mode= is more than enough to define something useful for me.
 
 #+begin_src emacs-lisp
   (require 'generic-x)
@@ -3779,8 +3340,7 @@ useful for me.
     "Mode for marlin g-code files.")
 #+end_src
 ** Openscad
-Openscad is a script based 3d parametric drawing program. Obviously
-I'm editting those scripts in emacs.
+Openscad is a script based 3d parametric drawing program. Obviously I'm editting those scripts in emacs.
 
 #+begin_src emacs-lisp
   (use-package scad-mode
@@ -3788,8 +3348,7 @@ I'm editting those scripts in emacs.
     (setq scad-keywords '("return" "true" "false" "include")))
 #+end_src
 ** SQL
-SQL has a number of different dialects I use, depending on the
-database software in use.
+SQL has a number of different dialects I use, depending on the database software in use.
 
 #+begin_src emacs-lisp
   (setq sql-server "dbserver.hsdev.com"
@@ -3797,18 +3356,12 @@ database software in use.
 #+end_src
 
 ** GIT integration
-A common factor in all my development is the use of git. For emacs
-this automatically means Magit. I've used eshell in the past but that
-config didn't work out.
+A common factor in all my development is the use of git. For emacs this automatically means Magit. I've used eshell in the past but that config didn't work out.
 
 *** Magit
-For most, if not all development work (and some other work too) I use
-git as the revision control system. In emacs that translates to using
-magit, so let's begin with bringing that in.
+For most, if not all development work (and some other work too) I use git as the revision control system. In emacs that translates to using magit, so let's begin with bringing that in.
 
-Magit forge is a submodule for magit which helps in managing
-repositories in forges (notably github and gitlab). This looks very
-promising, albeit slow.
+Magit forge is a submodule for magit which helps in managing repositories in forges (notably github and gitlab). This looks very promising, albeit slow.
 
 Features I'm interested in: issue commenting, pull requests
 
@@ -3834,29 +3387,19 @@ Features I'm interested in: issue commenting, pull requests
 #+END_SRC
 
 *** Commiting automatically
-I have lost a number of changes in the past because I reverted a file,
-made a mistake or whatever. Some of these mistakes can be reverted
-easily if saves are automatically committed
+I have lost a number of changes in the past because I reverted a file, made a mistake or whatever. Some of these mistakes can be reverted easily if saves are automatically committed
 
-Rather than using an after save hook, there is a minor git-auto-commit
-mode package which does just what I need.
+Rather than using an after save hook, there is a minor git-auto-commit mode package which does just what I need.
 
-There is not much to configure for this minor mode. There are a couple
-of ways to enable it:
+There is not much to configure for this minor mode. There are a couple of ways to enable it:
 1. file-local variable (put it in the file to be autocommitted)
 2. directory-local variable (make a =.dir-locals.el= file); this
    enables it for all files in the directory
 3. as a hook
 
-I'm using the first method on relevant files. The disadvantage of this
-method is that you have to think about it for each file, so perhaps a
-=.dir-locals.el= is a better solution.
+I'm using the first method on relevant files. The disadvantage of this method is that you have to think about it for each file, so perhaps a =.dir-locals.el= is a better solution.
 
-I am considering using a generic hook again to enable the method and
-either using =git commit --amend= and commit squashing if working on
-more structured commits. For files that I really do not want
-autocommit to run I can use a file local variable to disable the hook
-(or the minor mode)
+I am considering using a generic hook again to enable the method and either using =git commit --amend= and commit squashing if working on more structured commits. For files that I really do not want autocommit to run I can use a file local variable to disable the hook (or the minor mode)
 
 #+BEGIN_SRC emacs-lisp
   (use-package git-auto-commit-mode
@@ -3867,9 +3410,7 @@ autocommit to run I can use a file local variable to disable the hook
   (use-package gist)
 #+END_SRC
 * Machine specific configurations
-The aim is to have the exact same configuration on each machine, but
-there may be occasions where is pays to have a slight difference in
-configuration on different machines.
+The aim is to have the exact same configuration on each machine, but there may be occasions where is pays to have a slight difference in configuration on different machines.
 
 #+BEGIN_SRC emacs-lisp
   (pcase (system-name)
