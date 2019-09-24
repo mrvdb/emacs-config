@@ -3032,13 +3032,13 @@ I'm experimenting with Weechat now, mostly because it has multiple clients and c
          weechat-mode-default)))
 #+END_SRC
 ** Mastodon
-Not messaging or chatting perse, but a microblog social network.
+Not messaging or chatting perse, but a microblog social network. The 'capture a toot' is hotkeyed through =xbindkeys= like other capture commands.
 
 #+begin_src emacs-lisp
 ;; Mastodon in emacs
 (use-package mastodon
   :config
-  (setq mastodon-instance-url "https://todon.nl"
+  (setq mastodon-instance-url "https://mastodon.nl"
 	mastodon-auth-source-file "~/.authinfo.gpg")
 
   ;; Convenience function
