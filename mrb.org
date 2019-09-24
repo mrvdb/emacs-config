@@ -543,7 +543,8 @@ starting with the =base16-nord= theme and see where this leaves me.
 
             ;; Helm selection
             (helm-selection :foreground "black" :background "goldenrod2")
-            (fringe :foreground "#a3be8c")))
+            (fringe :foreground "#a3be8c")
+            (hl-line :background "#5e81ac")))
 
     ;; Apply our adjustment using the theme function
     (base16-set-faces 'base16-nord base16-nord-colors base16-adjustments)
