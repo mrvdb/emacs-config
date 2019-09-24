@@ -666,17 +666,9 @@ Line-numbering is off by default, it tends to slow things down, but if I want it
 #+END_SRC
 
 ** Client dependent settings
-Because most of my usage involves having a long lasting emacs daemon,
-some settings only come into scope once a client connects to that
-daemon. Most of these settings have to do with appearance and are
-related to having X available.
-Anyways, some settings need to be moved to the event when a client
-visits the server, so we can still apply these settings transparently.
+Because most of my usage involves having a long lasting emacs daemon, some settings only come into scope once a client connects to that daemon. Most of these settings have to do with appearance and are related to having X available.  Anyways, some settings need to be moved to the event when a client visits the server, so we can still apply these settings transparently.
 
-Note that if this code is evaluated any call to emacsclient (be that
-from external or, more importantly Magit) will try to run this code
-and magit will fail if there's an error in the next section. Take
-extra care here.
+Note that if this code is evaluated any call to emacsclient (be that from external or, more importantly Magit) will try to run this code and magit will fail if there's an error in the next section. Take extra care here.
 #+BEGIN_SRC emacs-lisp
   (defun mrb/run-client-settings(&optional args)
     (interactive)
