@@ -2638,9 +2638,6 @@ It's not entirely clear which package is exactly responsible for what, but there
      ;; Always put one in the Sent folder on sending
      message-default-mail-headers "Bcc: mrb+Sent@hsdev.com\n"
 
-     ;; Don't use a special header separator
-     mail-header-separator ""
-
      ;; How to attribute
      message-citation-line-format "[%N]:"
      ;; Make sure we use it
@@ -2679,7 +2676,7 @@ First, let's activate notmuch itself.
     ;; having hard newlines, so lets always enable those
     (use-hard-newlines t 'always)
 
-    ;; Use visual line mode and visually break at 66 which
+    ;; Use visual line mode and visually break at word boundaries which
     ;; is the same as the email encoding on send (see below)
     (visual-line-mode 1)
 
@@ -2687,9 +2684,8 @@ First, let's activate notmuch itself.
     ;; everything up, so make sure it is off.
     (auto-fill-mode 0)
 
-    ;; Adapt fill column to what encoding would do (not actually needed)
-    ;; and make visual-mode adhere to it.
-    (setq visual-fill-column-width 72)
+    ;; Adapt visual fill column locally to a reasonable value
+    (setq visual-fill-column-width 66)
     (visual-fill-column-mode 1)
 
     ;; Next, do the encoding and sending part
