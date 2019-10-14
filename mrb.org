@@ -2502,7 +2502,7 @@ Sending mail through smtp, using the smtpmail package
     (setq
      smtpmail-local-domain user-domain
      smtpmail-sendto-domain user-domain
-     ;; User agent style is message mode
+     ;; User agent style is message mode by default, specific mail packages may override this
      mail-user-agent 'message-user-agent
      send-mail-function 'smtpmail-send-it                 ;; This is for mail-mode
      message-send-mail-function 'message-smtpmail-send-it) ;; This is for message-mode
@@ -2542,8 +2542,8 @@ Composing mail is often an /out of band/ activity, like creating a tweet or a ca
     (if (and (stringp mailto-url)
              (string-match "\\`mailto:" mailto-url))
         (browse-url-mail mailto-url)
-      ;; No mailto, argument, just run compose mail in notmuch mua
-      (notmuch-mua-new-mail))
+      ;; No mailto, argument, just run the mua
+      (mu4e-compose-new))
 
     ;; Delete other windows from the frame we are composing it in.
     (delete-other-windows))
@@ -2557,6 +2557,7 @@ Composing mail is often an /out of band/ activity, like creating a tweet or a ca
     (if (equal "mailcompose" (frame-parameter nil 'name))
         (delete-frame)))
 
+  ;; CHECK: how do we deal with this using mu4e? Needed?
   (defun  mrb/make-mailreply-frame (mid &optional all)
     "Create a frame in which we reply to message id `mid`.
        which is of the form 'id:<mid>'"
@@ -2581,7 +2582,7 @@ Composing mail is often an /out of band/ activity, like creating a tweet or a ca
     (interactive)
     (let* ((file (buffer-file-name))
            (mimetype (mrb/mimetype file)))
-      (notmuch-mua-new-mail)
+      (mu4e-compose-new)
       (mml-attach-file file mimetype (concat mimetype " attachment") "attachment")))
 
   ;; We can either use file(1) in the OS or mailcap.
@@ -2656,7 +2657,50 @@ It's not entirely clear which package is exactly responsible for what, but there
     ;; Face for third and higher level of quoting
     (defface message-multiply-quoted-text-face
       '((t (:inherit org-level-3)))
-      "Third level quotations in email"))
+      "Third level quotations in email")
+
+    (defun mrb/message-mode-hook ()
+      "This configures message mode and thus notmuch-message mode."
+      ;; We have to make sure that the messages we produce are
+      ;; format=flowed compatible. This happens on encoding when sending
+      ;; it. However, during compose we need to make sure that what we
+      ;; offer to encode is suitable for it.
+
+      ;; Let's do the compose part first No reflowing is possible without
+      ;; having hard newlines, so lets always enable those
+      (use-hard-newlines t 'always)
+
+      ;; Use visual line mode and visually break at word boundaries which
+      ;; is the same as the email encoding on send (see below)
+      (visual-line-mode 1)
+
+      ;; Auto-fill makes no sense anymore now, and will in fact mess
+      ;; everything up, so make sure it is off.
+      (auto-fill-mode 0)
+
+      ;; Adapt visual fill column locally to a reasonable value
+      (setq visual-fill-column-width 66)
+      (visual-fill-column-mode 1)
+
+      ;; Next, do the encoding and sending part
+      ;; Set the fill column on encoding (send)
+      ;; Q: where does the 66 come from, surely it could be a little bit more?
+      (setq fill-flowed-encode-column 66)
+
+      ;; This enables the f=f encoding
+      (setq mml-enable-flowed t)
+
+      ;; Add some color to quoted lines
+      (font-lock-add-keywords
+       nil
+       '(("^[ \t]*>[ \t]*>[ \t]*>.*$"
+          (0 'message-multiply-quoted-text-face))
+         ("^[ \t]*>[ \t]*>.*$"
+          (0 'message-double-quoted-text-face)))))
+
+
+    )
+
 #+END_SRC
 
 *** Notmuch
@@ -2667,51 +2711,6 @@ The cop-out intermediate solution is address completion by notmuch itself, which
 First, let's activate notmuch itself.
 
 #+BEGIN_SRC emacs-lisp
-  (defun mrb/message-mode-hook ()
-    "This configures message mode and thus notmuch-message mode."
-    ;; We have to make sure that the messages we produce are
-    ;; format=flowed compatible. This happens on encoding when sending
-    ;; it. However, during compose we need to make sure that what we
-    ;; offer to encode is suitable for it.
-
-    ;; Let's do the compose part first No reflowing is possible without
-    ;; having hard newlines, so lets always enable those
-    (use-hard-newlines t 'always)
-
-    ;; Use visual line mode and visually break at word boundaries which
-    ;; is the same as the email encoding on send (see below)
-    (visual-line-mode 1)
-
-    ;; Auto-fill makes no sense anymore now, and will in fact mess
-    ;; everything up, so make sure it is off.
-    (auto-fill-mode 0)
-
-    ;; Adapt visual fill column locally to a reasonable value
-    (setq visual-fill-column-width 66)
-    (visual-fill-column-mode 1)
-
-    ;; Next, do the encoding and sending part
-    ;; Set the fill column on encoding (send)
-    ;; Q: where does the 66 come from, surely it could be a little bit more?
-    (setq fill-flowed-encode-column 66)
-
-    ;; This enables the f=f encoding
-    (setq mml-enable-flowed t)
-
-    ;; For displaying of f=f messages I'm not sure what is needed.
-    ;; This would be `notmuch-show-mode` ?
-
-    ;; Make sure the separator is just the standard, nothing fancy
-    ;; This is probably redundant as I have this set globally too
-    (set (make-local-variable 'mail-header-separator) "")
-
-    ;; Add some color to quoted lines
-    (font-lock-add-keywords
-     nil
-     '(("^[ \t]*>[ \t]*>[ \t]*>.*$"
-        (0 'message-multiply-quoted-text-face))
-       ("^[ \t]*>[ \t]*>.*$"
-        (0 'message-double-quoted-text-face)))))
 
 
   (use-package notmuch
@@ -2725,7 +2724,7 @@ First, let's activate notmuch itself.
     (add-to-list 'auto-mode-alist '("mrb@hsdev.com" . notmuch-message-mode))
 
     :bind      (:map message-mode-map
-                     ("<tab>" . company-complete)
+                     ;;("<tab>" . company-complete)
                      :map notmuch-common-keymap
                      ("/" . notmuch-search)
                      ("C-c l" . org-store-link)
@@ -2889,6 +2888,75 @@ Since we use org and notmuch, makes sense to support linking from one to the oth
 (use-package org-notmuch
   :load-path "~/.emacs.d/lisp/")
 #+END_SRC
+
+*** Mu4e
+
+A bit unsatisfied with notmuch regarding the compose functions, I've created a =mu4e= config also.
+
+#+begin_src emacs-lisp
+  (use-package mu4e
+    :ensure nil
+    :load-path "/usr/share/emacs/site-lisp/mu4e"
+    :after message
+    :config
+    (setq
+     ;; Override the defaul mail user agent with the mu4e specific one.
+     mu4e-maildir "/media/data/mail"
+     mail-user-agent 'mu4e-user-agent
+     mu4e-sent-folder "/Sent"
+     mu4e-drafts-folder "/Drafts"
+     mu4e-trash-folder "/Trash"
+     mu4e-refile-folder "/Archives"
+     ;; Absolute folder here, not relative to Maildir!
+     mu4e-attachment-dir "~/Downloads"
+     mu4e-confirm-quit nil
+     mu4e-use-fancy-chars t
+     ;; We do mailsyncing somewhere else
+     mu4e-get-mail-command "true"
+     mu4e-decryption-policy 'ask
+
+     ;; Message view settings
+     mu4e-view-show-images t
+     mu4e-view-use-gnus nil
+
+     ;; Compose settings
+     mu4e-compose-format-flowed t
+     mu4e-compose-in-new-frame t
+     ;; Read signature from the usual signature file
+     mu4e-compose-signature (with-current-buffer
+                                (find-file-noselect "~/.signature")
+                              (buffer-string))
+
+     ;; Header view settings
+     mu4e-headers-include-related t ; Use 'W' to toggle interactively
+     mu4e-headers-date-format "%F"  ; ISO format yyyy-mm-dd
+     ;; This is needed to make 'related search results' work properly
+     mu4e-headers-results-limit -1
+
+
+     ;; Jump to some folders directly with a shortcut
+     mu4e-maildir-shortcuts '(("/INBOX" . ?i)))
+
+    ;; Define actions for the message view
+    ;; Allow showing in browser when there is a HTML mess to deal with
+    (add-to-list 'mu4e-view-actions
+                 '("ViewInBrowser" . mu4e-action-view-in-browser) t)
+
+    ;; Bookmarks
+    (setq mu4e-bookmarks (list
+                          (make-mu4e-bookmark
+                           :name "Unread messages"
+                           :query "flag:unread and not flag:trashed"
+                           :key ?u)
+                          (make-mu4e-bookmark
+                           :name "INBOX"
+                           :query "(flag:unread or maildir:/INBOX) and not (flag:list or flag:draft or flag:flagged or flag:deleted or maildir:/Trash or flag:trashed)"
+                           :key ?i)
+                          (make-mu4e-bookmark
+                             :name "TODO list"
+                             :query "flag:flagged"
+                             :key ?$))))
+#+end_src
 *** Sieve
 Cyrus sieve is used on the server to filter our mail and this is accessed by the sieve-manage package. For some reason I can't get the '^M' characters out of the process, so here's a hack for that
 
