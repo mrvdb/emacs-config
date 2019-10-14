@@ -20,7 +20,7 @@
 ;; You may delete these explanatory comments.
 (package-initialize)
 (add-to-list 'package-archives
-	     '("org" . "http://orgmode.org/elpa/") t)
+	     '("org" . "https://orgmode.org/elpa/") t)
 
 ;; Bootstrap use-package
 (unless (package-installed-p 'use-package)

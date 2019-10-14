@@ -137,11 +137,11 @@ First of all, define the package archives I need; for now, just the default gnu 
 
 #+BEGIN_SRC emacs-lisp
   (add-to-list 'package-archives
-               '("melpa" . "http://melpa.org/packages/") t)
+               '("melpa" . "https://melpa.org/packages/") t)
   (add-to-list 'package-archives
                '("melpa-stable" . "https://stable.melpa.org/packages/") t)
   (add-to-list 'package-archives
-               '("gnu" . "http://elpa.gnu.org/packages/") t)
+               '("gnu" . "https://elpa.gnu.org/packages/") t)
 
 
   ;; Use-package is certain to be installed (init.el) does it.
