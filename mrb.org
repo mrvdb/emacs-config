@@ -2696,10 +2696,7 @@ It's not entirely clear which package is exactly responsible for what, but there
        '(("^[ \t]*>[ \t]*>[ \t]*>.*$"
           (0 'message-multiply-quoted-text-face))
          ("^[ \t]*>[ \t]*>.*$"
-          (0 'message-double-quoted-text-face)))))
-
-
-    )
+          (0 'message-double-quoted-text-face))))))
 
 #+END_SRC
 
@@ -2842,9 +2839,8 @@ First, let's activate notmuch itself.
     ;; Depends on ~/bin/mailrefile
     (defun mrb/nm-refile()
       (interactive)
-      ;; TODO: make this elisp only
-      ;; This uses rofi to select folders
-      ;; Shell out for now to the refile script
+      ;; TODO: make this elisp only, This uses rofi to select folders
+      ;; TODO: make this work with >1 selected
       (let ((process (start-process
                       "mailrefile"
                       "*mailrefile*"
@@ -2898,6 +2894,7 @@ A bit unsatisfied with notmuch regarding the compose functions, I've created a =
     :ensure nil
     :load-path "/usr/share/emacs/site-lisp/mu4e"
     :after message
+    :commands mu4e
     :config
     (setq
      ;; Override the defaul mail user agent with the mu4e specific one.
@@ -2914,6 +2911,11 @@ A bit unsatisfied with notmuch regarding the compose functions, I've created a =
      ;; We do mailsyncing somewhere else
      mu4e-get-mail-command "true"
      mu4e-decryption-policy 'ask
+     mu4e-update-interval 300
+     mu4e-compose-complete-only-after nil
+
+     ;; Set completing function to standard, so helm works
+     mu4e-completing-read-function 'completing-read
 
      ;; Message view settings
      mu4e-view-show-images t
@@ -2930,12 +2932,17 @@ A bit unsatisfied with notmuch regarding the compose functions, I've created a =
      ;; Header view settings
      mu4e-headers-include-related t ; Use 'W' to toggle interactively
      mu4e-headers-date-format "%F"  ; ISO format yyyy-mm-dd
-     ;; This is needed to make 'related search results' work properly
-     mu4e-headers-results-limit -1
+     mu4e-headers-results-limit -1  ; For now, needed to have related search results
+     mu4e-headers-visible-lines 20  ; Default of 10 is a bit small
 
 
      ;; Jump to some folders directly with a shortcut
      mu4e-maildir-shortcuts '(("/INBOX" . ?i)))
+
+    ;; Construct list of my email addresses, the default 'marcel@hsdev.com' is already there
+    (add-to-list 'mu4e-user-mail-address-list "mrb@hsdev.com")
+    (add-to-list 'mu4e-user-mail-address-list "mvanderboom@gmail.com")
+    (add-to-list 'mu4e-user-mail-address-list "marcel@van-der-boom.nl")
 
     ;; Define actions for the message view
     ;; Allow showing in browser when there is a HTML mess to deal with
