@@ -1118,14 +1118,27 @@ Here are the templates used for them.
    org-capture-templates
    (quote (
            ("b" "Buy"
-            entry (function mrb/capture-location) "* BUY %? :buy:\n%i\n" :prepend t :empty-lines 1)
+            entry (function mrb/capture-location) "* BUY %? :buy:\n%(mrb/prop-or-nothing :annotation)\n" :prepend t :empty-lines 1)
            ("t" "Todo"
-            entry (function mrb/capture-location) "* TODO %?\n%i\n" :prepend t :empty-lines 1))))
+            entry (function mrb/capture-location) "* TODO %?\n%(mrb/prop-or-nothing :annotation)\n" :prepend t :empty-lines 1))))
+
+
+  (defun mrb/prop-or-nothing(prop)
+    "Insert `[:type]: [:property]` when :property has a value, otherwise nothing.
+  Meant to be used inside org-capture-templates
+
+  Example: `%(mrb/prop-or-nothing :annotation)`"
+
+    (let ((prop-value (plist-get org-store-link-plist prop))
+          (type (plist-get org-store-link-plist :type)))
+      (if (equal prop-value "")
+          ""
+        (concat (when type (concat type ": ")) prop-value))))
 
   (defun mrb/capture-location()
-    "This function is meant to be used inside
-        org-capture-templates to find a file and location
-        where a caputured ITEM shdould be stored."
+    "This function is meant to be used inside org-capture-templates
+  to find a file and location where a caputured ITEM should
+  be stored."
 
     ;; Open journal file without creating a journal entry This has the
     ;; side effect that it creates the file and moves TODO items over
