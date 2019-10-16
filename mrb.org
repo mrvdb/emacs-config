@@ -2998,6 +2998,15 @@ A bit unsatisfied with notmuch regarding the compose functions, I've created a =
                              :query "flag:flagged"
                              :key ?$))))
 #+end_src
+
+To enable integration with orgmode =org-mu4e= must be loaded
+
+#+begin_src emacs-lisp
+(use-package org-mu4e
+	:ensure nil
+	:load-path "/usr/share/emacs/site-lisp/mu4e/"
+  :after org)
+#+end_src
 *** Sieve
 Cyrus sieve is used on the server to filter our mail and this is accessed by the sieve-manage package. For some reason I can't get the '^M' characters out of the process, so here's a hack for that
 
