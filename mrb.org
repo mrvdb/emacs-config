@@ -2919,6 +2919,10 @@ A bit unsatisfied with notmuch regarding the compose functions, I've created a =
      mu4e-refile-folder "/Archives"
      ;; Absolute folder here, not relative to Maildir!
      mu4e-attachment-dir "~/Downloads"
+
+     ;; Added for my specific config
+     mrb/mu4e-junk-folder "/Junk"
+
      mu4e-confirm-quit nil
      mu4e-use-fancy-chars t
      ;; We do mailsyncing somewhere else
@@ -2961,6 +2965,22 @@ A bit unsatisfied with notmuch regarding the compose functions, I've created a =
     ;; Allow showing in browser when there is a HTML mess to deal with
     (add-to-list 'mu4e-view-actions
                  '("ViewInBrowser" . mu4e-action-view-in-browser) t)
+
+    ;; Define marks
+    (add-to-list
+     'mu4e-marks
+     '(spam
+       :char ("S" . "🕱")
+       :prompt "Mark as spam"
+       :show-target (lambda (dyn-target) "Spam")
+       :ask-target (lambda () mrb/mu4e-junk-folder)
+       :action (lambda (docid msg target)
+                 (mu4e~proc-move
+                  docid
+                  (mu4e~mark-check-target target) "+S-N-u"))))
+    ;; Let mu4e define a function for it
+    (mu4e~headers-defun-mark-for spam)
+    (bind-key "S" 'mu4e-headers-mark-for-spam mu4e-headers-mode-map)
 
     ;; Bookmarks
     (setq mu4e-bookmarks (list
