@@ -2633,83 +2633,83 @@ edit -e '(mrb/make-mailcompose-frame)'
 It's not entirely clear which package is exactly responsible for what, but there are a few settings which are related to the =message= package
 
 #+BEGIN_SRC emacs-lisp
-  (use-package message
-    :ensure nil  ;; Emacs included, no need to go look for it
-    :requires org-faces
-    :config
-    (setq
-     ;; When citing, remove the original signature
-     ;; FIXME: often I want to remove a lot more, like the disclaimer
-     message-cite-function 'message-cite-original-without-signature
+    (use-package message
+      :ensure nil  ;; Emacs included, no need to go look for it
+      :requires org-faces
+      :config
+      (setq
+       ;; When citing, remove the original signature
+       ;; FIXME: often I want to remove a lot more, like the disclaimer
+       message-cite-function 'message-cite-original-without-signature
 
-     ;; Citing/Quoting when replying
-     ;; What I would like:
-     ;; - Add '> ' when quoting message lines
-     ;; - Add '>' when quoting cited lines (uses `message-cite-prefix-regexp` to determine this)
-     ;; - nothing on empty lines
-     message-yank-prefix "> "
-     message-yank-cited-prefix ">"
-     message-yank-empty-prefix ""
+       ;; Citing/Quoting when replying
+       ;; What I would like:
+       ;; - Add '> ' when quoting message lines
+       ;; - Add '>' when quoting cited lines (uses `message-cite-prefix-regexp` to determine this)
+       ;; - nothing on empty lines
+       message-yank-prefix "> "
+       message-yank-cited-prefix ">"
+       message-yank-empty-prefix ""
 
-     ;; Always put one in the Sent folder on sending
-     message-default-mail-headers "Bcc: mrb+Sent@hsdev.com\n"
+       ;; Always put one in the Sent folder on sending
+       message-default-mail-headers "Bcc: mrb+Sent@hsdev.com\n"
 
-     ;; How to attribute
-     message-citation-line-format "[%N]:"
-     ;; Make sure we use it
-     message-citation-line-function 'message-insert-formatted-citation-line)
+       ;; How to attribute
+       message-citation-line-format "[%N]:"
+       ;; Make sure we use it
+       message-citation-line-function 'message-insert-formatted-citation-line)
 
-    ;; First quote level
-    (set-face-attribute 'message-cited-text nil :inherit 'org-level-1)
+      ;; First quote level
+      (set-face-attribute 'message-cited-text nil :inherit 'org-level-1)
 
-    ;; Face for second level of quoting
-    (defface message-double-quoted-text-face
-      '((t (:inherit org-level-2)))
-      "Second level quotations in email")
+      ;; Face for second level of quoting
+      (defface message-double-quoted-text-face
+        '((t (:inherit org-level-2)))
+        "Second level quotations in email")
 
-    ;; Face for third and higher level of quoting
-    (defface message-multiply-quoted-text-face
-      '((t (:inherit org-level-3)))
-      "Third level quotations in email")
-
-    (defun mrb/message-mode-hook ()
-      "This configures message mode and thus notmuch-message mode."
-      ;; We have to make sure that the messages we produce are
-      ;; format=flowed compatible. This happens on encoding when sending
-      ;; it. However, during compose we need to make sure that what we
-      ;; offer to encode is suitable for it.
-
-      ;; Let's do the compose part first No reflowing is possible without
-      ;; having hard newlines, so lets always enable those
-      (use-hard-newlines t 'always)
-
-      ;; Use visual line mode and visually break at word boundaries which
-      ;; is the same as the email encoding on send (see below)
-      (visual-line-mode 1)
-
-      ;; Auto-fill makes no sense anymore now, and will in fact mess
-      ;; everything up, so make sure it is off.
-      (auto-fill-mode 0)
-
-      ;; Adapt visual fill column locally to a reasonable value
-      (setq visual-fill-column-width 66)
-      (visual-fill-column-mode 1)
-
-      ;; Next, do the encoding and sending part
-      ;; Set the fill column on encoding (send)
-      ;; Q: where does the 66 come from, surely it could be a little bit more?
-      (setq fill-flowed-encode-column 66)
-
-      ;; This enables the f=f encoding
-      (setq mml-enable-flowed t)
+      ;; Face for third and higher level of quoting
+      (defface message-multiply-quoted-text-face
+        '((t (:inherit org-level-3)))
+        "Third level quotations in email")
 
       ;; Add some color to quoted lines
       (font-lock-add-keywords
-       nil
-       '(("^[ \t]*>[ \t]*>[ \t]*>.*$"
-          (0 'message-multiply-quoted-text-face))
-         ("^[ \t]*>[ \t]*>.*$"
-          (0 'message-double-quoted-text-face))))))
+         nil
+         '(("^[ \t]*>[ \t]*>[ \t]*>.*$"
+            (0 'message-multiply-quoted-text-face))
+           ("^[ \t]*>[ \t]*>.*$"
+            (0 'message-double-quoted-text-face)))))
+
+      (defun mrb/message-mode-hook ()
+        "This configures message mode and thus other modes which inherit message mode."
+        ;; We have to make sure that the messages we produce are
+        ;; format=flowed compatible. This happens on encoding when sending
+        ;; it. However, during compose we need to make sure that what we
+        ;; offer to encode is suitable for it.
+
+        ;; Let's do the compose part first No reflowing is possible without
+        ;; having hard newlines, so lets always enable those
+        (use-hard-newlines t 'always)
+
+        ;; Use visual line mode and visually break at word boundaries which
+        ;; is the same as the email encoding on send (see below)
+        (visual-line-mode 1)
+
+        ;; Auto-fill makes no sense anymore now, and will in fact mess
+        ;; everything up, so make sure it is off.
+        (auto-fill-mode 0)
+
+        ;; Adapt visual fill column locally to a reasonable value
+        (setq visual-fill-column-width 66)
+        (visual-fill-column-mode 1)
+
+        ;; Next, do the encoding and sending part
+        ;; Set the fill column on encoding (send)
+        ;; Q: where does the 66 come from, surely it could be a little bit more?
+        (setq fill-flowed-encode-column 66)
+
+        ;; This enables the f=f encoding
+        (setq mml-enable-flowed t))
 
 #+END_SRC
 
