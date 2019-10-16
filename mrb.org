@@ -2937,6 +2937,7 @@ A bit unsatisfied with notmuch regarding the compose functions, I've created a =
      ;; Message view settings
      mu4e-view-show-images t
      mu4e-view-use-gnus nil
+     mu4e-view-mode-hook '(turn-on-visual-line-mode)
 
      ;; Compose settings
      mu4e-compose-format-flowed t
