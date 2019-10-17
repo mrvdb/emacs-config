@@ -2909,8 +2909,10 @@ A bit unsatisfied with notmuch regarding the compose functions, I've created a =
   (use-package mu4e
     :ensure nil
     :load-path "/usr/share/emacs/site-lisp/mu4e"
-    :after message
+    :after message fullframe
     :commands mu4e
+    :init
+    (fullframe mu4e mu4e-quit)
     :config
     (setq
      ;; Override the defaul mail user agent with the mu4e specific one.
