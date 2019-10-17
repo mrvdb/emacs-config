@@ -604,16 +604,12 @@ valid for 5 levels, not 6.
     (spaceline-spacemacs-theme 'tracking)
 
     ;; Enable the helm mode
-    (spaceline-helm-mode)
-    )
-
-
+    (spaceline-helm-mode))
 
   (use-package mic-paren
     :config
     (setq paren-highlight-at-point nil)
     (paren-activate))
-
 
   ;; Defer fontification a little bit, so we could gain a bit in scroll speed
   (setq jit-lock-defer-time 0.02)
