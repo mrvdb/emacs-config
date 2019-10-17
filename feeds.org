@@ -70,6 +70,8 @@ This has a number of attractive properties:
 ***** https://emacs.wordpress.com/feed/
 **** http://wordpress.panaceas.org/wp/index.php/comments/feed/
 **** https://lwn.net/headlines/rss
+**** https://www.archlinux.org/feeds/news/
+
 *** Hardware                                                                                      :hardware:
 **** http://www.readynas.com/?feed=rss2
 **** https://www.yubico.com/feed/                                                                :security:
