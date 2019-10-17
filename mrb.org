@@ -2919,7 +2919,21 @@ A bit unsatisfied with notmuch regarding the compose functions, I've created a =
      mu4e-sent-folder "/Sent"
      mu4e-drafts-folder "/Drafts"
      mu4e-trash-folder "/Trash"
-     mu4e-refile-folder "/Archives"
+
+     ;; Refiling to /Archives/YYYY
+     mu4e-refile-folder (lambda (msg)
+                          (let ((archive_base "/Archives/")
+                                (msgyear (format-time-string "%Y" (mu4e-message-field msg :date)))
+                                )
+                            (cond
+                             ;; Order: most specific to general, end with the 't' case
+
+                             ;; Archive messages per year if it has a date field (basically, always)
+                             (msgyear	(concat archive_base msgyear))
+
+                             ;; The default refile location
+                             (t  archive_base))))
+
      ;; Absolute folder here, not relative to Maildir!
      mu4e-attachment-dir "~/Downloads"
 
