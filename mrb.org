@@ -2925,8 +2925,7 @@ A bit unsatisfied with notmuch regarding the compose functions, I've created a =
      ;; Refiling to /Archives/YYYY
      mu4e-refile-folder (lambda (msg)
                           (let ((archive_base "/Archives/")
-                                (msgyear (format-time-string "%Y" (mu4e-message-field msg :date)))
-                                )
+                                (msgyear (format-time-string "%Y" (mu4e-message-field msg :date))))
                             (cond
                              ;; Order: most specific to general, end with the 't' case
 
@@ -2947,7 +2946,7 @@ A bit unsatisfied with notmuch regarding the compose functions, I've created a =
      ;; We do mailsyncing somewhere else
      mu4e-get-mail-command "true"
      mu4e-decryption-policy 'ask
-     mu4e-update-interval 300
+     mu4e-update-interval 120				; 2 minutes is fine since we don't actually retrieve, just index
      mu4e-compose-complete-only-after nil
 
      ;; Set completing function to standard, so helm works
@@ -2967,14 +2966,15 @@ A bit unsatisfied with notmuch regarding the compose functions, I've created a =
                               (buffer-string))
 
      ;; Header view settings
-     mu4e-headers-include-related t ; Use 'W' to toggle interactively
+     mu4e-headers-include-related nil ; Use 'W' to toggle interactively
      mu4e-headers-date-format "%F"  ; ISO format yyyy-mm-dd
      mu4e-headers-results-limit -1  ; For now, needed to have related search results
      mu4e-headers-visible-lines 20  ; Default of 10 is a bit small
 
 
      ;; Jump to some folders directly with a shortcut
-     mu4e-maildir-shortcuts '(("/INBOX" . ?i)))
+     mu4e-maildir-shortcuts '(("/INBOX" . ?i)
+                              ("/Trash" . ?t)))
 
     ;; Construct list of my email addresses, the default 'marcel@hsdev.com' is already there
     (add-to-list 'mu4e-user-mail-address-list "mrb@hsdev.com")
