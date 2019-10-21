@@ -2720,7 +2720,7 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
      mu4e-confirm-quit nil
      mu4e-use-fancy-chars t
      ;; We do mailsyncing somewhere else
-     mu4e-get-mail-command "true"
+     mu4e-get-mail-command "mbsync quick"
      mu4e-decryption-policy 'ask
      mu4e-update-interval 120				; 2 minutes is fine since we don't actually retrieve, just index
      mu4e-compose-complete-only-after nil
