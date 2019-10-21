@@ -2774,9 +2774,15 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
                  (mu4e~proc-move
                   docid
                   (mu4e~mark-check-target target) "+S-N-u"))))
+
     ;; Let mu4e define a function for it
     (mu4e~headers-defun-mark-for spam)
+    (mu4e~view-defun-mark-for spam)
+
+    ;; Bind this in the headers an view map
+    ;; TODO: how are we not editting a search? e?
     (bind-key "S" 'mu4e-headers-mark-for-spam mu4e-headers-mode-map)
+    (bind-key "S" 'mu4e-view-mark-for-spam mu4e-view-mode-map)
 
     ;; Bookmarks
     (setq mu4e-bookmarks (list
