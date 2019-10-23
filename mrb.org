@@ -2968,6 +2968,42 @@ Lets try to use ggtags everywhere.
   (use-package ggtags)
 #+END_SRC
 
+For most of the languages I use (Bash, python, C, Go, HTML Haskell, Lua), the Language Server Protocol seems to be supported by =lsp-mode=, so I'm setting this up generally here and enable it for each language I'm using if it is supported.
+
+#+begin_src emacs-lisp
+  ;; LSP mode
+  (use-package lsp-mode
+    :pin melpa-stable
+    :commands lsp-deferred
+
+    ;; Bash / Sh
+    :hook (sh-mode . lsp-deferred)
+    ;; Python
+    :hook (python-mode . lsp-deferred)
+    ;; CSS
+    :hook (css-mode . lsp-deferred)
+    ;; HTML
+    :hook (html-mode . lsp-deferred)
+
+
+    :init
+    ;; This hooks into company mode for autocompletion
+    (use-package company-lsp
+      :commands company-lsp)
+
+    (use-package lsp-ui
+      :commands lsp-ui-mode)
+
+    (use-package helm-lsp
+      :commands helm-lsp-workspace-symbol)
+
+    :config
+    (setq lsp-enable-snippet nil
+          lsp-prefer-flymake nil
+          lsp-ui-doc-position 'bottom))
+#+end_src
+
+
 Not specific to development, but extra useful, is folding of text sections. Origami mode seems to be the generic solution for it. Initially, let's not be too greedy with the keybindings and do it by mode. M-Tab seems to be the natural choice for me.
 
 #+BEGIN_SRC emacs-lisp
