@@ -705,11 +705,6 @@ flymake specifically, but some packages enable it automatically (elpy
 for example). Where applicable, I gather the necessary disable actions
 here first.
 
-#+BEGIN_SRC emacs-lisp
-  ;; Remove flymake from elpy configuration
-  ;;(delete 'elpy-module-flymake elpy-modules)
-#+END_SRC
-
 Now we can start configuring flycheck
 
 #+BEGIN_SRC emacs-lisp
@@ -722,7 +717,7 @@ Now we can start configuring flycheck
 #+END_SRC
 
 Currently actively configured are:
-- javscript :: eslint with a config file
+- javascript :: eslint with a config file
 -
 
 Flyspell is similar to flycheck but for text languages. I'm setting
@@ -1679,7 +1674,6 @@ Writefreely is a Write.as derivative and published as open source. This allows m
   (use-package writefreely
     :after org
     :ensure ox-gfm
-    :load-path "~/dat/src/write.as-related/writefreely.el/"
     :config
     (setq
      ;; Set api endpoints for my own install
@@ -2613,7 +2607,7 @@ It's not entirely clear which package is exactly responsible for what, but there
      message-yank-cited-prefix ">"
      message-yank-empty-prefix ""
 
-     ;; Always put one in the Sent folder on sending
+     ;; Always put one in the Sent folder on sending.
      message-default-mail-headers "Bcc: mrb+Sent@hsdev.com\n"
 
      ;; How to attribute
@@ -2684,7 +2678,7 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
 #+begin_src emacs-lisp
   (use-package mu4e
     :ensure nil
-    :load-path "/usr/share/emacs/site-lisp/mu4e"
+    :load-path "/usr/local/share/emacs/site-lisp/mu4e"
     :after message fullframe
     :commands mu4e
     :init
@@ -2805,7 +2799,7 @@ To enable integration with orgmode =org-mu4e= must be loaded
 #+begin_src emacs-lisp
 (use-package org-mu4e
 	:ensure nil
-	:load-path "/usr/share/emacs/site-lisp/mu4e/"
+	:load-path "/usr/local/share/emacs/site-lisp/mu4e/"
   :after org)
 #+end_src
 *** Sieve
@@ -3102,18 +3096,6 @@ Python is an indent aware language, wich saves quite a bit of fiddling around wi
 
 Having lines truncated is the preferred way in python, usually lines will be short enough anyway, but I can't have line automatically folding because that disturbs the way I think when looking at python code.
 
-#+BEGIN_SRC emacs-lisp
-  (use-package elpy
-    :init
-    (elpy-enable)
-    :config
-    (delete 'elpy-module-flymake elpy-modules)
-    (add-hook 'python-mode-hook
-              (lambda ()
-                (toggle-truncate-lines t)
-                ;; Manage code navigation
-                (ggtags-mode 1))))
-#+END_SRC
 ** Go
 #+BEGIN_SRC emacs-lisp
   (use-package go-mode
