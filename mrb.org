@@ -1427,21 +1427,21 @@ The item lists can be made a whole lot more attractive by attaching some icons b
 #+BEGIN_SRC emacs-lisp
   (setq org-agenda-category-icon-alist
         '(
-          ("Afspraak"      "~/dat/org/images/stock_new-meeting.png" nil nil :ascent center)
-          ("Blogging"      "~/dat/org/images/edit.png" nil nil :ascent center)
-          ("Cobra"         "~/dat/org/images/car.png" nil nil :ascent center)
-          ("DVD"           "~/dat/org/images/media-cdrom.png" nil nil :ascent center)
-          ("Emacs"         "~/dat/org/images/emacs.png" nil nil :ascent center)
-          ("Finance"       "~/dat/org/images/finance.png" nil nil :ascent center)
-          ("Habitat"       "~/dat/org/images/house.png" nil nil :ascent center)
-          ("Habit"         "~/dat/org/images/stock_task-recurring.png" nil nil :ascent center)
-          ("Hobbies"       "~/dat/org/images/hobbies.png" nil nil :ascent center)
-          ("Partners"      "~/dat/org/images/partners.png" nil nil :ascent center)
-          ("Personal"      "~/dat/org/images/personal.png" nil nil :ascent center)
-          ("Task"          "~/dat/org/images/stock_todo.png" nil nil :ascent center)
-          ("Org"           "~/dat/org/images/org-mode-unicorn.png" nil nil :ascent center)
-          ("Systeem"       "~/dat/org/images/systeembeheer.png" nil nil :ascent center)
-          ("Wordpress"     "~/dat/org/images/wordpress.png" nil nil :ascent center)
+          ("Afspraak"      (concat org-directory "images/stock_new-meeting.png") nil nil :ascent center)
+          ("Blogging"      (concat org-directory "images/edit.png") nil nil :ascent center)
+          ("Cobra"         (concat org-directory "images/car.png") nil nil :ascent center)
+          ("DVD"           (concat org-directory "images/media-cdrom.png") nil nil :ascent center)
+          ("Emacs"         (concat org-directory "images/emacs.png") nil nil :ascent center)
+          ("Finance"       (concat org-directory "images/finance.png") nil nil :ascent center)
+          ("Habitat"       (concat org-directory "images/house.png") nil nil :ascent center)
+          ("Habit"         (concat org-directory "images/stock_task-recurring.png") nil nil :ascent center)
+          ("Hobbies"       (concat org-directory "images/hobbies.png") nil nil :ascent center)
+          ("Partners"      (concat org-directory "images/partners.png") nil nil :ascent center)
+          ("Personal"      (concat org-directory "images/personal.png") nil nil :ascent center)
+          ("Task"          (concat org-directory "images/stock_todo.png") nil nil :ascent center)
+          ("Org"           (concat org-directory "images/org-mode-unicorn.png") nil nil :ascent center)
+          ("Systeem"       (concat org-directory "images/systeembeheer.png") nil nil :ascent center)
+          ("Wordpress"     (concat org-directory "images/wordpress.png") nil nil :ascent center)
   ))
 #+END_SRC
 
@@ -1620,7 +1620,7 @@ While the capture method is useful I found myself not using it very much. Not su
     ;; The expand-file-name is needed, which is odd, because for single
     ;; files this is not needed.
     (setq
-     org-journal-dir (expand-file-name "/media/data/org/journal/")
+     org-journal-dir (expand-file-name (concat org-directory "journal/"))
 
      ;; Match the journal files (FIXME: make this independent of earlier assignments)
      org-agenda-file-regexp "^[0-9]+\\.org"
@@ -2686,7 +2686,7 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
     :config
     (setq
      ;; Override the defaul mail user agent with the mu4e specific one.
-     mu4e-maildir "/media/data/mail"
+     mu4e-maildir "~/Maildir"
      mail-user-agent 'mu4e-user-agent
      mu4e-sent-folder "/Sent"
      mu4e-drafts-folder "/Drafts"
@@ -2839,7 +2839,7 @@ In an attempt to do even more in emacs, i've installed `elfeed' and imported my 
            ("w" . 'mrb/elfeed-search-toggle-watchlater))
     :init
     (setf url-queue-timeout 30
-          elfeed-db-directory "~/dat/.elfeed")
+          elfeed-db-directory "~/.elfeed")
 
     :config
     (defun mrb/elfeed-search-toggle-tag(tag)
