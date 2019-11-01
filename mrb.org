@@ -1426,22 +1426,23 @@ The item lists can be made a whole lot more attractive by attaching some icons b
 
 #+BEGIN_SRC emacs-lisp
   (setq org-agenda-category-icon-alist
-        '(
-          ("Afspraak"      (concat org-directory "images/stock_new-meeting.png") nil nil :ascent center)
-          ("Blogging"      (concat org-directory "images/edit.png") nil nil :ascent center)
-          ("Cobra"         (concat org-directory "images/car.png") nil nil :ascent center)
-          ("DVD"           (concat org-directory "images/media-cdrom.png") nil nil :ascent center)
-          ("Emacs"         (concat org-directory "images/emacs.png") nil nil :ascent center)
-          ("Finance"       (concat org-directory "images/finance.png") nil nil :ascent center)
-          ("Habitat"       (concat org-directory "images/house.png") nil nil :ascent center)
-          ("Habit"         (concat org-directory "images/stock_task-recurring.png") nil nil :ascent center)
-          ("Hobbies"       (concat org-directory "images/hobbies.png") nil nil :ascent center)
-          ("Partners"      (concat org-directory "images/partners.png") nil nil :ascent center)
-          ("Personal"      (concat org-directory "images/personal.png") nil nil :ascent center)
-          ("Task"          (concat org-directory "images/stock_todo.png") nil nil :ascent center)
-          ("Org"           (concat org-directory "images/org-mode-unicorn.png") nil nil :ascent center)
-          ("Systeem"       (concat org-directory "images/systeembeheer.png") nil nil :ascent center)
-          ("Wordpress"     (concat org-directory "images/wordpress.png") nil nil :ascent center)
+        `(
+          ("Afspraak"      ,(concat org-directory "images/stock_new-meeting.png") nil nil :ascent center)
+          ("Blogging"      ,(concat org-directory "images/edit.png") nil nil :ascent center)
+          ("Car"           ,(concat org-directory "images/car.png") nil nil :ascent center)
+          ("Cobra"         ,(concat org-directory "images/car.png") nil nil :ascent center)
+          ("DVD"           ,(concat org-directory "images/media-cdrom.png") nil nil :ascent center)
+          ("Emacs"         ,(concat org-directory "images/emacs.png") nil nil :ascent center)
+          ("Finance"       ,(concat org-directory "images/finance.png") nil nil :ascent center)
+          ("Habitat"       ,(concat org-directory "images/house.png") nil nil :ascent center)
+          ("Habit"         ,(concat org-directory "images/stock_task-recurring.png") nil nil :ascent center)
+          ("Hobbies"       ,(concat org-directory "images/hobbies.png") nil nil :ascent center)
+          ("Partners"      ,(concat org-directory "images/partners.png") nil nil :ascent center)
+          ("Personal"      ,(concat org-directory "images/personal.png") nil nil :ascent center)
+          ("Task"          ,(concat org-directory "images/stock_todo.png") nil nil :ascent center)
+          ("Org"           ,(concat org-directory "images/org-mode-unicorn.png") nil nil :ascent center)
+          ("Systeem"       ,(concat org-directory "images/systeembeheer.png") nil nil :ascent center)
+          ("Wordpress"     ,(concat org-directory "images/wordpress.png") nil nil :ascent center)
   ))
 #+END_SRC
 
@@ -2458,7 +2459,7 @@ As my default shell is =zsh= tramp does not work out of the box for me. It gets 
 [[ $TERM == "dumb" ]] && unsetopt zle && PS1='$ ' && return
 #+END_SRC
 
-Once that is in place files can be opened with =/ssh:/host:/path/to/file= syntax. Surprisingly, the syntax I got used to in the past (i.e. =/host:/path/to/file=) does not work for my anymore.
+Once that is in place files can be opened with =/ssh:/host:/path/to/file= syntax. Surprisingly, the syntax I got used to in the past (i.e. =/host:/path/to/file=) does not work for me anymore.
 
 #+BEGIN_SRC emacs-lisp
   (use-package tramp
@@ -3130,7 +3131,7 @@ For creating web apps I use yesod, which is supported by a number of packages
 ** Python
 Python is an indent aware language, wich saves quite a bit of fiddling around with parenthes and what have you.
 
-Having lines truncated is the preferred way in python, usually lines will be short enough anyway, but I can't have line automatically folding because that disturbs the way I think when looking at python code.
+Thus, having lines truncated is the preferred way in python, usually lines will be short enough anyway, but I can't have line automatically folding because that disturbs the way I think when looking at python code.
 
 ** Go
 #+BEGIN_SRC emacs-lisp
