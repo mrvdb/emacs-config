@@ -530,7 +530,7 @@ starting with the =base16-nord= theme and see where this leaves me.
               (fringe :foreground "#a3be8c")
 
               ;; Mu4e
-              (mu4e-header-highlight-face :underline nil :foreground nil)))
+              (mu4e-header-highlight-face :inherit hl-line :underline nil :foreground nil)))
 
       ;; Apply our adjustment using the theme function
       (base16-set-faces 'base16-nord base16-nord-colors base16-adjustments)
