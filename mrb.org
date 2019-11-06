@@ -2682,6 +2682,16 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
     :load-path "/usr/local/share/emacs/site-lisp/mu4e"
     :after message fullframe
     :commands mu4e
+    :bind (:map mu4e-headers-mode-map
+                ("S" . mu4e-headers-mark-for-spam)
+                ("r" . mu4e-compose-reply)
+                ("R" . mu4e-headers-mark-for-refile)
+            :map mu4e-view-mode-map
+                ("s" . mu4e-view-mark-for-spam)
+                ("r" . mu4e-compose-reply)
+                ("R" . mu4e-view-mark-for-refile))
+    ;; TODO: how are we editting a search? e?
+
     :init
     (fullframe mu4e mu4e-quit)
     :config
@@ -2730,7 +2740,8 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
 
      ;; Compose settings
      mu4e-compose-format-flowed t
-     mu4e-compose-in-new-frame t
+     ;; TODO: match this with mail-handler/compose frame etc.
+     mu4e-compose-in-new-frame nil
      ;; Read signature from the usual signature file
      mu4e-compose-signature (with-current-buffer
                                 (find-file-noselect "~/.signature")
@@ -2774,10 +2785,6 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
     (mu4e~headers-defun-mark-for spam)
     (mu4e~view-defun-mark-for spam)
 
-    ;; Bind this in the headers an view map
-    ;; TODO: how are we not editting a search? e?
-    (bind-key "S" 'mu4e-headers-mark-for-spam mu4e-headers-mode-map)
-    (bind-key "S" 'mu4e-view-mark-for-spam mu4e-view-mode-map)
 
     ;; Bookmarks
     (setq mu4e-bookmarks (list
