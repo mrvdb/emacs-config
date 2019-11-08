@@ -77,12 +77,9 @@ And edit the file obviously.
   # Save how we are called
   WEARE=$(basename $0)
 
-  # Base invocation of emacsclient
-  EMACS_SOCKET=/tmp/emacs`id -u`/server
-
   # Check how we are called and adapt
   # This is for things like commit messages
-  XARGS="--quiet --socket-name=$EMACS_SOCKET"
+  XARGS="--quiet"
   if [ $WEARE == "edit" ]; then
       XARGS=$XARGS' --no-wait'
   fi
@@ -444,6 +441,7 @@ I use (emacs, xterm, i3, dunst etc.) which sounds attractive. So, I'm
 starting with the =base16-nord= theme and see where this leaves me.
 
 #+BEGIN_SRC emacs-lisp
+      (setq custom--inhibit-theme-enable nil)
       (use-package base16-theme
         :config
         ;; Do config here and finally load the theme
@@ -2914,8 +2912,8 @@ I'm experimenting with Weechat now, mostly because it has multiple clients and c
 
 #+BEGIN_SRC emacs-lisp
   (use-package weechat
-    :ensure nil ;; We have it patched (issue #50), so do not retrieve again
     :after tracking
+    :disabled
     :config
     (require 'weechat-tracking)
     (require 'weechat-notifications)
