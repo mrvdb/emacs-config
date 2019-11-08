@@ -3128,11 +3128,6 @@ For creating web apps I use yesod, which is supported by a number of packages
      ("s-d" . zeal-at-point))
 
 #+END_SRC
-** Python
-Python is an indent aware language, wich saves quite a bit of fiddling around with parenthes and what have you.
-
-Thus, having lines truncated is the preferred way in python, usually lines will be short enough anyway, but I can't have line automatically folding because that disturbs the way I think when looking at python code.
-
 ** Go
 #+BEGIN_SRC emacs-lisp
   (use-package go-mode
@@ -3331,8 +3326,7 @@ Rather than using an after save hook, there is a minor git-auto-commit mode pack
 
 There is not much to configure for this minor mode. There are a couple of ways to enable it:
 1. file-local variable (put it in the file to be autocommitted)
-2. directory-local variable (make a =.dir-locals.el= file); this
-   enables it for all files in the directory
+2. directory-local variable (make a =.dir-locals.el= file); this enables it for all files in the directory
 3. as a hook
 
 I'm using the first method on relevant files. The disadvantage of this method is that you have to think about it for each file, so perhaps a =.dir-locals.el= is a better solution.
