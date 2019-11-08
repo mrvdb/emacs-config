@@ -2282,7 +2282,7 @@ emacsclient -a "" -n -c -e '(mrb/server-eshell)'
 The last bit of that command line is the function to evaluate, which was taken from http://ur1.ca/cf1m4 and sligthly adapted.
 
 #+BEGIN_SRC emacs-lisp
-  (use-package cl)
+  ;(use-package cl)
 
   (defun mrb/server-eshell ()
     "Command to be called by emacs-client to start a new shell.
