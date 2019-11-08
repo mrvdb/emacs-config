@@ -12,32 +12,29 @@
  '(dired-bind-jump nil)
  '(epg-gpg-program "/usr/bin/gpg2")
  '(eshell-modules-list
-   (quote
-	(eshell-alias eshell-banner eshell-basic eshell-cmpl eshell-dirs eshell-glob eshell-hist eshell-ls eshell-pred eshell-prompt eshell-rebind eshell-script eshell-term eshell-unix)))
+   '(eshell-alias eshell-banner eshell-basic eshell-cmpl eshell-dirs eshell-glob eshell-hist eshell-ls eshell-pred eshell-prompt eshell-rebind eshell-script eshell-term eshell-unix))
  '(explicit-shell-file-name "/bin/bash")
  '(flyspell-issue-message-flag nil)
  '(font-lock-maximum-size nil)
- '(goto-address-url-mouse-face (quote default))
+ '(goto-address-url-mouse-face 'default)
  '(gud-gdb-command-name "gdb --annotate=1")
- '(guess-language-languages (quote (en de nl)))
+ '(guess-language-languages '(en de nl))
  '(haskell-interactive-popup-errors nil)
- '(ido-vertical-define-keys (quote C-n-C-p-up-down-left-right))
+ '(ido-vertical-define-keys 'C-n-C-p-up-down-left-right)
  '(ispell-use-framepop-p t)
  '(mail-signature nil)
  '(markdown-css-path "/home/mrb/.markdown.css")
  '(nxml-heading-element-name-regexp "\\|.*")
  '(nxml-section-element-name-regexp "\\|file\\|.+")
  '(ocpf-frame-parameters
-   (quote
-	((name . "org-capture-pop-frame")
+   '((name . "org-capture-pop-frame")
 	 (width . 115)
 	 (height . 15)
 	 (tool-bar-lines . 0)
-	 (menu-bar-lines . 0))))
- '(org-M-RET-may-split-line (quote ((default . t) (headline))))
+	 (menu-bar-lines . 0)))
+ '(org-M-RET-may-split-line '((default . t) (headline)))
  '(org-agenda-custom-commands
-   (quote
-	(("w" "Waiting For list" tags-todo "-inactive/WAITING"
+   '(("w" "Waiting For list" tags-todo "-inactive/WAITING"
 	  ((org-agenda-overriding-header "WAITING FOR-list")
 	   (org-agenda-dim-blocked-tasks t)
 	   (org-agenda-group-by-property "Responsible")))
@@ -49,17 +46,14 @@
 	  nil)
 	 ("p" "Active project list" tags-todo "-ignore-inactive+LEVEL>1-TODO=\"DONE\"-TODO=\"CANCELLED\"-TODO=\"INFO\""
 	  ((org-agenda-overriding-header "Active project list")
-	   (org-agenda-skip-function
-		(quote mrb/skip-non-projects))
+	   (org-agenda-skip-function 'mrb/skip-non-projects)
 	   (org-agenda-dim-blocked-tasks nil)
 	   (org-agenda-group-by-property "Group")
 	   (org-agenda-sorting-strategy
-		(quote
-		 (alpha-up)))))
+		'(alpha-up))))
 	 ("A" "Active task list" tags-todo "+SCHEDULED=\"\"-inactive/TODO"
 	  ((org-agenda-group-by-property "Group")
-	   (org-agenda-dim-blocked-tasks
-		(quote invisible))))
+	   (org-agenda-dim-blocked-tasks 'invisible)))
 	 ("r" "To Review"
 	  ((tags-todo
 		#("SCHEDULED=\"\"+DEADLINE=\"\"-{.}/TODO" 25 28
@@ -69,8 +63,7 @@
 		#("-inactive+SCHEDULED=\"\"+DEADLINE=\"\"+TODO=\"TODO\"+{.}" 47 50
 		  (regexp t))
 		((org-agenda-overriding-header "Unscheduled active items"))))
-	  ((org-agenda-dim-blocked-tasks
-		(quote invisible))))
+	  ((org-agenda-dim-blocked-tasks 'invisible)))
 	 ("c" "Scheduled overview" tags-todo "SCHEDULED<>\"\"|DEADLINE<>\"\"/TODO"
 	  ((org-agenda-overriding-header "SCHEDULED")
 	   (org-agenda-view-columns-initially t)
@@ -87,8 +80,7 @@
 	  nil nil)
 	 ("n" "Next Action List [hides blocked/inactive/waiting/INBOX-ed]" tags-todo "+SCHEDULED=\"\"+DEADLINE=\"\"-BLOCKED=\"t\"-inactive-habit-ARCHIVE/-WAITING-INFO-HOWTO"
 	  ((org-agenda-overriding-header "Next Action List")
-	   (org-agenda-dim-blocked-tasks
-		(quote invisible))
+	   (org-agenda-dim-blocked-tasks 'invisible)
 	   (org-agenda-group-by-property "CREATED")))
 	 ("D" "Items ready for archiving" todo "DONE"
 	  ((org-agenda-overriding-header "Items ready for archiving")
@@ -96,34 +88,30 @@
 	 ("g" "AGENDA"
 	  ((agenda ""
 			   ((org-agenda-filter-preset
-				 (quote
-				  ("-inactive")))
-				(org-agenda-span
-				 (quote day))
+				 '("-inactive"))
+				(org-agenda-span 'day)
 				(org-agenda-overriding-header "Day agenda")))
 	   (tags-todo "carryover"
 				  ((org-agenda-overriding-header "Carry along list"))))
-	  nil))))
- '(org-agenda-ignore-properties (quote (effort appt category)))
+	  nil)))
+ '(org-agenda-ignore-properties '(effort appt category))
  '(org-agenda-text-search-extra-files
-   (quote
-	(agenda-archives "~/dat/org/_orgmeta/archive-2016.org" "~/dat/org/_orgmeta/archive-2015.org" "~/dat/org/_orgmeta/archive-2014.org" "~/dat/org/_orgmeta/archive-2013.org" "~/dat/org/_orgmeta/archive-2012.org" "~/dat/org/_orgmeta/archive-2011.org")))
- '(org-agenda-todo-ignore-scheduled (quote future))
+   '(agenda-archives "~/dat/org/_orgmeta/archive-2016.org" "~/dat/org/_orgmeta/archive-2015.org" "~/dat/org/_orgmeta/archive-2014.org" "~/dat/org/_orgmeta/archive-2013.org" "~/dat/org/_orgmeta/archive-2012.org" "~/dat/org/_orgmeta/archive-2011.org"))
+ '(org-agenda-todo-ignore-scheduled 'future)
  '(org-beamer-outline-frame-options nil)
  '(org-beamer-outline-frame-title "Onderwerpen")
  '(org-blocker-ignore-ancestor-siblings t)
  '(org-clock-x11idle-program-name "xprintidle")
  '(org-closed-keep-when-no-todo t)
  '(org-ditaa-jar-path "/home/mrb/bin/ditaa.jar")
- '(org-entities-user (quote (("cmd" "\\cmd{}" nil "⌘" "⌘" "⌘" "⌘"))))
- '(org-export-backends (quote (ascii html icalendar latex md odt org texinfo)))
- '(org-export-copy-to-kill-ring (quote if-interactive))
+ '(org-entities-user '(("cmd" "\\cmd{}" nil "⌘" "⌘" "⌘" "⌘")))
+ '(org-export-backends '(ascii html icalendar latex md odt org texinfo))
+ '(org-export-copy-to-kill-ring 'if-interactive)
  '(org-export-docbook-xsl-fo-proc-command "fop %i %o" t)
  '(org-export-docbook-xslt-proc-command "xsltproc --output %o %s %i" t)
- '(org-export-htmlize-output-type (quote css) t)
+ '(org-export-htmlize-output-type 'css t)
  '(org-export-latex-classes
-   (quote
-	(("article" "\\documentclass[11pt,a4paper,twoside]{article}"
+   '(("article" "\\documentclass[11pt,a4paper,twoside]{article}"
 	  ("\\section{%s}" . "\\section*{%s}")
 	  ("\\subsection{%s}" . "\\subsection*{%s}")
 	  ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
@@ -141,22 +129,20 @@
 	  ("\\section{%s}" . "\\section*{%s}")
 	  ("\\subsection{%s}" . "\\subsection*{%s}")
 	  ("\\subsubsection{%s}" . "\\subsubsection*{%s}"))
-	 ("beamer" "\\documentclass{beamer}" org-beamer-sectioning))) t)
+	 ("beamer" "\\documentclass{beamer}" org-beamer-sectioning)) t)
  '(org-export-latex-hyperref-format "\\ref{%s}:{%s}" t)
  '(org-export-latex-title-command " " t)
  '(org-export-with-tags nil)
  '(org-export-with-todo-keywords nil)
  '(org-file-apps
-   (quote
-	((auto-mode . emacs)
+   '((auto-mode . emacs)
 	 ("\\.dia\\'" . "dia %s")
 	 ("\\.mm\\'" . default)
-	 ("\\.pdf\\'" . emacs))))
+	 ("\\.pdf\\'" . emacs)))
  '(org-html-toplevel-hlevel 3)
  '(org-insert-heading-respect-content nil)
  '(org-latex-default-packages-alist
-   (quote
-	(("QX" "fontenc" t)
+   '(("QX" "fontenc" t)
 	 ("" "lmodern" t)
 	 ("AUTO" "inputenc" t)
 	 ("" "fixltx2e" nil)
@@ -172,40 +158,36 @@
 	 ("" "amssymb" t)
 	 ("" "amstext" nil)
 	 ("hidelinks" "hyperref" nil)
-	 "\\tolerance=1000")))
+	 "\\tolerance=1000"))
  '(org-latex-pdf-process
-   (quote
-	("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f" "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f" "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f")))
+   '("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f" "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f" "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"))
  '(org-latex-title-command " ")
  '(org-latex-to-pdf-process
-   (quote
-	("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f" "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f" "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f")) t)
+   '("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f" "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f" "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f") t)
  '(org-list-allow-alphabetical t)
  '(org-mime-use-property-inheritance t)
  '(org-org-htmlized-css-url "orgmode.css")
  '(org-plantuml-jar-path
    "/home/mrb/dat/src/emacs/packages/org-mode/contrib/scripts/plantuml.jar")
- '(org-stuck-projects (quote ("-inactive/+TODO" ("TODO" "WAITING") nil "")))
+ '(org-stuck-projects '("-inactive/+TODO" ("TODO" "WAITING") nil ""))
  '(org-tags-column -110)
- '(org-tags-exclude-from-inheritance (quote ("area" "encrypt")))
- '(org-time-stamp-custom-formats (quote ("<%m/%d/%y %a>" . "<%H:%M>")))
+ '(org-tags-exclude-from-inheritance '("area" "encrypt"))
+ '(org-time-stamp-custom-formats '("<%m/%d/%y %a>" . "<%H:%M>"))
  '(org-todo-state-tags-triggers
-   (quote
-	(("TODO"
+   '(("TODO"
 	  ("inactive"))
 	 ("DONE"
 	  ("inactive")
 	  ("fork"))
 	 ("BUY"
-	  ("buy" . t)))))
- '(org-use-fast-tag-selection (quote auto))
+	  ("buy" . t))))
+ '(org-use-fast-tag-selection 'auto)
  '(pdf-misc-print-programm "/usr/bin/lpr")
- '(pdf-view-midnight-colors (quote ("#DCDCCC" . "#383838")))
- '(reb-re-syntax (quote string))
- '(request-log-level (quote verbose))
+ '(pdf-view-midnight-colors '("#DCDCCC" . "#383838"))
+ '(reb-re-syntax 'string)
+ '(request-log-level 'verbose)
  '(safe-local-variable-values
-   (quote
-	((writefreely-post-id . "dbv92wvpfi")
+   '((writefreely-post-id . "dbv92wvpfi")
 	 (writefreely-post-id . "j9nqdr0edr")
 	 (writefreely-post-id . "3pn4uygr08")
 	 (writefreely-post-id . "gg3pfn4cb2")
@@ -221,13 +203,13 @@
 	 (haskell-process-use-ghci . t)
 	 (haskell-indent-spaces . 4)
 	 (encoding . utf-8)
-	 (buffer-auto-save-file-name))))
+	 (buffer-auto-save-file-name)))
  '(sgml-xml-mode t)
  '(shr-bullet "• ")
  '(shr-use-colors nil)
  '(shr-width 72)
  '(tab-width 4)
- '(warning-suppress-types (quote ((undo))))
+ '(warning-suppress-types '((undo)))
  '(x-select-enable-clipboard-manager nil))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
