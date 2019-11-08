@@ -444,99 +444,103 @@ I use (emacs, xterm, i3, dunst etc.) which sounds attractive. So, I'm
 starting with the =base16-nord= theme and see where this leaves me.
 
 #+BEGIN_SRC emacs-lisp
-    (use-package base16-theme
-      :config
-      ;; Do config here and finally load the theme
-      (setq base16-distinct-fringe-background nil
-            base16-highlight-mode-line 'contrast
-            base16-theme-256-color-source "terminal")
-      (load-theme 'base16-nord t)
+      (use-package base16-theme
+        :config
+        ;; Do config here and finally load the theme
+        (setq base16-distinct-fringe-background nil
+              base16-highlight-mode-line 'contrast
+              base16-theme-256-color-source "terminal")
+        (load-theme 'base16-nord t)
 
-      ;; Define our adjustments to faces
-      ;; This should be the only place where we adjust our faces
-      ;; For reference, these are the theme colors
-      ;; base00 '#2e3440 base01 '#3b4252 base02 '#434c5e base03 '#4c566a
-      ;; base04 '#d8dee9 base05 '#e5e9f0 base06 '#eceff4
-      ;; base07 '#8fbcbb base08 '#88c0d0 base09 '#81a1c1 base0A '#5e81ac
-      ;; base0B '#bf616a base0C '#d08770 base0D '#ebcb8b base0E '#a3be8c base0F '#b48ead
+        ;; Define our adjustments to faces
+        ;; This should be the only place where we adjust our faces
+        ;; For reference, these are the theme colors
+        ;; base00 '#2e3440 base01 '#3b4252 base02 '#434c5e base03 '#4c566a
+        ;; base04 '#d8dee9 base05 '#e5e9f0 base06 '#eceff4
+        ;; base07 '#8fbcbb base08 '#88c0d0 base09 '#81a1c1 base0A '#5e81ac
+        ;; base0B '#bf616a base0C '#d08770 base0D '#ebcb8b base0E '#a3be8c base0F '#b48ead
 
-      (setq base16-adjustments
-            '(
-              ;; Comments should not be that dark as base03
-              (font-lock-comment-face       :foreground "LightSkyBlue4")
-              ;; Make clickable things in help screens stand out
-              (button                       :foreground "#d08770" :weight semi-bold)
+        ;; FIXME: some of these adjustments come in too early and the package redefines it on loading
+        ;; the only solution for this is to move the visual adjustments in the use-package clauses of
+        ;; the package itself.
+        (setq base16-adjustments
+              '(
+                ;; Comments should not be that dark as base03
+                (font-lock-comment-face       :foreground "LightSkyBlue4")
+                ;; Make clickable things in help screens stand out
+                (button                       :foreground "#d08770" :weight semi-bold)
 
-              (show-paren-match             :foreground "#eceff4" :background "#5e81ac" :inherit nil :weight normal)
-              (show-paren-mismatch          :foreground "#2e3440" :background "#bf616a" :inherit nil :weight normal)
-              ;; Set regions so we keep the normal font locking
-              (region                       :foreground nil :background "#3b4252" :inherit nil :weight normal)
+                (show-paren-match             :foreground "#eceff4" :background "#5e81ac" :inherit nil :weight normal)
+                (show-paren-mismatch          :foreground "#2e3440" :background "#bf616a" :inherit nil :weight normal)
 
-              ;; Make highlights actually highlights, not hard to find.
-              (hl-line                      :background "#5e81ac")
+                ;; Set regions so we keep the normal font locking
+                (region                       :foreground nil :background "#3b4252" :inherit nil :weight normal)
 
-              ;; Magit
-              (magit-diff-added-highlight   :foreground "#a3be8c")
-              (magit-diff-removed-highlight :foreground "#bf616a")
-              (magit-diff-added             :foreground "#a3be8c")
-              (magit-diff-removed           :foreground "#bf616a")
-              ;; Elfeed
-              (elfeed-search-tag-face       :foreground "#a3be8c")
-              (elfeed-search-feed-face      :foreground "#ebcb8b")
-              (elfeed-search-date-face      :foreground "#88c0d0")
+                ;; Make highlights actually highlights, not hard to find.
+                (hl-line                      :background "#5e81ac" :foreground nil)
 
-              ;; flyspell errors/dupes look the same as flycheck-errors/warnings
-              (flyspell-incorrect           :inherit flycheck-error)
-              (flyspell-duplicate           :inherit flycheck-warning :foreground "#2e3440")
+                ;; Magit
+                (magit-diff-added-highlight   :foreground "#a3be8c")
+                (magit-diff-removed-highlight :foreground "#bf616a")
+                (magit-diff-added             :foreground "#a3be8c")
+                (magit-diff-removed           :foreground "#bf616a")
+                ;; Elfeed
+                (elfeed-search-tag-face       :foreground "#a3be8c")
+                (elfeed-search-feed-face      :foreground "#ebcb8b")
+                (elfeed-search-date-face      :foreground "#88c0d0")
 
-              ;; Orgmode
-              (mrb/org-todo-keyword-TODO      :foreground "#88c0d0" :weight bold)
-              (mrb/org-todo-keyword-DONE      :foreground "#a3be8c" :weight bold)
-              (mrb/org-todo-keyword-WAITING   :foreground "#bf616a" :weight bold)
-              (mrb/org-todo-keyword-CANCELLED :foreground "#3b4252" :weight bold)
-              (mrb/org-todo-keyword-BUY       :foreground "#d08770" :weight bold)
-              (mrb/org-todo-keyword-HOWTO     :foreground "#5e81ac" :weight bold)
-              (mrb/org-todo-keyword-INFO      :foreground "#ebcb8b" :weight bold)
-              (mrb/org-todo-keyword-COLLECT   :foreground "#a3be8c" :weight bold)
-              (mrb/org-todo-keyword-SOLVE     :foreground "#8fbcbb" :weight bold)
-              (mrb/org-todo-keyword-READ      :foreground "#b48ead" :weight bold)
-              (mrb/org-todo-keyword-PLAN      :foreground "#d8dee9" :weight bold)
-              ;; Headlines for DONE states should be less noticeable
-              (org-headline-done              :foreground "#4c566a")
-              ;; No underlining for date face in org
-              (org-date                       :foreground "#8fbcbb" :underline nil)
-              ;; the default org-level-4 is the same as comment-face, i.e. not very readable
-              ;; luckily 0F is free to use
-              (org-level-4                    :foreground "#b48ead")
-              (org-verbatim                   :foreground "#8fbcbb")
-              (org-list-dt                    :foreground "#b48ead")
-              ;; Set space-line state colors
-              (space-line-evil-normal         :background "#bf616a")
-              (space-line-evil-insert         :background "#ebcb8b")
-              (space-line-evil-emacs          :background "#a3be8c")
-              (space-line-evil-motion         :background "#81a1c1")
-              (space-line-evil-visual         :background "#8fbcbb")
-              (space-line-evil-replace        :background "#b48ead")
+                ;; flyspell errors/dupes look the same as flycheck-errors/warnings
+                (flyspell-incorrect           :inherit flycheck-error)
+                (flyspell-duplicate           :inherit flycheck-warning :foreground "#2e3440")
 
-              ;; line numbers current line, tone it down a bit
-              (line-number-current-line       :background "#4c566a")
+                ;; Orgmode
+                (mrb/org-todo-keyword-TODO      :foreground "#88c0d0" :weight bold)
+                (mrb/org-todo-keyword-DONE      :foreground "#a3be8c" :weight bold)
+                (mrb/org-todo-keyword-WAITING   :foreground "#bf616a" :weight bold)
+                (mrb/org-todo-keyword-CANCELLED :foreground "#3b4252" :weight bold)
+                (mrb/org-todo-keyword-BUY       :foreground "#d08770" :weight bold)
+                (mrb/org-todo-keyword-HOWTO     :foreground "#5e81ac" :weight bold)
+                (mrb/org-todo-keyword-INFO      :foreground "#ebcb8b" :weight bold)
+                (mrb/org-todo-keyword-COLLECT   :foreground "#a3be8c" :weight bold)
+                (mrb/org-todo-keyword-SOLVE     :foreground "#8fbcbb" :weight bold)
+                (mrb/org-todo-keyword-READ      :foreground "#b48ead" :weight bold)
+                (mrb/org-todo-keyword-PLAN      :foreground "#d8dee9" :weight bold)
+                ;; Headlines for DONE states should be less noticeable
+                (org-headline-done              :foreground "#4c566a")
+                ;; No underlining for date face in org
+                (org-date                       :foreground "#8fbcbb" :underline nil)
+                ;; the default org-level-4 is the same as comment-face, i.e. not very readable
+                ;; luckily 0F is free to use
+                (org-level-4                    :foreground "#b48ead")
+                (org-verbatim                   :foreground "#8fbcbb")
+                (org-list-dt                    :foreground "#b48ead")
+                ;; Set space-line state colors
+                (space-line-evil-normal         :background "#bf616a")
+                (space-line-evil-insert         :background "#ebcb8b")
+                (space-line-evil-emacs          :background "#a3be8c")
+                (space-line-evil-motion         :background "#81a1c1")
+                (space-line-evil-visual         :background "#8fbcbb")
+                (space-line-evil-replace        :background "#b48ead")
 
-              ;; Modeline faces
-              (mode-line :foreground "#3b4252" :background "#ebcb8b")
-              (header-line :foreground "#4c566a" :background "#ebcb8b")
+                ;; line numbers current line, tone it down a bit
+                (line-number-current-line       :background "#4c566a")
 
-              ;; Helm selection
-              (helm-selection :foreground "black" :background "goldenrod2")
-              (fringe :foreground "#a3be8c")
+                ;; Modeline faces
+                (mode-line :foreground "#3b4252" :background "#ebcb8b")
+                (header-line :foreground "#4c566a" :background "#ebcb8b")
 
-              ;; Mu4e
-              (mu4e-header-highlight-face :inherit hl-line :underline nil :foreground nil)))
+                ;; Helm selection
+                (helm-selection :foreground "black" :background "goldenrod2")
+                (fringe :foreground "#a3be8c")
 
-      ;; Apply our adjustment using the theme function
-      (base16-set-faces 'base16-nord base16-nord-colors base16-adjustments)
+                (mu4e-header-highlight-face :inherit hl-line :underline nil)
+  ))
 
-      ;; Define variable that I can use in other sections
-      (defvar mrb/base16-colors base16-nord-colors))
+        ;; Apply our adjustment using the theme function
+        (base16-set-faces 'base16-nord base16-nord-colors base16-adjustments)
+
+        ;; Define variable that I can use in other sections
+        (defvar mrb/base16-colors base16-nord-colors))
 #+END_SRC
 
 I enable highlighting matching parentheses in many levels
@@ -3045,23 +3049,12 @@ Make our source look a bit more attractive by enabling =prettify-symbol-mode= in
   (add-hook 'lisp-interaction-mode-hook 'mrb/prettify-symbols)
 #+END_SRC
 
-I think most of my documentation needs can be fulfilled with =(helm-)dash=
-
-#+begin_src emacs-lisp
-(use-package helm-dash
-  :after helm
-  :config
-  (setq helm-dash-browser-func 'eww)
-
-  ;; For now we can make all docsets common, i.e. always availabled
-  (add-to-list 'helm-dash-common-docsets "Emacs Lisp")
-  (add-to-list 'helm-dash-common-docsets "Python 3"))
-#+end_src
-
 ** Reference & documentation
 While emacs itself has a very nicely documentation system, I still don't understand why this is not interpolated into every other mode and or language.
 
 Example: =C-h-f= in lisp-mode describes the function to me. If I am in a python file, I want it to do exactly the same, but for the python function.  There's a page on emacswiki dealing with this a bit: https://www.emacswiki.org/emacs/Context_sensitive_help
+
+Anyways, here's what I have configured related to reference information and documentation
 
 *** RFC document reader
 I often need to consult RFC documents, so not having to leave emacs for that and be able to use all tools on RFC documents is very helpful.
