@@ -2685,7 +2685,8 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
     :after message fullframe
     :commands mu4e
     :bind (:map mu4e-headers-mode-map
-                ("S" . mu4e-headers-mark-for-spam)
+                ("/" . mu4e-headers-search)
+                ("s" . mu4e-headers-mark-for-spam)
                 ("r" . mu4e-compose-reply)
                 ("R" . mu4e-headers-mark-for-refile)
             :map mu4e-view-mode-map
