@@ -463,35 +463,49 @@ starting with the =base16-nord= theme and see where this leaves me.
         ;; the package itself.
         (setq base16-adjustments
               '(
+                ;; Adjustment for non-package faces
                 ;; Comments should not be that dark as base03
-                (font-lock-comment-face       :foreground "LightSkyBlue4")
-                ;; Make clickable things in help screens stand out
-                (button                       :foreground "#d08770" :weight semi-bold)
 
-                (show-paren-match             :foreground "#eceff4" :background "#5e81ac" :inherit nil :weight normal)
-                (show-paren-mismatch          :foreground "#2e3440" :background "#bf616a" :inherit nil :weight normal)
+                (font-lock-comment-face         :foreground "LightSkyBlue4")
+                (button                         :foreground "#d08770" :weight semi-bold)
 
-                ;; Set regions so we keep the normal font locking
-                (region                       :foreground nil :background "#3b4252" :inherit nil :weight normal)
+                (show-paren-match               :foreground "#eceff4" :background "#5e81ac" :inherit nil :weight normal)
+                (show-paren-mismatch            :foreground "#2e3440" :background "#bf616a" :inherit nil :weight normal)
 
-                ;; Make highlights actually highlights, not hard to find.
-                (hl-line                      :background "#5e81ac" :foreground nil)
+                (region                         :foreground nil :background "#3b4252" :inherit nil :weight normal)
+                (fringe                         :foreground "#a3be8c")
+
+                (hl-line                        :foreground nil :background "#5e81ac" )
+
+                (line-number-current-line       :background "#4c566a")
+
+                ;; Modeline faces
+                (mode-line                      :foreground "#3b4252" :background "#ebcb8b")
+                (header-line                    :foreground "#4c566a" :background "#ebcb8b")
 
                 ;; Magit
-                (magit-diff-added-highlight   :foreground "#a3be8c")
-                (magit-diff-removed-highlight :foreground "#bf616a")
-                (magit-diff-added             :foreground "#a3be8c")
-                (magit-diff-removed           :foreground "#bf616a")
-                ;; Elfeed
-                (elfeed-search-tag-face       :foreground "#a3be8c")
-                (elfeed-search-feed-face      :foreground "#ebcb8b")
-                (elfeed-search-date-face      :foreground "#88c0d0")
+                (magit-diff-added-highlight     :foreground "#a3be8c")
+                (magit-diff-removed-highlight   :foreground "#bf616a")
+                (magit-diff-added               :foreground "#a3be8c")
+                (magit-diff-removed             :foreground "#bf616a")
 
+                ;; Elfeed
+                (elfeed-search-tag-face         :foreground "#a3be8c")
+                (elfeed-search-feed-face        :foreground "#ebcb8b")
+                (elfeed-search-date-face        :foreground "#88c0d0")
+
+                ;; Flyspell
                 ;; flyspell errors/dupes look the same as flycheck-errors/warnings
-                (flyspell-incorrect           :inherit flycheck-error)
-                (flyspell-duplicate           :inherit flycheck-warning :foreground "#2e3440")
+                (flyspell-incorrect                                   :inherit flycheck-error)
+                (flyspell-duplicate             :foreground "#2e3440" :inherit flycheck-warning )
 
                 ;; Orgmode
+                (org-headline-done              :foreground "#4c566a")
+                (org-date                       :foreground "#8fbcbb" :underline nil)
+                (org-level-4                    :foreground "#b48ead")
+                (org-verbatim                   :foreground "#8fbcbb")
+                (org-list-dt                    :foreground "#b48ead")
+                ;; User defined faces for org-mode
                 (mrb/org-todo-keyword-TODO      :foreground "#88c0d0" :weight bold)
                 (mrb/org-todo-keyword-DONE      :foreground "#a3be8c" :weight bold)
                 (mrb/org-todo-keyword-WAITING   :foreground "#bf616a" :weight bold)
@@ -503,15 +517,7 @@ starting with the =base16-nord= theme and see where this leaves me.
                 (mrb/org-todo-keyword-SOLVE     :foreground "#8fbcbb" :weight bold)
                 (mrb/org-todo-keyword-READ      :foreground "#b48ead" :weight bold)
                 (mrb/org-todo-keyword-PLAN      :foreground "#d8dee9" :weight bold)
-                ;; Headlines for DONE states should be less noticeable
-                (org-headline-done              :foreground "#4c566a")
-                ;; No underlining for date face in org
-                (org-date                       :foreground "#8fbcbb" :underline nil)
-                ;; the default org-level-4 is the same as comment-face, i.e. not very readable
-                ;; luckily 0F is free to use
-                (org-level-4                    :foreground "#b48ead")
-                (org-verbatim                   :foreground "#8fbcbb")
-                (org-list-dt                    :foreground "#b48ead")
+
                 ;; Set space-line state colors
                 (space-line-evil-normal         :background "#bf616a")
                 (space-line-evil-insert         :background "#ebcb8b")
@@ -520,18 +526,12 @@ starting with the =base16-nord= theme and see where this leaves me.
                 (space-line-evil-visual         :background "#8fbcbb")
                 (space-line-evil-replace        :background "#b48ead")
 
-                ;; line numbers current line, tone it down a bit
-                (line-number-current-line       :background "#4c566a")
-
-                ;; Modeline faces
-                (mode-line :foreground "#3b4252" :background "#ebcb8b")
-                (header-line :foreground "#4c566a" :background "#ebcb8b")
 
                 ;; Helm selection
-                (helm-selection :foreground "black" :background "goldenrod2")
-                (fringe :foreground "#a3be8c")
+                (helm-selection                 :foreground "black" :background "goldenrod2")
 
-                (mu4e-header-highlight-face :inherit hl-line :underline nil)
+                ;; Mu4e
+                (mu4e-header-highlight-face     :inherit hl-line :underline nil)
   ))
 
         ;; Apply our adjustment using the theme function
