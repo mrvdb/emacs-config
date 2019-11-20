@@ -138,14 +138,17 @@ First of all, define the package archives I need; for now, just the default gnu 
   (add-to-list 'package-archives
                '("melpa-stable" . "https://stable.melpa.org/packages/") t)
   (add-to-list 'package-archives
-               '("gnu" . "https://elpa.gnu.org/packages/") t)
+               '("org" . "https://orgmode.org/elpa/") t)
 
+  ;; Bootstrap use-package
+  (unless (package-installed-p 'use-package)
+    (message "Use package needs to be installed")
+    (package-refresh-contents) ;; Just to make sure (note that refresh only runs if use-package is NOT installed)
+    (package-install 'use-package))
 
   ;; Use-package is certain to be installed (init.el) does it.
   (use-package use-package
-    :config
-    ;; Extension to check for system executables
-    (use-package use-package-ensure-system-package)
+    :init
     ;; Default is to have elpa provide the package
     (setq use-package-always-ensure t)
     (setq use-package-verbose t)
@@ -153,10 +156,14 @@ First of all, define the package archives I need; for now, just the default gnu 
     (if (daemonp)
         (setq use-package-always-demand t))
 
+    ;; Extension to check for system executable, needs explicit ensure!
+    (use-package use-package-ensure-system-package
+      :ensure t)
+
     ;; Location where I keep custom packages
     (setq custom-package-directory (concat emacs-directory "lisp/")))
 
-  (use-package cl-lib )
+  ;;(use-package cl-lib )
 #+END_SRC
 
 Now, there's an issue where a variable =package-selected-packages= gets written to =custom.el= everytime I try a package. I do not want that. The site [[http://www.holgerschurig.de/en/emacs-dont-let-packages-pollute-custom-el/][from holger]] has an answer for that, although it needs a slight adaptation (=context= argument is not there anymore)
@@ -531,7 +538,7 @@ starting with the =base16-nord= theme and see where this leaves me.
                 (helm-selection                 :foreground "black" :background "goldenrod2")
 
                 ;; Mu4e
-                (mu4e-header-highlight-face     :inherit hl-line :underline nil)))
+                (mu4e-header-highlight-face     :inherit hl-line :underline nil :foreground nil)))
 
         ;; Apply our adjustment using the theme function
         (base16-set-faces 'base16-nord base16-nord-colors base16-adjustments)
@@ -642,6 +649,7 @@ Line-numbering is off by default, it tends to slow things down, but if I want it
 
 #+BEGIN_SRC emacs-lisp
   (use-package display-line-numbers
+    :ensure nil ;;builtin
     :config
     (setq
      display-line-numbers-type 'relative)
@@ -727,6 +735,7 @@ consistent
 
 #+BEGIN_SRC emacs-lisp
   (use-package flyspell
+    :ensure nil ;builtin
     :config
 
     ;; flyspell-duplicate  as warnings
@@ -795,6 +804,7 @@ Also, save the location in files between sessions.
 
   ;; Save places in buffers between sessions
   (use-package saveplace
+    :ensure nil ;builtin
     :init
     (setq-default save-place-mode t))
 #+END_SRC
@@ -873,6 +883,7 @@ When emacs does not determine the right mode, I sometimes want a modestring some
     :mode "\\.php\\'")
 
   (use-package css-mode
+    :ensure nil ;builtin
     :mode ("\\.css\\'" "\\.mss\\'"))
 
   (use-package apache-mode
@@ -2223,7 +2234,6 @@ First thing I missed in eshell was a the =clear= function, as in bash. By defini
 We want to be able to open files from within eshell in the same way as we do from the command line shell in the os. For this I have define an alias which just uses find-file-other-window.  To be able to open multiple files (so we can use $* as argument instead of just $1) we need to advice find-file-other-window to support this.
 
 #+BEGIN_SRC emacs-lisp
-  (require 'cl)
   (defadvice find-file-other-window (around find-files activate)
     "Also find all files within a list of files. Thsi even works recursively."
     (if (listp filename)

@@ -8,33 +8,15 @@
 
 ;;; Code:
 
-;; Some performance tweaks
+;; Set gc really large, especially when loading the config file
 ;; These two lines prevent a stuttering cursor for me, in most cases
-;; FIXME: this sets gc to 500Mb / but in idle 5 seconds Obviously wrong!!
-(setq gc-cons-threshold 500000000)
+;; FIXME: gc collection in idle time is not the way to do this
+(setq gc-cons-threshold 200000000)
 (run-with-idle-timer 5 t #'garbage-collect)
 
-;; Added by Package.el.  This must come before configurations of
-;; installed packages.  Don't delete this line.  If you don't want it,
-;; just comment it out by adding a semicolon to the start of the line.
-;; You may delete these explanatory comments.
-(package-initialize)
-(add-to-list 'package-archives
-	     '("org" . "https://orgmode.org/elpa/") t)
-
-;; Bootstrap use-package
-(unless (package-installed-p 'use-package)
-  (package-refresh-contents) ;; Just to make sure (note that refresh only runs if use-package is NOT installed)
-  (package-install 'use-package))
-
-;; Load in the main org file which starts up configuration This will
-;; lead to an mrb.el file automatically, so that can't exist in the
-;; current directory for this to work.
-(use-package org)
-
-;; We have to set the local variables safe for the file (writefreely related)
+;; My org file is posted using writefreely, which uses local variables
 (add-to-list 'safe-local-variable-values '(writefreely-post-id . "wf83bq5jwz"))
-(add-to-list 'safe-local-variable-values '(writefreely-post-token))
+(add-to-list 'safe-local-variable-values '(writefreely-post-token . nil))
 (org-babel-load-file "~/.emacs.d/mrb.org")
 
 ;; END init.el
