@@ -311,34 +311,28 @@ Make life easier if we have sudo, so we can just edit the files and be done with
 
 Using pdf-tools for PDF handling. This is a lot better than docview. I'm a bit annoyed that they are not one package, they are very similar.
 #+BEGIN_SRC emacs-lisp
-(use-package pdf-tools
-  :after (pdf-annot fullframe)
-  :bind (:map pdf-view-mode-map
-         ("h"   . 'pdf-annot-add-highlight-markup-annotation)
-         ("t"   . 'pdf-annot-add-text-annotation)
-         ("D"   . 'pdf-annot-delete)
-         ("C-s" . 'isearch-forward)
-         ("m"   . 'mrb/mailfile)
-         :map pdf-annot-edit-contents-minor-mode-map
-         ("<return>"   . 'pdf-annot-edit-contents-commit)
-         ("<S-return>" .  'newline))
+  (use-package pdf-tools
+    :after (pdf-annot fullframe)
+    :magic ("%PDF" . pdf-view-mode)
+    :bind (:map pdf-view-mode-map
+                ("h"   . 'pdf-annot-add-highlight-markup-annotation)
+                ("t"   . 'pdf-annot-add-text-annotation)
+                ("D"   . 'pdf-annot-delete)
+                ("C-s" . 'isearch-forward)
+                ("m"   . 'mrb/mailfile)
+                :map pdf-annot-edit-contents-minor-mode-map
+                ("<return>"   . 'pdf-annot-edit-contents-commit)
+                ("<S-return>" .  'newline))
 
-  :config
-  ;; All this came from http://pragmaticemacs.com/emacs/even-more-pdf-tools-tweaks/
+    :config
+    ;; Some settings from http://pragmaticemacs.com/emacs/even-more-pdf-tools-tweaks/
+    (fullframe pdf-view-mode quit-window)
+    (setq-default pdf-view-display-size 'fit-page) ;scale to fit page by default
+    (setq pdf-annot-activate-created-annotations t) ; automatically annotate highlights
+    (setq pdf-view-resize-factor 1.1)	; more fine-grained zooming
+    (add-hook 'pdf-view-mode-hook (lambda () (cua-mode 0))) ; turn off cua so copy works
 
-   ;; open pdfs scaled to fit page in full frame window
-   (fullframe pdf-view-mode quit-window)
-   (setq-default pdf-view-display-size 'fit-page)
-   ;; automatically annotate highlights
-   (setq pdf-annot-activate-created-annotations t)
-
-   ;; turn off cua so copy works
-   (add-hook 'pdf-view-mode-hook (lambda () (cua-mode 0)))
-   ;; more fine-grained zooming
-   (setq pdf-view-resize-factor 1.1))
-  ;; Activate it
-  ;; Why can't this be inside the use-package clause?
-  (pdf-tools-install :no-query)
+    (pdf-tools-install :no-query))
 #+END_SRC
 
 * Internationalisation and multi-language features
