@@ -2897,9 +2897,9 @@ I'm experimenting with Weechat now, mostly because it has multiple clients and c
     :after tracking
     :disabled
     :config
-    (require 'weechat-tracking)
-    (require 'weechat-notifications)
-    (require 'weechat-image)
+    (use-package weechat-tracking)
+    (use-package weechat-notifications)
+    (use-package weechat-image)
     (setq weechat-host-default "chat.hsdev.com"
           weechat-port-default 8443
           weechat-mode-default 'ssl
@@ -3237,7 +3237,7 @@ I'm not in the habit of editting gcode, but every now and then I need to look at
 Using =define-generic-mode= is more than enough to define something useful for me.
 
 #+begin_src emacs-lisp
-  (require 'generic-x)
+  (use-package generic-x :ensure nil)
 
   (define-generic-mode marlin-gcode-mode
     '((";"))   ;; ; starts a comment
