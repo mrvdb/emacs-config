@@ -2600,13 +2600,9 @@ It's not entirely clear which package is exactly responsible for what, but there
      message-cite-function 'message-cite-original-without-signature
 
      ;; Citing/Quoting when replying
-     ;; What I would like:
-     ;; - Add '> ' when quoting message lines
-     ;; - Add '>' when quoting cited lines (uses `message-cite-prefix-regexp` to determine this)
-     ;; - nothing on empty lines
-     message-yank-prefix "> "
-     message-yank-cited-prefix ">"
-     message-yank-empty-prefix ""
+     message-yank-prefix "> "				; Add '> ' when quoting lines
+     message-yank-cited-prefix ">"		; Add '>' for cited lines
+     message-yank-empty-prefix ""			; Add nothing for empty lines
 
      ;; Always put one in the Sent folder on sending.
      message-default-mail-headers "Bcc: mrb+Sent@hsdev.com\n"
@@ -2616,29 +2612,7 @@ It's not entirely clear which package is exactly responsible for what, but there
      ;; Make sure we use it
      message-citation-line-function 'message-insert-formatted-citation-line
 
-     message-kill-buffer-on-exit t)
-
-
-    ;; First quote level
-    (set-face-attribute 'message-cited-text nil :inherit 'org-level-1)
-
-    ;; Face for second level of quoting
-    (defface message-double-quoted-text-face
-      '((t (:inherit org-level-2)))
-      "Second level quotations in email")
-
-    ;; Face for third and higher level of quoting
-    (defface message-multiply-quoted-text-face
-      '((t (:inherit org-level-3)))
-      "Third level quotations in email")
-
-    ;; Add some color to quoted lines
-    (font-lock-add-keywords
-     nil
-     '(("^[ \t]*>[ \t]*>[ \t]*>.*$"
-        (0 'message-multiply-quoted-text-face))
-       ("^[ \t]*>[ \t]*>.*$"
-        (0 'message-double-quoted-text-face)))))
+     message-kill-buffer-on-exit t))
 
   (defun mrb/message-mode-hook ()
     "This configures message mode and thus other modes which inherit message mode."
@@ -2718,16 +2692,12 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
                              ;; The default refile location
                              (t  archive_base))))
 
-     ;; Absolute folder here, not relative to Maildir!
-     mu4e-attachment-dir "~/Downloads"
-
-     ;; Added for my specific config
-     mrb/mu4e-junk-folder "/Junk"
+     mu4e-attachment-dir "~/Downloads"	; Absolute folder here, not relative to Maildir!
+     mrb/mu4e-junk-folder "/Junk"			; Added for my specific config
 
      mu4e-confirm-quit nil
      mu4e-use-fancy-chars t
-     ;; We do mailsyncing somewhere else
-     mu4e-get-mail-command "mbsync quick"
+     mu4e-get-mail-command "mbsync quick"	; Just get inbox and important stuff, not everything
      mu4e-decryption-policy 'ask
      mu4e-update-interval 120				; 2 minutes is fine since we don't actually retrieve, just index
      mu4e-compose-complete-only-after nil
@@ -2744,11 +2714,10 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
      mu4e-compose-format-flowed t			; Compose in format=flowed
      mu4e-compose-in-new-frame nil		; TODO: match with mail handler
      mu4e-compose-dont-reply-to-self t	; Do not include my addresses when replying
-
-     ;; Read signature from the usual signature file
-     mu4e-compose-signature (with-current-buffer
-                                (find-file-noselect "~/.signature")
-                              (buffer-string))
+     mu4e-compose-signature (			; Read signature from the usual signature file
+                             with-current-buffer
+                             (find-file-noselect "~/.signature")
+                             (buffer-string))
 
      ;; Header view settings
      mu4e-headers-include-related nil ; Use 'W' to toggle interactively
