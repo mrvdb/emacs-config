@@ -966,7 +966,7 @@ Also make sure we never load org from internal, this can happen when functions w
            ("C-s-s"   . 'org-save-all-org-buffers)
            ("C-x m"   . 'mrb/construct-mail)
            :map org-mode-map
-           ("C-c ,"   . 'mrb/org-insert-inactive-timestamp)
+           ("C-c ,"   . 'mrb/org-insert-inactive-timestamp) ; This wont work on org-reload
            ("C-c l"   . 'org-store-link)
            ("C-c p"   . 'org-plot/gnuplot)
            ("s-."     . 'org-todo)
