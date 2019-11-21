@@ -133,37 +133,37 @@ Package handling, do this early so emacs knows where to find things.
 First of all, define the package archives I need; for now, just the default gnu augmented with the melpa repository.
 
 #+BEGIN_SRC emacs-lisp
-  (add-to-list 'package-archives
-               '("melpa" . "https://melpa.org/packages/") t)
-  (add-to-list 'package-archives
-               '("melpa-stable" . "https://stable.melpa.org/packages/") t)
-  (add-to-list 'package-archives
-               '("org" . "https://orgmode.org/elpa/") t)
+  (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
+  (add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/") t)
+  (add-to-list 'package-archives '("org" . "https://orgmode.org/elpa/") t)
 
-  ;; Bootstrap use-package
-  (unless (package-installed-p 'use-package)
+  ;; Set explicit priorities (gnu is the default package-archive)
+  (setq package-archive-priorities '(("org" . 4)
+                                     ("melpa" . 3)
+                                     ("melpa-stable" . 2)
+                                     ("gnu" . 1)))
+
+  (unless (package-installed-p 'use-package) ; Bootstrap use-package
     (message "Use package needs to be installed")
-    (package-refresh-contents) ;; Just to make sure (note that refresh only runs if use-package is NOT installed)
+    (package-refresh-contents)
     (package-install 'use-package))
 
-  ;; Use-package is certain to be installed (init.el) does it.
+  ;; Use-package can now be used for itself
   (use-package use-package
     :init
     ;; Default is to have elpa provide the package
     (setq use-package-always-ensure t)
     (setq use-package-verbose t)
-    ;; If running as daemon, just load shite
+    ;; If running as daemon, just load shite to minimize chance of lockup, but it still happens.
     (if (daemonp)
         (setq use-package-always-demand t))
 
-    ;; Extension to check for system executable, needs explicit ensure!
     (use-package use-package-ensure-system-package
-      :ensure t)
+      :ensure t							; Need this because we are in use-package config
+      )
 
     ;; Location where I keep custom packages
     (setq custom-package-directory (concat emacs-directory "lisp/")))
-
-  ;;(use-package cl-lib )
 #+END_SRC
 
 Now, there's an issue where a variable =package-selected-packages= gets written to =custom.el= everytime I try a package. I do not want that. The site [[http://www.holgerschurig.de/en/emacs-dont-let-packages-pollute-custom-el/][from holger]] has an answer for that, although it needs a slight adaptation (=context= argument is not there anymore)
@@ -177,7 +177,7 @@ So, =package-selected-packages= will not stay empty and not written out. The fir
 
 #+BEGIN_SRC emacs-lisp
   (defun mrb/use-package-ensure-elpa (name args state &optional no-refresh)
-    ;; Args is a list, but only hase 1 entry?
+    ;; Args is a list, but only has 1 entry?
     (dolist (ensure args)
       (let ((package
              (or (and (eq ensure t) (use-package-as-symbol name))
@@ -1652,7 +1652,6 @@ While the capture method is useful I found myself not using it very much. Not su
      org-journal-carryover-items "+carryover|+TODO=\"TODO\""
      ;; and for this to work, we need agenda integration
      org-journal-enable-agenda-integration t
-
 
     ;; I want to have encryption, but how do TODO items bubble up then in the agenda
     org-journal-enable-encryption nil
