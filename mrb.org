@@ -4,11 +4,14 @@
 #+OPTIONS:  H:5 toc:1 creator:nil email:nil author:t timestamp:t tags:nil
 #+PROPERTY: header-args :results silent
 
-(note: this document was posted automatically with the [[https://github.com/dangom/writefreely.el][writefreely.el]] Emacs package. Therefore, some layout issues may occur due to orgmode to markdown conversion.
-
 This is my emacs configuration file that is loaded with =org-babel-load-file= in the Emacs init file. The intent is to have as much of my Emacs configuration in here as possible. The system works as a literal programming system where with a tangle the elisp code that actually makes up my configuration is extracted automatically and loaded.
 
 This file was created from many separate elisp files and has not been fully sanitized yet. Following the history of that may be interesting to some as well. On top of that I have an auto commit hook on save running at the moment which does not produce the best hitory records. All that will change over time.
+
+This document is irregularly published and lives in different locations:
+
+- available on github :: https://github.com/mrvdb/emacs-config
+- published on writefreely :: https://qua.name/mrb/an-org-babel-based-emacs-configuration
 
 * Preparing for lift-off
 The base of the emacs configuration is in the =~/.emacs.d/= directory, so add this to my loadpaths first and give it a name.
