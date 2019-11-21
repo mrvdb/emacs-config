@@ -536,10 +536,7 @@ starting with the =base16-nord= theme and see where this leaves me.
             (mu4e-header-highlight-face     :inherit hl-line :underline nil :foreground nil)))
 
     ;; Apply our adjustment using the theme function
-    (base16-set-faces 'base16-nord base16-nord-colors base16-adjustments)
-
-    ;; Define variable that I can use in other sections
-    (defvar mrb/base16-colors base16-nord-colors))
+    (base16-set-faces 'base16-nord base16-nord-colors base16-adjustments))
 #+END_SRC
 
 I enable highlighting matching parentheses in many levels
