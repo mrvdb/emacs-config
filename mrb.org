@@ -1,6 +1,6 @@
 #+SETUPFILE: "~/.emacs.d/org-config.org"
 #+TITLE: My org-babel based emacs configuration
-#+LANGUAGE:  en
+#+LANGUAGE: en
 #+OPTIONS:  H:5 toc:1 creator:nil email:nil author:t timestamp:t tags:nil
 #+PROPERTY: header-args :results silent
 
@@ -423,20 +423,19 @@ Let's set up some basics first, background dark, some default frame
 and cursor properties:
 
 #+BEGIN_SRC emacs-lisp
+  (setq mrb/cursor-type '(bar . 3))		; Slightly wide bar
+  (setq mrb/cursor-color "DarkOrange")	; in fat orange color
+
   (setq-default frame-background-mode 'dark)
 
   ;; Only show cursor in the active window.
   (setq-default cursor-in-non-selected-windows nil)
 
-  ;; Make the vertical cursor bar wider, but not so wide
-  ;; we can't read the next character anymore.
-  (setq mrb/cursor-type '(bar . 3))
-
   ;;Default frame properties frame position, color, etc
   (setq default-frame-alist
   `((cursor-type . ,mrb/cursor-type )
               (height . 60) (width . 100)
-              (cursor-color . "DarkOrange")))
+              (cursor-color . ,mrb/cursor-color)))
 #+END_SRC
 
 I'm using the [[https://github.com/arcticicestudio/nord][Nord color palette]]. This palette defines 16 colors.
@@ -451,103 +450,105 @@ I use (emacs, xterm, i3, dunst etc.) which sounds attractive. So, I'm
 starting with the =base16-nord= theme and see where this leaves me.
 
 #+BEGIN_SRC emacs-lisp
-      (setq custom--inhibit-theme-enable nil)
-      (use-package base16-theme
-        :config
-        ;; Do config here and finally load the theme
-        (setq base16-distinct-fringe-background nil
-              base16-highlight-mode-line 'contrast
-              base16-theme-256-color-source "terminal")
-        (load-theme 'base16-nord t)
+  (setq custom--inhibit-theme-enable nil)
+  (use-package base16-theme
+    :config
+    ;; Do config here and finally load the theme
+    (setq base16-distinct-fringe-background nil
+          base16-highlight-mode-line 'contrast
+          base16-theme-256-color-source "terminal")
+    (load-theme 'base16-nord t)
 
-        ;; Define our adjustments to faces
-        ;; This should be the only place where we adjust our faces
-        ;; For reference, these are the theme colors
-        ;; base00 '#2e3440 base01 '#3b4252 base02 '#434c5e base03 '#4c566a
-        ;; base04 '#d8dee9 base05 '#e5e9f0 base06 '#eceff4
-        ;; base07 '#8fbcbb base08 '#88c0d0 base09 '#81a1c1 base0A '#5e81ac
-        ;; base0B '#bf616a base0C '#d08770 base0D '#ebcb8b base0E '#a3be8c base0F '#b48ead
+    ;; Define our adjustments to faces
+    ;; This should be the only place where we adjust our faces
+    ;; For reference, these are the theme colors
+    ;; base00 '#2e3440 base01 '#3b4252 base02 '#434c5e base03 '#4c566aq
+    ;; base04 '#d8dee9 base05 '#e5e9f0 base06 '#eceff4
+    ;; base07 '#8fbcbb base08 '#88c0d0 base09 '#81a1c1 base0A '#5e81ac
+    ;; base0B '#bf616a base0C '#d08770 base0D '#ebcb8b base0E '#a3be8c base0F '#b48ead
 
-        ;; FIXME: some of these adjustments come in too early and the package redefines it on loading
-        ;; the only solution for this is to move the visual adjustments in the use-package clauses of
-        ;; the package itself.
-        (setq base16-adjustments
-              '(
-                ;; Adjustment for non-package faces
-                ;; Comments should not be that dark as base03
+    ;; FIXME: some of these adjustments come in too early and the package redefines it on loading
+    ;; the only solution for this is to move the visual adjustments in the use-package clauses of
+    ;; the package itself.
+    (setq base16-adjustments
+          `(
+            ;; Adjustment for non-package faces
+            ;; Comments should not be that dark as base03
+            (font-lock-comment-face         :foreground "#666666")
+            (button                         :foreground "#d08770" :weight semi-bold)
 
-                (font-lock-comment-face         :foreground "LightSkyBlue4")
-                (button                         :foreground "#d08770" :weight semi-bold)
+            (show-paren-match               :foreground "#eceff4" :background "#5e81ac" :inherit nil :weight normal)
+            (show-paren-mismatch            :foreground "#2e3440" :background "#bf616a" :inherit nil :weight normal)
 
-                (show-paren-match               :foreground "#eceff4" :background "#5e81ac" :inherit nil :weight normal)
-                (show-paren-mismatch            :foreground "#2e3440" :background "#bf616a" :inherit nil :weight normal)
+            (region                         :foreground nil :background "#3b4252" :inherit nil :weight normal)
+            (fringe                         :foreground "#a3be8c")
 
-                (region                         :foreground nil :background "#3b4252" :inherit nil :weight normal)
-                (fringe                         :foreground "#a3be8c")
+            (hl-line                        :foreground nil :background "#5e81ac" )
 
-                (hl-line                        :foreground nil :background "#5e81ac" )
+            (line-number-current-line       :background "#4c566a")
 
-                (line-number-current-line       :background "#4c566a")
+            (lazy-highlight                 :foreground "#434c5e" :background "#5e81ac")
+            (isearch                        :foreground "#434c5e" :background ,mrb/cursor-color)
 
-                ;; Modeline faces
-                (mode-line                      :foreground "#3b4252" :background "#ebcb8b")
-                (header-line                    :foreground "#4c566a" :background "#ebcb8b")
+            ;; Modeline faces
+            (mode-line                      :foreground "#3b4252" :background "#ebcb8b")
+            (header-line                    :foreground "#4c566a" :background "#ebcb8b")
 
-                ;; Magit
-                (magit-diff-added-highlight     :foreground "#a3be8c")
-                (magit-diff-removed-highlight   :foreground "#bf616a")
-                (magit-diff-added               :foreground "#a3be8c")
-                (magit-diff-removed             :foreground "#bf616a")
+            ;; Magit
+            (magit-diff-added-highlight     :foreground "#a3be8c")
+            (magit-diff-removed-highlight   :foreground "#bf616a")
+            (magit-diff-added               :foreground "#a3be8c")
+            (magit-diff-removed             :foreground "#bf616a")
 
-                ;; Elfeed
-                (elfeed-search-tag-face         :foreground "#a3be8c")
-                (elfeed-search-feed-face        :foreground "#ebcb8b")
-                (elfeed-search-date-face        :foreground "#88c0d0")
+            ;; Elfeed
+            (elfeed-search-tag-face         :foreground "#a3be8c")
+            (elfeed-search-feed-face        :foreground "#ebcb8b")
+            (elfeed-search-date-face        :foreground "#88c0d0")
 
-                ;; Flyspell
-                ;; flyspell errors/dupes look the same as flycheck-errors/warnings
-                (flyspell-incorrect                                   :inherit flycheck-error)
-                (flyspell-duplicate             :foreground "#2e3440" :inherit flycheck-warning )
+            ;; Flyspell
+            ;; flyspell errors/dupes look the same as flycheck-errors/warnings
+            (flyspell-incorrect                                   :inherit flycheck-error)
+            (flyspell-duplicate             :foreground "#2e3440" :inherit flycheck-warning )
 
-                ;; Orgmode
-                (org-headline-done              :foreground "#4c566a")
-                (org-date                       :foreground "#8fbcbb" :underline nil)
-                (org-level-4                    :foreground "#b48ead")
-                (org-verbatim                   :foreground "#8fbcbb")
-                (org-list-dt                    :foreground "#b48ead")
-                ;; User defined faces for org-mode
-                (mrb/org-todo-keyword-TODO      :foreground "#88c0d0" :weight bold)
-                (mrb/org-todo-keyword-DONE      :foreground "#a3be8c" :weight bold)
-                (mrb/org-todo-keyword-WAITING   :foreground "#bf616a" :weight bold)
-                (mrb/org-todo-keyword-CANCELLED :foreground "#3b4252" :weight bold)
-                (mrb/org-todo-keyword-BUY       :foreground "#d08770" :weight bold)
-                (mrb/org-todo-keyword-HOWTO     :foreground "#5e81ac" :weight bold)
-                (mrb/org-todo-keyword-INFO      :foreground "#ebcb8b" :weight bold)
-                (mrb/org-todo-keyword-COLLECT   :foreground "#a3be8c" :weight bold)
-                (mrb/org-todo-keyword-SOLVE     :foreground "#8fbcbb" :weight bold)
-                (mrb/org-todo-keyword-READ      :foreground "#b48ead" :weight bold)
-                (mrb/org-todo-keyword-PLAN      :foreground "#d8dee9" :weight bold)
+            ;; Orgmode
+            (org-headline-done              :foreground "#4c566a")
+            (org-date                       :foreground "#8fbcbb" :underline nil)
+            (org-level-4                    :foreground "#b48ead")
+            (org-verbatim                   :foreground "#8fbcbb")
+            (org-list-dt                    :foreground "#b48ead")
+            ;; User defined faces for org-mode
+            (mrb/org-todo-keyword-TODO      :foreground "#88c0d0" :weight bold)
+            (mrb/org-todo-keyword-DONE      :foreground "#a3be8c" :weight bold)
+            (mrb/org-todo-keyword-WAITING   :foreground "#bf616a" :weight bold)
+            (mrb/org-todo-keyword-CANCELLED :foreground "#3b4252" :weight bold)
+            (mrb/org-todo-keyword-BUY       :foreground "#d08770" :weight bold)
+            (mrb/org-todo-keyword-HOWTO     :foreground "#5e81ac" :weight bold)
+            (mrb/org-todo-keyword-INFO      :foreground "#ebcb8b" :weight bold)
+            (mrb/org-todo-keyword-COLLECT   :foreground "#a3be8c" :weight bold)
+            (mrb/org-todo-keyword-SOLVE     :foreground "#8fbcbb" :weight bold)
+            (mrb/org-todo-keyword-READ      :foreground "#b48ead" :weight bold)
+            (mrb/org-todo-keyword-PLAN      :foreground "#d8dee9" :weight bold)
 
-                ;; Set space-line state colors
-                (space-line-evil-normal         :background "#bf616a")
-                (space-line-evil-insert         :background "#ebcb8b")
-                (space-line-evil-emacs          :background "#a3be8c")
-                (space-line-evil-motion         :background "#81a1c1")
-                (space-line-evil-visual         :background "#8fbcbb")
-                (space-line-evil-replace        :background "#b48ead")
+            ;; Set space-line state colors
+            (space-line-evil-normal         :background "#bf616a")
+            (space-line-evil-insert         :background "#ebcb8b")
+            (space-line-evil-emacs          :background "#a3be8c")
+            (space-line-evil-motion         :background "#81a1c1")
+            (space-line-evil-visual         :background "#8fbcbb")
+            (space-line-evil-replace        :background "#b48ead")
 
 
-                ;; Helm selection
-                (helm-selection                 :foreground "black" :background "goldenrod2")
+            ;; Helm selection
+            (helm-selection                 :foreground "black" :background "goldenrod2")
 
-                ;; Mu4e
-                (mu4e-header-highlight-face     :inherit hl-line :underline nil :foreground nil)))
+            ;; Mu4e
+            (mu4e-header-highlight-face     :inherit hl-line :underline nil :foreground nil)))
 
-        ;; Apply our adjustment using the theme function
-        (base16-set-faces 'base16-nord base16-nord-colors base16-adjustments)
+    ;; Apply our adjustment using the theme function
+    (base16-set-faces 'base16-nord base16-nord-colors base16-adjustments)
 
-        ;; Define variable that I can use in other sections
-        (defvar mrb/base16-colors base16-nord-colors))
+    ;; Define variable that I can use in other sections
+    (defvar mrb/base16-colors base16-nord-colors))
 #+END_SRC
 
 I enable highlighting matching parentheses in many levels
