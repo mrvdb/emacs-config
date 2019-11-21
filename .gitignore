@@ -55,3 +55,4 @@ mastodon.plstore
 /.org-id-locations.save
 /.lsp-session-v1
 /transient/
+/org-journal.cache
