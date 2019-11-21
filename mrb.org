@@ -2889,12 +2889,12 @@ I'm experimenting with Weechat now, mostly because it has multiple clients and c
 
 #+BEGIN_SRC emacs-lisp
   (use-package weechat
+    :if (version< emacs-version "27")
     :after tracking
-    :disabled								; Not Emacs 27 compatible see weechat issue #20 on github
     :config
-    (use-package weechat-tracking)
-    (use-package weechat-notifications)
-    (use-package weechat-image)
+    (use-package weechat-tracking :ensure nil)
+    (use-package weechat-notifications :ensure nil)
+    (use-package weechat-image :ensure nil)
     (setq weechat-host-default "chat.hsdev.com"
           weechat-port-default 8443
           weechat-mode-default 'ssl
