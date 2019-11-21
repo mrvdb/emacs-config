@@ -2771,7 +2771,17 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
                           (make-mu4e-bookmark
                            :name "TODO list"
                            :query "flag:flagged"
-                           :key ?$))))
+                           :key ?$)))
+
+    ;; Rendering of html mail is done with shr
+    ;; By default, it's inhibiting images, I dont want that, as I only look at the html if needed
+    (defun mrb/mu4e-shr2text (msg)
+      "Overridden mu4e-shr2text"
+      (mu4e~html2text-wrapper
+        (lambda ()
+          (let ((shr-inhibit-images nil)) ; Explicitly allow images, use shr-blocked images to control
+            (shr-render-region (point-min) (point-max)))) msg))
+    (setq mu4e-html2text-command 'mrb/mu4e-shr2text))
 #+end_src
 
 To enable integration with orgmode =org-mu4e= must be loaded
