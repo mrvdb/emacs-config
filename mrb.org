@@ -2645,6 +2645,8 @@ It's not entirely clear which package is exactly responsible for what, but there
     ;; This enables the f=f encoding
     (setq mml-enable-flowed t))
 
+  ;; Keep an eye on message formatting, I think the above is right, but I'm not sure.
+  (add-hook 'message-mode-hook 'mrb/message-mode-hook)
 #+END_SRC
 
 *** Mu4e
