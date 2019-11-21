@@ -1757,16 +1757,6 @@ Below is what was contained in the old configuration. I will slowly migrate this
           subtree-end
         nil)))
 
-  (defun mrb/save-containing-org-file()
-    "I want to save the containing file in which the item state was
-     changed, but I'd like it to be asynchronous, because it can
-     take a bit and I don't want the system to stop responding.
-
-     To make it worse, git-autocommit-mode may be on for the file
-    which runs on the after-save hook" )
-
-  (add-hook 'org-after-todo-state-change-hook 'mrb/save-containing-org-file)
-
   ;; When in agenda mode, show the line we're working on.
   (add-hook 'org-agenda-mode-hook '(lambda () (hl-line-mode 1)))
 
