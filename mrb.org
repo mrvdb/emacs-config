@@ -154,16 +154,14 @@ First of all, define the package archives I need; for now, just the default gnu 
   ;; Use-package can now be used for itself
   (use-package use-package
     :init
-    ;; Default is to have elpa provide the package
-    (setq use-package-always-ensure t)
-    (setq use-package-verbose t)
-    ;; If running as daemon, just load shite to minimize chance of lockup, but it still happens.
+    (setq use-package-always-ensure t)	; Try installing automatically
+    (setq use-package-verbose nil)		; Set to true when interested in load times
+    ;; If running as daemon, there's no reason to defer,just load shite
+    ;; to minimize chance of lockup, but it still happens sometimes.
     (if (daemonp)
         (setq use-package-always-demand t))
 
-    (use-package use-package-ensure-system-package
-      :ensure t							; Need this because we are in use-package config
-      )
+    (use-package use-package-ensure-system-package :ensure t)	; Need this because we are in use-package config
 
     ;; Location where I keep custom packages
     (setq custom-package-directory (concat emacs-directory "lisp/")))
@@ -331,8 +329,7 @@ Using pdf-tools for PDF handling. This is a lot better than docview. I'm a bit a
     (setq pdf-annot-activate-created-annotations t) ; automatically annotate highlights
     (setq pdf-view-resize-factor 1.1)	; more fine-grained zooming
     (add-hook 'pdf-view-mode-hook (lambda () (cua-mode 0))) ; turn off cua so copy works
-
-    (pdf-tools-install :no-query))
+    (pdf-tools-install :no-query))						  ; no-query auto builds epfinfo when needed
 #+END_SRC
 
 * Internationalisation and multi-language features
@@ -444,7 +441,7 @@ I use (emacs, xterm, i3, dunst etc.) which sounds attractive. So, I'm
 starting with the =base16-nord= theme and see where this leaves me.
 
 #+BEGIN_SRC emacs-lisp
-  (setq custom--inhibit-theme-enable nil)
+  (setq custom--inhibit-theme-enable nil)	; This was needed for Emacs 27, but cant recally why
   (use-package base16-theme
     :config
     ;; Do config here and finally load the theme
@@ -502,7 +499,7 @@ starting with the =base16-nord= theme and see where this leaves me.
             ;; Flyspell
             ;; flyspell errors/dupes look the same as flycheck-errors/warnings
             (flyspell-incorrect                                   :inherit flycheck-error)
-            (flyspell-duplicate             :foreground "#2e3440" :inherit flycheck-warning )
+            (flyspell-duplicate             :foreground "#2e3440" :inherit flycheck-warning)
 
             ;; Orgmode
             (org-headline-done              :foreground "#4c566a")
@@ -510,6 +507,7 @@ starting with the =base16-nord= theme and see where this leaves me.
             (org-level-4                    :foreground "#b48ead")
             (org-verbatim                   :foreground "#8fbcbb")
             (org-list-dt                    :foreground "#b48ead")
+
             ;; User defined faces for org-mode
             (mrb/org-todo-keyword-TODO      :foreground "#88c0d0" :weight bold)
             (mrb/org-todo-keyword-DONE      :foreground "#a3be8c" :weight bold)
@@ -530,7 +528,6 @@ starting with the =base16-nord= theme and see where this leaves me.
             (space-line-evil-motion         :background "#81a1c1")
             (space-line-evil-visual         :background "#8fbcbb")
             (space-line-evil-replace        :background "#b48ead")
-
 
             ;; Helm selection
             (helm-selection                 :foreground "black" :background "goldenrod2")
@@ -2276,8 +2273,6 @@ emacsclient -a "" -n -c -e '(mrb/server-eshell)'
 The last bit of that command line is the function to evaluate, which was taken from http://ur1.ca/cf1m4 and sligthly adapted.
 
 #+BEGIN_SRC emacs-lisp
-  ;(use-package cl)
-
   (defun mrb/server-eshell ()
     "Command to be called by emacs-client to start a new shell.
 
@@ -2895,7 +2890,7 @@ I'm experimenting with Weechat now, mostly because it has multiple clients and c
 #+BEGIN_SRC emacs-lisp
   (use-package weechat
     :after tracking
-    :disabled
+    :disabled								; Not Emacs 27 compatible see weechat issue #20 on github
     :config
     (use-package weechat-tracking)
     (use-package weechat-notifications)
