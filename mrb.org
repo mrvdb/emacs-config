@@ -2752,9 +2752,10 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
      mu4e-view-mode-hook '(turn-on-visual-line-mode)
 
      ;; Compose settings
-     mu4e-compose-format-flowed t
-     ;; TODO: match this with mail-handler/compose frame etc.
-     mu4e-compose-in-new-frame nil
+     mu4e-compose-format-flowed t			; Compose in format=flowed
+     mu4e-compose-in-new-frame nil		; TODO: match with mail handler
+     mu4e-compose-dont-reply-to-self t	; Do not include my addresses when replying
+
      ;; Read signature from the usual signature file
      mu4e-compose-signature (with-current-buffer
                                 (find-file-noselect "~/.signature")
@@ -2810,9 +2811,9 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
                            :query "(flag:unread or flag:new or maildir:/INBOX) and not (flag:list or flag:draft or flag:flagged or flag:deleted or maildir:/Trash or flag:trashed)"
                            :key ?i)
                           (make-mu4e-bookmark
-                             :name "TODO list"
-                             :query "flag:flagged"
-                             :key ?$))))
+                           :name "TODO list"
+                           :query "flag:flagged"
+                           :key ?$))))
 #+end_src
 
 To enable integration with orgmode =org-mu4e= must be loaded
