@@ -2753,25 +2753,38 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
                   docid
                   (mu4e~mark-check-target target) "+S-N-u"))))
 
-    ;; Let mu4e define a function for it
+    ;; Let mu4e define functions for it
     (mu4e~headers-defun-mark-for spam)
     (mu4e~view-defun-mark-for spam)
 
-
     ;; Bookmarks
-    (setq mu4e-bookmarks (list
-                          (make-mu4e-bookmark
-                           :name "Unread messages"
-                           :query "flag:unread and not flag:trashed"
-                           :key ?u)
-                          (make-mu4e-bookmark
-                           :name "INBOX"
-                           :query "(flag:unread or flag:new or maildir:/INBOX) and not (flag:list or flag:draft or flag:flagged or flag:deleted or maildir:/Trash or flag:trashed)"
-                           :key ?i)
-                          (make-mu4e-bookmark
-                           :name "TODO list"
-                           :query "flag:flagged"
-                           :key ?$))))
+    (setq mu4e-bookmarks
+          (list
+           (make-mu4e-bookmark
+            :name "Unread messages"
+            :query "flag:unread and not flag:trashed"
+            :key ?u)
+           (make-mu4e-bookmark
+            :name "INBOX"
+            :query "(flag:unread or flag:new or maildir:/INBOX) and not (flag:list or flag:draft or flag:flagged or flag:deleted or maildir:/Trash or flag:trashed)"
+            :key ?i)
+           (make-mu4e-bookmark
+            :name "TODO list"
+            :query "flag:flagged"
+            :key ?$)))
+
+    ;; Rendering of html mail is done with shr
+    ;; By default, it's inhibiting images, I dont want that, as I only look at the html if needed
+    (defun mrb/mu4e-shr2text (msg)
+      "Overridden mu4e-shr2text"
+      (mu4e~html2text-wrapper
+        (lambda ()
+          (let ((shr-inhibit-images nil)	; Explicitly allow images, use shr-blocked images to control
+                (shr-width nil) 			; Use whole window width for rendering
+                (shr-use-colors nil)		; Don't use colors from html, they ugly
+                (shr-bullet "• "))		; Original was "* "
+            (shr-render-region (point-min) (point-max)))) msg))
+    (setq mu4e-html2text-command 'mrb/mu4e-shr2text))
 #+end_src
 
 To enable integration with orgmode =org-mu4e= must be loaded
