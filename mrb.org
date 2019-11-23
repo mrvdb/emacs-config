@@ -2961,6 +2961,7 @@ For most of the languages I use (Bash, python, C, Go, HTML Haskell, Lua), the La
     :pin melpa-stable
     :commands lsp-deferred
 
+    ;; Enable lsp for the languages that do not have their own section yet
     :hook (sh-mode . lsp-deferred)
     :hook (python-mode . lsp-deferred)
     :hook (css-mode . lsp-deferred)
@@ -3255,6 +3256,13 @@ SQL has a number of different dialects I use, depending on the database software
 #+begin_src emacs-lisp
   (setq sql-server "dbserver.hsdev.com"
         sql-postgres-options '("-P" "pager=off" "-p 5434"))
+#+end_src
+** Yaml
+#+begin_src emacs-lisp
+  (use-package lsp-yaml
+    :after lsp
+    :load-path "~/dat/src/emacs/packages/lsp-yaml"
+    :hook ('yaml-mode . lsp-deferred))
 #+end_src
 
 ** GIT integration
