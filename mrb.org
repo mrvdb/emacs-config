@@ -901,9 +901,7 @@ When emacs does not determine the right mode, I sometimes want a modestring some
   (use-package csv-mode
     :mode "\\.csv\\'")
 
-  (use-package js-mode
-    :ensure nil  ;; built in
-    :mode "\\.js\\'")
+  (use-package js2-mode :mode "\\.js\\'")
 
   (use-package diff-mode
     :ensure nil  ;; built in
@@ -2963,15 +2961,11 @@ For most of the languages I use (Bash, python, C, Go, HTML Haskell, Lua), the La
     :pin melpa-stable
     :commands lsp-deferred
 
-    ;; Bash / Sh
     :hook (sh-mode . lsp-deferred)
-    ;; Python
     :hook (python-mode . lsp-deferred)
-    ;; CSS
     :hook (css-mode . lsp-deferred)
-    ;; HTML
     :hook (html-mode . lsp-deferred)
-
+    :hook (js2-mode . lsp-deferred)
 
     :init
     ;; This hooks into company mode for autocompletion
