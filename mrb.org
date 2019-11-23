@@ -779,14 +779,10 @@ What I am aiming for here is to not have to think about explicitly saving for ce
   (defun mrb/save-timer-callback()
     "Callback function that runs when emacs is idle for
   `mrb/idle-timer' seconds. Typically we save files here"
-
-    ; FIXME: this messes up my journalling settings where autosave
-    ;        is explicitly
-    (message "save-timer ran out, saving all orgmode files")
     (org-save-all-org-buffers))
 
   ;; Activate the timer
-  ;; #' means:
+  ;; The # means: evaluate first ( I keep forgetting this stuff )
   (run-with-idle-timer mrb/idle-timer 'always #'mrb/save-timer-callback)
 #+END_SRC
 
@@ -1486,6 +1482,35 @@ A snippet which resized the agenda to its window whenever its rebuilt by orgmode
   "Fit the Org Agenda to its buffer."
   (fit-window-to-buffer))
 #+end_src
+
+*** Calendaring
+Traditionally somewhat related to mail, although mostly through orgmode these days, I want a simple setup to pull in some calendering information. I run a radical calendar server somewhere, but having the same info in orgmode makes sense for me.
+
+#+begin_src emacs-lisp
+  (use-package org-caldav
+    :after org
+    :config
+    ;; Set values which are valid for all calendars
+    ;; Authentication is done through auth-source automatically
+    (setq org-caldav-url "https://calendars.hsdev.com/mrb"
+          org-icalendar-timezone "Europe/Amsterdam"
+          org-caldav-sync-direction 'cal->org ; Just mirroring for now
+          org-caldav-delete-org-entries 'always
+          org-caldav-save-directory "~/dat/org/_calendars/"
+          org-caldav-files nil
+          org-caldav-show-sync-results t	; This should be off once I know it's stable
+
+          ;; Calendars to sync
+          org-caldav-calendars
+          '((:calendar-id "e00ffed0-2fc3-4adb-ba08-95c93b2b6abc" ; My own
+                          :inbox "~/dat/org/_calendars/marcel.org")
+            (:calendar-id "4de0fb18-8548-61ce-57fc-b2319b87106d" ; Waste services
+                          :inbox "~/dat/org/_calendars/afval.org")
+            (:calendar-id "shared-sylvia"	                       ; SO
+                          :inbox "~/dat/org/_calendars/sylvia.org"))))
+#+end_src
+
+For now, I can live with calling =org-caldav-sync= manually when I need up to date information.
 ** Babel / Literate programming
 Specific settings for babel and literate programming within org-mode
 
