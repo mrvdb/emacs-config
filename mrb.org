@@ -2673,16 +2673,18 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
     :load-path "/usr/local/share/emacs/site-lisp/mu4e"
     :after message fullframe
     :commands mu4e
-    :bind (:map mu4e-headers-mode-map
-                ("/" . mu4e-headers-search)
-                ("s" . mu4e-headers-mark-for-spam)
-                ("r" . mu4e-compose-reply)
-                ("R" . mu4e-headers-mark-for-refile)
-            :map mu4e-view-mode-map
-                ("/" . mu4e-headers-search)
-                ("s" . mu4e-view-mark-for-spam)
-                ("r" . mu4e-compose-reply)
-                ("R" . mu4e-view-mark-for-refile))
+    :bind (:map mu4e-main-mode-map
+           ("/" . mu4e-headers-search)
+           :map mu4e-headers-mode-map
+           ("/" . mu4e-headers-search)
+           ("s" . mu4e-headers-mark-for-spam)
+           ("r" . mu4e-compose-reply)
+           ("R" . mu4e-headers-mark-for-refile)
+           :map mu4e-view-mode-map
+           ("/" . mu4e-headers-search)
+           ("s" . mu4e-view-mark-for-spam)
+           ("r" . mu4e-compose-reply)
+           ("R" . mu4e-view-mark-for-refile))
     ;; TODO: how are we editting a search? e?
 
     :init
