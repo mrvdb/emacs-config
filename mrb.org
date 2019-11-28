@@ -2743,6 +2743,7 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
      mu4e-headers-date-format "%F"  ; ISO format yyyy-mm-dd
      mu4e-headers-results-limit -1  ; For now, needed to have related search results
      mu4e-headers-visible-lines 20  ; Default of 10 is a bit small
+     mu4e-headers-auto-update nil	  ; Prevent confusion
 
 
      ;; Jump to some folders directly with a shortcut
