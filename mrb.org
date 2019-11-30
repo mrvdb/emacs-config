@@ -2979,6 +2979,8 @@ However, this is problematic. It needs a special initialization because I run in
 Lets try to use ggtags everywhere.
 #+BEGIN_SRC emacs-lisp
   (use-package ggtags)
+
+  (use-package cmake-mode)				; adjusts auto-mode-alist on load
 #+END_SRC
 
 For most of the languages I use (Bash, python, C, Go, HTML Haskell, Lua), the Language Server Protocol seems to be supported by =lsp-mode=, so I'm setting this up generally here and enable it for each language I'm using if it is supported.
