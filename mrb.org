@@ -3070,6 +3070,19 @@ I often need to consult RFC documents, so not having to leave emacs for that and
 									"rfc-index.txt")))
 #+end_src
 
+*** Man pages
+There's a builtin package to read man pages, let's make it explicit.
+
+#+begin_src emacs-lisp
+(use-package man)
+#+end_src
+
+*** Epub documents
+Not often, but increasingly so, reference books are in epub format. So, for that we need a reader package. =nov= seems to be the best option
+
+#+begin_src emacs-lisp
+(use-package nov)
+#+end_src
 ** Coding styles
 Different projects use different coding styles. The ones I need I'll gather here for now.
 
