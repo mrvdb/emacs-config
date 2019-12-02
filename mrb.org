@@ -2685,7 +2685,8 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
            ("/" . mu4e-headers-search)
            ("s" . mu4e-view-mark-for-spam)
            ("r" . mu4e-compose-reply)
-           ("R" . mu4e-view-mark-for-refile))
+           ("R" . mu4e-view-mark-for-refile)
+           ("X" . (lambda () (interactive) (mu4e~view-in-headers-context (mu4e-mark-execute-all t)))))
     ;; TODO: how are we editting a search? e?
 
     :init
