@@ -1857,22 +1857,6 @@ Below is what was contained in the old configuration. I will slowly migrate this
   (ad-activate 'org-agenda-finalize-entries)
 
 
-  ;; Shorten url at point
-  ;; FIXME: I got an email this service will stop in March 2019
-  (use-package url-shortener
-    :config
-    (setq goo-api-key "AIzaSyDXpfGokg-TNqg3HwxO54bVQNnNXP0sygE")
-    (defun mrb/shortenurl-replace-at-point ()
-      "Replace the url at point with a tiny version."
-      (interactive)
-      (let ((long-url (thing-at-point 'url)))
-        (when long-url
-          (goo-shorten long-url))))
-    :bind
-    (:map org-mode-map
-          ("C-c s" . mrb/shortenurl-replace-at-point)))
-
-
   (defvar mrb/org-my-archive-expiry-days 365
     "The number of days after which a completed task should be auto-archived.
    This can be 0 for immediate, or a floating point value.")
