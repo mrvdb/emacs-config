@@ -2483,7 +2483,6 @@ Sending mail through smtp, using the smtpmail package
 #+BEGIN_SRC emacs-lisp
   (use-package smtpmail
      :init
-     (use-package mml-sec :ensure nil)
      (setq smtpmail-default-smtp-server "localhost"
            smtpmail-service 25)
      :config
@@ -2496,7 +2495,7 @@ Sending mail through smtp, using the smtpmail package
       message-send-mail-function 'message-smtpmail-send-it) ; This is for message-mode
 
      (setq password-cache t)            ; default is true, so no need to set this actually
-     (setq password-cache-expiry 28800) ; default is 16 seconds, which is ridiculously low
+     (setq password-cache-expiry 28800)) ; default is 16 seconds, which is ridiculously low
 #+END_SRC
 
 At times we want to send signed and/or encrypted mail
