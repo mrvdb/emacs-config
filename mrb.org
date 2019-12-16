@@ -2912,7 +2912,9 @@ I'm experimenting with Weechat now, mostly because it has multiple clients and c
 
 #+BEGIN_SRC emacs-lisp
   (use-package weechat
-    :if (version< emacs-version "27")
+    ;; I now have a patch in place ignoring the problem until issue is resolved upstream
+    ;; See: https://github.com/the-kenny/weechat.el/issues/80
+    ;:if (version< emacs-version "27")
     :after tracking
     :config
     (use-package weechat-tracking :ensure nil)
