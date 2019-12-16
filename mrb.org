@@ -2723,6 +2723,7 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
      ;; Message view settings
      mu4e-view-show-images t
      mu4e-view-use-gnus nil
+     mu4e-view-show-addresses t			; Show actuall addresses instead of names
      mu4e-view-mode-hook '(turn-on-visual-line-mode)
 
      ;; Compose settings
