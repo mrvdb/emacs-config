@@ -2494,12 +2494,23 @@ Sending mail through smtp, using the smtpmail package
       mail-user-agent 'message-user-agent
       send-mail-function 'smtpmail-send-it ;This is for mail-mode
       message-send-mail-function 'message-smtpmail-send-it) ; This is for message-mode
-      ;; Add my bcc address to list of safe addresses in bcc for secure message
-      (add-to-list 'mml-secure-safe-bcc-list "mrb+Sent@hsdev.com"))
 
      (setq password-cache t)            ; default is true, so no need to set this actually
      (setq password-cache-expiry 28800) ; default is 16 seconds, which is ridiculously low
 #+END_SRC
+
+At times we want to send signed and/or encrypted mail
+
+#+begin_src emacs-lisp
+  (use-package mml-sec
+    :ensure nil 							; Built-in
+    :config
+    ; Use my key to sign
+    (add-to-list 'mml-secure-openpgp-signers user-gpg-encrypt-key)
+
+    ;; Add my bcc address to list of safe addresses in bcc for secure message
+    (add-to-list 'mml-secure-safe-bcc-list "mrb+Sent@hsdev.com"))
+#+end_src
 
 *** Composing mail
 Composing mail is often an /out of band/ activity, like creating a tweet or a capture, so I would like to have roughly the same behaviour. This is by default provided by compose-mail-other-frame, but I could not get awesome to properly place the windows because it's hard to match on the varying name that xprop delivers, so. we make our own window.
