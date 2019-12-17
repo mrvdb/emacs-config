@@ -3188,8 +3188,10 @@ While we're here, let's do paxedit as well; not sure whey these two package don'
   (use-package geiser
     :after paredit
     :config
-    ;; Just guile for now
-    (setq geiser-active-implementations '(guile))
+    ; Add implementations to support
+    (setq geiser-active-implementations '(guile chez)
+          geiser-repl-send-on-return-p nil)
+
     (add-hook 'geiser-repl-mode-hook #'enable-paredit-mode)
     (add-hook 'geiser-repl-mode-hook 'mrb/prettify-symbols))
 #+END_SRC
