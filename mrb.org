@@ -3037,9 +3037,11 @@ Make our source look a bit more attractive by enabling =prettify-symbol-mode= in
     ;; If you want to see the effect: enable prettify-symbols mode
     (setq prettify-symbols-alist
         '(
-          ("lambda" . 955)
-          ("->"     . 8594)
-          ("=>"     . 8658)))
+          ("lambda" . ?λ)
+          ("->"     . ?→)
+          ("=>"     . ?⇒)
+          ("#t"     . ?⟙)
+          ("#f"     . ?⟘)))
     (prettify-symbols-mode))
 
   ;; Add hooks for all programming languages, for now
