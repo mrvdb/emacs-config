@@ -962,12 +962,14 @@ Also make sure we never load org from internal, this can happen when functions w
            ("C-c l"   . 'org-store-link)
            ("C-c p"   . 'org-plot/gnuplot)
            ("s-."     . 'org-todo)
+           ("s->"     . 'mrb/org-cancel-todo)
            ("C-s-."   . 'mrb/force-org-todo)
            ("C-."     . 'mrb/org-schedule-for-today)
            ("s-t"     . 'org-schedule)
            ("M-p"     . 'org-set-property)
            :map org-agenda-mode-map
            ("s-."   . 'org-agenda-todo)
+           ("s->"   . 'mrb/org-agenda-cancel-todo)
            ("C-s-." . 'mrb/force-org-agenda-todo)
            ("C-."   . 'mrb/org-agenda-schedule-for-today)
            ("s-t"   . 'org-agenda-schedule)
@@ -1272,17 +1274,29 @@ When an item changes to the DONE state, a question is asked if the item should b
 
 Thus, the normal sequence would be:
 #+BEGIN_SRC emacs-lisp
+  ;; Normal flow, but ignore blocking
   (defun mrb/force-org-todo()
     (interactive)
     ;; Disable blocking temporarily
     (let ((org-inhibit-blocking t))
       (org-todo)))
 
+  ;; Normal flow, but ignore blocking, agenda scope
   (defun mrb/force-org-agenda-todo()
     (interactive)
     ;; Disable blocking temporily
     (let ((org-inhibit-blocking t))
       (org-agenda-todo)))
+
+  ;; Break flow, cancel directly
+  (defun mrb/org-cancel-todo ()
+    (interactive)
+    (org-todo "CANCELLED"))
+
+  ;; Break flow, cancel directly, agenda scope
+  (defun mrb/org-agenda-cancel-todo ()
+    (interactive)
+    (org-agenda-todo "CANCELLED"))
 #+END_SRC
 
 ** Registering creation time of todo items
