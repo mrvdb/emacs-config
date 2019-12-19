@@ -1529,16 +1529,26 @@ For now, I can live with calling =org-caldav-sync= manually when I need up to da
 Specific settings for babel and literate programming within org-mode
 
 #+BEGIN_SRC emacs-lisp
-  (setq
-     org-babel-interpreters (quote ("emacs-lisp" "python" "ditaa" "sql" "sh" "R" "haskell" "js" "calc" "mathomatic"))
-  )
+  (setq org-babel-load-languages
+        '((awk        . t)
+          (calc       . t)
+          (css        . t)
+          (ditaa      . t)
+          (emacs-lisp . t)
+          (gnuplot    . t)
+          (haskell    . t)
+          (js         . t)
+          (lisp       . t)
+          (org        . t)
+          (plantuml   . t)
+          (scheme     . t)
+          (shell      . t)
+          (sql        . t)))
+
   ;; Activate Babel languages
-  (use-package ob-gnuplot :ensure nil)
   (org-babel-do-load-languages
    'org-babel-load-languages
-   '( (ditaa . t) (sql . t) (emacs-lisp t) (lisp t) (shell t)
-     (css t) (awk t) (js t) (lisp t) (org t) (plantuml t) (gnuplot . t)
-     (haskell t) (js t) (calc t)))
+   org-babel-load-languages)
 #+END_SRC
 
 ** Refiling
