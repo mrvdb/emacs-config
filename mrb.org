@@ -3080,6 +3080,17 @@ Example: =C-h-f= in lisp-mode describes the function to me. If I am in a python 
 
 Anyways, here's what I have configured related to reference information and documentation
 
+The closest thing I found is =zeal= or =dash= which allow docsets to be searched. There is a gui and helm-dash is an interface to the docsets for emacs. Typically I install docsets through the GUI or manually (the folder names are sometimes not the same when I use helm-dash to install docsets). This solution gives me at least /access/ to reference information for most of the programming languages I use. The direct accest to the sources is missing, or I don't know how to do this yet.
+
+#+begin_src emacs-lisp
+;; Unify reference documentation with dash
+(use-package helm-dash
+  :commands (helm-dash helm-dash-at-point)
+  :config
+  (setq helm-dash-browser-func 'eww		; Within dash, keep browser links within emacs
+		;; Use all installed docsets
+		helm-dash-common-docsets (helm-dash-installed-docsets)))
+#+end_src
 *** RFC document reader
 I often need to consult RFC documents, so not having to leave emacs for that and be able to use all tools on RFC documents is very helpful.
 
