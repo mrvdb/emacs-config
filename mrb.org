@@ -1991,7 +1991,7 @@ Furthermore, because I still can't remember keys, after pressing a prefix key li
   (use-package which-key
     :diminish
     :config
-    (setq which-key-idle-delay 2.0
+    (setq which-key-idle-delay 1.8
           which-key-show-operator-state-maps t)
     (which-key-mode))
 #+END_SRC
