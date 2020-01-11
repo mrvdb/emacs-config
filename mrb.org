@@ -595,8 +595,8 @@ valid for 5 levels, not 6.
     (setq paren-highlight-at-point nil)
     (paren-activate))
 
-  ;; Defer fontification a little bit, so we could gain a bit in scroll speed
-  (setq jit-lock-defer-time 0.02)
+  ;; Defer fontification, but only if there is input pending
+  (setq jit-lock-defer-time 0)
 
   ;; Make underlining nicer
   (setq  underline-minimum-offset 3)
