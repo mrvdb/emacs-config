@@ -200,7 +200,7 @@ some keywords, and give them fitting colors.
 
 Keep track of some reading efforts with a simple sequence
 
-#+SEQ_TODO: READ | DONE CANCELLED(@)
+#+SEQ_TODO: READ READING | DONE CANCELLED(@)
 * Publishing and exporting
 Getting the defaults right for publishing and exporting took some
 time, save them as defaults and code deviations in the sections to be
