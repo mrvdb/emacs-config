@@ -1669,7 +1669,6 @@ While the capture method is useful I found myself not using it very much. Not su
 
 #+BEGIN_SRC emacs-lisp
   (use-package org-journal
-    :pin melpa-stable
     :bind
     (("C-c j"   . 'org-journal-new-entry))
     :init
@@ -1677,6 +1676,9 @@ While the capture method is useful I found myself not using it very much. Not su
     ;; files this is not needed.
     (setq
      org-journal-dir (expand-file-name (concat org-directory "journal/"))
+
+     ;; Bring our config to every journal fil
+     org-journal-file-header "#+SETUPFILE: ~/.emacs.d/org-config.org"
 
      ;; Match the journal files (FIXME: make this independent of earlier assignments)
      org-agenda-file-regexp "^[0-9]+\\.org"
@@ -1686,7 +1688,7 @@ While the capture method is useful I found myself not using it very much. Not su
      org-journal-date-format "%A, %e-%m-%Y"
 
      ;; Put day on top of file, uses `org-journal-date-format
-     org-journal-date-prefix "#+SETUPFILE: ~/.emacs.d/org-config.org\n#+TITLE: "
+     org-journal-date-prefix "#+TITLE: "
      ;; New entries go at the bottom, make sure we are at top level
      org-journal-time-format "[%R] "
      org-journal-time-prefix "* "
