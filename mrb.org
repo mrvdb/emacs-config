@@ -1677,7 +1677,7 @@ While the capture method is useful I found myself not using it very much. Not su
     (setq
      org-journal-dir (expand-file-name (concat org-directory "journal/"))
 
-     ;; Bring our config to every journal fil
+     ;; Bring our config to every journal file
      org-journal-file-header "#+SETUPFILE: ~/.emacs.d/org-config.org"
 
      ;; Match the journal files (FIXME: make this independent of earlier assignments)
@@ -2663,14 +2663,11 @@ It's not entirely clear which package is exactly responsible for what, but there
     ;; Use visual line mode and visually break at word boundaries which
     ;; is the same as the email encoding on send (see below)
     (visual-line-mode 1)
+    (auto-fill-mode 0)					; Makes no sense in visual mode
 
-    ;; Auto-fill makes no sense anymore now, and will in fact mess
-    ;; everything up, so make sure it is off.
-    (auto-fill-mode 0)
-
-    ;; Adapt visual fill column locally to a reasonable value
-    (setq visual-fill-column-width 66)
-    (visual-fill-column-mode 1)
+    (setq visual-fill-column-width nil) 	; So `fill-columns gets used
+    (setq fill-column 66)					; Same as encode column below
+    (visual-fill-column-mode 1)			; Show it
 
     ;; Next, do the encoding and sending part
     ;; Set the fill column on encoding (send)
@@ -2680,7 +2677,7 @@ It's not entirely clear which package is exactly responsible for what, but there
     ;; This enables the f=f encoding
     (setq mml-enable-flowed t))
 
-  ;; Keep an eye on message formatting, I think the above is right, but I'm not sure.
+  ;; Enable it when entering message mode
   (add-hook 'message-mode-hook 'mrb/message-mode-hook)
 #+END_SRC
 
