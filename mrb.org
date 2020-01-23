@@ -1431,11 +1431,20 @@ For the headings at each level a =*= is normally used. As we're in unicode worls
 A couple of settings to steer the column in which the tags and habits appear in the frame:
 
 #+BEGIN_SRC emacs-lisp
-(setq
-   org-tags-column -110
-   org-agenda-tags-column -110
-   org-habit-graph-column 100
-)
+  ;; Static settings for tags in agenda and habit graphs
+  (setq org-agenda-tags-column -110
+        org-habit-graph-column 100)
+
+  ;; Dynamic setting for tags normally, align with wrapping column
+  ;; Interestingly `window-body-width` works for this
+  ;; TODO: this is not enough, because we dont always change focus, why not have it on an idle timer or after some event?
+  (add-hook 'focus-in-hook
+    (lambda () (progn
+      (setq org-tags-column (- 5 (window-body-width)))) (org-align-all-tags)))
+
+  (add-hook 'focus-out-hook
+    (lambda () (progn
+      (setq org-tags-column (- 5 (window-body-width)))) (org-align-all-tags)))
 #+END_SRC
 
 The item lists can be made a whole lot more attractive by attaching some icons based on the category an items belongs to. The category assignment itself is done by setting the =CATEGORY= property explicitly on the item or on the file.
