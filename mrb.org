@@ -793,7 +793,7 @@ Also, save the location in files between sessions.
 
 #+BEGIN_SRC emacs-lisp
   ;; Minibuffer prompt is a prompt, don't enter it as text.
-  (setq minibuffer-prompt-properties (quote (read-only t point-entered minibuffer-avoid-prompt face minibuffer-prompt)))
+  (setq minibuffer-prompt-properties '(read-only t point-entered minibuffer-avoid-prompt face minibuffer-prompt))
   ;; Don't echo keystrokes in the minibuffer, prefix will be hinted on after 2 seconds or so.
   (setq echo-keystrokes 0)
 
@@ -1002,36 +1002,34 @@ Also make sure we never load org from internal, this can happen when functions w
 
           ;; Pressing enter on a link should activate it
           org-return-follows-link t
-          org-support-shift-select (quote always)
+          org-support-shift-select 'always
 
-          org-agenda-log-mode-items (quote (closed clock state))
+          org-agenda-log-mode-items '(closed clock state)
           org-agenda-skip-deadline-prewarning-if-scheduled t
           ;; Auto detect blank line need, this is the default, but I explicitly set thi
           ;; because it needs to be this or my capturing breaks due to org-capture popup
-          org-blank-before-new-entry (quote ((heading . auto) (plain-list-item . auto)))
-          org-export-htmlize-output-type (quote css)
+          org-blank-before-new-entry '((heading . auto) (plain-list-item . auto))
+          org-export-htmlize-output-type 'css
 
           org-file-apps
-          (quote
-           ((auto-mode . emacs)
+          '((auto-mode . emacs)
             ("\\.dia\\'" . "dia %s")
             ("\\.mm\\'" . default)
-            ("\\.pdf\\'" . default)))
+            ("\\.pdf\\'" . default))
           org-fontify-done-headline t
-          org-goto-interface (quote outline-path-completion)
+          org-goto-interface 'outline-path-completion
           ;; non nil is just direct children, what an ODD name!!!!
           org-hierarchical-todo-statistics nil
           org-provide-todo-statistics t
           org-log-into-drawer t
-          org-log-redeadline (quote note)
-          org-log-reschedule (quote time)
-          org-modules (quote
-                       (org-info org-habit
+          org-log-redeadline 'note
+          org-log-reschedule 'time
+          org-modules '(org-info org-habit
                                  org-inlinetask org-irc
-                                 org-toc org-mac-iCal org-mouse))
+                                 org-toc org-mac-iCal org-mouse)
           org-remember-default-headline ""
           org-special-ctrl-a/e t
-          org-stuck-projects (quote ("-inactive/TODO" ("TODO" "WAITING") nil ""))
+          org-stuck-projects '("-inactive/TODO" ("TODO" "WAITING") nil "")
           org-track-ordered-property-with-tag nil
           org-startup-indented t)
 
@@ -1096,11 +1094,11 @@ Here are the templates used for them.
 #+BEGIN_SRC emacs-lisp
   (setq
    org-capture-templates
-   (quote (
+   '(
            ("b" "Buy"
             entry (function mrb/capture-location) "* BUY %? :buy:\n%(mrb/prop-or-nothing :annotation)\n" :prepend t :empty-lines 1)
            ("t" "Todo"
-            entry (function mrb/capture-location) "* TODO %?\n%(mrb/prop-or-nothing :annotation)\n" :prepend t :empty-lines 1))))
+            entry (function mrb/capture-location) "* TODO %?\n%(mrb/prop-or-nothing :annotation)\n" :prepend t :empty-lines 1)))
 
 
   (defun mrb/prop-or-nothing(prop)
@@ -1207,10 +1205,10 @@ Make sure we keep a clean tag slate when changing tag state. This means that whe
 
 #+BEGIN_SRC emacs-lisp
   (setq org-todo-state-tags-triggers
-        (quote (
+        '(
                 ('todo ("inactive"))          ; remove inactive tags if moved to any active state
                 ('done ("inactive") ("fork")) ; remove tags from any inactive state
-                ("BUY"  ("buy" . t)))))       ; add buy tag when this is a buying action
+                ("BUY"  ("buy" . t))))       ; add buy tag when this is a buying action
 #+END_SRC
 
 To keep the TODO list clean we immediately archive the completed entry in the archive. The archiving only occurs when an item enters the 'DONE' state and the item is not marked as a habit.
@@ -1312,8 +1310,8 @@ I want the property to be name 'CREATED' (I don't remeber what the org-expiry de
     :ensure nil
     :load-path (lambda () (concat custom-package-directory "org-expiry/"))
     :init
-    (setq org-expiry-created-property-name "CREATED")
-    (setq org-expiry-inactive-timestamps   t))
+    (setq org-expiry-created-property-name "CREATED"
+          org-expiry-inactive-timestamps  t))
 #+END_SRC
 
 So, to create the timestamp I need a little helper function which actually inserts it, using org-expiry. There is some additional cursor munging to make sure it is used comfortably during editing.
@@ -1335,8 +1333,7 @@ Now that function is used to insert the property when:
 #+BEGIN_SRC emacs-lisp
   (defadvice org-insert-todo-heading (after mrb/created-timestamp-advice activate)
     "Insert a CREATED property using org-expiry.el for TODO entries"
-    (mrb/insert-created-timestamp)
-  )
+    (mrb/insert-created-timestamp))
 
   (ad-activate 'org-insert-todo-heading)
 
@@ -1490,14 +1487,15 @@ Settings which are just applicable for the org-mode agenda view.
 
 #+BEGIN_SRC emacs-lisp
   ;; Show properties in agenda view
-  (use-package org-agenda-property)
-  (setq org-agenda-property-list '("LOCATION" "Responsible"))
+  (use-package org-agenda-property
+    :config
+    (setq org-agenda-property-list '("LOCATION" "Responsible")))
 
   ;; But remove the mouse-face text property which makes the lines
   ;; highlight when hovering (it is either the cursor or the mouse, but not both)
   (add-hook 'org-finalize-agenda-hook
-    (lambda () (remove-text-properties
-               (point-min) (point-max) '(mouse-face t))))
+            (lambda () (remove-text-properties
+                   (point-min) (point-max) '(mouse-face t))))
 #+END_SRC
 
 A snippet which resized the agenda to its window whenever its rebuilt by orgmode
@@ -1569,14 +1567,12 @@ A big part of organizing information and task is shuffling things around. The 't
 When filing, or capturing we want the items at the bottom of what we are filing it into. The main reason for this is that a large part of the sections that contain items are ordered. Should we file the item at the top, in many cases that would mean it is the most imminent thing to do, which is not the case.
 
 #+BEGIN_SRC emacs-lisp
-  (setq
-   org-reverse-note-order nil    ; File at the bottom of an entry
-   org-refile-allow-creating-parent-nodes (quote confirm)
-   org-refile-targets (quote ((org-agenda-files :maxlevel . 10 )))
-   org-refile-use-outline-path 'file
-   org-outline-path-complete-in-steps nil
-   org-refile-use-cache t
-   )
+  (setq org-reverse-note-order nil    ; File at the bottom of an entry
+        org-refile-allow-creating-parent-nodes 'confirm
+        org-refile-targets '((org-agenda-files :maxlevel . 10 ))
+        org-refile-use-outline-path 'file
+        org-outline-path-complete-in-steps nil
+        org-refile-use-cache t)
 #+END_SRC
 
 The list of headers to refile to is, in the standard config, basically everything. I limit it above to a maximum depth of 10, but then still. By using =org-refile-target-verify-function= we can fine-tune the decision whether to use a header as target or not.  The following conditions have been implemented:
@@ -1613,66 +1609,61 @@ Orgmode can export to a variety of formats, I mainly use LaTeX (PDF) and HTML as
 
 #+BEGIN_SRC emacs-lisp
   ;; {% raw %}
-  (setq
-   org-export-latex-hyperref-format "\\ref{%s}:{%s}"
-   ;; old system
-   org-export-latex-title-command " "
-   ;; new system > 8.0
-   org-latex-title-command " "
+  (setq org-export-latex-hyperref-format "\\ref{%s}:{%s}"
+        ;; old system
+        org-export-latex-title-command " "
+        ;; new system > 8.0
+        org-latex-title-command " "
 
-   org-export-docbook-xsl-fo-proc-command "fop %i %o"
-   org-export-docbook-xslt-proc-command "xsltproc --output %o %s %i"
-   org-export-htmlize-output-type (quote css)
-   org-org-htmlized-css-url "orgmode.css"
-   org-latex-pdf-process
-   (quote
-    ("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
-     "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
-     "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"))
-   org-latex-to-pdf-process
-   (quote
-    ("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
-     "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
-     "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"))
+        org-export-docbook-xsl-fo-proc-command "fop %i %o"
+        org-export-docbook-xslt-proc-command "xsltproc --output %o %s %i"
+        org-export-htmlize-output-type 'css
+        org-org-htmlized-css-url "orgmode.css"
+        org-latex-pdf-process
+        '("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
+          "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
+          "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f")
+        org-latex-to-pdf-process
+        '("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
+          "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
+          "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f")
 
-    org-latex-listings (quote minted)
-    ;; Define a default background color name, this needs to be set through
-    ;; a latex header
-    org-latex-minted-options (quote (("bgcolor" "codebg")))
+        org-latex-listings 'minted
+        ;; Define a default background color name, this needs to be set through
+        ;; a latex header
+        org-latex-minted-options '(("bgcolor" "codebg"))
 
-   org-export-copy-to-kill-ring (quote if-interactive)
-   org-export-docbook-xsl-fo-proc-command "fop %i %o"
-   org-export-docbook-xslt-proc-command "xsltproc --output %o %s %i"
-   org-export-htmlize-output-type (quote css)
-   org-export-htmlized-org-css-url "orgmode.css"
-   org-export-latex-classes
-   (quote (
-           ("article" "\\documentclass[11pt,a4paper,twoside]{article}"
-            ("\\section{%s}" . "\\section*{%s}")
-            ("\\subsection{%s}" . "\\subsection*{%s}")
-            ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
-            ("\\paragraph{%s}" . "\\paragraph*{%s}")
-            ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))
-           ("report" "\\documentclass[11pt]{report}"
-            ("\\part{%s}" . "\\part*{%s}")
-            ("\\chapter{%s}" . "\\chapter*{%s}")
-            ("\\section{%s}" . "\\section*{%s}")
-            ("\\subsection{%s}" . "\\subsection*{%s}")
-            ("\\subsubsection{%s}" . "\\subsubsection*{%s}"))
-           ("book" "\\documentclass[11pt]{book}"
-            ("\\part{%s}" . "\\part*{%s}")
-            ("\\chapter{%s}" . "\\chapter*{%s}")
-            ("\\section{%s}" . "\\section*{%s}")
-            ("\\subsection{%s}" . "\\subsection*{%s}")
-            ("\\subsubsection{%s}" . "\\subsubsection*{%s}"))
-           ("beamer" "\\documentclass{beamer}" org-beamer-sectioning)))
-   org-export-latex-hyperref-format "\\ref{%s}:{%s}"
-   org-latex-title-command " "
-   org-export-latex-title-command " "
-   org-export-with-tags nil
-   org-export-with-todo-keywords nil
+        org-export-copy-to-kill-ring 'if-interactive
 
-  )
+        org-export-htmlized-org-css-url "orgmode.css"
+        org-export-latex-classes
+        '(
+                ("article" "\\documentclass[11pt,a4paper,twoside]{article}"
+                 ("\\section{%s}" . "\\section*{%s}")
+                 ("\\subsection{%s}" . "\\subsection*{%s}")
+                 ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+                 ("\\paragraph{%s}" . "\\paragraph*{%s}")
+                 ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))
+                ("report" "\\documentclass[11pt]{report}"
+                 ("\\part{%s}" . "\\part*{%s}")
+                 ("\\chapter{%s}" . "\\chapter*{%s}")
+                 ("\\section{%s}" . "\\section*{%s}")
+                 ("\\subsection{%s}" . "\\subsection*{%s}")
+                 ("\\subsubsection{%s}" . "\\subsubsection*{%s}"))
+                ("book" "\\documentclass[11pt]{book}"
+                 ("\\part{%s}" . "\\part*{%s}")
+                 ("\\chapter{%s}" . "\\chapter*{%s}")
+                 ("\\section{%s}" . "\\section*{%s}")
+                 ("\\subsection{%s}" . "\\subsection*{%s}")
+                 ("\\subsubsection{%s}" . "\\subsubsection*{%s}"))
+                ("beamer" "\\documentclass{beamer}" org-beamer-sectioning))
+        org-export-latex-hyperref-format "\\ref{%s}:{%s}"
+        org-latex-title-command " "
+        org-export-latex-title-command " "
+        org-export-with-tags nil
+        org-export-with-todo-keywords nil
+
+        )
   ;; {% endraw %}
 #+END_SRC
 
@@ -1686,33 +1677,31 @@ While the capture method is useful I found myself not using it very much. Not su
     :init
     ;; The expand-file-name is needed, which is odd, because for single
     ;; files this is not needed.
-    (setq
-     org-journal-dir (expand-file-name (concat org-directory "journal/"))
+    (setq org-journal-dir (expand-file-name (concat org-directory "journal/"))
+          ;; Bring our config to every journal file
+          org-journal-file-header "#+SETUPFILE: ~/.emacs.d/org-config.org"
 
-     ;; Bring our config to every journal file
-     org-journal-file-header "#+SETUPFILE: ~/.emacs.d/org-config.org"
+          ;; Match the journal files (FIXME: make this independent of earlier assignments)
+          org-agenda-file-regexp "^[0-9]+\\.org"
+          org-journal-file-format  "%Y%m%d.org"
 
-     ;; Match the journal files (FIXME: make this independent of earlier assignments)
-     org-agenda-file-regexp "^[0-9]+\\.org"
-     org-journal-file-format  "%Y%m%d.org"
+          ;; Put day on top of file, uses `org-journal-date-format`
+          org-journal-date-format "%A, %e-%m-%Y"
 
-     ;; Put day on top of file, uses `org-journal-date-format`
-     org-journal-date-format "%A, %e-%m-%Y"
+          ;; Put day on top of file, uses `org-journal-date-format
+          org-journal-date-prefix "#+TITLE: "
+          ;; New entries go at the bottom, make sure we are at top level
+          org-journal-time-format "[%R] "
+          org-journal-time-prefix "* "
 
-     ;; Put day on top of file, uses `org-journal-date-format
-     org-journal-date-prefix "#+TITLE: "
-     ;; New entries go at the bottom, make sure we are at top level
-     org-journal-time-format "[%R] "
-     org-journal-time-prefix "* "
+          ;; Carry over TODO items and items explicitly marked
+          org-journal-carryover-items "+carryover|+TODO=\"TODO\""
+          ;; and for this to work, we need agenda integration
+          org-journal-enable-agenda-integration t
 
-     ;; Carry over TODO items and items explicitly marked
-     org-journal-carryover-items "+carryover|+TODO=\"TODO\""
-     ;; and for this to work, we need agenda integration
-     org-journal-enable-agenda-integration t
-
-    ;; I want to have encryption, but how do TODO items bubble up then in the agenda
-    org-journal-enable-encryption nil
-    org-crypt-disable-auto-save t))
+          ;; I want to have encryption, but how do TODO items bubble up then in the agenda
+          org-journal-enable-encryption nil
+          org-crypt-disable-auto-save t))
 #+END_SRC
 
 Particularly in journaling, but also in org-mode in general, I want to be able to quickly insert screenshots. Rather, images in general but 90% of my usecase is really screenshots.
@@ -1757,7 +1746,7 @@ Below is what was contained in the old configuration. I will slowly migrate this
 
 #+BEGIN_SRC emacs-lisp
   ;; Bit of a leftover from reorganising bits, do this later
-  (add-to-list 'org-tags-exclude-from-inheritance (quote "sell"))
+  (add-to-list 'org-tags-exclude-from-inheritance '"sell")
 
   ;; Dynamic behaviour
   (defun mrb/gtd()
@@ -1813,7 +1802,7 @@ Below is what was contained in the old configuration. I will slowly migrate this
         nil)))
 
   ;; When in agenda mode, show the line we're working on.
-  (add-hook 'org-agenda-mode-hook '(lambda () (hl-line-mode 1)))
+  (add-hook 'org-agenda-mode-hook (lambda () (hl-line-mode 1)))
 
   ;; Remove empty property drawers
   (defun mrb/org-remove-empty-propert-drawers ()
@@ -1964,8 +1953,8 @@ I use the /encrypt/ tag for encrypting sections in org-mode (and sometimes my jo
 We do not want to inherit this tag automatically, as its behaviour is already subsection inclusive. When you encrypt a section, everything below it is considered content of that section and gets encrypted. I also add the value "crypt" as that is the org default, so it won't be inherited by mistake.
 
 #+BEGIN_SRC emacs-lisp
-  (add-to-list 'org-tags-exclude-from-inheritance (quote "encrypt"))
-  (add-to-list 'org-tags-exclude-from-inheritance (quote "crypt"))
+  (add-to-list 'org-tags-exclude-from-inheritance '"encrypt")
+  (add-to-list 'org-tags-exclude-from-inheritance '"crypt")
 #+END_SRC
 
 * Key and mouse bindings
@@ -2280,13 +2269,12 @@ A list of functions / filters through which interactive output is passed, most o
 
 #+BEGIN_SRC emacs-lisp
   (setq eshell-output-filter-functions
-        (quote
-         (eshell-handle-ansi-color
+        '(eshell-handle-ansi-color
           eshell-handle-control-codes
           eshell-watch-for-password-prompt
           eshell-handle-control-codes
           eshell-handle-ansi-color
-          eshell-watch-for-password-prompt)))
+          eshell-watch-for-password-prompt))
 #+END_SRC
 
 As I am migrating from bash, I want eshell to behave as much like bash as possible. The next settings take care of some of the things to make that happen.
@@ -2508,7 +2496,7 @@ Once that is in place files can be opened with =/ssh:/host:/path/to/file= syntax
 My default browser, as set in the OS, should be started automatically on opening =http:= like stuff and =html= files. The only link to the /outside world/ is specifying that =xdg-open= should figure out what program to use.
 
 #+BEGIN_SRC emacs-lisp
-  (setq browse-url-browser-function (quote browse-url-generic))
+  (setq browse-url-browser-function 'browse-url-generic)
   (setq browse-url-generic-program "xdg-open")
 #+END_SRC
 * Messaging and chatting
