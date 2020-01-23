@@ -619,26 +619,29 @@ I recently reversed my stance on this and am now enabling visual line mode every
 To help me see the difference between visual lines and logical lines I let emacs display indicators in the fringe and define a function to help me unfill existing paragraphs.
 
 #+BEGIN_SRC emacs-lisp
-  (setq-default truncate-lines nil)
+    (use-package visual-fill-column
+      :commands (turn-on-visual-fill-column-mode))
 
-  ;; Similar to mail messages, use vertical bar for wrapped paragaphs
-  (setq visual-line-fringe-indicators
-        '(vertical-bar nil))
+    (setq-default truncate-lines nil)
 
-  ;; For all text modes use visual-line-mode
-  (add-hook 'text-mode-hook 'visual-line-mode)
+    ;; Similar to mail messages, use vertical bar for wrapped paragaphs
+    (setq visual-line-fringe-indicators
+          '(vertical-bar nil))
 
-  ;; From:https://www.emacswiki.org/emacs/UnfillParagraph
-  (defun unfill-paragraph (&optional region)
-    "Takes a multi-line paragraph and makes it into a single line of text."
-    (interactive (progn (barf-if-buffer-read-only) '(t)))
-    (let ((fill-column (point-max))
-          ;; This would override `fill-column' if it's an integer.
-          (emacs-lisp-docstring-fill-column t))
-      (fill-paragraph nil region)))
+    ;; For all text modes use visual-line-mode
+    (add-hook 'text-mode-hook 'visual-line-mode)
 
-   ;; Similar to M-q for fill, define M-Q for unfill
-  (bind-key "M-Q" 'unfill-paragraph)
+    ;; From:https://www.emacswiki.org/emacs/UnfillParagraph
+    (defun unfill-paragraph (&optional region)
+      "Takes a multi-line paragraph and makes it into a single line of text."
+      (interactive (progn (barf-if-buffer-read-only) '(t)))
+      (let ((fill-column (point-max))
+            ;; This would override `fill-column' if it's an integer.
+            (emacs-lisp-docstring-fill-column t))
+        (fill-paragraph nil region)))
+
+     ;; Similar to M-q for fill, define M-Q for unfill
+    (bind-key "M-Q" 'unfill-paragraph)
 #+END_SRC
 
 Line-numbering is off by default, it tends to slow things down, but if I want it on, I almost always want them relative
@@ -951,7 +954,7 @@ Also make sure we never load org from internal, this can happen when functions w
     :ensure nil
     :pin org
     :mode ("\\.txt\\'" "\\.org\'")
-    :after (org-capture)
+    :after (org-capture visual-fill-column)
     :bind (("C-c g" . 'mrb/gtd)
            ("C-c a"   . 'org-agenda)
            ("C-c b"   . 'org-switchb)
@@ -979,7 +982,7 @@ Also make sure we never load org from internal, this can happen when functions w
            ("C-c C-t" . mrb/add-tags-in-capture))
     :config
     (add-hook 'org-mode-hook 'turn-on-visual-line-mode)
-    (add-hook 'org-mode-hook '(lambda () (visual-fill-column-mode 1)))
+    (add-hook 'org-mode-hook 'turn-on-visual-fill-column-mode)
     (setq org-use-fast-todo-selection t
           org-use-fast-tag-selection t
           org-fast-tag-selection-single-key 'expert
