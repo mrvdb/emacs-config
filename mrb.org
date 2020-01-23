@@ -978,61 +978,59 @@ Also make sure we never load org from internal, this can happen when functions w
            :map org-capture-mode-map
            ("C-c C-t" . mrb/add-tags-in-capture))
     :config
-    (setq
-     org-use-fast-todo-selection t
-     org-use-fast-tag-selection t
-     org-fast-tag-selection-single-key 'expert
+    (add-hook 'org-mode-hook 'turn-on-visual-line-mode)
+    (add-hook 'org-mode-hook '(lambda () (visual-fill-column-mode 1)))
+    (setq org-use-fast-todo-selection t
+          org-use-fast-tag-selection t
+          org-fast-tag-selection-single-key 'expert
+          org-enforce-todo-dependencies t	; we do want task dependencies
+          org-enforce-todo-checkbox-dependencies nil ; but relax checkbox contraints for it
 
-     ;; We support task dependencies
-     org-enforce-todo-dependencies t
-     ;; but relax checkbox constraints
-     org-enforce-todo-checkbox-dependencies nil
+          ;; We dont do priorities
+          org-enable-priority-commands nil
 
-     ;; We dont do priorities
-     org-enable-priority-commands nil
+          ;; Agenda settings
+          org-agenda-include-diary t
+          org-agenda-start-with-log-mode t
+          org-agenda-todo-ignore-scheduled "future"
 
-     ;; Agenda settings
-     org-agenda-include-diary t
-     org-agenda-start-with-log-mode t
-     org-agenda-todo-ignore-scheduled "future"
+          ;; Habits
+          org-habit-show-habits-only-for-today nil
 
-     ;; Habits
-     org-habit-show-habits-only-for-today nil
+          ;; Pressing enter on a link should activate it
+          org-return-follows-link t
+          org-support-shift-select (quote always)
 
-     ;; Pressing enter on a link should activate it
-     org-return-follows-link t
-     org-support-shift-select (quote always)
+          org-agenda-log-mode-items (quote (closed clock state))
+          org-agenda-skip-deadline-prewarning-if-scheduled t
+          ;; Auto detect blank line need, this is the default, but I explicitly set thi
+          ;; because it needs to be this or my capturing breaks due to org-capture popup
+          org-blank-before-new-entry (quote ((heading . auto) (plain-list-item . auto)))
+          org-export-htmlize-output-type (quote css)
 
-     org-agenda-log-mode-items (quote (closed clock state))
-     org-agenda-skip-deadline-prewarning-if-scheduled t
-     ;; Auto detect blank line need, this is the default, but I explicitly set thi
-     ;; because it needs to be this or my capturing breaks due to org-capture popup
-     org-blank-before-new-entry (quote ((heading . auto) (plain-list-item . auto)))
-     org-export-htmlize-output-type (quote css)
-
-     org-file-apps
-     (quote
-      ((auto-mode . emacs)
-       ("\\.dia\\'" . "dia %s")
-       ("\\.mm\\'" . default)
-       ("\\.pdf\\'" . default)))
-     org-fontify-done-headline t
-     org-goto-interface (quote outline-path-completion)
-     ;; non nil is just direct children, what an ODD name!!!!
-     org-hierarchical-todo-statistics nil
-     org-provide-todo-statistics t
-     org-log-into-drawer t
-     org-log-redeadline (quote note)
-     org-log-reschedule (quote time)
-     org-modules (quote
-                  (org-info org-habit
-                            org-inlinetask org-irc
-                            org-toc org-mac-iCal org-mouse))
-     org-remember-default-headline ""
-     org-special-ctrl-a/e t
-     org-stuck-projects (quote ("-inactive/TODO" ("TODO" "WAITING") nil ""))
-     org-track-ordered-property-with-tag nil
-     org-startup-indented t)
+          org-file-apps
+          (quote
+           ((auto-mode . emacs)
+            ("\\.dia\\'" . "dia %s")
+            ("\\.mm\\'" . default)
+            ("\\.pdf\\'" . default)))
+          org-fontify-done-headline t
+          org-goto-interface (quote outline-path-completion)
+          ;; non nil is just direct children, what an ODD name!!!!
+          org-hierarchical-todo-statistics nil
+          org-provide-todo-statistics t
+          org-log-into-drawer t
+          org-log-redeadline (quote note)
+          org-log-reschedule (quote time)
+          org-modules (quote
+                       (org-info org-habit
+                                 org-inlinetask org-irc
+                                 org-toc org-mac-iCal org-mouse))
+          org-remember-default-headline ""
+          org-special-ctrl-a/e t
+          org-stuck-projects (quote ("-inactive/TODO" ("TODO" "WAITING") nil ""))
+          org-track-ordered-property-with-tag nil
+          org-startup-indented t)
 
 
 
@@ -1431,20 +1429,22 @@ For the headings at each level a =*= is normally used. As we're in unicode worls
 A couple of settings to steer the column in which the tags and habits appear in the frame:
 
 #+BEGIN_SRC emacs-lisp
-  ;; Static settings for tags in agenda and habit graphs
-  (setq org-agenda-tags-column -110
-        org-habit-graph-column 100)
+    ;; Static settings for tags in agenda and habit graphs
+    (setq org-agenda-tags-column -110
+          org-habit-graph-column 100)
 
-  ;; Dynamic setting for tags normally, align with wrapping column
-  ;; Interestingly `window-body-width` works for this
-  ;; TODO: this is not enough, because we dont always change focus, why not have it on an idle timer or after some event?
-  (add-hook 'focus-in-hook
-    (lambda () (progn
-      (setq org-tags-column (- 5 (window-body-width)))) (org-align-all-tags)))
+    (defun mrb/org-align-tags (&optional roffset)
+      "Set orgmode tag positions to window body width, right aligned.
+  ROFFSET is the offset from the right, defaults to 5"
+      (setq org-tags-column (-
+                             (or 5 roffset)
+                             (window-body-width)))
+      (org-align-all-tags))
 
-  (add-hook 'focus-out-hook
-    (lambda () (progn
-      (setq org-tags-column (- 5 (window-body-width)))) (org-align-all-tags)))
+    ;; TODO: why not have it on an idle timer or after some event?
+    ;; TODO: make this only apply to orgmode files, not globally
+    (add-hook 'focus-in-hook 'mrb/org-align-tags)
+    (add-hook 'focus-out-hook 'mrb/org-align-tags)
 #+END_SRC
 
 The item lists can be made a whole lot more attractive by attaching some icons based on the category an items belongs to. The category assignment itself is done by setting the =CATEGORY= property explicitly on the item or on the file.
@@ -2674,7 +2674,7 @@ It's not entirely clear which package is exactly responsible for what, but there
     (visual-line-mode 1)
     (auto-fill-mode 0)					; Makes no sense in visual mode
 
-    (setq visual-fill-column-width nil) 	; So `fill-columns gets used
+    (setq visual-fill-column-width nil) 	; Make sure `fill-column gets used
     (setq fill-column 66)					; Same as encode column below
     (visual-fill-column-mode 1)			; Show it
 
