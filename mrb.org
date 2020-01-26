@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil
 #+PROPERTY: header-args :results silent
 
-Last update Time-stamp: <2020-01-26 13:34:18 mrb>
+Last update: <2020-01-26 13:53:51>
 
 #+TOC: headlines 2
 
@@ -1360,6 +1360,12 @@ Related to the above, with some regularity I want to record timestamps, for exam
     (interactive "P")
     (org-insert-time-stamp (current-time) with-hm 1 ))
 #+END_SRC
+
+Lastly, there's a mechanism in emacs which can automatically insert time-stamps, based on a placeholder in the file and a format variable. I sometimes use that, so I add it to my before save hook. Typically, the format string is file specific and will be held in a file local variable.
+
+#+begin_src emacs-lisp
+(add-hook 'before-save-hook 'time-stamp)
+#+end_src
 
 ** Scheduling items
 Orgmode has a number of provisions to schedule items, either explicitly by setting the SCHEDULE property, inferring a deadline by setting the DEADLINE property, thus scheduling the task in an interval before the deadline expires.
@@ -3435,4 +3441,5 @@ When we are all done with this, provide it.
 # Local Variables:
 # writefreely-post-id: "wf83bq5jwz"
 # writefreely-post-token: nil
+# time-stamp-pattern: "7/Last update: <%:y-%02m-%02d %02H:%02M:%02S>"
 # End:
