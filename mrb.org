@@ -682,7 +682,11 @@ Note that if this code is evaluated any call to emacsclient (be that from extern
     (use-package ws-butler
       :diminish
       :init
-      (ws-butler-global-mode))
+      (ws-butler-global-mode)
+      ;; List exemptions here
+      ;; FIXME: why is org-capture-mode in here?
+      (add-to-list 'ws-butler-global-exempt-modes 'org-capture-mode)
+      (add-to-list 'ws-butler-global-exempt-modes 'magit-mode))
 
     (mrb/unicode-font-corrections))
 
@@ -1076,8 +1080,7 @@ frames.
     :diminish
     :ensure nil
     :after org-journal
-    :config
-    (add-to-list 'ws-butler-global-exempt-modes 'org-capture-mode))
+  )
 
   (use-package org-capture-pop-frame
     :config
