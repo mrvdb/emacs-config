@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil
 #+PROPERTY: header-args :results silent
 
-Last update: <2020-01-26 13:53:51>
+Last update: <2020-01-30 13:13:49>
 
 #+TOC: headlines 2
 
@@ -2722,6 +2722,19 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
     :init
     (fullframe mu4e mu4e-quit)
     :config
+    ;; Support icalendar Yes/No/Maybe reactions to calendar invites
+    (use-package mu4e-icalendar
+      :config
+      (mu4e-icalendar-setup))
+
+    ;; Patch highlighting inside messages
+    (use-package mu4e-patch
+      :ensure nil
+      :load-path "/home/mrb/dat/src/emacs/packages/mu4e-patch"
+      :config
+      (add-hook 'mu4e-view-mode-hook #'mu4e-patch-highlight))
+
+
     (setq
      ;; Override the defaul mail user agent with the mu4e specific one.
      mu4e-maildir "~/Maildir"
