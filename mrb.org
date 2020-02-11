@@ -3400,7 +3400,12 @@ Features I'm interested in: issue commenting, pull requests
     :config
     (setq forge-add-pullreq-refspec 'ask
           forge-pull-notifications t
-          forge-topic-list-limit '(60 . 0)))
+          forge-topic-list-limit '(60 . 0))
+
+    ;; Only show assigned stuff
+    (magit-add-section-hook 'magit-status-sections-hook 'forge-insert-assigned-issues   nil t)
+    (magit-add-section-hook 'magit-status-sections-hook 'forge-insert-assigned-pullreqs   nil t))
+
 #+END_SRC
 
 *** Commiting automatically
