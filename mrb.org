@@ -2739,8 +2739,7 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
 
 
     (setq
-     ;; Override the defaul mail user agent with the mu4e specific one.
-     mu4e-maildir "~/Maildir"
+     ;; Override the defaul mail user agent with the mu4e specific one
      mail-user-agent 'mu4e-user-agent
      mu4e-sent-folder "/Sent"
      mu4e-drafts-folder "/Drafts"
@@ -2798,11 +2797,6 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
      ;; Jump to some folders directly with a shortcut
      mu4e-maildir-shortcuts '(("/INBOX" . ?i)
                               ("/Trash" . ?t)))
-
-    ;; Construct list of my email addresses, the default 'marcel@hsdev.com' is already there
-    (add-to-list 'mu4e-user-mail-address-list "mrb@hsdev.com")
-    (add-to-list 'mu4e-user-mail-address-list "mvanderboom@gmail.com")
-    (add-to-list 'mu4e-user-mail-address-list "marcel@van-der-boom.nl")
 
     ;; Define actions for the message view
     ;; Allow showing in browser when there is a HTML mess to deal with
