@@ -3156,6 +3156,12 @@ My personal style will be called =mrb= and basing it on the =linux= style.
         '((java-mode . "java")
           (awk-mode  . "awk")
           (other     . "mrb")))
+
+  ;; EditorConfig support, not used much by the looks of it
+  (use-package editorconfig
+    :ensure t
+    :config
+    (editorconfig-mode 1))
 #+END_SRC
 
 ** Haskell
