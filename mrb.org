@@ -1511,15 +1511,14 @@ Settings which are just applicable for the org-mode agenda view.
                    (point-min) (point-max) '(mouse-face t))))
 #+END_SRC
 
-A snippet which resized the agenda to its window whenever its rebuilt by orgmode
+A snippet which resized the agenda to its window whenever its rebuilt by orgmode The 'auto value of the =org-agenda-tags-column= variable right aligns the tags in the agenda view
 
 #+begin_src emacs-lisp
-;; Goal: have the agenda window sized properly
-(defadvice org-agenda-redo (after fit-windows-for-agenda activate)
-  "Fit the Org Agenda to its buffer."
-  (fit-window-to-buffer))
+  (setq org-agenda-tags-column 'auto)
+  (defadvice org-agenda-redo (after fit-windows-for-agenda activate)
+    "Fit the Org Agenda to its buffer."
+    (fit-window-to-buffer))
 #+end_src
-
 *** Calendaring
 Traditionally somewhat related to mail, although mostly through orgmode these days, I want a simple setup to pull in some calendering information. I run a radical calendar server somewhere, but having the same info in orgmode makes sense for me.
 
