@@ -3160,6 +3160,7 @@ My personal style will be called =mrb= and basing it on the =linux= style.
   ;; EditorConfig support, not used much by the looks of it
   (use-package editorconfig
     :ensure t
+    :diminish
     :config
     (editorconfig-mode 1))
 #+END_SRC
