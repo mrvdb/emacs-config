@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil
 #+PROPERTY: header-args :results silent
 
-Last update: <2020-01-30 13:13:49>
+Last update: <2020-03-02 11:25:24>
 
 #+TOC: headlines 2
 
@@ -1563,6 +1563,7 @@ Specific settings for babel and literate programming within org-mode
           (lisp       . t)
           (org        . t)
           (plantuml   . t)
+          (python     . t)
           (scheme     . t)
           (shell      . t)
           (sql        . t)))
