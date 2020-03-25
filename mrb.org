@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil
 #+PROPERTY: header-args :results silent
 
-Last update: <2020-03-02 11:25:24>
+Last update: <2020-03-25 11:20:15>
 
 #+TOC: headlines 2
 
@@ -547,14 +547,7 @@ starting with the =base16-nord= theme and see where this leaves me.
     (base16-set-faces 'base16-nord base16-nord-colors base16-adjustments))
 #+END_SRC
 
-I enable highlighting matching parentheses in many levels
-globally. I do not know of a situation where not knowing which
-bracket or parenthesis goes with which is not a useful thing.
-
-Define the colors for the parentheses at different levels. One catch
-here is that the configuration needs one more color than is actually
-used. The last entry here does not get highlighted, so my config is
-valid for 5 levels, not 6.
+Miscelaneoous other visual settings follow.
 
 #+BEGIN_SRC emacs-lisp
   ;; no splash screen
