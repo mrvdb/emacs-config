@@ -677,6 +677,7 @@ Note that if this code is evaluated any call to emacsclient (be that from extern
     ;; Probably move this to somewhere else ?
     ;; I probably want the global mode and register exceptions
     (use-package ws-butler
+      :disabled
       :diminish
       :init
       (ws-butler-global-mode)
