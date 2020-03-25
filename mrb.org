@@ -1116,7 +1116,7 @@ Here are the templates used for them.
 
   (defun mrb/capture-location()
     "This function is meant to be used inside org-capture-templates
-  to find a file and location where a caputured ITEM should
+  to find a file and location where a captured ITEM should
   be stored."
 
     ;; Open journal file without creating a journal entry This has the
@@ -1675,43 +1675,45 @@ Orgmode can export to a variety of formats, I mainly use LaTeX (PDF) and HTML as
 #+END_SRC
 
 ** Journaling
-While the capture method is useful I found myself not using it very much. Not sure why, but I'm going to try =org-journal= and see it that is a better fit.
+While the standard capture method is useful I found myself not using it very much. Not sure why. It turns out that org-journal is a much better fit for my workflow, especially using the carry-over functionality.
 
 #+BEGIN_SRC emacs-lisp
-    (use-package org-journal
-      :bind
-      (("C-c j"   . 'org-journal-new-entry))
-      :init
-      ;; The expand-file-name is needed, which is odd, because for single
-      ;; files this is not needed.
-      (setq org-journal-dir (expand-file-name (concat org-directory "journal/"))
-            ;; Bring our config to every journal file
-            org-journal-file-header "#+SETUPFILE: ~/.emacs.d/org-config.org"
+  (use-package org-journal
+    :bind
+    (("C-c j"   . 'org-journal-new-entry))
+    :init
+    ;; The expand-file-name is needed, which is odd, because for single
+    ;; files this is not needed.
+    (setq org-journal-dir (expand-file-name (concat org-directory "journal/"))
+          ;; Bring our config to every journal file
+          org-journal-file-header "#+SETUPFILE: ~/.emacs.d/org-config.org"
 
-            ;; Match the journal files (FIXME: make this independent of earlier assignments)
-            org-agenda-file-regexp "^[0-9]+\\.org"
-            org-journal-file-format  "%Y%m%d.org"
+          ;; Match the journal files (FIXME: make this independent of earlier assignments)
+          org-agenda-file-regexp "^[0-9]+\\.org"
+          org-journal-file-format  "%Y%m%d.org"
 
-            ;; Put day on top of file, uses `org-journal-date-format`
-            org-journal-date-format "%A, %e-%m-%Y"
+          ;; Put day on top of file, uses `org-journal-date-format`
+          org-journal-date-format "%A, %e-%m-%Y"
 
-            ;; Put day on top of file, uses `org-journal-date-format
-            org-journal-date-prefix "#+TITLE: "
-            ;; New entries go at the bottom, make sure we are at top level
-            org-journal-time-format "[%R] "
-            org-journal-time-prefix "* "
+          ;; Put day on top of file, uses `org-journal-date-format`
+          org-journal-date-prefix "#+TITLE: "
+          ;; New entries go at the bottom, make sure we are at top level
+          org-journal-time-format "[%R] "
+          org-journal-time-prefix "* "
 
-            ;; Carry over TODO items and items explicitly marked
-            org-journal-carryover-items "+carryover|+TODO=\"TODO\""
-            ;; and for this to work, we need agenda integration
-            org-journal-enable-agenda-integration t
+          ;; Carry over TODO items and items explicitly marked
+          org-journal-carryover-items "+carryover|+TODO=\"TODO\""
+          ;; and for this to work, we need agenda integration
+          org-journal-enable-agenda-integration t
+          ;; Remove empty journals after carryover, but ask for now
+          org-journal-carryover-delete-empty-journal 'ask
 
-            ;; I want to have encryption, but how do TODO items bubble up then in the agenda
-            org-journal-enable-encryption nil
-            org-crypt-disable-auto-save t)
-      :config
-          (add-hook 'org-journal-mode-hook 'turn-on-visual-line-mode)
-          (add-hook 'org-journal-mode-hook 'turn-on-visual-fill-column-mode))
+          ;; I want to have encryption, but how do TODO items bubble up then in the agenda
+          org-journal-enable-encryption nil
+          org-crypt-disable-auto-save t)
+    :config
+        (add-hook 'org-journal-mode-hook 'turn-on-visual-line-mode)
+        (add-hook 'org-journal-mode-hook 'turn-on-visual-fill-column-mode))
 #+END_SRC
 
 Particularly in journaling, but also in org-mode in general, I want to be able to quickly insert screenshots. Rather, images in general but 90% of my usecase is really screenshots.
