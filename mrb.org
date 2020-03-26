@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil
 #+PROPERTY: header-args :results silent
 
-Last update: <2020-03-25 11:20:15>
+Last update: <2020-03-26 16:13:44>
 
 #+TOC: headlines 2
 
@@ -305,6 +305,21 @@ Most of what follows should probably be relocated to a better suited section.
     (lambda ()
       (goto-address-mode 1)))
   (global-goto-address-mode t)
+
+
+  ;; When in orgmode, we can shorten our urls without a service
+  (defun mrb/shortenurl-at-point (arg)
+    (interactive "P")
+    (let ((url (thing-at-point 'url))
+          (bounds (bounds-of-thing-at-point 'url)))
+      (kill-region (car bounds) (cdr bounds))
+      ;; TODO: this will work in orgmode, possibly markdown
+      ;;       tst for major mode?
+      (insert (format "[[%s][%s]]"
+                      url
+                      (truncate-string-to-width url (if arg (prefix-numeric-value arg) 40)
+                                                nil nil "…")))))
+  (bind-key "C-c s" 'mrb/shortenurl-at-point)
 #+END_SRC
 
 Make life easier if we have sudo, so we can just edit the files and be done with them if possible
