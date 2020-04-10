@@ -1471,6 +1471,7 @@ A couple of settings to steer the column in which the tags and habits appear in 
     ;; TODO: make this only apply to orgmode files, not globally
     (add-hook 'focus-in-hook 'mrb/org-align-tags)
     (add-hook 'focus-out-hook 'mrb/org-align-tags)
+    (add-hook 'org-mode-hook 'mrb/org-align-tags)
 #+END_SRC
 
 The item lists can be made a whole lot more attractive by attaching some icons based on the category an items belongs to. The category assignment itself is done by setting the =CATEGORY= property explicitly on the item or on the file.
