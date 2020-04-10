@@ -14,6 +14,7 @@
  '(eshell-modules-list
    '(eshell-alias eshell-banner eshell-basic eshell-cmpl eshell-dirs eshell-glob eshell-hist eshell-ls eshell-pred eshell-prompt eshell-rebind eshell-script eshell-term eshell-unix))
  '(explicit-shell-file-name "/bin/bash")
+ '(fill-column 100)
  '(flyspell-issue-message-flag nil)
  '(font-lock-maximum-size nil)
  '(goto-address-url-mouse-face 'default)
