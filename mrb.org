@@ -491,10 +491,13 @@ starting with the =base16-nord= theme and see where this leaves me.
             (font-lock-comment-face         :foreground "#666666")
             (button                         :foreground "#d08770" :weight semi-bold)
 
-            (show-paren-match               :foreground "#eceff4" :background "#5e81ac" :inherit nil :weight normal)
-            (show-paren-mismatch            :foreground "#2e3440" :background "#bf616a" :inherit nil :weight normal)
+            (show-paren-match               :foreground "#eceff4" :background "#5e81ac"
+                                            :inherit nil :weight normal)
+            (show-paren-mismatch            :foreground "#2e3440" :background "#bf616a"
+                                            :inherit nil :weight normal)
 
-            (region                         :foreground nil :background "#3b4252" :inherit nil :weight normal)
+            (region                         :foreground nil :background "#3b4252"
+                                            :inherit nil :weight normal)
             (fringe                         :foreground "#a3be8c")
 
             (hl-line                        :foreground nil :background "#5e81ac" )
@@ -593,7 +596,8 @@ Miscelaneoous other visual settings follow.
 
     ;; Define a segment for the tracking package
     (spaceline-define-segment tracking
-      "Segment to show if buffers need attention, similar to erc-track, but using mcirc tracking library"
+      "Segment to show if buffers need attention, similar to
+      erc-track, but using mcirc tracking library"
       tracking-mode-line-buffers)
 
     ;; We use the spacemacs theme, which gives us the evil state indicator
