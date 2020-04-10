@@ -1694,6 +1694,7 @@ While the standard capture method is useful I found myself not using it very muc
 
 #+BEGIN_SRC emacs-lisp
   (use-package org-journal
+    :after org
     :bind
     (("C-c j"   . 'org-journal-new-entry))
     :init
