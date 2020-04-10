@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil
 #+PROPERTY: header-args :results silent
 
-Last update: <2020-04-04 11:07:58>
+Last update: <2020-04-10 18:27:59>
 
 #+TOC: headlines 2
 
@@ -143,7 +143,7 @@ First of all, define the package archives I need; for now, just the default gnu 
   ;; Need to load
   (if (version< emacs-version "27")
     (package-initialize))
-  
+
   (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
   (add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/") t)
   (add-to-list 'package-archives '("org" . "https://orgmode.org/elpa/") t)
@@ -2741,6 +2741,9 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
       :config
       (mu4e-icalendar-setup))
 
+    (use-package mu4e-query-fragments)	; Support reusable query pieces '%junk' etc.
+    (use-package mu4e-jump-to-list)		; Shortcut key 'l' to directly focus on list threads
+
     ;; Patch highlighting inside messages
     (use-package mu4e-patch
       :ensure nil
@@ -2813,6 +2816,7 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
      mrb/private-address "marcel@van-der-boom.nl"
      mu4e-context-policy 'pick-first 		; When nothing matches only!
      mu4e-compose-context-policy 'pick-first
+
      mu4e-contexts
      `(,(make-mu4e-context
          :name "Default"
@@ -2859,7 +2863,7 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
                                :key ?i)
            (make-mu4e-bookmark :name "TODO list"
                                :query "flag:flagged"
-                               :key ?$)
+                               :key ?+)
            (make-mu4e-bookmark :name "Todays messages"
                                :query "date:today..now"
                                :key ?t)
