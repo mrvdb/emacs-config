@@ -16,17 +16,17 @@ This has a number of attractive properties:
 :PROPERTIES:
 :ID:       elfeed
 :END:
-*** Humor                                                                                            :humor:
+*** Humor                                                                             :humor:
 **** http://feeds.feedburner.com/GeekAndPoke
 **** http://blag.xkcd.com/feed/ 
-**** http://feeds.feedburner.com/oatmealfeed                                                        :comic:
-**** https://xkcd.com/atom.xml                                                                      :comic:
-**** http://what-if.xkcd.com/feed.atom                                                      :comic:science:
-**** https://kimmo.suominen.com/stuff/dilbert-daily.xml                                             :comic:
-**** http://www.nu.nl/feeds/rss/de-jager.rss                                                        :comic:
-**** http://www.commitstrip.com/en/feed/                                                :comic:programming:
+**** http://feeds.feedburner.com/oatmealfeed                                         :comic:
+**** https://xkcd.com/atom.xml                                                       :comic:
+**** http://what-if.xkcd.com/feed.atom                                       :comic:science:
+**** https://kimmo.suominen.com/stuff/dilbert-daily.xml                              :comic:
+**** http://www.nu.nl/feeds/rss/de-jager.rss                                         :comic:
+**** http://www.commitstrip.com/en/feed/                                 :comic:programming:
 *** News
-*** Cobra                                                                                            :cobra:
+*** Cobra                                                                             :cobra:
 **** http://gd427cobrabuild.blogspot.com/feeds/posts/default
 **** http://buildingmycobra.blogspot.com/feeds/posts/default
 **** http://www.cobraclub.com/forum/external.php?type=RSS2
@@ -40,58 +40,58 @@ This has a number of attractive properties:
 **** http://ryan427.blogspot.com/feeds/posts/default
 **** http://str-427-cobra.blogspot.com/feeds/posts/default
 **** http://cobnut.blogspot.com/feeds/posts/default
-**** https://cobra.mrblog.nl/feed                                                                      :me:
-*** Bitcoin                                                                                        :bitcoin:
+**** https://cobra.mrblog.nl/feed                                                       :me:
+*** Bitcoin                                                                         :bitcoin:
 *** Software
-**** http://nva-openerp.blogspot.com/feeds/posts/default                                             :odoo:
-**** http://esr.ibiblio.org/?feed=atom&tag=gpsd                                                      :gpsd:
+**** http://nva-openerp.blogspot.com/feeds/posts/default                              :odoo:
+**** http://esr.ibiblio.org/?feed=atom&tag=gpsd                                       :gpsd:
 **** http://planet.claws-mail.org/rss20.xml
 **** http://blog.prosody.im/feed/atom.xml
-**** https://odoo-community.org/blog_rss.xml                                                         :odoo:
+**** https://odoo-community.org/blog_rss.xml                                          :odoo:
 **** http://www.yesodweb.com/feed
 **** http://planet.haskell.org/atom.xml
 **** http://aherrmann.github.io/atom.xml
 **** http://blog.geargrams.com/comments/feed/
-**** Emacs                                                                                          :emacs:
+**** Emacs                                                                           :emacs:
 ***** http://whattheemacsd.com/atom.xml
-***** http://www.garron.me/en/atom.xml                                                     :people:jekyll:
-***** http://technomancy.us/feed/atom.xml                                                         :people:
-***** http://nullprogram.com/feed/                                                                :people:
-***** http://www.lunaryorn.com/feed.atom                                                         :haskell:
-***** http://www.emacswiki.org/emacs/index.rss?action=rss                                       :software:
+***** http://www.garron.me/en/atom.xml                                      :people:jekyll:
+***** http://technomancy.us/feed/atom.xml                                          :people:
+***** http://nullprogram.com/feed/                                                 :people:
+***** http://www.lunaryorn.com/feed.atom                                          :haskell:
+***** http://www.emacswiki.org/emacs/index.rss?action=rss                        :software:
 ***** http://planet.emacsen.org/atom.xml
-***** http://masteringemacs.org/feed                                                              :people:
+***** http://masteringemacs.org/feed                                               :people:
 ***** http://endlessparentheses.com/atom.xml
-***** http://www.howardism.org/index.xml                                                          :people:
+***** http://www.howardism.org/index.xml                                           :people:
 ***** http://oremacs.com/atom.xml
 ***** http://emacsnyc.org/atom.xml
-***** http://www.howardism.org/index.xml                                                          :people:
+***** http://www.howardism.org/index.xml                                           :people:
 ***** http://emacshorrors.com/feed.atom
 ***** https://emacs.wordpress.com/feed/
 **** http://wordpress.panaceas.org/wp/index.php/comments/feed/
 **** https://lwn.net/headlines/rss
 **** https://www.archlinux.org/feeds/news/
 
-*** Hardware                                                                                      :hardware:
+*** Hardware                                                                       :hardware:
 **** http://www.readynas.com/?feed=rss2
-**** https://www.yubico.com/feed/                                                                :security:
+**** https://www.yubico.com/feed/                                                 :security:
 **** http://everyday-carry.com/rss
 **** https://xiaomi.eu/community/forums/xiaomi-mimix.151/index.rss
 **** https://xiaomi.eu/community/forums/miui-weekly-rom-releases.103/index.rss
 *** People
-**** http://julien.danjou.info/blog/index.xml                                                      :people:
-**** https://mrblog.nl/feed                                                                     :people:me:
-**** https://qua.name/read/feed/                                                                       :me:
-**** http://torvalds-family.blogspot.com/feeds/posts/default                                       :people:
-**** http://feeds.feedburner.com/JuanReyero                                                        :people:
-**** http://feeds.feedburner.com/wyome                                                             :people:
+**** http://julien.danjou.info/blog/index.xml                                       :people:
+**** https://mrblog.nl/feed                                                      :people:me:
+**** https://qua.name/read/feed/                                                        :me:
+**** http://torvalds-family.blogspot.com/feeds/posts/default                        :people:
+**** http://feeds.feedburner.com/JuanReyero                                         :people:
+**** http://feeds.feedburner.com/wyome                                              :people:
 **** http://blog.sarine.nl/feed/index.xml
 **** http://heikkil.github.io/rss.xml
 **** http://www.blaenkdenum.com/rss.xml
 **** http://localhost:8000/feed/atom.xml
 **** https://asthetrailturns.com/feed/
 *** Automotive
-**** http://feeds.feedburner.com/TheChicane                                                     :oldschool:
+**** http://feeds.feedburner.com/TheChicane                                      :oldschool:
 **** http://www.gearjournal.com/feed/
 **** http://www.garagejournal.com/feed/
 *** Outdoors
@@ -106,11 +106,10 @@ This has a number of attractive properties:
 *** Other
 **** http://planet.jabber.org/rss20.xml
 **** http://feeds.twit.tv/sn_video_large
-**** http://www.thetoolanddieguy.com/feed                                                       :machining:
+**** http://www.thetoolanddieguy.com/feed                                        :machining:
 **** http://feeds.feedburner.com/hacknmod/qjUG
 **** https://blog.sleeplessbeastie.eu/atom.xml
 **** http://feeds2.feedburner.com/TheArtOfManliness
-**** http://www.geocaching.com/blog/feed/
 **** http://vimeo.com/mrvdb/subscriptions/videos/rss/5d94482c63b00132e107359e3740cd5d62bb60d3 :video:vimeo:
 **** https://unsplash.com/rss
 **** https://bof.nl/feed/
