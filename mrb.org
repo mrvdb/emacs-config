@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil
 #+PROPERTY: header-args :results silent
 
-Last update: <2020-04-10 18:27:59>
+Last update: <2020-04-12 09:49:15>
 
 #+TOC: headlines 2
 
@@ -696,7 +696,6 @@ Note that if this code is evaluated any call to emacsclient (be that from extern
     ;; Probably move this to somewhere else ?
     ;; I probably want the global mode and register exceptions
     (use-package ws-butler
-      :disabled
       :diminish
       :init
       (ws-butler-global-mode)
