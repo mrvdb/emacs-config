@@ -2743,6 +2743,7 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
     :config
     ;; Support icalendar Yes/No/Maybe reactions to calendar invites
     (use-package mu4e-icalendar
+      :load-path "/home/mrb/dat/src/emacs/packages/mu4e-patch"
       :config
       (mu4e-icalendar-setup))
 
