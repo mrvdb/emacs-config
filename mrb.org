@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil
 #+PROPERTY: header-args :results silent
 
-Last update: <2020-04-12 09:49:15>
+Last update: <2020-04-22 10:50:42>
 
 #+TOC: headlines 2
 
@@ -1725,8 +1725,8 @@ While the standard capture method is useful I found myself not using it very muc
           org-journal-carryover-items "+carryover|+TODO=\"TODO\""
           ;; and for this to work, we need agenda integration
           org-journal-enable-agenda-integration t
-          ;; Remove empty journals after carryover, but ask for now
-          org-journal-carryover-delete-empty-journal 'ask
+          ;; Remove empty journals after carryover
+          org-journal-carryover-delete-empty-journal 'always
 
           ;; I want to have encryption, but how do TODO items bubble up then in the agenda
           org-journal-enable-encryption nil
