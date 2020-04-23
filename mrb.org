@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil
 #+PROPERTY: header-args :results silent
 
-Last update: <2020-04-22 10:50:42>
+Last update: <2020-04-23 15:36:03>
 
 #+TOC: headlines 2
 
@@ -2758,6 +2758,7 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
       (add-hook 'mu4e-view-mode-hook #'mu4e-patch-highlight))
 
     (setq
+     mu4e-main-buffer-hide-personal-addresses t
      ;; Override the defaul mail user agent with the mu4e specific one
      mail-user-agent 'mu4e-user-agent
      mu4e-sent-folder     "/Sent"
@@ -2821,7 +2822,7 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
      ;; Goal 1. use global config, unless private address is used
      mrb/private-address "marcel@van-der-boom.nl"
      mu4e-context-policy 'pick-first 		; When nothing matches only!
-     mu4e-compose-context-policy 'pick-first
+     mu4e-compose-context-policy 'nil     ; for compose, use current if nothing matches
 
      mu4e-contexts
      `(,(make-mu4e-context
