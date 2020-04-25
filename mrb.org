@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil
 #+PROPERTY: header-args :results silent
 
-Last update: <2020-04-23 15:36:03>
+Last update: <2020-04-25 21:14:43>
 
 #+TOC: headlines 2
 
@@ -2796,6 +2796,7 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
      mu4e-view-use-gnus nil
      mu4e-view-show-addresses t			; Show actuall addresses instead of names
      mu4e-view-mode-hook '(turn-on-visual-line-mode)
+     mu4e-save-multiple-attachments-without-asking t
 
      ;; Compose settings
      mu4e-compose-format-flowed t			; Compose in format=flowed
