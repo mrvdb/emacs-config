@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil
 #+PROPERTY: header-args :results silent
 
-Last update: <2020-05-09 14:18:11>
+Last update: <2020-05-09 14:59:56>
 
 #+TOC: headlines 2
 
@@ -981,7 +981,6 @@ Also make sure we never load org from internal, this can happen when functions w
            ("C-s-s"   . 'org-save-all-org-buffers)
            ("C-x m"   . 'mrb/construct-mail)
            :map org-mode-map
-           ([remap org-priority]   . 'mrb/org-insert-inactive-timestamp)
            ("C-c l"   . 'org-store-link)	; Is this not bound to C-c l by default?
            ("C-c p"   . 'org-plot/gnuplot)
            ("s-."     . 'org-todo)
@@ -1365,13 +1364,7 @@ Now that function is used to insert the property when:
   ;;(ad-deactivate 'org-capture)
 #+END_SRC
 
-Related to the above, with some regularity I want to record timestamps, for example for documenting longer during tasks and recording incremental progress or information on them.
-
-#+BEGIN_SRC emacs-lisp
-  (defun mrb/org-insert-inactive-timestamp (&optional with-hm)
-    (interactive "P")
-    (org-insert-time-stamp (current-time) with-hm 1 ))
-#+END_SRC
+Related to the above, with some regularity I want to record timestamps, for example for documenting longer during tasks and recording incremental progress or information on them. Orgmode provides the binding '=C-c !=' for this which inserts an inactive datestamp, optionally including the time as well.
 
 Lastly, there's a mechanism in emacs which can automatically insert time-stamps, based on a placeholder in the file and a format variable. I sometimes use that, so I add it to my before save hook. Typically, the format string is file specific and will be held in a file local variable.
 
