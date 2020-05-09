@@ -56,3 +56,4 @@ mastodon.plstore
 /.lsp-session-v1
 /transient/
 /org-journal.cache
+/jabber-avatar-cache/

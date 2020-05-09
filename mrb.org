@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil
 #+PROPERTY: header-args :results silent
 
-Last update: <2020-04-27 10:42:35>
+Last update: <2020-05-09 14:18:11>
 
 #+TOC: headlines 2
 
@@ -2498,7 +2498,9 @@ I haven't found a solution for this yet, but also have not found it to be a prob
 The multiple cursors package is often used for repetitive editting.
 
 #+BEGIN_SRC emacs-lisp
-  (use-package multiple-cursors)
+  (use-package multiple-cursors
+    ;; Binding mc/edit-lines because I can't call it from M-x with helm
+    :bind (("C-c e" . 'mc/edit-lines)))
 #+END_SRC
 
 ** Navigation
