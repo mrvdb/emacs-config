@@ -168,8 +168,7 @@
  '(org-list-allow-alphabetical t)
  '(org-mime-use-property-inheritance t)
  '(org-org-htmlized-css-url "orgmode.css")
- '(org-plantuml-jar-path
-   "/home/mrb/dat/src/emacs/packages/org-mode/contrib/scripts/plantuml.jar")
+ '(org-plantuml-jar-path "/usr/share/java/plantuml/plantuml.jar")
  '(org-stuck-projects '("-inactive/+TODO" ("TODO" "WAITING") nil ""))
  '(org-tags-column -110)
  '(org-tags-exclude-from-inheritance '("area" "encrypt"))
