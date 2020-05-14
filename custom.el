@@ -21,7 +21,6 @@
  '(gud-gdb-command-name "gdb --annotate=1")
  '(guess-language-languages '(en de nl))
  '(haskell-interactive-popup-errors nil)
- '(ido-vertical-define-keys 'C-n-C-p-up-down-left-right)
  '(ispell-use-framepop-p t)
  '(mail-signature nil)
  '(markdown-css-path "/home/mrb/.markdown.css")
@@ -40,7 +39,7 @@
 	   (org-agenda-dim-blocked-tasks t)
 	   (org-agenda-group-by-property "Responsible")))
 	 ("b" "Buying list"
-	  ((tags-todo "-inactive+buy/TODO"
+	  ((tags-todo "-inactive+buy/-BUY"
 				  ((org-agenda-overriding-header "Buying list (tagged)")))
 	   (tags-todo "-inactive/BUY"
 				  ((org-agenda-overriding-header "Buying list (keyword)"))))
@@ -97,7 +96,7 @@
 	  nil)))
  '(org-agenda-ignore-properties '(effort appt category))
  '(org-agenda-text-search-extra-files
-   '(agenda-archives "~/dat/org/_orgmeta/archive-2016.org" "~/dat/org/_orgmeta/archive-2015.org" "~/dat/org/_orgmeta/archive-2014.org" "~/dat/org/_orgmeta/archive-2013.org" "~/dat/org/_orgmeta/archive-2012.org" "~/dat/org/_orgmeta/archive-2011.org"))
+   '(agenda-archives "~/dat/org/_orgmeta/archive-2019.org" "~/dat/org/_orgmeta/archive-2018.org" "~/dat/org/_orgmeta/archive-2017.org" "~/dat/org/_orgmeta/archive-2016.org" "~/dat/org/_orgmeta/archive-2015.org" "~/dat/org/_orgmeta/archive-2014.org" "~/dat/org/_orgmeta/archive-2013.org" "~/dat/org/_orgmeta/archive-2012.org" "~/dat/org/_orgmeta/archive-2011.org"))
  '(org-agenda-todo-ignore-scheduled 'future)
  '(org-beamer-outline-frame-options nil)
  '(org-beamer-outline-frame-title "Onderwerpen")
@@ -187,7 +186,11 @@
  '(reb-re-syntax 'string)
  '(request-log-level 'verbose)
  '(safe-local-variable-values
-   '((writefreely-post-id . "dbv92wvpfi")
+   '((eval visual-fill-column-mode t)
+	 (eval visual-line-mode t)
+	 (eval setq visual-fill-column-width: nil)
+	 (writefreely-post-id . "jnzt62gruo")
+	 (writefreely-post-id . "dbv92wvpfi")
 	 (writefreely-post-id . "j9nqdr0edr")
 	 (writefreely-post-id . "3pn4uygr08")
 	 (writefreely-post-id . "gg3pfn4cb2")
@@ -205,7 +208,6 @@
 	 (encoding . utf-8)
 	 (buffer-auto-save-file-name)))
  '(sgml-xml-mode t)
- '(tab-width 4)
  '(warning-suppress-types '((undo)))
  '(x-select-enable-clipboard-manager nil))
 (custom-set-faces
