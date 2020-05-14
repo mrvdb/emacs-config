@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil
 #+PROPERTY: header-args :results silent
 
-Last update: <2020-05-09 14:59:56>
+Last update: <2020-05-14 12:36:36>
 
 #+TOC: headlines 2
 
@@ -2712,182 +2712,187 @@ It's not entirely clear which package is exactly responsible for what, but there
 After a journey with many different MUAs I seem to be settling on =mu4e=.
 
 #+begin_src emacs-lisp
-  (use-package mu4e
-    :ensure nil
-    :load-path "/usr/local/share/emacs/site-lisp/mu4e"
-    :after message fullframe
-    :commands mu4e
-    :bind (:map mu4e-main-mode-map
-                ("/" . mu4e-headers-search)
-                :map mu4e-headers-mode-map
-                ("/" . mu4e-headers-search)
-                ("s" . mu4e-headers-mark-for-spam)
-                ("r" . mu4e-compose-reply)
-                ("R" . mu4e-headers-mark-for-refile)
-                ("X" . (lambda () (interactive) (mu4e-mark-execute-all t)))
-                :map mu4e-view-mode-map
-                ("/" . mu4e-headers-search)
-                ("s" . mu4e-view-mark-for-spam)
-                ("r" . mu4e-compose-reply)
-                ("R" . mu4e-view-mark-for-refile)
-                ("X" . (lambda () (interactive) (mu4e~view-in-headers-context (mu4e-mark-execute-all t)))))
-    ;; TODO: how are we editting a search? e?
-
-    :init
-    (fullframe mu4e mu4e-quit)			; Claim the whole screen
-    :config
-    ;; Support icalendar Yes/No/Maybe reactions to calendar invites
-    (use-package mu4e-icalendar
-      :load-path "/home/mrb/dat/src/emacs/packages/mu4e-patch"
-      :config
-      (mu4e-icalendar-setup))
-
-    (use-package mu4e-query-fragments)	; Support reusable query pieces '%junk' etc.
-    (use-package mu4e-jump-to-list)		; Shortcut key 'l' to directly focus on list threads
-
-    ;; Patch highlighting inside messages
-    (use-package mu4e-patch
+    (use-package mu4e
       :ensure nil
-      :load-path "/home/mrb/dat/src/emacs/packages/mu4e-patch"
+      :load-path "/usr/local/share/emacs/site-lisp/mu4e"
+      :after message fullframe
+      :commands mu4e
+      :bind (:map mu4e-main-mode-map
+                  ("/" . mu4e-headers-search)
+                  :map mu4e-headers-mode-map
+                  ("/" . mu4e-headers-search)
+                  ("s" . mu4e-headers-mark-for-spam)
+                  ("r" . mu4e-compose-reply)
+                  ("R" . mu4e-headers-mark-for-refile)
+                  ("X" . (lambda () (interactive) (mu4e-mark-execute-all t)))
+                  :map mu4e-view-mode-map
+                  ("/" . mu4e-headers-search)
+                  ("s" . mu4e-view-mark-for-spam)
+                  ("r" . mu4e-compose-reply)
+                  ("R" . mu4e-view-mark-for-refile)
+                  ("X" . (lambda () (interactive) (mu4e~view-in-headers-context (mu4e-mark-execute-all t)))))
+      ;; TODO: how are we editting a search? e?
+
+      :init
+      (fullframe mu4e mu4e-quit)			; Claim the whole screen
       :config
-      (add-hook 'mu4e-view-mode-hook #'mu4e-patch-highlight))
+      ;; Support icalendar Yes/No/Maybe reactions to calendar invites
+      (use-package mu4e-icalendar
+        :load-path "/home/mrb/dat/src/emacs/packages/mu4e-patch"
+        :config
+        (mu4e-icalendar-setup))
 
-    (setq
-     mu4e-main-buffer-hide-personal-addresses t
-     ;; Override the defaul mail user agent with the mu4e specific one
-     mail-user-agent 'mu4e-user-agent
-     mu4e-sent-folder     "/Sent"
-     mu4e-drafts-folder   "/Drafts"
-     mu4e-trash-folder    "/Trash"
-     mu4e-attachment-dir  "~/Downloads"	; Absolute folder here, not relative to Maildir!
-     mrb/mu4e-junk-folder "/Junk"			; Added for my specific config
+      (use-package mu4e-query-fragments)	; Support reusable query pieces '%junk' etc.
+      (use-package mu4e-jump-to-list)		; Shortcut key 'l' to directly focus on list threads
 
-     ;; Refiling to /Archives/YYYY
-     mu4e-refile-folder (lambda (msg)
-                          (let ((archive_base "/Archives/")
-                                (msgyear (format-time-string "%Y" (mu4e-message-field msg :date))))
-                            (cond
-                             ;; Order: most specific to general, end with the 't' case
+      ;; Patch highlighting inside messages
+      (use-package mu4e-patch
+        :ensure nil
+        :load-path "/home/mrb/dat/src/emacs/packages/mu4e-patch"
+        :config
+        (add-hook 'mu4e-view-mode-hook #'mu4e-patch-highlight))
 
-                             ;; Archive messages per year if it has a date field (basically, always)
-                             (msgyear	(concat archive_base msgyear))
+      (setq
+       mu4e-main-buffer-hide-personal-addresses t
+       ;; Override the defaul mail user agent with the mu4e specific one
+       mail-user-agent 'mu4e-user-agent
+       mu4e-sent-folder     "/Sent"
+       mu4e-drafts-folder   "/Drafts"
+       mu4e-trash-folder    "/Trash"
+       mu4e-attachment-dir  "~/Downloads"	; Absolute folder here, not relative to Maildir!
+       mrb/mu4e-junk-folder "/Junk"			; Added for my specific config
 
-                             ;; The default refile location
-                             (t  archive_base))))
+       ;; Refiling to /Archives/YYYY
+       mu4e-refile-folder (lambda (msg)
+                            (let ((archive_base "/Archives/")
+                                  (msgyear (format-time-string "%Y" (mu4e-message-field msg :date))))
+                              (cond
+                               ;; Order: most specific to general, end with the 't' case
 
+                               ;; Archive messages per year if it has a date field (basically, always)
+                               (msgyear	(concat archive_base msgyear))
 
-     mu4e-confirm-quit nil
-     mu4e-use-fancy-chars t
-     mu4e-get-mail-command "mbsync quick"	; Just get inbox and important stuff, not everything
-     mu4e-decryption-policy 'ask
-     mu4e-update-interval 120				; 2 minutes is fine since we don't actually retrieve, just index
-     mu4e-compose-complete-only-after nil
-
-     ;; Set completing function to standard, so helm works
-     mu4e-completing-read-function 'completing-read
-
-     ;; Message view settings
-     mu4e-view-show-images t
-     mu4e-view-use-gnus nil
-     mu4e-view-show-addresses t			; Show actuall addresses instead of names
-     mu4e-view-mode-hook '(turn-on-visual-line-mode)
-     mu4e-save-multiple-attachments-without-asking t
-
-     ;; Compose settings
-     mu4e-compose-format-flowed t			; Compose in format=flowed
-     mu4e-compose-in-new-frame nil		; TODO: match with mail handler
-     mu4e-compose-dont-reply-to-self t	; Do not include my addresses when replying
-     mu4e-compose-signature (			; Read signature from the usual signature file
-                             with-current-buffer
-                             (find-file-noselect "~/.signature")
-                             (buffer-string))
-
-     ;; Header view settings
-     mu4e-headers-include-related nil ; Use 'W' to toggle interactively
-     mu4e-headers-date-format "%F"  ; ISO format yyyy-mm-dd
-     mu4e-headers-results-limit -1  ; For now, needed to have related search results
-     mu4e-headers-visible-lines 20  ; Default of 10 is a bit small
-     mu4e-headers-auto-update nil	  ; Prevent confusion
+                               ;; The default refile location
+                               (t  archive_base))))
 
 
-     ;; Jump to some folders directly with a shortcut
-     mu4e-maildir-shortcuts '((:maildir "/INBOX" :key ?i)
-                              (:maildir "/Trash" :key ?t))
+       mu4e-confirm-quit nil
+       mu4e-use-fancy-chars t
+       mu4e-get-mail-command "mbsync quick"	; Just get inbox and important stuff, not everything
+       mu4e-decryption-policy 'ask
+       mu4e-update-interval 120				; 2 minutes is fine since we don't actually retrieve, just index
+       mu4e-compose-complete-only-after nil
+
+       ;; Set completing function to standard, so helm works
+       mu4e-completing-read-function 'completing-read
+
+       ;; Message view settings
+       mu4e-view-show-images t
+       mu4e-view-use-gnus nil
+       mu4e-view-show-addresses t			; Show actuall addresses instead of names
+       mu4e-view-mode-hook '(turn-on-visual-line-mode)
+       mu4e-save-multiple-attachments-without-asking t
+
+       ;; Compose settings
+       mu4e-compose-format-flowed t			; Compose in format=flowed
+       mu4e-compose-in-new-frame nil		; TODO: match with mail handler
+       mu4e-compose-dont-reply-to-self t	; Do not include my addresses when replying
+       mu4e-compose-signature (			; Read signature from the usual signature file
+                               with-current-buffer
+                               (find-file-noselect "~/.signature")
+                               (buffer-string))
+
+       ;; Header view settings
+       mu4e-headers-include-related nil ; Use 'W' to toggle interactively
+       mu4e-headers-date-format "%F"  ; ISO format yyyy-mm-dd
+       mu4e-headers-results-limit -1  ; For now, needed to have related search results
+       mu4e-headers-visible-lines 20  ; Default of 10 is a bit small
+       mu4e-headers-auto-update nil	  ; Prevent confusion
 
 
-     ;; Context definitions
-     ;; Goal 1. use global config, unless private address is used
-     mrb/private-address "marcel@van-der-boom.nl"
-     mu4e-context-policy 'pick-first 		; When nothing matches only!
-     mu4e-compose-context-policy 'nil     ; for compose, use current if nothing matches
-
-     mu4e-contexts
-     `(,(make-mu4e-context
-         :name "Default"
-         ;; Use global config, but restore what was changed in other contexts
-         :vars `((user-mail-address . "marcel@hsdev.com")))
-       ,(make-mu4e-context
-         :name "Private"
-         :match-func (lambda (msg)
-                       (when msg
-                         (mu4e-message-contact-field-matches
-                          msg `(:to :cc :from) mrb/private-address)))
-         :vars `((user-mail-address . ,mrb/private-address)))))
+       ;; Jump to some folders directly with a shortcut
+       mu4e-maildir-shortcuts '((:maildir "/INBOX" :key ?i)
+                                (:maildir "/Trash" :key ?t))
 
 
-    ;; Define actions for the message view
-    ;; Allow showing in browser when there is a HTML mess to deal with
-    (add-to-list 'mu4e-view-actions
-                 '("ViewInBrowser" . mu4e-action-view-in-browser) t)
+       ;; Context definitions
+       ;; Goal 1. use global config, unless private address is used
+       mrb/private-address "marcel@van-der-boom.nl"
+       mu4e-context-policy 'pick-first 		; When nothing matches only!
+       mu4e-compose-context-policy 'nil     ; for compose, use current if nothing matches
 
-    ;; Define marks
-    (add-to-list 'mu4e-marks
-                 '(spam
-                   :char ("S" . "🕱")
-                   :prompt "Mark as spam"
-                   :show-target (lambda (dyn-target) "Spam")
-                   :ask-target (lambda () mrb/mu4e-junk-folder)
-                   :action (lambda (docid msg target)
-                             (mu4e~proc-move
-                              docid
-                              (mu4e~mark-check-target target) "+S-N-u"))))
+       mu4e-contexts
+       `(,(make-mu4e-context
+           :name "Default"
+           ;; Use global config, but restore what was changed in other contexts
+           :vars `((user-mail-address . "marcel@hsdev.com")))
+         ,(make-mu4e-context
+           :name "Private"
+           :match-func (lambda (msg)
+                         (when msg
+                           (mu4e-message-contact-field-matches
+                            msg `(:to :cc :from) mrb/private-address)))
+           :vars `((user-mail-address . ,mrb/private-address)))))
 
-    ;; Let mu4e define functions for it
-    (mu4e~headers-defun-mark-for spam)
-    (mu4e~view-defun-mark-for spam)
 
-    ;; Bookmarks
-    (setq mu4e-bookmarks
-          (list
-           (make-mu4e-bookmark :name "Unread messages"
-                               :query "flag:unread and not flag:trashed"
-                               :key ?u)
-           (make-mu4e-bookmark :name "INBOX"
-                               :query "(flag:unread or flag:new or maildir:/INBOX) and not (flag:list or flag:draft or flag:flagged or flag:deleted or maildir:/Trash or flag:trashed)"
-                               :key ?i)
-           (make-mu4e-bookmark :name "TODO list"
-                               :query "flag:flagged"
-                               :key ?+)
-           (make-mu4e-bookmark :name "Todays messages"
-                               :query "date:today..now"
-                               :key ?t)
-           (make-mu4e-bookmark :name "SPAM folder"
-                               :query "maildir:/Junk"
-                               :key ?s)))
+      ;; Define actions for the message view
+      ;; Allow showing in browser when there is a HTML mess to deal with
+      (add-to-list 'mu4e-view-actions
+                   '("ViewInBrowser" . mu4e-action-view-in-browser) t)
 
-    ;; Rendering of html mail is done with shr
-    ;; By default, it's inhibiting images, I dont want that, as I only look at the html if needed
-    ;; FIXME: this does not work properly
-    (defun mrb/mu4e-shr2text (msg)
-      "Overridden mu4e-shr2text"
-      (mu4e~html2text-wrapper
-       (lambda ()
-         (let ((shr-inhibit-images nil)	; Explicitly allow images, use shr-blocked images to control
-               (shr-width nil) 			; Use whole window width for rendering
-               (shr-use-colors nil)		; Don't use colors from html, they ugly
-               (shr-bullet "• "))		; Original was "* "
-           (shr-render-region (point-min) (point-max)))) msg))
-    (setq mu4e-html2text-command 'mrb/mu4e-shr2text))
+      ;; Define marks
+      (add-to-list 'mu4e-marks
+                   '(spam
+                     :char ("S" . "🕱")
+                     :prompt "Mark as spam"
+                     :show-target (lambda (dyn-target) "Spam")
+                     :ask-target (lambda () mrb/mu4e-junk-folder)
+                     :action (lambda (docid msg target)
+                               (mu4e~proc-move
+                                docid
+                                (mu4e~mark-check-target target) "+S-N-u"))))
+
+      ;; Let mu4e define functions for it
+      (mu4e~headers-defun-mark-for spam)
+      (mu4e~view-defun-mark-for spam)
+
+      ;; Bookmarks
+      (setq mu4e-bookmarks
+            (list
+             (make-mu4e-bookmark :name "Unread messages"
+                                 :query "flag:unread and not flag:trashed"
+                                 :key ?u)
+             (make-mu4e-bookmark :name "INBOX"
+                                 :query "(flag:unread or flag:new or maildir:/INBOX) and not (flag:list or flag:draft or flag:flagged or flag:deleted or maildir:/Trash or flag:trashed)"
+                                 :key ?i)
+             (make-mu4e-bookmark :name "TODO list"
+                                 :query "flag:flagged"
+                                 :key ?+)
+             (make-mu4e-bookmark :name "Todays messages"
+                                 :query "date:today..now"
+                                 :key ?t)
+             (make-mu4e-bookmark :name "SPAM folder"
+                                 :query "maildir:/Junk"
+                                 :key ?s)))
+
+      ;; Rendering of html mail is done with shr
+      ;; By default, it's inhibiting images, I dont want that, as I only look at the html if needed
+      ;; FIXME: this does not work properly
+      (defun mrb/mu4e-shr2text (msg)
+        "Overridden mu4e-shr2text"
+        (mu4e~html2text-wrapper
+         (lambda ()
+           (let ((shr-inhibit-images nil)	; Explicitly allow images, use shr-blocked images to control
+                 (shr-width nil) 			; Use whole window width for rendering
+                 (shr-use-colors nil)		; Don't use colors from html, they ugly
+                 (shr-bullet "• "))		; Original was "* "
+             (shr-render-region (point-min) (point-max)))) msg))
+      (setq mu4e-html2text-command 'mrb/mu4e-shr2text)
+
+      ;; Make header configuration explicit
+      (setq mu4e-headers-fields
+            '((:flags . 6)(:human-date . 12)(:mailing-list . 10)(:from . 22)(:subject)))
+      )
 #+end_src
 
 To enable integration with orgmode =org-mu4e= must be loaded
