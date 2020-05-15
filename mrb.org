@@ -3472,26 +3472,6 @@ For now, just the ansible package, and some access to its documentation will suf
     :config
     (add-hook 'yaml-mode-hook '(lambda () (ansible 1))))
 #+end_src
-* Machine specific configurations
-The aim is to have the exact same configuration on each machine, but there may be occasions where is pays to have a slight difference in configuration on different machines.
-
-#+BEGIN_SRC emacs-lisp
-  (pcase (system-name)
-    ("x200s" (progn
-               ;; Stuff for the Lenovo Thinkpad X200s machine
-               (set-frame-font "Hack")
-               ))
-    ("t510"  (progn
-               ;; Stuff for the Lenovo Thinkpad T510 machine
-               ))
-    ("flip"  (progn
-               ;; Stuff for the Asus C101PA flip machine
-               ))
-    (_       (progn
-               ;; Stuff for non-mathing machine names
-               )))
-#+END_SRC
-
 * Finale
 When we are all done with this, provide it.
 
