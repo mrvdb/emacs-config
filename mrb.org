@@ -430,12 +430,9 @@ So, when characters do not show properly, the steps to take now are:
 3. Optional: define a convenient way to type the character
 
 * Visual
-Many settings have to do with how the screen looks and behaves in a
-visual way. Thing like colors, highlighting etc. go fall into this
-category.
+Many settings have to do with how the screen looks and behaves in a visual way. Thing like colors, highlighting etc. go fall into this category.
 
-Let's set up some basics first, background dark, some default frame
-and cursor properties:
+Let's set up some basics first, background dark, some default frame and cursor properties:
 
 #+BEGIN_SRC emacs-lisp
   (setq mrb/cursor-type '(bar . 3))		; Slightly wide bar
@@ -455,14 +452,9 @@ and cursor properties:
 
 I'm using the [[https://github.com/arcticicestudio/nord][Nord color palette]]. This palette defines 16 colors.
 
-There is a base16 theme which uses exactly these colors and there are
-varieties which use the 16 colors and some derivatives of it.
+There is a base16 theme which uses exactly these colors and there are varieties which use the 16 colors and some derivatives of it.
 
-Although I think the 16 color system is a bit simplistic and, for
-emacs at least, I will need to customize more later on, the main lure
-of this system is that I can use the same set for many of my programs
-I use (emacs, xterm, i3, dunst etc.) which sounds attractive. So, I'm
-starting with the =base16-nord= theme and see where this leaves me.
+Although I think the 16 color system is a bit simplistic and, for emacs at least, I will need to customize more later on, the main lure of this system is that I can use the same set for many of my programs I use (emacs, xterm, i3, dunst etc.) which sounds attractive. So, I'm starting with the =base16-nord= theme and see where this leaves me.
 
 #+BEGIN_SRC emacs-lisp
   (setq custom--inhibit-theme-enable nil)	; This was needed for Emacs 27, but cant recally why
@@ -717,9 +709,7 @@ Note that if this code is evaluated any call to emacsclient (be that from extern
   (mrb/run-client-settings)
 #+END_SRC
 ** Context dependent visualisation
-Next to the information registered in the theme which controls the
-overall look and feel, there is additional visualisation which depend
-on context dependent factors, such as:
+Next to the information registered in the theme which controls the overall look and feel, there is additional visualisation which depend on context dependent factors, such as:
 
 - the user spells a word wrong
 - the syntax of a certain phrase is wrong grammatically, depending on
@@ -744,11 +734,8 @@ Now we can start configuring flycheck
 
 Currently actively configured are:
 - javascript :: eslint with a config file
--
 
-Flyspell is similar to flycheck but for text languages. I'm setting
-some of the flyspell faces to the flycheck faces so they are
-consistent
+Flyspell is similar to flycheck but for text languages. I'm setting some of the flyspell faces to the flycheck faces so they are consistent
 
 #+BEGIN_SRC emacs-lisp
   (use-package flyspell
@@ -971,9 +958,7 @@ When emacs does not determine the right mode, I sometimes want a modestring some
     (add-hook 'nxml-mode-hook 'turn-off-auto-fill))
 #+END_SRC
 * Org-mode
-Orgmode configuraton is probably the largest part of my Emacs
-configuration, because most of the time I spent in Emacs, when not
-coding, is spent in org-mode.
+Orgmode configuraton is probably the largest part of my Emacs configuration, because most of the time I spent in Emacs, when not coding, is spent in org-mode.
 ** Initialisation of Orgmode
 Basically where to find stuff and what to load.
 
@@ -1091,8 +1076,7 @@ Most of work originates in capturing some task item in orgmode. Set up the locat
 #+END_SRC
 
 ** Capturing information
-I guess 90% of the information I keep in the main orgmode files
-starts life originally as a captured item. I use it for:
+I guess 90% of the information I keep in the main orgmode files starts life originally as a captured item. I use it for:
 
 1. TODO items;
 2. BUY items;
@@ -1100,8 +1084,7 @@ starts life originally as a captured item. I use it for:
 4. Logbook entries.
 
 
-The =org-capture-pop-frame= package makes sure all captures are in separate
-frames.
+The =org-capture-pop-frame= package makes sure all captures are in separate frames.
 
 #+BEGIN_SRC emacs-lisp
   (use-package org-capture
