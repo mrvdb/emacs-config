@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil
 #+PROPERTY: header-args :results silent
 
-Last update: <2020-05-14 12:36:36>
+Last update: <2020-05-15 14:29:59>
 
 #+TOC: headlines 2
 
@@ -725,13 +725,10 @@ on context dependent factors, such as:
   what language the user is writing in
 - the status of a certain region is changing, depdendent on certain
   rules
+- a part of the text could be rendered as non-text, images or formulas for example
 
 *** Flycheck
-Flycheck is a syntax checking package which seems to have better
-support than flymake, which is built-in. I've no configuration for
-flymake specifically, but some packages enable it automatically (elpy
-for example). Where applicable, I gather the necessary disable actions
-here first.
+Flycheck is a syntax checking package which seems to have better support than flymake, which is built-in. I've no configuration for flymake specifically, but some packages enable it automatically (elpy for example). Where applicable, I gather the necessary disable actions here first.
 
 Now we can start configuring flycheck
 
@@ -768,6 +765,21 @@ Still on the wish-list:
 - language detection (English and Dutch mainly)
 - check for language pythons, which was troublesome before
 - evaluate usage in org source blocks (many checks do not apply)
+
+*** Math rendering
+Mathetmatics requires some specific rendering. In simple cases, using the proper unicode symbols may suffice, but for anything other than the most basis equations or formulas, some help is needed.  $\LaTeX$ is the defacto standard for this and there's plenty of support for that in emacs.
+
+For $\TeX$ and $\LaTeX$ fragments I use the =texfrag= package. This allows to insert math fragments inside documents.
+
+Example:
+
+$$e^{ix} = cos x + i sinx$$
+
+#+begin_src emacs-lisp
+  (use-package texfrag
+    :config
+    (texfrag-global-mode 1))
+#+end_src
 * Buffers and files
 How do I deal with all those buffers?
 

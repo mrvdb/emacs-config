@@ -257,6 +257,9 @@ Use the minted package for trying to colorize source listings
 
 For keyboard symbols:
 #+LATEX_HEADER: \usepackage{menukeys}
+
+For math:
+#+LATEX_HEADER: \usepackage{amsmath}
 * Links
 Autolinks which can be entered like [[keyword:parameter]] This is mostly here as an example, I don’t think I’ve ever used these in my org files
 #+LINK: wiki   http://en.wikipedia.org/wiki/Search?search=
