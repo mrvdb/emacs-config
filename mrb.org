@@ -1197,7 +1197,7 @@ Adapt the colors of the states I use a bit:
   (defface mrb/org-todo-keyword-SOLVE     nil "")
   (defface mrb/org-todo-keyword-READ      nil "")
   (defface mrb/org-todo-keyword-PLAN      nil "")
-  (defface mrb/org-todo-keyword-WIP       nil "")
+
 
   (setq org-todo-keyword-faces `(
     ("TODO"      . mrb/org-todo-keyword-TODO)
@@ -1211,7 +1211,6 @@ Adapt the colors of the states I use a bit:
     ("SOLVE"     . mrb/org-todo-keyword-SOLVE)
     ("READ"      . mrb/org-todo-keyword-READ)
     ("PLAN"      . mrb/org-todo-keyword-PLAN)
-    ("WIP"       . mrb/org-todo-keyword-WIP)
   ))
 #+END_SRC
 
