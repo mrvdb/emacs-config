@@ -3156,12 +3156,11 @@ The closest thing I found is =zeal= or =dash= which allow docsets to be searched
 I often need to consult RFC documents, so not having to leave emacs for that and be able to use all tools on RFC documents is very helpful.
 
 #+begin_src emacs-lisp
-;; Special mode to read rfc documents locally
-(use-package rfc-mode
+  ;; Special mode to read rfc documents locally
+  (use-package rfc-mode
   :init
   (setq rfc-mode-directory (expand-file-name "~/dat/doc/rfc/")
-		rfc-mode-index-path (concat rfc-mode-directory
-									"rfc-index.txt")))
+          rfc-mode-index-path (concat rfc-mode-directory"rfc-index.txt")))
 #+end_src
 
 *** Man pages
