@@ -769,7 +769,7 @@ $$e^{ix} = cos x + i sinx$$
     (texfrag-global-mode 1))
 #+end_src
 * Buffers and files
-How do I deal with all those buffers?
+How do I deal with all those buffers and files?
 
 For starters, make sure that they have unique buffer names so I don't get confused:
 
@@ -847,6 +847,17 @@ The C-x-w shortcut write a file to a new location (and adjusts the buffer), but 
   (bind-key "C-x C-w" 'mrb/move-file)
   (bind-key "C-S-s" 'write-file)
 #+END_SRC
+
+For file management itself, dired is the defacto standard It's builtin so =use-package= isn't actually needed but it's nice for consistency.
+
+#+begin_src emacs-lisp
+  (use-package dired
+    :ensure nil 				;builtin
+    :init
+    ;; auto-revert global is only for buffers with a file attached
+    (add-hook 'dired-mode-hook #'auto-revert-mode))
+#+end_src
+
 * Modes
 Customisation setting for specific modes. Most of the modes I use have a separate section, so this section is only for other modes.
 
