@@ -2646,6 +2646,7 @@ To be able to use the =mailcompose-frame= function as a mailto handler we need t
 
   # Go
   edit --eval "$elisp_expr"
+  exit 0
 
 #+END_SRC
 
