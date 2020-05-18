@@ -2435,10 +2435,13 @@ Having the completion pop up automatically is annoying in most cases, so I disab
           ([remap indent-for-tab-command] . company-indent-for-tab-command))
 
     :config
-    (setq company-idle-delay nil
+    (setq company-idle-delay 0.0
+          company-minimum-prefix-length 1
           company-require-match 'never
           ;; List modes for which company mode must be turned on.
-          company-global-modes '(python-mode emacs-lisp-mode))
+          company-global-modes '(python-mode
+                                 emacs-lisp-mode lisp-interaction-mode ; Derived not automatic?
+                                 ))
     ;; And this turns them actually on
     (add-hook 'after-init-hook 'global-company-mode)
 
@@ -3093,8 +3096,7 @@ For most of the languages I use (Bash, python, C, Go, HTML Haskell, Lua), the La
     :hook (js2-mode . lsp-deferred)
     :hook (yaml-mode . lsp-deferred)
     :init
-    ;; This hooks into company mode for autocompletion
-    (use-package company-lsp :commands company-lsp)
+
     (use-package lsp-ui      :commands lsp-ui-mode)
     (use-package helm-lsp    :commands helm-lsp-workspace-symbol)
 
