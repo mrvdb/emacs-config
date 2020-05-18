@@ -9,7 +9,6 @@
  '(command-frequency-autosave-mode t)
  '(compilation-scroll-output t)
  '(custom-safe-themes t)
- '(dired-bind-jump nil)
  '(epg-gpg-program "/usr/bin/gpg2")
  '(eshell-modules-list
    '(eshell-alias eshell-banner eshell-basic eshell-cmpl eshell-dirs eshell-glob eshell-hist eshell-ls eshell-pred eshell-prompt eshell-rebind eshell-script eshell-term eshell-unix))
@@ -17,12 +16,10 @@
  '(fill-column 100)
  '(flyspell-issue-message-flag nil)
  '(font-lock-maximum-size nil)
- '(goto-address-url-mouse-face 'default)
  '(gud-gdb-command-name "gdb --annotate=1")
  '(guess-language-languages '(en de nl))
  '(haskell-interactive-popup-errors nil)
  '(ispell-use-framepop-p t)
- '(mail-signature nil)
  '(markdown-css-path "/home/mrb/.markdown.css")
  '(nxml-heading-element-name-regexp "\\|.*")
  '(nxml-section-element-name-regexp "\\|file\\|.+")
@@ -181,8 +178,6 @@
 	 ("BUY"
 	  ("buy" . t))))
  '(org-use-fast-tag-selection 'auto)
- '(pdf-misc-print-programm "/usr/bin/lpr")
- '(pdf-view-midnight-colors '("#DCDCCC" . "#383838"))
  '(reb-re-syntax 'string)
  '(request-log-level 'verbose)
  '(safe-local-variable-values

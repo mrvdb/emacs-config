@@ -301,6 +301,7 @@ Most of what follows should probably be relocated to a better suited section.
 
   ;; Should this be here?
   ;; Try to have urls and mailto links clickable everywhere
+  (setq goto-address-url-mouse-face 'default)
   (define-global-minor-mode global-goto-address-mode
     goto-address-mode
     (lambda ()
@@ -350,8 +351,12 @@ Using pdf-tools for PDF handling. This is a lot better than docview. I'm a bit a
     ;; Some settings from http://pragmaticemacs.com/emacs/even-more-pdf-tools-tweaks/
     (fullframe pdf-view-mode quit-window)
     (setq-default pdf-view-display-size 'fit-page) ;scale to fit page by default
-    (setq pdf-annot-activate-created-annotations t) ; automatically annotate highlights
-    (setq pdf-view-resize-factor 1.1)	; more fine-grained zooming
+    (setq pdf-annot-activate-created-annotations t ; automatically annotate highlights
+          pdf-view-resize-factor 1.1		  ; more fine-grained zooming
+          pdf-misc-print-program "/usr/bin/lpr"
+          pdf-view-midnight-colors '("#DCDCCC" . "#383838")) ; Not sure what this is
+
+
     (add-hook 'pdf-view-mode-hook (lambda () (cua-mode 0))) ; turn off cua so copy works
     (pdf-tools-install :no-query))						  ; no-query auto builds epfinfo when needed
 #+END_SRC
@@ -855,7 +860,10 @@ For file management itself, dired is the defacto standard It's builtin so =use-p
     :ensure nil 				;builtin
     :init
     ;; auto-revert global is only for buffers with a file attached
-    (add-hook 'dired-mode-hook #'auto-revert-mode))
+      (add-hook 'dired-mode-hook #'auto-revert-mode)
+      :config
+      (setq dired-bind-jump nil)		; Dont bind to C-x C-j, we do jabber prefix there
+  )
 #+end_src
 
 * Modes
@@ -2804,9 +2812,10 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
        mu4e-compose-format-flowed t			; Compose in format=flowed
        mu4e-compose-in-new-frame nil		; TODO: match with mail handler
        mu4e-compose-dont-reply-to-self t	; Do not include my addresses when replying
-       mu4e-compose-signature (			; Read signature from the usual signature file
-                               with-current-buffer
-                               (find-file-noselect "~/.signature")
+
+     mail-signature t			; use mail-signature file (move to message section?)
+     mu4e-compose-signature '(with-current-buffer
+                                 (find-file-noselect message-signature-file)
                                (buffer-string))
 
        ;; Header view settings
