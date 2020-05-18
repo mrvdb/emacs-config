@@ -3091,7 +3091,7 @@ For most of the languages I use (Bash, python, C, Go, HTML Haskell, Lua), the La
     :hook (css-mode . lsp-deferred)
     :hook (html-mode . lsp-deferred)
     :hook (js2-mode . lsp-deferred)
-
+    :hook (yaml-mode . lsp-deferred)
     :init
     ;; This hooks into company mode for autocompletion
     (use-package company-lsp :commands company-lsp)
@@ -3396,20 +3396,6 @@ SQL has a number of different dialects I use, depending on the database software
   (setq sql-server "dbserver.hsdev.com"
         sql-postgres-options '("-P" "pager=off" "-p 5434"))
 #+end_src
-** Yaml
-#+begin_src emacs-lisp
-  (use-package yaml-mode
-    :after flycheck
-    :mode ("\\.yml\\'" "\\.mml\\'")
-    :init
-    (add-hook 'yaml-mode-hook 'flycheck-mode))
-
-  (use-package lsp-yaml
-    :after lsp
-    :load-path "~/dat/src/emacs/packages/lsp-yaml"
-    :hook (yaml-mode . lsp-deferred))
-#+end_src
-
 ** GIT integration
 A common factor in all my development is the use of git. For emacs this automatically means Magit. I've used eshell in the past but that config didn't work out.
 
@@ -3480,7 +3466,7 @@ For now, just the ansible package, and some access to its documentation will suf
       :config
       (add-hook 'yaml-mode-hook #'ansible-doc-mode))
     :config
-    (add-hook 'yaml-mode-hook '(lambda () (ansible 1))))
+    (add-hook 'ansible-hook #'lsp))
 #+end_src
 * Finale
 When we are all done with this, provide it.
