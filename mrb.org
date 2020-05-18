@@ -3083,7 +3083,7 @@ For most of the languages I use (Bash, python, C, Go, HTML Haskell, Lua), the La
   ;; LSP mode
   (use-package lsp-mode
     :pin melpa-stable
-    :commands lsp-deferred
+    :commands (lsp-deferred lsp)
 
     ;; Enable lsp for the languages that do not have their own section yet
     :hook (sh-mode . lsp-deferred)
@@ -3094,14 +3094,9 @@ For most of the languages I use (Bash, python, C, Go, HTML Haskell, Lua), the La
 
     :init
     ;; This hooks into company mode for autocompletion
-    (use-package company-lsp
-      :commands company-lsp)
-
-    (use-package lsp-ui
-      :commands lsp-ui-mode)
-
-    (use-package helm-lsp
-      :commands helm-lsp-workspace-symbol)
+    (use-package company-lsp :commands company-lsp)
+    (use-package lsp-ui      :commands lsp-ui-mode)
+    (use-package helm-lsp    :commands helm-lsp-workspace-symbol)
 
     :config
     (setq lsp-enable-snippet nil
