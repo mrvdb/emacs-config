@@ -79,6 +79,7 @@ This has a number of attractive properties:
 **** http://everyday-carry.com/rss
 **** https://xiaomi.eu/community/forums/xiaomi-mimix.151/index.rss
 **** https://xiaomi.eu/community/forums/miui-weekly-rom-releases.103/index.rss
+**** https://www.talospace.com/feeds/posts/default
 *** People
 **** http://julien.danjou.info/blog/index.xml                                                                                   :people:
 **** https://mrblog.nl/feed                                                                                                  :people:me:
