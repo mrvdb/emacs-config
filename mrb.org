@@ -2445,11 +2445,13 @@ Having the completion pop up automatically is annoying in most cases, so I disab
     :config
     (setq company-idle-delay 0.0
           company-minimum-prefix-length 1
-          company-require-match 'never
+          company-require-match 'never)
+
           ;; List modes for which company mode must be turned on.
-          company-global-modes '(python-mode
-                                 emacs-lisp-mode lisp-interaction-mode ; Derived not automatic?
-                                 ))
+          (dolist (mode '(python-mode
+                          emacs-lisp-mode lisp-interaction-mode ;; Derived not automatic
+                          mu4e-compose-mode))
+            (add-to-list 'company-global-modes mode))
     ;; And this turns them actually on
     (add-hook 'after-init-hook 'global-company-mode)
 
