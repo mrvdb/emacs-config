@@ -2859,7 +2859,7 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
       ;; Define marks
       (add-to-list 'mu4e-marks
                    '(spam
-                     :char ("S" . "🕱")
+                   :char ("S" . "💀")
                      :prompt "Mark as spam"
                      :show-target (lambda (dyn-target) "Spam")
                      :ask-target (lambda () mrb/mu4e-junk-folder)
