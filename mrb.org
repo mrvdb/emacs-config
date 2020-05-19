@@ -2437,7 +2437,7 @@ Having the completion pop up automatically is annoying in most cases, so I disab
     :bind
     (:map company-active-map
           ("C-n" . company-select-next)
-          ("C-p" . company-select-previous) ; FIXME Evil binding?
+          ("C-p" . company-select-previous)
      :map company-mode-map
           ;; Remap normal indent-for-tab-command
           ([remap indent-for-tab-command] . company-indent-for-tab-command))
@@ -2453,21 +2453,6 @@ Having the completion pop up automatically is annoying in most cases, so I disab
 
     ;; And this turns them actually on
     (add-hook 'after-init-hook 'global-company-mode))
-
-    ;; Save the normal completion functions temporarily
-    ;(defvar completion-at-point-functions-saved nil)
-
-    ;; Hook company completion into all normal completion functions, so it
-    ;; just is enabled everywhere
-    ;; (defun company-indent-for-tab-command (&optional arg)
-    ;;   (interactive "P")
-    ;;   (let ((completion-at-point-functions-saved completion-at-point-functions)
-    ;;         (completion-at-point-functions '(company-complete-common-wrapper)))
-    ;;     (indent-for-tab-command arg)))
-
-    ;; (defun company-complete-common-wrapper ()
-    ;;   (let ((completion-at-point-functions completion-at-point-functions-saved))
-    ;;     (company-complete-common))))
 #+END_SRC
 
 ** Ad 4. Mode specialisation
