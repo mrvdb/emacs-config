@@ -2445,31 +2445,29 @@ Having the completion pop up automatically is annoying in most cases, so I disab
     :config
     (setq company-idle-delay 0.0
           company-minimum-prefix-length 1
-          company-require-match 'never)
+          company-require-match 'never
 
-          ;; List modes for which company mode must be turned on.
-          (dolist (mode '(python-mode
-                          ;; Derived modes apparently not automatic
-                          emacs-lisp-mode lisp-interaction-mode lisp-data-mode
-                          mu4e-compose-mode))
-            (add-to-list 'company-global-modes mode))
+          company-global-modes '(not
+                                 org-mode org-journal-mode
+                                 text-mode))
+
     ;; And this turns them actually on
-    (add-hook 'after-init-hook 'global-company-mode)
+    (add-hook 'after-init-hook 'global-company-mode))
 
     ;; Save the normal completion functions temporarily
-    (defvar completion-at-point-functions-saved nil)
+    ;(defvar completion-at-point-functions-saved nil)
 
     ;; Hook company completion into all normal completion functions, so it
     ;; just is enabled everywhere
-    (defun company-indent-for-tab-command (&optional arg)
-      (interactive "P")
-      (let ((completion-at-point-functions-saved completion-at-point-functions)
-            (completion-at-point-functions '(company-complete-common-wrapper)))
-        (indent-for-tab-command arg)))
+    ;; (defun company-indent-for-tab-command (&optional arg)
+    ;;   (interactive "P")
+    ;;   (let ((completion-at-point-functions-saved completion-at-point-functions)
+    ;;         (completion-at-point-functions '(company-complete-common-wrapper)))
+    ;;     (indent-for-tab-command arg)))
 
-    (defun company-complete-common-wrapper ()
-      (let ((completion-at-point-functions completion-at-point-functions-saved))
-        (company-complete-common))))
+    ;; (defun company-complete-common-wrapper ()
+    ;;   (let ((completion-at-point-functions completion-at-point-functions-saved))
+    ;;     (company-complete-common))))
 #+END_SRC
 
 ** Ad 4. Mode specialisation
