@@ -2449,7 +2449,8 @@ Having the completion pop up automatically is annoying in most cases, so I disab
 
           ;; List modes for which company mode must be turned on.
           (dolist (mode '(python-mode
-                          emacs-lisp-mode lisp-interaction-mode ;; Derived not automatic
+                          ;; Derived modes apparently not automatic
+                          emacs-lisp-mode lisp-interaction-mode lisp-data-mode
                           mu4e-compose-mode))
             (add-to-list 'company-global-modes mode))
     ;; And this turns them actually on
