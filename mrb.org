@@ -771,6 +771,7 @@ $$e^{ix} = cos x + i sinx$$
 #+begin_src emacs-lisp
   (use-package texfrag
     :config
+    (setq texfrag-prefix "")
     (texfrag-global-mode 1))
 #+end_src
 * Buffers and files
@@ -995,8 +996,7 @@ Also make sure we never load org from internal, this can happen when functions w
            ("C-s-s"   . 'org-save-all-org-buffers)
            ("C-x m"   . 'mrb/construct-mail)
            :map org-mode-map
-           ("C-c l"   . 'org-store-link)	; Is this not bound to C-c l by default?
-           ("C-c p"   . 'org-plot/gnuplot)
+           ("C-c l"   . 'org-store-link)	; Is this not bound to C-c l by default
            ("s-."     . 'org-todo)
            ("s->"     . 'mrb/org-cancel-todo)
            ("C-s-."   . 'mrb/force-org-todo)
