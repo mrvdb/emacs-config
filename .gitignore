@@ -57,3 +57,7 @@ mastodon.plstore
 /transient/
 /org-journal.cache
 /jabber-avatar-cache/
+/texfrag/
+/ltximg/
+/emms/
+/straight/
