@@ -18,7 +18,6 @@
  '(font-lock-maximum-size nil)
  '(gud-gdb-command-name "gdb --annotate=1")
  '(guess-language-languages '(en de nl))
- '(haskell-interactive-popup-errors nil)
  '(ispell-use-framepop-p t)
  '(markdown-css-path "/home/mrb/.markdown.css")
  '(nxml-heading-element-name-regexp "\\|.*")
