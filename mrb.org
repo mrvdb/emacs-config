@@ -2086,24 +2086,6 @@ Bind-key can define both global keys as map-based key settings and accepts all k
   ;; to type the latter by accident sometimes.)
   ;; Should this not be an unset?
   (bind-key "C-x RET" nil)
-
-  (defun mrb/new-empty-buffer ()
-    "Opens a new empty buffer."
-    (interactive)
-    (let ((buf (generate-new-buffer "untitled")))
-      (switch-to-buffer buf)
-      (make-frame)
-      (funcall (and initial-major-mode))
-      (setq buffer-offer-save t)))
-  ;; note: emacs won't offer to save a buffer that's
-  ;; not associated with a file,
-  ;; even if buffer-modified-p is true.
-  ;; One work around is to define your own my-kill-buffer function
-  ;; that wraps around kill-buffer, and check on the buffer modification
-  ;; status to offer save
-  ;; This custome kill buffer is close-current-buffer.
-  (bind-key "s-n" 'mrb/new-empty-buffer)
-
 #+END_SRC
 ** Key bindings
 *** Global
