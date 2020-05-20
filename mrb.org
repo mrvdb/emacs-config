@@ -1,11 +1,10 @@
 #+SETUPFILE: "~/.emacs.d/org-config.org"
 #+TITLE: My org-babel based emacs configuration
 #+LANGUAGE: en
-#+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil
-#+OPTIONS: tex:verbatim
+#+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent
 
-Last update: <2020-05-15 14:42:48>
+Last update: <2020-05-20 12:18:40>
 
 #+TOC: headlines 2
 
@@ -3485,5 +3484,5 @@ When we are all done with this, provide it.
 # Local Variables:
 # writefreely-post-id: "wf83bq5jwz"
 # writefreely-post-token: nil
-# time-stamp-pattern: "7/Last update: <%:y-%02m-%02d %02H:%02M:%02S>"
+# time-stamp-pattern: "8/Last update: <%:y-%02m-%02d %02H:%02M:%02S>"
 # End:
