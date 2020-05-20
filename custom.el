@@ -19,8 +19,6 @@
  '(gud-gdb-command-name "gdb --annotate=1")
  '(guess-language-languages '(en de nl))
  '(ispell-use-framepop-p t)
- '(nxml-heading-element-name-regexp "\\|.*")
- '(nxml-section-element-name-regexp "\\|file\\|.+")
  '(ocpf-frame-parameters
    '((name . "org-capture-pop-frame")
 	 (width . 115)

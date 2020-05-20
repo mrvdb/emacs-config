@@ -973,6 +973,9 @@ When emacs does not determine the right mode, I sometimes want a modestring some
   (use-package nxml-mode
     :ensure nil ;; builtin mode
     :config
+    (setq nxml-heading-element-name-regexp "\\|.*"
+          nxml-section-element-name-regexp "\\|file\\|.+")
+
     (add-hook 'nxml-mode-hook '(lambda () (set-input-method nil)))
     (add-hook 'nxml-mode-hook 'turn-off-auto-fill))
 #+END_SRC
