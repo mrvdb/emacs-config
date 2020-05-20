@@ -382,7 +382,6 @@ The problem with applying this function is that we need to be 'done' with our vi
 #+BEGIN_SRC emacs-lisp
   (defun mrb/unicode-font-corrections()
     (interactive)
-    (message "Turning emojis on")
     ;(emoji-fontset-enable "Symbola")
   )
 #+END_SRC
@@ -635,7 +634,6 @@ Note that if this code is evaluated any call to emacsclient (be that from extern
   (defun mrb/run-client-settings(&optional args)
     (interactive)
 
-    (message "Running client settings which server may not have applied")
     (tool-bar-mode -1)   ;; No tool-bar
     (scroll-bar-mode -1) ;; No scroll-bar
     (menu-bar-mode -1)   ;; No menu-bar
@@ -876,7 +874,6 @@ First bring in a bunch of modes that are used regularly, but have no other confi
   (use-package js2-mode              :mode "\\.js\\'")
   (use-package lua-mode              :mode "\\.lua\\'")
   (use-package php-mode              :mode "\\.php\\'")
-  (use-package sh-mode   :ensure nil :mode "\\.zsh\\'")
 #+END_SRC
 
 Now, do the other mode related packages which require a bit of configuration.
@@ -1511,7 +1508,7 @@ Traditionally somewhat related to mail, although mostly through orgmode these da
                             :inbox "~/dat/org/_calendars/sylvia.org")))
 
       ;;  Run the sync every now and then
-      (run-with-timer 0 (*30 60) 'org-caldav-sync))
+      (run-with-timer 0 (* 30 60) 'org-caldav-sync))
 #+end_src
 
 For now, I can live with calling =org-caldav-sync= manually when I need up to date information.
