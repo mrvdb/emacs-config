@@ -905,55 +905,36 @@ When emacs does not determine the right mode, I sometimes want a modestring some
         (comment-region (point-min) (point)))))
 #+END_SRC
 
-#+BEGIN_SRC emacs-lisp
+First bring in a bunch of modes that are used regularly, but have no other config than a map to some extensions. =:ensure= is set to nil for those packages which aret built in.
 
+#+BEGIN_SRC emacs-lisp
+  (use-package adoc-mode             :mode ("\\.asciidoc\\'" "\\.adoc\\'"))
+  (use-package apache-mode           :mode "\\.htaccess\\'")
+  (use-package conf-mode :ensure nil)
+  (use-package css-mode  :ensure nil :mode ("\\.css\\'" "\\.mss\\'"))
+  (use-package csv-mode              :mode "\\.csv\\'")
+  (use-package diff-mode :ensure nil :mode "\\.patch\\'")
+  (use-package gnuplot-mode          :mode "\\.gp\\'")
+  (use-package js2-mode              :mode "\\.js\\'")
+  (use-package lua-mode              :mode "\\.lua\\'")
+  (use-package php-mode              :mode "\\.php\\'")
+  (use-package sh-mode   :ensure nil :mode "\\.zsh\\'")
+#+END_SRC
+
+Now, do the other mode related packages which require a bit of configuration.
+#+BEGIN_SRC emacs-lisp
   ;; Extension mappings for several modes
   (use-package markdown-mode
     :mode ("\\.markdown\\'" "\\.md\\'")
     :config
     (setq  markdown-css-path "/home/mrb/.markdown.css"))
 
-  (use-package gnuplot-mode
-    :mode "\\.gp\\'")
-
-  (use-package php-mode
-    :mode "\\.php\\'")
-
-  (use-package css-mode
-    :ensure nil ;builtin
-    :mode ("\\.css\\'" "\\.mss\\'"))
-
-  (use-package apache-mode
-    :mode "\\.htaccess\\'")
-
-  (use-package rainbow-mode
-    :hook (conf-mode css-mode))
-
   (use-package eimp
     :config
     (add-hook 'image-mode-hook #'eimp-mode))
 
-  (use-package lua-mode
-    :mode "\\.lua\\'")
-
-  (use-package csv-mode
-    :mode "\\.csv\\'")
-
-  (use-package js2-mode :mode "\\.js\\'")
-
-  (use-package diff-mode
-    :ensure nil  ;; built in
-    :mode "\\.patch\\'")
-
-  (use-package sh-mode
-    :ensure nil ;; built in
-    :mode "\\.zsh\\'")
-
-  (use-package conf-mode
-    :ensure nil)
-
-  (use-package adoc-mode
-    :mode ("\\.asciidoc\\'" "\\.adoc\\'"))
+  (use-package rainbow-mode
+    :hook (conf-mode css-mode))
 
   ;; Open scratch buffer by default in the mode we are in at the moment
   ;; with C-u prefix a mode will be asked to use
