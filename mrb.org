@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent
 
-Last update: <2020-05-20 12:18:40>
+Last update: <2020-05-20 15:30:11>
 
 #+TOC: headlines 2
 
@@ -59,79 +59,38 @@ Most of the time the editting process starts at the command line. Because I use 
 And edit the file obviously.
 
 #+BEGIN_SRC sh :exports code :tangle ~/bin/edit :shebang #!/bin/bash
-  # set -x
+  # Wrapper for emacsclient usage to handle specific cases
+  ME=$(basename $0)
 
-  # This script should provide the following functionality:
-  # - start emacs if it hasn't already started
-  # - open a frame if emacs is there, but no frames are visible yet
-  # - be suitable as 'open with...' target for linux file managers
-  # - allow additional command line arguments
-  #   (like -e to just run a piece of elisp)
-  # - change the focus to the emacs frame
-  #
-  # The script is basically a wrapper around emacsclient and we would
-  # like to be compatible with it.
-  #
-  # - TODO: see if we can have some output when the daemon is not there,
-  #         it is now very silent
-  # - TODO: there is a mention of server-visit-hook not running when no
-  #         file is passed in in edit.old. I have not seen any ill effects,
-  #         so left that out
-  # - TODO: the way we open files and treat options is inconsistent, we now
-  #         optimize to opening files and adapt scripts
-  #
+  # Normal emacsclient as $EDITOR is fine except:
+  # 1. no filename is given -> just open a frame
+  # 2. stdin is given '-'   -> don't edit the file '-' but treat it as stdin
 
-  # Save how we are called
-  WEARE=$(basename $0)
+  # Default behaviou is:
+  # - if not otherwise specified, reuse exisiting frames
+  # - we're not waiting
 
-  # Check how we are called and adapt
-  # This is for things like commit messages
-  XARGS="--quiet"
-  if [ $WEARE == "edit" ]; then
-      XARGS=$XARGS' --no-wait'
-  fi
-  EC="`which emacsclient` $XARGS"
+  # Syntax: emacsclient [OPTIONS] FILE...
+  # FILE can be FILENAME or [+LINE[:COLUMN]] FILENAME
+  EC=`which emacsclient`
 
-  # Number of current visible frames,
-  # Emacs daemon always has a visible frame called F1 which is erm, not visible.
-  visible_frames() {
-      $EC --alternate-editor="" --eval '(length (visible-frame-list))' 2>/dev/null
-  }
+  # Default arguments
+  ARGS="--no-wait --quiet --suppress-output"
 
-  # Change the focus to emacs
-  change_focus() {
-      $EC --eval "(select-frame-set-input-focus (selected-frame))" > /dev/null
-  }
+  # 1. New frame if we're just called without arguments
+  [ $# -eq 0 ] && ARGS=$ARGS' --create-frame'
 
-  # Editting stdin, part 1: save the input to a file
-  save_stdin() {
+  # 2. Handle special 'stdin' case
+  if [ $# -ge 1 ] && [ "$1" == "-" ]; then
       TMPSTDIN="$(mktemp /tmp/emacsstdinXXX)";
       cat >"$TMPSTDIN";
-  }
-
-  # if the file argument is '-', treat this as stdin
-  # TODO: pass $@ further down?
-  if [ "X$1" == "X-" ]; then
-      save_stdin
-      # Recursive call!
-      edit $TMPSTDIN;
+      $ME $TMPSTDIN;
       rm $TMPSTDIN;
       exit 0;
   fi
 
-  # try switching to the frame incase it is just minimized
-  # This will start a server if not running
-  test "$(visible_frames)" -eq "1" && change_focus
-
-  if [ "$(visible_frames)" -lt  "2" ]; then
-      # need to create a frame
-      # -c $@ with no args just opens the scratch buffer
-       $EC --create-frame "$@" && change_focus
-  else
-      # there is already a visible frame besides the daemon, change focus
-      # -n $@ errors if there are no args
-      test  "$#" -ne "0" && $EC "$@"
-  fi
+  # Fire!
+  $EC $ARGS $@
 #+END_SRC
 
 * Package Management
