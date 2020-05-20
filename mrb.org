@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent
 
-Last update: <2020-05-20 15:30:11>
+Last update: <2020-05-20 15:52:46>
 
 #+TOC: headlines 2
 
@@ -1505,10 +1505,7 @@ Traditionally somewhat related to mail, although mostly through orgmode these da
             (:calendar-id "4de0fb18-8548-61ce-57fc-b2319b87106d" ; Waste services
                           :inbox "~/dat/org/_calendars/afval.org")
             (:calendar-id "shared-sylvia"	                       ; SO
-                            :inbox "~/dat/org/_calendars/sylvia.org")))
-
-      ;;  Run the sync every now and then
-      (run-with-timer 0 (* 30 60) 'org-caldav-sync))
+                          :inbox "~/dat/org/_calendars/sylvia.org"))))
 #+end_src
 
 For now, I can live with calling =org-caldav-sync= manually when I need up to date information.
