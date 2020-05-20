@@ -1034,6 +1034,9 @@ Also make sure we never load org from internal, this can happen when functions w
           org-agenda-include-diary t
           org-agenda-start-with-log-mode t
           org-agenda-todo-ignore-scheduled "future"
+          org-agenda-ignore-properties '(effort appt category)
+          org-agenda-todo-ignore-scheduled 'future
+
 
           ;; Habits
           org-habit-show-habits-only-for-today nil

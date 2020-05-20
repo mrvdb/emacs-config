@@ -87,10 +87,8 @@
 	   (tags-todo "carryover"
 				  ((org-agenda-overriding-header "Carry along list"))))
 	  nil)))
- '(org-agenda-ignore-properties '(effort appt category))
  '(org-agenda-text-search-extra-files
    '(agenda-archives "~/dat/org/_orgmeta/archive-2019.org" "~/dat/org/_orgmeta/archive-2018.org" "~/dat/org/_orgmeta/archive-2017.org" "~/dat/org/_orgmeta/archive-2016.org" "~/dat/org/_orgmeta/archive-2015.org" "~/dat/org/_orgmeta/archive-2014.org" "~/dat/org/_orgmeta/archive-2013.org" "~/dat/org/_orgmeta/archive-2012.org" "~/dat/org/_orgmeta/archive-2011.org"))
- '(org-agenda-todo-ignore-scheduled 'future)
  '(org-beamer-outline-frame-options nil)
  '(org-beamer-outline-frame-title "Onderwerpen")
  '(org-blocker-ignore-ancestor-siblings t)
