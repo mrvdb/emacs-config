@@ -19,7 +19,6 @@
  '(gud-gdb-command-name "gdb --annotate=1")
  '(guess-language-languages '(en de nl))
  '(ispell-use-framepop-p t)
- '(markdown-css-path "/home/mrb/.markdown.css")
  '(nxml-heading-element-name-regexp "\\|.*")
  '(nxml-section-element-name-regexp "\\|file\\|.+")
  '(ocpf-frame-parameters

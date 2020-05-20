@@ -909,7 +909,9 @@ When emacs does not determine the right mode, I sometimes want a modestring some
 
   ;; Extension mappings for several modes
   (use-package markdown-mode
-    :mode ("\\.markdown\\'" "\\.md\\'"))
+    :mode ("\\.markdown\\'" "\\.md\\'")
+    :config
+    (setq  markdown-css-path "/home/mrb/.markdown.css"))
 
   (use-package gnuplot-mode
     :mode "\\.gp\\'")
