@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent
 
-Last update: <2020-05-21 12:37:13>
+Last update: <2020-05-21 12:47:05>
 
 #+TOC: headlines 2
 
@@ -93,7 +93,8 @@ And edit the file obviously.
   $EC $ARGS $@
 #+end_src
 
-I'm now starting to explore running and (auto-) re-starting emacs as a systemd service.
+I'm now starting to explore running and (auto-) re-starting emacs as a systemd service. This is fairly easy, but the details can be finicky. For example, I have to override the systemd unit file with a =SSH_AUTH_SOCK= environment variable to allow magit to push (which uses ssh).
+
 * Package Management
 Package handling, do this early so emacs knows where to find things.
 
