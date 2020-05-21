@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent
 
-Last update: <2020-05-21 18:49:05>
+Last update: <2020-05-21 23:09:15>
 
 #+TOC: headlines 2
 
@@ -59,41 +59,110 @@ Most of the time the editting process starts at the command line. Because I use 
 And edit the file obviously.
 
 #+begin_src sh :exports code :tangle ~/bin/edit :shebang #!/bin/bash
-  # Wrapper for emacsclient usage to handle specific cases
+  # Wrapper for emacsclient usage to handle specific cases:
+  # - no filename given
+  # - stdin editting
+  # - force tty
+  # - adjustment to systemd invocation
   ME=$(basename $0)
-
-  # Normal emacsclient as $EDITOR is fine except:
-  # 1. no filename is given -> just open a frame
-  # 2. stdin is given '-'   -> don't edit the file '-' but treat it as stdin
-
-  # Default behaviou is:
-  # - if not otherwise specified, reuse exisiting frames
-  # - we're not waiting
-
-  # Syntax: emacsclient [OPTIONS] FILE...
-  # FILE can be FILENAME or [+LINE[:COLUMN]] FILENAME
   EC=`which emacsclient`
 
   # Default arguments
-  ARGS="--no-wait --quiet --suppress-output"
+  ARGS="--socket-name=default"
 
-  # 1. New frame if we're just called without arguments
-  [ $# -eq 0 ] && ARGS=$ARGS' --create-frame'
+  # Set to false when done
+  debug() { false $@; }
 
-  # 2. Handle special 'stdin' case
+  # I could let emacsclient do this, but not using systemd, it
+  # is hardcoded to exec emacs --daemon, sigh
+  # This goes along an emacs.service file obviously
+  if ( ! systemctl -q --user is-active emacs );then
+      debug "Emacs server not found, starting...."
+      systemctl --user start emacs;
+  fi
+
+  # Assert that the socket file exists
+  [ ! -f $XDG_RUNTIME_DIR/emacs/default ] || debug "Socket file not found???\n"
+
+  # Handle special 'stdin' case
   if [ $# -ge 1 ] && [ "$1" == "-" ]; then
       TMPSTDIN="$(mktemp /tmp/emacsstdinXXX)";
       cat >"$TMPSTDIN";
+      # Recurse or call with flags below
       $ME $TMPSTDIN;
       rm $TMPSTDIN;
       exit 0;
   fi
 
-  # Fire!
-  $EC $ARGS $@
+  # We're basically expecting X windows, but if not, we good
+  # force tty: call this like 'DISPLAY="" edit ....' see my aliases
+  if [ $DISPLAY ]; then
+      debug "X-display value seen, using GUI"
+      ARGS=$ARGS' --create-frame --no-wait'
+  else
+      debug "Starting tty emacs"
+      ARGS=$ARGS' -tty'
+  fi
+
+  # Go with the original arguments
+  $EC ${ARGS} $@
 #+end_src
 
+
 I'm now starting to explore running and (auto-) re-starting emacs as a systemd service. This is fairly easy, but the details can be finicky. For example, I have to override the systemd unit file with a =SSH_AUTH_SOCK= environment variable to allow magit to push (which uses ssh).
+
+** Running emacs as a server
+
+Emacs can run as a /server/ meaning that its process is always active and a specific /client/ program called =emacsclient= can be used to connect to it to do the actual user interaction and let me edit and use the lisp interpreter.
+
+It's far from trivial, for me at least, on how to properly configure this, assuming you have some special wishes. I've certainly spent my time on trying to get it right.
+
+*** Things that I'm sure of I want
+Here's what I know for sure on what I want:
+
+1. I want to have at least one server process for 'normal' editting so emacs does not have to start a process for every file; the goal here is to have fast opening of files to edit. This is critical. I'm assuming that for this a server-like-setup is needed.
+2. Given that I tweak emacs a lot, it must be very easy to either disable the server temporarily or have it restart easily so I can test new changes without shutting me out of emacs completely.
+3. The previous item also implies that I want to run multiple independent emacsen next to eachother, regardless if they are run as a daemon or not.
+4. Emacs must work on a non X-windows screen, but extra effort to get that is OK.
+5. Be able to use '-' as placeholder for =stdin= to be able to pipe information directly into editor
+6. allow specific handlers, like =mailto:=
+
+
+*** Things I see potential for, but not sure of
+Having a server/servers opens a couple of options which I may like, but not sure on how to do or even if I understand them properly
+
+- given that the socket can be a TCP socket, does that mean I can use emacsclient -some-arg <the ip of the socket> on one machine to use emacs on another machine? How well would that work? This would be awesome to have a small computer which doesn't need an emacs config to use my emacs on another machine, but I suspect I misunderstand how this works
+
+- having multiple emacs servers could help with specific scenario's for mu4e for example. I'd love to have the mu-server in itw own process and just use that from other emacs servers Similarly for long running language servers and or other processes which shouldn't be affected by me clawing words into my keyboard.
+
+*** So, given the above, how to proceed?
+
+[[https://www.gnu.org/software/emacs/manual/html_node/emacs/Emacs-Server.html#Emacs-Server][According to the manual]] there are several ways to run the server:
+
+1. run the emacs-lisp command =(server-start)= in the initialisation of emacs or interactively after starting;
+2. use the =--daemon= command line arguments to run emacs in daemon mode;
+3. use systemd to start it (like 2. but under systemd's control instead of manually)
+4. create a listening socket, which starts up emacs once a client tries to connect to it.
+
+
+I think the first method is out, although I like having everything under control inside Emacs, because when the last frame exits, the server will exit and that's probably not what I want.
+
+Assuming thusly I want the daemon to be started without having a frame that can be exited, there's a need for other criteria to make the decision:
+
+- if opening a file, should one frame be used?, always?
+- should there be 'one entry point' like 'edit' and have every program and person use that to get to emacs, or is it ok to specialize the tools. (e.g. auto matic edit runs by git/magit/systemd edit etc.
+-
+
+Actions:
+- ⌘e :: get an editor window right away, either a new frame, or a terminal editor
+- edit <somefile> :: open =<somefile>= I'm leaning towards opening a new frame, always.
+
+*** Affected configs:
+
+- ~/.emacs.d/mrb.org
+- ~/.config/zsh/.zshrc has aliases and environment variables
+- ~/.xbindkeysrc.scm has main shortcut key
+-
 
 * Package Management
 Package handling, do this early so emacs knows where to find things.
