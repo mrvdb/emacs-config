@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent
 
-Last update: <2020-05-21 11:07:16>
+Last update: <2020-05-21 12:02:22>
 
 #+TOC: headlines 2
 
@@ -488,6 +488,7 @@ Although I think the 16 color system is a bit simplistic and, for emacs at least
             (org-level-4                    :foreground "#b48ead")
             (org-verbatim                   :foreground "#8fbcbb")
             (org-list-dt                    :foreground "#b48ead")
+            (org-drawer                     :height 0.8 :inherit font-lock-comment-face)
 
             ;; User defined faces for org-mode
             (mrb/org-todo-keyword-TODO      :foreground "#88c0d0" :weight bold)
