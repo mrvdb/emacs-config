@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent
 
-Last update: <2020-05-21 12:02:22>
+Last update: <2020-05-21 12:37:13>
 
 #+TOC: headlines 2
 
@@ -93,6 +93,7 @@ And edit the file obviously.
   $EC $ARGS $@
 #+end_src
 
+I'm now starting to explore running and (auto-) re-starting emacs as a systemd service.
 * Package Management
 Package handling, do this early so emacs knows where to find things.
 
