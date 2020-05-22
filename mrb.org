@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent
 
-Last update: <2020-05-22 09:06:18>
+Last update: <2020-05-22 10:13:58>
 
 #+TOC: headlines 2
 
@@ -1988,7 +1988,7 @@ Below is what was contained in the old configuration. I will slowly migrate this
       (mrb/make-mailcompose-frame)))
 
   ;; But not for all others, because the org subtree will never be there
-  (bind-key "C-x m" 'mrb/make-mailcompose-frame)
+  (bind-key "C-x m" 'mrb/compose-mail)
 #+end_src
 
 ** Encrypting information in org-mode
@@ -2573,15 +2573,10 @@ At times we want to send signed and/or encrypted mail
 #+end_src
 
 *** Composing mail
-Composing mail is often an /out of band/ activity, like creating a tweet or a capture, so I would like to have roughly the same behaviour. This is by default provided by compose-mail-other-frame, but I could not get awesome to properly place the windows because it's hard to match on the varying name that xprop delivers, so. we make our own window.
+Composing mail is often an /out of band/ activity, like creating a tweet or a capture, so I would like to have roughly the same behaviour. This is by default provided by compose-mail-other-frame, which in turn calls the right mua to do the job. Oddly enough, it is still required to have =mu4e-compose-in-new-frame= set to actually have another frame, so I'm writing it with mu4e-compose directly.
 
 #+begin_src emacs-lisp
-  ;; Get the number of lines on this display, so we can
-  ;; determine sizes of windows
-  (defun mrb/get-display-lines-height ()
-    (/ (x-display-pixel-height) (frame-char-height)))
-
-  (defun mrb/make-mailcompose-frame (&optional mailto-url)
+  (defun mrb/compose-mail (&optional mailto-url)
     "Run mail-compose, use mailto URI if it is given."
     (interactive)
 
@@ -2590,24 +2585,10 @@ Composing mail is often an /out of band/ activity, like creating a tweet or a ca
              (string-match "\\`mailto:" mailto-url))
         (browse-url-mail mailto-url)
       ;; No mailto, argument, just run the mua
-      (mu4e-compose-new))
+      (mu4e-compose-new)))
 
-    ;; Delete other windows from the frame we are composing it in.
-    (delete-other-windows))
-
-  (defadvice message-kill-buffer (after delete-mailcompose-frame activate)
-    "Advise message-kill-buffer to close the frame if it is the capture frame"
-    (if (equal "mailcompose" (frame-parameter nil 'name))
-        (delete-frame)))
-  (defadvice message-send-and-exit (after delete-mailcompose-frame activate)
-    "Advise message-send-and-exit to close the frame if it is the capture frame"
-    (if (equal "mailcompose" (frame-parameter nil 'name))
-        (delete-frame)))
-
-
-  ;; Compose a mail message from current buffer file
-  ;; typically a pdf is viewed, but it doesn't have to
   (defun mrb/mailfile()
+    "Compose mail message from current buffer file, typically a pdf is viewed for my usecase"
     (interactive)
     (let* ((file (buffer-file-name))
            (mimetype (mrb/mimetype file)))
@@ -2618,32 +2599,31 @@ Composing mail is often an /out of band/ activity, like creating a tweet or a ca
   ;; The latter is just extension based, which suits me fine
   ;; in 99% of the cases. (i.e. .pdf)
   (defun mrb/mimetype(file)
+    "Get a mimetype for a certain file extension, using mailcap functionality"
     (mailcap-extension-to-mime
      (file-name-extension file t)))
 #+end_src
 
-To be able to use the =mailcompose-frame= function as a mailto handler we need to be able to call it from outside of emacs. Let's define a small shell script that does exactly this. The SRC attributes tangle it into my =bin= directory where is will be in the path. In the OS, this script will need to be set as the default mail handler.
+To be able to use the =mrb/compose-mail= function as a mailto handler we need to be able to call it from outside of emacs. Let's define a small shell script that does exactly this. The SRC attributes tangle it into my =bin= directory where is will be in the path. In the OS, this script will need to be set as the default mail handler.
 
-#+begin_src sh :exports code :tangle ~/bin/mailto-handler :shebang #!/bin/sh
+#+begin_src sh :exports code :tangle ~/bin/mailto-handler :shebang #!/bin/bash
   # Emacs mailto URI handler
 
-  mailto=$1
-  mailto="mailto:${mailto#mailto:}"
-
+  # Make sure mailto: is always prepended to $1
+  mailto="mailto:${1#mailto:}"
   mailto=$(printf '%s\n' "$mailto" | sed -e 's/[\"]/\\&/g')
 
   # Call the elisp function handling our mailto URI
-  elisp_expr="(mrb/make-mailcompose-frame \"$mailto\")"
+  elisp_expr="(mrb/compose-mail \"$mailto\")"
 
-  # Go
-  edit --eval "$elisp_expr"
-  exit 0
-
+  # Do not create new frame, because mu4e does that already
+  # which is a simpler solution in this case
+  emacsclient --socket-name=default -n --eval "$elisp_expr"
 #+end_src
 
 On top of that, I want a manual capture script which is basically the same as the mailto handler.
 #+begin_src sh :exports code :tangle ~/bin/capture-mail.sh :shebang #!/bin/sh
-edit -e '(mrb/make-mailcompose-frame)'
+emacsclient --socket-name=default -n -e '(mrb/compose-mail)'
 #+end_src
 
 *** Other message related settings
@@ -2793,7 +2773,7 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
 
        ;; Compose settings
        mu4e-compose-format-flowed t			; Compose in format=flowed
-       mu4e-compose-in-new-frame nil		; TODO: match with mail handler
+     mu4e-compose-in-new-frame t
        mu4e-compose-dont-reply-to-self t	; Do not include my addresses when replying
 
      mail-signature t			; use mail-signature file (move to message section?)
