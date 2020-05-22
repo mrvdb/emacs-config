@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent
 
-Last update: <2020-05-22 10:13:58>
+Last update: <2020-05-22 10:49:37>
 
 #+TOC: headlines 2
 
@@ -98,7 +98,9 @@ And edit the file obviously.
   # force tty: call this like 'DISPLAY="" edit ....' see my aliases
   if [ $DISPLAY ]; then
       debug "X-display value seen, using GUI"
-      ARGS=$ARGS' --create-frame --no-wait'
+      ARGS=$ARGS' --create-frame'
+      # Add no-wait, unless we're specifically called with '-wait'
+      [ ! ${ME: -5} == "-wait" ] && ARGS=$ARGS' --no-wait'
   else
       debug "Starting tty emacs"
       ARGS=$ARGS' -tty'
