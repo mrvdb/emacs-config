@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent
 
-Last update: <2020-05-22 10:49:37>
+Last update: <2020-05-22 11:35:55>
 
 #+TOC: headlines 2
 
@@ -67,8 +67,8 @@ And edit the file obviously.
   ME=$(basename $0)
   EC=`which emacsclient`
 
-  # Default arguments
-  ARGS="--socket-name=default"
+  # Default argument needs our socket in any case
+  ARGS="--socket-name=default --suppress-output"
 
   # Set to false when done
   debug() { false $@; }
@@ -98,16 +98,17 @@ And edit the file obviously.
   # force tty: call this like 'DISPLAY="" edit ....' see my aliases
   if [ $DISPLAY ]; then
       debug "X-display value seen, using GUI"
-      ARGS=$ARGS' --create-frame'
-      # Add no-wait, unless we're specifically called with '-wait'
-      [ ! ${ME: -5} == "-wait" ] && ARGS=$ARGS' --no-wait'
+      # Add --create-frame/--no-wait if there is no match with -noframe/-wait in name
+      [ `expr match "$ME" '.*-noframe'` -eq 0 ] && ARGS=$ARGS' --create-frame'
+      [ `expr match "$ME" '.*-wait'` -eq 0  ] &&  ARGS=$ARGS' --no-wait'
   else
+      # tty always waits, as it is in the terminal, create-frame has no meaning
       debug "Starting tty emacs"
       ARGS=$ARGS' -tty'
   fi
 
   # Go with the original arguments
-  $EC ${ARGS} "$@"
+  exec $EC ${ARGS} "$@"
 #+end_src
 
 
@@ -2620,7 +2621,7 @@ To be able to use the =mrb/compose-mail= function as a mailto handler we need to
 
   # Do not create new frame, because mu4e does that already
   # which is a simpler solution in this case
-  emacsclient --socket-name=default -n --eval "$elisp_expr"
+  edit-noframe --eval "$elisp_expr"
 #+end_src
 
 On top of that, I want a manual capture script which is basically the same as the mailto handler.
