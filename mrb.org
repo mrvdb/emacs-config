@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent
 
-Last update: <2020-05-22 11:53:10>
+Last update: <2020-05-22 15:20:44>
 
 #+TOC: headlines 2
 
@@ -1439,28 +1439,6 @@ For the headings at each level a =*= is normally used. As we're in unicode worls
 #+begin_src emacs-lisp
   (use-package org-bullets)
   (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
-#+end_src
-
-A couple of settings to steer the column in which the tags and habits appear in the frame:
-
-#+begin_src emacs-lisp
-    ;; Static settings for tags in agenda and habit graphs
-    (setq org-agenda-tags-column -110
-          org-habit-graph-column 100)
-
-    (defun mrb/org-align-tags (&optional roffset)
-      "Set orgmode tag positions to window body width, right aligned.
-  ROFFSET is the offset from the right, defaults to 5"
-      (setq org-tags-column (-
-                             (or 5 roffset)
-                             (window-body-width)))
-      (org-align-all-tags))
-
-    ;; TODO: why not have it on an idle timer or after some event?
-    ;; TODO: make this only apply to orgmode files, not globally
-    (add-hook 'focus-in-hook 'mrb/org-align-tags)
-    (add-hook 'focus-out-hook 'mrb/org-align-tags)
-    (add-hook 'org-mode-hook 'mrb/org-align-tags)
 #+end_src
 
 The item lists can be made a whole lot more attractive by attaching some icons based on the category an items belongs to. The category assignment itself is done by setting the =CATEGORY= property explicitly on the item or on the file.
