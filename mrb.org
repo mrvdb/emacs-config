@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent
 
-Last update: <2020-05-21 23:09:15>
+Last update: <2020-05-22 08:19:53>
 
 #+TOC: headlines 2
 
@@ -1192,11 +1192,11 @@ Define functions for each piece of information captured, so they can be easily b
 These capture functions are called from shell scripts in the operating system and have a shortcut key assigned to them. The scripts are produced directly from this document, in a similar way as the main edit script was produced in [[Preparing for lift-off]]
 
 #+begin_src sh :exports code :tangle ~/bin/capture-todo.sh :shebang #!/bin/sh
-emacsclient --eval '(mrb/capture-todo)'
+edit --eval '(mrb/capture-todo)'
 #+end_src
 
 #+begin_src sh :exports code :tangle ~/bin/capture-buy.sh :shebang #!/bin/sh
-emacsclient --eval '(mrb/capture-buy)'
+edit --eval '(mrb/capture-buy)'
 #+end_src
 
 By default C-c C-c ends the capture, but is normally the shortcut to enter tags, so I define a shortcut to define tags while capturing.
@@ -2332,11 +2332,7 @@ Another step closer to a full terminal replacement is to be able to replace lxte
 2. a lisp function which takes care of the passthrough to eshell,
    creating the frame, etcetera.
 
-The calling part is simpel:
-
-#+begin_src sh
-emacsclient -a "" -n -c -e '(mrb/server-eshell)'
-#+end_src
+The calling part is simpel: =edit -nc -e '(mrb/server-eshell)'= or =vi -e '(mrb/server-eshell)'= for a terminal variant
 
 The last bit of that command line is the function to evaluate, which was taken from http://ur1.ca/cf1m4 and sligthly adapted.
 
