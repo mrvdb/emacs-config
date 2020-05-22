@@ -105,11 +105,11 @@ And edit the file obviously.
   fi
 
   # Go with the original arguments
-  $EC ${ARGS} $@
+  $EC ${ARGS} "$@"
 #+end_src
 
 
-I'm now starting to explore running and (auto-) re-starting emacs as a systemd service. This is fairly easy, but the details can be finicky. For example, I have to override the systemd unit file with a =SSH_AUTH_SOCK= environment variable to allow magit to push (which uses ssh).
+I'm now starting to explore running and (auto-) re-starting emacs as a systemd service. This is fairly easy, but the details can be finicky.
 
 ** Running emacs as a server
 
