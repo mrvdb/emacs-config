@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent
 
-Last update: <2020-05-22 15:20:44>
+Last update: <2020-05-23 11:35:34>
 
 #+TOC: headlines 2
 
@@ -556,7 +556,12 @@ Although I think the 16 color system is a bit simplistic and, for emacs at least
             (helm-selection                 :foreground "black" :background "goldenrod2")
 
             ;; Mu4e
-            (mu4e-header-highlight-face     :inherit hl-line :underline nil :foreground nil)))
+            (mu4e-header-highlight-face     :inherit hl-line :underline nil :foreground nil)
+
+            ;; Man pages inside emacs
+            (Man-overstrike                 :foreground "#bf616a" :weight bold)
+            (Man-underline                  :foreground "#a3be8c" :weight bold)
+            ))
 
     ;; Apply our adjustment using the theme function
     (base16-set-faces 'base16-nord base16-nord-colors base16-adjustments))
