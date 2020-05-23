@@ -298,6 +298,11 @@ A the same time, I don't want to be /that spaces guy/ in every project, and I'm 
   ;; Map backspace to DEL and delete to C-d
   (if window-system  (normal-erase-is-backspace-mode t))
 
+  ;; Let marks be set when shift arrowing, everybody does this
+  (setq shift-select-mode t)
+  (delete-selection-mode 1)
+
+
   ;; Only require to type 'y' or 'n' instead of 'yes' or 'no' when prompted
   (fset 'yes-or-no-p 'y-or-n-p)
 
@@ -2032,11 +2037,6 @@ Binding keys if fine and all, but remembering them later is rather hard, especia
 Bind-key can define both global keys as map-based key settings and accepts all kinds of key specifications, including strings.
 
 #+begin_src emacs-lisp
-  ; Let marks be set when shift arrowing, everybody does this
-  ;; FIXME: this does not belong in keybindings, but somwhere global
-  (setq shift-select-mode t)
-  (delete-selection-mode 1)
-
   ; Font scaling, like in firefox
   (bind-key "C-+" 'text-scale-increase)
   (bind-key "C--" 'text-scale-decrease)
