@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent
 
-Last update: <2020-05-23 11:35:34>
+Last update: <2020-05-23 14:58:13>
 
 #+TOC: headlines 2
 
@@ -254,20 +254,36 @@ For org-mode, there is a wayto encrypt sections separately. See [[Encrypting inf
 Next to inline content in org that needs encryption, there is also content that needs encrypting which is more suitable to store in a separate file for several reasons.
 
 * Global Generic settings
-Most of what follows should probably be relocated to a better suited section.
+Section contains global settings which are either generic or I haven't figured out how to classify it under a better section.
+
+Let's begin with the setup of some fundamentals like if we want tabs or spaces, how to select stuff and what system facilities to use.
+
+I'm of the /spaces-no-tabs religion/:
+#+begin_src emacs-lisp
+  (setq-default indent-tabs-mode nil)     ; do not insert tabs when indenting by default
+  (setq tab-width 4)                      ; 4 spaces by default
+#+end_src
+
+A the same time, I don't want to be /that spaces guy/ in every project, and I'm willing to use tabs if that is the overwhelming consensus in a file. [[https://www.emacswiki.org/emacs/NoTabs]] has a snippet which guess the style in a file. Call this at the appropriate time.
+
+#+begin_src emacs-lisp
+  (defun mrb/infer-indentation-style ()
+    ;; if our source file uses tabs, we use tabs, if spaces spaces, and if
+    ;; neither, we use the current indent-tabs-mode
+    (let ((space-count (how-many "^  " (point-min) (point-max)))
+          (tab-count (how-many "^\t" (point-min) (point-max))))
+      (if (> space-count tab-count) (setq indent-tabs-mode nil))
+      (if (> tab-count space-count) (setq indent-tabs-mode t))))
+#+end_src
 
 #+begin_src emacs-lisp
   (setq
-   ;; disable backup files (foo~)
-   backup-inhibited t
-   ;; move files to the trash instead of rm
-   delete-by-moving-to-trash t
-   ;; use clipboard
-   select-enable-clipboard t
+   backup-inhibited t                   ; disable backup files like foo~ etc.
+   delete-by-moving-to-trash t          ; move files to the trash instead of rm
+   select-enable-clipboard t            ; use the clipboard in addition to kill-ring
 
    display-warning-minimum-level 'error
    large-file-warning-threshold nil
-   tab-width 4
    find-file-use-truenames nil
    find-file-compare-truenames t
 
@@ -676,7 +692,7 @@ Line-numbering is off by default, it tends to slow things down, but if I want it
 ** Client dependent settings
 Because most of my usage involves having a long lasting emacs daemon, some settings only come into scope once a client connects to that daemon. Most of these settings have to do with appearance and are related to having X available.  Anyways, some settings need to be moved to the event when a client visits the server, so we can still apply these settings transparently.
 
-Note that if this code is evaluated any call to emacsclient (be that from external or, more importantly Magit) will try to run this code and magit will fail if there's an error in the next section. Take extra care here.
+Note that if this code is evaluated any call to =emacsclient= (be that from external or, more importantly Magit) will try to run this code and magit will fail if there's an error in the next section. Take extra care here.
 #+begin_src emacs-lisp
   (defun mrb/run-client-settings(&optional args)
     (interactive)
@@ -689,17 +705,11 @@ Note that if this code is evaluated any call to emacsclient (be that from extern
     (set-fringe-mode fringe-mode)
     (setq indicate-buffer-boundaries 'left)
 
-    ;; When making a selection or in case of highlighting a region
-    ;; automatically, keep all font-locking in the region instead of
-    ;; just overwriting the whole section. The trick here is to specify
-    ;; nil in the foreground attribute
-
     ;; Probably move this to somewhere else ?
-    ;; I probably want the global mode and register exceptions
     (use-package ws-butler
       :diminish
       :init
-      (ws-butler-global-mode)
+      (ws-butler-global-mode)             ; Enable by default
       ;; List exemptions here
       ;; FIXME: why is org-capture-mode in here?
       (add-to-list 'ws-butler-global-exempt-modes 'org-capture-mode)
