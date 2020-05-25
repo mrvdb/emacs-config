@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent
 
-Last update: <2020-05-25 14:02:37>
+Last update: <2020-05-25 14:10:55>
 
 #+TOC: headlines 2
 
@@ -1495,6 +1495,7 @@ After experimenting with automatic aligning of tags I've come to the conclusion 
     "Wrap org-align-tags to be interactive and appy to all"
     (interactive)
     (org-align-tags t))
+  (bind-key "M-\"" 'mrb/org-align-all-tags)
 #+end_src
 ** Agenda customization
 Settings which are just applicable for the org-mode agenda view.
