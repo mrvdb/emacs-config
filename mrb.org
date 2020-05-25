@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent
 
-Last update: <2020-05-25 18:17:42>
+Last update: <2020-05-25 18:28:12>
 
 #+TOC: headlines 2
 
@@ -1229,16 +1229,14 @@ Adapt the colors of the states I use a bit:
     ("COLLECT"   . mrb/org-todo-keyword-COLLECT)
     ("SOLVE"     . mrb/org-todo-keyword-SOLVE)
     ("READ"      . mrb/org-todo-keyword-READ)
-    ("PLAN"      . mrb/org-todo-keyword-PLAN)
-  ))
+    ("PLAN"      . mrb/org-todo-keyword-PLAN)))
 #+end_src
 
 Make sure we keep a clean tag slate when changing tag state. This means that when I move to an active state, remove inactive tags; if something is DONE, remove tags from it and automatically adding a 'buy' tag when a BUY item is created.  Note: capturing does not honour this, i.e. when creating a new item.
 
 #+begin_src emacs-lisp
   (setq org-todo-state-tags-triggers
-        '(
-                ('todo ("inactive"))          ; remove inactive tags if moved to any active state
+        '(('todo ("inactive"))          ; remove inactive tags if moved to any active state
                 ('done ("inactive") ("fork")) ; remove tags from any inactive state
                 ("BUY"  ("buy" . t))))       ; add buy tag when this is a buying action
 #+end_src
@@ -1252,23 +1250,6 @@ I'm not sure if this works out in practice without having a confirmation (becaus
 
   ;; I need a modified version of org-is-habit, which takes inheritance
   ;; in to account
-  (defun mrb/org-is-habit-test (&optional pom)
-    "Is the task at POM or point a habit, taking property
-  inheritance into account?"
-    (interactive)
-    (message "Testing for habit")
-    (if (org-is-habit-p)
-        (message "Org-direct: Seems to be a habit")
-      (message "Org-direct: Nope, no habit"))
-
-    (if (mrb/org-is-habit-p)
-        (message "My test: seems to be a habit")
-      (progn
-        (message "My test: Nope, no habit")
-        (message (org-entry-get (or pom (point)) "STYLE" t))
-        (message "Still here")
-        )))
-
   (defun mrb/org-is-habit-p (&optional pom)
     "org-is-habit-p taking property inheritance into account"
     (equalp "habit" (org-with-point-at (or pom (point))
@@ -1955,8 +1936,6 @@ Below is what was contained in the old configuration. I will slowly migrate this
                     (org-archive-subtree)))))))))
 
   (defalias 'archive-done-tasks 'mrb/org-my-archive-done-tasks)
-
-
 #+end_src
 
 * Key and mouse bindings
