@@ -1490,7 +1490,7 @@ Showing items in the agenda views reacts to a number of settings. In my setup I 
 After experimenting with automatic aligning of tags I've come to the conclusion I want to have it manual. For now, I set the tags to align flush right with column 110 but ideally I'd want something more dynamic (in the sense that visual-line mode is also dynamic)
 
 #+begin_src emacs-lisp
-  (setq org-tags-column -110)
+  (setq org-tags-column -95)
   (defun mrb/org-align-all-tags ()
     "Wrap org-align-tags to be interactive and appy to all"
     (interactive)
