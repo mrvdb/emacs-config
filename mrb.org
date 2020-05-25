@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent
 
-Last update: <2020-05-25 12:05:40>
+Last update: <2020-05-25 14:02:37>
 
 #+TOC: headlines 2
 
@@ -551,6 +551,7 @@ Although I think the 16 color system is a bit simplistic and, for emacs at least
             (org-verbatim                   :foreground "#8fbcbb")
             (org-list-dt                    :foreground "#b48ead")
             (org-drawer                     :height 0.8 :inherit font-lock-comment-face)
+            (org-code                       :foreground "purple" :weight bold)
 
             ;; User defined faces for org-mode
             (mrb/org-todo-keyword-TODO      :foreground "#88c0d0" :weight bold)
@@ -1035,7 +1036,6 @@ Also make sure we never load org from internal, this can happen when functions w
           org-agenda-ignore-properties '(effort appt category)
           org-agenda-todo-ignore-scheduled 'future
 
-
           ;; Habits
           org-habit-show-habits-only-for-today nil
 
@@ -1072,14 +1072,12 @@ Also make sure we never load org from internal, this can happen when functions w
           org-track-ordered-property-with-tag nil
           org-startup-indented t)
 
-
-
-    (use-package org-datetree :ensure nil)        ;; Allows for archiving and refiling in a date organised tree
+    ;; Allow for archiving and refiling in a date organised tree
+    (use-package org-datetree :ensure nil)
     (use-package org-protocol :ensure nil
       :config
-      (setq org-protocol-default-template-key "t");; If nothing is specified, create a TODO entry
-      )
-    )
+      ;; If nothing is specified, create a TODO item
+      (setq org-protocol-default-template-key "t")))
 #+end_src
 
 Most of work originates in capturing some task item in orgmode. Set up the location and files for that.
@@ -1092,9 +1090,8 @@ Most of work originates in capturing some task item in orgmode. Set up the locat
   (setq org-default-notes-file (concat org-directory "GTD.org"))
   (setq diary-file (concat org-metadir "DIARY"))
 
-  ;; Some other modules I want
-  (use-package org-agenda-property)   ;; Display org properties in the agenda view
-
+  ;; Display org properties in the agenda view
+  (use-package org-agenda-property)
 #+end_src
 
 ** Capturing information
@@ -1427,12 +1424,6 @@ There are a couple of ways within org to emphasize text inline for *bold*, /ital
 
 #+begin_src emacs-lisp
   (setq org-hide-emphasis-markers t)
-#+end_src
-
-One of the emphasis markers is for ~inline code~ (delimited by ~). I never use that in that way, but I need an emaphasis marker in tables which does stand out more than *bold*. So, I'm adjusting the =org-code= face a bit.
-
-#+begin_src emacs-lisp
-  (set-face-attribute 'org-code nil :foreground "purple" :weight 'bold)
 #+end_src
 
 Similar to inline emphasis is the /rewriting/ with pretty entity characters (like '\delta' for example). These characters can be added to the text by adding a '\' before a symbol name ('delta' in the example).  I make an exception for the sub- and superscript characters. This happens a lot in variable names etc. and I a big annoyance if those get rendered to subscript all the time.
