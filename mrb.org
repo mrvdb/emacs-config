@@ -1763,6 +1763,25 @@ Writefreely is a Write.as derivative and published as open source. This allows m
      ;;writefreely-auth-token (password-store-get "Write.as/accesstoken")
      ))
 #+end_src
+** Encrypting information in org-mode
+I use the /encrypt/ tag for encrypting sections in org-mode (and sometimes my journal). The sections get encrypted and decrypted automatically on saving and opening. This uses the EasyPG library to get to my GPG key.
+
+#+begin_src emacs-lisp
+  (use-package org-crypt
+    :ensure nil
+    :config
+    (org-crypt-use-before-save-magic)
+    (setq org-crypt-tag-matcher "encrypt")
+    (setq org-crypt-key user-gpg-encrypt-key))
+#+end_src
+
+We do not want to inherit this tag automatically, as its behaviour is already subsection inclusive. When you encrypt a section, everything below it is considered content of that section and gets encrypted. I also add the value "crypt" as that is the org default, so it won't be inherited by mistake.
+
+#+begin_src emacs-lisp
+  (add-to-list 'org-tags-exclude-from-inheritance '"encrypt")
+  (add-to-list 'org-tags-exclude-from-inheritance '"crypt")
+#+end_src
+
 ** Old configuration
 Below is what was contained in the old configuration. I will slowly migrate this into more literal sections
 
@@ -1937,46 +1956,7 @@ Below is what was contained in the old configuration. I will slowly migrate this
 
   (defalias 'archive-done-tasks 'mrb/org-my-archive-done-tasks)
 
-  ;; Mail facilities related to org-mode
-  (use-package org-mime)
 
-  ;; Small bit to mail an org subtree
-  (defun mrb/mail-subtree-from-org ()
-    (interactive)
-    (if (equal major-mode 'org-agenda-mode)
-        (org-agenda-goto)
-      )
-    ;;TODO: make this also use the mailcompose frame
-    (org-mime-subtree))
-
-  ;; The entry point
-  (defun mrb/construct-mail (useOrgTree)
-    (interactive "P")
-    (if useOrgTree
-        (mrb/mail-subtree-from-org)
-      (mrb/make-mailcompose-frame)))
-
-  ;; But not for all others, because the org subtree will never be there
-  (bind-key "C-x m" 'mrb/compose-mail)
-#+end_src
-
-** Encrypting information in org-mode
-I use the /encrypt/ tag for encrypting sections in org-mode (and sometimes my journal). The sections get encrypted and decrypted automatically on saving and opening. This uses the EasyPG library to get to my GPG key.
-
-#+begin_src emacs-lisp
-  (use-package org-crypt
-    :ensure nil
-    :config
-    (org-crypt-use-before-save-magic)
-    (setq org-crypt-tag-matcher "encrypt")
-    (setq org-crypt-key user-gpg-encrypt-key))
-#+end_src
-
-We do not want to inherit this tag automatically, as its behaviour is already subsection inclusive. When you encrypt a section, everything below it is considered content of that section and gets encrypted. I also add the value "crypt" as that is the org default, so it won't be inherited by mistake.
-
-#+begin_src emacs-lisp
-  (add-to-list 'org-tags-exclude-from-inheritance '"encrypt")
-  (add-to-list 'org-tags-exclude-from-inheritance '"crypt")
 #+end_src
 
 * Key and mouse bindings
