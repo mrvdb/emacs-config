@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent
 
-Last update: <2020-05-23 14:58:13>
+Last update: <2020-05-25 12:05:40>
 
 #+TOC: headlines 2
 
@@ -1496,6 +1496,15 @@ Showing items in the agenda views reacts to a number of settings. In my setup I 
   )
 #+end_src
 
+After experimenting with automatic aligning of tags I've come to the conclusion I want to have it manual. For now, I set the tags to align flush right with column 110 but ideally I'd want something more dynamic (in the sense that visual-line mode is also dynamic)
+
+#+begin_src emacs-lisp
+  (setq org-tags-column -110)
+  (defun mrb/org-align-all-tags ()
+    "Wrap org-align-tags to be interactive and appy to all"
+    (interactive)
+    (org-align-tags t))
+#+end_src
 ** Agenda customization
 Settings which are just applicable for the org-mode agenda view.
 

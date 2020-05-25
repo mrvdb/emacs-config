@@ -160,7 +160,6 @@
  '(org-org-htmlized-css-url "orgmode.css")
  '(org-plantuml-jar-path "/usr/share/java/plantuml/plantuml.jar")
  '(org-stuck-projects '("-inactive/+TODO" ("TODO" "WAITING") nil ""))
- '(org-tags-column -110)
  '(org-tags-exclude-from-inheritance '("area" "encrypt"))
  '(org-time-stamp-custom-formats '("<%m/%d/%y %a>" . "<%H:%M>"))
  '(org-todo-state-tags-triggers
