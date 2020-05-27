@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent
 
-Last update: <2020-05-26 14:53:54>
+Last update: <2020-05-27 10:33:38>
 
 #+TOC: headlines 2
 
@@ -1102,24 +1102,20 @@ I guess 90% of the information I keep in the main orgmode files starts life orig
 3. Journaling entries;
 4. Logbook entries.
 
-
 The =org-capture-pop-frame= package makes sure all captures are in separate frames.
 
 #+begin_src emacs-lisp
   (use-package org-capture
     :diminish
     :ensure nil
-    :after org-journal
-  )
+    :after org-journal)
 
   (use-package org-capture-pop-frame
     :config
     (setq ocpf-frame-parameters
      '((name . "*capture*")
-       (width . 115)
-       (height . 15)
-       (tool-bar-lines . 0)
-       (menu-bar-lines . 0))))
+       (width . 115) (height . 15)
+       (tool-bar-lines . 0) (menu-bar-lines . 0))))
 #+end_src
 
 Here are the templates used for them.
@@ -2682,7 +2678,7 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
        mu4e-use-fancy-chars t
        mu4e-get-mail-command "mbsync quick"	; Just get inbox and important stuff, not everything
        mu4e-decryption-policy 'ask
-       mu4e-update-interval 120				; 2 minutes is fine since we don't actually retrieve, just index
+     mu4e-update-interval 120         ; we just index, no retrieve, so 2mins is fine
        mu4e-compose-complete-only-after nil
 
        ;; Set completing function to standard, so helm works
@@ -2714,9 +2710,8 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
 
 
        ;; Jump to some folders directly with a shortcut
-       mu4e-maildir-shortcuts '((:maildir "/INBOX" :key ?i)
-                                (:maildir "/Trash" :key ?t))
-
+     mu4e-maildir-shortcuts '((:maildir "/Trash" :key ?t)
+                              (:maildir "/Junk"  :key ?s))
 
        ;; Context definitions
        ;; Goal 1. use global config, unless private address is used
@@ -2773,10 +2768,7 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
                                  :key ?+)
              (make-mu4e-bookmark :name "Todays messages"
                                  :query "date:today..now"
-                                 :key ?t)
-             (make-mu4e-bookmark :name "SPAM folder"
-                                 :query "maildir:/Junk"
-                                 :key ?s)))
+                               :key ?t)))
 
       ;; Rendering of html mail is done with shr
       ;; By default, it's inhibiting images, I dont want that, as I only look at the html if needed
@@ -2962,7 +2954,6 @@ Not messaging or chatting perse, but a microblog social network. The 'capture a 
 #+begin_src sh :exports code :tangle ~/bin/capture-toot.sh :shebang #!/bin/sh
 edit-noframe --eval '(mrb/capture-toot)'
 #+end_src
-
 
 * Development settings
 Some settings which aid in development tasks.
