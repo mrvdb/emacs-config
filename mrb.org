@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent
 
-Last update: <2020-05-27 10:33:38>
+Last update: <2020-05-30 08:37:30>
 
 #+TOC: headlines 2
 
@@ -2711,7 +2711,8 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
 
        ;; Jump to some folders directly with a shortcut
      mu4e-maildir-shortcuts '((:maildir "/Trash" :key ?t)
-                              (:maildir "/Junk"  :key ?s))
+                              (:maildir "/Junk"  :key ?s)
+                              (:maildir "/INBOX" :key ?i :hide t)) ; Just for refiling
 
        ;; Context definitions
        ;; Goal 1. use global config, unless private address is used
