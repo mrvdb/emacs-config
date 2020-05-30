@@ -4,13 +4,13 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent
 
-Last update: <2020-05-30 08:37:30>
+Last update: <2020-05-30 08:54:21>
 
-#+TOC: headlines 2
+#+TOC: headlines 1
 
 This is my emacs configuration file that is loaded with =org-babel-load-file= in the Emacs init file. The intent is to have as much of my Emacs configuration in here as possible. The system works as a literal programming system where with a tangle the elisp code that actually makes up my configuration is extracted automatically and loaded.
 
-This file was created from many separate elisp files and has not been fully sanitized yet. Following the history of that may be interesting to some as well. On top of that I have an auto commit hook on save running at the moment which does not produce the best hitory records. All that will change over time.
+This file was created from many separate elisp files and has not been fully sanitized yet. Following the history of that may be interesting to some as well.
 
 This document is irregularly published and lives in different locations:
 
@@ -3039,6 +3039,17 @@ The closest thing I found is =zeal= or =dash= which allow docsets to be searched
 		;; Use all installed docsets
 		helm-dash-common-docsets (helm-dash-installed-docsets)))
 #+end_src
+
+Dash show documentation inside emacs, which is my preferred method. There are times however I need the desktop GUI Zeal. For one, it's a lot easier to see which docsets are installed and manage them.
+
+#+begin_src emacs-lisp
+;; Global keybinding ot open documentation
+  ;; This should probably be somewhere else
+  (use-package zeal-at-point
+     :bind
+     ("s-d" . zeal-at-point))
+#+end_src
+
 *** RFC document reader
 I often need to consult RFC documents, so not having to leave emacs for that and be able to use all tools on RFC documents is very helpful.
 
@@ -3128,9 +3139,8 @@ For creating web apps I use yesod, which is supported by a number of packages
 #+begin_src emacs-lisp
   ;; Yesod's html like files
   (use-package hamlet-mode)
-  (use-package zeal-at-point
-     :bind
-     ("s-d" . zeal-at-point))
+
+
 
 #+end_src
 ** Go
