@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent
 
-Last update: <2020-05-30 08:54:21>
+Last update: <2020-06-01 12:48:39>
 
 #+TOC: headlines 1
 
@@ -381,6 +381,11 @@ Using pdf-tools for PDF handling. This is a lot better than docview. I'm a bit a
     (pdf-tools-install :no-query))						  ; no-query auto builds epfinfo when needed
 #+end_src
 
+I tend to compile Emacs with ImageMagick support, let's make sure we use it too.
+#+begin_src emacs-lisp
+(when (fboundp 'imagemagick-register-types)
+  (imagemagick-register-types))
+#+end_src
 * Internationalisation and multi-language features
 If anything multi-language should work, UTF-8 encoding is a must, so let's make sure we try to use that everywhere
 
@@ -2685,7 +2690,7 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
        mu4e-completing-read-function 'completing-read
 
        ;; Message view settings
-       mu4e-view-show-images t
+     mu4e-view-show-images t              ; This creates connections, possible privacy issue?
        mu4e-view-use-gnus nil
        mu4e-view-show-addresses t			; Show actuall addresses instead of names
        mu4e-view-mode-hook '(turn-on-visual-line-mode)
@@ -2739,6 +2744,13 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
       (add-to-list 'mu4e-view-actions
                    '("ViewInBrowser" . mu4e-action-view-in-browser) t)
 
+    (defun mrb/mu4e-action-view-in-eww (msg)
+      "View the body of MSG in internal web"
+      (eww-open-file (mu4e~write-body-to-html msg)))
+
+    (add-to-list 'mu4e-view-actions
+                  '("E - view in eww" . mrb/mu4e-action-view-in-eww) t)
+
       ;; Define marks
       (add-to-list 'mu4e-marks
                    '(spam
@@ -2778,11 +2790,12 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
         "Overridden mu4e-shr2text"
         (mu4e~html2text-wrapper
          (lambda ()
-           (let ((shr-inhibit-images nil)	; Explicitly allow images, use shr-blocked images to control
+         (let ((shr-inhibit-images nil)	; use shr-blocked images to control
                  (shr-width nil) 			; Use whole window width for rendering
                  (shr-use-colors nil)		; Don't use colors from html, they ugly
                  (shr-bullet "• "))		; Original was "* "
              (shr-render-region (point-min) (point-max)))) msg))
+
       (setq mu4e-html2text-command 'mrb/mu4e-shr2text)
 
       ;; Make header configuration explicit
