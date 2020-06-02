@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent
 
-Last update: <2020-06-01 12:48:39>
+Last update: <2020-06-02 13:14:07>
 
 #+TOC: headlines 1
 
@@ -3323,17 +3323,27 @@ A common factor in all my development is the use of git. For emacs this automati
 *** Magit
 For most, if not all development work (and some other work too) I use git as the revision control system. In emacs that translates to using magit, so let's begin with bringing that in.
 
+For displaying diffs in a bit more fancy way, I normally use [[https://github.com/dandavison/delta][delta]]. The =magit-delta= package is a wrapper around it. The main advantage of delta over diff is language awareness, which allows for syntax highlighting in diffs.
+
 Magit forge is a submodule for magit which helps in managing repositories in forges (notably github and gitlab). This looks very promising, albeit slow.
 
 Features I'm interested in: issue commenting, pull requests
 
 #+begin_src emacs-lisp
   (use-package magit
+      :ensure-system-package delta
     :after (fullframe)
     :bind
     ("C-c m" . magit-status)
 
     :init
+      (use-package magit-delta
+        :config
+        ;; FIXME: why does magit-delta not by default take the delta theme?
+        (setq magit-delta-default-dark-theme "MrB")
+
+        (magit-delta-mode))
+
     (fullframe magit-status magit-mode-quit-window)
 
     :config
