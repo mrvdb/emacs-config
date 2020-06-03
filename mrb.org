@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent
 
-Last update: <2020-06-03 15:46:40>
+Last update: <2020-06-03 15:53:10>
 
 #+TOC: headlines 1
 
@@ -2741,14 +2741,7 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
       ;; Define actions for the message view
       ;; Allow showing in browser when there is a HTML mess to deal with
       (add-to-list 'mu4e-view-actions
-                   '("ViewInBrowser" . mu4e-action-view-in-browser) t)
-
-    (defun mrb/mu4e-action-view-in-eww (msg)
-      "View the body of MSG in internal web"
-      (eww-open-file (mu4e~write-body-to-html msg)))
-
-    (add-to-list 'mu4e-view-actions
-                  '("E - view in eww" . mrb/mu4e-action-view-in-eww) t)
+                 '("B - view in external browser" . mu4e-action-view-in-browser) t)
 
       ;; Define marks
       (add-to-list 'mu4e-marks
