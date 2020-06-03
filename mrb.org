@@ -968,12 +968,6 @@ Now, do the other mode related packages which require a bit of configuration.
     :config
     (persistent-scratch-setup-default))
 
-  ;; Turn on eldoc for modes which support it
-  (dolist
-      (the_mode
-      (list 'emacs-lisp-mode-hook 'lisp-interaction-mode-hook 'ielm-mode-hook 'python-mode))
-    (add-hook the_mode 'turn-on-eldoc-mode))
-
   (use-package nxml-mode
     :ensure nil ;; builtin mode
     :config
@@ -2294,9 +2288,14 @@ Sometimes processes get stuck and i want a way to delete those processes easily.
       (delete-process (get-process pname))))
 #+end_src
 * Completion
+
+There are 2 types of completion:
+1. Input completion in the minibuffer
+2. Inline completion in another buffer
+
 I want completion to work as follows:
 
-1. completion functions are always bound to a keybinding involving the TAB-key , with as little modifiers as possible;
+1. completion functions are always bound to a keybinding involving the TAB-key, with as little modifiers as possible;
 2. completion should *always* produce *something*, even if emacs has no special semantic knowledge of the current mode, it should produce /something/ which makes sense;
 3. completion should be inline whenever possible.
 4. for each mode, a specialization is ok, if that improves the situation; I expect to have many specialisations to improve the autocomplete quality;
@@ -2313,9 +2312,9 @@ So, tab tries to indent, which is the main expectation, and if it can't it tries
   (setq tab-always-indent 'complete)
 #+end_src
 
-In a standard emacs installation, TAB indents, depending on mode obviously. If indenting would not make sense, a TAB can be inserted or completion could start. The funciton =completion-at-point= is used in some situations. Ideally the =company-complete= function could take over in many cases. Here's a simplistic approach to get me started:
+In a standard emacs installation, TAB indents, depending on mode obviously. If indenting would not make sense, a TAB can be inserted or completion could start. The function =completion-at-point= is used in some situations. Ideally the =company-complete= function could take over in many cases. Here's a simplistic approach to get me started:
  1. if in minibuffer, do completion there like we are used to;
- 2. if cursor is at the end of a symbol, try to complet it with company;
+ 2. if cursor is at the end of a symbol, try to complete it with company;
  3. else, indent according to mode.
 
 This is probably incomplete or wrong even in some cases, but it's a start.
@@ -2325,8 +2324,7 @@ This way, TAB always does completion or indent, unless company-mode is not activ
 ** Ad 2. Completion should always produce something
 Not sure if there is anything to do here.
 ** Ad 3. Inline completion when possible
-With inline completion I mean without opening a whole new
-**Completions** window if not needed.
+With inline completion I mean without opening a whole new **Completions** window if not needed.
 
 Content that I want:
 - languages: lisp, python, ruby, bash, C/C++ roughtly in that order (function and argument completion)
@@ -2370,9 +2368,10 @@ Having the completion pop up automatically is annoying in most cases, so I disab
                                  org-mode org-journal-mode
                                  text-mode))
 
-    ;; And this turns them actually on
+    ;; And this turns it actually on, except for the modes above
     (add-hook 'after-init-hook 'global-company-mode)
 
+    ;; Taken from: https://github.com/company-mode/company-mode/issues/94#issuecomment-40884387
     ;; Save the normal completion functions temporarily
     (defvar completion-at-point-functions-saved nil)
 
@@ -3040,6 +3039,37 @@ While emacs itself has a very nicely documentation system, I still don't underst
 Example: =C-h-f= in lisp-mode describes the function to me. If I am in a python file, I want it to do exactly the same, but for the python function.  There's a page on emacswiki dealing with this a bit: https://www.emacswiki.org/emacs/Context_sensitive_help
 
 Anyways, here's what I have configured related to reference information and documentation
+
+*** Context sensitive
+Regardless of (programming) language there's certain information that's needed on the spot. These are the function signatures, the specific syntaxes when typing Math symbols, orgmode oddities etc.
+
+I want that type of information directly at hand. One part of the solution is [[https://www.emacswiki.org/emacs/ElDoc][ElDoc]]. This shows documentation in the echo area for a language. ElDoc is built into Emacs so that's a good start. Let's enable it for the modes that have support for it.
+
+#+begin_src emacs-lisp
+  (dolist
+      (the_mode
+       (list 'emacs-lisp-mode-hook
+             'lisp-interaction-mode-hook
+             'ielm-mode-hook
+             'python-mode))
+    (add-hook the_mode 'eldoc-mode))
+
+#+end_src
+
+However, having the documentation in the echo area is, especially on big monitors, often far away from where I am typing. So, =eldoc-overlay= shows the same information, but right below the point, which is alreay a lot more useful.
+
+#+begin_src emacs-lisp
+
+(use-package eldoc-overlay
+  :ensure t
+  :init (eldoc-overlay-mode 1)
+  :config
+  (setq eldoc-overlay-backend 'quick-peek))
+#+end_src
+
+I've also looked at =eldoc-box= which seems a bit more modern, but it didn't work for me
+*** Reference information
+If the inline documentation presented by ElDoc is not sufficient, I want a way to spaw reference documentation based on the context.
 
 The closest thing I found is =zeal= or =dash= which allow docsets to be searched. There is a gui and helm-dash is an interface to the docsets for emacs. Typically I install docsets through the GUI or manually (the folder names are sometimes not the same when I use helm-dash to install docsets). This solution gives me at least /access/ to reference information for most of the programming languages I use. The direct accest to the sources is missing, or I don't know how to do this yet.
 
