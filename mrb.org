@@ -3183,7 +3183,7 @@ For all of those languages, I want to use paredit which makes editting, longer t
 
 When a mode wants to use paredit, it can use the same constructs as above to enable paredit on it modes.
 
-While we're here, let's do paxedit as well; not sure whey these two package don't merge. It's the same thing. I'm just gonna treat them as one here and enable =paxedit= whenever paredit gets enabled, but I'll be a bit conservative with the keybindings first.
+While we're here, let's do paxedit as well; not sure whey these two package don't merge. It's the same concept. I'm just gonna treat them as one here and enable =paxedit= whenever paredit gets enabled, but I'll be a bit conservative with the keybindings first.
 
 #+begin_src emacs-lisp
   (use-package paxedit
