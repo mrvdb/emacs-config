@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent
 
-Last update: <2020-06-03 15:53:10>
+Last update: <2020-06-04 10:40:57>
 
 #+TOC: headlines 1
 
@@ -982,6 +982,15 @@ Orgmode configuraton is probably the largest part of my Emacs configuration, bec
 ** Initialisation of Orgmode
 Basically where to find stuff and what to load.
 
+I loosely follow the GTD method for organising things and I want a quick shortcut to start my main file.
+
+#+begin_src emacs-lisp
+  (defun mrb/gtd()
+    "Start my GTD system"
+    (interactive)
+    (find-file org-default-notes-file))
+#+end_src
+
 We do not have to load the main orgmode location, because we already did that on the main initialisation to get org-babel started.
 
 Also make sure we never load org from internal, this can happen when functions were defined in the included org version and not anymore in newer versions. We want an error, not a silent load of the older function.
@@ -1765,11 +1774,7 @@ Below is what was contained in the old configuration. I will slowly migrate this
   ;; Bit of a leftover from reorganising bits, do this later
   (add-to-list 'org-tags-exclude-from-inheritance '"sell")
 
-  ;; Dynamic behaviour
-  (defun mrb/gtd()
-    "Start my GTD system"
-    (interactive)
-    (find-file org-default-notes-file))
+
 
   (defun mrb/is-project-p ()
     "This function returns true if the entry is considered a project.
