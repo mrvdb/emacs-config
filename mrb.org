@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent
 
-Last update: <2020-06-04 10:40:57>
+Last update: <2020-06-06 08:57:53>
 
 #+TOC: headlines 1
 
@@ -1073,7 +1073,8 @@ Also make sure we never load org from internal, this can happen when functions w
           org-log-reschedule 'time
           org-modules '(org-info org-habit
                                  org-inlinetask org-irc
-                                 org-toc org-mac-iCal org-mouse)
+                                 org-toc org-mac-iCal org-mouse
+                                 org-tempo)
           org-remember-default-headline ""
           org-special-ctrl-a/e t
           org-stuck-projects '("-inactive/TODO" ("TODO" "WAITING") nil "")
