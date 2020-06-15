@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent
 
-Last update: <2020-06-06 08:57:53>
+Last update: <2020-06-15 10:12:07>
 
 #+TOC: headlines 1
 
@@ -2993,16 +2993,17 @@ For most of the languages I use (Bash, python, C, Go, HTML Haskell, Lua), the La
     :commands (lsp-deferred lsp)
 
     ;; Enable lsp for the languages that do not have their own section yet
-    :hook (sh-mode . lsp-deferred)
-    :hook (python-mode . lsp-deferred)
+    :hook (c++-mode    . lsp-deferred)
     :hook (css-mode . lsp-deferred)
     :hook (html-mode . lsp-deferred)
     :hook (js2-mode . lsp-deferred)
+    :hook (python-mode . lsp-deferred)
+    :hook (sh-mode     . lsp-deferred)
     :hook (yaml-mode . lsp-deferred)
     :init
 
     (use-package lsp-ui      :commands lsp-ui-mode)
-    (use-package helm-lsp    :commands helm-lsp-workspace-symbol)
+    ;(use-package helm-lsp    :commands helm-lsp-workspace-symbol)
 
     :config
     (setq lsp-enable-snippet nil
