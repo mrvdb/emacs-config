@@ -3369,6 +3369,7 @@ Features I'm interested in: issue commenting, pull requests
 
     :init
       (use-package magit-delta
+      :diminish ""
         :config
         ;; FIXME: why does magit-delta not by default take the delta theme?
         (setq magit-delta-default-dark-theme "MrB")
