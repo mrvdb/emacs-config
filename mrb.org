@@ -2989,11 +2989,12 @@ For most of the languages I use (Bash, python, C, Go, HTML Haskell, Lua), the La
 #+begin_src emacs-lisp
   ;; LSP mode
   (use-package lsp-mode
-    :pin melpa-stable
+    :pin melpa
     :commands (lsp-deferred lsp)
 
     ;; Enable lsp for the languages that do not have their own section yet
     :hook (c++-mode    . lsp-deferred)
+    :hook (c-mode      . lsp-deferred)
     :hook (css-mode . lsp-deferred)
     :hook (html-mode . lsp-deferred)
     :hook (js2-mode . lsp-deferred)
@@ -3002,7 +3003,7 @@ For most of the languages I use (Bash, python, C, Go, HTML Haskell, Lua), the La
     :hook (yaml-mode . lsp-deferred)
     :init
 
-    (use-package lsp-ui      :commands lsp-ui-mode)
+    (use-package lsp-ui)
     ;(use-package helm-lsp    :commands helm-lsp-workspace-symbol)
 
     :config
@@ -3432,7 +3433,7 @@ For now, just the ansible package, and some access to its documentation will suf
       :config
       (add-hook 'yaml-mode-hook #'ansible-doc-mode))
     :config
-    (add-hook 'ansible-hook #'lsp))
+    (add-hook 'ansible-hook #'lsp-deferred))
 #+end_src
 * Finale
 When we are all done with this, provide it.
