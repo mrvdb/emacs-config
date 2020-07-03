@@ -2620,9 +2620,10 @@ It's not entirely clear which package is exactly responsible for what, but there
 After a journey with many different MUAs I seem to be settling on =mu4e=.
 
 #+begin_src emacs-lisp
+  (setq mrb/mu4e-path "/usr/local/share/emacs/site-lisp/mu4e")
     (use-package mu4e
       :ensure nil
-      :load-path "/usr/local/share/emacs/site-lisp/mu4e"
+    :load-path mrb/mu4e-path
       :after message fullframe
       :commands mu4e
       :bind (:map mu4e-main-mode-map
@@ -2646,7 +2647,7 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
       :config
       ;; Support icalendar Yes/No/Maybe reactions to calendar invites
       (use-package mu4e-icalendar
-        :load-path "/home/mrb/dat/src/emacs/packages/mu4e-patch"
+      :load-path mrb/mu4e-path
         :config
         (mu4e-icalendar-setup))
 
