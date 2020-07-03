@@ -3010,7 +3010,12 @@ For most of the languages I use (Bash, python, C, Go, HTML Haskell, Lua), the La
     :config
     (setq lsp-enable-snippet nil
           lsp-prefer-flymake nil
-          lsp-ui-doc-position 'bottom))
+          lsp-ui-doc-position 'bottom
+          read-process-output-max (* 1024 1024) ; As per https://emacs-lsp.github.io/lsp-mode/page/performance/
+          lsp-prefer-capf t
+          lsp-idle-delay 0.5              ; Tuning know for frustration
+          )
+  )
 #+end_src
 
 
