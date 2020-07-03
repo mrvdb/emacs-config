@@ -102,6 +102,8 @@ This has a number of attractive properties:
 **** http://toc.hipcast.com/rss/audio2.xml
 **** https://ultralightandcomfortable.com/feed
 **** http://ultralightphotography.net/feed/
+**** https://weeklyosm.eu/feed
+
 *** Photography
 **** http://www.fujifilm.com/rss/newsfeed.xml
 
