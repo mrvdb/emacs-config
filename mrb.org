@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent
 
-Last update: <2020-07-03 11:32:16>
+Last update: <2020-07-04 11:58:11>
 
 #+TOC: headlines 1
 
@@ -2727,6 +2727,8 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
 
        ;; Context definitions
        ;; Goal 1. use global config, unless private address is used
+     ;; FIXME: Can we use the one that matched?
+     mrb/private-addresses '("marcel@van-der-boom.nl" "m@rcel.van-der-boom.nl")
        mrb/private-address "marcel@van-der-boom.nl"
        mu4e-context-policy 'pick-first 		; When nothing matches only!
        mu4e-compose-context-policy 'nil     ; for compose, use current if nothing matches
@@ -2741,7 +2743,7 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
            :match-func (lambda (msg)
                          (when msg
                            (mu4e-message-contact-field-matches
-                            msg `(:to :cc :from) mrb/private-address)))
+                          msg `(:to :cc :from) mrb/private-addresses)))
            :vars `((user-mail-address . ,mrb/private-address)))))
 
 
