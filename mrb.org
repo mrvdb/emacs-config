@@ -2697,6 +2697,8 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
 
        ;; Message view settings
      mu4e-view-show-images t              ; This creates connections, possible privacy issue?
+     mu4e-view-image-max-width 800
+     mu4e-view-image-max-height 600
        mu4e-view-use-gnus nil
        mu4e-view-show-addresses t			; Show actuall addresses instead of names
        mu4e-view-mode-hook '(turn-on-visual-line-mode)
