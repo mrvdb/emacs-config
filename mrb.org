@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent
 
-Last update: <2020-07-10 14:19:50>
+Last update: <2020-07-17 13:45:11>
 
 #+TOC: headlines 1
 
@@ -200,6 +200,16 @@ So, =package-selected-packages= will not stay empty and not written out. The fir
   (setq use-package-ensure-function #'mrb/use-package-ensure-elpa)
 #+end_src
 
+Finally, make updating and installing the packages a bit easier by having a keybinding for getting to the installation part right away
+
+#+begin_src emacs-lisp
+  (defun mrb/upgrade-packages ()
+    (interactive)
+    (list-packages)
+    (package-menu-mark-upgrades))
+
+  (bind-key "C-c p" 'mrb/upgrade-packages)
+#+end_src
 * Personal information
 I'd like to arrange 3 things related to personal information:
 1. register the proper identification to use;
