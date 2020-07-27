@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent
 
-Last update: <2020-07-17 13:45:11>
+Last update: <2020-07-27 10:42:39>
 
 #+TOC: headlines 1
 
@@ -1271,9 +1271,9 @@ I'm not sure if this works out in practice without having a confirmation (becaus
                        (org-entry-get-with-inheritance "STYLE"))))
 
   (defun mrb/archive-done-item()
-    ;; Determine if the item went to the DONE/CANCELLED state
-    ;; if so, ask to archive it, but skip habits which have
-    ;; their own logic.
+    "Determine if the item went to the DONE/CANCELLED state
+     if so, ask to archive it, but skip habits which have
+     their own logic."
     (when (not (mrb/org-is-habit-p))
       ;; No habit, so we have a candidate
       (progn
@@ -1293,6 +1293,17 @@ I'm not sure if this works out in practice without having a confirmation (becaus
   (add-hook 'org-after-todo-state-change-hook
             'mrb/archive-done-item t)
 
+#+end_src
+
+In addtion to the above I'm experimenting with =org-edna=  (Extensible Dependencies 'N' Actions) which has a bit more flexibility. Notably the blocking of tasks is what I want to peruse a bit, because the builtin system hasn't worked for me. I may still use the builtin way to block items, but perhaps under the dynamic control of org-edna instead of manually specifying =order= properties etc.
+
+For now, a basic config and enabling of =org-edna=
+
+#+begin_src emacs-lisp
+  (use-package org-edna
+    :after org
+    :config
+    (org-edna-mode))
 #+end_src
 ** Marking items as DONE
 Marking work as completed should be a smooth process to stop getting in the way of doing the actual work. A shortcut is defined to mark items done in the standard way and have an additional shortcut to mark it done should it be blocked.
@@ -1326,6 +1337,7 @@ Thus, the normal sequence would be:
     (org-agenda-todo "CANCELLED"))
 #+end_src
 
+The above may be influenced, or even made redundant, by the =org-edna= package configuration.
 ** Registering creation time of todo items
 Over time it gets a bit messy in my orgmode files. I can not remember when something was created and thus, by judging the time I didn't do anything with the item, decide if it is still important or not.
 
