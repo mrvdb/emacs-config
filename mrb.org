@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent
 
-Last update: <2020-07-27 10:42:39>
+Last update: <2020-07-29 14:35:06>
 
 #+TOC: headlines 1
 
@@ -1797,8 +1797,6 @@ Below is what was contained in the old configuration. I will slowly migrate this
   ;; Bit of a leftover from reorganising bits, do this later
   (add-to-list 'org-tags-exclude-from-inheritance '"sell")
 
-
-
   (defun mrb/is-project-p ()
     "This function returns true if the entry is considered a project.
       A project is defined to be:
@@ -3014,24 +3012,22 @@ Lets try to use ggtags everywhere.
 For most of the languages I use (Bash, python, C, Go, HTML Haskell, Lua), the Language Server Protocol seems to be supported by =lsp-mode=, so I'm setting this up generally here and enable it for each language I'm using if it is supported.
 
 #+begin_src emacs-lisp
-  ;; LSP mode
   (use-package lsp-mode
     :pin melpa
     :commands (lsp-deferred lsp)
 
-    ;; Enable lsp for the languages that do not have their own section yet
-    :hook (c++-mode    . lsp-deferred)
-    :hook (c-mode      . lsp-deferred)
-    :hook (css-mode . lsp-deferred)
-    :hook (html-mode . lsp-deferred)
-    :hook (js2-mode . lsp-deferred)
-    :hook (python-mode . lsp-deferred)
-    :hook (sh-mode     . lsp-deferred)
-    :hook (yaml-mode . lsp-deferred)
     :init
+    (use-package lsp-ui
+      :commands lsp-ui-mode)
 
-    (use-package lsp-ui)
-    ;(use-package helm-lsp    :commands helm-lsp-workspace-symbol)
+    ;; Enable lsp for languages I use
+    :hook (((c++-mode c-mode
+                      css-mode html-mode js2-mode
+                      python-mode
+                      sh-mode
+                      yaml-mode
+                      go-mode)  . lsp-deferred)
+           (lsp-mode . lsp-enable-which-key-integration))
 
     :config
     (setq lsp-enable-snippet nil
@@ -3039,11 +3035,10 @@ For most of the languages I use (Bash, python, C, Go, HTML Haskell, Lua), the La
           lsp-ui-doc-position 'bottom
           read-process-output-max (* 1024 1024) ; As per https://emacs-lsp.github.io/lsp-mode/page/performance/
           lsp-prefer-capf t
-          lsp-idle-delay 0.5              ; Tuning know for frustration
+          lsp-idle-delay 0.5              ; Tuning for frustration
           )
   )
 #+end_src
-
 
 Make our source look a bit more attractive by enabling =prettify-symbol-mode= in all programming modes
 
@@ -3224,8 +3219,13 @@ For creating web apps I use yesod, which is supported by a number of packages
   (use-package go-mode
     :ensure-system-package godef
     :config
-    :bind (:map go-mode-map
-                ("C-h f" . godoc-at-point)))
+    :init
+    ;; Set up before-save hooks to format buffer and add/delete imports.
+    ;; Make sure you don't have other gofmt/goimports hooks enabled.
+    (defun lsp-go-install-save-hooks ()
+      (add-hook 'before-save-hook #'lsp-format-buffer t t)
+      (add-hook 'before-save-hook #'lsp-organize-imports t t))
+    (add-hook 'go-mode-hook #'lsp-go-install-save-hooks))
 #+end_src
 ** Lisp-like
 There are a number of languages which are lisp-like, not in the least Emacs lisp itself. It makes sense to group the configuration for these languages together. In the first part there will be configuration for all lisp-like languages (like the =paredit= configuration for example). For each specific implementation there may be augmentations to the config, or even a completely separate.
