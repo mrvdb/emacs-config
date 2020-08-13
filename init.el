@@ -14,6 +14,14 @@
 (setq gc-cons-threshold 200000000)
 (run-with-idle-timer 5 t #'garbage-collect)
 
+;; If we have the native compiler, use it
+(if (and (fboundp 'native-comp-available-p)
+         (native-comp-available-p))
+    (progn
+      (message "Native compilation is available")
+      (setq comp-deferred-compilation t))
+  (message "Native complation is *not* available"))
+
 ;; My org file is posted using writefreely, which uses local variables
 (add-to-list 'safe-local-variable-values '(writefreely-post-id . "wf83bq5jwz"))
 (add-to-list 'safe-local-variable-values '(writefreely-post-token . nil))
