@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent
 
-Last update: <2020-08-12 15:53:34>
+Last update: <2020-08-13 13:05:07>
 
 #+TOC: headlines 1
 
@@ -1767,9 +1767,7 @@ Writefreely is a Write.as derivative and published as open source. This allows m
      writefreely-instance-url "https://qua.name"
      writefreely-instance-api-endpoint "https://qua.name/api"
      writefreely-maybe-publish-created-date t
-     writefreely-auth-token (password-store-get "Qua.name/accesstoken")
-     ;;writefreely-auth-token (password-store-get "Write.as/accesstoken")
-     ))
+     writefreely-auth-token (password-store-get "Qua.name/accesstoken")))
 #+end_src
 ** Encrypting information in org-mode
 I use the /encrypt/ tag for encrypting sections in org-mode (and sometimes my journal). The sections get encrypted and decrypted automatically on saving and opening. This uses the EasyPG library to get to my GPG key.
