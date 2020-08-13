@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent
 
-Last update: <2020-07-29 14:35:06>
+Last update: <2020-08-12 15:53:34>
 
 #+TOC: headlines 1
 
@@ -2487,42 +2487,9 @@ My default browser, as set in the OS, should be started automatically on opening
 ** Mail
 This section describes a search for the mail setup I want in Emacs. There are a few mail related packages and I'm unsure at what I want to use; reading the feature list doesn't cut it.  So, I'm having a setup where multiple mail handling packages may exist and hopefully one will float to the top as being *the one*
 
-*** Sending mail
-Sending mail through smtp, using the smtpmail package
-
-#+begin_src emacs-lisp
-  (use-package smtpmail
-     :init
-     (setq smtpmail-default-smtp-server "localhost"
-           smtpmail-service 25)
-     :config
-     (setq
-      smtpmail-local-domain user-domain
-      smtpmail-sendto-domain user-domain
-      ;; User agent style is message mode by default, specific mail packages may override this
-      mail-user-agent 'message-user-agent
-      send-mail-function 'smtpmail-send-it ;This is for mail-mode
-      message-send-mail-function 'message-smtpmail-send-it) ; This is for message-mode
-
-     (setq password-cache t)            ; default is true, so no need to set this actually
-     (setq password-cache-expiry 28800)) ; default is 16 seconds, which is ridiculously low
-#+end_src
-
-At times we want to send signed and/or encrypted mail
-
-#+begin_src emacs-lisp
-  (use-package mml-sec
-    :ensure nil 							; Built-in
-    :config
-    ; Use my key to sign
-    (add-to-list 'mml-secure-openpgp-signers user-gpg-encrypt-key)
-
-    ;; Add my bcc address to list of safe addresses in bcc for secure message
-    (add-to-list 'mml-secure-safe-bcc-list "mrb+Sent@hsdev.com"))
-#+end_src
-
 *** Composing mail
 Composing mail is often an /out of band/ activity, like creating a tweet or a capture, so I would like to have roughly the same behaviour. This is by default provided by compose-mail-other-frame, which in turn calls the right mua to do the job. Oddly enough, it is still required to have =mu4e-compose-in-new-frame= set to actually have another frame, so I'm writing it with mu4e-compose directly.
+
 
 #+begin_src emacs-lisp
   (defun mrb/compose-mail (&optional mailto-url)
@@ -2576,7 +2543,41 @@ On top of that, I want a manual capture script which is basically the same as th
 edit -e '(mrb/compose-mail)'
 #+end_src
 
-*** Other message related settings
+*** Sending mail
+Sending mail through smtp, using the smtpmail package
+
+#+begin_src emacs-lisp
+  (use-package smtpmail
+     :init
+     (setq smtpmail-default-smtp-server "localhost"
+           smtpmail-service 25)
+     :config
+     (setq
+      smtpmail-local-domain user-domain
+      smtpmail-sendto-domain user-domain
+      ;; User agent style is message mode by default, specific mail packages may override this
+      mail-user-agent 'message-user-agent
+      send-mail-function 'smtpmail-send-it ;This is for mail-mode
+      message-send-mail-function 'message-smtpmail-send-it) ; This is for message-mode
+
+     (setq password-cache t)            ; default is true, so no need to set this actually
+     (setq password-cache-expiry 28800)) ; default is 16 seconds, which is ridiculously low
+#+end_src
+
+At times we want to send signed and/or encrypted mail
+
+#+begin_src emacs-lisp
+  (use-package mml-sec
+    :ensure nil                                                         ; Built-in
+    :config
+    ; Use my key to sign
+    (add-to-list 'mml-secure-openpgp-signers user-gpg-encrypt-key)
+
+    ;; Add my bcc address to list of safe addresses in bcc for secure message
+    (add-to-list 'mml-secure-safe-bcc-list "mrb+Sent@hsdev.com"))
+#+end_src
+
+*** Generic mail message settings
 It's not entirely clear which package is exactly responsible for what, but there are a few settings which are related to the =message= package
 
 #+begin_src emacs-lisp
@@ -2636,11 +2637,12 @@ It's not entirely clear which package is exactly responsible for what, but there
   (add-hook 'message-mode-hook 'mrb/message-mode-hook)
 #+end_src
 
-*** Mu4e
+*** Mu4e specific settings
 After a journey with many different MUAs I seem to be settling on =mu4e=.
 
 #+begin_src emacs-lisp
   (setq mrb/mu4e-path "/usr/local/share/emacs/site-lisp/mu4e")
+  ;;(setq mrb/mu4e-path "/home/mrb/dat/src/mail/mu/mu4e")
     (use-package mu4e
       :ensure nil
     :load-path mrb/mu4e-path
