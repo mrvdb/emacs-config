@@ -3443,8 +3443,7 @@ I am considering using a generic hook again to enable the method and either usin
 #+end_src
 *** Misc
 #+begin_src emacs-lisp
-  (use-package gist
-    :disabled)
+  (use-package gist)
 #+end_src
 ** Ansible
 Not really a development setting, but closely related to it, as eventually the programs written need to be deployed. Most of the time, while deploying, ansible plays a role in this and it's now worth having a dedicated configuration for editting the YAML files for it.
