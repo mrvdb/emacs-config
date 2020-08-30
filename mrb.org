@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent
 
-Last update: <2020-08-13 13:05:07>
+Last update: <2020-08-30 16:52:04>
 
 #+TOC: headlines 1
 
@@ -3065,6 +3065,17 @@ Make our source look a bit more attractive by enabling =prettify-symbol-mode= in
 While emacs itself has a very nicely documentation system, I still don't understand why this is not interpolated into every other mode and or language.
 
 Example: =C-h-f= in lisp-mode describes the function to me. If I am in a python file, I want it to do exactly the same, but for the python function.  There's a page on emacswiki dealing with this a bit: https://www.emacswiki.org/emacs/Context_sensitive_help
+
+There's a package =ghelp= (/generic help/ I guess) which promises to do what I want, but I can't get it installed properly with =use-package=. That package can use the =helpful= package as backend which is also helpful on it own, so I'm installing that anyways and replace the internal help commands from emacs with them.
+
+#+begin_src emacs-lisp
+  (use-package helpful
+    :bind (("C-h f" . #'helpful-callable)
+           ("C-h h" . #'helpful-at-point) ; I don't care about the emacs 'hello' file
+           ("C-h v" . #'helpful-variable)
+           ("C-h k" . #'helpful-key)))
+
+#+end_src
 
 Anyways, here's what I have configured related to reference information and documentation
 
