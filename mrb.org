@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent
 
-Last update: <2020-08-30 16:52:04>
+Last update: <2020-10-04 15:17:57>
 
 #+TOC: headlines 1
 
@@ -2741,12 +2741,6 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
        mu4e-headers-visible-lines 20  ; Default of 10 is a bit small
        mu4e-headers-auto-update nil	  ; Prevent confusion
 
-
-       ;; Jump to some folders directly with a shortcut
-     mu4e-maildir-shortcuts '((:maildir "/Trash" :key ?t)
-                              (:maildir "/Junk"  :key ?s)
-                              (:maildir "/INBOX" :key ?i :hide t)) ; Just for refiling
-
        ;; Context definitions
        ;; Goal 1. use global config, unless private address is used
      ;; FIXME: Can we use the one that matched?
@@ -2804,7 +2798,13 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
                                  :key ?+)
              (make-mu4e-bookmark :name "Todays messages"
                                  :query "date:today..now"
-                               :key ?t)))
+                               :key ?d)
+           (make-mu4e-bookmark :name "Trash"
+                               :query "maildir:/Trash"
+                               :key ?t)
+           (make-mu4e-bookmark :name "Junk"
+                               :query "maildir:/Junk"
+                               :key ?s)))
 
       ;; Rendering of html mail is done with shr
       ;; By default, it's inhibiting images, I dont want that, as I only look at the html if needed
