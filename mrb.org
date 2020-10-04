@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent
 
-Last update: <2020-10-04 15:17:57>
+Last update: <2020-10-04 16:12:39>
 
 #+TOC: headlines 1
 
@@ -314,7 +314,7 @@ A the same time, I don't want to be /that spaces guy/ in every project, and I'm 
 
 
   ;; Only require to type 'y' or 'n' instead of 'yes' or 'no' when prompted
-  (fset 'yes-or-no-p 'y-or-n-p)
+  (defalias 'yes-or-no-p 'y-or-n-p)
 
   ;; Use auto revert mode globally
   ;; This is save because emacs tracks if the file is saved in the editting buffer
