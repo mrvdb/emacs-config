@@ -99,7 +99,7 @@ And edit the file obviously.
   if [ $DISPLAY ]; then
       debug "X-display value seen, using GUI"
       # Add --create-frame/--no-wait if there is no match with -noframe/-wait in name
-      [ `expr match "$ME" '.*-noframe'` -eq 0 ] && ARGS=$ARGS' --create-frame'
+      [ `expr match "$ME" '.*-frame'` -ne 0 ] && ARGS=$ARGS' --create-frame'
       [ `expr match "$ME" '.*-wait'` -eq 0  ] &&  ARGS=$ARGS' --no-wait'
   else
       # tty always waits, as it is in the terminal, create-frame has no meaning
