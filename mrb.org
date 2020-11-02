@@ -1311,7 +1311,6 @@ Marking work as completed should be a smooth process to stop getting in the way 
 
 When an item changes to the DONE state, a question is asked if the item should be archived, to which the normal answer should be 'Yes' to keep the active file as clean as possible.
 
-Thus, the normal sequence would be:
 #+begin_src emacs-lisp
   ;; Normal flow, but ignore blocking
   (defun mrb/force-org-todo()
@@ -2595,7 +2594,15 @@ It's not entirely clear which package is exactly responsible for what, but there
      message-yank-empty-prefix ""			; Add nothing for empty lines
 
      ;; Always put one in the Sent folder on sending.
-     message-default-mail-headers "Bcc: mrb+Sent@hsdev.com\n"
+     ;; FIXME: this does nothing for mu4e!!!
+     message-default-mail-headers (mapconcat
+      'identity
+      '("Bcc: mrb+Sent@hsdev.com"
+        "OpenPGP: id=235E5C8CF5E8DFFB"
+        "OpenPGP: url=https://keys.openpgp.org/vks/v1/by-fingerprint/77DDA1B68D04792A8F85D855235E5C8CF5E8DFFB"
+        "OpenPGP: preference=signencrypt")
+      "\n")
+
 
      ;; How to attribute
      message-citation-line-format "[%N]:"
@@ -2814,7 +2821,7 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
         "Overridden mu4e-shr2text"
         (mu4e~html2text-wrapper
          (lambda ()
-         (let ((shr-inhibit-images nil)	; use shr-blocked images to control
+         (let ((shr-inhibit-images t)   ; no images, unless I specifically ask for it
                  (shr-width nil) 			; Use whole window width for rendering
                  (shr-use-colors nil)		; Don't use colors from html, they ugly
                  (shr-bullet "• "))		; Original was "* "
@@ -3468,7 +3475,7 @@ For now, just the ansible package, and some access to its documentation will suf
       :config
       (add-hook 'yaml-mode-hook #'ansible-doc-mode))
     :config
-    (add-hook 'ansible-hook #'lsp-deferred))
+    (add-hook 'yaml-mode-hook '(lambda () (ansible 1))))
 #+end_src
 * Finale
 When we are all done with this, provide it.
