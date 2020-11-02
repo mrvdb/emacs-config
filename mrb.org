@@ -1301,6 +1301,7 @@ For now, a basic config and enabling of =org-edna=
 
 #+begin_src emacs-lisp
   (use-package org-edna
+    :diminish
     :after org
     :config
     (org-edna-mode))
