@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent
 
-Last update: <2020-10-04 16:12:39>
+Last update: <2020-11-13 15:22:16>
 
 #+TOC: headlines 1
 
@@ -2799,7 +2799,7 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
                                  :query "flag:unread and not flag:trashed"
                                  :key ?u)
              (make-mu4e-bookmark :name "INBOX"
-                                 :query "(flag:unread or flag:new or maildir:/INBOX) and not (flag:list or flag:draft or flag:flagged or flag:deleted or maildir:/Trash or flag:trashed)"
+                               :query "(flag:unread or flag:new or maildir:/INBOX) and not (flag:draft or flag:flagged or flag:deleted or maildir:/Trash or flag:trashed)"
                                  :key ?i)
              (make-mu4e-bookmark :name "TODO list"
                                  :query "flag:flagged"
