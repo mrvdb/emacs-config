@@ -3059,9 +3059,15 @@ Make our source look a bit more attractive by enabling =prettify-symbol-mode= in
         '(("lambda" . ?λ)
           ("map"    . ?↦)
           ("->"     . ?⟶)
+          ("<-"     . ?⟵)
           ("=>"     . ?⟹)
           ("#t"     . ?⟙)
-          ("#f"     . ?⟘)))
+          ("#f"     . ?⟘)
+          ("|>"     . ?▷)
+          ("<|"     . ?◁)
+          ("->>"    . ?↠)
+          ("<="     . ?≤)
+          (">="     . ?≥)))
     (prettify-symbols-mode))
 
   ;; Add hooks for all programming languages, for now
