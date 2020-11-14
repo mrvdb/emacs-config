@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent
 
-Last update: <2020-11-13 15:22:16>
+Last update: <2020-11-14 11:07:34>
 
 #+TOC: headlines 1
 
@@ -2812,7 +2812,7 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
                                :key ?t)
            (make-mu4e-bookmark :name "Junk"
                                :query "maildir:/Junk"
-                               :key ?s)))
+                               :key ?j)))
 
       ;; Rendering of html mail is done with shr
       ;; By default, it's inhibiting images, I dont want that, as I only look at the html if needed
