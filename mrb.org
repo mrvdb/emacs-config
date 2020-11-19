@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent
 
-Last update: <2020-11-14 11:07:34>
+Last update: <2020-11-19 14:56:09>
 
 #+TOC: headlines 1
 
@@ -288,7 +288,6 @@ A the same time, I don't want to be /that spaces guy/ in every project, and I'm 
 
 #+begin_src emacs-lisp
   (setq
-   backup-inhibited t                   ; disable backup files like foo~ etc.
    delete-by-moving-to-trash t          ; move files to the trash instead of rm
    select-enable-clipboard t            ; use the clipboard in addition to kill-ring
 
@@ -830,7 +829,23 @@ For every file-based buffer, I want auto-save to be on, but not in the same loca
                t)
 #+end_src
 
-The autosave helps for the minor disasters, my backups help for the major disasters. What else is need is a 'normal save' but automatic.
+Autosave helps to automatically recover to the latest save point, but I need a bit more. This is done through versioned backup file. The recovery process is then manual though.
+
+#+begin_src emacs-lisp
+  (setq
+   create-lockfiles nil                   ; just clutters for me, no real use?
+   backup-by-copying t                    ; otherwise symlinks galore
+
+   backup-directory-alist '(
+                            ("." . "/tmp/emacs/"))
+
+   delete-old-versions t
+   kept-new-versions 3
+   kept-old-versions 2
+   version-control t)
+#+end_src
+
+The autosave helps for the minor disasters, my backups help for the major disasters. What else is needed is a 'normal save' but automatically when I forget to do this.
 
 What I am aiming for here is to not have to think about explicitly saving for certain files. Typically when typing stuff in org-mode I just want the stuff saved that I have types so far.  For /some/ files, each save is committed if I think the content warrants this (for example if I think going back to an earlier version is a likely event).
 
@@ -952,15 +967,12 @@ First bring in a bunch of modes that are used regularly, but have no other confi
   (use-package js2-mode              :mode "\\.js\\'")
   (use-package lua-mode              :mode "\\.lua\\'")
   (use-package php-mode              :mode "\\.php\\'")
+  (use-package sass-mode             :mode "\\.sass\\'")
+  (use-package markdown-mode         :mode "\\.md\\'")
 #+end_src
 
 Now, do the other mode related packages which require a bit of configuration.
 #+begin_src emacs-lisp
-  ;; Extension mappings for several modes
-  (use-package markdown-mode
-    :mode ("\\.markdown\\'" "\\.md\\'")
-    :config
-    (setq  markdown-css-path "/home/mrb/.markdown.css"))
 
   (use-package eimp
     :config
