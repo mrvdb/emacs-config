@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent
 
-Last update: <2020-11-19 14:56:09>
+Last update: <2020-11-24 10:32:01>
 
 #+TOC: headlines 1
 
@@ -2216,7 +2216,6 @@ My policy is to use Emacs for as many things and use as little programs as neces
 
 This sections describes how terminals and shells are used from within Emacs. In an ideal situation I won't be needing any other terminal emulator program, other than the ones used directly from Emacs.
 
-At the moment I only use eshell; the all Emacs-Lisp based solution.
 
 ** Eshell
 Eshell is theoretically the ideal shell; part of emacs, completely implemented in lisp and thus available regardless of the underlying hardware and operating system. In practice, many things won't work as expected.
@@ -2281,14 +2280,12 @@ As I am migrating from bash, I want eshell to behave as much like bash as possib
   (add-to-list 'eshell-output-filter-functions 'eshell-postoutput-scroll-to-bottom)
 #+end_src
 
-Another step closer to a full terminal replacement is to be able to replace lxterminal (my terminal emulator in use now). This requires a number of parts:
-1. something to call from the commandline instead of lxterminal
+Another step closer to a full terminal replacement is to be able to replace xterml (my terminal emulator in use now). This requires a number of parts:
+1. something to call from the commandline instead of xterm
 2. a lisp function which takes care of the passthrough to eshell,
    creating the frame, etcetera.
 
 The calling part is simpel: =edit -nc -e '(mrb/server-eshell)'= or =vi -e '(mrb/server-eshell)'= for a terminal variant
-
-The last bit of that command line is the function to evaluate, which was taken from http://ur1.ca/cf1m4 and sligthly adapted.
 
 #+begin_src emacs-lisp
   (defun mrb/server-eshell ()
@@ -2312,6 +2309,26 @@ The last bit of that command line is the function to evaluate, which was taken f
       (delete-other-windows)
       nil))
 #+end_src
+
+** vterm
+While eshell is the more emacsy solution, it has some limitations which makes me reach for xterm for daily work. However, there's still a good option to benefit from all the emacs configuration in that case and that is the =vterm= package. This is an interface to the =libvterm= library creating a real terminal emulation using emacs for display.
+
+The basic install is easy.
+
+#+begin_src emacs-lisp
+(use-package vterm)
+#+end_src
+
+To benefit from some of the most useful features, there is a little bit of shell configuration involved. The package includes a shell script for that which I am sourcing in my =.zshrc= configuration file.
+
+The =vterm= brings me some advantages, even close to being able to replace xterm for daily use:
+- magit is now effectively a terminal package everywhere available
+- a terminal is an emacs buffer, so it's easy to have it available anywhere in emacs
+- most emacs commands will just work in a predictable way.
+
+The most important downside is that if emacs does weird things, like hang or crash, this will affect all my terminals too, which is unworkable in some situations, so xterm is not going anywhere soon (but eshell is out I think)
+
+
 ** Process handling
 Sometimes processes get stuck and i want a way to delete those processes easily.
 
