@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent
 
-Last update: <2020-11-24 10:32:01>
+Last update: <2020-11-25 14:58:45>
 
 #+TOC: headlines 1
 
@@ -77,7 +77,7 @@ And edit the file obviously.
   # is hardcoded to exec emacs --daemon, sigh
   # This goes along an emacs.service file obviously
   if ( ! systemctl -q --user is-active emacs );then
-      debug "Emacs server not found, starting...."
+      notify-send "Emacs server not found, starting...."
       systemctl --user start emacs;
   fi
 
@@ -2702,6 +2702,12 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
       :init
       (fullframe mu4e mu4e-quit)			; Claim the whole screen
       :config
+      ;; Show an alert when new mails come in, this relies on mu4e being active though
+      (use-package mu4e-alert
+        :config
+        (mu4e-alert-set-default-style 'libnotify)
+        (add-hook 'after-init-hook #'mu4e-alert-enable-notifications))
+
       ;; Support icalendar Yes/No/Maybe reactions to calendar invites
       (use-package mu4e-icalendar
       :load-path mrb/mu4e-path
