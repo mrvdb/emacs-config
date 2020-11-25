@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent
 
-Last update: <2020-11-25 17:00:16>
+Last update: <2020-11-25 17:22:33>
 
 #+TOC: headlines 1
 
@@ -2486,6 +2486,11 @@ Navigating pieces of text effectively is probably the best optimization to make 
 
 In my browser I use vimium to jump to links with the keyboard. In emacs =avy= does something similar. On pressing the hotkey, all matches of the first char typed are highlighted (frame wide) by a single character. By pressing that characator the cursor is place there directly. This makes =within-frame= navigation a 3-key operation, which is considerably faster than anything else.
 
+#+begin_src emacs-lisp
+  ;; Bind super-j globally to jump quickly to anything in view
+  (use-package avy
+    :bind (("s-j" . 'avy-goto-char)))
+#+end_src
 In a more general sense, =evil-mode=, the VI emulation layer on top of emacs, is the ultimate navigational package. I have tried this for about 6 months, but it's not for me yet.
 
 * Remote editing
