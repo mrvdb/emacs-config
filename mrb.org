@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent
 
-Last update: <2020-11-25 17:22:33>
+Last update: <2020-11-27 16:03:44>
 
 #+TOC: headlines 1
 
@@ -21,7 +21,7 @@ This document is irregularly published and lives in different locations:
 The base of the emacs configuration is in the =~/.emacs.d/= directory, so add this to my loadpaths first and give it a name.
 
 #+begin_src emacs-lisp
-  (setq emacs-directory "~/.emacs.d/")
+  (setq emacs-directory user-emacs-directory)
 #+end_src
 
 The first thing I want to take care of is to make customizations possible and stored in a place to my liking. I want to load this first so anything in the configuration I define explicitly overrides it.
@@ -507,10 +507,22 @@ Although I think the 16 color system is a bit simplistic and, for emacs at least
     ;; Define our adjustments to faces
     ;; This should be the only place where we adjust our faces
     ;; For reference, these are the theme colors
-    ;; base00 '#2e3440 base01 '#3b4252 base02 '#434c5e base03 '#4c566aq
-    ;; base04 '#d8dee9 base05 '#e5e9f0 base06 '#eceff4
-    ;; base07 '#8fbcbb base08 '#88c0d0 base09 '#81a1c1 base0A '#5e81ac
-    ;; base0B '#bf616a base0C '#d08770 base0D '#ebcb8b base0E '#a3be8c base0F '#b48ead
+    ;; :base00 "#2e3440"
+    ;; :base01 "#3b4252"
+    ;; :base02 "#434c5e"
+    ;; :base03 "#4c566a"
+    ;; :base04 "#d8dee9"
+    ;; :base05 "#e5e9f0"
+    ;; :base06 "#eceff4"
+    ;; :base07 "#8fbcbb"
+    ;; :base08 "#bf616a"
+    ;; :base09 "#d08770"
+    ;; :base0A "#ebcb8b"
+    ;; :base0B "#a3be8c"
+    ;; :base0C "#88c0d0"
+    ;; :base0D "#81a1c1"
+    ;; :base0E "#b48ead"
+    ;; :base0F "#5e81ac"
 
     ;; FIXME: some of these adjustments come in too early and the package redefines it on loading
     ;; the only solution for this is to move the visual adjustments in the use-package clauses of
@@ -561,7 +573,7 @@ Although I think the 16 color system is a bit simplistic and, for emacs at least
             ;; Orgmode
             (org-headline-done              :foreground "#4c566a")
             (org-date                       :foreground "#8fbcbb" :underline nil)
-            (org-level-4                    :foreground "#b48ead")
+
             (org-verbatim                   :foreground "#8fbcbb")
             (org-list-dt                    :foreground "#b48ead")
             (org-drawer                     :height 0.8 :inherit font-lock-comment-face)
@@ -579,14 +591,6 @@ Although I think the 16 color system is a bit simplistic and, for emacs at least
             (mrb/org-todo-keyword-SOLVE     :foreground "#8fbcbb" :weight bold)
             (mrb/org-todo-keyword-READ      :foreground "#b48ead" :weight bold)
             (mrb/org-todo-keyword-PLAN      :foreground "#d8dee9" :weight bold)
-
-            ;; Set space-line state colors
-            (space-line-evil-normal         :background "#bf616a")
-            (space-line-evil-insert         :background "#ebcb8b")
-            (space-line-evil-emacs          :background "#a3be8c")
-            (space-line-evil-motion         :background "#81a1c1")
-            (space-line-evil-visual         :background "#8fbcbb")
-            (space-line-evil-replace        :background "#b48ead")
 
             ;; Helm selection
             (helm-selection                 :foreground "black" :background "goldenrod2")
