@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent
 
-Last update: <2020-11-27 16:03:44>
+Last update: <2020-11-27 16:07:54>
 
 #+TOC: headlines 1
 
@@ -677,6 +677,7 @@ I recently reversed my stance on this and am now enabling visual line mode every
 To help me see the difference between visual lines and logical lines I let emacs display indicators in the fringe and define a function to help me unfill existing paragraphs.
 
 #+begin_src emacs-lisp
+  (setq-default word-wrap t)              ; why would i want to have no wrapping by word?
     (use-package visual-fill-column
       :commands (turn-on-visual-fill-column-mode))
 
