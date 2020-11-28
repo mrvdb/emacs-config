@@ -2601,6 +2601,8 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
       :commands mu4e
       :bind (:map mu4e-main-mode-map
                   ("/" . mu4e-headers-search)
+                ("q" . (lambda () (interactive) (kill-this-buffer))) ; just close the menu
+                ("Q" . mu4e-quit)
                   :map mu4e-headers-mode-map
                   ("/" . mu4e-headers-search)
                   ("s" . mu4e-headers-mark-for-spam)
