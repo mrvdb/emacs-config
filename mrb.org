@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent
 
-Last update: <2020-11-27 16:07:54>
+Last update: <2020-11-28 10:41:40>
 
 #+TOC: headlines 1
 
@@ -798,7 +798,7 @@ Still on the wish-list:
 - evaluate usage in org source blocks (many checks do not apply)
 
 *** Math rendering
-Mathetmatics requires some specific rendering. In simple cases, using the proper unicode symbols may suffice, but for anything other than the most basis equations or formulas, some help is needed.  $\LaTeX$ is the defacto standard for this and there's plenty of support for that in emacs.
+Mathematics requires some specific rendering. In simple cases, using the proper unicode symbols may suffice, but for anything other than the most basis equations or formulas, some help is needed.  $\LaTeX$ is the defacto standard for this and there's plenty of support for that in emacs.
 
 For $\TeX$ and $\LaTeX$ fragments I use the =texfrag= package. This allows to insert math fragments inside documents.
 
@@ -2218,103 +2218,9 @@ Make sure that the scroll wheel scrolls the window that the mouse pointer is ove
   (setq focus-follows-mouse t) ;; i3wm changes focus automatically
 #+end_src
 * Terminals, Character encodings and emulation
-My policy is to use Emacs for as many things and use as little programs as necessary. All this within reason obvously.
+My policy is to use Emacs for as many things and use as little other programs as necessary. All this within reason obvously.
 
 This sections describes how terminals and shells are used from within Emacs. In an ideal situation I won't be needing any other terminal emulator program, other than the ones used directly from Emacs.
-
-
-** Eshell
-Eshell is theoretically the ideal shell; part of emacs, completely implemented in lisp and thus available regardless of the underlying hardware and operating system. In practice, many things won't work as expected.
-
-In the window manager (awesome-wm) 'Cmd Enter' launches a terminal, similarly within Emacs 'C-c Enter' launches Eshell:
-
-#+begin_src emacs-lisp
-  (bind-key "C-c RET" 'eshell)
-#+end_src
-
-First thing I missed in eshell was a the =clear= function, as in bash. By defining a function in the "eshell namespace" it gets registered as a command automatically.
-
-#+begin_src emacs-lisp
-(defun eshell/clear ()
-  "Clears the shell buffer as in bashes clear"
-  (interactive)
-  ;; clear read-only of prompts
-  (let ((inhibit-read-only t))
-        (delete-region (point-min) (point-max))))
-#+end_src
-
-We want to be able to open files from within eshell in the same way as we do from the command line shell in the os. For this I have define an alias which just uses find-file-other-window.  To be able to open multiple files (so we can use $* as argument instead of just $1) we need to advice find-file-other-window to support this.
-
-#+begin_src emacs-lisp
-  (defadvice find-file-other-window (around find-files activate)
-    "Also find all files within a list of files. Thsi even works recursively."
-    (if (listp filename)
-        (loop for f in filename do (find-file-other-window f wildcards))
-      ad-do-it))
-#+end_src
-
-Set the main directory for eshell, I do not want in in the default place but below the .emacs.d directory where all other configuration of emacs stuff is.
-
-#+begin_src emacs-lisp
-  (setq eshell-directory-name (concat emacs-directory "eshell/"))
-#+end_src
-
-A list of functions / filters through which interactive output is passed, most of this was copied from the default for adjustment here. I have not actually changed anything myself.
-
-#+begin_src emacs-lisp
-  (setq eshell-output-filter-functions
-        '(eshell-handle-ansi-color
-          eshell-handle-control-codes
-          eshell-watch-for-password-prompt
-          eshell-handle-control-codes
-          eshell-handle-ansi-color
-          eshell-watch-for-password-prompt))
-#+end_src
-
-As I am migrating from bash, I want eshell to behave as much like bash as possible. The next settings take care of some of the things to make that happen.
-
-#+begin_src emacs-lisp
-  ;; Do completions, but don't cycle
-  (setq eshell-cmpl-cycle-completions nil)
-
-  ;; Completion ignores case
-  (setq eshell-cmpl-ignore-case t)
-
-  ;; scroll to the bottom
-  (setq eshell-scroll-to-bottom-on-output t)
-  (setq eshell-scroll-show-maximum-output t)
-  (add-to-list 'eshell-output-filter-functions 'eshell-postoutput-scroll-to-bottom)
-#+end_src
-
-Another step closer to a full terminal replacement is to be able to replace xterml (my terminal emulator in use now). This requires a number of parts:
-1. something to call from the commandline instead of xterm
-2. a lisp function which takes care of the passthrough to eshell,
-   creating the frame, etcetera.
-
-The calling part is simpel: =edit -nc -e '(mrb/server-eshell)'= or =vi -e '(mrb/server-eshell)'= for a terminal variant
-
-#+begin_src emacs-lisp
-  (defun mrb/server-eshell ()
-    "Command to be called by emacs-client to start a new shell.
-
-  A new eshell will be created. When the frame is closed, the buffer is
-  deleted or the shell exits, then hooks will take care that the other
-  actions happen. For example, when the frame is closed, then the buffer
-  will be deleted and the client disconnected."
-    (lexical-let ((buf (eshell t))
-                  (client (first server-clients))
-                  (frame (selected-frame)))
-      (cl-labels ((close (&optional arg)
-                  (when (not (boundp 'cve/recurse))
-                    (let ((cve/recurse t))
-                      (delete-frame frame)
-                      (kill-buffer buf)
-                      (server-delete-client client)))))
-      (add-hook 'eshell-exit-hook #'close t t)
-      (add-hook 'delete-frame-functions #'close t t))
-      (delete-other-windows)
-      nil))
-#+end_src
 
 ** vterm
 While eshell is the more emacsy solution, it has some limitations which makes me reach for xterm for daily work. However, there's still a good option to benefit from all the emacs configuration in that case and that is the =vterm= package. This is an interface to the =libvterm= library creating a real terminal emulation using emacs for display.
@@ -2327,13 +2233,12 @@ The basic install is easy.
 
 To benefit from some of the most useful features, there is a little bit of shell configuration involved. The package includes a shell script for that which I am sourcing in my =.zshrc= configuration file.
 
-The =vterm= brings me some advantages, even close to being able to replace xterm for daily use:
+The =vterm= brings me some advantages, even close to being able to replace xterm for daily use, for example:
 - magit is now effectively a terminal package everywhere available
 - a terminal is an emacs buffer, so it's easy to have it available anywhere in emacs
 - most emacs commands will just work in a predictable way.
 
 The most important downside is that if emacs does weird things, like hang or crash, this will affect all my terminals too, which is unworkable in some situations, so xterm is not going anywhere soon (but eshell is out I think)
-
 
 ** Process handling
 Sometimes processes get stuck and i want a way to delete those processes easily.
