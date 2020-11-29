@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent
 
-Last update: <2020-11-29 12:40:09>
+Last update: <2020-11-29 12:46:43>
 
 #+TOC: headlines 1
 
@@ -2601,7 +2601,6 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
       :after message fullframe
       :commands mu4e
       :bind (:map mu4e-main-mode-map
-                  ("/" . mu4e-headers-search)
                 ("q" . (lambda () (interactive) (kill-buffer (current-buffer)))) ; just close the menu
                 ("Q" . mu4e-quit)
                   :map mu4e-headers-mode-map
