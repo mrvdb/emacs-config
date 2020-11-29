@@ -21,9 +21,7 @@ This document is irregularly published and lives in different locations:
 The first thing I want to take care of is to make customizations possible and stored in a place to my liking. I want to load this first so anything in the configuration I define explicitly overrides it.
 
 #+begin_src emacs-lisp
-  (setq custom-file (concat user-emacs-directory "custom.el")
-        config-file (concat user-emacs-directory "mrb.org"))
-  (load custom-file)
+  (load (concat user-emacs-directory "custom.el"))
 #+end_src
 
 Now that we have the locations of the configuration determined, I want a way to have them forcibly compiled.

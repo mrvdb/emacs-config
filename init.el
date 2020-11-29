@@ -25,7 +25,9 @@
 ;; My org file is posted using writefreely, which uses local variables
 (add-to-list 'safe-local-variable-values '(writefreely-post-id . "wf83bq5jwz"))
 (add-to-list 'safe-local-variable-values '(writefreely-post-token . nil))
-(org-babel-load-file "~/.emacs.d/mrb.org")
+
+(setq config-file (concat user-emacs-directory "mrb.org"))
+(org-babel-load-file config-file)
 
 ;; END init.el
 ;; This is all there should be in this file, the rest is handled in org-mode.
