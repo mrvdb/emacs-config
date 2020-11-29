@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent
 
-Last update: <2020-11-29 10:00:51>
+Last update: <2020-11-29 12:40:09>
 
 #+TOC: headlines 1
 
@@ -3419,10 +3419,29 @@ I am considering using a generic hook again to enable the method and either usin
   (use-package git-auto-commit-mode
     :diminish "Auto-committed")
 #+end_src
-*** Misc
+*** Miscelaneous
+A collection of loosely development related things.
+
+**** Github gists
+I use github gists sometimes
 #+begin_src emacs-lisp
   (use-package gist)
 #+end_src
+
+**** Grepping files
+Searching for terms in files is a hard problem, but the vast majority of my usecases can just be solved by searching for terms in the current project root, almost always defined by having a .git directory in a parent directory. So, let's start there and see what else I'll need.
+
+I've chosen =ag= as the engine for /grepping/ the files because it has a helm interface and it's very fast.
+
+#+begin_src emacs-lisp
+  (use-package helm-ag
+    :bind (("C-s-s" . mrb/search))
+    :init
+    (defun mrb/search ()
+      (interactive)
+      (helm-do-ag-project-root)))
+#+end_src
+
 ** Ansible
 Not really a development setting, but closely related to it, as eventually the programs written need to be deployed. Most of the time, while deploying, ansible plays a role in this and it's now worth having a dedicated configuration for editting the YAML files for it.
 
