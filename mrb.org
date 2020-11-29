@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent
 
-Last update: <2020-11-29 13:19:31>
+Last update: <2020-11-29 16:43:32>
 
 #+TOC: headlines 1
 
@@ -18,17 +18,11 @@ This document is irregularly published and lives in different locations:
 - published on writefreely :: https://qua.name/mrb/an-org-babel-based-emacs-configuration
 
 * Preparing for lift-off
-The base of the emacs configuration is in the =~/.emacs.d/= directory, so add this to my loadpaths first and give it a name.
-
-#+begin_src emacs-lisp
-  (setq emacs-directory user-emacs-directory)
-#+end_src
-
 The first thing I want to take care of is to make customizations possible and stored in a place to my liking. I want to load this first so anything in the configuration I define explicitly overrides it.
 
 #+begin_src emacs-lisp
-  (setq custom-file (concat emacs-directory "custom.el")
-        config-file (concat emacs-directory "mrb.org"))
+  (setq custom-file (concat user-emacs-directory "custom.el")
+        config-file (concat user-emacs-directory "mrb.org"))
   (load custom-file)
 #+end_src
 
@@ -38,7 +32,7 @@ Now that we have the locations of the configuration determined, I want a way to 
   (defun mrb/compile-config ()
     (interactive)
     (org-babel-load-file config-file)
-    (byte-recompile-directory emacs-directory 0)
+    (byte-recompile-directory user-emacs-directory 0)
   )
 #+end_src
 
@@ -172,7 +166,7 @@ First of all, define the package archives I need; for now, just the default gnu 
     (use-package use-package-ensure-system-package :ensure t)	; Need this because we are in use-package config
 
     ;; Location where I keep custom packages
-    (setq custom-package-directory (concat emacs-directory "lisp/")))
+    (setq custom-package-directory (concat user-emacs-directory "lisp/")))
 #+end_src
 
 Now, there's an issue where a variable =package-selected-packages= gets written to =custom.el= everytime I try a package. I do not want that. The site [[http://www.holgerschurig.de/en/emacs-dont-let-packages-pollute-custom-el/][from holger]] has an answer for that, although it needs a slight adaptation (=context= argument is not there anymore)
@@ -2887,7 +2881,7 @@ Elfeed allows to interactively subscribe to a feed (defaulting to what is in the
   (use-package elfeed-org
     :after elfeed
     :init
-    (setq rmh-elfeed-org-files (list (concat emacs-directory "feeds.org")))
+    (setq rmh-elfeed-org-files (list (concat user-emacs-directory "feeds.org")))
     (elfeed-org))
 #+end_src
 ** IRC
