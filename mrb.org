@@ -2372,6 +2372,7 @@ For most of the completion that is needed which is not inline (for which I am us
     :bind
     (("C-c M-x" . 'execute-extended-command) ;; Save the default
      ("M-x"     . 'helm-M-x)                 ;; Replace M-x
+     ("<menu>"  . 'helm-M-x)                 ;; ..and on the menu key as well
      ("C-x C-f" . 'helm-find-files)          ;; Find files
      ("C-x b" .   'helm-buffers-list))       ;; Find buffers
     :config
