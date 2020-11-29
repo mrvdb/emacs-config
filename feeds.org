@@ -23,6 +23,7 @@ This has a number of attractive properties:
 **** https://kimmo.suominen.com/stuff/dilbert-daily.xml                                                                          :comic:
 **** http://www.commitstrip.com/en/feed/                                                                             :comic:programming:
 *** News
+**** https://decorrespondent.nl/feed/v1/publications
 *** Cobra                                                                                                                         :cobra:
 **** http://gd427cobrabuild.blogspot.com/feeds/posts/default
 **** http://buildingmycobra.blogspot.com/feeds/posts/default
@@ -40,7 +41,6 @@ This has a number of attractive properties:
 **** https://cobra.mrblog.nl/feed                                                                                                   :me:
 *** Bitcoin                                                                                                                     :bitcoin:
 *** Software
-**** http://nva-openerp.blogspot.com/feeds/posts/default                                                                          :odoo:
 **** http://blog.prosody.im/feed/atom.xml
 **** https://odoo-community.org/blog_rss.xml                                                                                      :odoo:
 **** http://www.yesodweb.com/feed
@@ -69,7 +69,6 @@ This has a number of attractive properties:
 ***** https://emacs.wordpress.com/feed/
 ***** https://sachachua.com/feed/
 *** Hardware                                                                                                                   :hardware:
-**** http://www.readynas.com/?feed=rss2
 **** https://www.yubico.com/feed/                                                                                             :security:
 **** http://everyday-carry.com/rss
 **** https://xiaomi.eu/community/forums/xiaomi-mimix.151/index.rss
@@ -83,6 +82,8 @@ This has a number of attractive properties:
 **** https://qua.name/read/feed/                                                                                                    :me:
 **** http://torvalds-family.blogspot.com/feeds/posts/default                                                                    :people:
 **** https://asthetrailturns.com/feed/
+**** http://localhost:1313/index.xml
+
 *** Automotive
 **** http://feeds.feedburner.com/TheChicane                                                                                  :oldschool:
 **** http://www.gearjournal.com/feed/
