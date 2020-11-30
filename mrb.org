@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent
 
-Last update: <2020-11-29 16:43:32>
+Last update: <2020-11-30 10:25:25>
 
 #+TOC: headlines 1
 
@@ -303,7 +303,6 @@ A the same time, I don't want to be /that spaces guy/ in every project, and I'm 
   (setq shift-select-mode t)
   (delete-selection-mode 1)
 
-
   ;; Only require to type 'y' or 'n' instead of 'yes' or 'no' when prompted
   (defalias 'yes-or-no-p 'y-or-n-p)
 
@@ -319,7 +318,6 @@ A the same time, I don't want to be /that spaces guy/ in every project, and I'm 
   ;; Also for dired
   (setq global-auto-revert-non-file-buffers t)
 
-
   ;; Should this be here?
   ;; Try to have urls and mailto links clickable everywhere
   (setq goto-address-url-mouse-face 'default)
@@ -328,7 +326,6 @@ A the same time, I don't want to be /that spaces guy/ in every project, and I'm 
     (lambda ()
       (goto-address-mode 1)))
   (global-goto-address-mode t)
-
 
   ;; When in orgmode, we can shorten our urls without a service
   (defun mrb/shortenurl-at-point (arg)
@@ -487,7 +484,7 @@ There is a base16 theme which uses exactly these colors and there are varieties 
 Although I think the 16 color system is a bit simplistic and, for emacs at least, I will need to customize more later on, the main lure of this system is that I can use the same set for many of my programs I use (emacs, xterm, i3, dunst etc.) which sounds attractive. So, I'm starting with the =base16-nord= theme and see where this leaves me.
 
 #+begin_src emacs-lisp
-  (setq custom--inhibit-theme-enable nil)	; This was needed for Emacs 27, but cant recally why
+  (setq custom--inhibit-theme-enable nil)  ; This was needed for Emacs 27, but cant recall why
   (use-package base16-theme
     :config
     ;; Do config here and finally load the theme
@@ -569,7 +566,7 @@ Although I think the 16 color system is a bit simplistic and, for emacs at least
             (org-verbatim                   :foreground "#8fbcbb")
             (org-list-dt                    :foreground "#b48ead")
             (org-drawer                     :height 0.8 :inherit font-lock-comment-face)
-            (org-code                       :foreground "purple" :weight bold)
+            (org-code                       :foreground "Purple" :weight bold)
 
             ;; User defined faces for org-mode
             (mrb/org-todo-keyword-TODO      :foreground "#88c0d0" :weight bold)
@@ -1529,7 +1526,7 @@ Settings which are just applicable for the org-mode agenda view.
   (add-hook 'org-agenda-finalize-hook
             (lambda () (remove-text-properties
                    (point-min) (point-max) '(mouse-face t))
-              (beginning-of-buffer)))
+              (beginning-of-buffer)))     ; the last statment has no effect?
 #+end_src
 
 A snippet which resized the agenda to its window whenever its rebuilt by orgmode The 'auto value of the =org-agenda-tags-column= variable right aligns the tags in the agenda view
@@ -2809,7 +2806,6 @@ which basically goes over the whole sieve script and removes the '^M' characters
 ** Elfeed
 In an attempt to do even more in emacs, i've installed `elfeed' and imported my feeds from RSSyl
 
-
 #+begin_src emacs-lisp
   (use-package notifications)
 
@@ -3001,7 +2997,7 @@ Make our source look a bit more attractive by enabling =prettify-symbol-mode= in
     ;; If you want to see the effect: enable prettify-symbols mode
     (setq prettify-symbols-alist
         '(("lambda" . ?λ)
-          ("map"    . ?↦)
+          ("map"    . ?↦)                 ; this one is a bit of a pain actually
           ("->"     . ?⟶)
           ("<-"     . ?⟵)
           ("=>"     . ?⟹)
@@ -3072,8 +3068,9 @@ If the inline documentation presented by ElDoc is not sufficient, I want a way t
 The closest thing I found is =zeal= or =dash= which allow docsets to be searched. There is a gui and helm-dash is an interface to the docsets for emacs. Typically I install docsets through the GUI or manually (the folder names are sometimes not the same when I use helm-dash to install docsets). This solution gives me at least /access/ to reference information for most of the programming languages I use. The direct accest to the sources is missing, or I don't know how to do this yet.
 
 #+begin_src emacs-lisp
-;; Unify reference documentation with dash
-(use-package helm-dash
+  ;; Unify reference documentation with dash
+  (use-package helm-dash
+    :after helm
   :commands (helm-dash helm-dash-at-point)
   :config
   (setq helm-dash-browser-func 'eww		; Within dash, keep browser links within emacs
@@ -3425,6 +3422,7 @@ I've chosen =ag= as the engine for /grepping/ the files because it has a helm in
 
 #+begin_src emacs-lisp
   (use-package helm-ag
+    :after helm
     :bind (("C-s-s" . mrb/search))
     :init
     (defun mrb/search ()
