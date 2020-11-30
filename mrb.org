@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent
 
-Last update: <2020-11-30 10:25:25>
+Last update: <2020-11-30 14:03:58>
 
 #+TOC: headlines 1
 
@@ -3433,10 +3433,14 @@ I've chosen =ag= as the engine for /grepping/ the files because it has a helm in
 #+begin_src emacs-lisp
   (use-package helm-ag
     :after helm
-    :bind (("C-s-s" . mrb/search))
+    :bind (("C-s-s" . mrb/search))        ; FIXME this is kinda clunky
+    :config
+    (setq helm-ag-use-agignore t)         ; Use the .agignore file if it is there
     :init
     (defun mrb/search ()
       (interactive)
+      ;; but do *not* use the vcs ignore mechanisme
+      (setq helm-ag-command-option "--skip-vcs-ignores")
       (helm-do-ag-project-root)))
 #+end_src
 
