@@ -518,6 +518,16 @@ Although I think the 16 color system is a bit simplistic and, for emacs at least
     ;; the package itself.
     (setq base16-adjustments
           `(
+            ;; Explicitly define the outline colors
+            (outline-1 :foreground "#5e81ac")
+            (outline-2 :foreground "#a3be8c")
+            (outline-3 :foreground "#b48ead")
+            (outline-4 :foreground "#81a1c1")
+            (outline-5 :foreground "#ebcb8b")
+            (outline-6 :foreground "#8fbcbb")
+            (outline-7 :foreground "#d08770")
+            (outline-8 :foreground "#bf616a")
+
             ;; Adjustment for non-package faces
             ;; Comments should not be that dark as base03
             (font-lock-comment-face         :foreground "#666666")
