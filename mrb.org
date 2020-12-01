@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent
 
-Last update: <2020-11-30 14:03:58>
+Last update: <2020-12-01 12:54:48>
 
 #+TOC: headlines 1
 
@@ -3060,18 +3060,8 @@ I want that type of information directly at hand. One part of the solution is [[
 
 #+end_src
 
-However, having the documentation in the echo area is, especially on big monitors, often far away from where I am typing. So, =eldoc-overlay= shows the same information, but right below the point, which is alreay a lot more useful.
+The location of the eldoc information in the message area is a bit far away from the editting point. I have looked at eldoc-overlay and others to resolve that, but haven't found a satisfying solution yet.
 
-#+begin_src emacs-lisp
-
-(use-package eldoc-overlay
-  :ensure t
-  :init (eldoc-overlay-mode 1)
-  :config
-  (setq eldoc-overlay-backend 'quick-peek))
-#+end_src
-
-I've also looked at =eldoc-box= which seems a bit more modern, but it didn't work for me
 *** Reference information
 If the inline documentation presented by ElDoc is not sufficient, I want a way to spaw reference documentation based on the context.
 
