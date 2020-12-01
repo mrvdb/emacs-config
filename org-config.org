@@ -1,3 +1,4 @@
+
 This file contains configuration items for my org-mode use. It is intended to be used by a =#+SETUPFILE:= directive in a normal org-file.
 
 The advantage of doing it this way, apart from the logical separation to make it easier to reuse, is that this configuration file is also just a normal orgmode file. That allows me to separate the configuration is different sections, publish the configuration in a variety of formats and generally describe the configuration in a clear way so I can remember what this was all about. This is not unlike literal programming.
@@ -68,15 +69,15 @@ Orgmode:
 :PROPERTIES:
 :CREATED:  [2018-03-22 do 13:47]
 :END:
-
-** org-level-3
-*** org-level-4
-**** org-level-5
-***** org-level-6
-****** org-level-7
-******* org-level-8
-******** org-level-1
-********* org-level-2
+* Level 1
+** Level 2
+*** Level 3
+**** Level 4
+***** Level 5
+****** Level 6
+******* Level 7
+******** Level 8
+********* Level 9
 
 * General configuration
 This section contains general settings.
