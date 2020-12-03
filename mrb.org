@@ -1744,7 +1744,8 @@ While the standard capture method is useful I found myself not using it very muc
 
           ;; I want to have encryption, but how do TODO items bubble up then in the agenda
           org-journal-enable-encryption nil
-          org-crypt-disable-auto-save t)
+          org-crypt-disable-auto-save t
+          org-journal-enable-cache t)
     :config
         (add-hook 'org-journal-mode-hook 'turn-on-visual-line-mode)
         (add-hook 'org-journal-mode-hook 'turn-on-visual-fill-column-mode))
