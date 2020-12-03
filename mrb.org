@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent
 
-Last update: <2020-12-01 12:54:48>
+Last update: <2020-12-03 14:42:57>
 
 #+TOC: headlines 1
 
@@ -1126,8 +1126,6 @@ Most of work originates in capturing some task item in orgmode. Set up the locat
   (setq org-default-notes-file (concat org-directory "GTD.org"))
   (setq diary-file (concat org-metadir "DIARY"))
 
-  ;; Display org properties in the agenda view
-  (use-package org-agenda-property)
 #+end_src
 
 ** Capturing information
