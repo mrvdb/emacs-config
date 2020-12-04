@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent
 
-Last update: <2020-12-03 14:42:57>
+Last update: <2020-12-04 15:46:06>
 
 #+TOC: headlines 1
 
@@ -1529,12 +1529,8 @@ Settings which are just applicable for the org-mode agenda view.
     :config
     (setq org-agenda-property-list '("LOCATION" "Responsible")))
 
-  ;; But remove the mouse-face text property which makes the lines
-  ;; highlight when hovering (it is either the cursor or the mouse, but not both)
-  (add-hook 'org-agenda-finalize-hook
-            (lambda () (remove-text-properties
-                   (point-min) (point-max) '(mouse-face t))
-              (beginning-of-buffer)))     ; the last statment has no effect?
+  ;; When done rendering, go to the top
+  (add-hook 'org-agenda-finalize-hook 'beginning-of-buffer 100)
 #+end_src
 
 A snippet which resized the agenda to its window whenever its rebuilt by orgmode The 'auto value of the =org-agenda-tags-column= variable right aligns the tags in the agenda view
@@ -1543,7 +1539,8 @@ A snippet which resized the agenda to its window whenever its rebuilt by orgmode
   (setq org-agenda-tags-column 'auto)
   (defadvice org-agenda-redo (after fit-windows-for-agenda activate)
     "Fit the Org Agenda to its buffer."
-    (fit-window-to-buffer))
+    (fit-window-to-buffer)
+    (beginning-of-buffer))
 #+end_src
 *** Calendaring
 Traditionally somewhat related to mail, although mostly through orgmode these days, I want a simple setup to pull in some calendering information. I run a radical calendar server somewhere, but having the same info in orgmode makes sense for me.
