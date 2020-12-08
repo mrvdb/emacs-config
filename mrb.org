@@ -2327,7 +2327,8 @@ Having the completion pop up automatically is annoying in most cases, so I disab
 
           company-global-modes '(not
                                  org-mode org-journal-mode
-                                 text-mode))
+                                 text-mode
+                                 geiser-repl-mode)) ; completion is annoying for the repl cmds, not for the scheme stuff, can we separate this?
 
     ;; And this turns it actually on, except for the modes above
     (add-hook 'after-init-hook 'global-company-mode)
@@ -3225,7 +3226,7 @@ While we're here, let's do paxedit as well; not sure whey these two package don'
 #+end_src
 
 *** Scheme
-[[https://www.nongnu.org/geiser][Geiser]] is, among other things, a repl for schemes. I try to use one, mostly for educational purposes. I chose guile because it also claims to support emacs-lisp and might be the future vm on which emacs-lisp will run. So, let's have it and use paredit in its REPL.
+[[https://www.nongnu.org/geiser][Geiser]] is, among other things, a repl for schemes. I try to use one, mostly for educational purposes. I chose guile because it also claims to support =emacs-lisp= and might be the future vm on which emacs-lisp will run. So, let's have it and use paredit in its REPL.
 
 #+begin_src emacs-lisp
   (use-package geiser
