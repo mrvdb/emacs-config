@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent
 
-Last update: <2020-12-04 15:46:06>
+Last update: <2020-12-09 11:19:30>
 
 #+TOC: headlines 1
 
@@ -1531,7 +1531,7 @@ Settings which are just applicable for the org-mode agenda view.
     (setq org-agenda-property-list '("LOCATION" "Responsible")))
 
   ;; When done rendering, go to the top
-  (add-hook 'org-agenda-finalize-hook 'beginning-of-buffer 100)
+  (add-hook 'org-agenda-finalize-hook '(lambda () (goto-char (point-min))) 100)
 #+end_src
 
 A snippet which resized the agenda to its window whenever its rebuilt by orgmode The 'auto value of the =org-agenda-tags-column= variable right aligns the tags in the agenda view
@@ -1541,7 +1541,7 @@ A snippet which resized the agenda to its window whenever its rebuilt by orgmode
   (defadvice org-agenda-redo (after fit-windows-for-agenda activate)
     "Fit the Org Agenda to its buffer."
     (fit-window-to-buffer)
-    (beginning-of-buffer))
+    (goto-char (point-min)))
 #+end_src
 *** Calendaring
 Traditionally somewhat related to mail, although mostly through orgmode these days, I want a simple setup to pull in some calendering information. I run a radical calendar server somewhere, but having the same info in orgmode makes sense for me.
