@@ -1607,13 +1607,42 @@ When filing, or capturing we want the items at the bottom of what we are filing 
 #+begin_src emacs-lisp
   (setq org-reverse-note-order nil    ; File at the bottom of an entry
         org-refile-allow-creating-parent-nodes 'confirm
-        org-refile-targets '((org-agenda-files :maxlevel . 10 ))
         org-refile-use-outline-path 'file
         org-outline-path-complete-in-steps nil
         org-refile-use-cache t)
 #+end_src
 
-The list of headers to refile to is, in the standard config, basically everything. I limit it above to a maximum depth of 10, but then still. By using =org-refile-target-verify-function= we can fine-tune the decision whether to use a header as target or not.  The following conditions have been implemented:
+The base list of files I want to be able to refile to are:
+1. The /active/ file list, i.e. everything in =org-agenda-files=, regardless of these files are currently opened or not;
+2. All open orgmode based files which, surprisingly, I need to generate myself?
+
+#+begin_src emacs-lisp
+    (setq org-refile-targets '((org-agenda-files :maxlevel . 10)))
+
+  ;; Borrows from https://yiming.dev/blog/2018/03/02/my-org-refile-workflow/
+    (defun mrb/org-opened-buffers ()
+      "Return the list of org files opened in emacs"
+
+      (defun buffer-mode (buf)
+        (buffer-local-value 'major-mode (get-buffer buf)))
+
+      (delq nil
+            (mapcar (lambda (x)
+                      (if (and (buffer-file-name x) ;-buffer has a file?
+                               (provided-mode-derived-p
+                                (buffer-mode x) 'org-mode))
+                          (buffer-file-name x)))
+                    (buffer-list))))
+
+    ;; Adjust refile target to include all opened org files
+    ;; Is it bad that we have duplicates here?
+    (add-to-list 'org-refile-targets
+                 '(mrb/org-opened-buffers :maxlevel . 10))
+
+
+#+end_src
+
+The type of headers to refile to is, in the default orgmode config, basically everything. I limit it above to a maximum depth of 10, but then still. By using =org-refile-target-verify-function= we can fine-tune the decision whether to use a header as target or not.  The following conditions have been implemented:
 
 1. The header must /not/ be a DONE item;
 2. The header needs to have children.
