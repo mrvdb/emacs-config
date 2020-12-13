@@ -3100,7 +3100,8 @@ The closest thing I found is =zeal= or =dash= which allow docsets to be searched
     :after helm
   :commands (helm-dash helm-dash-at-point)
   :config
-  (setq helm-dash-browser-func 'eww		; Within dash, keep browser links within emacs
+    (setq dash-docs-enable-debugging nil
+          helm-dash-browser-func 'eww             ; Within dash, keep browser links within emacs
 		;; Use all installed docsets
 		helm-dash-common-docsets (helm-dash-installed-docsets)))
 #+end_src
