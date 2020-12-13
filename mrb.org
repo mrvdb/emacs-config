@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent
 
-Last update: <2020-12-09 11:19:30>
+Last update: <2020-12-13 15:55:42>
 
 #+TOC: headlines 1
 
@@ -3263,7 +3263,8 @@ While we're here, let's do paxedit as well; not sure whey these two package don'
     :config
     ; Add implementations to support
     (setq geiser-active-implementations '(guile chez)
-          geiser-repl-send-on-return-p nil)
+          geiser-repl-send-on-return-p nil
+          geiser-default-implementation 'guile)
 
     (add-hook 'geiser-repl-mode-hook #'enable-paredit-mode)
     (add-hook 'geiser-repl-mode-hook 'mrb/prettify-symbols))
