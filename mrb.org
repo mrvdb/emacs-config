@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent
 
-Last update: <2020-12-14 09:56:05>
+Last update: <2020-12-14 10:10:29>
 
 #+TOC: headlines 1
 
@@ -2620,12 +2620,16 @@ It's not entirely clear which package is exactly responsible for what, but there
 After a journey with many different MUAs I seem to be settling on =mu4e=.
 
 #+begin_src emacs-lisp
+  (defun mrb/mu4e-quit ()
+    (interactive)
+    (kill-buffer (current-buffer)))
+
     (use-package mu4e
     :ensure nil                           ; dont load from remotes
       :after message fullframe
       :commands mu4e
       :bind (:map mu4e-main-mode-map
-                ("q" . (lambda () (interactive) (kill-buffer (current-buffer)))) ; just close the menu
+                ("q" . mrb/mu4e-quit) ; just close the menu
                 ("Q" . mu4e-quit)
                   :map mu4e-headers-mode-map
                 ("j" . mu4e-headers-mark-for-junk)
@@ -2640,7 +2644,7 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
       ;; TODO: how are we editting a search? e?
 
       :init
-      (fullframe mu4e mu4e-quit)			; Claim the whole screen
+    (fullframe mu4e mrb/mu4e-quit)                  ; Claim the whole screen
       :config
       ;; Show an alert when new mails come in, this relies on mu4e being active though
       (use-package mu4e-alert
