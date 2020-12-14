@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent
 
-Last update: <2020-12-14 10:10:29>
+Last update: <2020-12-14 11:37:48>
 
 #+TOC: headlines 1
 
@@ -2172,23 +2172,6 @@ For some special keys I have defined some commands. Special keys are those keys 
   (bind-key "<f2>" 'save-buffer)
   (bind-key "<f4>" 'find-file)
 
-  ;; Define the toggle-frame-fullscreen function in
-  ;; the case that it is not already.
-
-  (if (not (fboundp 'toggle-frame-fullscreen))
-      (defun toggle-frame-fullscreen()
-        (interactive)
-        (when (eq window-system 'x)
-          (set-frame-parameter
-           nil 'fullscreen
-           (when (not (frame-parameter nil 'fullscreen)) 'fullboth)))))
-
-  ;; Make gnome compliant, define a full-screen function and bind to F11
-  (defun mrb/switch-full-screen ()
-    (interactive)
-    (toggle-frame-fullscreen))
-  (bind-key "<f11>" 'mrb/switch-full-screen)
-
   ;; Not sure what this is? It is not the menu key.
   (bind-key [XF86MenuKB] 'accelerate-menu)
   (bind-key [XF86Battery] 'display-battery-mode)
@@ -2429,7 +2412,8 @@ In my browser I use vimium to jump to links with the keyboard. In emacs =avy= do
   (use-package avy
     :bind (("s-j" . 'avy-goto-char)))
 #+end_src
-In a more general sense, =evil-mode=, the VI emulation layer on top of emacs, is the ultimate navigational package. I have tried this for about 6 months, but it's not for me yet.
+In a more general sense, =evil-mode=, the VI emulation layer on top of emacs, is the ultimate navigational package. I have tried this for about 6 months, but it's not for me (yet).
+
 
 * Remote editing
 As my default shell is =zsh= tramp does not work out of the box for me. It gets confused by my prompt, so on top of my =.zshrc= file I have the following line:
