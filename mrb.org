@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent
 
-Last update: <2020-12-14 11:37:48>
+Last update: <2020-12-14 11:45:16>
 
 #+TOC: headlines 1
 
@@ -2142,6 +2142,22 @@ Bind-key can define both global keys as map-based key settings and accepts all k
   ;; Should this not be an unset?
   (bind-key "C-x RET" nil)
 #+end_src
+
+The standard open-line-splits the line, which is useful, but not what I want, so define a version which can open a line above or below the current line without changing the cursor position.
+
+#+begin_src emacs-lisp
+  (defun mrb/openline (arg)
+    (interactive "P")
+    (save-excursion
+      (end-of-line (if arg nil 0))        ; with prefix, open line below, else above
+      (open-line 1)))
+
+  ;; should prefix be for above or below open line?
+  (bind-key "C-o" 'mrb/openline)
+
+#+end_src
+
+Not sure how to bind it, C-o seems kinda busy.
 ** Key bindings
 *** Global
 I am running the emacs daemon and sometime when I quit emacs, I want it to quit too. This sounds a bit counterintuitive, but as long as my emacs config is moving and I am not proficient enough in making sure I can apply the changed settings reliably from within emacs, restarting emacs is just easier. This saves me from having to kill the emacs daemon from the terminal.
@@ -2206,7 +2222,7 @@ Emacs has, like for everything else, a peculiar idea on scrolling and moving fro
 
 These settings work better for me.
 
-I have my keyboard repeat rate rather quick; this helps by moving the cursor fast. It also means that if I press a key like backspace things disappear quite quickly, so it's important that what happens on the screen is 'real-time'. The effect I want to prevent is that when releasing the backspace key, the cursor keeps on going and deletes way more than needed. I think, by default, this is properly configure, but I just want to make sure.
+I have my keyboard repeat rate rather quick; this helps by moving the cursor fast. It also means that if I press a key like backspace things disappear quite quickly, so it's important that what happens on the screen is 'real-time'. The effect I want to prevent is that when releasing the backspace key, the cursor keeps on going and deletes way more than needed. I think, by default, this is properly configured, but I just want to make sure.
 
 #+begin_src emacs-lisp
   (setq redisplay-dont-pause t)
