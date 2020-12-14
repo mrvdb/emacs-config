@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent
 
-Last update: <2020-12-13 15:55:42>
+Last update: <2020-12-14 09:56:05>
 
 #+TOC: headlines 1
 
@@ -2620,11 +2620,8 @@ It's not entirely clear which package is exactly responsible for what, but there
 After a journey with many different MUAs I seem to be settling on =mu4e=.
 
 #+begin_src emacs-lisp
-  (setq mrb/mu4e-path "/usr/local/share/emacs/site-lisp/mu4e")
-  ;;(setq mrb/mu4e-path "/home/mrb/dat/src/mail/mu/mu4e")
     (use-package mu4e
-      :ensure nil
-    :load-path mrb/mu4e-path
+    :ensure nil                           ; dont load from remotes
       :after message fullframe
       :commands mu4e
       :bind (:map mu4e-main-mode-map
@@ -2653,7 +2650,6 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
 
       ;; Support icalendar Yes/No/Maybe reactions to calendar invites
       (use-package mu4e-icalendar
-      :load-path mrb/mu4e-path
         :config
         (mu4e-icalendar-setup))
 
@@ -2816,9 +2812,8 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
 To enable integration with orgmode =org-mu4e= must be loaded
 
 #+begin_src emacs-lisp
-(use-package org-mu4e
+  (use-package org-mu4e
 	:ensure nil
-	:load-path "/usr/local/share/emacs/site-lisp/mu4e/"
   :after org)
 #+end_src
 *** Sieve
@@ -2990,7 +2985,6 @@ However, this is problematic. It needs a special initialization because I run in
 Lets try to use ggtags everywhere.
 #+begin_src emacs-lisp
   (use-package ggtags)
-
   (use-package cmake-mode)				; adjusts auto-mode-alist on load
 #+end_src
 
@@ -3334,9 +3328,6 @@ The defacto standard for a development environment in Emacs for common-lisp is t
           (cons '(slime-repl-font-lock-find-prompt
                   . 'slime-repl-prompt-face)
                 slime-repl-font-lock-keywords))
-
-
-
 #+end_src
 
 On first glance, it looks like slime is a lot nicer than =geiser= + =guile=. I read that =slime= has support for MIT-Scheme as a backend so perhaps I should use that instead of guile.
