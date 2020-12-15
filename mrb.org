@@ -3256,6 +3256,19 @@ While we're here, let's do paxedit as well; not sure whey these two package don'
     (add-hook 'paredit-mode-hook 'paxedit-mode))
 #+end_src
 
+Evaluating an expression with the cursor after it is often used, I'd like being able to do the same when the cursor is in front of such an expression
+
+#+begin_src emacs-lisp
+  ;; The reciproke of C-x C-e
+  ;; As in:  _cursor_(...eval what is in here...)
+  (defun mrb/eval-next-sexp ()
+    (interactive)
+    (save-excursion
+      (forward-sexp)
+      (eval-last-sexp nil)))
+#+end_src
+
+Not sure how to bind this though. I'd like it close to C-x C-e obviously
 *** Scheme
 [[https://www.nongnu.org/geiser][Geiser]] is, among other things, a repl for schemes. I try to use one, mostly for educational purposes. I chose guile because it also claims to support =emacs-lisp= and might be the future vm on which emacs-lisp will run. So, let's have it and use paredit in its REPL.
 
