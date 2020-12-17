@@ -44,7 +44,9 @@ This has a number of attractive properties:
 **** http://blog.prosody.im/feed/atom.xml
 **** https://odoo-community.org/blog_rss.xml                                                                                      :odoo:
 **** http://www.yesodweb.com/feed
-**** http://planet.haskell.org/atom.xml
+**** http://planet.haskell.org/atom.xml                                        :programming:
+**** http://www.scheme.dk/planet/atom.xml                                      :programming:
+
 **** http://aherrmann.github.io/atom.xml
 **** http://blog.geargrams.com/comments/feed/
 **** http://wordpress.panaceas.org/wp/index.php/comments/feed/
