@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent
 
-Last update: <2020-12-16 15:07:13>
+Last update: <2020-12-17 13:17:50>
 
 #+TOC: headlines 1
 
@@ -1151,7 +1151,9 @@ The =org-capture-pop-frame= package makes sure all captures are in separate fram
     (setq ocpf-frame-parameters
      '((name . "*capture*")
        (width . 115) (height . 15)
-       (tool-bar-lines . 0) (menu-bar-lines . 0))))
+            (tool-bar-lines . 0)
+            (menu-bar-lines . 0)
+            (internal-border-width . 5))))
 #+end_src
 
 Here are the templates used for them.
