@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent
 
-Last update: <2020-12-17 13:17:50>
+Last update: <2020-12-19 14:01:26>
 
 #+TOC: headlines 1
 
@@ -590,6 +590,7 @@ Although I think the 16 color system is a bit simplistic and, for emacs at least
             (mrb/org-todo-keyword-COLLECT   :foreground "#a3be8c" :weight bold)
             (mrb/org-todo-keyword-SOLVE     :foreground "#8fbcbb" :weight bold)
             (mrb/org-todo-keyword-READ      :foreground "#b48ead" :weight bold)
+            (mrb/org-todo-keyword-READING   :foreground "#bf616a" :weight bold)
             (mrb/org-todo-keyword-PLAN      :foreground "#d8dee9" :weight bold)
 
             ;; Helm selection
@@ -1249,6 +1250,7 @@ Adapt the colors of the states I use a bit:
   (defface mrb/org-todo-keyword-COLLECT   nil "")
   (defface mrb/org-todo-keyword-SOLVE     nil "")
   (defface mrb/org-todo-keyword-READ      nil "")
+  (defface mrb/org-todo-keyword-READING   nil "")
   (defface mrb/org-todo-keyword-PLAN      nil "")
 
 
@@ -1263,6 +1265,7 @@ Adapt the colors of the states I use a bit:
     ("COLLECT"   . mrb/org-todo-keyword-COLLECT)
     ("SOLVE"     . mrb/org-todo-keyword-SOLVE)
     ("READ"      . mrb/org-todo-keyword-READ)
+    ("READING"   . mrb/org-todo-keyword-READING)
     ("PLAN"      . mrb/org-todo-keyword-PLAN)))
 #+end_src
 
