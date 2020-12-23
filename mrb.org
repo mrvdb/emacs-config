@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent
 
-Last update: <2020-12-19 14:01:26>
+Last update: <2020-12-23 10:31:21>
 
 #+TOC: headlines 1
 
@@ -154,14 +154,14 @@ First of all, define the package archives I need; for now, just the default gnu 
   ;; Use-package can now be used for itself
   (use-package use-package
     :init
-    (setq use-package-always-ensure t)	; Try installing automatically
-    (setq use-package-verbose nil)		; Set to true when interested in load times
+    (setq use-package-always-ensure t)  ; Try installing automatically
+    (setq use-package-verbose nil)              ; Set to true when interested in load times
     ;; If running as daemon, there's no reason to defer,just load shite
     ;; to minimize chance of lockup, but it still happens sometimes.
     (if (daemonp)
         (setq use-package-always-demand t))
 
-    (use-package use-package-ensure-system-package :ensure t)	; Need this because we are in use-package config
+    (use-package use-package-ensure-system-package :ensure t)   ; Need this because we are in use-package config
 
     ;; Location where I keep custom packages
     (setq custom-package-directory (concat user-emacs-directory "lisp/")))
@@ -370,13 +370,13 @@ Using pdf-tools for PDF handling. This is a lot better than docview. I'm a bit a
     (fullframe pdf-view-mode quit-window)
     (setq-default pdf-view-display-size 'fit-page) ;scale to fit page by default
     (setq pdf-annot-activate-created-annotations t ; automatically annotate highlights
-          pdf-view-resize-factor 1.1		  ; more fine-grained zooming
+          pdf-view-resize-factor 1.1              ; more fine-grained zooming
           pdf-misc-print-program "/usr/bin/lpr"
           pdf-view-midnight-colors '("#DCDCCC" . "#383838")) ; Not sure what this is
 
 
     (add-hook 'pdf-view-mode-hook (lambda () (cua-mode 0))) ; turn off cua so copy works
-    (pdf-tools-install :no-query))						  ; no-query auto builds epfinfo when needed
+    (pdf-tools-install :no-query))                                                ; no-query auto builds epfinfo when needed
 #+end_src
 
 I tend to compile Emacs with ImageMagick support, let's make sure we use it too.
@@ -462,8 +462,8 @@ Many settings have to do with how the screen looks and behaves in a visual way. 
 Let's set up some basics first, background dark, some default frame and cursor properties:
 
 #+begin_src emacs-lisp
-  (setq mrb/cursor-type '(bar . 3))		; Slightly wide bar
-  (setq mrb/cursor-color "DarkOrange")	; in fat orange color
+  (setq mrb/cursor-type '(bar . 3))             ; Slightly wide bar
+  (setq mrb/cursor-color "DarkOrange")  ; in fat orange color
 
   (setq-default frame-background-mode 'dark)
 
@@ -472,8 +472,8 @@ Let's set up some basics first, background dark, some default frame and cursor p
 
   ;;Default frame properties frame position, color, etc
   (setq default-frame-alist
-  `((cursor-type . ,mrb/cursor-type )
-              (height . 60) (width . 100)
+        `((cursor-type . ,mrb/cursor-type )
+          (height . 60) (width . 100)
           (cursor-color . ,mrb/cursor-color)
           (internal-border-width . 24)))
 #+end_src
@@ -680,29 +680,29 @@ To help me see the difference between visual lines and logical lines I let emacs
 
 #+begin_src emacs-lisp
   (setq-default word-wrap t)              ; why would i want to have no wrapping by word?
-    (use-package visual-fill-column
-      :commands (turn-on-visual-fill-column-mode))
+  (use-package visual-fill-column
+    :commands (turn-on-visual-fill-column-mode))
 
-    (setq-default truncate-lines nil)
+  (setq-default truncate-lines nil)
 
-    ;; Similar to mail messages, use vertical bar for wrapped paragaphs
-    (setq visual-line-fringe-indicators
-          '(vertical-bar nil))
+  ;; Similar to mail messages, use vertical bar for wrapped paragaphs
+  (setq visual-line-fringe-indicators
+        '(vertical-bar nil))
 
-    ;; For all text modes use visual-line-mode
-    (add-hook 'text-mode-hook 'visual-line-mode)
+  ;; For all text modes use visual-line-mode
+  (add-hook 'text-mode-hook 'visual-line-mode)
 
-    ;; From:https://www.emacswiki.org/emacs/UnfillParagraph
-    (defun unfill-paragraph (&optional region)
-      "Takes a multi-line paragraph and makes it into a single line of text."
-      (interactive (progn (barf-if-buffer-read-only) '(t)))
-      (let ((fill-column (point-max))
-            ;; This would override `fill-column' if it's an integer.
-            (emacs-lisp-docstring-fill-column t))
-        (fill-paragraph nil region)))
+  ;; From:https://www.emacswiki.org/emacs/UnfillParagraph
+  (defun unfill-paragraph (&optional region)
+    "Takes a multi-line paragraph and makes it into a single line of text."
+    (interactive (progn (barf-if-buffer-read-only) '(t)))
+    (let ((fill-column (point-max))
+          ;; This would override `fill-column' if it's an integer.
+          (emacs-lisp-docstring-fill-column t))
+      (fill-paragraph nil region)))
 
-     ;; Similar to M-q for fill, define M-Q for unfill
-    (bind-key "M-Q" 'unfill-paragraph)
+   ;; Similar to M-q for fill, define M-Q for unfill
+  (bind-key "M-Q" 'unfill-paragraph)
 #+end_src
 
 Line-numbering is off by default, it tends to slow things down, but if I want it on, I almost always want them relative
@@ -914,12 +914,12 @@ For file management itself, dired is the defacto standard It's builtin so =use-p
 
 #+begin_src emacs-lisp
   (use-package dired
-    :ensure nil 				;builtin
+    :ensure nil                                 ;builtin
     :init
     ;; auto-revert global is only for buffers with a file attached
       (add-hook 'dired-mode-hook #'auto-revert-mode)
       :config
-      (setq dired-bind-jump nil)		; Dont bind to C-x C-j, we do jabber prefix there
+      (setq dired-bind-jump nil)                ; Dont bind to C-x C-j, we do jabber prefix there
   )
 #+end_src
 
@@ -1031,13 +1031,13 @@ Also make sure we never load org from internal, this can happen when functions w
     :pin org
     :mode ("\\.txt\\'" "\\.org\'")
     :after (org-capture visual-fill-column)
-    :bind (("C-c g" . 'mrb/gtd)
+    :bind (("C-c g"   . 'mrb/gtd)
            ("C-c a"   . 'org-agenda)
            ("C-c b"   . 'org-switchb)
            ("C-s-s"   . 'org-save-all-org-buffers)
            ("C-x m"   . 'mrb/construct-mail)
-           ("C-c l"   . 'org-store-link)	; Is this not bound to C-c l by default
-           :map org-mode-map
+           ("C-c l"   . 'org-store-link)        ; Is this not bound to C-c l by default
+          :map org-mode-map
            ("s-."     . 'org-todo)
            ("s->"     . 'mrb/org-cancel-todo)
            ("C-s-."   . 'mrb/force-org-todo)
@@ -1060,7 +1060,7 @@ Also make sure we never load org from internal, this can happen when functions w
     (setq org-use-fast-todo-selection t
           org-use-fast-tag-selection t
           org-fast-tag-selection-single-key 'expert
-          org-enforce-todo-dependencies t	; we do want task dependencies
+          org-enforce-todo-dependencies t       ; we do want task dependencies
           org-enforce-todo-checkbox-dependencies nil ; but relax checkbox contraints for it
 
           ;; We dont do priorities
@@ -1150,8 +1150,8 @@ The =org-capture-pop-frame= package makes sure all captures are in separate fram
     :after org-capture
     :init
     (setq ocpf-frame-parameters
-     '((name . "*capture*")
-       (width . 115) (height . 15)
+          '((name . "*capture*")
+            (width . 115) (height . 15)
             (tool-bar-lines . 0)
             (menu-bar-lines . 0)
             (internal-border-width . 5))))
@@ -1163,10 +1163,10 @@ Here are the templates used for them.
   (setq
    org-capture-templates
    '(
-           ("b" "Buy"
-            entry (function mrb/capture-location) "* BUY %? :buy:\n%(mrb/prop-or-nothing :annotation)\n" :prepend t :empty-lines 1)
-           ("t" "Todo"
-            entry (function mrb/capture-location) "* TODO %?\n%(mrb/prop-or-nothing :annotation)\n" :prepend t :empty-lines 1)))
+     ("b" "Buy"
+      entry (function mrb/capture-location) "* BUY %? :buy:\n%(mrb/prop-or-nothing :annotation)\n" :prepend t :empty-lines 1)
+     ("t" "Todo"
+      entry (function mrb/capture-location) "* TODO %?\n%(mrb/prop-or-nothing :annotation)\n" :prepend t :empty-lines 1)))
 
 
   (defun mrb/prop-or-nothing(prop)
@@ -1274,8 +1274,8 @@ Make sure we keep a clean tag slate when changing tag state. This means that whe
 #+begin_src emacs-lisp
   (setq org-todo-state-tags-triggers
         '(('todo ("inactive"))          ; remove inactive tags if moved to any active state
-                ('done ("inactive") ("fork")) ; remove tags from any inactive state
-                ("BUY"  ("buy" . t))))       ; add buy tag when this is a buying action
+          ('done ("inactive") ("fork")) ; remove tags from any inactive state
+          ("BUY"  ("buy" . t))))        ; add buy tag when this is a buying action
 #+end_src
 
 To keep the TODO list clean we immediately archive the completed entry in the archive. The archiving only occurs when an item enters the 'DONE' state and the item is not marked as a habit.
@@ -1290,7 +1290,7 @@ I'm not sure if this works out in practice without having a confirmation (becaus
   (defun mrb/org-is-habit-p (&optional pom)
     "org-is-habit-p taking property inheritance into account"
     (equalp "habit" (org-with-point-at (or pom (point))
-                       (org-entry-get-with-inheritance "STYLE"))))
+                      (org-entry-get-with-inheritance "STYLE"))))
 
   (defun mrb/archive-done-item()
     "Determine if the item went to the DONE/CANCELLED state
@@ -1299,16 +1299,16 @@ I'm not sure if this works out in practice without having a confirmation (becaus
     (when (not (mrb/org-is-habit-p))
       ;; No habit, so we have a candidate
       (progn
-       ;; Try to use a dialog box to ask for confirmation
-       (setq last-nonmenu-event nil)
+        ;; Try to use a dialog box to ask for confirmation
+        (setq last-nonmenu-event nil)
 
-       ;; When a note is going to be added, postpone that Otherwise just
-       ;; run the archiving question
-       ;; FIXME: org-add-note runs through post-command-hook,
-       ;;        which is kinda weird, how to i get it to run
-       ;;        before the archiving question?
-       (when (equal org-state "DONE")
-         (org-archive-subtree-default-with-confirmation)))))
+        ;; When a note is going to be added, postpone that Otherwise just
+        ;; run the archiving question
+        ;; FIXME: org-add-note runs through post-command-hook,
+        ;;        which is kinda weird, how to i get it to run
+        ;;        before the archiving question?
+        (when (equal org-state "DONE")
+          (org-archive-subtree-default-with-confirmation)))))
 
 
   ;; Run archive for the item that changed state
@@ -1565,7 +1565,7 @@ Traditionally somewhat related to mail, although mostly through orgmode these da
           org-caldav-save-directory "~/dat/org/_calendars/"
           org-caldav-files nil
             org-caldav-show-sync-results nil ; This should be off once I know it's stable
-            org-caldav-backup-file nil	 ; saves a LOT of time when syncing
+            org-caldav-backup-file nil   ; saves a LOT of time when syncing
 
           ;; Calendars to sync
           org-caldav-calendars
@@ -1573,11 +1573,21 @@ Traditionally somewhat related to mail, although mostly through orgmode these da
                           :inbox "~/dat/org/_calendars/marcel.org")
             (:calendar-id "4de0fb18-8548-61ce-57fc-b2319b87106d" ; Waste services
                           :inbox "~/dat/org/_calendars/afval.org")
-            (:calendar-id "shared-sylvia"	                       ; SO
+            (:calendar-id "shared-sylvia"                              ; SO
                           :inbox "~/dat/org/_calendars/sylvia.org"))))
 #+end_src
 
 For now, I can live with calling =org-caldav-sync= manually when I need up to date information.
+** Searching for items
+Over the year the amount of information I manage with orgmode has grown considerably, ranging from the plain TODO lists, blog posts, calendar information, project files etc. Increasingly I find myself not being able to find things in that pile of information. The solution in [[Grepping files]] helps a lot already but is a generic solution.
+
+To have a more structured solution for org type content, I'm using =org-ql=
+
+#+begin_src emacs-lisp
+  (use-package org-ql)
+#+end_src
+
+One thing I use this for is in my habits file to predefine a search for the relevant items for the habit.
 ** Babel / Literate programming
 Specific settings for babel and literate programming within org-mode
 
@@ -1780,8 +1790,8 @@ While the standard capture method is useful I found myself not using it very muc
           org-crypt-disable-auto-save t
           org-journal-enable-cache t)
     :config
-        (add-hook 'org-journal-mode-hook 'turn-on-visual-line-mode)
-        (add-hook 'org-journal-mode-hook 'turn-on-visual-fill-column-mode))
+    (add-hook 'org-journal-mode-hook 'turn-on-visual-line-mode)
+    (add-hook 'org-journal-mode-hook 'turn-on-visual-fill-column-mode))
 #+end_src
 
 Particularly in journaling, but also in org-mode in general, I want to be able to quickly insert screenshots. Rather, images in general but 90% of my usecase is really screenshots.
@@ -2568,9 +2578,9 @@ It's not entirely clear which package is exactly responsible for what, but there
      message-cite-function 'message-cite-original-without-signature
 
      ;; Citing/Quoting when replying
-     message-yank-prefix "> "				; Add '> ' when quoting lines
-     message-yank-cited-prefix ">"		; Add '>' for cited lines
-     message-yank-empty-prefix ""			; Add nothing for empty lines
+     message-yank-prefix "> "             ; Add '> ' when quoting lines
+     message-yank-cited-prefix ">"        ; Add '>' for cited lines
+     message-yank-empty-prefix ""         ; Add nothing for empty lines
 
      ;; Always put one in the Sent folder on sending.
      ;; FIXME: this does nothing for mu4e!!!
@@ -2604,11 +2614,11 @@ It's not entirely clear which package is exactly responsible for what, but there
     ;; Use visual line mode and visually break at word boundaries which
     ;; is the same as the email encoding on send (see below)
     (visual-line-mode 1)
-    (auto-fill-mode 0)					; Makes no sense in visual mode
+    (auto-fill-mode 0)                    ; Makes no sense in visual mode
 
-    (setq visual-fill-column-width nil) 	; Make sure `fill-column gets used
+    (setq visual-fill-column-width nil)       ; Make sure `fill-column gets used
     (setq fill-column 80)                 ; Not the same as encode column below!
-    (visual-fill-column-mode 1)			; Show it
+    (visual-fill-column-mode 1)           ; Show it
 
     ;; Next, do the encoding and sending part
     ;; Set the fill column on encoding (send)
@@ -2630,169 +2640,169 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
     (interactive)
     (kill-buffer (current-buffer)))
 
-    (use-package mu4e
+  (use-package mu4e
     :ensure nil                           ; dont load from remotes
-      :after message fullframe
-      :commands mu4e
-      :bind (:map mu4e-main-mode-map
+    :after message fullframe
+    :commands mu4e
+    :bind (:map mu4e-main-mode-map
                 ("q" . mrb/mu4e-quit) ; just close the menu
                 ("Q" . mu4e-quit)
                 (";" . nil)
                 ("C-;" . mu4e-context-switch)
-                  :map mu4e-headers-mode-map
+                :map mu4e-headers-mode-map
                 ("j" . mu4e-headers-mark-for-junk)
-                  ("r" . mu4e-compose-reply)
-                  ("R" . mu4e-headers-mark-for-refile)
-                  ("X" . (lambda () (interactive) (mu4e-mark-execute-all t)))
-                  :map mu4e-view-mode-map
+                ("r" . mu4e-compose-reply)
+                ("R" . mu4e-headers-mark-for-refile)
+                ("X" . (lambda () (interactive) (mu4e-mark-execute-all t)))
+                :map mu4e-view-mode-map
                 ("j" . mu4e-view-mark-for-junk)
-                  ("r" . mu4e-compose-reply)
-                  ("R" . mu4e-view-mark-for-refile)
-                  ("X" . (lambda () (interactive) (mu4e~view-in-headers-context (mu4e-mark-execute-all t)))))
-      ;; TODO: how are we editting a search? e?
+                ("r" . mu4e-compose-reply)
+                ("R" . mu4e-view-mark-for-refile)
+                ("X" . (lambda () (interactive) (mu4e~view-in-headers-context (mu4e-mark-execute-all t)))))
+    ;; TODO: how are we editting a search? e?
 
-      :init
+    :init
     (fullframe mu4e mrb/mu4e-quit)                  ; Claim the whole screen
+    :config
+    ;; Show an alert when new mails come in, this relies on mu4e being active though
+    (use-package mu4e-alert
       :config
-      ;; Show an alert when new mails come in, this relies on mu4e being active though
-      (use-package mu4e-alert
-        :config
-        (mu4e-alert-set-default-style 'libnotify)
-        (add-hook 'after-init-hook #'mu4e-alert-enable-notifications))
+      (mu4e-alert-set-default-style 'libnotify)
+      (add-hook 'after-init-hook #'mu4e-alert-enable-notifications))
 
-      ;; Support icalendar Yes/No/Maybe reactions to calendar invites
-      (use-package mu4e-icalendar
+    ;; Support icalendar Yes/No/Maybe reactions to calendar invites
+    (use-package mu4e-icalendar
       :ensure nil
-        :config
-        (mu4e-icalendar-setup))
+      :config
+      (mu4e-icalendar-setup))
 
-      (use-package mu4e-query-fragments)	; Support reusable query pieces '%junk' etc.
-      (use-package mu4e-jump-to-list)		; Shortcut key 'l' to directly focus on list threads
+    (use-package mu4e-query-fragments)  ; Support reusable query pieces '%junk' etc.
+    (use-package mu4e-jump-to-list)       ; Shortcut key 'l' to directly focus on list threads
 
-      ;; Patch highlighting inside messages
-      (use-package mu4e-patch
-        :ensure nil
-        :load-path "/home/mrb/dat/src/emacs/packages/mu4e-patch"
-        :config
-        (add-hook 'mu4e-view-mode-hook #'mu4e-patch-highlight))
+    ;; Patch highlighting inside messages
+    (use-package mu4e-patch
+      :ensure nil
+      :load-path "/home/mrb/dat/src/emacs/packages/mu4e-patch"
+      :config
+      (add-hook 'mu4e-view-mode-hook #'mu4e-patch-highlight))
 
-      (setq
-       mu4e-main-buffer-hide-personal-addresses t
-       ;; Override the defaul mail user agent with the mu4e specific one
-       mail-user-agent 'mu4e-user-agent
-       mu4e-sent-folder     "/Sent"
-       mu4e-drafts-folder   "/Drafts"
-       mu4e-trash-folder    "/Trash"
-       mu4e-attachment-dir  "~/Downloads"	; Absolute folder here, not relative to Maildir!
-       mrb/mu4e-junk-folder "/Junk"			; Added for my specific config
+    (setq
+     mu4e-main-buffer-hide-personal-addresses t
+     ;; Override the defaul mail user agent with the mu4e specific one
+     mail-user-agent 'mu4e-user-agent
+     mu4e-sent-folder     "/Sent"
+     mu4e-drafts-folder   "/Drafts"
+     mu4e-trash-folder    "/Trash"
+     mu4e-attachment-dir  "~/Downloads"         ; Absolute folder here, not relative to Maildir!
+     mrb/mu4e-junk-folder "/Junk"         ; Added for my specific config
 
-       ;; Refiling to /Archives/YYYY
-       mu4e-refile-folder (lambda (msg)
-                            (let ((archive_base "/Archives/")
-                                  (msgyear (format-time-string "%Y" (mu4e-message-field msg :date))))
-                              (cond
-                               ;; Order: most specific to general, end with the 't' case
+     ;; Refiling to /Archives/YYYY
+     mu4e-refile-folder (lambda (msg)
+                          (let ((archive_base "/Archives/")
+                                (msgyear (format-time-string "%Y" (mu4e-message-field msg :date))))
+                            (cond
+                             ;; Order: most specific to general, end with the 't' case
 
-                               ;; Archive messages per year if it has a date field (basically, always)
-                               (msgyear	(concat archive_base msgyear))
+                             ;; Archive messages per year if it has a date field (basically, always)
+                             (msgyear   (concat archive_base msgyear))
 
-                               ;; The default refile location
-                               (t  archive_base))))
+                             ;; The default refile location
+                             (t  archive_base))))
 
 
-       mu4e-confirm-quit nil
-       mu4e-use-fancy-chars t
-       mu4e-get-mail-command "mbsync quick"	; Just get inbox and important stuff, not everything
-       mu4e-decryption-policy 'ask
-     mu4e-update-interval 120         ; we just index, no retrieve, so 2mins is fine
-       mu4e-compose-complete-only-after nil
+     mu4e-confirm-quit nil
+     mu4e-use-fancy-chars t
+     mu4e-get-mail-command "mbsync quick" ; Just get inbox and important stuff, not everything
+     mu4e-decryption-policy 'ask
+     mu4e-update-interval 120             ; we just index, no retrieve, so 2mins is fine
+     mu4e-compose-complete-only-after nil
 
-       ;; Set completing function to standard, so helm works
-       mu4e-completing-read-function 'completing-read
+     ;; Set completing function to standard, so helm works
+     mu4e-completing-read-function 'completing-read
 
-       ;; Message view settings
+     ;; Message view settings
      mu4e-view-show-images t              ; This creates connections, possible privacy issue?
      mu4e-view-image-max-width 800
      mu4e-view-image-max-height 600
-       mu4e-view-use-gnus nil
-       mu4e-view-show-addresses t			; Show actuall addresses instead of names
-       mu4e-view-mode-hook '(turn-on-visual-line-mode)
-       mu4e-save-multiple-attachments-without-asking t
+     mu4e-view-use-gnus nil
+     mu4e-view-show-addresses t                         ; Show actuall addresses instead of names
+     mu4e-view-mode-hook '(turn-on-visual-line-mode)
+     mu4e-save-multiple-attachments-without-asking t
 
-       ;; Compose settings
-       mu4e-compose-format-flowed t			; Compose in format=flowed
+     ;; Compose settings
+     mu4e-compose-format-flowed t                       ; Compose in format=flowed
      mu4e-compose-in-new-frame t
-       mu4e-compose-dont-reply-to-self t	; Do not include my addresses when replying
+     mu4e-compose-dont-reply-to-self t  ; Do not include my addresses when replying
 
-     mail-signature t			; use mail-signature file (move to message section?)
+     mail-signature t                   ; use mail-signature file (move to message section?)
      mu4e-compose-signature '(with-current-buffer
                                  (find-file-noselect message-signature-file)
                                (buffer-string))
 
-       ;; Header view settings
-       mu4e-headers-include-related nil ; Use 'W' to toggle interactively
-       mu4e-headers-date-format "%F"  ; ISO format yyyy-mm-dd
-       mu4e-headers-results-limit -1  ; For now, needed to have related search results
-       mu4e-headers-visible-lines 20  ; Default of 10 is a bit small
-       mu4e-headers-auto-update nil	  ; Prevent confusion
+     ;; Header view settings
+     mu4e-headers-include-related nil ; Use 'W' to toggle interactively
+     mu4e-headers-date-format "%F"  ; ISO format yyyy-mm-dd
+     mu4e-headers-results-limit -1  ; For now, needed to have related search results
+     mu4e-headers-visible-lines 20  ; Default of 10 is a bit small
+     mu4e-headers-auto-update nil         ; Prevent confusion
 
-       ;; Context definitions
-       ;; Goal 1. use global config, unless private address is used
+     ;; Context definitions
+     ;; Goal 1. use global config, unless private address is used
      ;; FIXME: Can we use the one that matched?
      mrb/private-addresses '("marcel@van-der-boom.nl" "m@rcel.van-der-boom.nl")
-       mrb/private-address "marcel@van-der-boom.nl"
-       mu4e-context-policy 'pick-first 		; When nothing matches only!
-       mu4e-compose-context-policy 'nil     ; for compose, use current if nothing matches
+     mrb/private-address "marcel@van-der-boom.nl"
+     mu4e-context-policy 'pick-first            ; When nothing matches only!
+     mu4e-compose-context-policy 'nil     ; for compose, use current if nothing matches
 
-       mu4e-contexts
-       `(,(make-mu4e-context
-           :name "Default"
-           ;; Use global config, but restore what was changed in other contexts
-           :vars `((user-mail-address . "marcel@hsdev.com")))
-         ,(make-mu4e-context
-           :name "Private"
-           :match-func (lambda (msg)
-                         (when msg
-                           (mu4e-message-contact-field-matches
+     mu4e-contexts
+     `(,(make-mu4e-context
+         :name "Default"
+         ;; Use global config, but restore what was changed in other contexts
+         :vars `((user-mail-address . "marcel@hsdev.com")))
+       ,(make-mu4e-context
+         :name "Private"
+         :match-func (lambda (msg)
+                       (when msg
+                         (mu4e-message-contact-field-matches
                           msg `(:to :cc :from) mrb/private-addresses)))
-           :vars `((user-mail-address . ,mrb/private-address)))))
+         :vars `((user-mail-address . ,mrb/private-address)))))
 
 
-      ;; Define actions for the message view
-      ;; Allow showing in browser when there is a HTML mess to deal with
-      (add-to-list 'mu4e-view-actions
+    ;; Define actions for the message view
+    ;; Allow showing in browser when there is a HTML mess to deal with
+    (add-to-list 'mu4e-view-actions
                  '("B - view in external browser" . mu4e-action-view-in-browser) t)
 
-      ;; Define marks
-      (add-to-list 'mu4e-marks
+    ;; Define marks
+    (add-to-list 'mu4e-marks
                  '(junk
                    :char ("J" . "💀")
                    :prompt "Mark as junk"
                    :show-target (lambda (dyn-target) "Junk")
-                     :ask-target (lambda () mrb/mu4e-junk-folder)
-                     :action (lambda (docid msg target)
-                               (mu4e~proc-move
-                                docid
-                                (mu4e~mark-check-target target) "+S-N-u"))))
+                   :ask-target (lambda () mrb/mu4e-junk-folder)
+                   :action (lambda (docid msg target)
+                             (mu4e~proc-move
+                              docid
+                              (mu4e~mark-check-target target) "+S-N-u"))))
 
-      ;; Let mu4e define functions for it
+    ;; Let mu4e define functions for it
     (mu4e~headers-defun-mark-for junk)
     (mu4e~view-defun-mark-for junk)
 
-      ;; Bookmarks
-      (setq mu4e-bookmarks
-            (list
-             (make-mu4e-bookmark :name "Unread messages"
-                                 :query "flag:unread and not flag:trashed"
-                                 :key ?u)
-             (make-mu4e-bookmark :name "INBOX"
+    ;; Bookmarks
+    (setq mu4e-bookmarks
+          (list
+           (make-mu4e-bookmark :name "Unread messages"
+                               :query "flag:unread and not flag:trashed"
+                               :key ?u)
+           (make-mu4e-bookmark :name "INBOX"
                                :query "(flag:unread or flag:new or maildir:/INBOX) and not (flag:draft or flag:flagged or flag:deleted or maildir:/Trash or flag:trashed)"
-                                 :key ?i)
-             (make-mu4e-bookmark :name "TODO list"
-                                 :query "flag:flagged"
-                                 :key ?+)
-             (make-mu4e-bookmark :name "Todays messages"
-                                 :query "date:today..now"
+                               :key ?i)
+           (make-mu4e-bookmark :name "TODO list"
+                               :query "flag:flagged"
+                               :key ?+)
+           (make-mu4e-bookmark :name "Todays messages"
+                               :query "date:today..now"
                                :key ?d)
            (make-mu4e-bookmark :name "Trash"
                                :query "maildir:/Trash"
@@ -2801,33 +2811,33 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
                                :query "maildir:/Junk"
                                :key ?j)))
 
-      ;; Rendering of html mail is done with shr
-      ;; By default, it's inhibiting images, I dont want that, as I only look at the html if needed
-      ;; FIXME: this does not work properly
-      (defun mrb/mu4e-shr2text (msg)
-        "Overridden mu4e-shr2text"
-        (mu4e~html2text-wrapper
-         (lambda ()
+    ;; Rendering of html mail is done with shr
+    ;; By default, it's inhibiting images, I dont want that, as I only look at the html if needed
+    ;; FIXME: this does not work properly
+    (defun mrb/mu4e-shr2text (msg)
+      "Overridden mu4e-shr2text"
+      (mu4e~html2text-wrapper
+       (lambda ()
          (let ((shr-inhibit-images t)   ; no images, unless I specifically ask for it
-                 (shr-width nil) 			; Use whole window width for rendering
-                 (shr-use-colors nil)		; Don't use colors from html, they ugly
-                 (shr-bullet "• "))		; Original was "* "
-             (shr-render-region (point-min) (point-max)))) msg))
+               (shr-width nil)            ; Use whole window width for rendering
+               (shr-use-colors nil)       ; Don't use colors from html, they ugly
+               (shr-bullet "• "))               ; Original was "* "
+           (shr-render-region (point-min) (point-max)))) msg))
 
-      (setq mu4e-html2text-command 'mrb/mu4e-shr2text)
+    (setq mu4e-html2text-command 'mrb/mu4e-shr2text)
 
-      ;; Make header configuration explicit
-      (setq mu4e-headers-fields
-            '((:flags . 6)(:human-date . 12)(:mailing-list . 10)(:from . 22)(:subject)))
-      )
+    ;; Make header configuration explicit
+    (setq mu4e-headers-fields
+          '((:flags . 6)(:human-date . 12)(:mailing-list . 10)(:from . 22)(:subject)))
+    )
 #+end_src
 
 To enable integration with orgmode =org-mu4e= must be loaded
 
 #+begin_src emacs-lisp
   (use-package org-mu4e
-	:ensure nil
-  :after org)
+    :ensure nil
+    :after org)
 #+end_src
 *** Sieve
 Cyrus sieve is used on the server to filter our mail and this is accessed by the sieve-manage package. For some reason I can't get the '^M' characters out of the process, so here's a hack for that
@@ -2973,7 +2983,7 @@ Not messaging or chatting perse, but a microblog social network. The 'capture a 
 (use-package mastodon
   :config
   (setq mastodon-instance-url "https://mastodon.nl"
-	mastodon-auth-source-file "~/.authinfo.gpg")
+        mastodon-auth-source-file "~/.authinfo.gpg")
 
   ;; Convenience function
   (defun mrb/capture-toot()
@@ -2998,38 +3008,38 @@ However, this is problematic. It needs a special initialization because I run in
 Lets try to use ggtags everywhere.
 #+begin_src emacs-lisp
   (use-package ggtags)
-  (use-package cmake-mode)				; adjusts auto-mode-alist on load
+  (use-package cmake-mode)                              ; adjusts auto-mode-alist on load
 #+end_src
 
 For most of the languages I use (Bash, python, C, Go, HTML Haskell, Lua), the Language Server Protocol seems to be supported by =lsp-mode=, so I'm setting this up generally here and enable it for each language I'm using if it is supported.
 
 #+begin_src emacs-lisp
-  (use-package lsp-mode
-    :pin melpa
-    :commands (lsp-deferred lsp)
+    (use-package lsp-mode
+      :pin melpa
+      :commands (lsp-deferred lsp)
 
-    :init
-    (use-package lsp-ui
-      :commands lsp-ui-mode)
+      :init
+      (use-package lsp-ui
+        :commands lsp-ui-mode)
 
-    ;; Enable lsp for languages I use
-    :hook (((c++-mode c-mode
-                      css-mode html-mode js2-mode
-                      python-mode
-                      sh-mode
-                      yaml-mode
-                      go-mode)  . lsp-deferred)
-           (lsp-mode . lsp-enable-which-key-integration))
+      ;; Enable lsp for languages I use
+      :hook (((c++-mode c-mode
+                        css-mode html-mode js2-mode
+                        python-mode
+                        sh-mode
+                        yaml-mode
+                        go-mode)  . lsp-deferred)
+             (lsp-mode . lsp-enable-which-key-integration))
 
-    :config
-    (setq lsp-enable-snippet nil
-          lsp-prefer-flymake nil
-          lsp-ui-doc-position 'bottom
-          read-process-output-max (* 1024 1024) ; As per https://emacs-lsp.github.io/lsp-mode/page/performance/
-          lsp-prefer-capf t
-          lsp-idle-delay 0.5              ; Tuning for frustration
-          )
-  )
+      :config
+      (setq lsp-enable-snippet nil
+            lsp-prefer-flymake nil
+            lsp-ui-doc-position 'bottom
+            read-process-output-max (* 1024 1024) ; As per https://emacs-lsp.github.io/lsp-mode/page/performance/
+            lsp-prefer-capf t
+            lsp-idle-delay 0.5              ; Tuning for frustration
+            )
+      )
 #+end_src
 
 Make our source look a bit more attractive by enabling =prettify-symbol-mode= in all programming modes
@@ -3105,12 +3115,12 @@ The closest thing I found is =zeal= or =dash= which allow docsets to be searched
   ;; Unify reference documentation with dash
   (use-package helm-dash
     :after helm
-  :commands (helm-dash helm-dash-at-point)
-  :config
+    :commands (helm-dash helm-dash-at-point)
+    :config
     (setq dash-docs-enable-debugging nil
           helm-dash-browser-func 'eww             ; Within dash, keep browser links within emacs
-		;; Use all installed docsets
-		helm-dash-common-docsets (helm-dash-installed-docsets)))
+          ;; Use all installed docsets
+          helm-dash-common-docsets (helm-dash-installed-docsets)))
 #+end_src
 
 Dash show documentation inside emacs, which is my preferred method. There are times however I need the desktop GUI Zeal. For one, it's a lot easier to see which docsets are installed and manage them.
