@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent
 
-Last update: <2020-12-19 14:01:26>
+Last update: <2020-12-23 10:31:21>
 
 #+TOC: headlines 1
 
@@ -1578,6 +1578,16 @@ Traditionally somewhat related to mail, although mostly through orgmode these da
 #+end_src
 
 For now, I can live with calling =org-caldav-sync= manually when I need up to date information.
+** Searching for items
+Over the year the amount of information I manage with orgmode has grown considerably, ranging from the plain TODO lists, blog posts, calendar information, project files etc. Increasingly I find myself not being able to find things in that pile of information. The solution in [[Grepping files]] helps a lot already but is a generic solution.
+
+To have a more structured solution for org type content, I'm using =org-ql=
+
+#+begin_src emacs-lisp
+  (use-package org-ql)
+#+end_src
+
+One thing I use this for is in my
 ** Babel / Literate programming
 Specific settings for babel and literate programming within org-mode
 
