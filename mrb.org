@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent
 
-Last update: <2020-12-23 11:55:43>
+Last update: <2020-12-23 17:16:36>
 
 #+TOC: headlines 1
 
@@ -1579,7 +1579,7 @@ Traditionally somewhat related to mail, although mostly through orgmode these da
 
 For now, I can live with calling =org-caldav-sync= manually when I need up to date information.
 ** Searching for items
-Over the year the amount of information I manage with orgmode has grown considerably, ranging from the plain TODO lists, blog posts, calendar information, project files etc. Increasingly I find myself not being able to find things in that pile of information. The solution in [[Grepping files]] helps a lot already but is a generic solution.
+Over the years the amount of information I manage with orgmode has grown considerably, ranging from the plain TODO lists, blog posts, calendar information, project files etc. Increasingly I find myself not being able to find things in that pile of information. The solution in [[Grepping files]] helps a lot already but is a generic solution.
 
 To have a more structured solution for org type content, I'm using =org-ql=
 
@@ -2724,7 +2724,7 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
      mu4e-view-show-images t              ; This creates connections, possible privacy issue?
      mu4e-view-image-max-width 800
      mu4e-view-image-max-height 600
-     mu4e-view-use-gnus nil
+     mu4e-view-use-gnus t                 ; Experimental, but unleashes a lot of features
      mu4e-view-show-addresses t                         ; Show actuall addresses instead of names
      mu4e-view-mode-hook '(turn-on-visual-line-mode)
      mu4e-save-multiple-attachments-without-asking t
@@ -3478,8 +3478,9 @@ I've chosen =ag= as the engine for /grepping/ the files because it has a helm in
 
 #+begin_src emacs-lisp
   (use-package helm-ag
+    :commands mrb/search
     :after helm
-    :bind (("C-s-s" . mrb/search))        ; FIXME this is kinda clunky
+    :bind (("C-s-s" . mrb/search))
     :config
     (setq helm-ag-use-agignore t)         ; Use the .agignore file if it is there
     :init
