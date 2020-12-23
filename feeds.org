@@ -108,6 +108,7 @@ This has a number of attractive properties:
 **** http://feeds.feedburner.com/hacknmod/qjUG
 **** https://blog.sleeplessbeastie.eu/atom.xml
 **** http://feeds2.feedburner.com/TheArtOfManliness
-**** http://vimeo.com/mrvdb/subscriptions/videos/rss/5d94482c63b00132e107359e3740cd5d62bb60d3                              :video:vimeo:
+**** [[http://vimeo.com/mrvdb/subscriptions/videos/rss/5d94482c63b00132e107359e3740cd5d62bb60d3][http://vimeo.com/mrvdb/subscriptions/vi…]]                                  :video:vimeo:
 **** https://unsplash.com/rss
 **** https://bof.nl/feed/
+**** https://solar.lowtechmagazine.com/feeds/all-en.atom.xml
