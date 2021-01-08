@@ -2667,6 +2667,8 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
     ;; Show an alert when new mails come in, this relies on mu4e being active though
     (use-package mu4e-alert
       :config
+      ;; Just show subjects, not counts
+      (setq mu4e-alert-email-notification-types '(subjects))
       (mu4e-alert-set-default-style 'libnotify)
       (add-hook 'after-init-hook #'mu4e-alert-enable-notifications))
 
