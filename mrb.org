@@ -3436,6 +3436,7 @@ Features I'm interested in: issue commenting, pull requests
 #+begin_src emacs-lisp
   (use-package magit
     :after (fullframe)
+    :commands magit-status
     :bind
     ("C-c m" . magit-status)
 
