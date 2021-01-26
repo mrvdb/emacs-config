@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent
 
-Last update: <2020-12-30 14:43:39>
+Last update: <2021-01-26 15:21:30>
 
 #+TOC: headlines 1
 
@@ -497,6 +497,7 @@ Although I think the 16 color system is a bit simplistic and, for emacs at least
     ;; Define our adjustments to faces
     ;; This should be the only place where we adjust our faces
     ;; For reference, these are the theme colors
+    ;; Keep an eye on this: https://github.com/chriskempson/base16/issues/162
     ;; :base00 "#2e3440"
     ;; :base01 "#3b4252"
     ;; :base02 "#434c5e"
@@ -2688,8 +2689,16 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
       :config
       (add-hook 'mu4e-view-mode-hook #'mu4e-patch-highlight))
 
+    ;; Try to get some more icons in mu4e to spice up the display
+    (use-package mu4e-marker-icons
+      :init (mu4e-marker-icons-mode 1)
+      :config
+      ;; This is needed for me,otherwise the lineheight is fucked up
+      (setq mu4e-marker-icons-use-unicode 0))
+
     (setq
      mu4e-main-buffer-hide-personal-addresses t
+     mu4e-main-hide-fully-read t
      ;; Override the defaul mail user agent with the mu4e specific one
      mail-user-agent 'mu4e-user-agent
      mu4e-sent-folder     "/Sent"
@@ -2726,7 +2735,7 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
      mu4e-view-show-images t              ; This creates connections, possible privacy issue?
      mu4e-view-image-max-width 800
      mu4e-view-image-max-height 600
-     mu4e-view-use-gnus t                 ; Experimental, but unleashes a lot of features
+     mu4e-view-use-gnus nil                 ; Experimental, but unleashes a lot of features
      mu4e-view-show-addresses t                         ; Show actuall addresses instead of names
      mu4e-view-mode-hook '(turn-on-visual-line-mode)
      mu4e-save-multiple-attachments-without-asking t
