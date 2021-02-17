@@ -610,7 +610,7 @@ Although I think the 16 color system is a bit simplistic and, for emacs at least
     (base16-set-faces 'base16-nord base16-nord-colors base16-adjustments))
 #+end_src
 
-Miscelaneoous other visual settings follow.
+Miscelaneous other visual settings follow.
 
 #+begin_src emacs-lisp
   ;; no splash screen
@@ -2706,20 +2706,20 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
     ;; Patch highlighting inside messages
     (use-package mu4e-patch
       :ensure nil
-      :load-path "/home/mrb/dat/src/emacs/packages/mu4e-patch"
+      :load-path "~/dat/src/emacs/packages/mu4e-patch"
       :config
       (add-hook 'mu4e-view-mode-hook #'mu4e-patch-highlight))
 
     ;; Try to get some more icons in mu4e to spice up the display
     (use-package mu4e-marker-icons
-      :init (mu4e-marker-icons-mode 1)
-      :config
+      :init
       ;; This is needed for me,otherwise the lineheight is fucked up
-      (setq mu4e-marker-icons-use-unicode 0))
+      (setq mu4e-marker-icons-use-unicode 0)
+      (mu4e-marker-icons-mode 1))
 
     (setq
      mu4e-main-buffer-hide-personal-addresses t
-     mu4e-main-hide-fully-read t
+     mu4e-main-hide-fully-read nil
      ;; Override the defaul mail user agent with the mu4e specific one
      mail-user-agent 'mu4e-user-agent
      mu4e-sent-folder     "/Sent"

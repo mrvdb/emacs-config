@@ -7,6 +7,10 @@
  '(ansi-color-names-vector
    ["#2e3440" "#88c0d0" "#bf616a" "#5e81ac" "#ebcb8b" "#a3be8c" "#ebcb8b" "#e5e9f0"])
  '(command-frequency-autosave-mode t)
+ '(company-backends
+   '(company-bbdb company-eclim company-semantic company-clang company-xcode company-cmake company-capf company-files
+                  (company-dabbrev-code company-gtags company-etags company-keywords)
+                  company-oddmuse))
  '(compilation-scroll-output t)
  '(custom-safe-themes t)
  '(epg-gpg-program "/usr/bin/gpg2")
@@ -196,7 +200,7 @@
      (encoding . utf-8)
      (buffer-auto-save-file-name)))
  '(sgml-xml-mode t)
- '(warning-suppress-types '((undo)))
+ '(warning-suppress-types '((comp) (undo)))
  '(x-select-enable-clipboard-manager nil))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
