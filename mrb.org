@@ -384,6 +384,32 @@ I tend to compile Emacs with ImageMagick support, let's make sure we use it too.
 (when (fboundp 'imagemagick-register-types)
   (imagemagick-register-types))
 #+end_src
+
+In quite a few situation I would like to use keybinding which are only valid when a selection/region is active.
+
+#+begin_src emacs-lisp
+  (use-package selected
+    :after (org)
+    :init
+    (setq selected-org-mode-map (make-sparse-keymap)) ;create map for selected regions
+    :commands selected-minor-mode         ; do I want the global one too?
+    :bind (:map selected-keymap           ; bindings for all active regions
+                ("q" . selected-off)
+                ("u" . upcase-region)
+                ("d" . downcase-region)
+           :map selected-org-mode-map
+           ;; Used by the selected package FIXME I want this configured with org, not here
+           ("~"       . (lambda () (interactive) (org-emphasize ?~)))
+           ("_"       . (lambda () (interactive) (org-emphasize ?_)))
+           ("*"       . (lambda () (interactive) (org-emphasize ?*)))
+           ("+"       . (lambda () (interactive) (org-emphasize ?+))))
+    :config
+    (selected-global-mode))
+
+#+end_src
+
+From now on we can bind keys into the selected-keymap if we want keys to be active on every regions. When only needed for a certain major mode, define a keymap named =selected-<major-mode>-keymap= and bind keys into that.
+
 * Internationalisation and multi-language features
 If anything multi-language should work, UTF-8 encoding is a must, so let's make sure we try to use that everywhere
 
