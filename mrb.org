@@ -2819,14 +2819,20 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
      `(,(make-mu4e-context
          :name "Default"
          ;; Use global config, but restore what was changed in other contexts
-         :vars `((user-mail-address . "marcel@hsdev.com")))
+         :vars `((user-mail-address . "marcel@hsdev.com")
+                 (mu4e-compose-signature . (with-current-buffer
+                                            (find-file-noselect message-signature-file)
+                                          (buffer-string)))))
        ,(make-mu4e-context
          :name "Private"
          :match-func (lambda (msg)
                        (when msg
                          (mu4e-message-contact-field-matches
                           msg `(:to :cc :from) mrb/private-addresses)))
-         :vars `((user-mail-address . ,mrb/private-address)))))
+         :vars `((user-mail-address . ,mrb/private-address)
+                 (mu4e-compose-signature . nil)))
+       )
+     )
 
 
     ;; Define actions for the message view
