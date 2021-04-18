@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent
 
-Last update: <2021-04-18 13:29:09>
+Last update: <2021-04-18 13:31:53>
 
 #+TOC: headlines 1
 
@@ -523,7 +523,7 @@ Although I think the 16 color system is a bit simplistic and, for emacs at least
     ;; Define our adjustments to faces
     ;; This should be the only place where we adjust our faces
     ;; For reference, these are the theme colors
-    ;; Keep an eye on this: https://github.com/chriskempson/base16/issues/162
+
     ;; :base00 "#2e3440"
     ;; :base01 "#3b4252"
     ;; :base02 "#434c5e"
@@ -532,20 +532,30 @@ Although I think the 16 color system is a bit simplistic and, for emacs at least
     ;; :base05 "#e5e9f0"
     ;; :base06 "#eceff4"
     ;; :base07 "#8fbcbb"
-    ;; :base08 "#bf616a"
-    ;; :base09 "#d08770"
-    ;; :base0A "#ebcb8b"
-    ;; :base0B "#a3be8c"
-    ;; :base0C "#88c0d0"
-    ;; :base0D "#81a1c1"
-    ;; :base0E "#b48ead"
-    ;; :base0F "#5e81ac"
+     ;; :base08 "#88c0d0"
+     ;; :base09 "#81a1c1"
+     ;; :base0A "#5e81ac"
+     ;; :base0B "#bf616a"
+     ;; :base0C "#d08770"
+     ;; :base0D "#ebcb8b"
+     ;; :base0E "#a3be8c"
+     ;; :base0F "#b48ead"
 
     ;; FIXME: some of these adjustments come in too early and the package redefines it on loading
     ;; the only solution for this is to move the visual adjustments in the use-package clauses of
     ;; the package itself.
     (setq base16-adjustments
           `(
+            (vterm-color-black :foreground "#2e3440")
+            (vterm-color-red :foreground "#bf616a")
+            (vterm-color-green :foreground "#a3be8c")
+            (vterm-color-yellow :foreground "#ebcb8b")
+            (vterm-color-blue :foreground "#81a1c1")
+            (vterm-color-cyan :foreground "#88c0c0")
+            (vterm-color-magenta :foreground "#b48ead")
+
+
+
             ;; Explicitly define the outline colors
             (outline-1 :foreground "#5e81ac")
             (outline-2 :foreground "#a3be8c")
@@ -561,7 +571,7 @@ Although I think the 16 color system is a bit simplistic and, for emacs at least
             (font-lock-comment-face         :foreground "#666666")
             (button                         :foreground "#d08770" :weight semi-bold)
 
-            (show-paren-match               :foreground "#eceff4" :background "#5e81ac"
+            (show-paren-match               :foreground "#eceff4" :background "#81a1c1"
                                             :inherit nil :weight normal)
             (show-paren-mismatch            :foreground "#2e3440" :background "#bf616a"
                                             :inherit nil :weight normal)
