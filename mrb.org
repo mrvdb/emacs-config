@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent
 
-Last update: <2021-02-17 12:12:26>
+Last update: <2021-04-18 13:29:09>
 
 #+TOC: headlines 1
 
@@ -2673,20 +2673,23 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
     :commands mu4e
     :bind (:map mu4e-main-mode-map
                 ("q" . mrb/mu4e-quit) ; just close the menu
-                ("Q" . mu4e-quit)
-                (";" . nil)
+                ("Q" . mu4e-quit)     ; really Quit
+                (";" . nil)           ; this was too easy to press by mistake
                 ("C-;" . mu4e-context-switch)
+                ("s" . nil)               ; map search to / only
+                ("/" . mu4e-headers-search)
                 :map mu4e-headers-mode-map
-                ("j" . mu4e-headers-mark-for-junk)
+                ("s" . mu4e-headers-mark-for-junk)
                 ("r" . mu4e-compose-reply)
                 ("R" . mu4e-headers-mark-for-refile)
                 ("X" . (lambda () (interactive) (mu4e-mark-execute-all t)))
-                :map mu4e-view-mode-map
-                ("j" . mu4e-view-mark-for-junk)
+                ("e" . mu4e-headers-search-edit)
+            :map mu4e-view-mode-map       ;FIXME: sometimes does not stick/take?
+                ("s" . mu4e-view-mark-for-junk)
                 ("r" . mu4e-compose-reply)
                 ("R" . mu4e-view-mark-for-refile)
-                ("X" . (lambda () (interactive) (mu4e~view-in-headers-context (mu4e-mark-execute-all t)))))
-    ;; TODO: how are we editting a search? e?
+                ("X" . (lambda () (interactive) (mu4e~view-in-headers-context (mu4e-mark-execute-all t))))
+                ("e" . mu4e-view-search-edit))
 
     :init
 
