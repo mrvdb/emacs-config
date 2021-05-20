@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent
 
-Last update: <2021-04-18 13:31:53>
+Last update: <2021-05-20 11:23:16>
 
 #+TOC: headlines 1
 
@@ -466,14 +466,16 @@ For this to work properly we have to define a whole new input-method based on a 
 
 #+end_src
 
-For even more esoteric characters we have to do some extra work. No font provides all Unicode characters. There are packages (like unicode-fonts) which aim to create a giant replacement table for characters. While I'm sure this works, the characters I tried either already worked or didn't change, i.e. still don't work. So, the solution I've come up with (with some borrowing here and there obviously) is to create a table of my own to which I can add characters to use certain fonts which *do* have the characters and be done with them.
+For even more esoteric characters we have to do some extra work. No font provides all Unicode characters. While I previously had a manual solution, I'm now relying on the package =unicode-fonts= to do the proper mapping. The first run will be very slow, but the information gets cached.
 
 The problem with applying this function is that we need to be 'done' with our visual initialisation or otherwise they'll do nothing (at least that I can see). So, let's group our corrections in a function and call that when we are done with our visual (X) init.
 
 #+begin_src emacs-lisp
+  (use-package unicode-fonts)
+
   (defun mrb/unicode-font-corrections()
     (interactive)
-    ;(emoji-fontset-enable "Symbola")
+    (unicode-fonts-setup)
   )
 #+end_src
 
@@ -785,8 +787,7 @@ Note that if this code is evaluated any call to =emacsclient= (be that from exte
   ;; overkill to do on every frame, but it covers the situation where
   ;; `server-visit-hook` won't work because we started emacs without a
   ;; file. This config covers all situations.
-  (add-hook 'after-make-frame-functions 'mrb/run-client-settings)
-
+  (add-hook 'server-after-make-frame-hook 'mrb/run-client-settings)
   ;; And we need to run those settings *now* too, when we are not in server mode
   (mrb/run-client-settings)
 #+end_src
