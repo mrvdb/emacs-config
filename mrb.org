@@ -392,8 +392,9 @@ In quite a few situation I would like to use keybinding which are only valid whe
     :after (org)
     :init
     (setq selected-org-mode-map (make-sparse-keymap)) ;create map for selected regions
+    (setq selected-org-journal-mode-map (make-sparse-keymap))
     :commands selected-minor-mode         ; do I want the global one too?
-    :bind (:map selected-keymap           ; bindings for all active regions
+    :bind ( :map selected-keymap           ; bindings for all active regions
                 ("q" . selected-off)
                 ("u" . upcase-region)
                 ("d" . downcase-region)
@@ -402,6 +403,12 @@ In quite a few situation I would like to use keybinding which are only valid whe
            ("~"       . (lambda () (interactive) (org-emphasize ?~)))
            ("_"       . (lambda () (interactive) (org-emphasize ?_)))
            ("*"       . (lambda () (interactive) (org-emphasize ?*)))
+            ("+"       . (lambda () (interactive) (org-emphasize ?+)))
+            :map selected-org-journal-mode-map
+            ;; Used by the selected package FIXME I want this configured with org, not here
+            ("~"       . (lambda () (interactive) (org-emphasize ?~)))
+            ("_"       . (lambda () (interactive) (org-emphasize ?_)))
+            ("*"       . (lambda () (interactive) (org-emphasize ?*)))
            ("+"       . (lambda () (interactive) (org-emphasize ?+))))
     :config
     (selected-global-mode))
