@@ -2695,6 +2695,7 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
                 ("R" . mu4e-headers-mark-for-refile)
                 ("X" . (lambda () (interactive) (mu4e-mark-execute-all t)))
                 ("e" . mu4e-headers-search-edit)
+                ("/" . mu4e-headers-search)
             :map mu4e-view-mode-map       ;FIXME: sometimes does not stick/take?
                 ("s" . mu4e-view-mark-for-junk)
                 ("r" . mu4e-compose-reply)
