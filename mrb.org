@@ -2802,6 +2802,7 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
      mu4e-completing-read-function 'completing-read
 
      ;; Message view settings
+     mu4e-view-use-old nil
      mu4e-view-show-images t              ; This creates connections, possible privacy issue?
      mu4e-view-image-max-width 800
      mu4e-view-image-max-height 600
