@@ -2714,25 +2714,26 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
 
     (fullframe mu4e mrb/mu4e-quit)                  ; Claim the whole screen
     :config
-    ;; Use local thread-folding package
-    ;; (use-package mu4e-thread-folding
-    ;;   :ensure nil
-    ;;   :load-path (lambda () (concat custom-package-directory "mu4e-thread-folding"))
-    ;;   :init
-    ;;   ;; Make sure we have our custom emptyr field to put the symbols in place
-    ;;   (add-to-list 'mu4e-header-info-custom
-    ;;                '(:empty . (:name "Empty"
-    ;;                                  :shortname ""
-    ;;                                  :function (lambda (msg) "  "))))
-    ;;   :bind (:map mu4e-headers-mode-map
-    ;;               ("<right>" . mu4e-headers-unfold-at-point)
-    ;;               ("<left>"  . mu4e-headers-fold-at-point)
-    ;;               ("S-<right>" . mu4e-headers-unfold-all)
-    ;;               ("S-<left>"  . mu4e-headers-fold-all))
-    ;;   :config
-    ;;   ;; This needs to be here, it's too early in the visual section
-    ;;   (set-face-attribute 'mu4e-thread-folding-root-unfolded-face nil :background "#434c5e")
-    ;;   (set-face-attribute 'mu4e-thread-folding-child-face nil :background "#4c566a"))
+    ; Use local thread-folding package
+    ; This used to give some problems with other packages?
+    (use-package mu4e-thread-folding
+      :ensure nil
+      :load-path (lambda () (concat custom-package-directory "mu4e-thread-folding"))
+      :init
+      ;; Make sure we have our custom empty field to put the symbols in place
+      (add-to-list 'mu4e-header-info-custom
+                   '(:empty . (:name "Empty"
+                                     :shortname ""
+                                     :function (lambda (msg) "  "))))
+      :bind (:map mu4e-headers-mode-map
+                  ("<right>" . mu4e-headers-unfold-at-point)
+                  ("<left>"  . mu4e-headers-fold-at-point)
+                  ("S-<right>" . mu4e-headers-unfold-all)
+                  ("S-<left>"  . mu4e-headers-fold-all))
+      :config
+      ;; This needs to be here, it's too early in the visual section
+      (set-face-attribute 'mu4e-thread-folding-root-unfolded-face nil :background "#434c5e")
+      (set-face-attribute 'mu4e-thread-folding-child-face nil :background "#4c566a"))
 
 
     ;; Show an alert when new mails come in, this relies on mu4e being active though
