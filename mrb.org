@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent
 
-Last update: <2021-05-20 11:23:16>
+Last update: <2021-06-15 12:01:04>
 
 #+TOC: headlines 1
 
@@ -2927,23 +2927,6 @@ To enable integration with orgmode =org-mu4e= must be loaded
     :after org)
 #+end_src
 
-Within =mu4e= both gnus and the internal mu4e viewer are supported for rendering messages. I use both, but it's a bit hard to switch between them. As it happens, there is a package to deal with this; =mu4e-views=, so let's use that.
-
-#+begin_src emacs-lisp
-  (use-package mu4e-views
-    :after mu4e
-    :bind (:map mu4e-headers-mode-map
-                ;; Main method I want to switch easily
-                ("v" . mu4e-views-mu4e-select-view-msg-method)
-                ("f" . mu4e-views-toggle-auto-view-selected-message))
-    :config
-    (setq mu4e-views-completion-method 'helm
-          mu4e-views-default-view-method "text"      ;; set the default, and select it
-          mu4e-views-mu4e-use-view-msg-method "text"
-          ;; when presssing n and p stay in the current window, not sure if I want this
-          mu4e-views-next-previous-message-behaviour 'stick-to-current-window
-          mu4e-views-auto-view-selected-message t))
-#+end_src
 *** Sieve
 Cyrus sieve is used on the server to filter our mail and this is accessed by the sieve-manage package. For some reason I can't get the '^M' characters out of the process, so here's a hack for that
 
