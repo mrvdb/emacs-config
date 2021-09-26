@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent
 
-Last update: <2021-06-15 12:01:04>
+Last update: <2021-09-26 14:04:04>
 
 #+TOC: headlines 1
 
@@ -126,6 +126,7 @@ Having a server/servers opens a couple of options which I may like, but not sure
 
 - having multiple emacs servers could help with specific scenario's for mu4e for example. I'd love to have the mu-server in itw own process and just use that from other emacs servers Similarly for long running language servers and or other processes which shouldn't be affected by me clawing words into my keyboard.
 
+
 * Package Management
 Package handling, do this early so emacs knows where to find things.
 
@@ -138,10 +139,9 @@ First of all, define the package archives I need; for now, just the default gnu 
 
   (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
   (add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/") t)
-  (add-to-list 'package-archives '("org" . "https://orgmode.org/elpa/") t)
 
   ;; Set explicit priorities (gnu is the default package-archive)
-  (setq package-archive-priorities '(("org" . 4)
+  (setq package-archive-priorities '(
                                      ("melpa" . 3)
                                      ("melpa-stable" . 2)
                                      ("gnu" . 1)))
@@ -1073,7 +1073,6 @@ Also make sure we never load org from internal, this can happen when functions w
 #+begin_src emacs-lisp
   (use-package org
     :ensure nil
-    :pin org
     :mode ("\\.txt\\'" "\\.org\'")
     :after (org-capture visual-fill-column)
     :bind (("C-c g"   . 'mrb/gtd)
