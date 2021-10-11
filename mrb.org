@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent
 
-Last update: <2021-09-26 14:04:04>
+Last update: <2021-10-11 10:36:20>
 
 #+TOC: headlines 1
 
@@ -2853,12 +2853,6 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
                  (mu4e-compose-signature . nil)))
        )
      )
-
-
-    ;; Define actions for the message view
-    ;; Allow showing in browser when there is a HTML mess to deal with
-    (add-to-list 'mu4e-view-actions
-                 '("b - view in external browser" . mu4e-views-mu4e-view-in-browser-action))
 
     ;; Define marks
     (add-to-list 'mu4e-marks
