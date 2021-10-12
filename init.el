@@ -22,11 +22,12 @@
       (setq comp-deferred-compilation t))
   (message "Native complation is *not* available"))
 
-;; My org file is posted using writefreely, which uses local variables
+;; My org file is posted using writefreely, which uses local variables, we need them right away
 (add-to-list 'safe-local-variable-values '(writefreely-post-id . "wf83bq5jwz"))
 (add-to-list 'safe-local-variable-values '(writefreely-post-token . nil))
 
 (setq config-file (concat user-emacs-directory "mrb.org"))
+;; This presumably uses the internal orgmode version?
 (org-babel-load-file config-file)
 
 ;; END init.el
