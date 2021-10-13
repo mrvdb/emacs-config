@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent
 
-Last update: <2021-10-12 14:38:48>
+Last update: <2021-10-14 13:36:02>
 
 #+TOC: headlines 1
 
@@ -119,77 +119,59 @@ Having a server/servers opens a couple of options which I may like, but not sure
 
 
 * Package Management
-Package handling, do this early so emacs knows where to find things.
+Package handling, do this early so emacs knows where to find things. Package handling basically means two things:
 
-First of all, define the package archives I need; for now, just the default gnu augmented with the melpa repository.
+1. getting and installing packages, by default handled by package.el;
+2. configuring packages, just elisp, but I use the =use-package= macro typically.
 
-#+begin_src emacs-lisp
-  ;; Need to load
-  (if (version< emacs-version "27")
-    (package-initialize))
-
-  (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
-  (add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/") t)
-
-  ;; Set explicit priorities (gnu is the default package-archive)
-  (setq package-archive-priorities '(
-                                     ("melpa" . 3)
-                                     ("melpa-stable" . 2)
-                                     ("gnu" . 1)))
-
-  (unless (package-installed-p 'use-package) ; Bootstrap use-package
-    (message "Use package needs to be installed")
-    (package-refresh-contents)
-    (package-install 'use-package))
-
-  ;; Use-package can now be used for itself
-  (use-package use-package
-    :init
-    (setq use-package-always-ensure t)  ; Try installing automatically
-    (setq use-package-verbose nil)              ; Set to true when interested in load times
-    ;; If running as daemon, there's no reason to defer,just load shite
-    ;; to minimize chance of lockup, but it still happens sometimes.
-    (if (daemonp)
-        (setq use-package-always-demand t))
-
-    (use-package use-package-ensure-system-package :ensure t)   ; Need this because we are in use-package config
-
-    ;; Location where I keep custom packages
-    (setq custom-package-directory (concat user-emacs-directory "lisp/")))
-#+end_src
-
-Now, there's an issue where a variable =package-selected-packages= gets written to =custom.el= everytime I try a package. I do not want that. The site [[http://www.holgerschurig.de/en/emacs-dont-let-packages-pollute-custom-el/][from holger]] has an answer for that, although it needs a slight adaptation (=context= argument is not there anymore)
+As I want to have version controlled package installation that is easily reproduceable, =straight.el= seem a logical choice, so let's start by bootstrapping that.
 
 #+begin_src emacs-lisp
-  ;; Override the function that write to selected packages
-  (defun package--save-selected-packages (&optional value) nil)
+  (defvar bootstrap-version)
+  (setq straight-repository-branch "develop") ; Need this for new org-contrib location
+  (let ((bootstrap-file
+         (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+        (bootstrap-version 5))
+    (unless (file-exists-p bootstrap-file)
+      (with-current-buffer
+          (url-retrieve-synchronously
+           "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
+           'silent 'inhibit-cookies)
+        (goto-char (point-max))
+        (eval-print-last-sexp)))
+    (load bootstrap-file nil 'nomessage))
 #+end_src
 
-So, =package-selected-packages= will not stay empty and not written out. The first is a bit problematic though, because package-list will then show every installed package as =dependency= instead of installed.  We can correct this by overriding the package ensure function to our own and fill the variable to correct the listings.
+Now that we have =straight= we can use it to install =use-package=
 
 #+begin_src emacs-lisp
-  (defun mrb/use-package-ensure-elpa (name args state &optional no-refresh)
-    ;; Args is a list, but only has 1 entry?
-    (dolist (ensure args)
-      (let ((package
-             (or (and (eq ensure t) (use-package-as-symbol name))
-                 ensure)))
-        (when package
-          ;; It needs to be selected
-          (add-to-list 'package-selected-packages package))))
-    ;; Execute the default ensure elpa function
-    (use-package-ensure-elpa name args state no-refresh))
+  (straight-use-package 'use-package)      ; Install use-package
+  (setq use-package-always-ensure nil      ; Make sure this is nil, so we dont use package.el
+        use-package-always-demand t        ; FIXME: only when using deamon?
+        )
 
-  (setq use-package-ensure-function #'mrb/use-package-ensure-elpa)
+  ;; From this point on we should be abale to use `use-package
+  (use-package straight
+    :custom (straight-use-package-by-default t))
+
 #+end_src
+
+
+#+begin_src emacs-lisp
+  (use-package use-package-ensure-system-package)   ; Need this because we are in use-package config
+
+  ;; Location where I keep custom packages
+  (setq custom-package-directory (concat user-emacs-directory "lisp/"))
+#+end_src
+
+
 
 Finally, make updating and installing the packages a bit easier by having a keybinding for getting to the installation part right away
 
 #+begin_src emacs-lisp
   (defun mrb/upgrade-packages ()
     (interactive)
-    (list-packages)
-    (package-menu-mark-upgrades))
+    (message "Rewrite this function to use straight.el"))
 
   (bind-key "C-c p" 'mrb/upgrade-packages)
 #+end_src
@@ -220,8 +202,8 @@ I have a gpg-agent daemon configured which manages gpg and ssh keys, protected b
 
 #+begin_src emacs-lisp
   ;; Use only password-store
+  (use-package password-store)            ; Missing auto dependency?
   (use-package auth-source-pass
-    :ensure password-store
     :init
     (auth-source-pass-enable)
     :config
@@ -302,7 +284,7 @@ A the same time, I don't want to be /that spaces guy/ in every project, and I'm 
   ;; and if so, it will not revert to the saved file.
   (use-package autorevert
     :diminish auto-revert-mode
-    :ensure nil
+
     :config
     (global-auto-revert-mode t))
 
@@ -337,7 +319,7 @@ Make life easier if we have sudo, so we can just edit the files and be done with
 
 #+begin_src emacs-lisp
   (use-package sudo-save
-    :ensure nil
+
     :load-path (lambda () (concat custom-package-directory "sudo-save/")))
 #+end_src
 
@@ -386,21 +368,21 @@ In quite a few situation I would like to use keybinding which are only valid whe
     (setq selected-org-journal-mode-map (make-sparse-keymap))
     :commands selected-minor-mode         ; do I want the global one too?
     :bind ( :map selected-keymap           ; bindings for all active regions
-                ("q" . selected-off)
-                ("u" . upcase-region)
-                ("d" . downcase-region)
-           :map selected-org-mode-map
-           ;; Used by the selected package FIXME I want this configured with org, not here
-           ("~"       . (lambda () (interactive) (org-emphasize ?~)))
-           ("_"       . (lambda () (interactive) (org-emphasize ?_)))
-           ("*"       . (lambda () (interactive) (org-emphasize ?*)))
+            ("q" . selected-off)
+            ("u" . upcase-region)
+            ("d" . downcase-region)
+            :map selected-org-mode-map
+            ;; Used by the selected package FIXME I want this configured with org, not here
+            ("~"       . (lambda () (interactive) (org-emphasize ?~)))
+            ("_"       . (lambda () (interactive) (org-emphasize ?_)))
+            ("*"       . (lambda () (interactive) (org-emphasize ?*)))
             ("+"       . (lambda () (interactive) (org-emphasize ?+)))
             :map selected-org-journal-mode-map
             ;; Used by the selected package FIXME I want this configured with org, not here
             ("~"       . (lambda () (interactive) (org-emphasize ?~)))
             ("_"       . (lambda () (interactive) (org-emphasize ?_)))
             ("*"       . (lambda () (interactive) (org-emphasize ?*)))
-           ("+"       . (lambda () (interactive) (org-emphasize ?+))))
+            ("+"       . (lambda () (interactive) (org-emphasize ?+))))
     :config
     (selected-global-mode))
 
@@ -524,14 +506,14 @@ Although I think the 16 color system is a bit simplistic and, for emacs at least
     ;; This should be the only place where we adjust our faces
     ;; For reference, these are the theme colors
 
-    ;; :base00 "#2e3440"
-    ;; :base01 "#3b4252"
-    ;; :base02 "#434c5e"
-    ;; :base03 "#4c566a"
-    ;; :base04 "#d8dee9"
-    ;; :base05 "#e5e9f0"
-    ;; :base06 "#eceff4"
-    ;; :base07 "#8fbcbb"
+     ;; :base00 "#2e3440"
+     ;; :base01 "#3b4252"
+     ;; :base02 "#434c5e"
+     ;; :base03 "#4c566a"
+     ;; :base04 "#d8dee9"
+     ;; :base05 "#e5e9f0"
+     ;; :base06 "#eceff4"
+     ;; :base07 "#8fbcbb"
      ;; :base08 "#88c0d0"
      ;; :base09 "#81a1c1"
      ;; :base0A "#5e81ac"
@@ -667,25 +649,26 @@ Miscelaneous other visual settings follow.
 
   ;; Modeline
   ;; TODO: probably simplify this package, now we do not need evil support
+  (use-package spaceline
+    :straight (:includes spaceline-config))
+
   (use-package spaceline-config
     :after tracking
-    :ensure spaceline
-    :ensure eyebrowse
-    :ensure persp-mode
-    :ensure window-numbering
+   ;;   :requires eyebrowse
+  ;;   :requires persp-mode
+  ;;   :requires window-numbering
     :config
-
     ;; Define a segment for the tracking package
     (spaceline-define-segment tracking
       "Segment to show if buffers need attention, similar to
-      erc-track, but using mcirc tracking library"
-      tracking-mode-line-buffers)
+       erc-track, but using mcirc tracking library"
+       tracking-mode-line-buffers)
 
-    ;; We use the spacemacs theme, which gives us the evil state indicator
-    (spaceline-spacemacs-theme 'tracking)
+     ;; We use the spacemacs theme, which gives us the evil state indicator
+     (spaceline-spacemacs-theme 'tracking)
 
-    ;; Enable the helm mode
-    (spaceline-helm-mode))
+     ;; Enable the helm mode
+     (spaceline-helm-mode))
 
   (use-package mic-paren
     :config
@@ -746,7 +729,7 @@ Line-numbering is off by default, it tends to slow things down, but if I want it
 
 #+begin_src emacs-lisp
   (use-package display-line-numbers
-    :ensure nil ;;builtin
+     ;;builtin
     :config
     (setq
      display-line-numbers-type 'relative)
@@ -807,7 +790,7 @@ Now we can start configuring flycheck
 #+begin_src emacs-lisp
   (use-package flycheck
     ;; Use popup to show flycheck message
-    :ensure flycheck-pos-tip
+    :requires flycheck-pos-tip
     :config
     (with-eval-after-load 'flycheck
       (flycheck-pos-tip-mode)))
@@ -820,7 +803,7 @@ Flyspell is similar to flycheck but for text languages. I'm setting some of the 
 
 #+begin_src emacs-lisp
   (use-package flyspell
-    :ensure nil ;builtin
+     ;builtin
     :config
 
     ;; flyspell-duplicate  as warnings
@@ -917,7 +900,7 @@ Also, save the location in files between sessions.
 
   ;; Save places in buffers between sessions
   (use-package saveplace
-    :ensure nil ;builtin
+     ;builtin
     :init
     (setq-default save-place-mode t))
 #+end_src
@@ -950,7 +933,7 @@ For file management itself, dired is the defacto standard It's builtin so =use-p
 
 #+begin_src emacs-lisp
   (use-package dired
-    :ensure nil                                 ;builtin
+    :straight (:type built-in)                                 ;builtin
     :init
     ;; auto-revert global is only for buffers with a file attached
       (add-hook 'dired-mode-hook #'auto-revert-mode)
@@ -997,15 +980,15 @@ When emacs does not determine the right mode, I sometimes want a modestring some
         (comment-region (point-min) (point)))))
 #+end_src
 
-First bring in a bunch of modes that are used regularly, but have no other config than a map to some extensions. =:ensure= is set to nil for those packages which aret built in.
+First bring in a bunch of modes that are used regularly, but have no other config than a map to some extensions. =:requires= is set to nil for those packages which aret built in.
 
 #+begin_src emacs-lisp
   (use-package adoc-mode             :mode ("\\.asciidoc\\'" "\\.adoc\\'"))
   (use-package apache-mode           :mode "\\.htaccess\\'")
-  (use-package conf-mode :ensure nil)
-  (use-package css-mode  :ensure nil :mode ("\\.css\\'" "\\.mss\\'"))
+  (use-package conf-mode )
+  (use-package css-mode   :mode ("\\.css\\'" "\\.mss\\'"))
   (use-package csv-mode              :mode "\\.csv\\'")
-  (use-package diff-mode :ensure nil :mode "\\.patch\\'")
+  (use-package diff-mode  :mode "\\.patch\\'")
   (use-package gnuplot-mode          :mode "\\.gp\\'")
   (use-package js2-mode              :mode "\\.js\\'")
   (use-package lua-mode              :mode "\\.lua\\'")
@@ -1029,12 +1012,13 @@ Now, do the other mode related packages which require a bit of configuration.
   (use-package scratch)
   ;; Don't throw away scratch buffer
   (use-package persistent-scratch
-    :ensure t
+    :requires t
     :config
     (persistent-scratch-setup-default))
 
   (use-package nxml-mode
-    :ensure nil ;; builtin mode
+     ;; builtin mode
+    :straight (:type built-in)
     :config
     (setq nxml-heading-element-name-regexp "\\|.*"
           nxml-section-element-name-regexp "\\|file\\|.+")
@@ -1063,6 +1047,7 @@ Also make sure we never load org from internal, this can happen when functions w
 #+COMMENT: This duplicates the one in init.el, problems?
 #+begin_src emacs-lisp
   (use-package org
+    :straight (:includes (org-capture org-crypt org-datetree org-protocol))
     :mode ("\\.txt\\'" "\\.org\'")
     :after (org-capture visual-fill-column)
     :bind (("C-c g"   . 'mrb/gtd)
@@ -1145,8 +1130,8 @@ Also make sure we never load org from internal, this can happen when functions w
           org-startup-indented t)
 
     ;; Allow for archiving and refiling in a date organised tree
-    (use-package org-datetree :ensure nil)
-    (use-package org-protocol :ensure nil
+    (use-package org-datetree )
+    (use-package org-protocol
       :config
       ;; If nothing is specified, create a TODO item
       (setq org-protocol-default-template-key "t")))
@@ -1177,7 +1162,7 @@ The =org-capture-pop-frame= package makes sure all captures are in separate fram
 #+begin_src emacs-lisp
   (use-package org-capture
     :diminish
-    :ensure nil
+
     :after org-journal
     :config
     (setq org-capture-bookmark nil))
@@ -1319,7 +1304,8 @@ To keep the TODO list clean we immediately archive the completed entry in the ar
 I'm not sure if this works out in practice without having a confirmation (because we archive the whole subtree), so for now, I'm building in the confirmation.
 
 #+begin_src emacs-lisp
-  (use-package org-habit :ensure nil)
+  ;; (use-package org-habit
+  ;;   :straight (:type built-in))
 
   ;; I need a modified version of org-is-habit, which takes inheritance
   ;; in to account
@@ -1404,8 +1390,8 @@ So, to help with that I created a little glue to make sure each actionable item 
 I want the property to be name 'CREATED' (I don't remeber what the org-expiry default name is, but it is different) and the timestamps inserted must not be active, otherwise they'll appear all over the place in the agenda.
 
 #+begin_src emacs-lisp
+  (use-package org-contrib)
   (use-package org-expiry
-    :ensure nil
     :load-path (lambda () (concat custom-package-directory "org-expiry/"))
     :init
     (setq org-expiry-created-property-name "CREATED"
@@ -1435,7 +1421,6 @@ Now that function is used to insert the property when:
 
   (ad-activate 'org-insert-todo-heading)
 
-  (use-package org-capture :ensure nil)
   (defadvice org-capture (after mrb/created-timestamp-advice activate)
     "Insert a CREATED property using org-expiry.el for TODO entries"
     (when (member (org-get-todo-state) org-todo-keywords-1)
@@ -1620,7 +1605,7 @@ Over the years the amount of information I manage with orgmode has grown conside
 To have a more structured solution for org type content, I'm using =org-ql=
 
 #+begin_src emacs-lisp
-  (use-package org-ql)
+  ;; (use-package org-ql)   ; Postponing, has wrong repository reference for peg.el
 #+end_src
 
 One thing I use this for is in my habits file to predefine a search for the relevant items for the habit.
@@ -1870,7 +1855,7 @@ I use the /encrypt/ tag for encrypting sections in org-mode (and sometimes my jo
 
 #+begin_src emacs-lisp
   (use-package org-crypt
-    :ensure nil
+
     :config
     (org-crypt-use-before-save-magic)
     (setq org-crypt-tag-matcher "encrypt")
@@ -2591,7 +2576,7 @@ At times we want to send signed and/or encrypted mail
 
 #+begin_src emacs-lisp
   (use-package mml-sec
-    :ensure nil                                                         ; Built-in
+    :straight (:type built-in)
     :config
     ; Use my key to sign
     (add-to-list 'mml-secure-openpgp-signers user-gpg-encrypt-key)
@@ -2605,7 +2590,7 @@ It's not entirely clear which package is exactly responsible for what, but there
 
 #+begin_src emacs-lisp
   (use-package message
-    :ensure nil  ;; Emacs included, no need to go look for it
+    :straight (:type built-in)
     :requires org-faces
     :config
     (setq
@@ -2677,7 +2662,8 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
     (kill-buffer (current-buffer)))
 
   (use-package mu4e
-    :ensure nil                           ; dont load from remotes
+    :straight (:includes (org-mu4e mu4e-icalendar))
+                               ; dont load from remotes
     :after message fullframe
     :commands mu4e
     :bind (:map mu4e-main-mode-map
@@ -2687,7 +2673,7 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
                 ("C-;" . mu4e-context-switch)
                 ("s" . nil)               ; map search to / only
                 ("/" . mu4e-headers-search)
-                :map mu4e-headers-mode-map
+            :map mu4e-headers-mode-map
                 ("s" . mu4e-headers-mark-for-junk)
                 ("r" . mu4e-compose-reply)
                 ("R" . mu4e-headers-mark-for-refile)
@@ -2710,8 +2696,7 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
     ; Use local thread-folding package
     ; This used to give some problems with other packages?
     (use-package mu4e-thread-folding
-      :ensure nil
-      :load-path (lambda () (concat custom-package-directory "mu4e-thread-folding"))
+      :straight (:type git :host github :repo "rougier/mu4e-thread-folding")
       :init
       ;; Make sure we have our custom empty field to put the symbols in place
       (add-to-list 'mu4e-header-info-custom
@@ -2739,7 +2724,7 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
 
     ;; Support icalendar Yes/No/Maybe reactions to calendar invites
     (use-package mu4e-icalendar
-      :ensure nil
+
       :config
       (mu4e-icalendar-setup))
 
@@ -2747,14 +2732,16 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
     (use-package mu4e-jump-to-list)       ; Shortcut key 'l' to directly focus on list threads
 
     ;; Patch highlighting inside messages
-    (use-package mu4e-patch
-      :ensure nil
-      :load-path "~/dat/src/emacs/packages/mu4e-patch"
+    (use-package message-view-patch
+      ;;FIXME: package is in melpa but straight cant find it?
+      :straight (:type git :host github :repo "seanfarley/message-view-patch")
       :config
-      (add-hook 'mu4e-view-mode-hook #'mu4e-patch-highlight))
+      (add-hook 'mu4e-view-mode-hook #'message-view-patch-highlight))
 
     ;; Try to get some more icons in mu4e to spice up the display
     (use-package mu4e-marker-icons
+      ;; FIXME: package is on melpa, why not found?
+      :straight (:type git :host github :repo "stardiviner/mu4e-marker-icons")
       :init
       ;; This is needed for me,otherwise the lineheight is fucked up
       (setq mu4e-marker-icons-use-unicode 0)
@@ -2768,7 +2755,7 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
      mu4e-sent-folder     "/Sent"
      mu4e-drafts-folder   "/Drafts"
      mu4e-trash-folder    "/Trash"
-     mu4e-attachment-dir  "~/Downloads"         ; Absolute folder here, not relative to Maildir!
+     mu4e-attachment-dir  "~/Downloads"   ; Absolute folder here, not relative to Maildir!
      mrb/mu4e-junk-folder "/Junk"         ; Added for my specific config
 
      ;; Refiling to /Archives/YYYY
@@ -2800,14 +2787,14 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
      mu4e-view-show-images t              ; This creates connections, possible privacy issue?
      mu4e-view-image-max-width 800
      mu4e-view-image-max-height 600
-     mu4e-view-show-addresses t                         ; Show actuall addresses instead of names
+     mu4e-view-show-addresses t           ; Show actuall addresses instead of names
      mu4e-view-mode-hook '(turn-on-visual-line-mode)
      mu4e-save-multiple-attachments-without-asking t
 
      ;; Compose settings
-     mu4e-compose-format-flowed t                       ; Compose in format=flowed
+     mu4e-compose-format-flowed t         ; Compose in format=flowed
      mu4e-compose-in-new-frame t
-     mu4e-compose-dont-reply-to-self t  ; Do not include my addresses when replying
+     mu4e-compose-dont-reply-to-self t    ; Do not include my addresses when replying
 
      mail-signature t                   ; use mail-signature file (move to message section?)
      mu4e-compose-signature '(with-current-buffer
@@ -2912,7 +2899,7 @@ To enable integration with orgmode =org-mu4e= must be loaded
 
 #+begin_src emacs-lisp
   (use-package org-mu4e
-    :ensure nil
+
     :after org)
 #+end_src
 
@@ -3015,14 +3002,15 @@ I'm experimenting with Weechat now, mostly because it has multiple clients and c
 
 #+begin_src emacs-lisp
   (use-package weechat
+    ;; this works, but we /are/ inside weechat when we need this, can't it be autoloaded?
+    :straight (:includes (weechat-tracking weechat-notifications weechat-image))
     ;; I now have a patch in place ignoring the problem until issue is resolved upstream
     ;; See: https://github.com/the-kenny/weechat.el/issues/80
-    ;:if (version< emacs-version "27")
     :after tracking
     :config
-    (use-package weechat-tracking :ensure nil)
-    (use-package weechat-notifications :ensure nil)
-    (use-package weechat-image :ensure nil)
+    (use-package weechat-tracking )
+    (use-package weechat-notifications )
+    (use-package weechat-image )
     (setq weechat-host-default "chat.hsdev.com"
           weechat-port-default 8443
           weechat-mode-default 'ssl
@@ -3092,7 +3080,7 @@ For most of the languages I use (Bash, python, C, Go, HTML Haskell, Lua), the La
 
 #+begin_src emacs-lisp
     (use-package lsp-mode
-      :pin melpa
+
       :commands (lsp-deferred lsp)
 
       :init
@@ -3256,7 +3244,7 @@ My personal style will be called =mrb= and basing it on the =linux= style.
 
   ;; EditorConfig support, not used much by the looks of it
   (use-package editorconfig
-    :ensure t
+    :requires t
     :diminish ""
     :config
     (editorconfig-mode 1))
@@ -3269,7 +3257,7 @@ I am just starting out with haskell, but the two things that are probably needed
 
 #+begin_src emacs-lisp
   (use-package haskell-mode
-    :ensure ghc
+    :requires ghc
     :init
     (progn
       (add-hook 'haskell-mode-hook 'interactive-haskell-mode)
@@ -3306,7 +3294,8 @@ For creating web apps I use yesod, which is supported by a number of packages
 ** Go
 #+begin_src emacs-lisp
   (use-package go-mode
-    :ensure-system-package godef
+    ;; FIXME: how to do this with :straight
+    ;; :requires-system-package godef
     :config
     :init
     ;; Set up before-save hooks to format buffer and add/delete imports.
@@ -3339,7 +3328,7 @@ While we're here, let's do paxedit as well; not sure whey these two package don'
 
 #+begin_src emacs-lisp
   (use-package paxedit
-    :ensure paredit
+    :requires paredit
     :diminish
     :bind (("M-<right>" . 'paxedit-transpose-forward)
            ("M-<left>"  . 'paxedit-transpose-backward)
@@ -3366,16 +3355,22 @@ Not sure how to bind this though. I'd like it close to C-x C-e obviously
 [[https://www.nongnu.org/geiser][Geiser]] is, among other things, a repl for schemes. I try to use one, mostly for educational purposes. I chose guile because it also claims to support =emacs-lisp= and might be the future vm on which emacs-lisp will run. So, let's have it and use paredit in its REPL.
 
 #+begin_src emacs-lisp
-  (use-package geiser
-    :after paredit
-    :config
-    ; Add implementations to support
-    (setq geiser-active-implementations '(guile chez)
-          geiser-repl-send-on-return-p nil
-          geiser-default-implementation 'guile)
+      (use-package geiser
+        ;; repository moved and straight.el does not know about it yet
+        :straight (:type git :host gitlab :repo "emacs-geiser/geiser")
+        :after paredit
+        :config
+        ; Add implementations to support
+        (use-package geiser-guile
+          :straight (:type git :host gitlab :repo "emacs-geiser/guile"))
+        (use-package geiser-chez
+          :straight (:type git :host gitlab :repo "emacs-geiser/chez"))
+        (setq geiser-active-implementations '(guile chez)
+              geiser-repl-send-on-return-p nil
+              geiser-default-implementation 'guile)
 
-    (add-hook 'geiser-repl-mode-hook #'enable-paredit-mode)
-    (add-hook 'geiser-repl-mode-hook 'mrb/prettify-symbols))
+        (add-hook 'geiser-repl-mode-hook #'enable-paredit-mode)
+        (add-hook 'geiser-repl-mode-hook 'mrb/prettify-symbols))
 #+end_src
 
 *** Common lisp
@@ -3450,20 +3445,21 @@ I'm not in the habit of editting gcode, but every now and then I need to look at
 Using =define-generic-mode= is more than enough to define something useful for me.
 
 #+begin_src emacs-lisp
-  (use-package generic-x :ensure nil)
+    (use-package generic-x
+      :straight (:type built-in))
 
-  (define-generic-mode marlin-gcode-mode
-    '((";"))   ;; ; starts a comment
-    (apply 'append
-           (mapcar #'(lambda (s) (list (upcase s) (downcase s) (capitalize s)))
-                   '("keywords?" "exist?")))
-    '(("\\([GM]\\)[0-9]+" (1 font-lock-function-name-face))    ; code letters
-      ("\\([ABCDEFHIJKLNOPQRSTUVWXYZ]\\)[-]?[0-9]+" (1 font-lock-string-face)) ; parameter letters
-      ("\\([\-+]?[0-9]*\\.[0-9]+\\)" (1 font-lock-constant-face)) ; 9.9 type numbers
-      ("\\([\-+]?[0-9]+\\)" (1 font-lock-constant-face)))         ; 999 type numbers
-    '("\\.gcode\\'")
-    nil
-    "Mode for marlin g-code files.")
+    (define-generic-mode marlin-gcode-mode
+      '((";"))   ;; ; starts a comment
+      (apply 'append
+             (mapcar #'(lambda (s) (list (upcase s) (downcase s) (capitalize s)))
+                     '("keywords?" "exist?")))
+      '(("\\([GM]\\)[0-9]+" (1 font-lock-function-name-face))    ; code letters
+        ("\\([ABCDEFHIJKLNOPQRSTUVWXYZ]\\)[-]?[0-9]+" (1 font-lock-string-face)) ; parameter letters
+        ("\\([\-+]?[0-9]*\\.[0-9]+\\)" (1 font-lock-constant-face)) ; 9.9 type numbers
+        ("\\([\-+]?[0-9]+\\)" (1 font-lock-constant-face)))         ; 999 type numbers
+      '("\\.gcode\\'")
+      nil
+      "Mode for marlin g-code files.")
 #+end_src
 ** Openscad
 Openscad is a script based 3d parametric drawing program. Obviously I'm editting those scripts in emacs.
@@ -3504,6 +3500,10 @@ Features I'm interested in: issue commenting, pull requests
     (setq magit-last-seen-setup-instructions "1.4.0"
           magit-diff-refine-hunk 'all))
 
+
+  ;; yaml recipe is missing, and forge depends on it
+  (use-package yaml
+    :straight (:type git :host github :repo "zkry/yaml.el"))
 
   (use-package forge
     :after magit

@@ -37,9 +37,9 @@
        (org-agenda-group-by-property "Responsible")))
      ("b" "Buying list"
       ((tags-todo "-inactive+buy/-BUY"
-		  ((org-agenda-overriding-header "Buying list (tagged)")))
+                  ((org-agenda-overriding-header "Buying list (tagged)")))
        (tags-todo "-inactive/BUY"
-		  ((org-agenda-overriding-header "Buying list (keyword)"))))
+                  ((org-agenda-overriding-header "Buying list (keyword)"))))
       nil)
      ("p" "Active project list" tags-todo "-ignore-inactive+LEVEL>1-TODO=\"DONE\"-TODO=\"CANCELLED\"-TODO=\"INFO\""
       ((org-agenda-overriding-header "Active project list")
@@ -47,19 +47,19 @@
        (org-agenda-dim-blocked-tasks nil)
        (org-agenda-group-by-property "Group")
        (org-agenda-sorting-strategy
-	'(alpha-up))))
+        '(alpha-up))))
      ("A" "Active task list" tags-todo "+SCHEDULED=\"\"-inactive/TODO"
       ((org-agenda-group-by-property "Group")
        (org-agenda-dim-blocked-tasks 'invisible)))
      ("r" "To Review"
       ((tags-todo
-	#("SCHEDULED=\"\"+DEADLINE=\"\"-{.}/TODO" 25 28
-	  (regexp t))
-	((org-agenda-overriding-header "Untagged items")))
+        #("SCHEDULED=\"\"+DEADLINE=\"\"-{.}/TODO" 25 28
+          (regexp t))
+        ((org-agenda-overriding-header "Untagged items")))
        (tags-todo
-	#("-inactive+SCHEDULED=\"\"+DEADLINE=\"\"+TODO=\"TODO\"+{.}" 47 50
-	  (regexp t))
-	((org-agenda-overriding-header "Unscheduled active items"))))
+        #("-inactive+SCHEDULED=\"\"+DEADLINE=\"\"+TODO=\"TODO\"+{.}" 47 50
+          (regexp t))
+        ((org-agenda-overriding-header "Unscheduled active items"))))
       ((org-agenda-dim-blocked-tasks 'invisible)))
      ("c" "Scheduled overview" tags-todo "SCHEDULED<>\"\"|DEADLINE<>\"\"/TODO"
       ((org-agenda-overriding-header "SCHEDULED")
@@ -68,12 +68,12 @@
        (org-agenda-dim-blocked-tasks t)))
      ("l" "Blocked projects and tasks"
       ((tags-todo "+BLOCKED=\"t\"/PROJ"
-		  ((org-agenda-overriding-header "Blocked projects")
-		   (org-agenda-dim-blocked-tasks t)))
+                  ((org-agenda-overriding-header "Blocked projects")
+                   (org-agenda-dim-blocked-tasks t)))
        (tags-todo "+BLOCKED=\"t\"/TODO"
-		  ((org-agenda-overriding-header "Blocked tasks")
-		   (org-agenda-dim-blocked-tasks t)
-		   (org-agenda-group-by-property "Group"))))
+                  ((org-agenda-overriding-header "Blocked tasks")
+                   (org-agenda-dim-blocked-tasks t)
+                   (org-agenda-group-by-property "Group"))))
       nil nil)
      ("n" "Next Action List [hides blocked/inactive/waiting/INBOX-ed]" tags-todo "+SCHEDULED=\"\"+DEADLINE=\"\"-BLOCKED=\"t\"-inactive-habit-ARCHIVE/-WAITING-INFO-HOWTO"
       ((org-agenda-overriding-header "Next Action List")
@@ -84,12 +84,12 @@
        (org-agenda-group-by-property "CREATED")))
      ("g" "AGENDA"
       ((agenda ""
-	       ((org-agenda-filter-preset
-		 '("-inactive"))
-		(org-agenda-span 'day)
-		(org-agenda-overriding-header "Day agenda")))
+               ((org-agenda-filter-preset
+                 '("-inactive"))
+                (org-agenda-span 'day)
+                (org-agenda-overriding-header "Day agenda")))
        (tags-todo "carryover"
-		  ((org-agenda-overriding-header "Carry along list"))))
+                  ((org-agenda-overriding-header "Carry along list"))))
       nil)))
  '(org-agenda-text-search-extra-files
    '(agenda-archives "~/dat/org/_orgmeta/archive-2019.org" "~/dat/org/_orgmeta/archive-2018.org" "~/dat/org/_orgmeta/archive-2017.org" "~/dat/org/_orgmeta/archive-2016.org" "~/dat/org/_orgmeta/archive-2015.org" "~/dat/org/_orgmeta/archive-2014.org" "~/dat/org/_orgmeta/archive-2013.org" "~/dat/org/_orgmeta/archive-2012.org" "~/dat/org/_orgmeta/archive-2011.org"))
