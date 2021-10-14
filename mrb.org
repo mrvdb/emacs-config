@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent
 
-Last update: <2021-10-14 14:43:39>
+Last update: <2021-10-14 16:34:48>
 
 #+TOC: headlines 1
 
@@ -152,7 +152,6 @@ Now that we have =straight= we can use it to install =use-package=
   ;; From this point on we should be abale to use `use-package
   (use-package straight
     :custom (straight-use-package-by-default t))
-
 #+end_src
 
 
@@ -317,9 +316,7 @@ A the same time, I don't want to be /that spaces guy/ in every project, and I'm 
 Make life easier if we have sudo, so we can just edit the files and be done with them if possible
 
 #+begin_src emacs-lisp
-  (use-package sudo-save
-
-    :load-path (lambda () (concat custom-package-directory "sudo-save/")))
+  (use-package sudo-save)
 #+end_src
 
 Using pdf-tools for PDF handling. This is a lot better than docview. I'm a bit annoyed that they are not one package, they are very similar.
@@ -1011,7 +1008,6 @@ Now, do the other mode related packages which require a bit of configuration.
   (use-package scratch)
   ;; Don't throw away scratch buffer
   (use-package persistent-scratch
-    :requires t
     :config
     (persistent-scratch-setup-default))
 
@@ -1391,7 +1387,6 @@ I want the property to be name 'CREATED' (I don't remeber what the org-expiry de
 #+begin_src emacs-lisp
   (use-package org-contrib)
   (use-package org-expiry
-    :load-path (lambda () (concat custom-package-directory "org-expiry/"))
     :init
     (setq org-expiry-created-property-name "CREATED"
           org-expiry-inactive-timestamps  t))
@@ -2467,8 +2462,6 @@ In my browser I use vimium to jump to links with the keyboard. In emacs =avy= do
     :bind (("s-j" . 'avy-goto-char)))
 #+end_src
 In a more general sense, =evil-mode=, the VI emulation layer on top of emacs, is the ultimate navigational package. I have tried this for about 6 months, but it's not for me (yet).
-
-
 * Remote editing
 As my default shell is =zsh= tramp does not work out of the box for me. It gets confused by my prompt, so on top of my =.zshrc= file I have the following line:
 
@@ -2734,15 +2727,11 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
 
     ;; Patch highlighting inside messages
     (use-package message-view-patch
-      ;;FIXME: package is in melpa but straight cant find it?
-      :straight (:type git :host github :repo "seanfarley/message-view-patch")
       :config
       (add-hook 'mu4e-view-mode-hook #'message-view-patch-highlight))
 
     ;; Try to get some more icons in mu4e to spice up the display
     (use-package mu4e-marker-icons
-      ;; FIXME: package is on melpa, why not found?
-      :straight (:type git :host github :repo "stardiviner/mu4e-marker-icons")
       :init
       ;; This is needed for me,otherwise the lineheight is fucked up
       (setq mu4e-marker-icons-use-unicode 0)
@@ -3245,7 +3234,6 @@ My personal style will be called =mrb= and basing it on the =linux= style.
 
   ;; EditorConfig support, not used much by the looks of it
   (use-package editorconfig
-    :requires t
     :diminish ""
     :config
     (editorconfig-mode 1))
@@ -3296,7 +3284,7 @@ For creating web apps I use yesod, which is supported by a number of packages
 #+begin_src emacs-lisp
   (use-package go-mode
     ;; FIXME: how to do this with :straight
-    ;; :requires-system-package godef
+    :ensure-system-package godef
     :config
     :init
     ;; Set up before-save hooks to format buffer and add/delete imports.
