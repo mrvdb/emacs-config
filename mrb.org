@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent
 
-Last update: <2021-10-14 13:36:02>
+Last update: <2021-10-14 14:43:39>
 
 #+TOC: headlines 1
 
@@ -116,7 +116,6 @@ Having a server/servers opens a couple of options which I may like, but not sure
 - given that the socket can be a TCP socket, does that mean I can use emacsclient -some-arg <the ip of the socket> on one machine to use emacs on another machine? How well would that work? This would be awesome to have a small computer which doesn't need an emacs config to use my emacs on another machine, but I suspect I misunderstand how this works
 
 - having multiple emacs servers could help with specific scenario's for mu4e for example. I'd love to have the mu-server in itw own process and just use that from other emacs servers Similarly for long running language servers and or other processes which shouldn't be affected by me clawing words into my keyboard.
-
 
 * Package Management
 Package handling, do this early so emacs knows where to find things. Package handling basically means two things:
@@ -1471,10 +1470,12 @@ For the collapsed items in the outline orgmode uses the variable =org-ellipsis= 
   (setq org-ellipsis "…")
 #+end_src
 
-There are a couple of ways within org to emphasize text inline for *bold*, /italics/, underlined etc. These are set in the text by enclosing regions with delimiters. I do not want to see these delimiters, but rather render the text.
+There are a couple of ways within org to emphasize text inline for *bold*, /italics/, _underlined_ etc. These are set in the text by enclosing regions with delimiters. I do not want to see these delimiters, but rather render the text. The org-appear package makes this even fancier by showing the characters when inside the marked area, so editting is a lot easier.
 
 #+begin_src emacs-lisp
-  (setq org-hide-emphasis-markers t)
+  (use-package org-appear
+    :config
+    (add-hook 'org-mode-hook 'org-appear-mode))
 #+end_src
 
 Similar to inline emphasis is the /rewriting/ with pretty entity characters (like '\delta' for example). These characters can be added to the text by adding a '\' before a symbol name ('delta' in the example).  I make an exception for the sub- and superscript characters. This happens a lot in variable names etc. and I a big annoyance if those get rendered to subscript all the time.
@@ -3488,7 +3489,7 @@ Features I'm interested in: issue commenting, pull requests
 
 #+begin_src emacs-lisp
   (use-package magit
-    :after (fullframe)
+    :after fullframe
     :commands magit-status
     :bind
     ("C-c m" . magit-status)
