@@ -28,6 +28,7 @@
 
 (setq config-file (concat user-emacs-directory "mrb.org"))
 ;; This presumably uses the internal orgmode version?
+;; This produces mrb.el which is then loaded. It checks datetime before tangling.
 (org-babel-load-file config-file)
 
 ;; END init.el

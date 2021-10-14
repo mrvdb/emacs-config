@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent
 
-Last update: <2021-10-14 16:34:48>
+Last update: <2021-10-14 18:26:47>
 
 #+TOC: headlines 1
 
@@ -16,6 +16,17 @@ This document is irregularly published and lives in different locations:
 
 - available on github :: https://github.com/mrvdb/emacs-config
 - published on writefreely :: https://qua.name/mrb/an-org-babel-based-emacs-configuration
+
+
+* Files for configuration
+Next to this main configuration file (=mrb.org=), two other files are involved in the configuration:
+
+1. =early-init.el= emacs' early initialisation file;
+   #+INCLUDE: early-init.el src emacs-lisp
+
+2. =init.el= the main init file, which is used to generate =mrb.el= from =mrb.org=.
+   #+INCLUDE: init.el src emacs-lisp
+
 
 * Preparing for lift-off
 The first thing I want to take care of is to make customizations possible and stored in a place to my liking. I want to load this first so anything in the configuration I define explicitly overrides it.
@@ -532,8 +543,6 @@ Although I think the 16 color system is a bit simplistic and, for emacs at least
             (vterm-color-cyan :foreground "#88c0c0")
             (vterm-color-magenta :foreground "#b48ead")
 
-
-
             ;; Explicitly define the outline colors
             (outline-1 :foreground "#5e81ac")
             (outline-2 :foreground "#a3be8c")
@@ -593,6 +602,7 @@ Although I think the 16 color system is a bit simplistic and, for emacs at least
             (org-list-dt                    :foreground "#b48ead")
             (org-drawer                     :height 0.8 :inherit font-lock-comment-face)
             (org-code                       :foreground "Purple" :weight bold)
+            (org-block                      :background "#313745")
 
             ;; User defined faces for org-mode
             (mrb/org-todo-keyword-TODO      :foreground "#88c0d0" :weight bold)
@@ -1470,6 +1480,7 @@ There are a couple of ways within org to emphasize text inline for *bold*, /ital
 #+begin_src emacs-lisp
   (use-package org-appear
     :config
+    (setq org-hide-emphasis-markers t)    ; Is this used by org-appear mode?
     (add-hook 'org-mode-hook 'org-appear-mode))
 #+end_src
 
