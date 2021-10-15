@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent
 
-Last update: <2021-10-15 10:52:08>
+Last update: <2021-10-15 13:37:51>
 
 #+TOC: headlines 1
 
@@ -2603,7 +2603,7 @@ It's not entirely clear which package is exactly responsible for what, but there
     :requires org-faces
     :config
     (setq
-     ;; When citing, remove the original signature
+     ;; When citing, remove the senders signature.
      ;; FIXME: often I want to remove a lot more, like the disclaimer
      message-cite-function 'message-cite-original-without-signature
 
@@ -2702,7 +2702,7 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
     ; Use local thread-folding package
     ; This used to give some problems with other packages?
     (use-package mu4e-thread-folding
-      :straight (:type git :host github :repo "rougier/mu4e-thread-folding")
+      :straight (:host github :repo "rougier/mu4e-thread-folding")
       :init
       ;; Make sure we have our custom empty field to put the symbols in place
       (add-to-list 'mu4e-header-info-custom
@@ -3358,14 +3358,14 @@ Not sure how to bind this though. I'd like it close to C-x C-e obviously
 #+begin_src emacs-lisp
       (use-package geiser
         ;; repository moved and straight.el does not know about it yet
-        :straight (:type git :host gitlab :repo "emacs-geiser/geiser")
+        :straight (:host gitlab :repo "emacs-geiser/geiser")
         :after paredit
         :config
         ; Add implementations to support
         (use-package geiser-guile
-          :straight (:type git :host gitlab :repo "emacs-geiser/guile"))
+          :straight (:host gitlab :repo "emacs-geiser/guile"))
         (use-package geiser-chez
-          :straight (:type git :host gitlab :repo "emacs-geiser/chez"))
+          :straight (:host gitlab :repo "emacs-geiser/chez"))
         (setq geiser-active-implementations '(guile chez)
               geiser-repl-send-on-return-p nil
               geiser-default-implementation 'guile)
@@ -3504,7 +3504,7 @@ Features I'm interested in: issue commenting, pull requests
 
   ;; yaml recipe is missing, and forge depends on it
   (use-package yaml
-    :straight (:type git :host github :repo "zkry/yaml.el"))
+    :straight (:host github :repo "zkry/yaml.el"))
 
   (use-package forge
     :after magit
