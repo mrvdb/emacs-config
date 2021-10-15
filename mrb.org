@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent
 
-Last update: <2021-10-15 10:29:52>
+Last update: <2021-10-15 10:52:08>
 
 #+TOC: headlines 1
 
@@ -221,6 +221,8 @@ I have a gpg-agent daemon configured which manages gpg and ssh keys, protected b
     ;; Make sure it's the only mechanism
     (setq auth-sources '(password-store))
     (setq auth-source-gpg-encrypt-to (list user-mail-address)))
+  ;; I like the pass interface, so install that too
+  (use-package pass)
 #+end_src
 
 ** Encrypting information
