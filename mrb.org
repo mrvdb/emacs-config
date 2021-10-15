@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent
 
-Last update: <2021-10-15 13:37:51>
+Last update: <2021-10-15 13:46:33>
 
 #+TOC: headlines 1
 
@@ -162,8 +162,11 @@ Now that we have =straight= we can use it to install =use-package=
         use-package-always-demand t        ; FIXME: only when using deamon?
         )
 
-  ;; From this point on we should be abale to use `use-package
+  ;; From this point on we should be able to use `use-package
   (use-package straight
+    :config
+    (setq straight-host-usernames
+          '((github . "mrvdb")))
     :custom (straight-use-package-by-default t))
 #+end_src
 
@@ -3005,7 +3008,9 @@ I'm experimenting with Weechat now, mostly because it has multiple clients and c
 #+begin_src emacs-lisp
   (use-package weechat
     ;; this works, but we /are/ inside weechat when we need this, can't it be autoloaded?
-    :straight (:includes (weechat-tracking weechat-notifications weechat-image))
+    :straight (
+               :includes (weechat-tracking weechat-notifications weechat-image)
+               :fork t)
     ;; I now have a patch in place ignoring the problem until issue is resolved upstream
     ;; See: https://github.com/the-kenny/weechat.el/issues/80
     :after tracking
