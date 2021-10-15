@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent
 
-Last update: <2021-10-14 18:26:47>
+Last update: <2021-10-15 10:29:52>
 
 #+TOC: headlines 1
 
@@ -27,6 +27,8 @@ Next to this main configuration file (=mrb.org=), two other files are involved i
 2. =init.el= the main init file, which is used to generate =mrb.el= from =mrb.org=.
    #+INCLUDE: init.el src emacs-lisp
 
+Ideally these files should be produced by org-babel as well, just like the main configuration, but that generates a dependency because these two files need to be available from the beginning.
+I am not entirely sure if I need the early-init.el file though.
 
 * Preparing for lift-off
 The first thing I want to take care of is to make customizations possible and stored in a place to my liking. I want to load this first so anything in the configuration I define explicitly overrides it.
@@ -2668,30 +2670,27 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
 
   (use-package mu4e
     :straight (:includes (org-mu4e mu4e-icalendar))
-                               ; dont load from remotes
     :after message fullframe
     :commands mu4e
-    :bind (:map mu4e-main-mode-map
+    :bind (:map mu4e-search-minor-mode-map
+                ("/" . mu4e-search)
+                ("s" . nil)
+                ("e" . mu4e-search-edit)
+           :map mu4e-main-mode-map
                 ("q" . mrb/mu4e-quit) ; just close the menu
                 ("Q" . mu4e-quit)     ; really Quit
                 (";" . nil)           ; this was too easy to press by mistake
                 ("C-;" . mu4e-context-switch)
-                ("s" . nil)               ; map search to / only
-                ("/" . mu4e-headers-search)
             :map mu4e-headers-mode-map
                 ("s" . mu4e-headers-mark-for-junk)
                 ("r" . mu4e-compose-reply)
                 ("R" . mu4e-headers-mark-for-refile)
                 ("X" . (lambda () (interactive) (mu4e-mark-execute-all t)))
-                ("e" . mu4e-headers-search-edit)
-                ("/" . mu4e-headers-search)
-            :map mu4e-view-mode-map       ;FIXME: sometimes does not stick/take?
+           :map mu4e-view-mode-map
                 ("s" . mu4e-view-mark-for-junk)
                 ("r" . mu4e-compose-reply)
                 ("R" . mu4e-view-mark-for-refile)
-                ("X" . (lambda () (interactive) (mu4e~view-in-headers-context (mu4e-mark-execute-all t))))
-                ("/" . mu4e-headers-search)
-                ("e" . mu4e-view-search-edit))
+                ("X" . (lambda () (interactive) (mu4e~view-in-headers-context (mu4e-mark-execute-all t)))))
 
     :init
 
@@ -2844,7 +2843,7 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
                    :show-target (lambda (dyn-target) "Junk")
                    :ask-target (lambda () mrb/mu4e-junk-folder)
                    :action (lambda (docid msg target)
-                             (mu4e~proc-move
+                             (mu4e--server-move
                               docid
                               (mu4e~mark-check-target target) "+S-N-u"))))
 
