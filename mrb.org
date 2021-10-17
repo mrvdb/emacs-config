@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent
 
-Last update: <2021-10-15 13:46:33>
+Last update: <2021-10-17 10:08:42>
 
 #+TOC: headlines 1
 
@@ -1177,7 +1177,8 @@ The =org-capture-pop-frame= package makes sure all captures are in separate fram
 
     :after org-journal
     :config
-    (setq org-capture-bookmark nil))
+    (setq org-capture-bookmark nil
+          bookmark-set-fringe-mark nil))
 
   (use-package org-capture-pop-frame
     :after org-capture
@@ -3008,8 +3009,7 @@ I'm experimenting with Weechat now, mostly because it has multiple clients and c
 #+begin_src emacs-lisp
   (use-package weechat
     ;; this works, but we /are/ inside weechat when we need this, can't it be autoloaded?
-    :straight (
-               :includes (weechat-tracking weechat-notifications weechat-image)
+    :straight (:includes (weechat-tracking weechat-notifications weechat-image)
                :fork t)
     ;; I now have a patch in place ignoring the problem until issue is resolved upstream
     ;; See: https://github.com/the-kenny/weechat.el/issues/80
