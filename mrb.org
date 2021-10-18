@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent
 
-Last update: <2021-10-17 10:08:42>
+Last update: <2021-10-18 17:41:43>
 
 #+TOC: headlines 1
 
@@ -1487,6 +1487,7 @@ There are a couple of ways within org to emphasize text inline for *bold*, /ital
 
 #+begin_src emacs-lisp
   (use-package org-appear
+    :after org
     :config
     (setq org-hide-emphasis-markers t)    ; Is this used by org-appear mode?
     (add-hook 'org-mode-hook 'org-appear-mode))
