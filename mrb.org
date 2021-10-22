@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent
 
-Last update: <2021-10-18 17:41:43>
+Last update: <2021-10-22 15:33:46>
 
 #+TOC: headlines 1
 
@@ -3187,6 +3187,9 @@ The closest thing I found is =zeal= or =dash= which allow docsets to be searched
 #+begin_src emacs-lisp
   ;; Unify reference documentation with dash
   (use-package helm-dash
+    :init
+    ;; Make sure docset directory exists
+    (make-directory helm-dash-docsets-path t)
     :after helm
     :commands (helm-dash helm-dash-at-point)
     :config
