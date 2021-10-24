@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent
 
-Last update: <2021-10-24 12:42:36>
+Last update: <2021-10-24 12:58:26>
 
 #+TOC: headlines 1
 
@@ -2682,7 +2682,7 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
   (use-package mu4e
     :straight (:type git :host github :repo "djcb/mu"
                      :pre-build (("./autogen.sh") ("make"))
-                     :files (:defaults "mu4e/*.el")
+                     :files (:defaults "build/mu4e/*.el")
                      :includes (org-mu4e mu4e-icalendar))
     ;; Make sure we use what was just compiled
     :custom (mu4e-mu-binary (expand-file-name "build/mu/mu" (straight--repos-dir "mu")))
