@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent
 
-Last update: <2021-10-22 15:33:46>
+Last update: <2021-10-24 12:20:44>
 
 #+TOC: headlines 1
 
@@ -2675,8 +2675,16 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
     (interactive)
     (kill-buffer (current-buffer)))
 
+  ;; FIXME: check for system packages meson, g++, pkg-config,
+  ;;        cmake, libglib2.0-dev, libgmime3.0-dev, libxapian-dev, texinfo
+  ;; (names are debian package names)
   (use-package mu4e
-    :straight (:includes (org-mu4e mu4e-icalendar))
+    :straight (:type git :host github :repo "djcb/mu"
+                     :pre-build (("./autogen.sh") ("make"))
+                     :files (:defaults "mu4e/*.el")
+                     :includes (org-mu4e mu4e-icalendar))
+    ;; Make sure we use what was just compiled
+    :custom (mu4e-mu-binary (expand-file-name "build/mu/mu" (straight--repos-dir "mu")))
     :after message fullframe
     :commands mu4e
     :bind (:map mu4e-search-minor-mode-map
@@ -2700,7 +2708,6 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
                 ("X" . (lambda () (interactive) (mu4e~view-in-headers-context (mu4e-mark-execute-all t)))))
 
     :init
-
     (fullframe mu4e mrb/mu4e-quit)                  ; Claim the whole screen
 
     :config
