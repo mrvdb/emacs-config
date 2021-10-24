@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent
 
-Last update: <2021-10-24 12:20:44>
+Last update: <2021-10-24 12:42:36>
 
 #+TOC: headlines 1
 
@@ -2303,10 +2303,11 @@ This sections describes how terminals and shells are used from within Emacs. In 
 ** vterm
 While eshell is the more emacsy solution, it has some limitations which makes me reach for xterm for daily work. However, there's still a good option to benefit from all the emacs configuration in that case and that is the =vterm= package. This is an interface to the =libvterm= library creating a real terminal emulation using emacs for display.
 
-The basic install is easy.
+The basic install is easy, but does need an emacs compiled with module support.
 
 #+begin_src emacs-lisp
-(use-package vterm)
+    (use-package vterm
+      :if (fboundp'module-load))
 #+end_src
 
 To benefit from some of the most useful features, there is a little bit of shell configuration involved. The package includes a shell script for that which I am sourcing in my =.zshrc= configuration file.
