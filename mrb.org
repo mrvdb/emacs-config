@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent
 
-Last update: <2021-10-24 12:58:26>
+Last update: <2021-10-24 14:30:22>
 
 #+TOC: headlines 1
 
@@ -2496,6 +2496,7 @@ Once that is in place files can be opened with =/ssh:/host:/path/to/file= syntax
 
 #+begin_src emacs-lisp
   (use-package tramp
+    :straight (:type built-in)            ; tramp is closely tied to emacs, use builtin
     :config
     (setq default-tramp-method "ssh"))
 #+end_src
@@ -3017,6 +3018,8 @@ I'm experimenting with Weechat now, mostly because it has multiple clients and c
 
 #+begin_src emacs-lisp
   (use-package weechat
+    :if (version< "28" emacs-version)     ;patch for 28 does not work for earlier versions
+
     ;; this works, but we /are/ inside weechat when we need this, can't it be autoloaded?
     :straight (:includes (weechat-tracking weechat-notifications weechat-image)
                :fork t)
