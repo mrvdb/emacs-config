@@ -27,13 +27,12 @@
 (add-to-list 'safe-local-variable-values '(writefreely-post-token . nil))
 
 ;; Assuming file-name-concat exists, which is 28.1 emacs?
-(setq config-file (file-name-concat user-emacs-directory "mrb.org"))
+(setq config-file (concat user-emacs-directory "mrb.org"))
 ;; This presumably uses the internal orgmode version?
 ;; This produces mrb.el which is then loaded. It checks datetime before tangling.
 ;; FIXME: having two different versions of org in the startup sequence sucks,
 ;;        how to solve the biting of my own tail here?
-;; should i (require 'org-compat) here instead ofjust chasing individual voids?
-(defalias 'org-file-name-concat #'file-name-concat)
+(require 'org-compat) 
 (org-babel-load-file config-file)
 
 ;; END init.el
