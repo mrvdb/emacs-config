@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent
 
-Last update: <2021-10-24 14:30:22>
+Last update: <2021-11-13 11:47:54>
 
 #+TOC: headlines 1
 
@@ -3520,10 +3520,7 @@ Features I'm interested in: issue commenting, pull requests
     (setq magit-last-seen-setup-instructions "1.4.0"
           magit-diff-refine-hunk 'all))
 
-
-  ;; yaml recipe is missing, and forge depends on it
-  (use-package yaml
-    :straight (:host github :repo "zkry/yaml.el"))
+  (use-package yaml-mode)
 
   (use-package forge
     :after magit
