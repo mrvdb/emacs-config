@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent
 
-Last update: <2021-11-27 11:22:59>
+Last update: <2021-11-28 13:20:39>
 
 #+TOC: headlines 1
 
@@ -3371,7 +3371,9 @@ Not sure how to bind this though. I'd like it close to C-x C-e obviously
         (use-package geiser-guile
           :straight (:host gitlab :repo "emacs-geiser/guile"))
         (use-package geiser-chez
-          :straight (:host gitlab :repo "emacs-geiser/chez"))
+               :straight (:host gitlab :repo "emacs-geiser/chez")
+               :config
+               (setq geiser-chez-binary "chez"))
         (setq geiser-active-implementations '(guile chez)
               geiser-repl-send-on-return-p nil
               geiser-default-implementation 'guile)
