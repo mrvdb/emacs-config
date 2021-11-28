@@ -3386,10 +3386,22 @@ Not sure how to bind this though. I'd like it close to C-x C-e obviously
 The defacto standard for a development environment in Emacs for common-lisp is the the =slime= package.
 
 #+begin_src emacs-lisp
+  ;; Use company completion within slime, need to load this first so slime-setup knows
+  (use-package slime-company
+    :after (company)
+    :config (setq slime-company-completion 'fuzzy
+                  slime-company-after-completion 'slime-company-just-one-space))
+
   (use-package slime
-    :after paredit
+    :after (paredit slime-company)
+    ;; Make a local versionn of the proper backends for the slime REPL
+    :hook (slime-editing-mode
+           . (lambda ()
+               (set (make-local-variable 'company-backends)
+                    '((company-slime company-dabbrev-code company-semantic)))))
     :config
     (setq
+     slime-startup-animation nil
      ;; Choose an implementation
      inferior-lisp-program "/usr/bin/sbcl"
      slime-lisp-implementations
@@ -3397,9 +3409,7 @@ The defacto standard for a development environment in Emacs for common-lisp is t
      slime-net-coding-system 'utf-8-unix)
 
     ;; Make it nice to work with
-    (add-to-list 'slime-contribs 'slime-fancy)  ;; This loads a bunch, perhaps split?
-    (add-to-list 'slime-contribs 'slime-banner) ;; Shows what I am connected to
-    (setq slime-startup-animation nil)
+    (slime-setup '(slime-fancy slime-banner slime-company))
 
     ;; In the REPL slime takes backspace, I want paredit to have it
     (defun override-slime-repl-bindings-with-paredit ()
@@ -3409,7 +3419,6 @@ The defacto standard for a development environment in Emacs for common-lisp is t
     ;; Override the bindings and enable paredit
     (add-hook 'slime-repl-mode-hook 'override-slime-repl-bindings-with-paredit)
     (add-hook 'slime-repl-mode-hook #'enable-paredit-mode))
-
 
     ;; Trying to get font-locking in the lisp repl
     ;;
