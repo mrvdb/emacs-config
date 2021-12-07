@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent
 
-Last update: <2021-11-28 13:20:39>
+Last update: <2021-12-07 14:50:59>
 
 #+TOC: headlines 1
 
@@ -3409,7 +3409,7 @@ The defacto standard for a development environment in Emacs for common-lisp is t
      slime-net-coding-system 'utf-8-unix)
 
     ;; Make it nice to work with
-    (slime-setup '(slime-fancy slime-banner slime-company))
+    (slime-setup '(slime-fancy slime-banner slime-company slime-asdf))
 
     ;; In the REPL slime takes backspace, I want paredit to have it
     (defun override-slime-repl-bindings-with-paredit ()
