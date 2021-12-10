@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent
 
-Last update: <2021-12-10 16:02:49>
+Last update: <2021-12-10 17:08:45>
 
 #+TOC: headlines 1
 
@@ -3397,7 +3397,7 @@ The defacto standard for a development environment in Emacs for common-lisp is e
 
     :config
     (setq inferior-lisp-program "/usr/bin/sbcl"
-          sly-lisp-implementations '((sbcl ("sbcl" "--core" "/home/mrb/.sbcl/sbcl.core-for-slime")))
+          sly-lisp-implementations '((sbcl ("sbcl" "--core" "/home/mrb/.sbcl/sbcl.core-for-sly")))
           sly-net-coding-system 'utf-8-unix)
 
     ;; In the REPL sly takes backspace, I want paredit to have it
