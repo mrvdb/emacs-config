@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent
 
-Last update: <2021-12-07 14:50:59>
+Last update: <2021-12-10 14:55:47>
 
 #+TOC: headlines 1
 
@@ -185,7 +185,12 @@ Finally, make updating and installing the packages a bit easier by having a keyb
 #+begin_src emacs-lisp
   (defun mrb/upgrade-packages ()
     (interactive)
-    (message "Rewrite this function to use straight.el"))
+    ;; Update our repositories first
+    (message "Updating repositories...")
+    (straight-pull-recipe-repositories)
+
+    (message "Pulling all packages...")
+    (straight-pull-all))
 
   (bind-key "C-c p" 'mrb/upgrade-packages)
 #+end_src
