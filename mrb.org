@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent
 
-Last update: <2021-12-10 14:55:47>
+Last update: <2021-12-10 16:02:49>
 
 #+TOC: headlines 1
 
@@ -3388,80 +3388,59 @@ Not sure how to bind this though. I'd like it close to C-x C-e obviously
 #+end_src
 
 *** Common lisp
-The defacto standard for a development environment in Emacs for common-lisp is the the =slime= package.
+The defacto standard for a development environment in Emacs for common-lisp is either the =slime= or =sly= package. The latter seems a bit more modern and easier to configure, so trying that one
 
 #+begin_src emacs-lisp
-  ;; Use company completion within slime, need to load this first so slime-setup knows
-  (use-package slime-company
-    :after (company)
-    :config (setq slime-company-completion 'fuzzy
-                  slime-company-after-completion 'slime-company-just-one-space))
+  (use-package sly
+    :after (paredit)
 
-  (use-package slime
-    :after (paredit slime-company)
-    ;; Make a local versionn of the proper backends for the slime REPL
-    :hook (slime-editing-mode
-           . (lambda ()
-               (set (make-local-variable 'company-backends)
-                    '((company-slime company-dabbrev-code company-semantic)))))
     :config
-    (setq
-     slime-startup-animation nil
-     ;; Choose an implementation
-     inferior-lisp-program "/usr/bin/sbcl"
-     slime-lisp-implementations
-     '((sbcl ("sbcl" "--core" "/home/mrb/.sbcl/sbcl.core-for-slime")))
-     slime-net-coding-system 'utf-8-unix)
+    (setq inferior-lisp-program "/usr/bin/sbcl"
+          sly-lisp-implementations '((sbcl ("sbcl" "--core" "/home/mrb/.sbcl/sbcl.core-for-slime")))
+          sly-net-coding-system 'utf-8-unix)
 
-    ;; Make it nice to work with
-    (slime-setup '(slime-fancy slime-banner slime-company slime-asdf))
-
-    ;; In the REPL slime takes backspace, I want paredit to have it
-    (defun override-slime-repl-bindings-with-paredit ()
-      (define-key slime-repl-mode-map
+    ;; In the REPL sly takes backspace, I want paredit to have it
+    (defun override-sly-repl-bindings-with-paredit ()
+      (define-key sly-mrepl-mode-map
         (read-kbd-macro paredit-backward-delete-key) nil))
 
-    ;; Override the bindings and enable paredit
-    (add-hook 'slime-repl-mode-hook 'override-slime-repl-bindings-with-paredit)
-    (add-hook 'slime-repl-mode-hook #'enable-paredit-mode))
+    (add-hook 'sly-mrepl-mode-hook 'override-sly-repl-bindings-with-paredit)
+    (add-hook 'sly-mrepl-mode-hook #'enable-paredit-mode)
 
-    ;; Trying to get font-locking in the lisp repl
-    ;;
     ;; Copy the keywords from lisp mode
-    (defvar slime-repl-font-lock-keywords lisp-font-lock-keywords-2)
+    (defvar sly-mrepl-font-lock-keywords lisp-font-lock-keywords-2)
 
     ;; Set them up
-    (defun slime-repl-font-lock-setup ()
+    (defun sly-mrepl-font-lock-setup ()
       (setq font-lock-defaults
-            '(slime-repl-font-lock-keywords
+            '(sly-mrepl-font-lock-keywords
               ;; From lisp-mode.el
               nil nil (("+-*/.<>=!?$%_&~^:@" . "w")) nil
               (font-lock-syntactic-face-function
-               . lisp-font-lock-syntactic-face-function))))
+               . lisp-font-lock-syntactic-face-function)))))
 
     ;; Set up fontlocking
-    (add-hook 'slime-repl-mode-hook 'slime-repl-font-lock-setup)
+    (add-hook 'sly-mrepl-mode-hook 'sly-mrepl-font-lock-setup)
 
     ;; Correct the REPL prompt
-    (defun slime-repl-font-lock-find-prompt (limit)
+    (defun sly-mrepl-font-lock-find-prompt (limit)
       ;; Rough: (re-search-forward "^\\w*>" limit t)
       (let (beg end)
         (when (setq beg (text-property-any
-                         (point) limit 'slime-repl-prompt t))
+                         (point) limit 'sly-mrepl-prompt-face t))
           (setq end (or (text-property-any
-                         beg limit 'slime-repl-prompt nil)
+                         beg limit 'sly-mrepl-prompt-face nil)
                         limit))
           (goto-char beg)
           (set-match-data (list beg end))
           t)))
 
-    (setq slime-repl-font-lock-keywords
-          (cons '(slime-repl-font-lock-find-prompt
-                  . 'slime-repl-prompt-face)
-                slime-repl-font-lock-keywords))
+    (setq sly-mrepl-font-lock-keywords
+          (cons '(sly-mrepl-font-lock-find-prompt
+                  . 'sly-mrepl-prompt-face)
+                sly-mrepl-font-lock-keywords))
 #+end_src
 
-On first glance, it looks like slime is a lot nicer than =geiser= + =guile=. I read that =slime= has support for MIT-Scheme as a backend so perhaps I should use that instead of guile.
 ** Gcode
 I'm not in the habit of editting gcode, but every now and then I need to look at it and I want it reasonably decent. My usecase is just sending gcode to my 3D-printer which runs Marlin firmware.
 
