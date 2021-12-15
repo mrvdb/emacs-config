@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent
 
-Last update: <2021-12-15 12:34:52>
+Last update: <2021-12-15 16:43:38>
 
 #+TOC: headlines 1
 
@@ -386,6 +386,7 @@ In quite a few situation I would like to use keybinding which are only valid whe
 
 #+begin_src emacs-lisp
   (use-package selected
+    :diminish selected-minor-mode
     :after (org)
     :init
     (setq selected-org-mode-map (make-sparse-keymap)) ;create map for selected regions
@@ -852,6 +853,7 @@ $$e^{ix} = cos x + i sinx$$
 
 #+begin_src emacs-lisp
   (use-package texfrag
+    :diminish
     :config
     (setq texfrag-prefix "")
     (texfrag-global-mode 1))
@@ -1098,6 +1100,7 @@ Also make sure we never load org from internal, this can happen when functions w
     :config
     (add-hook 'org-mode-hook 'turn-on-visual-line-mode)
     (add-hook 'org-mode-hook 'turn-on-visual-fill-column-mode)
+    (add-hook 'org-indent-mode-hook (lambda () (diminish 'org-indent-mode)))
     (setq org-use-fast-todo-selection t
           org-use-fast-tag-selection t
           org-fast-tag-selection-single-key 'expert
@@ -3183,7 +3186,7 @@ I want that type of information directly at hand. One part of the solution is [[
              'ielm-mode-hook
              'python-mode))
     (add-hook the_mode 'eldoc-mode))
-
+  (diminish 'eldoc-mode)
 #+end_src
 
 The location of the eldoc information in the message area is a bit far away from the editting point. I have looked at eldoc-overlay and others to resolve that, but haven't found a satisfying solution yet.
@@ -3263,7 +3266,7 @@ My personal style will be called =mrb= and basing it on the =linux= style.
 
   ;; EditorConfig support, not used much by the looks of it
   (use-package editorconfig
-    :diminish ""
+    :diminish
     :config
     (editorconfig-mode 1))
 
