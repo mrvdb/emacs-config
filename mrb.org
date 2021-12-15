@@ -2507,6 +2507,23 @@ My default browser, as set in the OS, should be started automatically on opening
   (setq browse-url-browser-function 'browse-url-generic)
   (setq browse-url-generic-program "xdg-open")
 #+end_src
+
+There's a special place for the =nyxt= browser here. It is particularly interesting because its design was inpirated by emacs. The two thing that are interesting to me are that it is programmed in common-lisp and thus has alle the niceties of that, including an option to connect a REPL to the browser and change the program while it is running. So, let's start with a convenience function to make a connection to a runing Nyxt instance.
+
+#+begin_src emacs-lisp
+  (defun mrb/nyxt-connected-p ()
+    "Is nyxt connected"
+    (sly-connected-p))
+
+  (defun mrb/nyxt ()
+    "Connect the the nyxt browser with sly"
+    (interactive)
+
+    (unless (sly-connected-p)
+      (sly-connect "localhost" "4006")))
+#+end_src
+
+What other options I need for this is as of yet unclear. Things which come to mind are: controlling window refreshments when something was published (blog postings for example) or monitoring web page changes, capturing information from the current web view buffer to emacs.
 * Messaging and chatting
 ** Mail
 This section describes a search for the mail setup I want in Emacs. There are a few mail related packages and I'm unsure at what I want to use; reading the feature list doesn't cut it.  So, I'm having a setup where multiple mail handling packages may exist and hopefully one will float to the top as being *the one*
