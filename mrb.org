@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent
 
-Last update: <2021-12-10 17:08:45>
+Last update: <2021-12-15 12:34:52>
 
 #+TOC: headlines 1
 
@@ -168,6 +168,11 @@ Now that we have =straight= we can use it to install =use-package=
     (setq straight-host-usernames
           '((github . "mrvdb")))
     :custom (straight-use-package-by-default t))
+
+  ;; FROM THIS POINT use-package should work as intended, i.e. using straight.
+
+  ;; Need to install dependencies of use-package manually
+  (use-package diminish)
 #+end_src
 
 
