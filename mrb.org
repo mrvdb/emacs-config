@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent
 
-Last update: <2021-12-15 16:43:38>
+Last update: <2022-01-07 12:56:27>
 
 #+TOC: headlines 1
 
@@ -350,7 +350,7 @@ Make life easier if we have sudo, so we can just edit the files and be done with
 Using pdf-tools for PDF handling. This is a lot better than docview. I'm a bit annoyed that they are not one package, they are very similar.
 #+begin_src emacs-lisp
   (use-package pdf-tools
-    :after (pdf-annot fullframe)
+    :after (fullframe)
     :magic ("%PDF" . pdf-view-mode)
     :bind (:map pdf-view-mode-map
                 ("h"   . 'pdf-annot-add-highlight-markup-annotation)
@@ -361,8 +361,10 @@ Using pdf-tools for PDF handling. This is a lot better than docview. I'm a bit a
                 :map pdf-annot-edit-contents-minor-mode-map
                 ("<return>"   . 'pdf-annot-edit-contents-commit)
                 ("<S-return>" .  'newline))
-
     :config
+    (pdf-tools-install) ; :no-query auto builds epfinfo when needed
+    (require 'pdf-annot)
+
     ;; Some settings from http://pragmaticemacs.com/emacs/even-more-pdf-tools-tweaks/
     (fullframe pdf-view-mode quit-window)
     (setq-default pdf-view-display-size 'fit-page) ;scale to fit page by default
@@ -373,7 +375,7 @@ Using pdf-tools for PDF handling. This is a lot better than docview. I'm a bit a
 
 
     (add-hook 'pdf-view-mode-hook (lambda () (cua-mode 0))) ; turn off cua so copy works
-    (pdf-tools-install :no-query))                                                ; no-query auto builds epfinfo when needed
+    )
 #+end_src
 
 I tend to compile Emacs with ImageMagick support, let's make sure we use it too.
