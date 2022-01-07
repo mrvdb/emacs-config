@@ -1133,11 +1133,9 @@ Also make sure we never load org from internal, this can happen when functions w
           org-blank-before-new-entry '((heading . auto) (plain-list-item . auto))
           org-export-htmlize-output-type 'css
 
-          org-file-apps
-          '((auto-mode . emacs)
-            ("\\.dia\\'" . "dia %s")
-            ("\\.mm\\'" . default)
-            ("\\.pdf\\'" . default))
+          ;; Use auto-mode-alist for all file links/types
+          org-file-apps '((auto-mode . emacs))
+
           org-fontify-done-headline t
           org-goto-interface 'outline-path-completion
           ;; non nil is just direct children, what an ODD name!!!!
