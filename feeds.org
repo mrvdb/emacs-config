@@ -22,8 +22,6 @@ This has a number of attractive properties:
 **** http://what-if.xkcd.com/feed.atom                                                                                   :comic:science:
 **** https://kimmo.suominen.com/stuff/dilbert-daily.xml                                                                          :comic:
 **** http://www.commitstrip.com/en/feed/                                                                             :comic:programming:
-*** News
-**** https://decorrespondent.nl/feed/v1/publications
 *** Cobra                                                                                                                         :cobra:
 **** http://gd427cobrabuild.blogspot.com/feeds/posts/default
 **** http://buildingmycobra.blogspot.com/feeds/posts/default
@@ -69,7 +67,9 @@ This has a number of attractive properties:
 ***** http://www.howardism.org/index.xml                                                                                       :people:
 ***** http://emacshorrors.com/feed.atom
 ***** https://emacs.wordpress.com/feed/
-***** https://sachachua.com/feed/
+***** https://sachachua.com/blog/category/emacs-news/feed/atom/
+***** https://nyxt.atlas.engineer/feed
+
 *** Hardware                                                                                                                   :hardware:
 **** https://www.yubico.com/feed/                                                                                             :security:
 **** http://everyday-carry.com/rss
@@ -91,6 +91,9 @@ This has a number of attractive properties:
 **** http://feeds.feedburner.com/TheChicane                                                                                  :oldschool:
 **** http://www.gearjournal.com/feed/
 **** http://www.garagejournal.com/feed/
+**** https://www.gebruiktejaguaronderdelen.nl/product-categorie/jaguar-xk8/feed/
+**** https://www.gebruiktejaguaronderdelen.nl/product-categorie/jaguar-x350/feed/
+
 *** Outdoors
 **** http://www.hikeitlikeit.com/feed
 **** http://backcountrybanter.com/feed/
