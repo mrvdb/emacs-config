@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent
 
-Last update: <2022-01-07 16:43:39>
+Last update: <2022-01-09 10:49:39>
 
 #+TOC: headlines 1
 
@@ -2964,7 +2964,7 @@ Cyrus sieve is used on the server to filter our mail and this is accessed by the
 
 which basically goes over the whole sieve script and removes the '^M' characters from the buffer
 ** Elfeed
-In an attempt to do even more in emacs, i've installed `elfeed' and imported my feeds from RSSyl
+Elfeed handles my RSS feeds, which I specify using an orgmode file =feeds.org=
 
 #+begin_src emacs-lisp
   (use-package notifications)
@@ -2980,7 +2980,7 @@ In an attempt to do even more in emacs, i've installed `elfeed' and imported my 
            ("w" . 'mrb/elfeed-search-toggle-watchlater))
     :init
     (setf url-queue-timeout 30
-          elfeed-db-directory "~/.elfeed")
+          elfeed-db-directory "~/.elfeed/")
 
     :config
     (defun mrb/elfeed-search-toggle-tag(tag)
@@ -3035,7 +3035,7 @@ Elfeed allows to interactively subscribe to a feed (defaulting to what is in the
   (use-package elfeed-org
     :after elfeed
     :init
-    (setq rmh-elfeed-org-files (list (concat user-emacs-directory "feeds.org")))
+    (setq rmh-elfeed-org-files (list (concat elfeed-db-directory "feeds.org")))
     (elfeed-org))
 #+end_src
 ** IRC
