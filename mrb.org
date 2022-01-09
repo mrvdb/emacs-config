@@ -2992,7 +2992,7 @@ In an attempt to do even more in emacs, i've installed `elfeed' and imported my 
         (mapc #'elfeed-search-update-entry entries)
         (unless (use-region-p) (forward-line))))
 
-    (defun mrb/elfeed-search-togggle-watchlater()
+    (defun mrb/elfeed-search-toggle-watchlater()
       (mrb/elfeed-search-toggle-tag 'watchlater))
 
     (defun mrb/elfeed-show-toggle-tag(tag)
@@ -3001,7 +3001,7 @@ In an attempt to do even more in emacs, i've installed `elfeed' and imported my 
           (elfeed-show-untag tag)
         (elfeed-show-tag tag)))
 
-    (defun mrb/elfeed-show-togggle-watchlater()
+    (defun mrb/elfeed-show-toggle-watchlater()
       (mrb/elfeed-show-toggle-tag 'watchlater))
 
     ;; TODO: mrb/elfeed-enqueue-video
