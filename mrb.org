@@ -361,7 +361,7 @@ Using pdf-tools for PDF handling. This is a lot better than docview. I'm a bit a
                 ("<return>"   . 'pdf-annot-edit-contents-commit)
                 ("<S-return>" .  'newline))
     :config
-    (pdf-tools-install) ; :no-query auto builds epfinfo when needed
+    (pdf-tools-install :no-query) ; :no-query auto builds epfinfo when needed
     (require 'pdf-annot)
 
     ;; Some settings from http://pragmaticemacs.com/emacs/even-more-pdf-tools-tweaks/
