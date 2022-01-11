@@ -2921,14 +2921,16 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
                                :query "maildir:/Junk"
                                :key ?j)))
 
-    ;; Rendering of html mail is done with shr
-    ;; By default, it's inhibiting images, I dont want that, as I only look at the html if needed
-    ;; FIXME: this does not work properly
+      ;; Rendering of html mail is done with shr, but I prefer not to show it at all
+      (with-eval-after-load "mm-decode"
+        (add-to-list 'mm-discouraged-alternatives "text/html")
+        (add-to-list 'mm-discouraged-alternatives "text/richtext"))
+
     (defun mrb/mu4e-shr2text (msg)
       "Overridden mu4e-shr2text"
       (mu4e~html2text-wrapper
        (lambda ()
-         (let ((shr-inhibit-images t)   ; no images, unless I specifically ask for it
+           (let ((shr-inhibit-images nil)   ;
                (shr-width nil)            ; Use whole window width for rendering
                (shr-use-colors nil)       ; Don't use colors from html, they ugly
                (shr-bullet "• "))               ; Original was "* "
