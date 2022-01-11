@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent
 
-Last update: <2022-01-11 13:29:14>
+Last update: <2022-01-11 14:03:12>
 
 #+TOC: headlines 1
 
@@ -390,7 +390,7 @@ I tend to compile Emacs with ImageMagick support, let's make sure we use it too.
   (imagemagick-register-types))
 #+end_src
 
-In quite a few situation I would like to use keybinding which are only valid when a selection/region is active.
+In quite a few situations I would like to use keybindings which are only valid when a selection/region is active.
 
 #+begin_src emacs-lisp
   (use-package selected
@@ -612,10 +612,13 @@ Although I think the 16 color system is a bit simplistic and, for emacs at least
             (header-line                    :foreground "#4c566a" :background "#ebcb8b")
 
             ;; Magit
+            (diff-refine-added              :background "#003000")
+            (diff-refine-removed            :background "#300000")
             (magit-diff-added-highlight     :foreground "#a3be8c")
             (magit-diff-removed-highlight   :foreground "#bf616a")
             (magit-diff-added               :foreground "#a3be8c")
             (magit-diff-removed             :foreground "#bf616a")
+            (magit-diff-hunk-heading-highlight :background "#5e81ac")
 
             ;; Elfeed
             (elfeed-search-tag-face         :foreground "#a3be8c")
