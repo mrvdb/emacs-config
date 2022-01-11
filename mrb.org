@@ -3021,7 +3021,7 @@ Elfeed handles my RSS feeds, which I specify using an orgmode file =feeds.org=
        :app-name "Elfeed")
 
       (start-process "elfeed-mpv" nil
-                     "umpv"
+                     "~/bin/umpv"
                      (elfeed-entry-link elfeed-show-entry)))
 
 
