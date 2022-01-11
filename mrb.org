@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent
 
-Last update: <2022-01-09 11:00:10>
+Last update: <2022-01-11 13:29:14>
 
 #+TOC: headlines 1
 
@@ -422,6 +422,13 @@ In quite a few situation I would like to use keybinding which are only valid whe
 #+end_src
 
 From now on we can bind keys into the selected-keymap if we want keys to be active on every regions. When only needed for a certain major mode, define a keymap named =selected-<major-mode>-keymap= and bind keys into that.
+
+
+Quick install of package that exports =qrencode-region= function. I use this mainly to send links or package tracking codes to my mobile.
+
+#+begin_src emacs-lisp
+  (use-package qrencode)
+#+end_src
 
 * Internationalization and multi-language features
 If anything multi-language should work, UTF-8 encoding is a must, so let's make sure we try to use that everywhere
