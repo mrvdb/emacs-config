@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent
 
-Last update: <2022-01-11 14:03:12>
+Last update: <2022-01-11 20:55:57>
 
 #+TOC: headlines 1
 
@@ -305,16 +305,15 @@ A the same time, I don't want to be /that spaces guy/ in every project, and I'm 
   (defalias 'yes-or-no-p 'y-or-n-p)
 
   ;; Use auto revert mode globally
-  ;; This is save because emacs tracks if the file is saved in the editing buffer
+  ;; This is safe because emacs tracks if the file is saved in the editing buffer
   ;; and if so, it will not revert to the saved file.
   (use-package autorevert
     :diminish auto-revert-mode
 
     :config
+    (setq auto-revert-interval 0.5               ; Perhaps too often, let's see
+          global-auto-revert-non-file-buffers t) ; things like dired buffers
     (global-auto-revert-mode t))
-
-  ;; Also for dired
-  (setq global-auto-revert-non-file-buffers t)
 
   ;; Should this be here?
   ;; Try to have urls and mailto links clickable everywhere
@@ -374,6 +373,8 @@ Using pdf-tools for PDF handling. This is a lot better than docview. I'm a bit a
 
 
     (add-hook 'pdf-view-mode-hook (lambda () (cua-mode 0))) ; turn off cua so copy works
+
+    (add-to-list 'revert-without-query ".+\\.pdf")
     )
 #+end_src
 
