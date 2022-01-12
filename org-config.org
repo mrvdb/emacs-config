@@ -158,7 +158,6 @@ Getting the defaults right for publishing and exporting took some time, save the
 #+EMAIL:  marcel@hsdev.com
 #+DESCRIPTION: description
 #+KEYWORDS: orgmode
-#+LANGUAGE: nl
 #+OPTIONS:  h:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil
 
 Define a tag which hides stuff from exported documents
@@ -178,7 +177,13 @@ This option does not seem to work when not in the same file as exporting. I have
 
 Latex default configuration to produce a memo-style document.
 
-Our documents are mostly in dutch, so load that up by default, it's easy to override this on a subtree or file basis. (NO, it's not) #+COMMENTS LATEX_HEADER: \usepackage[dutch]{babel}
+Our documents are mostly in dutch, so load that up by default, it's easy to override this on a subtree or file basis.
+
+#+LANGUAGE: nl
+
+Let the babel package handle our language settings automatically. This makes the TOC for example actually say /"Inhoudsopgave"/ and the hyphenation rules be applied for the proper language.
+
+#+LATEX_HEADER: \usepackage[AUTO]{babel}
 
 Adjust the title of our documents
 #+LaTeX_HEADER: \usepackage{titling}
@@ -262,9 +267,7 @@ For keyboard symbols:
 For math:
 #+LATEX_HEADER: \usepackage{amsmath}
 
-Let the babel package handle our language settings automatically. This makes the TOC for example actually say /"Inhoudsopgave"/ and the hyphenation rules be applied for the proper language.
 
-#+LATEX_HEADER: \usepackage[AUTO]{babel}
 * Links
 Autolinks which can be entered like [[keyword:parameter]] This is mostly here as an example, I don’t think I’ve ever used these in my org files
 #+LINK: wiki   http://en.wikipedia.org/wiki/Search?search=
