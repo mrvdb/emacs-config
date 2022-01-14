@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent
 
-Last update: <2022-01-14 16:23:49>
+Last update: <2022-01-14 16:40:24>
 
 #+TOC: headlines 1
 
@@ -877,6 +877,36 @@ $$e^{ix} = cos x + i sinx$$
     :config
     (setq texfrag-prefix "")
     (texfrag-global-mode 1))
+#+end_src
+*** Highlighting tags and keywords
+
+In many modes, but especially in orgmode, the use of tags and keywords is abundant. In the set of packages that [[https://github.com/rougier][Nicolas P. Rougier]] has made for emacs, there's also a gem which generates SVG labels from keyword matches.
+
+The use of that package is simple, just create a list of keyword matches in the =svg-tag-tags= variable and match those up with a command to create a tag.
+
+I have at least the following usecases in mind:
+
+1. Render my orgmode keywords as tags;
+2. Use in mu4e to render the tags
+3. perhaps some FIXME keywords in code, I use that quite a bit.
+
+The first is the easiest, as the format of =org-todo-keyword-faces= is nigh perfect to transform into a list that cann be used by svg-tag-mode.
+
+#+begin_src emacs-lisp
+  ;; Readymade svg-tag-tags generator from org keywords
+  (defun mrb/gen-svg-tags (kf)
+    "Generate a `svg-tag-tags element from a `org-todo-keyword-faces element"
+    (let ((k (concat "\\(" (car kf) "\\) ")) ; pass keyword, not the space
+          (f (cdr kf)))
+      `(,k . ((lambda (tag) (svg-tag-make tag :face ',f :inverse t :margin 0 ))))))
+
+  ;; Trickiest here is to know when org-todo-keyword-faces has been filled
+  (use-package svg-tag-mode
+    :after (org base16-theme)
+    :commands svg-tag-mode                ; Possibly redundant?
+    :hook (org-mode . svg-tag-mode)
+    :config
+    (setq svg-tag-tags (mapcar 'mrb/gen-svg-tags org-todo-keyword-faces)))
 #+end_src
 * Buffers and files
 How do I deal with all those buffers and files?
