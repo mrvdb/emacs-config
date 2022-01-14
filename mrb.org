@@ -159,8 +159,8 @@ Now that we have =straight= we can use it to install =use-package=
   (straight-use-package 'use-package)      ; Install use-package
   (setq use-package-always-ensure nil      ; Make sure this is nil, so we do not use package.el
         ; use-package-always-demand t      ; This 2 should be commented unless debugging
-        ; use-package-verbose 'debug)      ; FIXME: use a debug var for all of config?
-
+        ; use-package-verbose 'debug       ; FIXME: use a debug var for all of config?
+  )
   ;; From this point on we should be able to use `use-package
   (use-package straight
     :config
