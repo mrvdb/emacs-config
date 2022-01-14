@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent
 
-Last update: <2022-01-14 11:06:48>
+Last update: <2022-01-14 16:23:49>
 
 #+TOC: headlines 1
 
@@ -158,8 +158,8 @@ Now that we have =straight= we can use it to install =use-package=
 #+begin_src emacs-lisp
   (straight-use-package 'use-package)      ; Install use-package
   (setq use-package-always-ensure nil      ; Make sure this is nil, so we do not use package.el
-        use-package-always-demand t        ; FIXME: only when using daemon?
-        )
+        ; use-package-always-demand t      ; This 2 should be commented unless debugging
+        ; use-package-verbose 'debug)      ; FIXME: use a debug var for all of config?
 
   ;; From this point on we should be able to use `use-package
   (use-package straight
@@ -382,7 +382,7 @@ Integrate this with orgmode as well. This is, for now, effectively making a link
 
 #+begin_src emacs-lisp
   (use-package org-pdftools               ; this brings in org-noter as well
-    :after org
+    :after (org pdftools)
     :hook (org-mode . org-pdftools-setup-link))
 #+end_src
 I tend to compile Emacs with ImageMagick support, let's make sure we use it too.
@@ -1091,7 +1091,7 @@ Also make sure we never load org from internal, this can happen when functions w
 #+COMMENT: This duplicates the one in init.el, problems?
 #+begin_src emacs-lisp
   (use-package org
-    :straight (:branch "release_9.5"
+    :straight (org-mode :branch "release_9.5"
                :includes (org-capture org-crypt org-datetree org-protocol))
     :mode ("\\.txt\\'" "\\.org\'")
     :after (org-capture visual-fill-column)
