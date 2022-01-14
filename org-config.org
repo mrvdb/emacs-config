@@ -87,7 +87,7 @@ This section contains general settings.
 #+STARTUP: hidestars
 
 Drawer definitions. We render drawers with a slightly smaller font, so it's important to define them, otherwise orgmode does not know they are supposed to be rendered differently.
-#+DRAWERS: PROPERTIES FEEDSTATUS LOGBOOK
+#+DRAWERS: PROPERTIES LOGBOOK
 
 Standard category is things that fall withing GTD
 #+CATEGORY: Task
