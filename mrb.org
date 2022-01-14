@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent
 
-Last update: <2022-01-12 10:06:20>
+Last update: <2022-01-14 11:06:48>
 
 #+TOC: headlines 1
 
@@ -3007,6 +3007,7 @@ Elfeed handles my RSS feeds, which I specify using an orgmode file =feeds.org=
         (unless (use-region-p) (forward-line))))
 
     (defun mrb/elfeed-search-toggle-watchlater()
+      (interactive)
       (mrb/elfeed-search-toggle-tag 'watchlater))
 
     (defun mrb/elfeed-show-toggle-tag(tag)
@@ -3016,6 +3017,7 @@ Elfeed handles my RSS feeds, which I specify using an orgmode file =feeds.org=
         (elfeed-show-tag tag)))
 
     (defun mrb/elfeed-show-toggle-watchlater()
+      (interactive)
       (mrb/elfeed-show-toggle-tag 'watchlater))
 
     ;; TODO: mrb/elfeed-enqueue-video
