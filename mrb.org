@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent
 
-Last update: <2022-01-15 12:56:07>
+Last update: <2022-01-15 17:06:14>
 
 #+TOC: headlines 1
 
@@ -1232,7 +1232,8 @@ I guess 90% of the information I keep in the main orgmode files starts life orig
 1. TODO items;
 2. BUY items;
 3. Journal entries;
-4. Logbook entries.
+4. Logbook entries;
+5. Weblinks
 
 The =org-capture-pop-frame= package makes sure all captures are in separate frames.
 
@@ -1264,8 +1265,10 @@ Here are the templates used for them.
    '(
      ("b" "Buy"
       entry (function mrb/capture-location) "* BUY %? :buy:\n%(mrb/prop-or-nothing :annotation)\n" :prepend t :empty-lines 1)
+       ("l" "Link"
+        entry (function mrb/capture-location) "* TODO %?\n%(mrb/prop-or-nothing :annotation)\n" :prepend t :empty-lines 1)
      ("t" "Todo"
-      entry (function mrb/capture-location) "* TODO %?\n%(mrb/prop-or-nothing :annotation)\n" :prepend t :empty-lines 1)))
+      entry (function mrb/capture-location) "* TODO %?\n" :prepend t :empty-lines 1)))
 
 
   (defun mrb/prop-or-nothing(prop)
