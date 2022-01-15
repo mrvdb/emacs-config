@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent
 
-Last update: <2022-01-14 16:40:24>
+Last update: <2022-01-15 12:56:07>
 
 #+TOC: headlines 1
 
@@ -1122,9 +1122,12 @@ Also make sure we never load org from internal, this can happen when functions w
 #+begin_src emacs-lisp
   (use-package org
     :straight (org-mode :branch "release_9.5"
-               :includes (org-capture org-crypt org-datetree org-protocol))
+               :includes (org-agenda org-capture org-crypt org-datetree org-protocol))
+    :init
+    ;; FIXME: this should not be needed, see https://github.com/raxod502/straight.el/issues/536
+    (use-package org-agenda)
+    (use-package org-capture)
     :mode ("\\.txt\\'" "\\.org\'")
-    :after (org-capture visual-fill-column)
     :bind (("C-c g"   . 'mrb/gtd)
            ("C-c a"   . 'org-agenda)
            ("C-c b"   . 'org-switchb)
