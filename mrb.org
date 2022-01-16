@@ -1132,7 +1132,6 @@ Also make sure we never load org from internal, this can happen when functions w
            ("C-c a"   . 'org-agenda)
            ("C-c b"   . 'org-switchb)
            ("C-s-s"   . 'org-save-all-org-buffers)
-           ("C-x m"   . 'mrb/construct-mail)
            ("C-c l"   . 'org-store-link)        ; Is this not bound to C-c l by default
           :map org-mode-map
            ("s-."     . 'org-todo)
