@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent
 
-Last update: <2022-01-15 17:06:14>
+Last update: <2022-01-16 11:45:56>
 
 #+TOC: headlines 1
 
@@ -832,9 +832,11 @@ Flycheck is a syntax checking package which seems to have better support than fl
 Now we can start configuring flycheck
 
 #+begin_src emacs-lisp
+  (use-package flycheck-pos-tip)
+
   (use-package flycheck
     ;; Use popup to show flycheck message
-    :requires flycheck-pos-tip
+    :after flycheck-pos-tip
     :config
     (with-eval-after-load 'flycheck
       (flycheck-pos-tip-mode)))
