@@ -8,7 +8,7 @@
    ["#2e3440" "#88c0d0" "#bf616a" "#5e81ac" "#ebcb8b" "#a3be8c" "#ebcb8b" "#e5e9f0"])
  '(command-frequency-autosave-mode t)
  '(company-backends
-   '(company-bbdb company-eclim company-semantic company-clang company-xcode company-cmake company-capf company-files
+   '(company-bbdb company-semantic company-clang company-cmake company-capf company-files
                   (company-dabbrev-code company-gtags company-etags company-keywords)
                   company-oddmuse))
  '(compilation-scroll-output t)
@@ -174,7 +174,6 @@
       ("fork"))
      ("BUY"
       ("buy" . t))))
- '(org-use-fast-tag-selection 'auto)
  '(reb-re-syntax 'string)
  '(request-log-level 'verbose)
  '(safe-local-variable-values
