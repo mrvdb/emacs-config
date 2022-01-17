@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent
 
-Last update: <2022-01-17 16:27:53>
+Last update: <2022-01-17 17:21:28>
 
 #+TOC: headlines 1
 
@@ -411,11 +411,12 @@ In quite a few situations I would like to use keybindings which are only valid w
 #+begin_src emacs-lisp
   (use-package selected
     :diminish selected-minor-mode
-    :after (org)
+    :after (org org-journal)
+    :demand t                             ; Does not load without demand, why not?
     :init
-    (setq selected-org-mode-map (make-sparse-keymap)) ;create map for selected regions
-    (setq selected-org-journal-mode-map (make-sparse-keymap))
-    :commands selected-minor-mode         ; do I want the global one too?
+    (setq selected-org-mode-map (make-sparse-keymap)
+          selected-org-journal-mode-map (make-sparse-keymap))
+    :commands (selected-global-mode selected-minor-mode)
     :bind ( :map selected-keymap           ; bindings for all active regions
             ("q" . selected-off)
             ("u" . upcase-region)
@@ -434,7 +435,6 @@ In quite a few situations I would like to use keybindings which are only valid w
             ("+"       . (lambda () (interactive) (org-emphasize ?+))))
     :config
     (selected-global-mode))
-
 #+end_src
 
 From now on we can bind keys into the selected-keymap if we want keys to be active on every regions. When only needed for a certain major mode, define a keymap named =selected-<major-mode>-keymap= and bind keys into that.
@@ -1127,6 +1127,7 @@ Also make sure we never load org from internal, this can happen when functions w
 #+COMMENT: This duplicates the one in init.el, problems?
 #+begin_src emacs-lisp
   (use-package org
+    :demand t
     :straight (org-mode :branch "release_9.5"
                :includes (org-agenda org-capture org-crypt org-datetree org-protocol))
     :init
