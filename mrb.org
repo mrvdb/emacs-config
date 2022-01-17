@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent
 
-Last update: <2022-01-17 17:21:28>
+Last update: <2022-01-17 17:39:48>
 
 #+TOC: headlines 1
 
@@ -156,10 +156,10 @@ As I want to have version controlled package installation that is easily reprodu
 Now that we have =straight= we can use it to install =use-package=
 
 #+begin_src emacs-lisp
-  (straight-use-package 'use-package)      ; Install use-package
+  (straight-use-package 'use-package)
   (setq use-package-always-ensure nil      ; Make sure this is nil, so we do not use package.el
-        ; use-package-always-demand t      ; This 2 should be commented unless debugging
-        ; use-package-verbose 'debug       ; FIXME: use a debug var for all of config?
+        use-package-always-demand t      ; Until I grok the loading order logic I need this
+        use-package-verbose 'debug       ; FIXME: use a debug var for all of config?
   )
   ;; From this point on we should be able to use `use-package
   (use-package straight
