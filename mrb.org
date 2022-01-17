@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent
 
-Last update: <2022-01-16 13:53:26>
+Last update: <2022-01-17 16:27:53>
 
 #+TOC: headlines 1
 
@@ -274,6 +274,21 @@ A the same time, I don't want to be /that spaces guy/ in every project, and I'm 
           (tab-count (how-many "^\t" (point-min) (point-max))))
       (if (> space-count tab-count) (setq indent-tabs-mode nil))
       (if (> tab-count space-count) (setq indent-tabs-mode t))))
+#+end_src
+
+Finally, I want to prevent producing files which have trailing spaces, because they serve no purpose at all. Removing these spaces is less trivial than it seems and I am not pretending to know what the best strategy is. For a while now, the =ws-butler= package has done a great job for me.
+
+#+begin_src emacs-lisp
+      ;; Probably move this to somewhere else ?
+    (use-package ws-butler
+      :diminish
+      :init
+      (ws-butler-global-mode)             ; Enable by default
+      ;; List exemptions here
+      ;; FIXME: why is org-capture-mode in here?
+      (add-to-list 'ws-butler-global-exempt-modes 'org-capture-mode)
+      (add-to-list 'ws-butler-global-exempt-modes 'magit-mode))
+
 #+end_src
 
 #+begin_src emacs-lisp
@@ -795,16 +810,6 @@ Note that if this code is evaluated any call to =emacsclient= (be that from exte
     (setq fringe-mode '(14 . 14)) ;; Fringe, left and right for the continuation characters
     (set-fringe-mode fringe-mode)
     (setq indicate-buffer-boundaries 'left)
-
-    ;; Probably move this to somewhere else ?
-    (use-package ws-butler
-      :diminish
-      :init
-      (ws-butler-global-mode)             ; Enable by default
-      ;; List exemptions here
-      ;; FIXME: why is org-capture-mode in here?
-      (add-to-list 'ws-butler-global-exempt-modes 'org-capture-mode)
-      (add-to-list 'ws-butler-global-exempt-modes 'magit-mode))
 
     (mrb/unicode-font-corrections))
 
