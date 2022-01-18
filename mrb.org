@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent
 
-Last update: <2022-01-17 17:39:48>
+Last update: <2022-01-18 11:42:28>
 
 #+TOC: headlines 1
 
@@ -859,7 +859,8 @@ Flyspell is similar to flycheck but for text languages. I'm setting some of the 
     ;; flyspell-duplicate  as warnings
     ;; Do I want this at all?, seems overkill
     ;; FIXME: this does not seem to help
-    (setq flyspell-mark-duplications-flag nil))
+      (setq flyspell-mark-duplications-flag nil
+            flyspell-issue-message-flag nil))
 #+end_src
 
 Still on the wish-list:
@@ -1822,10 +1823,6 @@ Orgmode can export to a variety of formats, I mainly use LaTeX (PDF) and HTML as
         '("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
           "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
           "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f")
-        org-latex-to-pdf-process
-        '("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
-          "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
-          "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f")
 
         org-latex-listings 'minted
         ;; Define a default background color name, this needs to be set through
@@ -1856,11 +1853,12 @@ Orgmode can export to a variety of formats, I mainly use LaTeX (PDF) and HTML as
                  ("\\subsection{%s}" . "\\subsection*{%s}")
                  ("\\subsubsection{%s}" . "\\subsubsection*{%s}"))
                 ("beamer" "\\documentclass{beamer}" org-beamer-sectioning))
-        org-export-latex-hyperref-format "\\ref{%s}:{%s}"
-        org-latex-title-command " "
-        org-export-latex-title-command " "
+
+
         org-export-with-tags nil
         org-export-with-todo-keywords nil
+         org-export-backends '(ascii html icalendar latex md odt org texinfo)
+
 
         )
   ;; {% endraw %}
@@ -2483,7 +2481,10 @@ Having the completion pop up automatically is annoying in most cases, so I disab
           ([remap indent-for-tab-command] . company-indent-or-complete-common))
 
     :config
-    (setq company-idle-delay 0.0
+    (setq company-backends '(company-bbdb company-semantic company-clang company-cmake company-capf company-files
+                             (company-dabbrev-code company-gtags company-etags company-keywords)
+                             company-oddmuse)
+          company-idle-delay 0.0
           company-minimum-prefix-length 1
           company-require-match 'never
 

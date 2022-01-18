@@ -6,29 +6,17 @@
  ;; If there is more than one, they won't work right.
  '(ansi-color-names-vector
    ["#2e3440" "#88c0d0" "#bf616a" "#5e81ac" "#ebcb8b" "#a3be8c" "#ebcb8b" "#e5e9f0"])
- '(command-frequency-autosave-mode t)
- '(company-backends
-   '(company-bbdb company-semantic company-clang company-cmake company-capf company-files
-                  (company-dabbrev-code company-gtags company-etags company-keywords)
-                  company-oddmuse))
+ '(autocrypt-accounts
+   '(("marcel@hsdev.com" "BC19C9D32D968224572D74A84EF46170ABE2ACDE" none)) nil nil "Set by autocrypt.el")
  '(compilation-scroll-output t)
  '(custom-safe-themes t)
  '(epg-gpg-program "/usr/bin/gpg2")
- '(eshell-modules-list
-   '(eshell-alias eshell-banner eshell-basic eshell-cmpl eshell-dirs eshell-glob eshell-hist eshell-ls eshell-pred eshell-prompt eshell-rebind eshell-script eshell-term eshell-unix))
  '(explicit-shell-file-name "/bin/bash")
  '(fill-column 100)
- '(flyspell-issue-message-flag nil)
  '(font-lock-maximum-size nil)
  '(gud-gdb-command-name "gdb --annotate=1")
  '(guess-language-languages '(en de nl))
  '(ispell-use-framepop-p t)
- '(ocpf-frame-parameters
-   '((name . "org-capture-pop-frame")
-     (width . 115)
-     (height . 15)
-     (tool-bar-lines . 0)
-     (menu-bar-lines . 0)))
  '(org-M-RET-may-split-line '((default . t) (headline)))
  '(org-agenda-custom-commands
    '(("w" "Waiting For list" tags-todo "-inactive/WAITING"
@@ -91,47 +79,12 @@
        (tags-todo "carryover"
                   ((org-agenda-overriding-header "Carry along list"))))
       nil)))
- '(org-beamer-outline-frame-options nil)
- '(org-beamer-outline-frame-title "Onderwerpen")
  '(org-blocker-ignore-ancestor-siblings t)
  '(org-clock-x11idle-program-name "xprintidle")
  '(org-closed-keep-when-no-todo t)
  '(org-ditaa-jar-path "/home/mrb/bin/ditaa.jar")
  '(org-entities-user '(("cmd" "\\cmd{}" nil "⌘" "⌘" "⌘" "⌘")))
- '(org-export-backends '(ascii html icalendar latex md odt org texinfo))
- '(org-export-copy-to-kill-ring 'if-interactive)
- '(org-export-docbook-xsl-fo-proc-command "fop %i %o" t)
- '(org-export-docbook-xslt-proc-command "xsltproc --output %o %s %i" t)
- '(org-export-htmlize-output-type 'css t)
- '(org-export-latex-classes
-   '(("article" "\\documentclass[11pt,a4paper,twoside]{article}"
-      ("\\section{%s}" . "\\section*{%s}")
-      ("\\subsection{%s}" . "\\subsection*{%s}")
-      ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
-      ("\\paragraph{%s}" . "\\paragraph*{%s}")
-      ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))
-     ("report" "\\documentclass[11pt]{report}"
-      ("\\part{%s}" . "\\part*{%s}")
-      ("\\chapter{%s}" . "\\chapter*{%s}")
-      ("\\section{%s}" . "\\section*{%s}")
-      ("\\subsection{%s}" . "\\subsection*{%s}")
-      ("\\subsubsection{%s}" . "\\subsubsection*{%s}"))
-     ("book" "\\documentclass[11pt]{book}"
-      ("\\part{%s}" . "\\part*{%s}")
-      ("\\chapter{%s}" . "\\chapter*{%s}")
-      ("\\section{%s}" . "\\section*{%s}")
-      ("\\subsection{%s}" . "\\subsection*{%s}")
-      ("\\subsubsection{%s}" . "\\subsubsection*{%s}"))
-     ("beamer" "\\documentclass{beamer}" org-beamer-sectioning)) t)
- '(org-export-latex-hyperref-format "\\ref{%s}:{%s}" t)
- '(org-export-latex-title-command " " t)
- '(org-export-with-tags nil)
- '(org-export-with-todo-keywords nil)
- '(org-file-apps
-   '((auto-mode . emacs)
-     ("\\.dia\\'" . "dia %s")
-     ("\\.mm\\'" . default)
-     ("\\.pdf\\'" . emacs)))
+
  '(org-html-toplevel-hlevel 3)
  '(org-insert-heading-respect-content nil)
  '(org-latex-default-packages-alist
@@ -152,14 +105,8 @@
      ("" "amstext" nil)
      ("hidelinks" "hyperref" nil)
      "\\tolerance=1000"))
- '(org-latex-pdf-process
-   '("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f" "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f" "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"))
- '(org-latex-title-command " ")
- '(org-latex-to-pdf-process
-   '("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f" "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f" "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f") t)
  '(org-list-allow-alphabetical t)
  '(org-mime-use-property-inheritance t)
- '(org-org-htmlized-css-url "orgmode.css")
  '(org-plantuml-jar-path "/usr/share/java/plantuml/plantuml.jar")
  '(org-stuck-projects '("-inactive/+TODO" ("TODO" "WAITING") nil ""))
  '(org-tags-exclude-from-inheritance '("area" "encrypt"))
