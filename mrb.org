@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent
 
-Last update: <2022-01-18 11:42:28>
+Last update: <2022-01-18 12:03:24>
 
 #+TOC: headlines 1
 
@@ -758,11 +758,13 @@ I recently reversed my stance on this and am now enabling visual line mode every
 To help me see the difference between visual lines and logical lines I let emacs display indicators in the fringe and define a function to help me unfill existing paragraphs.
 
 #+begin_src emacs-lisp
-  (setq-default word-wrap t)              ; why would i want to have no wrapping by word?
+  ;; Set some defaults
+  (setq-default word-wrap t               ; why would i want to have no wrapping by word?
+                fill-column 100
+                truncate-lines nil)
+
   (use-package visual-fill-column
     :commands (turn-on-visual-fill-column-mode))
-
-  (setq-default truncate-lines nil)
 
   ;; Similar to mail messages, use vertical bar for wrapped paragraphs
   (setq visual-line-fringe-indicators
@@ -1727,9 +1729,14 @@ Specific settings for babel and literate programming within org-mode
           (sql        . t)))
 
   ;; Activate Babel languages
-  (org-babel-do-load-languages
-   'org-babel-load-languages
-   org-babel-load-languages)
+  (org-babel-do-load-languages 'org-babel-load-languages org-babel-load-languages)
+#+end_src
+
+The elements of org babel are blocks of source code. Here are some helper programs relevant for those blocks:
+
+#+begin_src emacs-lisp
+  (setq org-plantuml-jar-path "/usr/share/java/plantuml/plantuml.jar"
+        org-ditaa-jar-path    "/home/mrb/bin/ditaa.jar")
 #+end_src
 
 ** Refiling

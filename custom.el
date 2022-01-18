@@ -12,7 +12,6 @@
  '(custom-safe-themes t)
  '(epg-gpg-program "/usr/bin/gpg2")
  '(explicit-shell-file-name "/bin/bash")
- '(fill-column 100)
  '(font-lock-maximum-size nil)
  '(gud-gdb-command-name "gdb --annotate=1")
  '(guess-language-languages '(en de nl))
@@ -82,9 +81,7 @@
  '(org-blocker-ignore-ancestor-siblings t)
  '(org-clock-x11idle-program-name "xprintidle")
  '(org-closed-keep-when-no-todo t)
- '(org-ditaa-jar-path "/home/mrb/bin/ditaa.jar")
  '(org-entities-user '(("cmd" "\\cmd{}" nil "⌘" "⌘" "⌘" "⌘")))
-
  '(org-html-toplevel-hlevel 3)
  '(org-insert-heading-respect-content nil)
  '(org-latex-default-packages-alist
@@ -107,7 +104,6 @@
      "\\tolerance=1000"))
  '(org-list-allow-alphabetical t)
  '(org-mime-use-property-inheritance t)
- '(org-plantuml-jar-path "/usr/share/java/plantuml/plantuml.jar")
  '(org-stuck-projects '("-inactive/+TODO" ("TODO" "WAITING") nil ""))
  '(org-tags-exclude-from-inheritance '("area" "encrypt"))
  '(org-time-stamp-custom-formats '("<%m/%d/%y %a>" . "<%H:%M>"))
