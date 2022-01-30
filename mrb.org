@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent
 
-Last update: <2022-01-18 12:03:24>
+Last update: <2022-01-30 10:34:41>
 
 #+TOC: headlines 1
 
@@ -2778,7 +2778,7 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
                      :includes (org-mu4e mu4e-icalendar))
     ;; Make sure we use what was just compiled
     :custom (mu4e-mu-binary (expand-file-name "build/mu/mu" (straight--repos-dir "mu")))
-    :after message fullframe
+    :after (message fullframe)
     :commands mu4e
     :bind (:map mu4e-search-minor-mode-map
                 ("/" . mu4e-search)
@@ -2847,13 +2847,6 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
     (use-package message-view-patch
       :config
       (add-hook 'mu4e-view-mode-hook #'message-view-patch-highlight))
-
-    ;; Try to get some more icons in mu4e to spice up the display
-    (use-package mu4e-marker-icons
-      :init
-      ;; This is needed for me,otherwise the lineheight is fucked up
-      (setq mu4e-marker-icons-use-unicode 0)
-      (mu4e-marker-icons-mode 1))
 
     (setq
      mu4e-main-buffer-hide-personal-addresses t
@@ -2953,7 +2946,7 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
                    :action (lambda (docid msg target)
                              (mu4e--server-move
                               docid
-                              (mu4e~mark-check-target target) "+S-N-u"))))
+                              (mu4e--mark-check-target target) "+S-N-u"))))
 
     ;; Let mu4e define functions for it
     (mu4e~headers-defun-mark-for junk)
@@ -2962,22 +2955,22 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
     ;; Bookmarks
     (setq mu4e-bookmarks
           (list
-           (make-mu4e-bookmark :name "Unread messages"
+           '(:name "Unread messages"
                                :query "flag:unread and not flag:trashed"
                                :key ?u)
-           (make-mu4e-bookmark :name "INBOX"
+           '(:name "INBOX"
                                :query "(flag:unread or flag:new or maildir:/INBOX) and not (flag:draft or flag:flagged or flag:deleted or maildir:/Trash or flag:trashed)"
                                :key ?i)
-           (make-mu4e-bookmark :name "TODO list"
+           '(:name "TODO list"
                                :query "flag:flagged"
                                :key ?+)
-           (make-mu4e-bookmark :name "Today's messages"
+           '(:name "Today's messages"
                                :query "date:today..now"
                                :key ?d)
-           (make-mu4e-bookmark :name "Trash"
+           '(:name "Trash"
                                :query "maildir:/Trash"
                                :key ?t)
-           (make-mu4e-bookmark :name "Junk"
+           '(:name "Junk"
                                :query "maildir:/Junk"
                                :key ?j)))
 
