@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent
 
-Last update: <2022-01-31 10:29:55>
+Last update: <2022-01-31 14:20:05>
 
 #+TOC: headlines 1
 
@@ -1256,7 +1256,6 @@ The =org-capture-pop-frame= package makes sure all captures are in separate fram
 #+begin_src emacs-lisp
   (use-package org-capture
     :diminish
-
     :after org-journal
     :config
     (setq org-capture-bookmark nil
@@ -1268,24 +1267,25 @@ The =org-capture-pop-frame= package makes sure all captures are in separate fram
     (setq ocpf-frame-parameters
           '((name . "*capture*")
             (width . 115) (height . 15)
-            (tool-bar-lines . 0)
-            (menu-bar-lines . 0)
+            (tool-bar-lines . 0) (menu-bar-lines . 0)
             (internal-border-width . 5))))
 #+end_src
 
 Here are the templates used for them.
 
+#+name: org-capture-templates
 #+begin_src emacs-lisp
   (setq
    org-capture-templates
-   '(
-     ("b" "Buy"
+     '(("b" "Buy"
       entry (function mrb/capture-location) "* BUY %? :buy:\n%(mrb/prop-or-nothing :annotation)\n" :prepend t :empty-lines 1)
        ("l" "Link"
         entry (function mrb/capture-location) "* TODO %?\n%(mrb/prop-or-nothing :annotation)\n" :prepend t :empty-lines 1)
      ("t" "Todo"
       entry (function mrb/capture-location) "* TODO %?\n" :prepend t :empty-lines 1)))
+  #+end_src
 
+  #+begin_src emacs-lisp
 
   (defun mrb/prop-or-nothing(prop)
     "Insert `[:type]: [:property]` when :property has a value, otherwise nothing.
@@ -1329,6 +1329,11 @@ Define functions for each piece of information captured, so they can be easily b
     "Capture a BUY item"
     (interactive)
     (org-capture nil "b"))
+
+  (defun mrb/capture-link ()
+    "Capture a TODO item, but link to source when we can"
+    (interactive)
+    (org-capture nil "l"))
 #+end_src
 
 These capture functions are called from shell scripts in the operating system and have a shortcut key assigned to them. The scripts are produced directly from this document, in a similar way as the main edit script was produced in [[Preparing for lift-off]]
@@ -1435,7 +1440,6 @@ I'm not sure if this works out in practice without having a confirmation (becaus
   ;; Run archive for the item that changed state
   (add-hook 'org-after-todo-state-change-hook
             'mrb/archive-done-item t)
-
 #+end_src
 
 In addition to the above I'm experimenting with =org-edna=  (Extensible Dependencies 'N' Actions) which has a bit more flexibility. Notably the blocking of tasks is what I want to peruse a bit, because the builtin system hasn't worked for me. I may still use the builtin way to block items, but perhaps under the dynamic control of org-edna instead of manually specifying =order= properties etc.
