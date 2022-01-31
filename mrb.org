@@ -2936,7 +2936,20 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
        )
      )
 
-    ;; Define marks
+    ;; Define marks, possibly redundant, but I'd like to see them here.
+    (setq mu4e-headers-unread-mark    '("u" . "📩 ")
+          mu4e-headers-draft-mark     '("D" . "🚧 ")
+          mu4e-headers-flagged-mark   '("F" . "🚩 ")
+          mu4e-headers-new-mark       '("N" . "✨ ")
+          mu4e-headers-passed-mark    '("P" . "↪ ")
+          mu4e-headers-replied-mark   '("R" . "↩ ")
+          mu4e-headers-seen-mark      '("S" . " ")
+          mu4e-headers-trashed-mark   '("T" . "🗑️")
+          mu4e-headers-attach-mark    '("a" . "📎 ")
+          mu4e-headers-encrypted-mark '("x" . "🔑 ")
+          mu4e-headers-signed-mark    '("s" . "🖊 "))
+
+    ;; Add one specifically for marking as junk
     (add-to-list 'mu4e-marks
                  '(junk
                    :char ("J" . "💀")
