@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent
 
-Last update: <2022-01-31 15:12:49>
+Last update: <2022-01-31 15:24:32>
 
 #+TOC: headlines 1
 
@@ -170,17 +170,8 @@ Now that we have =straight= we can use it to install =use-package=
 
   ;; Need to install dependencies of use-package manually
   (use-package diminish)
+  (use-package use-package-ensure-system-package)   ; because we are in use-package config
 #+end_src
-
-
-#+begin_src emacs-lisp
-  (use-package use-package-ensure-system-package)   ; Need this because we are in use-package config
-
-  ;; Location where I keep custom packages
-  (setq custom-package-directory (concat user-emacs-directory "lisp/"))
-#+end_src
-
-
 
 Finally, make updating and installing the packages a bit easier by having a keybinding for getting to the installation part right away
 
