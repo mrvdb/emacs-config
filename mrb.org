@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent
 
-Last update: <2022-01-31 14:20:05>
+Last update: <2022-01-31 15:12:49>
 
 #+TOC: headlines 1
 
@@ -37,14 +37,12 @@ The first thing I want to take care of is to make customization possible and sto
   (load custom-file)
 #+end_src
 
-The config file =mrb.org= gets opened *a lot* because I tend to fiddle with this config at least once a day. So, it warrants it's own keybinding.
+The config file =mrb.org= gets opened *a lot* because I tend to fiddle with this config at least once a day. So, it warrants it's own keybinding, but it will have to wait until [[Key bindings]] before we can use the =bind-key= package.
 
 #+begin_src emacs-lisp
   (defun mrb/open-config ()
     (interactive)
     (find-file config-file))
-  ;; I wanted something with '~'
-  (global-set-key (kbd "C-~") 'mrb/open-config)
 #+end_src
 
 Most of the time the editing process starts at the command line. Because I use emacs in server mode, this needs a little script.  The script does two things:
@@ -2144,7 +2142,8 @@ Below is what was contained in the old configuration. I will slowly migrate this
 #+end_src
 
 * Key and mouse bindings
-Keyboard binding are the primary way to interact for me. I have been struggling with consistent keyboard shortcuts and how to integrate them with the other systems on my machine which capture shortcut keys. At this time the following applications capture shortcut keys:
+Keyboard bindings are the primary way to interact for me. I have been struggling with consistent keyboard shortcuts and how to integrate them with the other systems on my machine which capture shortcut keys. At this time the following applications capture shortcut keys:
+
 1. the awesome window manager captures keys;
 2. xbindkeys provides a number of key bindings for application
    dependent operations;
@@ -2185,15 +2184,7 @@ Furthermore, because I still can't remember keys, after pressing a prefix key li
     (which-key-mode))
 #+end_src
 
-** First, unsetting the keys I don't want.
-Let's begin with killing some bindings which are in my way, notably the standard right mouse click behavior. This is because I want it to behave in org-mode, which apparently sets this. I should probably find out a better way for this.
-
-#+begin_src emacs-lisp
-  (global-unset-key (kbd "<mouse-3>"))
-#+end_src
-
-** Setting keys
-Binding keys if fine and all, but remembering them later is rather hard, especially if they wander all over the configuration file. It seems that `bind-key' (now part of `use-package') solves this problem, so let's use that.
+For binding keys there are many ways it seems, with all different syntaxes and uses. I've tried to do everything with the =bind-key= package, because that is part of =use-package= so we get that for free.
 
 #+begin_src emacs-lisp
   (use-package bind-key)
@@ -2201,90 +2192,18 @@ Binding keys if fine and all, but remembering them later is rather hard, especia
 
 Bind-key can define both global keys as map-based key settings and accepts all kinds of key specifications, including strings.
 
+** First, unsetting the keys I don't want.
+Let's begin with killing some bindings which are in my way, notably the standard right mouse click behavior. This is because I want it to behave in org-mode, which apparently sets this. I should probably find out a better way for this.
+
 #+begin_src emacs-lisp
-  ; Font scaling, like in firefox
-  (bind-key "C-+" 'text-scale-increase)
-  (bind-key "C--" 'text-scale-decrease)
-
-  ;; Line handling functions
-  (bind-key "s-`" 'toggle-truncate-lines)
-
-  ;; Most of the time I want return to be newline and indent
-  ;; Every mode can augment this at will obviously (org-mode does, for example)
-  (bind-key "RET" 'newline-and-indent)
-
-  ;; Comment code lines, command reacts based on the major mode.
-  (bind-key "s-/" 'comment-dwim)
-
-  (bind-key "s-s" 'save-buffer)
-
-  ;; Kill buffer
-  (bind-key "s-k" 'kill-buffer)
-
-  ;; Resizing windows
-  ;; Introduce a bit of intelligence so the shrink and enlarge know what window I'm in.
-  (defun mrb/xor (b1 b2)
-    "Exclusive or between arguments"
-    (or (and b1 b2)
-        (and (not b1) (not b2))))
-
-  (defun mrb/move-border-left-or-right (arg dir)
-    "General function covering move-border-left and move-border-right. If DIR is
-    t, then move left, otherwise move right."
-    (interactive)
-    (if (null arg) (setq arg 5))
-    (let ((left-edge (nth 0 (window-edges))))
-      (if (mrb/xor (= left-edge 0) dir)
-          (shrink-window arg t)
-        (enlarge-window arg t)))
-    )
-
-  (defun mrb/move-border-left (arg)
-    (interactive "P")
-    (mrb/move-border-left-or-right arg t))
-
-  (defun mrb/move-border-right (arg)
-    (interactive "P")
-    (mrb/move-border-left-or-right arg nil))
-
-  ;; Same for up and down
-  (defun mrb/move-border-up-or-down (arg dir)
-    "General function covering move-border-up and move-border-down. If DIR is
-    t, then move up, otherwise move down."
-    (interactive)
-    (if (null arg) (setq arg 5))
-    (let ((top-edge (nth 1 (window-edges))))
-      (if (mrb/xor (= top-edge 0) dir)
-          (shrink-window arg nil)
-        (enlarge-window arg nil))))
-
-  (defun mrb/move-border-up (arg)
-    (interactive "P")
-    (mrb/move-border-up-or-down arg t))
-
-  (defun move-border-down (arg)
-    (interactive "P")
-    (mrb/move-border-up-or-down arg nil))
-
-
-  ;; cut, copy and paste with cmd-key (like on osx).
-  ;; this kinds sucks now, because the rest of the OS does not do this
-  ;; SOLUTION: learn to work with standard emacs keybinding and adjust the OS  ?
-  (bind-key "s-z" 'undo)
-  (bind-key "s-x" 'clipboard-kill-region)
-  (bind-key "s-c" 'clipboard-kill-ring-save)
-  (bind-key "s-v" 'yank)
-  (bind-key "s-a" 'mark-whole-buffer)
-
-  ;; Keypad delete
-  (bind-key [(kp-delete)] 'delete-char)
+  (unbind-key "<mouse-3>")
 
   ;; Make `C-x C-m' and `C-x RET' be different (since I tend
   ;; to type the latter by accident sometimes.)
-  ;; Should this not be an unset?
-  (bind-key "C-x RET" nil)
+  (unbind-key "C-x RET")
 #+end_src
 
+** Setting keys
 The standard open-line-splits the line, which is useful, but not what I want, so define a version which can open a line above or below the current line without changing the cursor position.
 
 #+begin_src emacs-lisp
@@ -2312,7 +2231,50 @@ Probably the most important key is =M-x= (as set by default). That key gives acc
 
 I'm using helm which has a replacement for the =M-x= command, see the helm config for details.
 
+Set of bindings on which I would like to have cut, copy and paste and friends:
 
+#+begin_src emacs-lisp
+  ;; this kinda sucks now, because the rest of the OS does not do this
+  ;; SOLUTION: learn to work with standard emacs keybinding and adjust the OS  ?
+  (bind-key "s-z" 'undo)
+  (bind-key "s-x" 'clipboard-kill-region)
+  (bind-key "s-c" 'clipboard-kill-ring-save)
+  (bind-key "s-v" 'yank)
+  (bind-key "s-a" 'mark-whole-buffer)
+#+end_src
+
+Some operations on buffers:
+
+#+begin_src emacs-lisp
+  ;; Buffer handling shortcuts
+  (bind-key "s-n" #'(lambda () (interactive) (switch-to-buffer (generate-new-buffer "Untitled"))))
+  (bind-key "s-s" 'save-buffer)
+  (bind-key "s-k" 'kill-buffer)
+#+end_src
+
+And the rest, for now uncategorized:
+
+#+begin_src emacs-lisp
+  ;; Open my emacs config; I wanted something with '~'
+  (bind-key "C-~" 'mrb/open-config)
+
+  ;; Font scaling, like in firefox
+  (bind-key "C-+" 'text-scale-increase)
+  (bind-key "C--" 'text-scale-decrease)
+
+  ;; Line handling functions
+  (bind-key "s-`" 'toggle-truncate-lines)
+  ;; Most of the time I want return to be newline and indent
+  ;; Every mode can augment this at will obviously (org-mode does, for example)
+  (bind-key "RET" 'newline-and-indent)
+
+  ;; Comment code lines, command reacts based on the major mode.
+  (bind-key "s-/" 'comment-dwim)
+
+  ;; Keypad delete
+  (bind-key [(kp-delete)] 'delete-char)
+
+#+end_src
 **** What should have been in emacs
 Sometimes there are /logical gaps/ in emacs' keybinding. I put them here
 
@@ -2320,6 +2282,7 @@ Sometimes there are /logical gaps/ in emacs' keybinding. I put them here
   (bind-keys :map help-map
             ("A" . describe-face))
 #+end_src
+
 **** Special keys
 For some special keys I have defined some commands. Special keys are those keys that may not be on every keyboard, within reason. I consider the function keys also as special, although they do not fit the previous definition.
 
@@ -2336,6 +2299,8 @@ For some special keys I have defined some commands. Special keys are those keys 
 #+end_src
 
 **** Resizing and switching windows and frames
+
+Treading cautiously here as ideally frames sizing is the responsibility of the window manager.
 
 #+begin_src emacs-lisp
   ;; Moving back and forth in windows For now, I'm using the Fn Key +
@@ -3204,7 +3169,6 @@ For most of the languages I use (Bash, python, C, Go, HTML Haskell, Lua), the La
 
 #+begin_src emacs-lisp
     (use-package lsp-mode
-
       :commands (lsp-deferred lsp)
 
       :init
