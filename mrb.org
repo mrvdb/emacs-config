@@ -1136,7 +1136,7 @@ Also make sure we never load org from internal, this can happen when functions w
     :straight (org-mode :branch "release_9.5"
                :includes (org-agenda org-capture org-crypt org-datetree org-protocol))
         :hook ((org-mode . turn-on-visual-line-mode)
-               (org-mode . turn-on-visusl-fill-column-mode)
+               (org-mode . turn-on-visual-fill-column-mode)
                (org-indent-mode . (lambda () (diminish 'org-indent-mode)))
                (org-agenda-mode . (lambda () (hl-line-mode 1))))
     :init
