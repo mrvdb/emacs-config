@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent
 
-Last update: <2022-01-30 10:34:41>
+Last update: <2022-01-31 10:29:55>
 
 #+TOC: headlines 1
 
@@ -365,6 +365,7 @@ Using pdf-tools for PDF handling. This is a lot better than docview. I'm a bit a
   (use-package pdf-tools
     :after (fullframe)
     :magic ("%PDF" . pdf-view-mode)
+    :hook (pdf-view-mode . (lambda () (cua-mode 0)))
     :bind (:map pdf-view-mode-map
                 ("h"   . 'pdf-annot-add-highlight-markup-annotation)
                 ("t"   . 'pdf-annot-add-text-annotation)
@@ -386,11 +387,7 @@ Using pdf-tools for PDF handling. This is a lot better than docview. I'm a bit a
           pdf-misc-print-program "/usr/bin/lpr"
           pdf-view-midnight-colors '("#DCDCCC" . "#383838")) ; Not sure what this is
 
-
-    (add-hook 'pdf-view-mode-hook (lambda () (cua-mode 0))) ; turn off cua so copy works
-
-    (add-to-list 'revert-without-query ".+\\.pdf")
-    )
+    (add-to-list 'revert-without-query ".+\\.pdf"))
 #+end_src
 
 Integrate this with orgmode as well. This is, for now, effectively making a link type available so we can directly link, very efficiently, to pages in PDF documents.
@@ -744,8 +741,8 @@ Miscellaneous other visual settings follow.
   (use-package rainbow-mode
     :diminish)
 
-  ;; Give commands the option to display full-screen (so far, magit-status only)
-  (use-package fullframe  )
+  ;; Give commands the option to display full-screen
+  (use-package fullframe)
 #+end_src
 
 ** Lines
@@ -1017,10 +1014,9 @@ For file management itself, dired is the defacto standard It's builtin so =use-p
 
 #+begin_src emacs-lisp
   (use-package dired
-    :straight (:type built-in)                                 ;builtin
-    :init
-    ;; auto-revert global is only for buffers with a file attached
-      (add-hook 'dired-mode-hook #'auto-revert-mode)
+    :straight (:type built-in)
+    ;; auto-revert global is only for file buffers, so explicit enable is needed
+    :hook (dired-mode-hook . auto-revert-mode)
       :config
       (setq dired-bind-jump nil)                ; Do not bind to C-x C-j, we do jabber prefix there
   )
@@ -1085,8 +1081,7 @@ Now, do the other mode related packages which require a bit of configuration.
 #+begin_src emacs-lisp
 
   (use-package eimp
-    :config
-    (add-hook 'image-mode-hook #'eimp-mode))
+    :hook (image-mode . eimp-mode))
 
   (use-package rainbow-mode
     :hook (conf-mode css-mode))
@@ -1100,14 +1095,12 @@ Now, do the other mode related packages which require a bit of configuration.
     (persistent-scratch-setup-default))
 
   (use-package nxml-mode
-     ;; builtin mode
     :straight (:type built-in)
+    :hook ((nxml-mode . (lambda () (set-input-method nil)))
+           (nxml-mode . turn-off-auto-fill))
     :config
     (setq nxml-heading-element-name-regexp "\\|.*"
-          nxml-section-element-name-regexp "\\|file\\|.+")
-
-    (add-hook 'nxml-mode-hook #'(lambda () (set-input-method nil)))
-    (add-hook 'nxml-mode-hook 'turn-off-auto-fill))
+          nxml-section-element-name-regexp "\\|file\\|.+"))
 #+end_src
 * Org-mode
 Orgmode configuration is probably the largest part of my Emacs configuration, because most of the time I spent in Emacs, when not coding, is spent in org-mode.
@@ -1133,10 +1126,15 @@ Also make sure we never load org from internal, this can happen when functions w
     :demand t
     :straight (org-mode :branch "release_9.5"
                :includes (org-agenda org-capture org-crypt org-datetree org-protocol))
+        :hook ((org-mode . turn-on-visual-line-mode)
+               (org-mode . turn-on-visusl-fill-column-mode)
+               (org-indent-mode . (lambda () (diminish 'org-indent-mode)))
+               (org-agenda-mode . (lambda () (hl-line-mode 1))))
     :init
     ;; FIXME: this should not be needed, see https://github.com/raxod502/straight.el/issues/536
     (use-package org-agenda)
     (use-package org-capture)
+
     :mode ("\\.txt\\'" "\\.org\'")
     :bind (("C-c g"   . 'mrb/gtd)
            ("C-c a"   . 'org-agenda)
@@ -1161,9 +1159,6 @@ Also make sure we never load org from internal, this can happen when functions w
            :map org-capture-mode-map
            ("C-c C-t" . mrb/add-tags-in-capture))
     :config
-    (add-hook 'org-mode-hook 'turn-on-visual-line-mode)
-    (add-hook 'org-mode-hook 'turn-on-visual-fill-column-mode)
-    (add-hook 'org-indent-mode-hook (lambda () (diminish 'org-indent-mode)))
     (setq org-use-fast-todo-selection t
           org-use-fast-tag-selection t
           org-fast-tag-selection-single-key 'expert
@@ -1570,9 +1565,10 @@ There are a couple of ways within org to emphasize text inline for *bold*, /ital
 #+begin_src emacs-lisp
   (use-package org-appear
     :after org
+    :hook (org-mode . org-appear-mode)
     :config
     (setq org-hide-emphasis-markers t)    ; Is this used by org-appear mode?
-    (add-hook 'org-mode-hook 'org-appear-mode))
+    )
 #+end_src
 
 Similar to inline emphasis is the /rewriting/ with pretty entity characters (like '\delta' for example). These characters can be added to the text by adding a '\' before a symbol name ('delta' in the example).  I make an exception for the sub- and superscript characters. This happens a lot in variable names etc. and I a big annoyance if those get rendered to subscript all the time.
@@ -1597,8 +1593,8 @@ For most of the source blocks I want Emacs to render those blocks in their nativ
 For the headings at each level a =*= is normally used. As we're in unicode world now, we can do a bit better.
 
 #+begin_src emacs-lisp
-  (use-package org-bullets)
-  (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
+  (use-package org-bullets
+    :hook (org-mode . (lambda () (org-bullets-mode 1))))
 #+end_src
 
 The item lists can be made a whole lot more attractive by attaching some icons based on the category an items belongs to. The category assignment itself is done by setting the =CATEGORY= property explicitly on the item or on the file.
@@ -1877,6 +1873,8 @@ While the standard capture method is useful I found myself not using it very muc
 #+begin_src emacs-lisp
   (use-package org-journal
     :after org
+    :hook ((org-journal-mode . turn-on-visual-line-mode)
+           (org-journal-mode . turn-on-visual-fill-column-mode))
     :bind
     (("C-c j"   . 'org-journal-new-entry))
     :init
@@ -1909,10 +1907,7 @@ While the standard capture method is useful I found myself not using it very muc
           ;; I want to have encryption, but how do TODO items bubble up then in the agenda
           org-journal-enable-encryption nil
           org-crypt-disable-auto-save t
-          org-journal-enable-cache t)
-    :config
-    (add-hook 'org-journal-mode-hook 'turn-on-visual-line-mode)
-    (add-hook 'org-journal-mode-hook 'turn-on-visual-fill-column-mode))
+          org-journal-enable-cache t))
 #+end_src
 
 Particularly in journaling, but also in org-mode in general, I want to be able to quickly insert screenshots. Rather, images in general but 90% of my use-case is really screenshots.
@@ -2022,9 +2017,6 @@ Below is what was contained in the old configuration. I will slowly migrate this
       (if (mrb/is-project-p)
           subtree-end
         nil)))
-
-  ;; When in agenda mode, show the line we're working on.
-  (add-hook 'org-agenda-mode-hook (lambda () (hl-line-mode 1)))
 
   ;; Remove empty property drawers
   (defun mrb/org-remove-empty-propert-drawers ()
@@ -2698,36 +2690,8 @@ It's not entirely clear which package is exactly responsible for what, but there
 #+begin_src emacs-lisp
   (use-package message
     :straight (:type built-in)
-    :requires org-faces
-    :config
-    (setq
-     ;; When citing, remove the senders signature.
-     ;; FIXME: often I want to remove a lot more, like the disclaimer
-     message-cite-function 'message-cite-original-without-signature
 
-     ;; Citing/Quoting when replying
-     message-yank-prefix "> "             ; Add '> ' when quoting lines
-     message-yank-cited-prefix ">"        ; Add '>' for cited lines
-     message-yank-empty-prefix ""         ; Add nothing for empty lines
-
-     ;; Always put one in the Sent folder on sending.
-     ;; FIXME: this does nothing for mu4e!!!
-     message-default-mail-headers (mapconcat
-      'identity
-      '("Bcc: mrb+Sent@hsdev.com"
-        "OpenPGP: id=235E5C8CF5E8DFFB"
-        "OpenPGP: url=https://keys.openpgp.org/vks/v1/by-fingerprint/77DDA1B68D04792A8F85D855235E5C8CF5E8DFFB"
-        "OpenPGP: preference=signencrypt")
-      "\n")
-
-
-     ;; How to attribute
-     message-citation-line-format "[%N]:"
-     ;; Make sure we use it
-     message-citation-line-function 'message-insert-formatted-citation-line
-
-     message-kill-buffer-on-exit t))
-
+    :init
   (defun mrb/message-mode-hook ()
     "This configures message mode and thus other modes which inherit message mode."
     ;; We have to make sure that the messages we produce are
@@ -2756,18 +2720,42 @@ It's not entirely clear which package is exactly responsible for what, but there
     ;; This enables the f=f encoding
     (setq mml-enable-flowed t))
 
-  ;; Enable it when entering message mode
-  (add-hook 'message-mode-hook 'mrb/message-mode-hook)
+    :hook (message-mode . mrb/message-mode-hook)
+
+    :config
+    (setq
+     ;; When citing, remove the senders signature.
+     ;; FIXME: often I want to remove a lot more, like the disclaimer
+     message-cite-function 'message-cite-original-without-signature
+
+     ;; Citing/Quoting when replying
+     message-yank-prefix "> "             ; Add '> ' when quoting lines
+     message-yank-cited-prefix ">"        ; Add '>' for cited lines
+     message-yank-empty-prefix ""         ; Add nothing for empty lines
+
+     ;; Always put one in the Sent folder on sending.
+     ;; FIXME: this does nothing for mu4e!!!
+     message-default-mail-headers (mapconcat
+                                   'identity
+                                   '("Bcc: mrb+Sent@hsdev.com"
+                                     "OpenPGP: id=235E5C8CF5E8DFFB"
+                                     "OpenPGP: url=https://keys.openpgp.org/vks/v1/by-fingerprint/77DDA1B68D04792A8F85D855235E5C8CF5E8DFFB"
+                                     "OpenPGP: preference=signencrypt")
+                                   "\n")
+
+
+     ;; How to attribute
+     message-citation-line-format "[%N]:"
+     message-citation-line-function 'message-insert-formatted-citation-line
+
+     message-kill-buffer-on-exit t))
+
 #+end_src
 
 *** Mu4e specific settings
 After a journey with many different MUAs I seem to be settling on =mu4e=.
 
 #+begin_src emacs-lisp
-  (defun mrb/mu4e-quit ()
-    (interactive)
-    (kill-buffer (current-buffer)))
-
   ;; FIXME: check for system packages meson, g++, pkg-config,
   ;;        cmake, libglib2.0-dev, libgmime3.0-dev, libxapian-dev, texinfo
   ;; (names are debian package names)
@@ -2780,6 +2768,7 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
     :custom (mu4e-mu-binary (expand-file-name "build/mu/mu" (straight--repos-dir "mu")))
     :after (message fullframe)
     :commands mu4e
+    :hook (mu4e-view-mode . turn-on-visual-line-mode)
     :bind (:map mu4e-search-minor-mode-map
                 ("/" . mu4e-search)
                 ("s" . nil)
@@ -2802,7 +2791,12 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
                 ("X" . (lambda () (interactive) (mu4e~view-in-headers-context (mu4e-mark-execute-all t)))))
 
     :init
-    (fullframe mu4e mrb/mu4e-quit)                  ; Claim the whole screen
+    ;; Claim the whole screen in mu4e main window
+    (defun mrb/mu4e-quit ()
+      (interactive)
+      (kill-buffer (current-buffer)))
+
+    (fullframe mu4e mrb/mu4e-quit)
 
     :config
     ; Use local thread-folding package
@@ -2828,15 +2822,14 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
 
     ;; Show an alert when new mails come in, this relies on mu4e being active though
     (use-package mu4e-alert
+      :hook (after-init . mu4e-alert-enable-notifications)
       :config
       ;; Just show subjects, not counts
       (setq mu4e-alert-email-notification-types '(subjects))
-      (mu4e-alert-set-default-style 'libnotify)
-      (add-hook 'after-init-hook #'mu4e-alert-enable-notifications))
+      (mu4e-alert-set-default-style 'libnotify))
 
     ;; Support icalendar Yes/No/Maybe reactions to calendar invites
     (use-package mu4e-icalendar
-
       :config
       (mu4e-icalendar-setup))
 
@@ -2845,9 +2838,9 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
 
     ;; Patch highlighting inside messages
     (use-package message-view-patch
-      :config
-      (add-hook 'mu4e-view-mode-hook #'message-view-patch-highlight))
+      :hook (mu4e-view-mode . message-view-patch-highlight))
 
+    ;; FIXME: move these up
     (setq
      mu4e-main-buffer-hide-personal-addresses t
      mu4e-main-hide-fully-read nil
@@ -2889,7 +2882,7 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
      mu4e-view-image-max-width 800
      mu4e-view-image-max-height 600
      mu4e-view-show-addresses t           ; Show actual addresses instead of names
-     mu4e-view-mode-hook '(turn-on-visual-line-mode)
+
      mu4e-save-multiple-attachments-without-asking t
 
      ;; Compose settings
@@ -3014,27 +3007,24 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
 To enable integration with orgmode =org-mu4e= must be loaded
 
 #+begin_src emacs-lisp
-  (use-package org-mu4e
-
-    :after org)
+    (use-package org-mu4e :after org)
 #+end_src
 
 *** Sieve
-Cyrus sieve is used on the server to filter our mail and this is accessed by the sieve-manage package. For some reason I can't get the '^M' characters out of the process, so here's a hack for that
+Sieve is used on the server to filter our mail and this is accessed by the sieve-manage package. For some reason I can't get the '^M' characters out of the process, so here's a hack for that.
 
 #+begin_src emacs-lisp
-(use-package sieve
-  :commands sieve-manage
-  :config
-  (setq sieve-manage-authenticators '(plain digest-md5 cram-md5 scram-md5 ntlm login)))
-
+  (use-package sieve
+    :init
   (defun dos2unix ()
     "Replace DOS eolns CR LF with Unix eolns CR"
     (interactive)
       (goto-char (point-min))
       (while (search-forward "\r" nil t) (replace-match "")))
-
-  (add-hook 'sieve-mode-hook 'dos2unix)
+    :commands sieve-manage
+    :hook (sieve-mode . dos2unix)
+    :config
+    (setq sieve-manage-authenticators '(plain digest-md5 cram-md5 scram-md5 ntlm login)))
 #+end_src
 
 which basically goes over the whole sieve script and removes the '^M' characters from the buffer
@@ -3128,6 +3118,7 @@ I run a weechat proxy on a vps for IRC. Luckily there is a good emacs package to
     ;; I now have a patch in place ignoring the problem until issue is resolved upstream
     ;; See: https://github.com/the-kenny/weechat.el/issues/80
     :after tracking
+    :hook (weechat-mode . visual-line-mode)
     :config
     (use-package weechat-tracking )
     (use-package weechat-notifications )
@@ -3150,7 +3141,6 @@ I run a weechat proxy on a vps for IRC. Luckily there is a good emacs package to
       (add-to-list 'weechat-modules 'weechat-notifications)
       (add-to-list 'weechat-modules 'weechat-tracking)
       (add-to-list 'weechat-modules 'weechat-image)
-      (add-hook 'weechat-mode-hook 'visual-line-mode)
 
       ;; Make a convenient connect function
       (defun mrb/chat()
@@ -3380,16 +3370,14 @@ I am just starting out with haskell, but the two things that are probably needed
 #+begin_src emacs-lisp
   (use-package haskell-mode
     :requires ghc
-    :init
-    (progn
-      (add-hook 'haskell-mode-hook 'interactive-haskell-mode)
-      (add-hook 'haskell-mode-hook 'turn-on-haskell-doc-mode)
-      (add-hook 'haskell-mode-hook 'turn-on-haskell-indent))
+    :hook ((haskell-mode .interactive-haskell)
+           (haskell-mode . turn-on-haskell-doc)
+           (haskell-mode . turn-on-haskell-indent))
 
     :mode "\‌\.hs\\'"
     :config
-
     ;; Replace ⇒ with ⇉ q
+    ;; FIXME: i have a global prettifier, can't we use that?
     (delete '("=>" . "⇒") haskell-font-lock-symbols-alist)
     (add-to-list 'haskell-font-lock-symbols-alist '("=>" . "⇉"))
     (setq haskell-font-lock-symbols t
@@ -3400,18 +3388,14 @@ Because the haskell environment can be different for each project, we need a way
 
 #+begin_src emacs-lisp
   (use-package flycheck-haskell
-    :config
-    (eval-after-load 'flycheck
-      '(add-hook 'flycheck-mode-hook #'flycheck-haskell-setup)))
+    :after flycheck
+    :hook (flycheck-mode . flycheck-haskell-setup))
 #+end_src
 
 For creating web apps I use yesod, which is supported by a number of packages
 #+begin_src emacs-lisp
   ;; Yesod's html like files
   (use-package hamlet-mode)
-
-
-
 #+end_src
 ** Go
 #+begin_src emacs-lisp
@@ -3422,6 +3406,7 @@ For creating web apps I use yesod, which is supported by a number of packages
     :init
     ;; Set up before-save hooks to format buffer and add/delete imports.
     ;; Make sure you don't have other gofmt/goimports hooks enabled.
+    ;; FIXME: would this not add hooks for all files that are saved??
     (defun lsp-go-install-save-hooks ()
       (add-hook 'before-save-hook #'lsp-format-buffer t t)
       (add-hook 'before-save-hook #'lsp-organize-imports t t))
@@ -3434,14 +3419,10 @@ For all of those languages, I want to use paredit which makes editing, longer te
 
 #+begin_src emacs-lisp
   (use-package paredit
-    :diminish
-    :config
-    ;; For things like *scratch* buffer
-    (add-hook 'lisp-interaction-mode-hook #'enable-paredit-mode)
-    (add-hook 'emacs-lisp-mode-hook #'enable-paredit-mode)
-    (add-hook 'eval-expression-mode-hook #'enable-paredit-mode)
-    (add-hook 'scheme-mode-hook #'enable-paredit-mode)
-    (add-hook 'lisp-mode-hook #'enable-paredit-mode))
+    :hook ((lisp-interaction-mode emacs-lisp-mode
+            eval-expression-mode scheme-mode
+            lisp-mode) . enable-paredit-mode)
+    :diminish)
 #+end_src
 
 When a mode wants to use paredit, it can use the same constructs as above to enable paredit on it modes.
@@ -3451,13 +3432,12 @@ While we're here, let's do paxedit as well; not sure whey these two package don'
 #+begin_src emacs-lisp
   (use-package paxedit
     :requires paredit
+    :hook (paredit-mode . paxedit-mode)
     :diminish
     :bind (("M-<right>" . 'paxedit-transpose-forward)
            ("M-<left>"  . 'paxedit-transpose-backward)
            ("M-<up>"    . 'paxedit-backward-up)
-           ("M-<down>"  . 'paxedit-backward-end))
-    :config
-    (add-hook 'paredit-mode-hook 'paxedit-mode))
+           ("M-<down>"  . 'paxedit-backward-end)))
 #+end_src
 
 Evaluating an expression with the cursor after it is often used, I'd like being able to do the same when the cursor is in front of such an expression
@@ -3481,8 +3461,10 @@ Not sure how to bind this though. I'd like it close to C-x C-e obviously
         ;; repository moved and straight.el does not know about it yet
         :straight (:host gitlab :repo "emacs-geiser/geiser")
         :after paredit
+    :hook ((geiser-repl-mode . enable-paredit-mode)
+           (geiser-repl-mode . mrb/prettify-symbols))
         :config
-        ; Add implementations to support
+    ;; Add implementations to support
         (use-package geiser-guile
           :straight (:host gitlab :repo "emacs-geiser/guile"))
         (use-package geiser-chez
@@ -3491,10 +3473,7 @@ Not sure how to bind this though. I'd like it close to C-x C-e obviously
                (setq geiser-chez-binary "chez"))
         (setq geiser-active-implementations '(guile chez)
               geiser-repl-send-on-return-p nil
-              geiser-default-implementation 'guile)
-
-        (add-hook 'geiser-repl-mode-hook #'enable-paredit-mode)
-        (add-hook 'geiser-repl-mode-hook 'mrb/prettify-symbols))
+          geiser-default-implementation 'guile))
 #+end_src
 
 *** Common lisp
@@ -3503,24 +3482,22 @@ The defacto standard for a development environment in Emacs for common-lisp is e
 #+begin_src emacs-lisp
   (use-package sly
     :after (paredit)
-
-    :config
-    (setq inferior-lisp-program "/usr/bin/sbcl"
-          sly-lisp-implementations '((sbcl ("sbcl" "--core" "/home/mrb/.sbcl/sbcl.core-for-sly")))
-          sly-net-coding-system 'utf-8-unix)
-
+    :hook ((sly-mrepl-mode . override-sly-repl-bindings-with-paredit)
+           (sly-mrepl-mode . enable-paredit-mode)
+           (sly-mrepl-mode . sly-mrepl-font-lock-setup))
+    :init
     ;; In the REPL sly takes backspace, I want paredit to have it
     (defun override-sly-repl-bindings-with-paredit ()
       (define-key sly-mrepl-mode-map
         (read-kbd-macro paredit-backward-delete-key) nil))
-
-    (add-hook 'sly-mrepl-mode-hook 'override-sly-repl-bindings-with-paredit)
-    (add-hook 'sly-mrepl-mode-hook #'enable-paredit-mode)
-
     ;; Copy the keywords from lisp mode
     (defvar sly-mrepl-font-lock-keywords lisp-font-lock-keywords-2)
 
     ;; Set them up
+    (setq sly-mrepl-font-lock-keywords
+          (cons '(sly-mrepl-font-lock-find-prompt
+                  . 'sly-mrepl-prompt-face)
+                sly-mrepl-font-lock-keywords))
     (defun sly-mrepl-font-lock-setup ()
       (setq font-lock-defaults
             '(sly-mrepl-font-lock-keywords
@@ -3529,8 +3506,10 @@ The defacto standard for a development environment in Emacs for common-lisp is e
               (font-lock-syntactic-face-function
                . lisp-font-lock-syntactic-face-function)))))
 
-    ;; Set up font-locking
-    (add-hook 'sly-mrepl-mode-hook 'sly-mrepl-font-lock-setup)
+  :config
+  (setq inferior-lisp-program "/usr/bin/sbcl"
+        sly-lisp-implementations '((sbcl ("sbcl" "--core" "/home/mrb/.sbcl/sbcl.core-for-sly")))
+        sly-net-coding-system 'utf-8-unix)
 
     ;; Correct the REPL prompt
     (defun sly-mrepl-font-lock-find-prompt (limit)
@@ -3545,10 +3524,7 @@ The defacto standard for a development environment in Emacs for common-lisp is e
           (set-match-data (list beg end))
           t)))
 
-    (setq sly-mrepl-font-lock-keywords
-          (cons '(sly-mrepl-font-lock-find-prompt
-                  . 'sly-mrepl-prompt-face)
-                sly-mrepl-font-lock-keywords))
+
 #+end_src
 
 ** Gcode
@@ -3687,10 +3663,8 @@ For now, just the ansible package, and some access to its documentation will suf
     :after yaml-mode
     :init
     (use-package ansible-doc
-      :config
-      (add-hook 'yaml-mode-hook #'ansible-doc-mode))
-    :config
-    (add-hook 'yaml-mode-hook #'(lambda () (ansible 1))))
+      :hook (yaml-mode . ansible-doc-mode))
+    :hook (yaml-mode . (lambda () (ansible 1))))
 #+end_src
 * Finale
 When we are all done with this, provide it.
