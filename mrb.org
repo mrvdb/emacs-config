@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent
 
-Last update: <2022-01-31 15:44:15>
+Last update: <2022-01-31 16:59:23>
 
 #+TOC: headlines 1
 
@@ -489,7 +489,6 @@ For this to work properly we have to define a whole new input-method based on a 
 
   ;; Activate it for all text modes
   (add-hook 'text-mode-hook 'mrb/set-default-input-method)
-
 #+end_src
 
 For even more esoteric characters we have to do some extra work. No font provides all Unicode characters. While I previously had a manual solution, I'm now relying on the package =uni-code-fonts= to do the proper mapping. The first run will be very slow, but the information gets cached.
@@ -2229,20 +2228,20 @@ Set of bindings on which I would like to have cut, copy and paste and friends:
 #+begin_src emacs-lisp
   ;; this kinda sucks now, because the rest of the OS does not do this
   ;; SOLUTION: learn to work with standard emacs keybinding and adjust the OS  ?
-  (bind-key "s-z" 'undo)
-  (bind-key "s-x" 'clipboard-kill-region)
-  (bind-key "s-c" 'clipboard-kill-ring-save)
-  (bind-key "s-v" 'yank)
-  (bind-key "s-a" 'mark-whole-buffer)
+  (bind-keys ("s-z" . undo)
+             ("s-x" . clipboard-kill-region)
+             ("s-c" . clipboard-kill-ring-save)
+             ("s-v" . yank)
+             ("s-a" . mark-whole-buffer))
 #+end_src
 
 Some operations on buffers:
 
 #+begin_src emacs-lisp
   ;; Buffer handling shortcuts
-  (bind-key "s-n" #'(lambda () (interactive) (switch-to-buffer (generate-new-buffer "Untitled"))))
-  (bind-key "s-s" 'save-buffer)
-  (bind-key "s-k" 'kill-buffer)
+  (bind-keys ("s-n" . (lambda () (interactive) (switch-to-buffer (generate-new-buffer "Untitled"))))
+             ("s-s" . save-buffer)
+             ("s-k" . kill-buffer))
 #+end_src
 
 And the rest, for now uncategorized:
