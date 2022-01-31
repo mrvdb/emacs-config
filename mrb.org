@@ -517,6 +517,15 @@ So, when characters do not show properly, the steps to take now are:
 2. Map the character(-range) to that font
 3. Optional: define a convenient way to type the character
 
+To make my life a bit easier, using the =all the icons= package for using special symbols.
+
+#+begin_src emacs-lisp
+  (use-package all-the-icons
+    :if (display-graphic-p))
+#+end_src
+
+The above in itself does nothing. It just makes using the icons easier and consistent. Other packages. With the command =M-x all-the-icons-install-fonts= the latest version of the proper fonts will be installed automaticaly, so run that once in a while.
+
 * Visual
 Many settings have to do with how the screen looks and behaves in a visual way. Thing like colors, highlighting etc. go fall into this category.
 
