@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent
 
-Last update: <2022-01-31 15:24:32>
+Last update: <2022-01-31 15:44:15>
 
 #+TOC: headlines 1
 
@@ -162,8 +162,7 @@ Now that we have =straight= we can use it to install =use-package=
   ;; From this point on we should be able to use `use-package
   (use-package straight
     :config
-    (setq straight-host-usernames
-          '((github . "mrvdb")))
+    (setq straight-host-usernames '((github . "mrvdb")))
     :custom (straight-use-package-by-default t))
 
   ;; FROM THIS POINT use-package should work as intended, i.e. using straight.
@@ -171,6 +170,7 @@ Now that we have =straight= we can use it to install =use-package=
   ;; Need to install dependencies of use-package manually
   (use-package diminish)
   (use-package use-package-ensure-system-package)   ; because we are in use-package config
+  (use-package bind-key)                  ; Load early, but see section [[Key bindings]]
 #+end_src
 
 Finally, make updating and installing the packages a bit easier by having a keybinding for getting to the installation part right away
@@ -184,7 +184,6 @@ Finally, make updating and installing the packages a bit easier by having a keyb
 
     (message "Pulling all packages...")
     (straight-pull-all))
-
   (bind-key "C-c p" 'mrb/upgrade-packages)
 #+end_src
 * Personal information
@@ -218,12 +217,14 @@ I have a gpg-agent daemon configured which manages gpg and ssh keys, protected b
   (use-package auth-source-pass
     :init
     (auth-source-pass-enable)
+      :after password-store
     :config
     ;; Make sure it's the only mechanism
     (setq auth-sources '(password-store))
     (setq auth-source-gpg-encrypt-to (list user-mail-address)))
   ;; I like the pass interface, so install that too
-  (use-package pass)
+    (use-package pass
+      :after password-store)
 #+end_src
 
 ** Encrypting information
@@ -364,6 +365,7 @@ Using pdf-tools for PDF handling. This is a lot better than docview. I'm a bit a
                 :map pdf-annot-edit-contents-minor-mode-map
                 ("<return>"   . 'pdf-annot-edit-contents-commit)
                 ("<S-return>" .  'newline))
+
     :config
     (pdf-tools-install :no-query) ; :no-query auto builds epfinfo when needed
     (require 'pdf-annot)
@@ -386,7 +388,9 @@ Integrate this with orgmode as well. This is, for now, effectively making a link
     :after (org pdftools)
     :hook (org-mode . org-pdftools-setup-link))
 #+end_src
+
 I tend to compile Emacs with ImageMagick support, let's make sure we use it too.
+
 #+begin_src emacs-lisp
 (when (fboundp 'imagemagick-register-types)
   (imagemagick-register-types))
@@ -397,7 +401,7 @@ In quite a few situations I would like to use keybindings which are only valid w
 #+begin_src emacs-lisp
   (use-package selected
     :diminish selected-minor-mode
-    :after (org org-journal)
+    :after (org org-journal)              ; List all packages which use this
     :demand t                             ; Does not load without demand, why not?
     :init
     (setq selected-org-mode-map (make-sparse-keymap)
@@ -419,12 +423,12 @@ In quite a few situations I would like to use keybindings which are only valid w
             ("_"       . (lambda () (interactive) (org-emphasize ?_)))
             ("*"       . (lambda () (interactive) (org-emphasize ?*)))
             ("+"       . (lambda () (interactive) (org-emphasize ?+))))
+
     :config
     (selected-global-mode))
 #+end_src
 
 From now on we can bind keys into the selected-keymap if we want keys to be active on every regions. When only needed for a certain major mode, define a keymap named =selected-<major-mode>-keymap= and bind keys into that.
-
 
 Quick install of package that exports =qrencode-region= function. I use this mainly to send links or package tracking codes to my mobile.
 
@@ -785,7 +789,7 @@ Line-numbering is off by default, it tends to slow things down, but if I want it
 
 #+begin_src emacs-lisp
   (use-package display-line-numbers
-     ;;builtin
+    :straight (:type built-in)
     :config
     (setq
      display-line-numbers-type 'relative)
@@ -851,7 +855,7 @@ Flyspell is similar to flycheck but for text languages. I'm setting some of the 
 
 #+begin_src emacs-lisp
   (use-package flyspell
-     ;builtin
+    :straight (:type built-in)
     :config
     ;; flyspell-duplicate  as warnings
     ;; Do I want this at all?, seems overkill
@@ -918,16 +922,14 @@ How do I deal with all those buffers and files?
 For starters, make sure that they have unique buffer names so I don't get confused:
 
 #+begin_src emacs-lisp
-  ;; nicer buffer names
   (setq uniquify-buffer-name-style 'forward)
 #+end_src
 
 For every file-based buffer, I want auto-save to be on, but not in the same location as the file, as that clutters up everything. For that, I add to the list of file-name transforms to have (local) files auto saved in a designated folder)
 
 #+begin_src emacs-lisp
-  (setq auto-save-default t)
-
-  (setq mrb/auto-save-folder "~/.emacs.d/auto-save-list/")
+   (setq auto-save-default t
+         mrb/auto-save-folder (concat user-emacs-directory "auto-save-list/"))
 
   (add-to-list 'auto-save-file-name-transforms
                (list "\\(.+/\\)*\\(.*?\\)" (expand-file-name "\\2" mrb/auto-save-folder))
@@ -1884,7 +1886,7 @@ While the standard capture method is useful I found myself not using it very muc
     ;; files this is not needed.
     (setq org-journal-dir (expand-file-name (concat org-directory "journal/"))
           ;; Bring our config to every journal file
-          org-journal-file-header "#+SETUPFILE: ~/.emacs.d/org-config.org"
+          org-journal-file-header (concat "#+SETUPFILE: " user-emacs-directory "org-config.org")
 
           ;; Match the journal files (FIXME: make this independent of earlier assignments)
           org-agenda-file-regexp "^[0-9]+\\.org"
