@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent
 
-Last update: <2022-01-31 16:59:23>
+Last update: <2022-02-01 18:19:45>
 
 #+TOC: headlines 1
 
@@ -401,34 +401,18 @@ In quite a few situations I would like to use keybindings which are only valid w
 #+begin_src emacs-lisp
   (use-package selected
     :diminish selected-minor-mode
-    :after (org org-journal)              ; List all packages which use this
     :demand t                             ; Does not load without demand, why not?
-    :init
-    (setq selected-org-mode-map (make-sparse-keymap)
-          selected-org-journal-mode-map (make-sparse-keymap))
     :commands (selected-global-mode selected-minor-mode)
     :bind ( :map selected-keymap           ; bindings for all active regions
             ("q" . selected-off)
             ("u" . upcase-region)
-            ("d" . downcase-region)
-            :map selected-org-mode-map
-            ;; Used by the selected package FIXME I want this configured with org, not here
-            ("~"       . (lambda () (interactive) (org-emphasize ?~)))
-            ("_"       . (lambda () (interactive) (org-emphasize ?_)))
-            ("*"       . (lambda () (interactive) (org-emphasize ?*)))
-            ("+"       . (lambda () (interactive) (org-emphasize ?+)))
-            :map selected-org-journal-mode-map
-            ;; Used by the selected package FIXME I want this configured with org, not here
-            ("~"       . (lambda () (interactive) (org-emphasize ?~)))
-            ("_"       . (lambda () (interactive) (org-emphasize ?_)))
-            ("*"       . (lambda () (interactive) (org-emphasize ?*)))
-            ("+"       . (lambda () (interactive) (org-emphasize ?+))))
+            ("d" . downcase-region))
 
     :config
     (selected-global-mode))
 #+end_src
 
-From now on we can bind keys into the selected-keymap if we want keys to be active on every regions. When only needed for a certain major mode, define a keymap named =selected-<major-mode>-keymap= and bind keys into that.
+From now on we can bind keys into the selected-keymap if we want keys to be active on every regions. When only needed for a certain major mode, define a keymap named =selected-<major-mode>-map= and bind keys into that.
 
 Quick install of package that exports =qrencode-region= function. I use this mainly to send links or package tracking codes to my mobile.
 
@@ -1122,6 +1106,7 @@ Also make sure we never load org from internal, this can happen when functions w
 #+COMMENT: This duplicates the one in init.el, problems?
 #+begin_src emacs-lisp
   (use-package org
+    :after selected
     :demand t
     :straight (org-mode :branch "release_9.5"
                :includes (org-agenda org-capture org-crypt org-datetree org-protocol))
@@ -1130,6 +1115,8 @@ Also make sure we never load org from internal, this can happen when functions w
                (org-indent-mode . (lambda () (diminish 'org-indent-mode)))
                (org-agenda-mode . (lambda () (hl-line-mode 1))))
     :init
+    (setq selected-org-mode-map (make-sparse-keymap))
+
     ;; FIXME: this should not be needed, see https://github.com/raxod502/straight.el/issues/536
     (use-package org-agenda)
     (use-package org-capture)
@@ -1156,7 +1143,13 @@ Also make sure we never load org from internal, this can happen when functions w
            ("M-p"   . 'org-set-property)
            ("C-x m" . 'mrb/construct-mail)
            :map org-capture-mode-map
-           ("C-c C-t" . mrb/add-tags-in-capture))
+           ("C-c C-t" . mrb/add-tags-in-capture)
+           :map selected-org-mode-map
+           ;; Used by the selected package FIXME I want this configured with org, not here
+           ("~"       . (lambda () (interactive) (org-emphasize ?~)))
+           ("_"       . (lambda () (interactive) (org-emphasize ?_)))
+           ("*"       . (lambda () (interactive) (org-emphasize ?*)))
+           ("+"       . (lambda () (interactive) (org-emphasize ?+))))
     :config
     (setq org-use-fast-todo-selection t
           org-use-fast-tag-selection t
@@ -1875,12 +1868,18 @@ While the standard capture method is useful I found myself not using it very muc
 
 #+begin_src emacs-lisp
   (use-package org-journal
-    :after org
+    :after (org selected)
     :hook ((org-journal-mode . turn-on-visual-line-mode)
            (org-journal-mode . turn-on-visual-fill-column-mode))
-    :bind
-    (("C-c j"   . 'org-journal-new-entry))
+    :bind (("C-c j"   . 'org-journal-new-entry)
+           :map selected-org-journal-mode-map
+           ;; Used by the selected package FIXME I want this configured with org, not here
+           ("~" . (lambda () (interactive) (org-emphasize ?~)))
+           ("_" . (lambda () (interactive) (org-emphasize ?_)))
+           ("*" . (lambda () (interactive) (org-emphasize ?*)))
+           ("+" . (lambda () (interactive) (org-emphasize ?+))))
     :init
+    (setq selected-org-journal-mode-map (make-sparse-keymap))
     ;; The expand-file-name is needed, which is odd, because for single
     ;; files this is not needed.
     (setq org-journal-dir (expand-file-name (concat org-directory "journal/"))
@@ -2734,11 +2733,14 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
                      :pre-build (("./autogen.sh") ("make"))
                      :files (:defaults "build/mu4e/*.el")
                      :includes (org-mu4e mu4e-icalendar))
-    ;; Make sure we use what was just compiled
+
     :custom (mu4e-mu-binary (expand-file-name "build/mu/mu" (straight--repos-dir "mu")))
-    :after (message fullframe)
+    :after (message fullframe selected)
     :commands mu4e
     :hook (mu4e-view-mode . turn-on-visual-line-mode)
+    :init
+    ;; Create a keymap for selected regions in compose mode
+    (setq selected-mu4e-compose-mode-map (make-sparse-keymap))
     :bind (:map mu4e-search-minor-mode-map
                 ("/" . mu4e-search)
                 ("s" . nil)
@@ -2758,9 +2760,18 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
                 ("s" . mu4e-view-mark-for-junk)
                 ("r" . mu4e-compose-reply)
                 ("R" . mu4e-view-mark-for-refile)
-                ("X" . (lambda () (interactive) (mu4e~view-in-headers-context (mu4e-mark-execute-all t)))))
+                ("X" . (lambda () (interactive) (mu4e~view-in-headers-context (mu4e-mark-execute-all t))))
+           :map selected-mu4e-compose-mode-map
+                ("." . mrb/compose-deletion))
 
     :init
+    ;; Signal a deletion in compose
+    ;; FIXME: do something clever with the quote level?
+    (defun mrb/compose-deletion ()
+      (interactive)
+      (delete-active-region)
+      (insert "[...]"))
+
     ;; Claim the whole screen in mu4e main window
     (defun mrb/mu4e-quit ()
       (interactive)

@@ -63,3 +63,4 @@ mastodon.plstore
 /straight/
 /eln-cache/
 /speed-type/
+*.aux
