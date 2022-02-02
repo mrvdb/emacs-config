@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent :noweb no-export
 
-Last update: <2022-02-02 11:04:45>
+Last update: <2022-02-02 14:38:28>
 
 #+TOC: headlines 1
 
@@ -413,6 +413,34 @@ In quite a few situations I would like to use keybindings which are only valid w
 #+end_src
 
 From now on we can bind keys into the selected-keymap if we want keys to be active on every regions. When only needed for a certain major mode, define a keymap named =selected-<major-mode>-map= and bind keys into that.
+
+Within orgmode I'd like to have the emphasis markers react when a region is active, so let's create the necessary fragment for those bindings.
+
+#+name: org-emphasis-binds
+#+begin_src emacs-lisp :tangle no
+  ("~"       . (lambda () (interactive) (org-emphasize ?~)))
+  ("_"       . (lambda () (interactive) (org-emphasize ?_)))
+  ("*"       . (lambda () (interactive) (org-emphasize ?*)))
+  ("+"       . (lambda () (interactive) (org-emphasize ?+)))
+#+end_src
+
+Now use those bindings too configure both orgmode and org-journal-mode.
+
+#+name: org-mode-selected
+#+begin_src emacs-lisp :tangle no
+  :init
+  (setq selected-org-mode-map (make-sparse-keymap))
+  :bind  (:map selected-org-mode-map
+               <<org-emphasis-binds>>)
+#+end_src
+
+#+name: org-journal-mode-selected
+#+begin_src emacs-lisp :tangle no
+  :init
+  (setq selected-org-journal-mode-map (make-sparse-keymap))
+  :bind  (:map selected-org-journal-mode-map
+               <<org-emphasis-binds>>)
+#+end_src
 
 Quick install of package that exports =qrencode-region= function. I use this mainly to send links or package tracking codes to my mobile.
 
@@ -1092,7 +1120,8 @@ Basically where to find stuff and what to load.
 
 I loosely follow the GTD method for organizing things and I want a quick shortcut to start my main file.
 
-#+begin_src emacs-lisp
+#+name: gtd-startup
+#+begin_src emacs-lisp :tangle no
   (defun mrb/gtd()
     "Start my GTD system"
     (interactive)
@@ -1114,12 +1143,16 @@ Also make sure we never load org from internal, this can happen when functions w
                (org-mode . turn-on-visual-fill-column-mode)
                (org-indent-mode . (lambda () (diminish 'org-indent-mode)))
                (org-agenda-mode . (lambda () (hl-line-mode 1))))
-    :init
-    (setq selected-org-mode-map (make-sparse-keymap))
 
+    :init
     ;; FIXME: this should not be needed, see https://github.com/raxod502/straight.el/issues/536
     (use-package org-agenda)
     (use-package org-capture)
+
+    <<gtd-startup>>
+
+    ;; Keybindings specifically for actived regions in orgmode
+    <<org-mode-selected>>
 
     :mode ("\\.txt\\'" "\\.org\'")
     :bind (("C-c g"   . 'mrb/gtd)
@@ -1143,14 +1176,12 @@ Also make sure we never load org from internal, this can happen when functions w
            ("M-p"   . 'org-set-property)
            ("C-x m" . 'mrb/construct-mail)
            :map org-capture-mode-map
-           ("C-c C-t" . mrb/add-tags-in-capture)
-           :map selected-org-mode-map
-           ;; Used by the selected package FIXME I want this configured with org, not here
-           ("~"       . (lambda () (interactive) (org-emphasize ?~)))
-           ("_"       . (lambda () (interactive) (org-emphasize ?_)))
-           ("*"       . (lambda () (interactive) (org-emphasize ?*)))
-           ("+"       . (lambda () (interactive) (org-emphasize ?+))))
+           ("C-c C-t" . mrb/add-tags-in-capture))
+
     :config
+
+    <<orgmode-keywords>>
+
     (setq org-use-fast-todo-selection t
           org-use-fast-tag-selection t
           org-fast-tag-selection-single-key 'expert
@@ -1241,6 +1272,9 @@ The =org-capture-pop-frame= package makes sure all captures are in separate fram
     :diminish
     :after org-journal
     :config
+
+    <<org-capture-templates>>
+
     (setq org-capture-bookmark nil
           bookmark-set-fringe-mark nil))
 
@@ -1257,7 +1291,7 @@ The =org-capture-pop-frame= package makes sure all captures are in separate fram
 Here are the templates used for them.
 
 #+name: org-capture-templates
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (setq
    org-capture-templates
      '(("b" "Buy"
@@ -1266,9 +1300,7 @@ Here are the templates used for them.
         entry (function mrb/capture-location) "* TODO %?\n%(mrb/prop-or-nothing :annotation)\n" :prepend t :empty-lines 1)
      ("t" "Todo"
       entry (function mrb/capture-location) "* TODO %?\n" :prepend t :empty-lines 1)))
-  #+end_src
 
-  #+begin_src emacs-lisp
 
   (defun mrb/prop-or-nothing(prop)
     "Insert `[:type]: [:property]` when :property has a value, otherwise nothing.
@@ -1345,7 +1377,8 @@ Orgmode used a couple of thing which enable you to steer the workflow for items.
 
 Adapt the colors of the states I use a bit:
 
-#+begin_src emacs-lisp
+#+name: orgmode-keywords
+#+begin_src emacs-lisp :tangle no
   ;; Define face specs for our keywords, so they can be used in the
   ;; theme adjustment like standard faces
   (defface mrb/org-todo-keyword-TODO      nil "")
@@ -1871,15 +1904,12 @@ While the standard capture method is useful I found myself not using it very muc
     :after (org selected)
     :hook ((org-journal-mode . turn-on-visual-line-mode)
            (org-journal-mode . turn-on-visual-fill-column-mode))
-    :bind (("C-c j"   . 'org-journal-new-entry)
-           :map selected-org-journal-mode-map
-           ;; Used by the selected package FIXME I want this configured with org, not here
-           ("~" . (lambda () (interactive) (org-emphasize ?~)))
-           ("_" . (lambda () (interactive) (org-emphasize ?_)))
-           ("*" . (lambda () (interactive) (org-emphasize ?*)))
-           ("+" . (lambda () (interactive) (org-emphasize ?+))))
+    :bind (("C-c j"   . 'org-journal-new-entry))
+
+    ;; Keybindings for active regions in org-journal
+    <<org-journal-mode-selected>>
+
     :init
-    (setq selected-org-journal-mode-map (make-sparse-keymap))
     ;; The expand-file-name is needed, which is odd, because for single
     ;; files this is not needed.
     (setq org-journal-dir (expand-file-name (concat org-directory "journal/"))
