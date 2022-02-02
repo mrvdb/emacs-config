@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent :noweb no-export
 
-Last update: <2022-02-02 17:36:52>
+Last update: <2022-02-02 17:53:02>
 
 #+TOC: headlines 1
 
@@ -2657,6 +2657,15 @@ Composing mail is often an /out of band/ activity, like creating a tweet or a ca
   :bind ("C-x m" . 'mrb/compose-mail)
 
   :config
+  (setq mu4e-compose-format-flowed t
+        mu4e-compose-in-new-frame t
+        mu4e-compose-dont-reply-to-self t
+        mu4e-compose-signature '(with-current-buffer
+                                    (find-file-noselect message-signature-file)
+                                  (buffer-string))
+        mu4e-compose-complete-only-after nil ; no limit on contact completion for now
+        mail-signature t  ; use mail-signature file (move to message section?)
+        )
 
   (defun mrb/compose-mail (&optional mailto-url)
     "Run mail-compose, use mailto URI if it is given."
@@ -2861,26 +2870,8 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
     (fullframe mu4e mrb/mu4e-quit)
 
     :config
-
-    ;; Show an alert when new mails come in, this relies on mu4e being active though
-    (use-package mu4e-alert
-      :hook (after-init . mu4e-alert-enable-notifications)
-      :config
-      ;; Just show subjects, not counts
-      (setq mu4e-alert-email-notification-types '(subjects))
-      (mu4e-alert-set-default-style 'libnotify))
-
-    ;; Support icalendar Yes/No/Maybe reactions to calendar invites
-    (use-package mu4e-icalendar
-      :config
-      (mu4e-icalendar-setup))
-
-    (use-package mu4e-query-fragments)  ; Support reusable query pieces '%junk' etc.
-    (use-package mu4e-jump-to-list)       ; Shortcut key 'l' to directly focus on list threads
-
-    ;; Patch highlighting inside messages
-    (use-package message-view-patch
-      :hook (mu4e-view-mode . message-view-patch-highlight))
+    ;; Load extra packages/plugins
+    <<mu4e-packages>>
 
     ;; FIXME: move these up
     (setq
@@ -2894,10 +2885,11 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
      mu4e-trash-folder    "/Trash"
      mu4e-attachment-dir  "~/Downloads"   ; Absolute folder here, not relative to Maildir!
      mrb/mu4e-junk-folder "/Junk"         ; Added for my specific config
+     mrb/mu4e-archive-folder "/Archives"
 
      ;; Refiling to /Archives/YYYY
      mu4e-refile-folder (lambda (msg)
-                          (let ((archive_base "/Archives/")
+                          (let ((archive_base (concat mrb/mu4e-archive-folder "/"))
                                 (msgyear (format-time-string "%Y" (mu4e-message-field msg :date))))
                             (cond
                              ;; Order: most specific to general, end with the 't' case
@@ -2908,13 +2900,11 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
                              ;; The default refile location
                              (t  archive_base))))
 
-
      mu4e-confirm-quit nil
      mu4e-use-fancy-chars t
      mu4e-get-mail-command "mbsync quick" ; Just get inbox and important stuff, not everything
      mu4e-decryption-policy 'ask
      mu4e-update-interval 120             ; we just index, no retrieve, so 2mins is fine
-     mu4e-compose-complete-only-after nil
 
      ;; Set completing function to standard, so helm works
      mu4e-completing-read-function 'completing-read
@@ -2927,16 +2917,6 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
      mu4e-view-show-addresses t           ; Show actual addresses instead of names
 
      mu4e-save-multiple-attachments-without-asking t
-
-     ;; Compose settings
-     mu4e-compose-format-flowed t         ; Compose in format=flowed
-     mu4e-compose-in-new-frame t
-     mu4e-compose-dont-reply-to-self t    ; Do not include my addresses when replying
-
-     mail-signature t                   ; use mail-signature file (move to message section?)
-     mu4e-compose-signature '(with-current-buffer
-                                 (find-file-noselect message-signature-file)
-                               (buffer-string))
 
      ;; Header view settings
      mu4e-headers-include-related nil ; Use 'W' to toggle interactively
@@ -3055,6 +3035,31 @@ To enable integration with orgmode =org-mu4e= must be loaded
     (use-package org-mu4e :after org)
 #+end_src
 
+
+
+There are quite a few mu4e packages out there. Let's load them in one group for now, so it will be easy to /disable plugins/ if we need to.
+#+name: mu4e-packages
+#+begin_src emacs-lisp :tangle no
+  ;; Show an alert when new mails come in, this relies on mu4e being active though
+  (use-package mu4e-alert
+    :hook (after-init . mu4e-alert-enable-notifications)
+    :config
+    ;; Just show subjects, not counts
+    (setq mu4e-alert-email-notification-types '(subjects))
+    (mu4e-alert-set-default-style 'libnotify))
+
+  ;; Support icalendar Yes/No/Maybe reactions to calendar invites
+  (use-package mu4e-icalendar
+    :config
+    (mu4e-icalendar-setup))
+
+  (use-package mu4e-query-fragments)  ; Support reusable query pieces '%junk' etc.
+  (use-package mu4e-jump-to-list)     ; Shortcut key 'l' to directly focus on list threads
+
+  ;; Patch highlighting inside messages
+  (use-package message-view-patch
+    :hook (mu4e-view-mode . message-view-patch-highlight))
+#+end_src
 *** Sieve
 Sieve is used on the server to filter our mail and this is accessed by the sieve-manage package. For some reason I can't get the '^M' characters out of the process, so here's a hack for that.
 
