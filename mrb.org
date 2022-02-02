@@ -1179,15 +1179,34 @@ Also make sure we never load org from internal, this can happen when functions w
            ("C-."   . 'mrb/org-agenda-schedule-for-today)
            ("s-t"   . 'org-agenda-schedule)
            ("M-p"   . 'org-set-property)
-           ("C-x m" . 'mrb/construct-mail)
-           :map org-capture-mode-map
-           ("C-c C-t" . mrb/add-tags-in-capture))
+           ("C-x m" . 'mrb/construct-mail))
 
     :config
 
     <<orgmode-keywords>>
 
-    (setq org-use-fast-todo-selection t
+    <<orgmode-generalconfig>>
+
+    <<orgmode-itemactions>>
+
+    <<orgmode-scheduling>>
+
+    ;; Allow for archiving and refiling in a date organized tree
+    (use-package org-datetree )
+    (use-package org-protocol
+      :config
+      ;; If nothing is specified, create a TODO item
+      (setq org-protocol-default-template-key "t")))
+#+end_src
+
+Gather generic config variables for orgmode in one section
+
+#+name: orgmode-generalconfig
+#+begin_src emacs-lisp :tangle no
+  (setq org-directory "~/dat/org/"
+        org-metadir (concat org-directory "_orgmeta/")
+
+        org-use-fast-todo-selection t
           org-use-fast-tag-selection t
           org-fast-tag-selection-single-key 'expert
           org-enforce-todo-dependencies t       ; we do want task dependencies
@@ -1197,12 +1216,16 @@ Also make sure we never load org from internal, this can happen when functions w
           org-enable-priority-commands nil
 
           ;; Agenda settings
+        org-agenda-files (concat org-directory ".agenda_files")
           org-agenda-include-diary t
           org-agenda-start-with-log-mode t
           org-agenda-todo-ignore-scheduled "future"
           org-agenda-ignore-properties '(effort appt category)
           org-agenda-todo-ignore-scheduled 'future
-
+        org-agenda-log-mode-items '(closed clock state)
+        org-agenda-skip-deadline-prewarning-if-scheduled t
+        org-agenda-text-search-extra-files `('agenda-archives ,(directory-files
+                                                                (expand-file-name (concat org-metadir)) t ".+\\.org"))
           ;; Habits
           org-habit-show-habits-only-for-today nil
 
@@ -1210,8 +1233,7 @@ Also make sure we never load org from internal, this can happen when functions w
           org-return-follows-link t
           org-support-shift-select 'always
 
-          org-agenda-log-mode-items '(closed clock state)
-          org-agenda-skip-deadline-prewarning-if-scheduled t
+
           ;; Auto detect blank line need, this is the default, but I explicitly set thi
           ;; because it needs to be this or my capturing breaks due to org-capture popup
           org-blank-before-new-entry '((heading . auto) (plain-list-item . auto))
@@ -1225,9 +1247,11 @@ Also make sure we never load org from internal, this can happen when functions w
           ;; non nil is just direct children, what an ODD name!!!!
           org-hierarchical-todo-statistics nil
           org-provide-todo-statistics t
+
           org-log-into-drawer t
           org-log-redeadline 'note
           org-log-reschedule 'time
+
           org-modules '(org-info org-habit
                                  org-inlinetask org-irc
                                  org-toc org-mac-iCal org-mouse
@@ -1236,29 +1260,11 @@ Also make sure we never load org from internal, this can happen when functions w
           org-special-ctrl-a/e t
           org-stuck-projects '("-inactive/TODO" ("TODO" "WAITING") nil "")
           org-track-ordered-property-with-tag nil
-          org-startup-indented t)
+        org-startup-indented t
 
-    ;; Allow for archiving and refiling in a date organized tree
-    (use-package org-datetree )
-    (use-package org-protocol
-      :config
-      ;; If nothing is specified, create a TODO item
-      (setq org-protocol-default-template-key "t")))
-#+end_src
-
-Most of work originates in capturing some task item in orgmode. Set up the location and files for that.
-
-#+begin_src emacs-lisp
-  (setq org-directory "~/dat/org/")
-  (setq org-agenda-files (concat org-directory ".agenda_files"))
-  (setq org-metadir (concat org-directory "_orgmeta/"))
-  (setq org-archive-location (concat org-metadir "archive.org::datetree/"))
-  (setq org-default-notes-file (concat org-directory "GTD.org"))
-  (setq diary-file (concat org-metadir "DIARY"))
-
-  (setq org-agenda-text-search-extra-files
-     `('agenda-archives ,(directory-files
-                        (expand-file-name (concat org-metadir)) t ".+\\.org")))
+        org-archive-location (concat org-metadir "archive.org::datetree/")
+        org-default-notes-file (concat org-directory "GTD.org")
+        diary-file (concat org-metadir "DIARY"))
 #+end_src
 
 ** Capturing information
@@ -1276,9 +1282,15 @@ The =org-capture-pop-frame= package makes sure all captures are in separate fram
   (use-package org-capture
     :diminish
     :after org-journal
-    :config
 
+    ;; Special config for handling tags while capturing
+    <<org-capture-taghandling>>
+
+    :config
+    ;; Configuration of all the capture templates
     <<org-capture-templates>>
+    ;; and some shortcuts to run them
+    <<org-capture-runners>>
 
     (setq org-capture-bookmark nil
           bookmark-set-fringe-mark nil))
@@ -1293,7 +1305,7 @@ The =org-capture-pop-frame= package makes sure all captures are in separate fram
             (internal-border-width . 5))))
 #+end_src
 
-Here are the templates used for them.
+Here are the templates used by org-capture. The /todo/ template is the most used, it is the same as the /link/ template, but does not include a reference to the current context, which is, in most cases, just annoying.
 
 #+name: org-capture-templates
 #+begin_src emacs-lisp :tangle no
@@ -1337,7 +1349,8 @@ Here are the templates used for them.
 
 Define functions for each piece of information captured, so they can be easily bound to keys.
 
-#+begin_src emacs-lisp
+#+name: capture-runners
+#+begin_src emacs-lisp :tangle no
   (defun mrb/capture-todo ()
     "Capture a TODO item"
     (interactive)
@@ -1366,9 +1379,14 @@ edit-noframe --eval '(mrb/capture-todo)'
 edit-noframe --eval '(mrb/capture-buy)'
 #+end_src
 
-By default C-c C-c ends the capture, but is normally the shortcut to enter tags, so I define a shortcut to define tags while capturing.
+By default =C-c C-c= ends the capture, but is normally the shortcut to enter tags, so I define a shortcut to define tags while capturing.
 
-#+begin_src emacs-lisp
+#+name: org-capture-taghandling
+#+begin_src emacs-lisp :tangle no
+  :bind ((:map org-capture-mode-map
+           ("C-c C-t" . mrb/add-tags-in-capture)))
+
+  :init
   (defun mrb/add-tags-in-capture()
     (interactive)
     "Insert tags in a capture window without losing the point"
@@ -1479,7 +1497,8 @@ Marking work as completed should be a smooth process to stop getting in the way 
 
 When an item changes to the DONE state, a question is asked if the item should be archived, to which the normal answer should be 'Yes' to keep the active file as clean as possible.
 
-#+begin_src emacs-lisp
+#+name: orgmode-itemactions
+#+begin_src emacs-lisp :tangle no
   ;; Normal flow, but ignore blocking
   (defun mrb/force-org-todo()
     (interactive)
@@ -1518,18 +1537,24 @@ I want the property to be name 'CREATED' (I don't remember what the org-expiry d
   (use-package org-expiry
     :init
     (setq org-expiry-created-property-name "CREATED"
-          org-expiry-inactive-timestamps  t))
+          org-expiry-inactive-timestamps  t)
+
+    :config
+    <<org-expiry-createdtimestampfunction>>
+
+    <<org-expiry-createdtimestampusage>>
+    )
 #+end_src
 
 So, to create the timestamp I need a little helper function which actually inserts it, using org-expiry. There is some additional cursor munging to make sure it is used comfortably during editing.
 
-#+begin_src emacs-lisp
+#+name: org-expiry-createdtimestampfunction
+#+begin_src emacs-lisp :tangle no
   (defun mrb/insert-created-timestamp()
     "Insert a CREATED property using org-expiry.el for TODO entries"
     (org-expiry-insert-created)
     (org-back-to-heading)
-    (org-end-of-line)
-  )
+    (org-end-of-line))
 #+end_src
 
 Now that function is used to insert the property when:
@@ -1537,7 +1562,8 @@ Now that function is used to insert the property when:
 2. capturing an item, but only when it is a TODO item (i.e. has a
    defined keyword)
 
-#+begin_src emacs-lisp
+#+name: org-expiry-createdtimestampusage
+#+begin_src emacs-lisp :tangle no
   (defadvice org-insert-todo-heading (after mrb/created-timestamp-advice activate)
     "Insert a CREATED property using org-expiry.el for TODO entries"
     (mrb/insert-created-timestamp))
@@ -1565,7 +1591,8 @@ Orgmode has a number of provisions to schedule items, either explicitly by setti
 
 A routine task I am performing, often at the beginning of the day, is to make a list of what I want to do that day. This is often ad-hoc and thus still on paper most of the time. Over time, I want this to be done in orgmode, but that requires the process to be a lot simpler than it is now and one of the things is to make it easier to model a thing like: "yeah, do this today"
 
-#+begin_src emacs-lisp
+#+name: orgmode-scheduling
+#+begin_src emacs-lisp :tangle no
   (defun mrb/org-schedule-for-today()
     "Schedule the current item for today"
     (interactive)
