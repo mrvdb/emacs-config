@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent :noweb no-export
 
-Last update: <2022-02-02 16:46:03>
+Last update: <2022-02-02 17:04:50>
 
 #+TOC: headlines 1
 
@@ -2380,6 +2380,24 @@ Now use those bindings too configure both orgmode and org-journal-mode.
                  <<org-emphasis-binds>>
                  )
 #+end_src
+
+During mail composition, when deleting text, this should be replace by '[...]' to signal that we removed text from the original mail.
+
+#+name: mu4e-compose-mode-selected
+#+begin_src emacs-lisp :tangle no
+  :init
+  (setq selected-mu4e-compose-mode-map (make-sparse-keymap))
+
+  ;; Signal a deletion in compose
+  ;; FIXME: do something clever with the quote level?
+  (defun mrb/compose-deletion ()
+    (interactive)
+    (delete-active-region)
+    (insert "[...]"))
+
+  :bind (:map selected-mu4e-compose-mode-map
+              ("." . mrb/compose-deletion))
+#+end_src
 ** Other key and mouse related settings
 Emacs has, like for everything else, a peculiar idea on scrolling and moving from screen to screen.
 
@@ -2631,8 +2649,15 @@ This section describes a search for the mail setup I want in Emacs. There are a 
 *** Composing mail
 Composing mail is often an /out of band/ activity, like creating a tweet or a capture, so I would like to have roughly the same behavior. This is by default provided by compose-mail-other-frame, which in turn calls the right mua to do the job. Oddly enough, it is still required to have =mu4e-compose-in-new-frame= set to actually have another frame, so I'm writing it with mu4e-compose directly.
 
+#+name: mu4e-composeconfig
+#+begin_src emacs-lisp :tangle no
+  ;; Keygbindings for active regions
+  <<mu4e-compose-mode-selected>>
 
-#+begin_src emacs-lisp
+  :bind ("C-x m" . 'mrb/compose-mail)
+
+  :config
+
   (defun mrb/compose-mail (&optional mailto-url)
     "Run mail-compose, use mailto URI if it is given."
     (interactive)
@@ -2643,7 +2668,6 @@ Composing mail is often an /out of band/ activity, like creating a tweet or a ca
         (browse-url-mail mailto-url)
       ;; No mailto, argument, just run the mua
       (mu4e-compose-new)))
-    (bind-key "C-x m" 'mrb/compose-mail)
 
   (defun mrb/mailfile()
     "Compose mail message from current buffer file, typically a pdf is viewed for my use-case"
@@ -2803,9 +2827,7 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
     :after (message fullframe selected)
     :commands mu4e
     :hook (mu4e-view-mode . turn-on-visual-line-mode)
-    :init
-    ;; Create a keymap for selected regions in compose mode
-    (setq selected-mu4e-compose-mode-map (make-sparse-keymap))
+
     :bind (:map mu4e-search-minor-mode-map
                 ("/" . mu4e-search)
                 ("s" . nil)
@@ -2825,18 +2847,12 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
                 ("s" . mu4e-view-mark-for-junk)
                 ("r" . mu4e-compose-reply)
                 ("R" . mu4e-view-mark-for-refile)
-                ("X" . (lambda () (interactive) (mu4e~view-in-headers-context (mu4e-mark-execute-all t))))
-           :map selected-mu4e-compose-mode-map
-                ("." . mrb/compose-deletion))
+                ("X" . (lambda () (interactive) (mu4e~view-in-headers-context (mu4e-mark-execute-all t)))))
+
+    ;; Configuration for composing mail
+    <<mu4e-composeconfig>>
 
     :init
-    ;; Signal a deletion in compose
-    ;; FIXME: do something clever with the quote level?
-    (defun mrb/compose-deletion ()
-      (interactive)
-      (delete-active-region)
-      (insert "[...]"))
-
     ;; Claim the whole screen in mu4e main window
     (defun mrb/mu4e-quit ()
       (interactive)
