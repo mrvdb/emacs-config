@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent :noweb no-export
 
-Last update: <2022-02-02 18:04:39>
+Last update: <2022-02-02 18:39:13>
 
 #+TOC: headlines 1
 
@@ -2845,44 +2845,22 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
     :bind (:map mu4e-search-minor-mode-map
                 ("/" . mu4e-search)
                 ("s" . nil)
-                ("e" . mu4e-search-edit)
-           :map mu4e-main-mode-map
-                ("q" . mrb/mu4e-quit) ; just close the menu
-                ("Q" . mu4e-quit)     ; really Quit
-                (";" . nil)           ; this was too easy to press by mistake
-                ("C-;" . mu4e-context-switch)
-            :map mu4e-headers-mode-map
-                ("s" . mu4e-headers-mark-for-junk)
-                ("r" . mu4e-compose-reply)
-                ("R" . mu4e-headers-mark-for-refile)
-                ("SPC" . mu4e-headers-mark-for-something)
-                ("X" . (lambda () (interactive) (mu4e-mark-execute-all t)))
-           :map mu4e-view-mode-map
-                ("s" . mu4e-view-mark-for-junk)
-                ("r" . mu4e-compose-reply)
-                ("R" . mu4e-view-mark-for-refile)
-                ("X" . (lambda () (interactive) (mu4e~view-in-headers-context (mu4e-mark-execute-all t)))))
+                ("e" . mu4e-search-edit))
 
     ;; Configuration for composing mail
     <<mu4e-composeconfig>>
 
-    :init
-    ;; Claim the whole screen in mu4e main window
-    (defun mrb/mu4e-quit ()
-      (interactive)
-      (kill-buffer (current-buffer)))
+    <<mu4e-main-config>>
 
-    (fullframe mu4e mrb/mu4e-quit)
+    <<mu4e-headers-config>>
 
-    :config
+    <<mu4e-view-config>>
+
     ;; Load extra packages/plugins
     <<mu4e-packages>>
 
     ;; FIXME: move these up
     (setq
-     mu4e-main-buffer-hide-personal-addresses t
-     mu4e-main-hide-fully-read nil
-
      ;; Override the default mail user agent with the mu4e specific one
      mail-user-agent 'mu4e-user-agent
      mu4e-sent-folder     "/Sent"
@@ -2898,14 +2876,12 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
                                 (msgyear (format-time-string "%Y" (mu4e-message-field msg :date))))
                             (cond
                              ;; Order: most specific to general, end with the 't' case
-
                              ;; Archive messages per year if it has a date field (basically, always)
                              (msgyear   (concat archive_base msgyear))
-
                              ;; The default refile location
                              (t  archive_base))))
 
-     mu4e-confirm-quit nil
+
      mu4e-use-fancy-chars t
      mu4e-get-mail-command "mbsync quick" ; Just get inbox and important stuff, not everything
      mu4e-decryption-policy 'ask
@@ -2913,22 +2889,7 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
 
      ;; Set completing function to standard, so helm works
      mu4e-completing-read-function 'completing-read
-
-     ;; Message view settings
-     mu4e-view-use-old nil
-     mu4e-view-show-images t              ; This creates connections, possible privacy issue?
-     mu4e-view-image-max-width 800
-     mu4e-view-image-max-height 600
-     mu4e-view-show-addresses t           ; Show actual addresses instead of names
-
      mu4e-save-multiple-attachments-without-asking t
-
-     ;; Header view settings
-     mu4e-headers-include-related nil ; Use 'W' to toggle interactively
-     mu4e-headers-date-format "%F"  ; ISO format yyyy-mm-dd
-     mu4e-headers-results-limit -1  ; For now, needed to have related search results
-     mu4e-headers-visible-lines 20  ; Default of 10 is a bit small
-     mu4e-headers-auto-update nil         ; Prevent confusion
 
      ;; Context definitions
      ;; Goal 1. use global config, unless private address is used
@@ -2955,38 +2916,49 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
        )
      )
 
-    ;; Define marks, possibly redundant, but I'd like to see them here.
-    (setq mu4e-headers-unread-mark    '("u" . "📩 ")
-          mu4e-headers-draft-mark     '("D" . "🚧 ")
-          mu4e-headers-flagged-mark   '("F" . "🚩 ")
-          mu4e-headers-new-mark       '("N" . "✨ ")
-          mu4e-headers-passed-mark    '("P" . "↪ ")
-          mu4e-headers-replied-mark   '("R" . "↩ ")
-          mu4e-headers-seen-mark      '("S" . " ")
-          mu4e-headers-trashed-mark   '("T" . "🗑️")
-          mu4e-headers-attach-mark    '("a" . "📎 ")
-          mu4e-headers-encrypted-mark '("x" . "🔑 ")
-          mu4e-headers-signed-mark    '("s" . "🖊 "))
+    ;; Rendering of html mail is done with shr, but I prefer not to show it at all
+    (with-eval-after-load "mm-decode"
+      (add-to-list 'mm-discouraged-alternatives "text/html")
+      (add-to-list 'mm-discouraged-alternatives "text/richtext"))
 
-    ;; Add one specifically for marking as junk
-    (add-to-list 'mu4e-marks
-                 '(junk
-                   :char ("J" . "💀")
-                   :prompt "Mark as junk"
-                   :show-target (lambda (dyn-target) "Junk")
-                   :ask-target (lambda () mrb/mu4e-junk-folder)
-                   :action (lambda (docid msg target)
-                             (mu4e--server-move
-                              docid
-                              (mu4e--mark-check-target target) "+S-N-u"))))
+    (defun mrb/mu4e-shr2text (msg)
+      "Overridden mu4e-shr2text"
+      (mu4e~html2text-wrapper
+       (lambda ()
+         (let ((shr-inhibit-images nil)   ;
+               (shr-width nil)            ; Use whole window width for rendering
+               (shr-use-colors nil)       ; Don't use colors from html, they ugly
+               (shr-bullet "• "))               ; Original was "* "
+           (shr-render-region (point-min) (point-max)))) msg))
 
-    ;; Let mu4e define functions for it
-    (mu4e~headers-defun-mark-for junk)
-    (mu4e~view-defun-mark-for junk)
+    (setq mu4e-html2text-command 'mrb/mu4e-shr2text))
+#+end_src
 
-    ;; Bookmarks
-    (setq mu4e-bookmarks
-          (list
+
+**** Main screen
+When mu4e start, it always opens in its main screen, which contains the main operations, visible bookmarks.
+
+#+name: mu4e-main-config
+#+begin_src emacs-lisp :tangle no
+    :bind (:map mu4e-main-mode-map
+                ("q" . mrb/mu4e-quit) ; just close the menu
+                ("Q" . mu4e-quit)     ; really Quit
+                (";" . nil)           ; this was too easy to press by mistake
+                ("C-;" . mu4e-context-switch))
+    :init
+    ;; Claim the whole screen in mu4e main window
+    (defun mrb/mu4e-quit ()
+      (interactive)
+      (kill-buffer (current-buffer)))
+
+    (fullframe mu4e mrb/mu4e-quit)
+
+    :config
+    (setq mu4e-main-buffer-hide-personal-addresses t
+          mu4e-main-hide-fully-read nil
+          mu4e-confirm-quit nil
+
+          mu4e-bookmarks (list
            '(:name "Unread messages"
                                :query "flag:unread and not flag:trashed"
                                :key ?u)
@@ -3005,42 +2977,86 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
            '(:name "Junk"
                                :query "maildir:/Junk"
                                :key ?j)))
+#+end_src
+**** Header view
+The first view after searching is a list of mail headers. Set config vars for this view and define the visualisation of the marks. I need an extra action to mark mail as junk which, on processing, moves the marked messages to the junk folder
 
-      ;; Rendering of html mail is done with shr, but I prefer not to show it at all
-      (with-eval-after-load "mm-decode"
-        (add-to-list 'mm-discouraged-alternatives "text/html")
-        (add-to-list 'mm-discouraged-alternatives "text/richtext"))
-
-    (defun mrb/mu4e-shr2text (msg)
-      "Overridden mu4e-shr2text"
-      (mu4e~html2text-wrapper
-       (lambda ()
-           (let ((shr-inhibit-images nil)   ;
-               (shr-width nil)            ; Use whole window width for rendering
-               (shr-use-colors nil)       ; Don't use colors from html, they ugly
-               (shr-bullet "• "))               ; Original was "* "
-           (shr-render-region (point-min) (point-max)))) msg))
-
-    (setq mu4e-html2text-command 'mrb/mu4e-shr2text)
+#+name: mu4e-headers-config
+#+begin_src emacs-lisp :tangle no
+  :bind (:map mu4e-headers-mode-map
+              ("s" . mu4e-headers-mark-for-junk)
+              ("r" . mu4e-compose-reply)
+              ("R" . mu4e-headers-mark-for-refile)
+              ("SPC" . mu4e-headers-mark-for-something)
+              ("X" . (lambda () (interactive) (mu4e-mark-execute-all t))))
+  :config
+  (setq
+   mu4e-headers-include-related nil ; Use 'W' to toggle interactively
+   mu4e-headers-date-format "%F"  ; ISO format yyyy-mm-dd
+   mu4e-headers-results-limit -1  ; For now, needed to have related search results
+   mu4e-headers-visible-lines 20  ; Default of 10 is a bit small
+   mu4e-headers-auto-update nil   ; Prevent confusion
 
     ;; Make header configuration explicit
-    (setq mu4e-headers-fields
-          '((:flags . 6)
+   mu4e-headers-fields '((:flags . 6)
             (:human-date . 12)
             (:mailing-list . 10)
             (:from . 22)
-            (:subject . nil))))
+                         (:subject . nil))
+
+   ;; Define marks, possibly redundant, but I'd like to see them here.
+   mu4e-headers-unread-mark    '("u" . "📩 ")
+   mu4e-headers-draft-mark     '("D" . "🚧 ")
+   mu4e-headers-flagged-mark   '("F" . "🚩 ")
+   mu4e-headers-new-mark       '("N" . "✨ ")
+   mu4e-headers-passed-mark    '("P" . "↪ ")
+   mu4e-headers-replied-mark   '("R" . "↩ ")
+   mu4e-headers-seen-mark      '("S" . " ")
+   mu4e-headers-trashed-mark   '("T" . "🗑️")
+   mu4e-headers-attach-mark    '("a" . "📎 ")
+   mu4e-headers-encrypted-mark '("x" . "🔑 ")
+   mu4e-headers-signed-mark    '("s" . "🖊 "))
+
+  ;; Add one specifically for marking as junk
+  (add-to-list 'mu4e-marks
+               '(junk
+                 :char ("J" . "💀") :prompt "Mark as junk"
+                 :show-target (lambda (dyn-target) "Junk")
+                 :ask-target (lambda () mrb/mu4e-junk-folder)
+                 :action (lambda (docid msg target)
+                           (mu4e--server-move
+                            docid
+                            (mu4e--mark-check-target target) "+S-N-u"))))
+
+  ;; Let mu4e define functions for it
+  (mu4e~headers-defun-mark-for junk)
+  (mu4e~view-defun-mark-for junk)
+
 #+end_src
 
-To enable integration with orgmode =org-mu4e= must be loaded
+**** Message view
+After selecting a message in the header view, a message view will open.
 
-#+begin_src emacs-lisp
-    (use-package org-mu4e :after org)
+#+name: mu4e-view-config
+#+begin_src emacs-lisp :tangle no
+  :bind (:map mu4e-view-mode-map
+              ("s" . mu4e-view-mark-for-junk)
+              ("r" . mu4e-compose-reply)
+              ("R" . mu4e-view-mark-for-refile)
+              ("X" . (lambda () (interactive) (mu4e~view-in-headers-context (mu4e-mark-execute-all t)))))
+
+  :config
+  (setq mu4e-view-use-old nil
+        mu4e-view-show-images t              ; This creates connections, possible privacy issue?
+        mu4e-view-image-max-width 800
+        mu4e-view-image-max-height 600
+        mu4e-view-show-addresses t)           ; Show actual addresses instead of names
 #+end_src
-
+**** Addon packages
 There are quite a few mu4e packages out there. Let's load them in one group for now, so it will be easy to /disable plugins/ if we need to.
 #+name: mu4e-packages
 #+begin_src emacs-lisp :tangle no
+  :config
   ;; Show an alert when new mails come in, this relies on mu4e being active though
   (use-package mu4e-alert
     :hook (after-init . mu4e-alert-enable-notifications)
@@ -3060,7 +3076,10 @@ There are quite a few mu4e packages out there. Let's load them in one group for 
   ;; Patch highlighting inside messages
   (use-package message-view-patch
     :hook (mu4e-view-mode . message-view-patch-highlight))
+
+  (use-package org-mu4e :after org)
 #+end_src
+
 *** Sieve
 Sieve is used on the server to filter our mail and this is accessed by the sieve-manage package. For some reason I can't get the '^M' characters out of the process, so here's a hack for that.
 
