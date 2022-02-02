@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent :noweb no-export
 
-Last update: <2022-02-02 17:53:02>
+Last update: <2022-02-02 18:04:39>
 
 #+TOC: headlines 1
 
@@ -201,11 +201,16 @@ So, identification, authorization and encryption.
 Seems like a good idea to start configuration with some details about me. The idea being that anything personal goes here and nowhere else. For one, this means my name only appears in this section in this document. Most of the variables I just made up, but some are used in other places too.
 
 #+begin_src emacs-lisp
-  (setq user-full-name       "Marcel van der Boom"
-        user-mail-address    "marcel@hsdev.com"
+  (setq mrb/default-email-address "marcel@hsdev.com"
+        mrb/private-addresses '("marcel@van-der-boom.nl" "m@rcel.van-der-boom.nl")
+        mrb/default-private-address (car mrb/private-addresses)
+        mrb/bcc-address      "mrb+Sent@hsdev.com"
+        user-full-name       "Marcel van der Boom"
+        user-mail-address    mrb/default-email-address
         user-domain          "hsdev.com"
         user-organisation    "HS-Development BV"
-        user-gpg-encrypt-key "0x235E5C8CF5E8DFFB")
+        user-gpg-encrypt-key "0x235E5C8CF5E8DFFB"
+        )
 #+end_src
 
 ** Authorization
@@ -2748,7 +2753,7 @@ At times we want to send signed and/or encrypted mail
     (add-to-list 'mml-secure-openpgp-signers user-gpg-encrypt-key)
 
     ;; Add my bcc address to list of safe addresses in bcc for secure message
-    (add-to-list 'mml-secure-safe-bcc-list "mrb+Sent@hsdev.com"))
+    (add-to-list 'mml-secure-safe-bcc-list mrb/bcc-address))
 #+end_src
 
 *** Generic mail message settings
@@ -2804,7 +2809,7 @@ It's not entirely clear which package is exactly responsible for what, but there
      ;; FIXME: this does nothing for mu4e!!!
      message-default-mail-headers (mapconcat
                                    'identity
-                                   '("Bcc: mrb+Sent@hsdev.com"
+                                   `(,(concat "Bcc: " mrb/bcc-address)
                                      "OpenPGP: id=235E5C8CF5E8DFFB"
                                      "OpenPGP: url=https://keys.openpgp.org/vks/v1/by-fingerprint/77DDA1B68D04792A8F85D855235E5C8CF5E8DFFB"
                                      "OpenPGP: preference=signencrypt")
@@ -2928,8 +2933,6 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
      ;; Context definitions
      ;; Goal 1. use global config, unless private address is used
      ;; FIXME: Can we use the one that matched?
-     mrb/private-addresses '("marcel@van-der-boom.nl" "m@rcel.van-der-boom.nl")
-     mrb/private-address "marcel@van-der-boom.nl"
      mu4e-context-policy 'pick-first            ; When nothing matches only!
      mu4e-compose-context-policy 'nil     ; for compose, use current if nothing matches
 
@@ -2937,7 +2940,7 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
      `(,(make-mu4e-context
          :name "Default"
          ;; Use global config, but restore what was changed in other contexts
-         :vars `((user-mail-address . "marcel@hsdev.com")
+         :vars `((user-mail-address . ,mrb/default-email-address)
                  (mu4e-compose-signature . (with-current-buffer
                                             (find-file-noselect message-signature-file)
                                           (buffer-string)))))
@@ -2947,7 +2950,7 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
                        (when msg
                          (mu4e-message-contact-field-matches
                           msg `(:to :cc :from) mrb/private-addresses)))
-         :vars `((user-mail-address . ,mrb/private-address)
+         :vars `((user-mail-address . ,mrb/default-private-address)
                  (mu4e-compose-signature . nil)))
        )
      )
@@ -3034,8 +3037,6 @@ To enable integration with orgmode =org-mu4e= must be loaded
 #+begin_src emacs-lisp
     (use-package org-mu4e :after org)
 #+end_src
-
-
 
 There are quite a few mu4e packages out there. Let's load them in one group for now, so it will be easy to /disable plugins/ if we need to.
 #+name: mu4e-packages
