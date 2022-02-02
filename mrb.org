@@ -436,7 +436,8 @@ Now use those bindings too configure both orgmode and org-journal-mode.
   :init
   (setq selected-org-mode-map (make-sparse-keymap))
   :bind  (:map selected-org-mode-map
-               <<org-emphasis-binds>>)
+                 <<org-emphasis-binds>>
+                 )
 #+end_src
 
 #+name: org-journal-mode-selected
@@ -444,7 +445,8 @@ Now use those bindings too configure both orgmode and org-journal-mode.
   :init
   (setq selected-org-journal-mode-map (make-sparse-keymap))
   :bind  (:map selected-org-journal-mode-map
-               <<org-emphasis-binds>>)
+                 <<org-emphasis-binds>>
+                 )
 #+end_src
 
 Quick install of package that exports =qrencode-region= function. I use this mainly to send links or package tracking codes to my mobile.
@@ -1121,11 +1123,9 @@ Now, do the other mode related packages which require a bit of configuration.
 * Org-mode
 Orgmode configuration is probably the largest part of my Emacs configuration, because most of the time I spent in Emacs, when not coding, is spent in org-mode.
 ** Initialization of Orgmode
-Basically where to find stuff and what to load.
-
 I loosely follow the GTD method for organizing things and I want a quick shortcut to start my main file.
 
-#+name: gtd-startup
+#+name: gtd-starter
 #+begin_src emacs-lisp :tangle no
   (defun mrb/gtd()
     "Start my GTD system"
@@ -1154,7 +1154,7 @@ Also make sure we never load org from internal, this can happen when functions w
     (use-package org-agenda)
     (use-package org-capture)
 
-    <<gtd-startup>>
+    <<gtd-starter>>
 
     ;; Keybindings specifically for actived regions in orgmode
     <<org-mode-selected>>
