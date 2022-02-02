@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent :noweb no-export
 
-Last update: <2022-02-02 17:04:50>
+Last update: <2022-02-02 17:36:52>
 
 #+TOC: headlines 1
 
@@ -2861,26 +2861,6 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
     (fullframe mu4e mrb/mu4e-quit)
 
     :config
-    ; Use local thread-folding package
-    ; This used to give some problems with other packages?
-    (use-package mu4e-thread-folding
-      :straight (:host github :repo "rougier/mu4e-thread-folding")
-      :init
-      ;; Make sure we have our custom empty field to put the symbols in place
-      (add-to-list 'mu4e-header-info-custom
-                   '(:empty . (:name "Empty"
-                                     :shortname ""
-                                     :function (lambda (msg) "  "))))
-      :bind (:map mu4e-headers-mode-map
-                  ("<right>" . mu4e-headers-unfold-at-point)
-                  ("<left>"  . mu4e-headers-fold-at-point)
-                  ("S-<right>" . mu4e-headers-unfold-all)
-                  ("S-<left>"  . mu4e-headers-fold-all))
-      :config
-      ;; This needs to be here, it's too early in the visual section
-      (set-face-attribute 'mu4e-thread-folding-root-unfolded-face nil :background "#434c5e")
-      (set-face-attribute 'mu4e-thread-folding-child-face nil :background "#4c566a"))
-
 
     ;; Show an alert when new mails come in, this relies on mu4e being active though
     (use-package mu4e-alert
@@ -2906,6 +2886,7 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
     (setq
      mu4e-main-buffer-hide-personal-addresses t
      mu4e-main-hide-fully-read nil
+
      ;; Override the default mail user agent with the mu4e specific one
      mail-user-agent 'mu4e-user-agent
      mu4e-sent-folder     "/Sent"
@@ -3060,10 +3041,12 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
     (setq mu4e-html2text-command 'mrb/mu4e-shr2text)
 
     ;; Make header configuration explicit
-    ;; The empty field is to accommodate for mu4e thread folding symbols
     (setq mu4e-headers-fields
-          '((:flags . 6)(:human-date . 12)(:mailing-list . 10)(:from . 22)(:subject)))
-    )
+          '((:flags . 6)
+            (:human-date . 12)
+            (:mailing-list . 10)
+            (:from . 22)
+            (:subject . nil))))
 #+end_src
 
 To enable integration with orgmode =org-mu4e= must be loaded
