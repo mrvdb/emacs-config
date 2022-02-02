@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent :noweb no-export
 
-Last update: <2022-02-02 16:24:34>
+Last update: <2022-02-02 16:46:03>
 
 #+TOC: headlines 1
 
@@ -224,8 +224,8 @@ I have a gpg-agent daemon configured which manages gpg and ssh keys, protected b
       :after password-store
     :config
     ;; Make sure it's the only mechanism
-    (setq auth-sources '(password-store))
-    (setq auth-source-gpg-encrypt-to (list user-mail-address)))
+      (setq auth-sources '(password-store)
+            auth-source-gpg-encrypt-to (list user-mail-address)))
   ;; I like the pass interface, so install that too
     (use-package pass
       :after password-store)
@@ -355,6 +355,7 @@ Make life easier if we have sudo, so we can just edit the files and be done with
 #+end_src
 
 Using pdf-tools for PDF handling. This is a lot better than docview. I'm a bit annoyed that they are not one package, they are very similar.
+
 #+begin_src emacs-lisp
   (use-package pdf-tools
     :after (fullframe)
@@ -400,54 +401,7 @@ I tend to compile Emacs with ImageMagick support, let's make sure we use it too.
   (imagemagick-register-types))
 #+end_src
 
-In quite a few situations I would like to use keybindings which are only valid when a selection/region is active.
 
-#+begin_src emacs-lisp
-  (use-package selected
-    :diminish selected-minor-mode
-    :demand t                             ; Does not load without demand, why not?
-    :commands (selected-global-mode selected-minor-mode)
-    :bind ( :map selected-keymap           ; bindings for all active regions
-            ("q" . selected-off)
-            ("u" . upcase-region)
-            ("d" . downcase-region))
-
-    :config
-    (selected-global-mode))
-#+end_src
-
-From now on we can bind keys into the selected-keymap if we want keys to be active on every regions. When only needed for a certain major mode, define a keymap named =selected-<major-mode>-map= and bind keys into that.
-
-Within orgmode I'd like to have the emphasis markers react when a region is active, so let's create the necessary fragment for those bindings.
-
-#+name: org-emphasis-binds
-#+begin_src emacs-lisp :tangle no
-  ("~"       . (lambda () (interactive) (org-emphasize ?~)))
-  ("_"       . (lambda () (interactive) (org-emphasize ?_)))
-  ("*"       . (lambda () (interactive) (org-emphasize ?*)))
-  ("+"       . (lambda () (interactive) (org-emphasize ?+)))
-  ("=" . (lambda () (interactive) (org-emphasize ?=)))
-#+end_src
-
-Now use those bindings too configure both orgmode and org-journal-mode.
-
-#+name: org-mode-selected
-#+begin_src emacs-lisp :tangle no
-  :init
-  (setq selected-org-mode-map (make-sparse-keymap))
-  :bind  (:map selected-org-mode-map
-                 <<org-emphasis-binds>>
-                 )
-#+end_src
-
-#+name: org-journal-mode-selected
-#+begin_src emacs-lisp :tangle no
-  :init
-  (setq selected-org-journal-mode-map (make-sparse-keymap))
-  :bind  (:map selected-org-journal-mode-map
-                 <<org-emphasis-binds>>
-                 )
-#+end_src
 
 Quick install of package that exports =qrencode-region= function. I use this mainly to send links or package tracking codes to my mobile.
 
@@ -2376,6 +2330,55 @@ Treading cautiously here as ideally frames sizing is the responsibility of the w
   (bind-key "<S-s-up>"    'windmove-up)
   (bind-key "<S-s-down>"  'windmove-down)
 
+#+end_src
+*** For active regions
+In quite a few situations I would like to use keybindings which are only valid when a selection/region is active.
+
+#+begin_src emacs-lisp
+  (use-package selected
+    :diminish selected-minor-mode
+    :demand t                             ; Does not load without demand, why not?
+    :commands (selected-global-mode selected-minor-mode)
+    :bind ( :map selected-keymap           ; bindings for all active regions
+            ("q" . selected-off)
+            ("u" . upcase-region)
+            ("d" . downcase-region))
+
+    :config
+    (selected-global-mode))
+#+end_src
+
+From now on we can bind keys into the selected-keymap if we want keys to be active on every regions. When only needed for a certain major mode, define a keymap named =selected-<major-mode>-map= and bind keys into that.
+
+Within orgmode I'd like to have the emphasis markers react when a region is active, so let's create the necessary fragment for those bindings.
+
+#+name: org-emphasis-binds
+#+begin_src emacs-lisp :tangle no
+  ("~" . (lambda () (interactive) (org-emphasize ?~)))
+  ("_" . (lambda () (interactive) (org-emphasize ?_)))
+  ("*" . (lambda () (interactive) (org-emphasize ?*)))
+  ("+" . (lambda () (interactive) (org-emphasize ?+)))
+  ("=" . (lambda () (interactive) (org-emphasize ?=)))
+#+end_src
+
+Now use those bindings too configure both orgmode and org-journal-mode.
+
+#+name: org-mode-selected
+#+begin_src emacs-lisp :tangle no
+    :init
+    (setq selected-org-mode-map (make-sparse-keymap))
+    :bind  (:map selected-org-mode-map
+                 <<org-emphasis-binds>>
+                 )
+#+end_src
+
+#+name: org-journal-mode-selected
+#+begin_src emacs-lisp :tangle no
+    :init
+    (setq selected-org-journal-mode-map (make-sparse-keymap))
+    :bind  (:map selected-org-journal-mode-map
+                 <<org-emphasis-binds>>
+                 )
 #+end_src
 ** Other key and mouse related settings
 Emacs has, like for everything else, a peculiar idea on scrolling and moving from screen to screen.
