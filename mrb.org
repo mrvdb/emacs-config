@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent :noweb no-export
 
-Last update: <2022-02-02 14:38:28>
+Last update: <2022-02-02 16:24:34>
 
 #+TOC: headlines 1
 
@@ -163,6 +163,9 @@ Now that we have =straight= we can use it to install =use-package=
   (use-package straight
     :config
     (setq straight-host-usernames '((github . "mrvdb")))
+
+    <<straight-helperfunctions>>
+
     :custom (straight-use-package-by-default t))
 
   ;; FROM THIS POINT use-package should work as intended, i.e. using straight.
@@ -175,7 +178,8 @@ Now that we have =straight= we can use it to install =use-package=
 
 Finally, make updating and installing the packages a bit easier by having a keybinding for getting to the installation part right away
 
-#+begin_src emacs-lisp
+#+name: straight-helperfunctions
+#+begin_src emacs-lisp :tangle no
   (defun mrb/upgrade-packages ()
     (interactive)
     ;; Update our repositories first
