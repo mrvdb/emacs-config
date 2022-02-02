@@ -2,9 +2,9 @@
 #+TITLE: My org-babel based emacs configuration
 #+LANGUAGE: en
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
-#+PROPERTY: header-args :results silent
+#+PROPERTY: header-args :results silent :noweb no-export
 
-Last update: <2022-02-01 18:19:45>
+Last update: <2022-02-02 11:04:45>
 
 #+TOC: headlines 1
 
