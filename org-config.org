@@ -1,4 +1,3 @@
-
 This file contains configuration items for my org-mode use. It is intended to be used by a =#+SETUPFILE:= directive in a normal org-file.
 
 The advantage of doing it this way, apart from the logical separation to make it easier to reuse, is that this configuration file is also just a normal orgmode file. That allows me to separate the configuration is different sections, publish the configuration in a variety of formats and generally describe the configuration in a clear way so I can remember what this was all about. This is not unlike literal programming.

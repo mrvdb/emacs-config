@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent :noweb no-export
 
-Last update: <2022-02-03 14:06:56>
+Last update: <2022-02-03 14:57:54>
 
 #+TOC: headlines 4
 
@@ -632,6 +632,7 @@ Although I think the 16 color system is a bit simplistic and, for emacs at least
             (org-drawer                     :height 0.8 :inherit font-lock-comment-face)
             (org-code                       :foreground "Purple" :weight bold)
             (org-block                      :background "#313745")
+            (org-block-begin-line           :foreground "dark gray")
 
             ;; User defined faces for org-mode
             (mrb/org-todo-keyword-TODO      :foreground "#88c0d0" :weight bold)
