@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent :noweb no-export
 
-Last update: <2022-02-03 16:26:40>
+Last update: <2022-02-03 16:39:04>
 
 #+TOC: headlines 4
 
@@ -1624,7 +1624,8 @@ For the headings at each level a =*= is normally used. As we're in unicode world
 
 The item lists can be made a whole lot more attractive by attaching some icons based on the category an items belongs to. The category assignment itself is done by setting the =CATEGORY= property explicitly on the item or on the file.
 
-#+begin_src emacs-lisp
+#+name: org-agenda-visuals
+#+begin_src emacs-lisp :tangle no
   (setq org-agenda-category-icon-alist
         `(
           ("Afspraak"      ,(concat org-directory "images/stock_new-meeting.png") nil nil :ascent center)
@@ -2371,15 +2372,14 @@ Within orgmode I'd like to have the emphasis markers react when a region is acti
   ("=" . (lambda () (interactive) (org-emphasize ?=)))
 #+end_src
 
-Now use those bindings too configure both orgmode and org-journal-mode.
+Now use those bindings to configure both orgmode and org-journal-mode.
 
 #+name: org-mode-selected
 #+begin_src emacs-lisp :tangle no
     :init
     (setq selected-org-mode-map (make-sparse-keymap))
     :bind  (:map selected-org-mode-map
-                 <<org-emphasis-binds>>
-                 )
+                 <<org-emphasis-binds>> )
 #+end_src
 
 #+name: org-journal-mode-selected
@@ -2387,8 +2387,7 @@ Now use those bindings too configure both orgmode and org-journal-mode.
     :init
     (setq selected-org-journal-mode-map (make-sparse-keymap))
     :bind  (:map selected-org-journal-mode-map
-                 <<org-emphasis-binds>>
-                 )
+                 <<org-emphasis-binds>> )
 #+end_src
 
 During mail composition, when deleting text, this should be replace by '[...]' to signal that we removed text from the original mail.
