@@ -4,9 +4,9 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent :noweb no-export
 
-Last update: <2022-02-02 18:39:13>
+Last update: <2022-02-03 14:06:56>
 
-#+TOC: headlines 1
+#+TOC: headlines 4
 
 This is my emacs configuration file that is loaded with =org-babel-load-file= in the Emacs init file. The intent is to have as much of my Emacs configuration in here as possible. The system works as a literal programming system where with a tangle the elisp code that actually makes up my configuration is extracted automatically and loaded.
 
@@ -491,7 +491,7 @@ To make my life a bit easier, using the =all the icons= package for using specia
 
 #+begin_src emacs-lisp
   (use-package all-the-icons
-    :if (display-graphic-p))
+    :if (display-graphic-p))              ; FIXME: when in daemon mode, this does not get loaded
 #+end_src
 
 The above in itself does nothing. It just makes using the icons easier and consistent. Other packages. With the command =M-x all-the-icons-install-fonts= the latest version of the proper fonts will be installed automaticaly, so run that once in a while.
@@ -1308,7 +1308,7 @@ Here are the templates used by org-capture. The /todo/ template is the most used
 
 Define functions for each piece of information captured, so they can be easily bound to keys.
 
-#+name: capture-runners
+#+name: org-capture-runners
 #+begin_src emacs-lisp :tangle no
   (defun mrb/capture-todo ()
     "Capture a TODO item"
@@ -2847,16 +2847,11 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
                 ("s" . nil)
                 ("e" . mu4e-search-edit))
 
-    ;; Configuration for composing mail
+    ;; Configuration sections
     <<mu4e-composeconfig>>
-
     <<mu4e-main-config>>
-
     <<mu4e-headers-config>>
-
     <<mu4e-view-config>>
-
-    ;; Load extra packages/plugins
     <<mu4e-packages>>
 
     ;; FIXME: move these up
@@ -2933,7 +2928,6 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
 
     (setq mu4e-html2text-command 'mrb/mu4e-shr2text))
 #+end_src
-
 
 **** Main screen
 When mu4e start, it always opens in its main screen, which contains the main operations, visible bookmarks.
