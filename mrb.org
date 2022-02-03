@@ -879,6 +879,14 @@ I have at least the following usecases in mind:
 The first is the easiest, as the format of =org-todo-keyword-faces= is nigh perfect to transform into a list that can be used by svg-tag-mode.
 
 #+begin_src emacs-lisp
+  ;; Trickiest here is to know when org-todo-keyword-faces has been filled
+  (use-package svg-tag-mode
+    :after (org base16-theme)
+    :demand t
+    :commands svg-tag-mode                ; Possibly redundant?
+    :hook (org-mode . svg-tag-mode)
+
+    :init
   ;; Readymade svg-tag-tags generator from org keywords
   (defun mrb/gen-svg-tags (kf)
     "Generate a `svg-tag-tags element from a `org-todo-keyword-faces element"
@@ -886,12 +894,6 @@ The first is the easiest, as the format of =org-todo-keyword-faces= is nigh perf
           (f (cdr kf)))
       `(,k . ((lambda (tag) (svg-tag-make tag :face ',f :inverse t :margin 0 ))))))
 
-  ;; Trickiest here is to know when org-todo-keyword-faces has been filled
-  (use-package svg-tag-mode
-    :after (org base16-theme)
-    :commands svg-tag-mode                ; Possibly redundant?
-    :hook (org-mode . svg-tag-mode)
-    :config
     (setq svg-tag-tags (mapcar 'mrb/gen-svg-tags org-todo-keyword-faces)))
 #+end_src
 * Buffers and files
