@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent :noweb no-export
 
-Last update: <2022-02-05 13:26:42>
+Last update: <2022-02-05 15:25:43>
 
 #+TOC: headlines 4
 
@@ -221,8 +221,9 @@ I have a gpg-agent daemon configured which manages gpg and ssh keys, protected b
 
 #+begin_src emacs-lisp
   ;; Use only password-store
-  (use-package password-store)            ; Missing auto dependency?
+  (use-package password-store)
   (use-package auth-source-pass
+    :straight (:type built-in)
     :init
     (auth-source-pass-enable)
       :after password-store
@@ -287,9 +288,6 @@ Finally, I want to prevent producing files which have trailing spaces, because t
       (add-to-list 'ws-butler-global-exempt-modes 'org-capture-mode)
       (add-to-list 'ws-butler-global-exempt-modes 'magit-mode))
 
-#+end_src
-
-#+begin_src emacs-lisp
   (setq
    delete-by-moving-to-trash t          ; move files to the trash instead of rm
    select-enable-clipboard t            ; use the clipboard in addition to kill-ring
@@ -404,8 +402,6 @@ I tend to compile Emacs with ImageMagick support, let's make sure we use it too.
 (when (fboundp 'imagemagick-register-types)
   (imagemagick-register-types))
 #+end_src
-
-
 
 Quick install of package that exports =qrencode-region= function. I use this mainly to send links or package tracking codes to my mobile.
 
@@ -558,8 +554,7 @@ Although I think the 16 color system is a bit simplistic and, for emacs at least
     ;; the only solution for this is to move the visual adjustments in the use-package clauses of
     ;; the package itself.
     (setq base16-adjustments
-          `(
-            (vterm-color-black :foreground "#2e3440")
+          `((vterm-color-black :foreground "#2e3440")
             (vterm-color-red :foreground "#bf616a")
             (vterm-color-green :foreground "#a3be8c")
             (vterm-color-yellow :foreground "#ebcb8b")
@@ -919,8 +914,7 @@ For every file-based buffer, I want auto-save to be on, but not in the same loca
 Auto save helps to automatically recover to the latest save point, but I need a bit more. This is done through versioned backup file. The recovery process is then manual though.
 
 #+begin_src emacs-lisp
-  (setq
-   create-lockfiles nil                   ; just clutters for me, no real use?
+  (setq create-lockfiles nil           ; just clutters for me, no real use?
    backup-by-copying t                    ; otherwise symlinks galore
 
    backup-directory-alist '(
@@ -961,7 +955,7 @@ Also, save the location in files between sessions.
 
   ;; Save places in buffers between sessions
   (use-package saveplace
-     ;builtin
+    :straight (:type built-in)
     :init
     (setq-default save-place-mode t))
 #+end_src
@@ -1310,11 +1304,10 @@ Define functions for each piece of information captured, so they can be easily b
 
 #+name: org-capture-runners
 #+begin_src emacs-lisp :tangle no
+  :init
   (defun mrb/capture-todo ()
     "Capture a TODO item"
     (interactive)
-    ;; FIXME: use t by default, but with C-u, use l ?
-    ;; Problem is that this is called from the environment, not from within Emacs
     (org-capture nil "t"))
 
   (defun mrb/capture-buy ()
@@ -1406,9 +1399,6 @@ To keep the TODO list clean we immediately archive the completed entry in the ar
 I'm not sure if this works out in practice without having a confirmation (because we archive the whole sub-tree), so for now, I'm building in the confirmation.
 
 #+begin_src emacs-lisp
-  ;; (use-package org-habit
-  ;;   :straight (:type built-in))
-
   ;; I need a modified version of org-is-habit, which takes inheritance
   ;; in to account
   (defun mrb/org-is-habit-p (&optional pom)
@@ -2620,7 +2610,14 @@ Once that is in place files can be opened with =/ssh:/host:/path/to/file= syntax
   (use-package tramp
     :straight (:type built-in)            ; tramp is closely tied to emacs, use builtin
     :config
-    (setq default-tramp-method "ssh"))
+    (setq default-tramp-method "ssh"
+          tramp-syntax 'simplified
+          tramp-terminal-type "tramp")
+
+    (eval-after-load 'tramp '(setenv "SHELL" "/bin/bash"))
+    (add-to-list 'tramp-connection-properties
+                     (list ".*" "locale" "LC_ALL=C")))
+
 #+end_src
 * Browser integration
 My default browser, as set in the OS, should be started automatically on opening =http:= like stuff and =html= files. The only link to the /outside world/ is specifying that =xdg-open= should figure out what program to use.
