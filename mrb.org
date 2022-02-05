@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent :noweb no-export
 
-Last update: <2022-02-05 12:00:33>
+Last update: <2022-02-05 13:26:42>
 
 #+TOC: headlines 4
 
@@ -1112,10 +1112,6 @@ Also make sure we never load org from internal, this can happen when functions w
                (org-agenda-mode . (lambda () (hl-line-mode 1))))
 
     :init
-    ;; FIXME: this should not be needed, see https://github.com/raxod502/straight.el/issues/536
-    (use-package org-agenda)
-    (use-package org-capture)
-
     <<gtd-starter>>
 
     ;; Keybindings specifically for actived regions in orgmode
