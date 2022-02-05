@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent :noweb no-export
 
-Last update: <2022-02-03 16:39:04>
+Last update: <2022-02-05 12:00:33>
 
 #+TOC: headlines 4
 
@@ -1245,7 +1245,6 @@ The =org-capture-pop-frame= package makes sure all captures are in separate fram
 #+begin_src emacs-lisp
   (use-package org-capture
     :diminish
-    :after org-journal
 
     ;; Special config for handling tags while capturing
     <<org-capture-taghandling>>
