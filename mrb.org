@@ -1040,6 +1040,7 @@ First bring in a bunch of modes that are used regularly, but have no other confi
   (use-package adoc-mode             :mode ("\\.asciidoc\\'" "\\.adoc\\'"))
   (use-package apache-mode           :mode "\\.htaccess\\'")
   (use-package conf-mode )
+  (use-package i3wm-config-mode)
   (use-package css-mode   :mode ("\\.css\\'" "\\.mss\\'"))
   (use-package csv-mode              :mode "\\.csv\\'")
   (use-package diff-mode  :mode "\\.patch\\'")
