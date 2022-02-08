@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent :noweb no-export
 
-Last update: <2022-02-06 11:26:59>
+Last update: <2022-02-08 09:02:54>
 
 
 
@@ -1181,7 +1181,7 @@ Gather generic config variables for orgmode in one section
           org-agenda-todo-ignore-scheduled 'future
         org-agenda-log-mode-items '(closed clock state)
         org-agenda-skip-deadline-prewarning-if-scheduled t
-        org-agenda-text-search-extra-files `('agenda-archives ,(directory-files
+            org-agenda-text-search-extra-files (cons 'agenda-archives (directory-files
                                                                 (expand-file-name (concat org-metadir)) t ".+\\.org"))
           ;; Habits
           org-habit-show-habits-only-for-today nil
