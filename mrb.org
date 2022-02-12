@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent :noweb no-export
 
-Last update: <2022-02-08 09:02:54>
+Last update: <2022-02-12 16:16:13>
 
 
 
@@ -51,9 +51,17 @@ Most of the time the editing process starts at the command line. Because I use e
 1. check if we already have the emacs server, if not, start it;
 2. treat input from stdin a little bit special.
 
+While we are here, define a snippet which should go in shell scripts. We will repeat this per language at some point.
+
+#+name: tangle-header
+#+begin_src sh :tangle no
+[ Org-mode generated this file from a code block, changes will be overwritten ]
+#+end_src
+
 And edit the file obviously.
 
 #+begin_src sh :exports code :tangle ~/bin/edit :shebang #!/bin/bash
+  # <<tangle-header>>
   # Wrapper for emacs-client usage to handle specific cases:
   # - no filename given
   # - stdin editing
@@ -1681,29 +1689,27 @@ A snippet which resized the agenda to its window whenever its rebuilt by orgmode
 *** Calendaring
 Traditionally somewhat related to mail, although mostly through orgmode these days, I want a simple setup to pull in some calendaring information. I run a radical calendar server somewhere, but having the same info in orgmode makes sense for me.
 
-#+begin_src emacs-lisp
-  (use-package org-caldav
-    :after org
-    :config
-    ;; Set values which are valid for all calendars
-    ;; Authentication is done through auth-source automatically
-    (setq org-caldav-url "https://calendars.hsdev.com/mrb"
-          org-icalendar-timezone "Europe/Amsterdam"
-          org-caldav-sync-direction 'cal->org ; Just mirroring for now
-          org-caldav-delete-org-entries 'always
-          org-caldav-save-directory "~/dat/org/_calendars/"
-          org-caldav-files nil
-            org-caldav-show-sync-results nil ; This should be off once I know it's stable
-            org-caldav-backup-file nil   ; saves a LOT of time when syncing
+I have used =org-caldav= but even in just a read only setup it does not work properly. I'm using =ical2orgpy= which is a pythons script that takes =.ics= input and creates an org-mode file.
 
-          ;; Calendars to sync
-          org-caldav-calendars
-          '((:calendar-id "e00ffed0-2fc3-4adb-ba08-95c93b2b6abc" ; My own
-                          :inbox "~/dat/org/_calendars/marcel.org")
-            (:calendar-id "4de0fb18-8548-61ce-57fc-b2319b87106d" ; Waste services
-                          :inbox "~/dat/org/_calendars/afval.org")
-            (:calendar-id "shared-sylvia"                              ; SO
-                          :inbox "~/dat/org/_calendars/sylvia.org"))))
+#+begin_src sh :exports code :tangle ~/bin/ical2org :shebang #!/bin/sh
+    # <<tangle-header>>
+    # manually test this script with `env -i /bin/sh`
+    #
+    # Mostly assume nothing is implied, like paths etc.
+
+    BASEDIR=/home/mrb/dat/org/_calendars
+    ICAL2ORGPY="/home/mrb/.local/bin/ical2orgpy"
+
+    # wget uses .netrc to gett auth info
+    WGETBASE="/usr/bin/wget -O wget.log -O - --quiet"
+
+    # Just go over each one manually
+    # FIXME make this nice with url . file pairs in a loop
+    cd $BASEDIR
+
+    $WGETBASE https://calendars.hsdev.com/mrb/e00ffed0-2fc3-4adb-ba08-95c93b2b6abc/ 2>/dev/null | $ICAL2ORGPY - marcel.org
+    $WGETBASE https://calendars.hsdev.com/mrb/shared-sylvia/ 2>/dev/null | $ICAL2ORGPY - sylvia.org
+    $WGETBASE https://calendars.hsdev.com/mrb/4de0fb18-8548-61ce-57fc-b2319b87106d/ 2>/dev/null | $ICAL2ORGPY - afval.org
 #+end_src
 
 For now, I can live with calling =org-caldav-sync= manually when I need up to date information.
