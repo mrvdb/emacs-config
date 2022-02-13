@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent :noweb no-export
 
-Last update: <2022-02-12 16:16:13>
+Last update: <2022-02-13 10:43:34>
 
 
 
@@ -1687,9 +1687,11 @@ A snippet which resized the agenda to its window whenever its rebuilt by orgmode
     (goto-char (point-min)))
 #+end_src
 *** Calendaring
-Traditionally somewhat related to mail, although mostly through orgmode these days, I want a simple setup to pull in some calendaring information. I run a radical calendar server somewhere, but having the same info in orgmode makes sense for me.
+Traditionally somewhat related to mail, although mostly through orgmode these days, I want a simple setup to pull in some calendaring information. I run a radicale calendar server somewhere, but having the same info in orgmode makes sense for me.
 
-I have used =org-caldav= but even in just a read only setup it does not work properly. I'm using =ical2orgpy= which is a pythons script that takes =.ics= input and creates an org-mode file.
+I have used =org-caldav= but even in just a read only setup it does not work properly. I'm using =ical2orgpy= which is a python script that takes =.ics= input and creates an org-mode file.
+
+I combine =ical2orgpy= with a cron job which pulls in the calendars I am interested into. Adding the produced org-mode files to the =org-agenda-files= variable is enough to get the information into the org-mode agenda.
 
 #+begin_src sh :exports code :tangle ~/bin/ical2org :shebang #!/bin/sh
     # <<tangle-header>>
@@ -1701,18 +1703,22 @@ I have used =org-caldav= but even in just a read only setup it does not work pro
     ICAL2ORGPY="/home/mrb/.local/bin/ical2orgpy"
 
     # wget uses .netrc to gett auth info
-    WGETBASE="/usr/bin/wget -O wget.log -O - --quiet"
+  WGET="/usr/bin/wget -O wget.log -O - --quiet"
+
+  # Base URI for calendar access, perhaps also put in the datafile?
+  CALBASE="https://calendars.hsdev.com/mrb"
 
     # Just go over each one manually
     # FIXME make this nice with url . file pairs in a loop
     cd $BASEDIR
 
-    $WGETBASE https://calendars.hsdev.com/mrb/e00ffed0-2fc3-4adb-ba08-95c93b2b6abc/ 2>/dev/null | $ICAL2ORGPY - marcel.org
-    $WGETBASE https://calendars.hsdev.com/mrb/shared-sylvia/ 2>/dev/null | $ICAL2ORGPY - sylvia.org
-    $WGETBASE https://calendars.hsdev.com/mrb/4de0fb18-8548-61ce-57fc-b2319b87106d/ 2>/dev/null | $ICAL2ORGPY - afval.org
+  # Read destination org file and the calendar id from a file .calendars
+  while IFS= read -r orgfile calendar_id _
+  do
+      $WGET $CALBASE/$calendar_id 2>/dev/null | $ICAL2ORGPY $orgfile
+  done < .calendars
 #+end_src
 
-For now, I can live with calling =org-caldav-sync= manually when I need up to date information.
 ** Searching for items
 Over the years the amount of information I manage with orgmode has grown considerably, ranging from the plain TODO lists, blog posts, calendar information, project files etc. Increasingly I find myself not being able to find things in that pile of information. The solution in [[Grepping files]] helps a lot already but is a generic solution.
 
