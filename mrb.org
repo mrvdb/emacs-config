@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent :noweb no-export
 
-Last update: <2022-02-13 10:43:34>
+Last update: <2022-02-13 11:13:51>
 
 
 
@@ -1713,9 +1713,9 @@ I combine =ical2orgpy= with a cron job which pulls in the calendars I am interes
     cd $BASEDIR
 
   # Read destination org file and the calendar id from a file .calendars
-  while IFS= read -r orgfile calendar_id _
+  while IFS=' ' read -r orgfile calendar_id
   do
-      $WGET $CALBASE/$calendar_id 2>/dev/null | $ICAL2ORGPY $orgfile
+      $WGET "$CALBASE/$calendar_id" 2>/dev/null | $ICAL2ORGPY - $orgfile
   done < .calendars
 #+end_src
 
