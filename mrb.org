@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent :noweb no-export
 
-Last update: <2022-02-14 16:54:30>
+Last update: <2022-02-15 16:21:38>
 
 
 
@@ -2644,7 +2644,8 @@ My default browser, as set in the OS, should be started automatically on opening
 
 There's a special place for the =nyxt= browser here. It is particularly interesting because its design was inspired by emacs. The two things that are interesting to me are that it is programmed in common-lisp and thus has all the niceties of that, including an option to connect a REPL to the browser and change the program while it is running. So, let's start with a convenience function to make a connection to a running Nyxt instance.
 
-#+begin_src emacs-lisp
+#+name: nyxt-sly-config
+#+begin_src emacs-lisp :tangle no
   (defun mrb/nyxt-connected-p ()
     "Is nyxt connected"
     (sly-connected-p))
@@ -3493,6 +3494,7 @@ For all of those languages, I want to use paredit which makes editing, longer te
 
 #+begin_src emacs-lisp
   (use-package paredit
+    :demand t
     :hook ((lisp-interaction-mode emacs-lisp-mode
             eval-expression-mode scheme-mode
             lisp-mode) . enable-paredit-mode)
@@ -3559,6 +3561,7 @@ The defacto standard for a development environment in Emacs for common-lisp is e
     :hook ((sly-mrepl-mode . override-sly-repl-bindings-with-paredit)
            (sly-mrepl-mode . enable-paredit-mode)
            (sly-mrepl-mode . sly-mrepl-font-lock-setup))
+    :commands (mrb/nyxt)
     :init
     ;; In the REPL sly takes backspace, I want paredit to have it
     (defun override-sly-repl-bindings-with-paredit ()
@@ -3578,12 +3581,15 @@ The defacto standard for a development environment in Emacs for common-lisp is e
               ;; From lisp-mode.el
               nil nil (("+-*/.<>=!?$%_&~^:@" . "w")) nil
               (font-lock-syntactic-face-function
-               . lisp-font-lock-syntactic-face-function)))))
+               . lisp-font-lock-syntactic-face-function))))
 
   :config
   (setq inferior-lisp-program "/usr/bin/sbcl"
         sly-lisp-implementations '((sbcl ("sbcl" "--core" "/home/mrb/.sbcl/sbcl.core-for-sly")))
         sly-net-coding-system 'utf-8-unix)
+
+    ;; Nyxt exposes a repl we can use
+    <<nyxt-sly-config>>
 
     ;; Correct the REPL prompt
     (defun sly-mrepl-font-lock-find-prompt (limit)
@@ -3596,9 +3602,7 @@ The defacto standard for a development environment in Emacs for common-lisp is e
                         limit))
           (goto-char beg)
           (set-match-data (list beg end))
-          t)))
-
-
+          t))))
 #+end_src
 
 ** Gcode
