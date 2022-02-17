@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent :noweb no-export
 
-Last update: <2022-02-15 16:21:38>
+Last update: <2022-02-17 17:05:24>
 
 
 
@@ -1754,11 +1754,18 @@ Specific settings for babel and literate programming within org-mode
   (org-babel-do-load-languages 'org-babel-load-languages org-babel-load-languages)
 #+end_src
 
-The elements of org babel are blocks of source code. Here are some helper programs relevant for those blocks:
+The elements of org babel are blocks of source code. Some of the modes for sources have some helper programs.
+
+Plantuml transforms diagram specifications with a /mini programming language/ into diagrams. It has support for many types of diagram. Ditaa transforms ascii diagrams into graphics.
 
 #+begin_src emacs-lisp
+  (use-package plantuml-mode
+    :after org    ; strictly not needed, but i use it mainly from org
+    :config
   (setq org-plantuml-jar-path "/usr/share/java/plantuml/plantuml.jar"
-        org-ditaa-jar-path    "/home/mrb/bin/ditaa.jar")
+          plantuml-default-exec-mode 'jar))
+
+  (setq org-ditaa-jar-path    "/usr/share/java/ditaa/ditaa-0.11.jar")
 #+end_src
 
 ** Refiling
