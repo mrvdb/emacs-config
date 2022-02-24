@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent :noweb no-export
 
-Last update: <2022-02-17 17:05:24>
+Last update: <2022-02-24 14:14:33>
 
 
 
@@ -398,13 +398,20 @@ Using pdf-tools for PDF handling. This is a lot better than docview. I'm a bit a
     (add-to-list 'revert-without-query ".+\\.pdf"))
 #+end_src
 
-Integrate this with orgmode as well. This is, for now, effectively making a link type available so we can directly link, very efficiently, to pages in PDF documents.
+Integrate this with orgmode as well. =org-pdftools= provides a link type, so we can link /into/ pdf documents. =pdf-tools-org= provides utility functions to help export pdf annotations into org mode and vice versa
 
 #+begin_src emacs-lisp
   (use-package org-pdftools               ; this brings in org-noter as well
-    :after (org pdftools)
+    :after (org pdf-tools)
     :hook (org-mode . org-pdftools-setup-link))
+
+  (use-package pdf-tools-org
+    :demand t                             ; when should this be loaded? goes on pdftools load now
+    :after (org pdf-tools)
+    :straight (:host github :repo "machc/pdf-tools-org"))
 #+end_src
+
+
 
 I tend to compile Emacs with ImageMagick support, let's make sure we use it too.
 
