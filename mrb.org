@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent :noweb no-export
 
-Last update: <2022-02-24 14:48:10>
+Last update: <2022-02-24 16:36:33>
 
 
 
@@ -2714,6 +2714,9 @@ Composing mail is often an /out of band/ activity, like creating a tweet or a ca
            (mimetype (mm-default-file-type file)))
       (mu4e-compose-new)
       (mml-attach-file file mimetype (concat mimetype " attachment") "attachment")))
+
+  ;; Extend attaching files with extra info insertion
+  <<extend-attach>>
 #+end_src
 
 To be able to use the =mrb/compose-mail= function as a mailto handler we need to be able to call it from outside of emacs. Let's define a small shell script that does exactly this. The SRC attributes tangle it into my =bin= directory where is will be in the path. In the OS, this script will need to be set as the default mail handler.
@@ -2738,6 +2741,61 @@ On top of that, I want a manual capture script which is basically the same as th
 edit -e '(mrb/compose-mail)'
 #+end_src
 
+When attaching files, it is sometimes useful to extract some info from the attached file and include it in the message. My main usecase is extracting PDF annotations (mostly for people who cannot process the annotations in their PDF viewer directly.
+
+The way I have implemented this is by advicing the function =mml-insert-empty-tag= which is used by the =mml-attach-file= function. At that point in the code the file and point in the active buffer are known, and we just have to process the extra actions.
+The advice function extracts the annotations from the pdf file (unconditionally at the moment) and inserts a rendering of them just before inserting the attachment itself.
+
+#+name: extend-attach
+#+begin_src emacs-lisp :tangle no
+  ;; FIXME: return info, do not use insert directly, so we have more control
+  (defun mrb/pdf-extract-info (file)
+    "Extract and render the pdf annotations in FILE"
+    (mapc
+     (lambda (annot) ;; traverse all annotations
+       (progn
+         (let ((page (cdr (assoc 'page annot)))
+               (highlighted-text
+                (if (pdf-annot-get annot 'markup-edges)
+                    (let ((highlighted-text
+                           (pdf-info-gettext (pdf-annot-get annot 'page)
+                                             (pdf-tools-org-edges-to-region
+                                              (pdf-annot-get annot 'markup-edges))
+                                             t
+                                             file)))
+                      (replace-regexp-in-string "\n" " " highlighted-text))
+                  nil))
+               (note (pdf-annot-get annot 'contents))
+               (type (pdf-annot-get annot 'type))) ; underline, strike-through etc.
+           ;; Stuff gathered, start rendering
+           (when (or highlighted-text (> (length note) 0))
+             (insert (format "\n- page %s" page))
+
+             (when highlighted-text
+               (insert (format ": “%s”\n" highlighted-text)))
+
+             (if (> (length note) 0)
+                 (insert (format "\n  %s\n" note))
+               (insert "\n" ))))))
+     (cl-remove-if                          ; don't process links?
+      (lambda (annot) (member (pdf-annot-get-type annot) (list 'link)))
+      (pdf-info-getannots nil  (expand-file-name file)))))
+
+
+  (defun mrb/extended-attach-file (name &rest plist)
+    "Advice `:before `mml-insert-empty-tag to grab additional info from the attachment."
+    (let* ((file (plist-get plist 'filename))
+           (mimetype (mm-default-file-type file)))
+      (when (string= mimetype "application/pdf")
+        ;; Extract and render annotations
+        (mrb/pdf-extract-info file))))
+
+  (advice-add
+   'mml-insert-empty-tag                  ; a lot easier because we already know the file
+   :before
+   'mrb/extended-attach-file
+   '((name . "extended-attach")))
+#+end_src
 *** Sending mail
 Sending mail through smtp, using the smtpmail package
 
@@ -2854,7 +2912,7 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
 
     :custom (mu4e-mu-binary (expand-file-name "build/mu/mu" (straight--repos-dir "mu")))
     :after (message fullframe selected)
-    :commands mu4e
+    :commands (mu4e mrb/compose-mail mrb/mailfile)
     :hook (mu4e-view-mode . turn-on-visual-line-mode)
 
     :bind (:map mu4e-search-minor-mode-map
@@ -2942,6 +3000,12 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
            (shr-render-region (point-min) (point-max)))) msg))
 
     (setq mu4e-html2text-command 'mrb/mu4e-shr2text))
+#+end_src
+
+Regardless, I always want mu4e, so start it in the background
+
+#+begin_src emacs-lisp
+  (mu4e 'background)
 #+end_src
 
 **** Main screen
