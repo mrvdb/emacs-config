@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent :noweb no-export
 
-Last update: <2022-02-24 14:14:33>
+Last update: <2022-02-24 14:48:10>
 
 
 
@@ -410,8 +410,6 @@ Integrate this with orgmode as well. =org-pdftools= provides a link type, so we 
     :after (org pdf-tools)
     :straight (:host github :repo "machc/pdf-tools-org"))
 #+end_src
-
-
 
 I tend to compile Emacs with ImageMagick support, let's make sure we use it too.
 
@@ -2682,7 +2680,7 @@ Composing mail is often an /out of band/ activity, like creating a tweet or a ca
 
 #+name: mu4e-composeconfig
 #+begin_src emacs-lisp :tangle no
-  ;; Keygbindings for active regions
+  ;; Keybindings for active regions
   <<mu4e-compose-mode-selected>>
 
   :bind ("C-x m" . 'mrb/compose-mail)
@@ -2713,17 +2711,9 @@ Composing mail is often an /out of band/ activity, like creating a tweet or a ca
     "Compose mail message from current buffer file, typically a pdf is viewed for my use-case"
     (interactive)
     (let* ((file (buffer-file-name))
-           (mimetype (mrb/mimetype file)))
+           (mimetype (mm-default-file-type file)))
       (mu4e-compose-new)
       (mml-attach-file file mimetype (concat mimetype " attachment") "attachment")))
-
-  ;; We can either use file(1) in the OS or mailcap.
-  ;; The latter is just extension based, which suits me fine
-  ;; in 99% of the cases. (i.e. .pdf)
-  (defun mrb/mimetype(file)
-    "Get a mimetype for a certain file extension, using mailcap functionality"
-    (mailcap-extension-to-mime
-     (file-name-extension file t)))
 #+end_src
 
 To be able to use the =mrb/compose-mail= function as a mailto handler we need to be able to call it from outside of emacs. Let's define a small shell script that does exactly this. The SRC attributes tangle it into my =bin= directory where is will be in the path. In the OS, this script will need to be set as the default mail handler.
@@ -2847,7 +2837,6 @@ It's not entirely clear which package is exactly responsible for what, but there
      message-citation-line-function 'message-insert-formatted-citation-line
 
      message-kill-buffer-on-exit t))
-
 #+end_src
 
 *** Mu4e specific settings
