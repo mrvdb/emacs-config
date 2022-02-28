@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent :noweb no-export
 
-Last update: <2022-02-24 16:36:33>
+Last update: <2022-02-28 09:04:26>
 
 
 
@@ -1767,7 +1767,7 @@ Plantuml transforms diagram specifications with a /mini programming language/ in
   (use-package plantuml-mode
     :after org    ; strictly not needed, but i use it mainly from org
     :config
-  (setq org-plantuml-jar-path "/usr/share/java/plantuml/plantuml.jar"
+    (setq plantuml-jar-path "/usr/share/java/plantuml/plantuml.jar"
           plantuml-default-exec-mode 'jar))
 
   (setq org-ditaa-jar-path    "/usr/share/java/ditaa/ditaa-0.11.jar")
@@ -2835,6 +2835,7 @@ It's not entirely clear which package is exactly responsible for what, but there
 
 #+begin_src emacs-lisp
   (use-package message
+    :demand t ; mu4e won't load otherwise
     :straight (:type built-in)
 
     :init
@@ -3561,7 +3562,6 @@ For all of those languages, I want to use paredit which makes editing, longer te
 
 #+begin_src emacs-lisp
   (use-package paredit
-    :demand t
     :hook ((lisp-interaction-mode emacs-lisp-mode
             eval-expression-mode scheme-mode
             lisp-mode) . enable-paredit-mode)
