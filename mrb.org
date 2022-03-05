@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent :noweb no-export
 
-Last update: <2022-03-01 11:49:26>
+Last update: <2022-03-05 12:09:34>
 
 
 
@@ -3042,7 +3042,7 @@ When mu4e start, it always opens in its main screen, which contains the main ope
                                :query "(flag:unread or flag:new or maildir:/INBOX) and not (flag:draft or flag:flagged or flag:deleted or maildir:/Trash or flag:trashed)"
                                :key ?i)
            '(:name "TODO list"
-                               :query "flag:flagged"
+                                  :query "flag:flagged and not flag:trashed"
                                :key ?+)
            '(:name "Today's messages"
                                :query "date:today..now"
