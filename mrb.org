@@ -1117,7 +1117,7 @@ Also make sure we never load org from internal, this can happen when functions w
   (use-package org
     :after selected
 
-    :straight (org-mode :branch "release_9.5"
+    :straight (org-mode
                :includes (org-agenda org-capture org-crypt org-datetree org-protocol))
         :hook ((org-mode . turn-on-visual-line-mode)
                (org-mode . turn-on-visual-fill-column-mode)
