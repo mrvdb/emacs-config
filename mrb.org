@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent :noweb no-export
 
-Last update: <2022-03-05 12:09:34>
+Last update: <2022-03-16 16:52:01>
 
 
 
@@ -375,6 +375,7 @@ Using pdf-tools for PDF handling. This is a lot better than docview. I'm a bit a
     :after (fullframe)
     :magic ("%PDF" . pdf-view-mode)
     :hook (pdf-view-mode . (lambda () (cua-mode 0)))
+    :commands (pdf-info-getannots mrb/pdf-extract-info)
     :bind (:map pdf-view-mode-map
                 ("h"   . 'pdf-annot-add-highlight-markup-annotation)
                 ("t"   . 'pdf-annot-add-text-annotation)
@@ -2787,7 +2788,7 @@ The advice function extracts the annotations from the pdf file (unconditionally 
   (defun mrb/extended-attach-file (name &rest plist)
     "Advice `:before `mml-insert-empty-tag to grab additional info from the attachment."
     (let* ((file (plist-get plist 'filename))
-           (mimetype (mm-default-file-type file)))
+           (mimetype (if file (mm-default-file-type file) nil)))
       (when (string= mimetype "application/pdf")
         ;; Extract and render annotations
         (mrb/pdf-extract-info file))))
