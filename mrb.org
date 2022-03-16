@@ -2674,6 +2674,35 @@ There's a special place for the =nyxt= browser here. It is particularly interest
 #+end_src
 
 What other options I need for this is as of yet unclear. Things which come to mind are: controlling window refreshments when something was published (blog postings for example) or monitoring web page changes, capturing information from the current web view buffer to emacs.
+
+Not exactly browser integration, but 'openstreetmap browsing' is close enough. I would like to use this for planning trips, so something like a 'set of view settings' for this package would be nice. This would allow me to gather maps views, augment them with a gpx route and bookmarks. Not sure if gpx waypoints/POI sets would work.
+
+The package as is, is already useful for searching locations and storing links to locations.
+
+#+begin_src emacs-lisp
+  (use-package osm
+    :straight (:host github :repo "minad/osm")
+    :init
+    ;; Load Org link support
+    (with-eval-after-load 'org
+      (require 'osm-ol))
+
+    :config
+    (setq osm-server-list
+          '((default
+              :name "Mapnik"
+              :description "Standard Mapnik map provided by OpenStreetMap"
+              :url "https://%s.tile.openstreetmap.org/%z/%x/%y.png"
+              :group "Standard")
+            (outdoor
+             :name "Outdoor"
+             :description "Outdoor focussed maps"
+             :url "https://tile.thunderforest.com/outdoors/{%z}/{%x}/{%y}.png?apikey=b1987b4b4ef449a19332204f8b2dbdff"
+             :group "Personal"))
+          ;; set proper home location, FIXME: read this from private store
+          osm-home '(51.6441759 4.4377029 17)
+          osm-copyright nil))
+#+end_src
 * Messaging and chatting
 ** Mail
 This section describes a search for the mail setup I want in Emacs. There are a few mail related packages and I'm unsure at what I want to use; reading the feature list doesn't cut it.  So, I'm having a setup where multiple mail handling packages may exist and hopefully one will float to the top as being *the one*
