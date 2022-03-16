@@ -101,11 +101,20 @@ And edit the file obviously.
   # force tty: call this like 'DISPLAY="" edit ....' see my aliases
   if [ $DISPLAY ]; then
       debug "X-display value seen, using GUI"
-      # Add --create-frame/--no-wait if there is no match with -noframe/-wait in name
-      if [ $ME != "edit" ]; then
-      [ `expr match "$ME" '.*-noframe'` -eq 0 ] && ARGS=$ARGS' --create-frame'
-      [ `expr match "$ME" '.*-wait'` -eq 0  ] &&  ARGS=$ARGS' --no-wait'
-      fi
+      case $ME in
+        "edit")
+            ARGS=$ARGS' --no-wait'
+            ;;
+        "edit-wait")
+            ARGS=$ARGS' '
+            ;;
+        "edit-frame")
+            ARGS=$ARGS' --no-wait --create-frame'
+            ;;
+        ,*)
+            echo "Wrong calling name..."
+            ;;
+      esac
   else
       # tty always waits, as it is in the terminal, create-frame has no meaning
       debug "Starting tty emacs"
