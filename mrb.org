@@ -3078,7 +3078,7 @@ When mu4e start, it always opens in its main screen, which contains the main ope
                                :query "date:today..now"
                                :key ?d)
            '(:name "Trash"
-                               :query "maildir:/Trash"
+                                  :query "maildir:/Trash or flag:trashed"
                                :key ?t)
            '(:name "Junk"
                                :query "maildir:/Junk"
