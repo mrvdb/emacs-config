@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent :noweb no-export
 
-Last update: <2022-03-16 16:52:01>
+Last update: <2022-03-21 09:17:14>
 
 
 
@@ -1923,6 +1923,7 @@ While the standard capture method is useful I found myself not using it very muc
 #+begin_src emacs-lisp
   (use-package org-journal
     :after (org selected)
+    :commands (org-journal-new-entry)
     :hook ((org-journal-mode . turn-on-visual-line-mode)
            (org-journal-mode . turn-on-visual-fill-column-mode))
     :bind (("C-c j"   . 'org-journal-new-entry))
@@ -2695,7 +2696,7 @@ The package as is, is already useful for searching locations and storing links t
     ;; Load Org link support
     (with-eval-after-load 'org
       (require 'osm-ol))
-
+    :commands (osm)
     :config
     (setq osm-server-list
           '((default
