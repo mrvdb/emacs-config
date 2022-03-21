@@ -28,12 +28,11 @@
 
 ;; Assuming file-name-concat exists, which is 28.1 emacs?
 (setq config-file (concat user-emacs-directory "mrb.org"))
-;; This presumably uses the internal orgmode version?
 ;; This produces mrb.el which is then loaded. It checks datetime before tangling.
 ;; FIXME: having two different versions of org in the startup sequence sucks,
 ;;        how to solve the biting of my own tail here?
-(require 'org-compat) 
-(org-babel-load-file config-file)
+(defalias 'org-file-name-concat #'file-name-concat) ; No fbound check needed, if it goes wrong I want to know
+(org-babel-load-file config-file)                   ; Uses built-in org!
 
 ;; END init.el
 ;; This is all there should be in this file, the rest is handled in org-mode.
