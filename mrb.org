@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent :noweb no-export
 
-Last update: <2022-03-23 09:56:21>
+Last update: <2022-03-23 10:13:58>
 
 
 
@@ -2688,8 +2688,11 @@ The package as is, is already useful for searching locations and storing links t
       (require 'osm-ol))
     :commands (osm)
     :config
-    (setq osm-server-list
-          '((default
+    (setq osm-url (concat
+                   "https://tile.thunderforest.com/outdoors/{%z}/{%x}/{%y}.png?apikey="
+                   (password-store-get "API/tile.thunderforest.com"))
+          osm-server-list
+          `((default
               :name "Mapnik"
               :description "Standard Mapnik map provided by OpenStreetMap"
               :url "https://%s.tile.openstreetmap.org/%z/%x/%y.png"
@@ -2697,7 +2700,7 @@ The package as is, is already useful for searching locations and storing links t
             (outdoor
              :name "Outdoor"
              :description "Outdoor focussed maps"
-             :url "https://tile.thunderforest.com/outdoors/{%z}/{%x}/{%y}.png?apikey=b1987b4b4ef449a19332204f8b2dbdff"
+             :url ,osm-url
              :group "Personal"))
           ;; set proper home location, FIXME: read this from private store
           osm-home '(51.6441759 4.4377029 17)
