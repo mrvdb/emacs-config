@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent :noweb no-export
 
-Last update: <2022-03-21 09:17:14>
+Last update: <2022-03-23 09:56:21>
 
 
 
@@ -182,7 +182,10 @@ Now that we have =straight= we can use it to install =use-package=
   ;; From this point on we should be able to use `use-package
   (use-package straight
     :config
-    (setq straight-host-usernames '((github . "mrvdb")))
+    (setq straight-host-usernames '((github . "mrvdb"))) ; Move to personal information?
+    ;; Make sure packages do not pull in internal org, we pregister org from straight.el
+    (straight-register-package 'org)
+    (straight-register-package 'org-contrib)
 
     <<straight-helperfunctions>>
 
@@ -1126,7 +1129,7 @@ Also make sure we never load org from internal, this can happen when functions w
   (use-package org
     :after selected
 
-    :straight (org-mode
+    :straight (org
                :includes (org-agenda org-capture org-crypt org-datetree org-protocol))
         :hook ((org-mode . turn-on-visual-line-mode)
                (org-mode . turn-on-visual-fill-column-mode)
