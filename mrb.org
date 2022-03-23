@@ -199,20 +199,7 @@ Now that we have =straight= we can use it to install =use-package=
   (use-package bind-key)                  ; Load early, but see section [[Key bindings]]
 #+end_src
 
-Finally, make updating and installing the packages a bit easier by having a keybinding for getting to the installation part right away
 
-#+name: straight-helperfunctions
-#+begin_src emacs-lisp :tangle no
-  (defun mrb/upgrade-packages ()
-    (interactive)
-    ;; Update our repositories first
-    (message "Updating repositories...")
-    (straight-pull-recipe-repositories)
-
-    (message "Pulling all packages...")
-    (straight-pull-all))
-  (bind-key "C-c p" 'mrb/upgrade-packages)
-#+end_src
 * Personal information
 I'd like to arrange 3 things related to personal information:
 1. register the proper identification to use;
