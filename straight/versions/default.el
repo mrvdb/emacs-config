@@ -91,6 +91,7 @@
  ("org-noter" . "9ead81d42dd4dd5074782d239b2efddf9b8b7b3d")
  ("org-pdftools" . "967f48fb5038bba32915ee9da8dc4e8b10ba3376")
  ("org-screenshot" . "55fa23e69c8ac4c40f8600300301a9cdc5c6732f")
+ ("orgit" . "42b7f682b3e4e487ff209a44221a729921241133")
  ("osm" . "e4f8775fec99d109ca330daaadc0696323fa1b7f")
  ("ox-gfm" . "99f93011b069e02b37c9660b8fcb45dab086a07f")
  ("paredit" . "8330a41e8188fe18d3fa805bb9aa529f015318e8")
