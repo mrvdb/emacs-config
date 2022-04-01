@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent :noweb no-export
 
-Last update: <2022-03-29 22:36:28>
+Last update: <2022-04-01 09:55:46>
 
 
 
@@ -3363,10 +3363,13 @@ Alternatively a package ws-butler exists on github, which solves this exact prob
 However, this is problematic. It needs a special initialization because I run in server mode (doable), but its global mode is way to global, because it just applies to all buffers, which lead to errors on non-file buffers; for example because they are read-only.
 
 ** Generic
-Lets try to use ggtags everywhere.
+Let's start with some generic development related settings and packages
 #+begin_src emacs-lisp
-  (use-package ggtags)
+  (use-package ggtags)                    ; not used very much
+
   (use-package cmake-mode)                              ; adjusts auto-mode-alist on load
+
+  (use-package yaml-mode)                 ; used by ansible, magit(?)
 #+end_src
 
 For most of the languages I use (Bash, python, C, Go, HTML Haskell, Lua), the Language Server Protocol seems to be supported by =lsp-mode=, so I'm setting this up generally here and enable it for each language I'm using if it is supported.
@@ -3759,7 +3762,7 @@ Features I'm interested in: issue commenting, pull requests
 
 #+begin_src emacs-lisp
   (use-package magit
-    :after fullframe
+    :after (org fullframe)
     :commands magit-status
     :bind
     ("C-c m" . magit-status)
@@ -3769,12 +3772,12 @@ Features I'm interested in: issue commenting, pull requests
 
     :config
     (setq magit-last-seen-setup-instructions "1.4.0"
-          magit-diff-refine-hunk 'all))
+          magit-diff-refine-hunk 'all)
 
-  (use-package yaml-mode)
+    ;; Enable links to magit fromm org
+    (use-package orgit)
 
   (use-package forge
-    :after magit
     :config
     (setq forge-add-pullreq-refspec 'ask
           forge-pull-notifications t
@@ -3786,7 +3789,7 @@ Features I'm interested in: issue commenting, pull requests
      'forge-insert-assigned-issues   nil t)
     (magit-add-section-hook
      'magit-status-sections-hook
-     'forge-insert-assigned-pullreqs   nil t))
+       'forge-insert-assigned-pullreqs   nil t)))
 
 #+end_src
 
