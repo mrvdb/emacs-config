@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent :noweb no-export
 
-Last update: <2022-04-01 09:55:46>
+Last update: <2022-04-01 16:27:13>
 
 
 
@@ -371,6 +371,7 @@ Using pdf-tools for PDF handling. This is a lot better than docview. I'm a bit a
 
 #+begin_src emacs-lisp
   (use-package pdf-tools
+    :demand t                             ; prevent configuring while opening pdf files
     :after (fullframe)
     :magic ("%PDF" . pdf-view-mode)
     :hook (pdf-view-mode . (lambda () (cua-mode 0)))
@@ -381,6 +382,7 @@ Using pdf-tools for PDF handling. This is a lot better than docview. I'm a bit a
                 ("D"   . 'pdf-annot-delete)
                 ("C-s" . 'isearch-forward)
                 ("m"   . 'mrb/mailfile)
+                ("q"   . 'kill-this-buffer)
                 :map pdf-annot-edit-contents-minor-mode-map
                 ("<return>"   . 'pdf-annot-edit-contents-commit)
                 ("<S-return>" .  'newline))
@@ -390,7 +392,7 @@ Using pdf-tools for PDF handling. This is a lot better than docview. I'm a bit a
     (require 'pdf-annot)
 
     ;; Some settings from http://pragmaticemacs.com/emacs/even-more-pdf-tools-tweaks/
-    (fullframe pdf-view-mode quit-window)
+    (fullframe pdf-view-mode kill-this-buffer)
     (setq-default pdf-view-display-size 'fit-page) ;scale to fit page by default
     (setq pdf-annot-activate-created-annotations t ; automatically annotate highlights
           pdf-view-resize-factor 1.1              ; more fine-grained zooming
