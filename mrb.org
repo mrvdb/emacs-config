@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent :noweb no-export
 
-Last update: <2022-03-23 10:13:58>
+Last update: <2022-03-29 22:36:28>
 
 
 
@@ -1770,6 +1770,7 @@ Plantuml transforms diagram specifications with a /mini programming language/ in
     :after org    ; strictly not needed, but i use it mainly from org
     :config
     (setq plantuml-jar-path "/usr/share/java/plantuml/plantuml.jar"
+          org-plantuml-jar-path plantuml-jar-path
           plantuml-default-exec-mode 'jar))
 
   (setq org-ditaa-jar-path    "/usr/share/java/ditaa/ditaa-0.11.jar")
@@ -2459,7 +2460,9 @@ The basic install is easy, but does need an emacs compiled with module support.
 
 #+begin_src emacs-lisp
     (use-package vterm
-      :if (fboundp'module-load))
+    :if (fboundp'module-load)
+    :config
+    (setq vterm-timer-delay 0))
 #+end_src
 
 To benefit from some of the most useful features, there is a little bit of shell configuration involved. The package includes a shell script for that which I am sourcing in my =.zshrc= configuration file.
