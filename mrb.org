@@ -3300,6 +3300,7 @@ I run a weechat proxy on a vps for IRC. Luckily there is a good emacs package to
   (use-package weechat
     :if (version< "28" emacs-version)     ;patch for 28 does not work for earlier versions
 
+    :demand t
     ;; this works, but we /are/ inside weechat when we need this, can't it be auto-loaded?
     :straight (:includes (weechat-tracking weechat-notifications weechat-image)
                :fork t)
