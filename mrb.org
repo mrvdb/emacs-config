@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent :noweb no-export
 
-Last update: <2022-04-01 16:27:13>
+Last update: <2022-04-08 17:42:25>
 
 
 
@@ -2863,11 +2863,15 @@ At times we want to send signed and/or encrypted mail
   (use-package mml-sec
     :straight (:type built-in)
     :config
-    ; Use my key to sign
+    ; Use my key to sign messages
     (add-to-list 'mml-secure-openpgp-signers user-gpg-encrypt-key)
 
     ;; Add my bcc address to list of safe addresses in bcc for secure message
-    (add-to-list 'mml-secure-safe-bcc-list mrb/bcc-address))
+    (add-to-list 'mml-secure-safe-bcc-list mrb/bcc-address)
+
+    ;; Always encrypt to self, so I can read my own messages
+    (setq mml-secure-openpgp-encrypt-to-self t))
+
 #+end_src
 
 *** Generic mail message settings
