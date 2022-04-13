@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent :noweb no-export
 
-Last update: <2022-04-13 14:18:59>
+Last update: <2022-04-13 17:02:40>
 
 
 
@@ -198,7 +198,6 @@ Now that we have =straight= we can use it to install =use-package=
   (use-package use-package-ensure-system-package)   ; because we are in use-package config
   (use-package bind-key)                  ; Load early, but see section [[Key bindings]]
 #+end_src
-
 
 * Personal information
 I'd like to arrange 3 things related to personal information:
@@ -663,6 +662,7 @@ Although I think the 16 color system is a bit simplistic and, for emacs at least
 
             ;; Helm selection
             (helm-selection                 :foreground "black" :background "goldenrod2")
+            (helm-M-x-key                   :foreground "#bf616a")
 
             ;; Mu4e
             (mu4e-header-highlight-face     :inherit hl-line :underline nil :foreground nil)
