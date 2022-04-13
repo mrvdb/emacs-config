@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent :noweb no-export
 
-Last update: <2022-04-08 17:42:25>
+Last update: <2022-04-13 13:25:31>
 
 
 
@@ -3797,7 +3797,15 @@ Features I'm interested in: issue commenting, pull requests
     (magit-add-section-hook
      'magit-status-sections-hook
        'forge-insert-assigned-pullreqs   nil t)))
+#+end_src
 
+Most of the magit work is done through its status screen and I would like to see issues and todo's and fixme's and other work that needs to be done in that screen. The forge package does that from a remote forge, like github, but many tasks are hiddenn in the sources already by myself. The magit-todos package scans for those things and show them in the magit screen
+
+#+begin_src emacs-lisp
+  (use-package magit-todos
+    :after (magit)
+    :config
+    (magit-todos-mode 1))
 #+end_src
 
 *** Committing automatically
