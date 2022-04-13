@@ -15,12 +15,14 @@
 (run-with-idle-timer 5 t #'garbage-collect)
 
 ;; If we have the native compiler, use it
-(if (and (fboundp 'native-comp-available-p)
-         (native-comp-available-p))
+(message (concat
+          "Native compilation is "
+          (if (and (fboundp 'native-comp-available-p) (native-comp-available-p))
     (progn
-      (message "Native compilation is available")
-      (setq comp-deferred-compilation t))
-  (message "Native complation is *not* available"))
+                (setq comp-deferred-compilation t)
+                "")
+            "*not* ")
+          "available"))
 
 ;; My org file is posted using writefreely, which uses local variables, we need them right away
 (add-to-list 'safe-local-variable-values '(writefreely-post-id . "wf83bq5jwz"))
