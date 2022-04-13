@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent :noweb no-export
 
-Last update: <2022-04-13 13:25:31>
+Last update: <2022-04-13 13:52:36>
 
 
 
@@ -219,7 +219,7 @@ Seems like a good idea to start configuration with some details about me. The id
         user-mail-address    mrb/default-email-address
         user-domain          "hsdev.com"
         user-organisation    "HS-Development BV"
-        user-gpg-encrypt-key "0x235E5C8CF5E8DFFB"
+        user-gpg-encrypt-key "77DDA1B68D04792A8F85D855235E5C8CF5E8DFFB"
         )
 #+end_src
 
@@ -2863,8 +2863,16 @@ At times we want to send signed and/or encrypted mail
   (use-package mml-sec
     :straight (:type built-in)
     :config
-    ; Use my key to sign messages
+    ;; Use my key to sign messages and make it safe if other keys exist
     (add-to-list 'mml-secure-openpgp-signers user-gpg-encrypt-key)
+    (setq mml-secure-key-preferences
+          '((OpenPGP
+             (sign)
+             (encrypt
+              (user-mail-address user-gpg-encrypt-key)))
+            (CMS
+             (sign)
+             (encrypt))))
 
     ;; Add my bcc address to list of safe addresses in bcc for secure message
     (add-to-list 'mml-secure-safe-bcc-list mrb/bcc-address)
