@@ -1141,15 +1141,13 @@ Also make sure we never load org from internal, this can happen when functions w
            ("s-."     . 'org-todo)
            ("s->"     . 'mrb/org-cancel-todo)
            ("C-s-."   . 'mrb/force-org-todo)
-           ("C-."     . 'mrb/org-schedule-for-today)
-           ("s-t"     . 'org-schedule)
+           ("C-."     . 'org-schedule)
            ("M-p"     . 'org-set-property)
            :map org-agenda-mode-map
            ("s-."   . 'org-agenda-todo)
            ("s->"   . 'mrb/org-agenda-cancel-todo)
            ("C-s-." . 'mrb/force-org-agenda-todo)
-           ("C-."   . 'mrb/org-agenda-schedule-for-today)
-           ("s-t"   . 'org-agenda-schedule)
+           ("C-."   . 'org-agenda-schedule)
            ("M-p"   . 'org-set-property)
            ("C-x m" . 'mrb/construct-mail))
 
@@ -1558,22 +1556,9 @@ Lastly, there's a mechanism in emacs which can automatically insert time-stamps,
 ** Scheduling items
 Orgmode has a number of provisions to schedule items, either explicitly by setting the SCHEDULE property, inferring a deadline by setting the DEADLINE property, thus scheduling the task in an interval before the deadline expires.
 
-A routine task I am performing, often at the beginning of the day, is to make a list of what I want to do that day. This is often ad-hoc and thus still on paper most of the time. Over time, I want this to be done in orgmode, but that requires the process to be a lot simpler than it is now and one of the things is to make it easier to model a thing like: "yeah, do this today"
+The main key for scheduling will be =C-.= (Control key with dot). A todo is marked to the next state with =M-.= so this makes sense, at least to me. In plain org and in org-agenda mode this key is used most often, but I expect this to be useful in other modes as well. I will try to u use the same keybinding in those modes as well.
 
-#+name: orgmode-scheduling
-#+begin_src emacs-lisp :tangle no
-  (defun mrb/org-schedule-for-today()
-    "Schedule the current item for today"
-    (interactive)
-    (org-schedule nil
-                  (format-time-string "%Y-%m-%d")))
-
-  (defun mrb/org-agenda-schedule-for-today()
-    "Schedule the current item in the agenda for today"
-    (interactive)
-    (org-agenda-schedule nil
-                         (format-time-string "%Y-%m-%d")))
-#+end_src
+I had /schedule-for-today/ functions earlier, but those really just save me from pressing return in a normal =org-schedule= function, so their added value was minimal and I have since deleted them.
 
 ** Visual settings
 Having an attractive screen to look at becomes more important if you use the system all day long. /Attractive/ is rather subjective here. For me it mainly consists of functional things. Anyways, this section groups settings for the visual characteristics of orgmode.
