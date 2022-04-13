@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent :noweb no-export
 
-Last update: <2022-04-13 13:52:36>
+Last update: <2022-04-13 14:18:59>
 
 
 
@@ -3267,7 +3267,7 @@ Elfeed handles my RSS feeds, which I specify using an orgmode file =feeds.org=
       (interactive)
       (mrb/elfeed-show-toggle-tag 'watchlater))
 
-    ;; TODO: mrb/elfeed-enqueue-video
+    ;; umpv maintains a playlist, so adding more videos wil automatically queue
     (defun mrb/elfeed-play-with-mpv ()
       "Play elfeed link in mpv"
       (interactive)
