@@ -176,7 +176,7 @@ Now that we have =straight= we can use it to install =use-package=
 
 #+begin_src emacs-lisp
   (straight-use-package 'use-package)
-  (setq use-package-always-ensure nil      ; Make sure this is nil, so we do not use package.el
+  (setq use-package-always-ensure nil   ; Make sure this is nil, so we do not use package.el
         use-package-verbose 'debug      ; FIXME: use a debug var for all of config?
   )
   ;; From this point on we should be able to use `use-package
@@ -236,14 +236,14 @@ I have a gpg-agent daemon configured which manages gpg and ssh keys, protected b
     :straight (:type built-in)
     :init
     (auth-source-pass-enable)
-      :after password-store
+    :after password-store
     :config
     ;; Make sure it's the only mechanism
-      (setq auth-sources '(password-store)
-            auth-source-gpg-encrypt-to (list user-mail-address)))
+    (setq auth-sources '(password-store)
+          auth-source-gpg-encrypt-to (list user-mail-address)))
   ;; I like the pass interface, so install that too
-    (use-package pass
-      :after password-store)
+  (use-package pass
+    :after password-store)
 #+end_src
 
 ** Encrypting information
@@ -288,15 +288,15 @@ A the same time, I don't want to be /that spaces guy/ in every project, and I'm 
 Finally, I want to prevent producing files which have trailing spaces, because they serve no purpose at all. Removing these spaces is less trivial than it seems and I am not pretending to know what the best strategy is. For a while now, the =ws-butler= package has done a great job for me.
 
 #+begin_src emacs-lisp
-      ;; Probably move this to somewhere else ?
-    (use-package ws-butler
-      :diminish
-      :init
-      (ws-butler-global-mode)             ; Enable by default
-      ;; List exemptions here
-      ;; FIXME: why is org-capture-mode in here?
-      (add-to-list 'ws-butler-global-exempt-modes 'org-capture-mode)
-      (add-to-list 'ws-butler-global-exempt-modes 'magit-mode))
+  ;; Probably move this to somewhere else ?
+  (use-package ws-butler
+    :diminish
+    :init
+    (ws-butler-global-mode)             ; Enable by default
+    ;; List exemptions here
+    ;; FIXME: why is org-capture-mode in here?
+    (add-to-list 'ws-butler-global-exempt-modes 'org-capture-mode)
+    (add-to-list 'ws-butler-global-exempt-modes 'magit-mode))
 
   (setq
    delete-by-moving-to-trash t          ; move files to the trash instead of rm
@@ -382,7 +382,7 @@ Using pdf-tools for PDF handling. This is a lot better than docview. I'm a bit a
                 ("C-s" . 'isearch-forward)
                 ("m"   . 'mrb/mailfile)
                 ("q"   . 'kill-this-buffer)
-                :map pdf-annot-edit-contents-minor-mode-map
+            :map pdf-annot-edit-contents-minor-mode-map
                 ("<return>"   . 'pdf-annot-edit-contents-commit)
                 ("<S-return>" .  'newline))
 
@@ -409,7 +409,7 @@ Integrate this with orgmode as well. =org-pdftools= provides a link type, so we 
     :hook (org-mode . org-pdftools-setup-link))
 
   (use-package pdf-tools-org
-    :demand t                             ; when should this be loaded? goes on pdftools load now
+    :demand t  ; when should this be loaded? goes on pdftools load now
     :after (org pdf-tools)
     :straight (:host github :repo "machc/pdf-tools-org"))
 #+end_src
@@ -623,7 +623,7 @@ Although I think the 16 color system is a bit simplistic and, for emacs at least
             (magit-diff-added               :foreground "#a3be8c")
             (magit-diff-removed             :foreground "#bf616a")
             (magit-diff-hunk-heading-highlight :background "#5e81ac")
-              (magit-diff-hunk-heading           :background "#5e81ac")
+            (magit-diff-hunk-heading           :background "#5e81ac")
 
             ;; Elfeed
             (elfeed-search-tag-face         :foreground "#a3be8c")
@@ -851,8 +851,8 @@ Flyspell is similar to flycheck but for text languages. I'm setting some of the 
     ;; flyspell-duplicate  as warnings
     ;; Do I want this at all?, seems overkill
     ;; FIXME: this does not seem to help
-      (setq flyspell-mark-duplications-flag nil
-            flyspell-issue-message-flag nil))
+    (setq flyspell-mark-duplications-flag nil
+          flyspell-issue-message-flag nil))
 #+end_src
 
 Still on the wish-list:
@@ -899,12 +899,12 @@ The first is the easiest, as the format of =org-todo-keyword-faces= is nigh perf
     :hook (org-mode . svg-tag-mode)
 
     :config
-  ;; Readymade svg-tag-tags generator from org keywords
-  (defun mrb/gen-svg-tags (kf)
-    "Generate a `svg-tag-tags element from a `org-todo-keyword-faces element"
-    (let ((k (concat "\\(" (car kf) "\\) ")) ; pass keyword, not the space
-          (f (cdr kf)))
-      `(,k . ((lambda (tag) (svg-tag-make tag :face ',f :inverse t :margin 0 ))))))
+    ;; Readymade svg-tag-tags generator from org keywords
+    (defun mrb/gen-svg-tags (kf)
+      "Generate a `svg-tag-tags element from a `org-todo-keyword-faces element"
+      (let ((k (concat "\\(" (car kf) "\\) ")) ; pass keyword, not the space
+            (f (cdr kf)))
+        `(,k . ((lambda (tag) (svg-tag-make tag :face ',f :inverse t :margin 0 ))))))
 
     ;; This gets initialized the first time svg-tag-mode is called, so then it must have
     ;; the proper keywords in org-todo-keyword-faces
@@ -925,24 +925,24 @@ For every file-based buffer, I want auto-save to be on, but not in the same loca
    (setq auto-save-default t
          mrb/auto-save-folder (concat user-emacs-directory "auto-save-list/"))
 
-  (add-to-list 'auto-save-file-name-transforms
-               (list "\\(.+/\\)*\\(.*?\\)" (expand-file-name "\\2" mrb/auto-save-folder))
-               t)
+   (add-to-list 'auto-save-file-name-transforms
+                (list "\\(.+/\\)*\\(.*?\\)" (expand-file-name "\\2" mrb/auto-save-folder))
+                t)
 #+end_src
 
 Auto save helps to automatically recover to the latest save point, but I need a bit more. This is done through versioned backup file. The recovery process is then manual though.
 
 #+begin_src emacs-lisp
   (setq create-lockfiles nil           ; just clutters for me, no real use?
-   backup-by-copying t                    ; otherwise symlinks galore
+        backup-by-copying t            ; otherwise symlinks galore
 
-   backup-directory-alist '(
-                            ("." . "/tmp/emacs/"))
+        backup-directory-alist '(
+                                 ("." . "/tmp/emacs/"))
 
-   delete-old-versions t
-   kept-new-versions 3
-   kept-old-versions 2
-   version-control t)
+        delete-old-versions t
+        kept-new-versions 3
+        kept-old-versions 2
+        version-control t)
 #+end_src
 
 The auto save helps for the minor disasters, my backups help for the major disasters. What else is needed is a 'normal save' but automatically when I forget to do this.
@@ -1010,8 +1010,8 @@ For file management itself, dired is the defacto standard It's builtin so =use-p
     :straight (:type built-in)
     ;; auto-revert global is only for file buffers, so explicit enable is needed
     :hook (dired-mode-hook . auto-revert-mode)
-      :config
-      (setq dired-bind-jump nil)                ; Do not bind to C-x C-j, we do jabber prefix there
+    :config
+      (setq dired-bind-jump nil) ; Do not bind to C-x C-j, we do jabber prefix there
   )
 #+end_src
 
@@ -1120,10 +1120,10 @@ Also make sure we never load org from internal, this can happen when functions w
 
     :straight (org
                :includes (org-agenda org-capture org-crypt org-datetree org-protocol))
-        :hook ((org-mode . turn-on-visual-line-mode)
-               (org-mode . turn-on-visual-fill-column-mode)
-               (org-indent-mode . (lambda () (diminish 'org-indent-mode)))
-               (org-agenda-mode . (lambda () (hl-line-mode 1))))
+    :hook ((org-mode . turn-on-visual-line-mode)
+           (org-mode . turn-on-visual-fill-column-mode)
+           (org-indent-mode . (lambda () (diminish 'org-indent-mode)))
+           (org-agenda-mode . (lambda () (hl-line-mode 1))))
 
     :init
     <<gtd-starter>>
@@ -1137,7 +1137,7 @@ Also make sure we never load org from internal, this can happen when functions w
            ("C-c b"   . 'org-switchb)
            ("C-s-s"   . 'org-save-all-org-buffers)
            ("C-c l"   . 'org-store-link)        ; Is this not bound to C-c l by default
-          :map org-mode-map
+           :map org-mode-map
            ("s-."     . 'org-todo)
            ("s->"     . 'mrb/org-cancel-todo)
            ("C-s-."   . 'mrb/force-org-todo)
@@ -1179,59 +1179,59 @@ Gather generic config variables for orgmode in one section
         org-metadir (concat org-directory "_orgmeta/")
 
         org-use-fast-todo-selection t
-          org-use-fast-tag-selection t
-          org-fast-tag-selection-single-key 'expert
-          org-enforce-todo-dependencies t       ; we do want task dependencies
-          org-enforce-todo-checkbox-dependencies nil ; but relax checkbox constraints for it
+        org-use-fast-tag-selection t
+        org-fast-tag-selection-single-key 'expert
+        org-enforce-todo-dependencies t       ; we do want task dependencies
+        org-enforce-todo-checkbox-dependencies nil ; but relax checkbox constraints for it
 
-          ;; We do not do priorities
-          org-enable-priority-commands nil
+        ;; We do not do priorities
+        org-enable-priority-commands nil
 
-          ;; Agenda settings
+        ;; Agenda settings
         org-agenda-files (concat org-directory ".agenda_files")
-          org-agenda-include-diary t
-          org-agenda-start-with-log-mode t
-          org-agenda-todo-ignore-scheduled "future"
-          org-agenda-ignore-properties '(effort appt category)
-          org-agenda-todo-ignore-scheduled 'future
+        org-agenda-include-diary t
+        org-agenda-start-with-log-mode t
+        org-agenda-todo-ignore-scheduled "future"
+        org-agenda-ignore-properties '(effort appt category)
+        org-agenda-todo-ignore-scheduled 'future
         org-agenda-log-mode-items '(closed clock state)
         org-agenda-skip-deadline-prewarning-if-scheduled t
-            org-agenda-text-search-extra-files (cons 'agenda-archives (directory-files
-                                                                (expand-file-name (concat org-metadir)) t ".+\\.org"))
-          ;; Habits
-          org-habit-show-habits-only-for-today nil
+        org-agenda-text-search-extra-files (cons 'agenda-archives (directory-files
+                                                                   (expand-file-name (concat org-metadir)) t ".+\\.org"))
+        ;; Habits
+        org-habit-show-habits-only-for-today nil
 
-          ;; Pressing enter on a link should activate it
-          org-return-follows-link t
-          org-support-shift-select 'always
+        ;; Pressing enter on a link should activate it
+        org-return-follows-link t
+        org-support-shift-select 'always
 
 
-          ;; Auto detect blank line need, this is the default, but I explicitly set thi
-          ;; because it needs to be this or my capturing breaks due to org-capture popup
-          org-blank-before-new-entry '((heading . auto) (plain-list-item . auto))
-          org-export-htmlize-output-type 'css
+        ;; Auto detect blank line need, this is the default, but I explicitly set thi
+        ;; because it needs to be this or my capturing breaks due to org-capture popup
+        org-blank-before-new-entry '((heading . auto) (plain-list-item . auto))
+        org-export-htmlize-output-type 'css
 
-          ;; Use auto-mode-alist for all file links/types
-          org-file-apps '((auto-mode . emacs))
+        ;; Use auto-mode-alist for all file links/types
+        org-file-apps '((auto-mode . emacs))
 
-          org-fontify-done-headline t
-          org-goto-interface 'outline-path-completion
-          ;; non nil is just direct children, what an ODD name!!!!
-          org-hierarchical-todo-statistics nil
-          org-provide-todo-statistics t
+        org-fontify-done-headline t
+        org-goto-interface 'outline-path-completion
+        ;; non nil is just direct children, what an ODD name!!!!
+        org-hierarchical-todo-statistics nil
+        org-provide-todo-statistics t
 
-          org-log-into-drawer t
-          org-log-redeadline 'note
-          org-log-reschedule 'time
+        org-log-into-drawer t
+        org-log-redeadline 'note
+        org-log-reschedule 'time
 
-          org-modules '(org-info org-habit
-                                 org-inlinetask org-irc
-                                 org-toc org-mac-iCal org-mouse
-                                 org-tempo)
-          org-remember-default-headline ""
-          org-special-ctrl-a/e t
-          org-stuck-projects '("-inactive/TODO" ("TODO" "WAITING") nil "")
-          org-track-ordered-property-with-tag nil
+        org-modules '(org-info org-habit
+                               org-inlinetask org-irc
+                               org-toc org-mac-iCal org-mouse
+                               org-tempo)
+        org-remember-default-headline ""
+        org-special-ctrl-a/e t
+        org-stuck-projects '("-inactive/TODO" ("TODO" "WAITING") nil "")
+        org-track-ordered-property-with-tag nil
         org-startup-indented t
 
         org-archive-location (concat org-metadir "archive.org::datetree/")
@@ -1280,42 +1280,42 @@ Here are the templates used by org-capture. The /todo/ template is the most used
 
 #+name: org-capture-templates
 #+begin_src emacs-lisp :tangle no
-  (setq
-   org-capture-templates
+    (setq
+     org-capture-templates
      '(("b" "Buy"
-      entry (function mrb/capture-location) "* BUY %? :buy:\n%(mrb/prop-or-nothing :annotation)\n" :prepend t :empty-lines 1)
+        entry (function mrb/capture-location) "* BUY %? :buy:\n%(mrb/prop-or-nothing :annotation)\n" :prepend t :empty-lines 1)
        ("l" "Link"
         entry (function mrb/capture-location) "* TODO %?\n%(mrb/prop-or-nothing :annotation)\n" :prepend t :empty-lines 1)
-     ("t" "Todo"
-      entry (function mrb/capture-location) "* TODO %?\n" :prepend t :empty-lines 1)))
+       ("t" "Todo"
+        entry (function mrb/capture-location) "* TODO %?\n" :prepend t :empty-lines 1)))
 
 
-  (defun mrb/prop-or-nothing(prop)
-    "Insert `[:type]: [:property]` when :property has a value, otherwise nothing.
-  Meant to be used inside org-capture-templates
+    (defun mrb/prop-or-nothing(prop)
+      "Insert `[:type]: [:property]` when :property has a value, otherwise nothing.
+    Meant to be used inside org-capture-templates
 
-  Example: `%(mrb/prop-or-nothing :annotation)`"
+    Example: `%(mrb/prop-or-nothing :annotation)`"
 
-    (let ((prop-value (plist-get org-store-link-plist prop))
-          (type (plist-get org-store-link-plist :type)))
-      (if (equal prop-value "")
-          ""
-        (concat (when type (concat type ": ")) prop-value))))
+      (let ((prop-value (plist-get org-store-link-plist prop))
+            (type (plist-get org-store-link-plist :type)))
+        (if (equal prop-value "")
+            ""
+          (concat (when type (concat type ": ")) prop-value))))
 
-  (defun mrb/capture-location()
-    "This function is meant to be used inside org-capture-templates
-  to find a file and location where a captured ITEM should
-  be stored."
+    (defun mrb/capture-location()
+      "This function is meant to be used inside org-capture-templates
+    to find a file and location where a captured ITEM should
+    be stored."
 
-    ;; Open journal file without creating a journal entry This has the
-    ;; side effect that it creates the file and moves TODO items over
-    ;; on first call and leaves the cursor at the end of the file.
-    (org-journal-new-entry 1)
+      ;; Open journal file without creating a journal entry This has the
+      ;; side effect that it creates the file and moves TODO items over
+      ;; on first call and leaves the cursor at the end of the file.
+      (org-journal-new-entry 1)
 
-    ;; Find the id in this file and go there for the capture
-    (setq loc (org-find-entry-with-id "new-todo-receiver"))
-    (when loc
-      (goto-char loc)))
+      ;; Find the id in this file and go there for the capture
+      (setq loc (org-find-entry-with-id "new-todo-receiver"))
+      (when loc
+        (goto-char loc)))
 #+end_src
 
 Define functions for each piece of information captured, so they can be easily bound to keys.
@@ -1634,7 +1634,7 @@ The item lists can be made a whole lot more attractive by attaching some icons b
           ("Org"           ,(concat org-directory "images/org-mode-unicorn.png") nil nil :ascent center)
           ("Systeem"       ,(concat org-directory "images/systeembeheer.png") nil nil :ascent center)
           ("Wordpress"     ,(concat org-directory "images/wordpress.png") nil nil :ascent center)
-  ))
+          ))
 #+end_src
 
 Showing items in the agenda views reacts to a number of settings. In my setup I want blocked tasks hidden, that is the reason for blocking. Hide tasks which are DONE already and a deadline is coming up, no use showing those; the same goes for tasks which are DONE and are scheduled. In short, anything that does not need my attention needs to be hidden.
@@ -1688,23 +1688,23 @@ I have used =org-caldav= but even in just a read only setup it does not work pro
 I combine =ical2orgpy= with a cron job which pulls in the calendars I am interested into. Adding the produced org-mode files to the =org-agenda-files= variable is enough to get the information into the org-mode agenda.
 
 #+begin_src sh :exports code :tangle ~/bin/ical2org :shebang #!/bin/sh
-    # <<tangle-header>>
-    # manually test this script with `env -i /bin/sh`
-    #
-    # Mostly assume nothing is implied, like paths etc.
+  # <<tangle-header>>
+  # manually test this script with `env -i /bin/sh`
+  #
+  # Mostly assume nothing is implied, like paths etc.
 
-    BASEDIR=/home/mrb/dat/org/_calendars
-    ICAL2ORGPY="/home/mrb/.local/bin/ical2orgpy"
+  BASEDIR=/home/mrb/dat/org/_calendars
+  ICAL2ORGPY="/home/mrb/.local/bin/ical2orgpy"
 
-    # wget uses .netrc to gett auth info
+  # wget uses .netrc to gett auth info
   WGET="/usr/bin/wget -O wget.log -O - --quiet"
 
   # Base URI for calendar access, perhaps also put in the datafile?
   CALBASE="https://calendars.hsdev.com/mrb"
 
-    # Just go over each one manually
-    # FIXME make this nice with url . file pairs in a loop
-    cd $BASEDIR
+  # Just go over each one manually
+  # FIXME make this nice with url . file pairs in a loop
+  cd $BASEDIR
 
   # Read destination org file and the calendar id from a file .calendars
   while IFS=' ' read -r orgfile calendar_id
@@ -1839,60 +1839,60 @@ The latter is the most important one and will prevent creating 'gathering' items
 Orgmode can export to a variety of formats, I mainly use LaTeX (PDF) and HTML as destination format
 
 #+begin_src emacs-lisp
-  ;; {% raw %}
-  (setq org-export-latex-hyperref-format "\\ref{%s}:{%s}"
-        ;; old system
-        org-export-latex-title-command " "
-        ;; new system > 8.0
-        org-latex-title-command " "
+   ;; {% raw %}
+   (setq org-export-latex-hyperref-format "\\ref{%s}:{%s}"
+         ;; old system
+         org-export-latex-title-command " "
+         ;; new system > 8.0
+         org-latex-title-command " "
 
-        org-export-docbook-xsl-fo-proc-command "fop %i %o"
-        org-export-docbook-xslt-proc-command "xsltproc --output %o %s %i"
-        org-export-htmlize-output-type 'css
-        org-org-htmlized-css-url "orgmode.css"
-        org-latex-pdf-process
-        '("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
-          "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
-          "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f")
+         org-export-docbook-xsl-fo-proc-command "fop %i %o"
+         org-export-docbook-xslt-proc-command "xsltproc --output %o %s %i"
+         org-export-htmlize-output-type 'css
+         org-org-htmlized-css-url "orgmode.css"
+         org-latex-pdf-process
+         '("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
+           "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
+           "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f")
 
-        org-latex-listings 'minted
-        ;; Define a default background color name, this needs to be set through
-        ;; a latex header
-        org-latex-minted-options '(("bgcolor" "codebg"))
+         org-latex-listings 'minted
+         ;; Define a default background color name, this needs to be set through
+         ;; a latex header
+         org-latex-minted-options '(("bgcolor" "codebg"))
 
-        org-export-copy-to-kill-ring 'if-interactive
+         org-export-copy-to-kill-ring 'if-interactive
 
-        org-export-htmlized-org-css-url "orgmode.css"
-        org-export-latex-classes
-        '(
-                ("article" "\\documentclass[11pt,a4paper,twoside]{article}"
-                 ("\\section{%s}" . "\\section*{%s}")
-                 ("\\subsection{%s}" . "\\subsection*{%s}")
-                 ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
-                 ("\\paragraph{%s}" . "\\paragraph*{%s}")
-                 ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))
-                ("report" "\\documentclass[11pt]{report}"
-                 ("\\part{%s}" . "\\part*{%s}")
-                 ("\\chapter{%s}" . "\\chapter*{%s}")
-                 ("\\section{%s}" . "\\section*{%s}")
-                 ("\\subsection{%s}" . "\\subsection*{%s}")
-                 ("\\subsubsection{%s}" . "\\subsubsection*{%s}"))
-                ("book" "\\documentclass[11pt]{book}"
-                 ("\\part{%s}" . "\\part*{%s}")
-                 ("\\chapter{%s}" . "\\chapter*{%s}")
-                 ("\\section{%s}" . "\\section*{%s}")
-                 ("\\subsection{%s}" . "\\subsection*{%s}")
-                 ("\\subsubsection{%s}" . "\\subsubsection*{%s}"))
-                ("beamer" "\\documentclass{beamer}" org-beamer-sectioning))
+         org-export-htmlized-org-css-url "orgmode.css"
+         org-export-latex-classes
+         '(
+                 ("article" "\\documentclass[11pt,a4paper,twoside]{article}"
+                  ("\\section{%s}" . "\\section*{%s}")
+                  ("\\subsection{%s}" . "\\subsection*{%s}")
+                  ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+                  ("\\paragraph{%s}" . "\\paragraph*{%s}")
+                  ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))
+                 ("report" "\\documentclass[11pt]{report}"
+                  ("\\part{%s}" . "\\part*{%s}")
+                  ("\\chapter{%s}" . "\\chapter*{%s}")
+                  ("\\section{%s}" . "\\section*{%s}")
+                  ("\\subsection{%s}" . "\\subsection*{%s}")
+                  ("\\subsubsection{%s}" . "\\subsubsection*{%s}"))
+                 ("book" "\\documentclass[11pt]{book}"
+                  ("\\part{%s}" . "\\part*{%s}")
+                  ("\\chapter{%s}" . "\\chapter*{%s}")
+                  ("\\section{%s}" . "\\section*{%s}")
+                  ("\\subsection{%s}" . "\\subsection*{%s}")
+                  ("\\subsubsection{%s}" . "\\subsubsection*{%s}"))
+                 ("beamer" "\\documentclass{beamer}" org-beamer-sectioning))
 
 
-        org-export-with-tags nil
-        org-export-with-todo-keywords nil
+         org-export-with-tags nil
+         org-export-with-todo-keywords nil
          org-export-backends '(ascii html icalendar latex md odt org texinfo)
 
 
-        )
-  ;; {% endraw %}
+         )
+   ;; {% endraw %}
 #+end_src
 
 ** Journaling
@@ -2276,7 +2276,7 @@ Some operations on buffers:
 And the rest, for now uncategorized:
 
 #+begin_src emacs-lisp
-  ;; Open my emacs config; I wanted something with '~'
+    ;; Open my emacs config; I wanted something with '~'
   (bind-key "C-~" 'mrb/open-config)
 
   ;; Font scaling, like in firefox
@@ -2446,7 +2446,7 @@ While eshell is the more emacsy solution, it has some limitations which makes me
 The basic install is easy, but does need an emacs compiled with module support.
 
 #+begin_src emacs-lisp
-    (use-package vterm
+  (use-package vterm
     :if (fboundp'module-load)
     :config
     (setq vterm-timer-delay 0))
@@ -2859,10 +2859,10 @@ At times we want to send signed and/or encrypted mail
              (sign)
              (encrypt))))
 
-    ;; Add my bcc address to list of safe addresses in bcc for secure message
-    (add-to-list 'mml-secure-safe-bcc-list mrb/bcc-address)
+          ;; Add my bcc address to list of safe addresses in bcc for secure message
+          (add-to-list 'mml-secure-safe-bcc-list mrb/bcc-address)
 
-    ;; Always encrypt to self, so I can read my own messages
+          ;; Always encrypt to self, so I can read my own messages
           (setq mml-secure-openpgp-encrypt-to-self `(,user-gpg-encrypt-key)))
 #+end_src
 
@@ -2875,33 +2875,33 @@ It's not entirely clear which package is exactly responsible for what, but there
     :straight (:type built-in)
 
     :init
-  (defun mrb/message-mode-hook ()
-    "This configures message mode and thus other modes which inherit message mode."
-    ;; We have to make sure that the messages we produce are
-    ;; format=flowed compatible. This happens on encoding when sending
-    ;; it. However, during compose we need to make sure that what we
-    ;; offer to encode is suitable for it.
+    (defun mrb/message-mode-hook ()
+      "This configures message mode and thus other modes which inherit message mode."
+      ;; We have to make sure that the messages we produce are
+      ;; format=flowed compatible. This happens on encoding when sending
+      ;; it. However, during compose we need to make sure that what we
+      ;; offer to encode is suitable for it.
 
-    ;; Let's do the compose part first No reflowing is possible without
-    ;; having hard newlines, so lets always enable those
-    (use-hard-newlines t 'always)
+      ;; Let's do the compose part first No reflowing is possible without
+      ;; having hard newlines, so lets always enable those
+      (use-hard-newlines t 'always)
 
-    ;; Use visual line mode and visually break at word boundaries which
-    ;; is the same as the email encoding on send (see below)
-    (visual-line-mode 1)
-    (auto-fill-mode 0)                    ; Makes no sense in visual mode
+      ;; Use visual line mode and visually break at word boundaries which
+      ;; is the same as the email encoding on send (see below)
+      (visual-line-mode 1)
+      (auto-fill-mode 0)                    ; Makes no sense in visual mode
 
-    (setq visual-fill-column-width nil)       ; Make sure `fill-column gets used
-    (setq fill-column 80)                 ; Not the same as encode column below!
-    (visual-fill-column-mode 1)           ; Show it
+      (setq visual-fill-column-width nil)       ; Make sure `fill-column gets used
+      (setq fill-column 80)                 ; Not the same as encode column below!
+      (visual-fill-column-mode 1)           ; Show it
 
-    ;; Next, do the encoding and sending part
-    ;; Set the fill column on encoding (send)
-    ;; Q: where does the 66 come from, surely it could be a little bit more?
-    (setq fill-flowed-encode-column 66)
+      ;; Next, do the encoding and sending part
+      ;; Set the fill column on encoding (send)
+      ;; Q: where does the 66 come from, surely it could be a little bit more?
+      (setq fill-flowed-encode-column 66)
 
-    ;; This enables the f=f encoding
-    (setq mml-enable-flowed t))
+      ;; This enables the f=f encoding
+      (setq mml-enable-flowed t))
 
     :hook (message-mode . mrb/message-mode-hook)
 
@@ -3008,8 +3008,8 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
          ;; Use global config, but restore what was changed in other contexts
          :vars `((user-mail-address . ,mrb/default-email-address)
                  (mu4e-compose-signature . (with-current-buffer
-                                            (find-file-noselect message-signature-file)
-                                          (buffer-string)))))
+                                               (find-file-noselect message-signature-file)
+                                             (buffer-string)))))
        ,(make-mu4e-context
          :name "Private"
          :match-func (lambda (msg)
@@ -3069,24 +3069,24 @@ When mu4e start, it always opens in its main screen, which contains the main ope
           mu4e-confirm-quit nil
 
           mu4e-bookmarks (list
-           '(:name "Unread messages"
-                               :query "flag:unread and not flag:trashed"
-                               :key ?u)
-           '(:name "INBOX"
-                               :query "(flag:unread or flag:new or maildir:/INBOX) and not (flag:draft or flag:flagged or flag:deleted or maildir:/Trash or flag:trashed)"
-                               :key ?i)
-           '(:name "TODO list"
+                          '(:name "Unread messages"
+                                  :query "flag:unread and not flag:trashed"
+                                  :key ?u)
+                          '(:name "INBOX"
+                                  :query "(flag:unread or flag:new or maildir:/INBOX) and not (flag:draft or flag:flagged or flag:deleted or maildir:/Trash or flag:trashed)"
+                                  :key ?i)
+                          '(:name "TODO list"
                                   :query "flag:flagged and not flag:trashed"
-                               :key ?+)
-           '(:name "Today's messages"
-                               :query "date:today..now"
-                               :key ?d)
-           '(:name "Trash"
+                                  :key ?+)
+                          '(:name "Today's messages"
+                                  :query "date:today..now"
+                                  :key ?d)
+                          '(:name "Trash"
                                   :query "maildir:/Trash or flag:trashed"
-                               :key ?t)
-           '(:name "Junk"
-                               :query "maildir:/Junk"
-                               :key ?j)))
+                                  :key ?t)
+                          '(:name "Junk"
+                                  :query "maildir:/Junk"
+                                  :key ?j)))
 #+end_src
 **** Header view
 The first view after searching is a list of mail headers. Set config vars for this view and define the visualisation of the marks. I need an extra action to mark mail as junk which, on processing, moves the marked messages to the junk folder
@@ -3107,11 +3107,11 @@ The first view after searching is a list of mail headers. Set config vars for th
    mu4e-headers-visible-lines 20  ; Default of 10 is a bit small
    mu4e-headers-auto-update nil   ; Prevent confusion
 
-    ;; Make header configuration explicit
+   ;; Make header configuration explicit
    mu4e-headers-fields '((:flags . 6)
-            (:human-date . 12)
-            (:mailing-list . 10)
-            (:from . 22)
+                         (:human-date . 12)
+                         (:mailing-list . 10)
+                         (:from . 22)
                          (:subject . nil))
 
    ;; Define marks, possibly redundant, but I'd like to see them here.
@@ -3196,9 +3196,9 @@ Sieve is used on the server to filter our mail and this is accessed by the sieve
 #+begin_src emacs-lisp
   (use-package sieve
     :init
-  (defun dos2unix ()
-    "Replace DOS eolns CR LF with Unix eolns CR"
-    (interactive)
+    (defun dos2unix ()
+      "Replace DOS eolns CR LF with Unix eolns CR"
+      (interactive)
       (goto-char (point-min))
       (while (search-forward "\r" nil t) (replace-match "")))
     :commands sieve-manage
@@ -3366,7 +3366,7 @@ Let's start with some generic development related settings and packages
 #+begin_src emacs-lisp
   (use-package ggtags)                    ; not used very much
 
-  (use-package cmake-mode)                              ; adjusts auto-mode-alist on load
+  (use-package cmake-mode)                ; adjusts auto-mode-alist on load
 
   (use-package yaml-mode)                 ; used by ansible, magit(?)
 #+end_src
@@ -3374,31 +3374,31 @@ Let's start with some generic development related settings and packages
 For most of the languages I use (Bash, python, C, Go, HTML Haskell, Lua), the Language Server Protocol seems to be supported by =lsp-mode=, so I'm setting this up generally here and enable it for each language I'm using if it is supported.
 
 #+begin_src emacs-lisp
-    (use-package lsp-mode
-      :commands (lsp-deferred lsp)
+  (use-package lsp-mode
+    :commands (lsp-deferred lsp)
 
-      :init
-      (use-package lsp-ui
-        :commands lsp-ui-mode)
+    :init
+    (use-package lsp-ui
+      :commands lsp-ui-mode)
 
-      ;; Enable lsp for languages I use
-      :hook (((c++-mode c-mode
-                        css-mode html-mode js2-mode
-                        python-mode
-                        sh-mode
-                        yaml-mode
-                        go-mode)  . lsp-deferred)
-             (lsp-mode . lsp-enable-which-key-integration))
+    ;; Enable lsp for languages I use
+    :hook (((c++-mode c-mode
+                      css-mode html-mode js2-mode
+                      python-mode
+                      sh-mode
+                      yaml-mode
+                      go-mode)  . lsp-deferred)
+           (lsp-mode . lsp-enable-which-key-integration))
 
-      :config
-      (setq lsp-enable-snippet nil
-            lsp-prefer-flymake nil
-            lsp-ui-doc-position 'bottom
-            read-process-output-max (* 1024 1024) ; As per https://emacs-lsp.github.io/lsp-mode/page/performance/
-            lsp-prefer-capf t
-            lsp-idle-delay 0.5              ; Tuning for frustration
-            )
-      )
+    :config
+    (setq lsp-enable-snippet nil
+          lsp-prefer-flymake nil
+          lsp-ui-doc-position 'bottom
+          read-process-output-max (* 1024 1024) ; As per https://emacs-lsp.github.io/lsp-mode/page/performance/
+          lsp-prefer-capf t
+          lsp-idle-delay 0.5              ; Tuning for frustration
+          )
+    )
 #+end_src
 
 Make our source look a bit more attractive by enabling =prettify-symbol-mode= in all programming modes
@@ -3640,22 +3640,22 @@ Not sure how to bind this though. I'd like it close to C-x C-e obviously
 [[https://www.nongnu.org/geiser][Geiser]] is, among other things, a repl for schemes. I try to use one, mostly for educational purposes. I chose guile because it also claims to support =emacs-lisp= and might be the future vm on which emacs-lisp will run. So, let's have it and use paredit in its REPL.
 
 #+begin_src emacs-lisp
-      (use-package geiser
-        ;; repository moved and straight.el does not know about it yet
-        :straight (:host gitlab :repo "emacs-geiser/geiser")
-        :after paredit
+  (use-package geiser
+    ;; repository moved and straight.el does not know about it yet
+    :straight (:host gitlab :repo "emacs-geiser/geiser")
+    :after paredit
     :hook ((geiser-repl-mode . enable-paredit-mode)
            (geiser-repl-mode . mrb/prettify-symbols))
-        :config
+    :config
     ;; Add implementations to support
-        (use-package geiser-guile
-          :straight (:host gitlab :repo "emacs-geiser/guile"))
-        (use-package geiser-chez
-               :straight (:host gitlab :repo "emacs-geiser/chez")
-               :config
-               (setq geiser-chez-binary "chez"))
-        (setq geiser-active-implementations '(guile chez)
-              geiser-repl-send-on-return-p nil
+    (use-package geiser-guile
+      :straight (:host gitlab :repo "emacs-geiser/guile"))
+    (use-package geiser-chez
+      :straight (:host gitlab :repo "emacs-geiser/chez")
+      :config
+      (setq geiser-chez-binary "chez"))
+    (setq geiser-active-implementations '(guile chez)
+          geiser-repl-send-on-return-p nil
           geiser-default-implementation 'guile))
 #+end_src
 
@@ -3690,10 +3690,10 @@ The defacto standard for a development environment in Emacs for common-lisp is e
               (font-lock-syntactic-face-function
                . lisp-font-lock-syntactic-face-function))))
 
-  :config
-  (setq inferior-lisp-program "/usr/bin/sbcl"
-        sly-lisp-implementations '((sbcl ("sbcl" "--core" "/home/mrb/.sbcl/sbcl.core-for-sly")))
-        sly-net-coding-system 'utf-8-unix)
+    :config
+    (setq inferior-lisp-program "/usr/bin/sbcl"
+          sly-lisp-implementations '((sbcl ("sbcl" "--core" "/home/mrb/.sbcl/sbcl.core-for-sly")))
+          sly-net-coding-system 'utf-8-unix)
 
     ;; Nyxt exposes a repl we can use
     <<nyxt-sly-config>>
@@ -3776,18 +3776,18 @@ Features I'm interested in: issue commenting, pull requests
     ;; Enable links to magit fromm org
     (use-package orgit)
 
-  (use-package forge
-    :config
-    (setq forge-add-pullreq-refspec 'ask
-          forge-pull-notifications t
-          forge-topic-list-limit '(60 . 0))
+    (use-package forge
+      :config
+      (setq forge-add-pullreq-refspec 'ask
+            forge-pull-notifications t
+            forge-topic-list-limit '(60 . 0))
 
-    ;; Only show assigned stuff
-    (magit-add-section-hook
-     'magit-status-sections-hook
-     'forge-insert-assigned-issues   nil t)
-    (magit-add-section-hook
-     'magit-status-sections-hook
+      ;; Only show assigned stuff
+      (magit-add-section-hook
+       'magit-status-sections-hook
+       'forge-insert-assigned-issues   nil t)
+      (magit-add-section-hook
+       'magit-status-sections-hook
        'forge-insert-assigned-pullreqs   nil t)))
 #+end_src
 

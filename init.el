@@ -18,7 +18,7 @@
 (message (concat
           "Native compilation is "
           (if (and (fboundp 'native-comp-available-p) (native-comp-available-p))
-    (progn
+              (progn
                 (setq comp-deferred-compilation t)
                 "")
             "*not* ")
