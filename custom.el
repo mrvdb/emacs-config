@@ -118,7 +118,7 @@
  '(reb-re-syntax 'string)
  '(request-log-level 'verbose)
  '(safe-local-variable-values
-   '((magit-todos-exclude-globs "_minted-mrb/*" "*.texi")
+   '((magit-todos-exclude-globs "_minted-mrb/*" "*.texi" "org-config.org")
      (eval visual-fill-column-mode t)
      (eval visual-line-mode t)
      (eval setq visual-fill-column-width: nil)
