@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent :noweb no-export
 
-Last update: <2022-04-15 17:50:55>
+Last update: <2022-04-16 15:56:39>
 
 This is my emacs configuration file that is loaded with =org-babel-load-file= in the Emacs init file. The intent is to have as much of my Emacs configuration in here as possible. The system works as a literal programming system where with a tangle the elisp code that actually makes up my configuration is extracted automatically and loaded.
 
@@ -380,6 +380,7 @@ Using pdf-tools for PDF handling. This is a lot better than docview. I'm a bit a
                 ("C-s" . 'isearch-forward)
                 ("m"   . 'mrb/mailfile)
                 ("q"   . 'kill-this-buffer)
+                ([remap pdf-misc-print-document] . 'mrb/pdf-misc-print-pages)
             :map pdf-annot-edit-contents-minor-mode-map
                 ("<return>"   . 'pdf-annot-edit-contents-commit)
                 ("<S-return>" .  'newline))
@@ -393,10 +394,23 @@ Using pdf-tools for PDF handling. This is a lot better than docview. I'm a bit a
     (setq-default pdf-view-display-size 'fit-page) ;scale to fit page by default
     (setq pdf-annot-activate-created-annotations t ; automatically annotate highlights
           pdf-view-resize-factor 1.1              ; more fine-grained zooming
-          pdf-misc-print-program "/usr/bin/lpr"
+          pdf-misc-print-program-executable "/usr/bin/lp"
           pdf-view-midnight-colors '("#DCDCCC" . "#383838")) ; Not sure what this is
 
-    (add-to-list 'revert-without-query ".+\\.pdf"))
+    (add-to-list 'revert-without-query ".+\\.pdf")
+
+    ;; NOTE: assumes lp as printer program!
+    (defun mrb/pdf-misc-print-pages(filename pages &optional interactive-p)
+      "Wrapper for `pdf-misc-print-document` to add page selection support"
+      (interactive (list (pdf-view-buffer-file-name)
+                         (read-string "Page range (empty for all pages): "
+                                      (number-to-string (pdf-view-current-page)))
+                         t) pdf-view-mode)
+      (let ((pdf-misc-print-program-args
+             (if (not (string-blank-p pages))
+                 (cons (concat "-P " pages) pdf-misc-print-program-args)
+               pdf-misc-print-program-args)))
+        (pdf-misc-print-document filename))))
 #+end_src
 
 Integrate this with orgmode as well. =org-pdftools= provides a link type, so we can link /into/ pdf documents. =pdf-tools-org= provides utility functions to help export pdf annotations into org mode and vice versa
