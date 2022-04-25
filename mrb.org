@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent :noweb no-export
 
-Last update: <2022-04-16 16:46:27>
+Last update: <2022-04-25 12:01:09>
 
 This is my emacs configuration file that is loaded with =org-babel-load-file= in the Emacs init file. The intent is to have as much of my Emacs configuration in here as possible. The system works as a literal programming system where with a tangle the elisp code that actually makes up my configuration is extracted automatically and loaded.
 
@@ -1057,7 +1057,7 @@ When emacs does not determine the right mode, I sometimes want a mode-string som
   (defun mrb/insert-mode-string()
     "Inserts a mode string for the current mode at beginning of the current buffer"
     (interactive)
-    (let ((m (symbol-name (buffer-majormode))))
+    (let ((m (symbol-name (mrb/buffer-majormode))))
       (save-excursion
         (goto-char (point-min))
         (insert "-*- mode:"
