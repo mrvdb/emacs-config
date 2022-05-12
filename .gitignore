@@ -65,3 +65,4 @@ mastodon.plstore
 /speed-type/
 *.aux
 /_minted-mrb/
+/.cache/
