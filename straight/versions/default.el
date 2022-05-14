@@ -76,7 +76,7 @@
  ("melpa" . "4b695ee03d16e9253674cedaef785c2545113b67")
  ("message-view-patch" . "40bc2e554fc1d0b6f0c403192c0a3ceaa019a78d")
  ("mic-paren" . "d0410c7d805c9aaf51a1bcefaaef092bed5824c4")
- ("mu" . "eb22ec450c064e7eadf4ad9d0ddc0b2c35b10f7f")
+ ("mu" . "201acfbbd38d030826698f39e49d50878e025590")
  ("mu4e-alert" . "91f0657c5b245a9de57aa38391221fb5d141d9bd")
  ("mu4e-jump-to-list.el" . "4d362a668be4ae624ee96bf7806b25505b4bdf5c")
  ("mu4e-query-fragments.el" . "8d93ede3772353e2dbc307de03e06e37ea6a0b6c")
@@ -126,7 +126,7 @@
  ("sly" . "4513c382f07a2a2cedb3c046231b69eae2f5e6f0")
  ("spaceline" . "9a81afa52738544ad5e8b71308a37422ca7e25ba")
  ("spinner" . "34905eae12a236753fa88abc831eff1e41e8576e")
- ("straight.el" . "5e9ca867fb3fbde05b092906458493c9f7d80719")
+ ("straight.el" . "99ba608ed85e8814d89f00e09f3d99d76ee4f3d3")
  ("sudo-save" . "b82a37da41185f89133bf5b45574f58d275f0653")
  ("svg-lib" . "5ff87b7f9a85e728360a63d8e4ae7aaa7eccf7d3")
  ("svg-tag-mode" . "fee61c6a0b0570bd24fd335efef17c7385297aa0")
@@ -147,4 +147,4 @@
  ("yaml-mode" . "535273d5a1eb76999d20afbcf4d9f056d8ffd2da")
  ("yaml.el" . "34c300b08579b72c7c92aefee1f4b500913f0c85")
  ("zeal-at-point" . "0fc3263f44e95acd3e9d91057677621ce4d297ee"))
-:beta
+:gamma
