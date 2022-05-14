@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent :noweb no-export
 
-Last update: <2022-04-26 13:35:52>
+Last update: <2022-05-14 15:36:50>
 
 This is my emacs configuration file that is loaded with =org-babel-load-file= in the Emacs init file. The intent is to have as much of my Emacs configuration in here as possible. The system works as a literal programming system where with a tangle the elisp code that actually makes up my configuration is extracted automatically and loaded.
 
@@ -500,18 +500,37 @@ For even more esoteric characters we have to do some extra work. No font provide
 The problem with applying this function is that we need to be 'done' with our visual initialization or otherwise they'll do nothing (at least that I can see). So, let's group our corrections in a function and call that when we are done with our visual (X) init.
 
 #+begin_src emacs-lisp
-  (use-package unicode-fonts)
+      (use-package unicode-fonts
+        :demand t
+        )
 
-  (defun mrb/unicode-font-corrections()
-    (interactive)
-    (unicode-fonts-setup)
-  )
+      (defun mrb/unicode-font-corrections()
+        (interactive)
+        (unicode-fonts-setup)
+        ;; Add a line like the following  for each char displaying improperly
+        (mrb/fix-fontset-font "Symbola" #x24C5) ; noto Ⓟ line-height too high
+        (mrb/fix-fontset-font "Symbola" #x24c1) ; noto Ⓛ line-height too high
+      )
 #+end_src
 
 So, when characters do not show properly, the steps to take now are:
 1. Find a font which has the char
 2. Map the character(-range) to that font
 3. Optional: define a convenient way to type the character
+
+#+begin_src emacs-lisp
+  (defun mrb/fix-fontset-font ( family from &optional to)
+    "Make characters FROM to TO come from FAMILY. The TO parameter
+    defaults to the same value as the FROM parameter. The FAMILY
+    parameter, when specified as nil defaults to 'FreeSerif'"
+    (set-fontset-font
+     t                                    ; apply to the default mapping
+     (cons from (or to from))             ; if to empty, just map to another font
+     (font-spec :family (or family "FreeSerif"))
+     ))
+
+
+#+end_src   
 
 To make my life a bit easier, using the =all the icons= package for using special symbols.
 
