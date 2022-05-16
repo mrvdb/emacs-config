@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent :noweb no-export
 
-Last update: <2022-05-16 20:37:27>
+Last update: <2022-05-16 20:43:34>
 
 This is my emacs configuration file that is loaded with =org-babel-load-file= in the Emacs init file. The intent is to have as much of my Emacs configuration in here as possible. The system works as a literal programming system where with a tangle the elisp code that actually makes up my configuration is extracted automatically and loaded.
 
@@ -3782,6 +3782,7 @@ Features I'm interested in: issue commenting, pull requests
 
 #+begin_src emacs-lisp
   (use-package magit
+    :demand t
     :after (org fullframe)
     :commands magit-status
     :bind
