@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent :noweb no-export
 
-Last update: <2022-05-25 11:40:55>
+Last update: <2022-05-28 21:32:31>
 
 This is my emacs configuration file that is loaded with =org-babel-load-file= in the Emacs init file. The intent is to have as much of my Emacs configuration in here as possible. The system works as a literal programming system where with a tangle the elisp code that actually makes up my configuration is extracted automatically and loaded.
 
@@ -3679,23 +3679,20 @@ Not sure how to bind this though. I'd like it close to C-x C-e obviously
 [[https://www.nongnu.org/geiser][Geiser]] is, among other things, a repl for schemes. I try to use one, mostly for educational purposes. I chose guile because it also claims to support =emacs-lisp= and might be the future vm on which emacs-lisp will run. So, let's have it and use paredit in its REPL.
 
 #+begin_src emacs-lisp
-  (use-package geiser
-    ;; repository moved and straight.el does not know about it yet
-    :straight (:host gitlab :repo "emacs-geiser/geiser")
-    :after paredit
-    :hook ((geiser-repl-mode . enable-paredit-mode)
+  ;; Specific implementations depend onn geiser
+  (use-package geiser-guile
+      :straight (:host gitlab :repo "emacs-geiser/guile")
+      :ensure t
+      :after paredit
+      :hook ((geiser-repl-mode . enable-paredit-mode)
            (geiser-repl-mode . mrb/prettify-symbols))
-    :config
-    ;; Add implementations to support
-    (use-package geiser-guile
-      :straight (:host gitlab :repo "emacs-geiser/guile"))
-    (use-package geiser-chez
-      :straight (:host gitlab :repo "emacs-geiser/chez")
+
       :config
-      (setq geiser-chez-binary "chez"))
-    (setq geiser-active-implementations '(guile chez)
-          geiser-repl-send-on-return-p nil
-          geiser-default-implementation 'guile))
+      (setq geiser-active-implementations '(guile)
+            geiser-guile-binary "/usr/bin/guile3"
+            geiser-repl-send-on-return-p nil
+            geiser-default-implementation 'guile) ;chez isnt available for ppc64?
+      )
 #+end_src
 
 *** Common lisp
