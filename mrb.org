@@ -2691,11 +2691,14 @@ The package as is, is already useful for searching locations and storing links t
 #+begin_src emacs-lisp
   (use-package osm
     :straight (:host github :repo "minad/osm")
+    :commands (osm osm-mode)
+    :mode ("\\.gpx" . osm-mode)
+    :bind (:map osm-mode-map
+                ("q" . (lambda() (interactive) (quit-window t))))
     :init
     ;; Load Org link support
     (with-eval-after-load 'org
       (require 'osm-ol))
-    :commands (osm)
     :config
     (setq osm-outdoor-url (concat
                            "https://tile.thunderforest.com/outdoors/{%z}/{%x}/{%y}.png?apikey="
@@ -2703,9 +2706,12 @@ The package as is, is already useful for searching locations and storing links t
           map5-base (concat "https://s.map5.nl/map/"
                             (password-store-get "API/map5.nl")
                             "/tiles/")
-          osm-map5-opentopo-url  (concat map5-base "opentopo/EPSG900913/{%z}/{%x}/{%y}.jpeg")
-          osm-map5-opensimpletopo-url  (concat map5-base "opensimpletopo/EPSG900913/{%z}/{%x}/{%y}.jpeg")
-          osm-map5-openlufo-url  (concat map5-base "openlufo/EPSG900913/{%z}/{%x}/{%y}.jpeg")
+          osm-map5-opentopo-url (concat map5-base
+                                        "opentopo/EPSG900913/{%z}/{%x}/{%y}.jpeg")
+          osm-map5-opensimpletopo-url (concat map5-base
+                                              "opensimpletopo/EPSG900913/{%z}/{%x}/{%y}.jpeg")
+          osm-map5-openlufo-url (concat map5-base
+                                        "openlufo/EPSG900913/{%z}/{%x}/{%y}.jpeg")
 
           osm-server-list
           `((default
