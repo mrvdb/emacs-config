@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent :noweb no-export
 
-Last update: <2022-06-01 15:14:01>
+Last update: <2022-06-07 17:57:03>
 
 This is my emacs configuration file that is loaded with =org-babel-load-file= in the Emacs init file. The intent is to have as much of my Emacs configuration in here as possible. The system works as a literal programming system where with a tangle the elisp code that actually makes up my configuration is extracted automatically and loaded.
 
@@ -3474,6 +3474,32 @@ Make our source look a bit more attractive by enabling =prettify-symbol-mode= in
   (add-hook 'prog-mode-hook 'mrb/prettify-symbols)
   (add-hook 'lisp-interaction-mode-hook 'mrb/prettify-symbols)
 #+end_src
+
+In general, the syntax highlighting of emacs is sufficient, but is based on defining regular expression to match language contents to color them. There is a better way to do this; based on generating a semantic tree representation of the language in question. There is a tool called [[https://tree-sitter.github.io/][tree-sitter]] which does this.
+
+The main advantages of the methode that tree-sitter uses are:
+- the same tree representation is used for all languages, so adding new languages is relatively easy
+- using the representation for syntax highlighting is just one application: code folding or semantic extending a region, all of which are available in emacs in other ways, is a lot better using the tree-sitter method.
+- it's super fast. fast enough to keep up with typing.
+
+An interface from emacs to tree-sitter luckily exist. Although it is not stable yet, I'm going to enable the highlighting for supported languages.
+
+#+begin_src emacs-lisp
+  (use-package tree-sitter
+    :init
+    (setq tsc-dyn-get-from '(:compilation)) ; dont fetch binaries, ppc64 likely is not there
+    :config
+    ;; Needs to be set before tree-sitter-langs is loaded
+    (setq tree-sitter-langs-grammar-dir
+          (expand-file-name "straight/repos/tree-sitter-langs/" user-emacs-directory))
+    (use-package tree-sitter-langs :demand t)
+
+    ;; Enable the mode globally, including highlighting
+    (global-tree-sitter-mode)
+    (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode))
+#+end_src
+
+The emacs packages for tree-sitter require tree-sitter version 0.19.3 for now to work as intented and I had to patch tree-sitter-langs to omit /devDependencies/ on building some language grammars. Compilation of the included grammars went fine after that and they will be automatically active.
 
 ** Reference & documentation
 While emacs itself has a very nicely documentation system, I still don't understand why this is not interpolated into every other mode and or language.
