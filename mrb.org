@@ -3507,6 +3507,7 @@ Now that we have a tree, we can take advantage of that for folding, so let's con
   (use-package ts-fold
     :after tree-sitter
     :straight (ts-fold :type git :host github :repo "jcs090218/ts-fold")
+    :bind (("M-S-<iso-lefttab>" . ts-fold-toggle))
     :config
     ;; Enable folding when tree-sitter gets swtiched on
     (add-hook 'tree-sitter-after-on-hook #'ts-fold-indicators-mode))
