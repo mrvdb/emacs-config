@@ -4,7 +4,7 @@
 #+OPTIONS:  H:5 toc:nil creator:nil email:nil author:t timestamp:t tags:nil tex:verbatim
 #+PROPERTY: header-args :results silent :noweb no-export
 
-Last update: <2022-06-07 17:57:03>
+Last update: <2022-06-08 10:20:00>
 
 This is my emacs configuration file that is loaded with =org-babel-load-file= in the Emacs init file. The intent is to have as much of my Emacs configuration in here as possible. The system works as a literal programming system where with a tangle the elisp code that actually makes up my configuration is extracted automatically and loaded.
 
@@ -3500,6 +3500,19 @@ An interface from emacs to tree-sitter luckily exist. Although it is not stable 
 #+end_src
 
 The emacs packages for tree-sitter require tree-sitter version 0.19.3 for now to work as intented and I had to patch tree-sitter-langs to omit /devDependencies/ on building some language grammars. Compilation of the included grammars went fine after that and they will be automatically active.
+
+Now that we have a tree, we can take advantage of that for folding, so let's configure that as well.
+
+#+begin_src emacs-lisp
+  (use-package ts-fold
+    :after tree-sitter
+    :straight (ts-fold :type git :host github :repo "jcs090218/ts-fold")
+    :config
+    ;; Enable folding when tree-sitter gets swtiched on
+    (add-hook 'tree-sitter-after-on-hook #'ts-fold-indicators-mode))
+#+end_src
+
+Ideally, the folding should be spread out over the major modes and have support for tree-sitter there automatically.
 
 ** Reference & documentation
 While emacs itself has a very nicely documentation system, I still don't understand why this is not interpolated into every other mode and or language.
