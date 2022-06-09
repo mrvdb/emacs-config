@@ -3338,53 +3338,77 @@ Elfeed allows to interactively subscribe to a feed (defaulting to what is in the
     (elfeed-org))
 #+end_src
 ** IRC
-I run a weechat proxy on a vps for IRC. Luckily there is a good emacs package to use irc in emacs directly.
+
+I used to run a weechat relay on a vps for IRC. The main reason for this was that the relay allowed multiple clients to be active at the same time an have at least an attempt at saving the state betwee multiple devices.
+
+The major downside is that a special weechat client is needed to make this work, which is not the same as a standard IRC client. This made the choice for clients very limited, but luckily there was an emacs client.
+
+After using it some time and maintaining some local patches; the main program is largely unmaintained, it was time to look for an alternative.
+
+While having the weechat relay is very nice, I also want to have a /"standard"/ IRC configuration where everything is happening in the client, possibly augmented by having an IRC bouncer to maintain persistent connections. [[https://wiki.znc.in/ZNC][ZNC]] might almost have the featureset to do what weechat does, or very closely to it.
+
+ERC seems to be the most used IRC client for emacs and included with it, so it would make sense to use it. I like the simplicity of [[https://github.com/emacs-circe/circe/wiki][circe]] though, so I opted to create a config for that.
 
 #+begin_src emacs-lisp
-  (use-package weechat
-    :if (version< "28" emacs-version)     ;patch for 28 does not work for earlier versions
-
-    :demand t
-    ;; this works, but we /are/ inside weechat when we need this, can't it be auto-loaded?
-    :straight (:includes (weechat-tracking weechat-notifications weechat-image)
-               :fork t)
-    ;; I now have a patch in place ignoring the problem until issue is resolved upstream
-    ;; See: https://github.com/the-kenny/weechat.el/issues/80
-    :after tracking
-    :hook (weechat-mode . visual-line-mode)
+  (use-package circe
+    :commands (circe mrb/chat)
     :config
-    (use-package weechat-tracking )
-    (use-package weechat-notifications )
-    (use-package weechat-image )
-    (setq weechat-host-default "chat.hsdev.com"
-          weechat-port-default 8443
-          weechat-mode-default 'ssl
-          weechat-auto-monitor-buffers t   ;; Auto monitor all buffers for now
-          weechat-tracking-types '(:message :highlight)
-          weechat-image-max-height 300
-          weechat-image-resize t
-          weechat-buffer-line-limit 10000
-          weechat-color-list '(unspecified
-                               "#2e3440" "#4c566a" "#d08770" "#bf616a"
-                               "#d8dee9" "#a3be8c" "#e5e9f0"
-                               "#ebcb8b" "#81a1c1" "#5e81ac"
-                               "#eceff4" "#b48ead" "#88c0d0"
-                               "#8fbcbb" "#3b4252"
-                               "#434c5e"))
+    (setq
+     ;; Get just a connection to ZNC for now
+     circe-network-options
+       `(("HSD"
+          :host "chat.hsdev.com" :port 6667
+          :nick "mrb"
+          :pass ,(concat "mrb@emacs:"
+                         (password-store-get "chat.hsdev.com"))
+          :channels ("#emacs"
+                     "#talos-workstation"
+                     "#vikings")))
 
-      (add-to-list 'weechat-modules 'weechat-notifications)
-      (add-to-list 'weechat-modules 'weechat-tracking)
-      (add-to-list 'weechat-modules 'weechat-image)
+     ;; Simplify and imporove formatting
+     circe-format-say-format-say "{nick:10s}: {body}" ; right align nicks at 10th pos
+     circe-format-server-part "*** Part: {nick} left {channel}"
+     circe-format-server-quit "*** Quit: {nick}"
+     circe-format-server-join "*** Join: {nick}"
 
-      ;; Make a convenient connect function
-      (defun mrb/chat()
-        (interactive)
-        (weechat-connect
-         weechat-host-default
-         weechat-port-default
-         nil
-         weechat-mode-default)))
+     lui-time-stamp-position 'right-margin
+     lui-fill-type nil
+     circe-reduce-lurker-spam t           ; dont show notices for non talkers
+     circe-default-part-message ""        ; no parting reason
+     circe-default-quit-message "")       ; no quitting reason
+
+
+    (enable-lui-track)                   ; show indicator to where has been read
+    (enable-circe-display-images)        ; turn links to images into images
+    (enable-circe-color-nicks)           ; color nicks
+
+    ;; Faces after enables, so the faces are there
+    ;; FIXME: do not use color names here, but functional names, which we can change centrally
+    (set-face-attribute 'circe-prompt-face   nil :foreground mrb/cursor-color :height 1.3)
+    (set-face-attribute 'lui-time-stamp-face nil :height 0.8)
+    (set-face-attribute 'lui-track-bar       nil :background "LawnGreen") ; fix this one!
+
+    ;; Gather buffer local and line UI settings
+    (defun mrb/lui-setup ()
+      (setq fringes-outside-margins t     ; first margins, then fringes
+            right-margin-width 7          ; [hh:mm]
+            word-wrap t                   ;
+            wrap-prefix "         ")      ; line this up with size of nick in `circe-format-say
+      (setf (cdr (assoc 'continuation fringe-indicator-alist)) nil))
+    (add-hook 'lui-mode-hook 'mrb/lui-setup)
+
+    ;; Set the prompt properly on entering the chat mode
+    (defun mrb/set-circe-prompt ()
+      (lui-set-prompt (propertize "➜ " 'face 'circe-prompt-face)))
+    (add-hook 'circe-chat-mode-hook 'mrb/set-circe-prompt)
+
+    ;; Make a convenient connect function
+    ;; TODO make this re-entrant
+    (defun mrb/chat()
+      (interactive)
+      (circe "HSD")))
 #+end_src
+
 ** Mastodon
 Not messaging or chatting perse, but a micro blog social network. The 'capture a toot' is hot-keyed through =xbindkeys= like other capture commands.
 
