@@ -3365,11 +3365,13 @@ ERC seems to be the most used IRC client for emacs and included with it, so it w
                      "#talos-workstation"
                      "#vikings")))
 
-     ;; Simplify and imporove formatting
+     ;; Simplify and improve formatting, remove some details
      circe-format-say "{nick:10s}: {body}" ; right align nicks at 10th pos
      circe-format-server-part "*** Part: {nick} left {channel}"
+     circe-format-server-quit-channel "*** Quit: {nick} left {channel}"
      circe-format-server-quit "*** Quit: {nick}"
      circe-format-server-join "*** Join: {nick}"
+     circe-format-server-rejoin "*** Re-joined: {nick}"
 
      lui-time-stamp-position 'right-margin
      lui-fill-type nil
