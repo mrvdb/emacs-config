@@ -2701,7 +2701,6 @@ The package as is, is already useful for searching locations and storing links t
   (use-package osm
     :straight (:host github :repo "minad/osm")
     :commands (osm osm-mode)
-    :mode ("\\.gpx" . osm-mode)
     :bind (:map osm-mode-map
                 ("q" . (lambda() (interactive) (quit-window t))))
     :init
