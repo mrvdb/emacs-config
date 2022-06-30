@@ -573,8 +573,8 @@ Although I think the 16 color system is a bit simplistic and, for emacs at least
   (use-package base16-theme
     :config
     ;; Do config here and finally load the theme
-    (setq base16-distinct-fringe-background nil
-          base16-highlight-mode-line 'contrast
+    (setq base16-theme-distinct-fringe-background nil
+          base16-theme-highlight-mode-line 'contrast
           base16-theme-256-color-source "terminal")
     (load-theme 'base16-nord t)
 
@@ -705,7 +705,7 @@ Although I think the 16 color system is a bit simplistic and, for emacs at least
             ))
 
     ;; Apply our adjustment using the theme function
-    (base16-set-faces 'base16-nord base16-nord-colors base16-adjustments))
+    (base16-theme-set-faces 'base16-nord base16-nord-theme-colors base16-adjustments))
 #+end_src
 
 Miscellaneous other visual settings follow.
