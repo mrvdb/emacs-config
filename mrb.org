@@ -377,6 +377,7 @@ Using pdf-tools for PDF handling. This is a lot better than docview. I'm a bit a
 
 #+begin_src emacs-lisp
   (use-package pdf-tools
+    :straight (:host github :repo "vedang/pdf-tools")
     :demand t                             ; prevent configuring while opening pdf files
     :after (fullframe)
     :magic ("%PDF" . pdf-view-mode)
@@ -395,6 +396,9 @@ Using pdf-tools for PDF handling. This is a lot better than docview. I'm a bit a
                 ("<S-return>" .  'newline))
 
     :config
+    ;; TODO uncommenting the next line helps when rebuilding faild
+    ;(setq pdf-info-epdfinfo-program
+    ;      (expand-file-name "server/epdfinfo" (straight--repos-dir "pdf-tools")))
     (pdf-tools-install :no-query) ; :no-query auto builds epfinfo when needed
     (require 'pdf-annot)
 
