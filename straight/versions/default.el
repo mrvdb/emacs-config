@@ -75,7 +75,7 @@
  ("melpa" . "b6a2f221f15a20916fb6a90f57ea5c5c3a658751")
  ("message-view-patch" . "40bc2e554fc1d0b6f0c403192c0a3ceaa019a78d")
  ("mic-paren" . "d0410c7d805c9aaf51a1bcefaaef092bed5824c4")
- ("mu" . "98b0353c004e7f8c5325042679f7915a52005de7")
+ ("mu" . "a423a8bbcc34b3c3e394008020b0475e426a1f3f")
  ("mu4e-alert" . "91f0657c5b245a9de57aa38391221fb5d141d9bd")
  ("mu4e-jump-to-list.el" . "4d362a668be4ae624ee96bf7806b25505b4bdf5c")
  ("mu4e-query-fragments.el" . "8d93ede3772353e2dbc307de03e06e37ea6a0b6c")
