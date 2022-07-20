@@ -3503,6 +3503,7 @@ Make our source look a bit more attractive by enabling =prettify-symbol-mode= in
     ;; If you want to see the effect: enable prettify-symbols mode
     (setq prettify-symbols-alist
         '(("lambda" . ?λ)
+          ("lambda*" . "λ*")
           ;("map"    . ?↦)                 ; this one is a bit of a pain actually
           ("->"     . ?⟶)
           ("<-"     . ?⟵)
