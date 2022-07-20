@@ -3779,7 +3779,7 @@ Not sure how to bind this though. I'd like it close to C-x C-e obviously
 
       :config
       (setq geiser-active-implementations '(guile)
-            geiser-guile-binary "/usr/bin/guile3"
+            geiser-guile-binary "/home/mrb/.guix-profile/bin/guile"
             geiser-repl-send-on-return-p nil
             geiser-default-implementation 'guile) ;chez isnt available for ppc64?
       )
