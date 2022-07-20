@@ -3357,66 +3357,70 @@ While having the weechat relay is very nice, I also want to have a /"standard"/ 
 ERC seems to be the most used IRC client for emacs and included with it, so it would make sense to use it. I like the simplicity of [[https://github.com/emacs-circe/circe/wiki][circe]] though, so I opted to create a config for that.
 
 #+begin_src emacs-lisp
-  (use-package circe
-    :commands (circe mrb/chat)
-    :config
-    (setq
-     ;; Get just a connection to ZNC for now
-     circe-network-options
-       `(("HSD"
-          :host "chat.hsdev.com" :port 6667
-          :nick "mrb"
-          :pass ,(concat "mrb@emacs:"
-                         (password-store-get "chat.hsdev.com"))
-          :channels ("#emacs"
-                     "#talos-workstation"
-                     "#vikings")))
+    (use-package circe
+      :commands (circe mrb/chat)
+      :config
+      (setq circe-default-nick "mrvdb"
+            circe-network-options
+            `(("libera"
+               :host "chat.hsdev.com" :port 6667
+               :pass ,(concat "mrb@emacs/libera:"
+                              (password-store-get "chat.hsdev.com"))
+               :channels ("#emacs"
+                          "#talos-workstation"
+                          "#vikings"))
+              ("oftc"
+               :host "chat.hsdev.com" :port 6667
+               :pass ,(concat "mrb@emacs/oftc:"
+                              (password-store-get "chat.hsdev.com"))
+               :channels ("#osm")))
 
-     ;; Simplify and improve formatting, remove some details
-     circe-format-say "{nick:10s}: {body}" ; right align nicks at 10th pos
-     circe-format-server-part "*** Part: {nick} left {channel}"
-     circe-format-server-quit-channel "*** Quit: {nick} left {channel}"
-     circe-format-server-quit "*** Quit: {nick}"
-     circe-format-server-join "*** Join: {nick}"
-     circe-format-server-rejoin "*** Re-joined: {nick}"
+            ;; Simplify and improve formatting, remove some details
+            circe-format-say "{nick:10s}: {body}" ; right align nicks at 10th pos
+            circe-format-server-part "*** Part: {nick} left {channel}"
+            circe-format-server-quit-channel "*** Quit: {nick} left {channel}"
+            circe-format-server-quit "*** Quit: {nick}"
+            circe-format-server-join "*** Join: {nick}"
+            circe-format-server-rejoin "*** Re-joined: {nick}"
 
-     lui-time-stamp-position 'right-margin
-     lui-fill-type nil
-     circe-reduce-lurker-spam t           ; dont show notices for non talkers
-     circe-default-part-message ""        ; no parting reason
-     circe-default-quit-message "")       ; no quitting reason
+            lui-time-stamp-position 'right-margin
+            lui-fill-type nil
+            circe-reduce-lurker-spam t           ; dont show notices for non talkers
+            circe-default-part-message ""        ; no parting reason
+            circe-default-quit-message "")       ; no quitting reason
 
 
-    (enable-lui-track)                   ; show indicator to where has been read
-    (enable-circe-display-images)        ; turn links to images into images
-    (enable-circe-color-nicks)           ; color nicks
+      (enable-lui-track)                   ; show indicator to where has been read
+      (enable-circe-display-images)        ; turn links to images into images
+      (enable-circe-color-nicks)           ; color nicks
 
-    ;; Faces after enables, so the faces are there
-    ;; FIXME: do not use color names here, but functional names, which we can change centrally
-    (set-face-attribute 'circe-prompt-face   nil :foreground mrb/cursor-color :height 1.3)
-    (set-face-attribute 'lui-time-stamp-face nil :height 0.8)
-    (set-face-attribute 'lui-track-bar       nil :background "LawnGreen") ; fix this one!
+      ;; Faces after enables, so the faces are there
+      ;; FIXME: do not use color names here, but functional names, which we can change centrally
+      (set-face-attribute 'circe-prompt-face   nil :foreground mrb/cursor-color :height 1.3)
+      (set-face-attribute 'lui-time-stamp-face nil :height 0.8)
+      (set-face-attribute 'lui-track-bar       nil :background "LawnGreen") ; fix this one!
 
-    ;; Gather buffer local and line UI settings
-    (defun mrb/lui-setup ()
-      (setq fringes-outside-margins t     ; first margins, then fringes
-            right-margin-width 7          ; [hh:mm]
-            word-wrap t                   ;
-            wrap-prefix "            ")   ; line this up with size of nick in `circe-format-say
-      (setf (cdr (assoc 'continuation fringe-indicator-alist)) nil))
-    (add-hook 'lui-mode-hook 'mrb/lui-setup)
+      ;; Gather buffer local and line UI settings
+      (defun mrb/lui-setup ()
+        (setq fringes-outside-margins t     ; first margins, then fringes
+              right-margin-width 7          ; [hh:mm]
+              word-wrap t                   ;
+              wrap-prefix "            ")   ; line this up with size of nick in `circe-format-say
+        (setf (cdr (assoc 'continuation fringe-indicator-alist)) nil))
+      (add-hook 'lui-mode-hook 'mrb/lui-setup)
 
-    ;; Set the prompt properly on entering the chat mode
-    (defun mrb/set-circe-prompt ()
-      (lui-set-prompt (propertize (concat "[" circe-chat-target "]➜ ")
-                                  'face 'circe-prompt-face)))
-    (add-hook 'circe-chat-mode-hook 'mrb/set-circe-prompt)
+      ;; Set the prompt properly on entering the chat mode
+      (defun mrb/set-circe-prompt ()
+        (lui-set-prompt (propertize (concat "[" circe-chat-target "]➜ ")
+                                    'face 'circe-prompt-face)))
+      (add-hook 'circe-chat-mode-hook 'mrb/set-circe-prompt)
 
-    ;; Make a convenient connect function
-    ;; TODO make this re-entrant
-    (defun mrb/chat()
-      (interactive)
-      (circe "HSD")))
+      ;; Make a convenient connect function
+      ;; TODO make this re-entrant
+      (defun mrb/chat()
+        (interactive)
+        (circe "libera")
+        (circe "oftc")))
 #+end_src
 
 ** Mastodon
