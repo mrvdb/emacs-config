@@ -3701,6 +3701,14 @@ I am just starting out with haskell, but the two things that are probably needed
           haskell-interactive-popup-errors nil))
 #+end_src
 
+Enable the language server for haskell
+
+#+begin_src emacs-lisp
+  (use-package lsp-haskell
+    :after (haskell-mode lsp-mode)
+    :hook ((haskell-mode  haskell-literate-mode) . lsp))
+#+end_src
+
 Because the haskell environment can be different for each project, we need a way to adjust to that for certain things. One such thing is flycheck which will give false-negatives when checking haskell files if the specific build environment is not taken into account. The package flycheck-haskell automatically adjusts flycheck.
 
 #+begin_src emacs-lisp
