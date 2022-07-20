@@ -3470,6 +3470,7 @@ For most of the languages I use (Bash, python, C, Go, HTML Haskell, Lua), the La
       :commands lsp-ui-mode)
 
     ;; Enable lsp for languages I use
+    ;; TODO move these to their own blocks?
     :hook (((c++-mode c-mode
                       css-mode html-mode js2-mode
                       python-mode
@@ -3681,8 +3682,7 @@ I am just starting out with haskell, but the two things that are probably needed
 
 #+begin_src emacs-lisp
   (use-package haskell-mode
-    :requires ghc
-    :hook ((haskell-mode .interactive-haskell)
+    :hook ((haskell-mode . interactive-haskell)
            (haskell-mode . turn-on-haskell-doc)
            (haskell-mode . turn-on-haskell-indent))
 
