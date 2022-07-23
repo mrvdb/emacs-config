@@ -53,6 +53,8 @@ The config file =mrb.org= gets opened *a lot* because I tend to fiddle with this
     (find-file config-file))
 #+end_src
 
+
+
 Most of the time the editing process starts at the command line. Because I use emacs in server mode, this needs a little script.  The script does two things:
 1. check if we already have the emacs server, if not, start it;
 2. treat input from stdin a little bit special.
@@ -184,7 +186,7 @@ Now that we have =straight= we can use it to install =use-package=
   (straight-use-package 'use-package)
   (setq use-package-always-ensure nil   ; Make sure this is nil, so we do not use package.el
         use-package-verbose 'debug      ; FIXME: use a debug var for all of config?
-  )
+        )
   ;; From this point on we should be able to use `use-package
   (use-package straight
     :config
@@ -204,6 +206,18 @@ Now that we have =straight= we can use it to install =use-package=
   (use-package use-package-ensure-system-package)   ; because we are in use-package config
   (use-package bind-key)                  ; Load early, but see section [[Key bindings]]
 #+end_src
+
+As emacs lives inside the systemd environment it is not automatically the case that my shell environment is inherited. In many cases, this is not a problem, but for those cases that expect the same environment, I'm making explicit that the enviroment needs to be from the shell. We should do this a soon as =use-package= is useable.
+
+#+begin_src emacs-lisp
+   (use-package exec-path-from-shell
+     :demand t
+     :config
+     (exec-path-from-shell-initialize))
+#+end_src
+
+This makes sure that things like TeX and git and other programs run in the same context as they would in my shell. Especially for guix-installed programs this is important.
+
 
 * Personal information
 I'd like to arrange 3 things related to personal information:
@@ -1881,10 +1895,6 @@ Orgmode can export to a variety of formats, I mainly use LaTeX (PDF) and HTML as
          org-export-docbook-xslt-proc-command "xsltproc --output %o %s %i"
          org-export-htmlize-output-type 'css
          org-org-htmlized-css-url "orgmode.css"
-         org-latex-pdf-process
-         '("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
-           "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
-           "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f")
 
          org-latex-listings 'minted
          ;; Define a default background color name, this needs to be set through
