@@ -3254,7 +3254,8 @@ There are quite a few mu4e packages out there. Let's load them in one group for 
 
   ;; Patch highlighting inside messages
   (use-package message-view-patch
-    :hook (mu4e-view-mode . message-view-patch-highlight))
+    :after (magit)
+    :hook (gnus-part-display . message-view-patch-highlight))
 
   (use-package org-mu4e :after org)
 #+end_src
