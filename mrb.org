@@ -3813,6 +3813,28 @@ Not sure how to bind this though. I'd like it close to C-x C-e obviously
       )
 #+end_src
 
+While we're in the scheme section, let's configure =guix= and friend, which use scheme heavily
+
+#+begin_src emacs-lisp
+  (use-package guix
+    :config
+    ;; Assuming the Guix checkout is in ~/src/guix.
+    (with-eval-after-load 'geiser-guile
+      (add-to-list 'geiser-guile-load-path "~/dat/src/guix"))
+
+    ;; guix uses debbugs, but this should probably be closer to mu4e and gnus config
+    (use-package debbugs)
+
+    ;; Add yasnippett here, but probably split of later
+    (use-package yasnippet
+      :config
+      (setq yas-snippet-dirs
+            '("~/dat/src/guix/etc/snippets" ; guix project helpers
+              "~/.config/emacs/snippets"    ; sort of a default
+              ))
+      (yas-global-mode 1))
+    )
+#+end_src
 *** Common lisp
 The defacto standard for a development environment in Emacs for common-lisp is either the =slime= or =sly= package. The latter seems a bit more modern and easier to configure, so trying that one
 
