@@ -532,6 +532,8 @@ The problem with applying this function is that we need to be 'done' with our vi
 
   (defun mrb/unicode-font-corrections()
     (interactive)
+    ;; TODO this fails with recent emacs-28, finds '...' in unicode-fonts pcache file??
+    ;; TODO it works with emacs-29 but cache state is not save, so it runs on startup always
     (unicode-fonts-setup)
     ;; Add a line like the following  for each char displaying improperly
 
