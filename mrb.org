@@ -3702,18 +3702,18 @@ I am just starting out with haskell, but the two things that are probably needed
 
 #+begin_src emacs-lisp
   (use-package haskell-mode
-    :hook ((haskell-mode . interactive-haskell)
+    :hook (;(haskell-mode . interactive-haskell) ;; Produces elc load error
            (haskell-mode . turn-on-haskell-doc)
-           (haskell-mode . turn-on-haskell-indent))
+           (haskell-mode . haskell-indentation-mode))
 
     :mode "\‌\.hs\\'"
     :config
-    ;; Replace ⇒ with ⇉ q
-    ;; FIXME: i have a global prettifier, can't we use that?
+    ;; Replace ⇒ with ⇉
     (delete '("=>" . "⇒") haskell-font-lock-symbols-alist)
     (add-to-list 'haskell-font-lock-symbols-alist '("=>" . "⇉"))
     (setq haskell-font-lock-symbols t
-          haskell-interactive-popup-errors nil))
+          haskell-interactive-popup-errors nil
+          haskell-process-type 'stack-ghci))
 #+end_src
 
 Enable the language server for haskell
