@@ -78,7 +78,7 @@
  ("magit-todos" . "67fd80c2f10aec4d5b2a24b5d3d53c08cc1f05dc")
  ("markdown-mode" . "521658eb32e456681592443e04ae507c3a59ed07")
  ("markup-faces" . "98a807ed82473eb41c6a201ed7ef816d6bcd67b0")
- ("mastodon" . "f7de456e918fdde1c7728e6fe435d9d40d98dd4b")
+ ("mastodon" . "e4443ee61505b82f967dd4cb2d2cb5af999d4a41")
  ("melpa" . "b6a2f221f15a20916fb6a90f57ea5c5c3a658751")
  ("message-view-patch" . "40bc2e554fc1d0b6f0c403192c0a3ceaa019a78d")
  ("mic-paren" . "d0410c7d805c9aaf51a1bcefaaef092bed5824c4")

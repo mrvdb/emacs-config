@@ -3444,15 +3444,16 @@ Not messaging or chatting perse, but a micro blog social network. The 'capture a
 #+begin_src emacs-lisp
   ;; Mastodon in emacs
   (use-package mastodon
-  :config
-  (setq mastodon-instance-url "https://mastodon.nl"
+    :config
+    (setq mastodon-instance-url "https://mastodon.nl"
+          mastodon-active-user "mrb"
           ;; finds mastodon.nl in password-store and expects user field to be present
           mastodon-auth-source-file 'password-store)
 
-  ;; Convenience function
-  (defun mrb/capture-toot()
-    (interactive)
-    (mastodon-toot)))
+    ;; Convenience function
+    (defun mrb/capture-toot()
+      (interactive)
+      (mastodon-toot)))
 #+end_src
 
 #+begin_src sh :exports code :tangle ~/bin/capture-toot.sh :shebang #!/bin/sh
