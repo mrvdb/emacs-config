@@ -565,7 +565,9 @@ Let's set up some basics first, background dark, some default frame and cursor p
   (setq mrb/cursor-type '(bar . 3))             ; Slightly wide bar
   (setq mrb/cursor-color "DarkOrange")  ; in fat orange color
 
+
   (setq-default frame-background-mode 'dark)
+  (set-mouse-color "white")
 
   ;; Only show cursor in the active window.
   (setq-default cursor-in-non-selected-windows nil)
