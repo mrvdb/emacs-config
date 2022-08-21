@@ -580,22 +580,23 @@ Many settings have to do with how the screen looks and behaves in a visual way. 
 Let's set up some basics first, background dark, some default frame and cursor properties:
 
 #+begin_src emacs-lisp
-  (setq mrb/cursor-type '(bar . 3))             ; Slightly wide bar
-  (setq mrb/cursor-color "DarkOrange")  ; in fat orange color
+    (setq mrb/cursor-type '(bar . 3))             ; Slightly wide bar
+    (setq mrb/cursor-color "DarkOrange")  ; in fat orange color
 
 
-  (setq-default frame-background-mode 'dark)
-  (set-mouse-color "white")
+    (setq-default frame-background-mode 'dark)
+    (set-mouse-color "white")
 
-  ;; Only show cursor in the active window.
-  (setq-default cursor-in-non-selected-windows nil)
+    ;; Only show cursor in the active window.
+    (setq-default cursor-in-non-selected-windows nil)
 
-  ;;Default frame properties frame position, color, etc
-  (setq default-frame-alist
-        `((cursor-type . ,mrb/cursor-type )
-          (height . 60) (width . 100)
-          (cursor-color . ,mrb/cursor-color)
-          (internal-border-width . 24)))
+    ;;Default frame properties frame position, color, etc
+    (setq default-frame-alist
+          `((cursor-type . ,mrb/cursor-type )
+            (height . 60) (width . 100)
+            (cursor-color . ,mrb/cursor-color)
+            (internal-border-width . 24)
+            (mouse-color . "white")))
 #+end_src
 
 I'm using the [[https://github.com/arcticicestudio/nord][Nord color palette]]. This palette defines 16 colors.
