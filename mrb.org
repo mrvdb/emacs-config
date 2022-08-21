@@ -3012,7 +3012,7 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
   ;; (names are debian package names)
   (use-package mu4e
     :straight (:type git :host github :repo "djcb/mu"
-                     :pre-build (("./autogen.sh") ("make"))
+                     :pre-build (("./autogen.sh") ("ninja" "-C" "build"))
                      :files (:defaults "build/mu4e/*.el")
                      :includes (org-mu4e mu4e-icalendar))
 
