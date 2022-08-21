@@ -77,23 +77,41 @@ And edit the file obviously.
   # - adjustment to systemd invocation
   ME=$(basename $0)
   EC=`which emacsclient`
+  SNAME=server
+  SFILE=$XDG_RUNTIME_DIR/emacs/$SNAME
 
   # Default argument needs our socket in any case
-  ARGS="--socket-name=default --suppress-output"
+  ARGS="--socket-name=$SNAME --suppress-output"
 
   # Set to false when done
   debug() { false $@; }
 
-  # I could let emacsclient do this, but not using systemd, it
-  # is hard-coded to exec emacs --daemon, sigh
+  # Do we already have an emacs?
+  # I could let emacsclient do this automatically, but it
+  # is hard-coded to exec emacs --daemon (without socket name)
+
   # This goes along an emacs.service file obviously
   if ( ! systemctl -q --user is-active emacs );then
-      notify-send "Emacs server not found, starting...."
-      systemctl --user start emacs;
+      debug "Emacs systemd service not active...";
+
+      # We might have a socket though
+      if [ -S $SFILE ];then
+          # The systemd starting has always been a little problematic
+          # with the environment, so I might have a server running another
+          # way.
+          # FIXME: why not /just/ checking for the socket?
+          #
+          debug "..but server socket is there, using it..."
+      else
+          debug "...and we have no socket either."
+          notify-send "Starting Emacs server, this might take a while....";
+          emacs --bg-daemon=$SFILE
+          #systemctl --user start emacs
+      fi
   fi
 
   # Assert that the socket file exists
-  [ ! -f $XDG_RUNTIME_DIR/emacs/default ] || debug "Socket file not found???\n"
+  [ ! -S $SFILE ] || debug "Socket file not found???\n"
 
   # Handle special 'stdin' case
   if [ $# -ge 1 ] && [ "$1" == "-" ]; then
