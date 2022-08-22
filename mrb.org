@@ -3056,6 +3056,10 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
     <<mu4e-packages>>
 
     ;; FIXME: move these up
+    (defun mrb/setsigfile (ctxname)
+      (concat "~/Maildir/.signature-"
+              (downcase ctxname)))
+
     (setq
      ;; Override the default mail user agent with the mu4e specific one
      mail-user-agent 'mu4e-user-agent
@@ -3094,26 +3098,31 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
      mu4e-compose-context-policy 'nil     ; for compose, use current if nothing matches
      mail-signature-file  mrb/default-signature-file
 
+
      mu4e-contexts
-     `(,(make-mu4e-context
-         :name "Default"
-         ;; Use global config, but restore what was changed in other contexts
-         :vars `((user-mail-address      . ,mrb/default-email-address)
-                 (mail-signature-file    . ,mrb/default-signature-file)
-                 (mu4e-compose-signature . (with-current-buffer
-                                               (find-file-noselect mail-signature-file)
-                                             (buffer-string)))))
-       ,(make-mu4e-context
-         :name "Private"
-         :match-func (lambda (msg)
-                       (when msg
-                         (mu4e-message-contact-field-matches
-                          msg `(:to :cc :from) mrb/private-addresses)))
-         :vars `((user-mail-address     . ,mrb/default-private-address)
-                 (mail-signature-file   . ,mrb/private-signature-file)
-                 (mu4e-compose-signature . (with-current-buffer
-                                               (find-file-noselect mail-signature-file)
-                                             (buffer-string)))))
+     `(,(let* ((ctxname "Default")
+               (sigfile (mrb/setsigfile ctxname)))
+          (make-mu4e-context
+           :name ctxname
+           ;; Use global config, but restore what was changed in other contexts
+           :vars `((user-mail-address      . ,mrb/default-email-address)
+                   (mail-signature-file    . ,sigfile)
+                   (mu4e-compose-signature . (with-current-buffer
+                                                 (find-file-noselect mail-signature-file)
+                                               (buffer-string))))))
+       ,(let* ((ctxname "Private")
+               (sigfile (mrb/setsigfile ctxname)))
+          (make-mu4e-context
+           :name "Private"
+           :match-func (lambda (msg)
+                         (when msg
+                           (mu4e-message-contact-field-matches
+                            msg `(:to :cc :from) mrb/private-addresses)))
+           :vars `((user-mail-address     . ,mrb/default-private-address)
+                   (mail-signature-file   . ,sigfile)
+                   (mu4e-compose-signature . (with-current-buffer
+                                                 (find-file-noselect mail-signature-file)
+                                               (buffer-string))))))
        )
      )
 
