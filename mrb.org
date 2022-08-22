@@ -249,8 +249,11 @@ Seems like a good idea to start configuration with some details about me. The id
 
 #+begin_src emacs-lisp
   (setq mrb/default-email-address "marcel@hsdev.com"
+        mrb/default-signature-file "~/Maildir/.signature"
         mrb/private-addresses '("marcel@van-der-boom.nl" "m@rcel.van-der-boom.nl")
+        mrb/private-signature-file "~/Maildir/.signature-private"
         mrb/default-private-address (car mrb/private-addresses)
+
         mrb/bcc-address      "mrb+Sent@hsdev.com"
         user-full-name       "Marcel van der Boom"
         user-mail-address    mrb/default-email-address
@@ -3089,14 +3092,16 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
      ;; FIXME: Can we use the one that matched?
      mu4e-context-policy 'pick-first            ; When nothing matches only!
      mu4e-compose-context-policy 'nil     ; for compose, use current if nothing matches
+     mail-signature-file  mrb/default-signature-file
 
      mu4e-contexts
      `(,(make-mu4e-context
          :name "Default"
          ;; Use global config, but restore what was changed in other contexts
-         :vars `((user-mail-address . ,mrb/default-email-address)
+         :vars `((user-mail-address      . ,mrb/default-email-address)
+                 (mail-signature-file    . ,mrb/default-signature-file)
                  (mu4e-compose-signature . (with-current-buffer
-                                               (find-file-noselect message-signature-file)
+                                               (find-file-noselect mail-signature-file)
                                              (buffer-string)))))
        ,(make-mu4e-context
          :name "Private"
@@ -3104,8 +3109,11 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
                        (when msg
                          (mu4e-message-contact-field-matches
                           msg `(:to :cc :from) mrb/private-addresses)))
-         :vars `((user-mail-address . ,mrb/default-private-address)
-                 (mu4e-compose-signature . nil)))
+         :vars `((user-mail-address     . ,mrb/default-private-address)
+                 (mail-signature-file   . ,mrb/private-signature-file)
+                 (mu4e-compose-signature . (with-current-buffer
+                                               (find-file-noselect mail-signature-file)
+                                             (buffer-string)))))
        )
      )
 
