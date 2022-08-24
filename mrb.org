@@ -3036,7 +3036,7 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
     :straight (:type git :host github :repo "djcb/mu"
                      :pre-build (("./autogen.sh") ("ninja" "-C" "build"))
                      :files (:defaults "build/mu4e/*.el")
-                     :includes (org-mu4e mu4e-icalendar))
+                     :includes (mu4e-icalendar))
 
     :custom (mu4e-mu-binary (expand-file-name "build/mu/mu" (straight--repos-dir "mu")))
     :after (message fullframe selected)
@@ -3297,7 +3297,7 @@ There are quite a few mu4e packages out there. Let's load them in one group for 
     :after (magit)
     :hook (gnus-part-display . message-view-patch-highlight))
 
-  (use-package org-mu4e :after org)
+  ;(use-package org-mu4e :after org)
 #+end_src
 
 *** Sieve
