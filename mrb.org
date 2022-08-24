@@ -3791,6 +3791,10 @@ For creating web apps I use yesod, which is supported by a number of packages
       (add-hook 'before-save-hook #'lsp-organize-imports t t))
     (add-hook 'go-mode-hook #'lsp-go-install-save-hooks))
 #+end_src
+** Rust
+#+begin_src emacs-lisp
+(use-package rust-mode)
+#+end_src
 ** Lisp-like
 There are a number of languages which are lisp-like, not in the least Emacs lisp itself. It makes sense to group the configuration for these languages together. In the first part there will be configuration for all lisp-like languages (like the =paredit= configuration for example). For each specific implementation there may be augmentations to the config, or even a completely separate.
 
