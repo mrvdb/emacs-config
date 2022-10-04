@@ -979,7 +979,23 @@ The first is the easiest, as the format of =org-todo-keyword-faces= is nigh perf
 
     ;; This gets initialized the first time svg-tag-mode is called, so then it must have
     ;; the proper keywords in org-todo-keyword-faces
-    (setq svg-tag-tags (mapcar 'mrb/gen-svg-tags org-todo-keyword-faces)))
+    (setq svg-tag-tags (mapcar 'mrb/gen-svg-tags org-todo-keyword-faces))
+
+    ;; See: https://github.com/rougier/svg-tag-mode/issues/27
+    ;; Org agenda does not use font-lock, so needs separate overlay to render
+    (defun mrb/org-agenda-show-svg ()
+    (let* ((case-fold-search nil)
+           (keywords (mapcar #'svg-tag--build-keywords svg-tag--active-tags))
+           (keyword (car keywords)))
+      (while keyword
+        (save-excursion
+          (while (re-search-forward (nth 0 keyword) nil t)
+            (overlay-put (make-overlay
+                          (match-beginning 0) (match-end 0))
+                         'display  (nth 3 (eval (nth 2 keyword)))) ))
+        (pop keywords)
+        (setq keyword (car keywords)))))
+    (add-hook 'org-agenda-finalize-hook #'mrb/org-agenda-show-svg))
 #+end_src
 * Buffers and files
 How do I deal with all those buffers and files?
