@@ -3007,8 +3007,10 @@ It's not entirely clear which package is exactly responsible for what, but there
       ;; Q: where does the 66 come from, surely it could be a little bit more?
       (setq fill-flowed-encode-column 66)
 
-      ;; This enables the f=f encoding
-      (setq mml-enable-flowed t))
+      ;; This enables the f=f encoding for sending
+      (setq mml-enable-flowed t)
+      (setq mm-fill-flowed nil) ;; ??? I expected this to need the 't' valu???
+      )
 
     :hook (message-mode . mrb/message-mode-hook)
 
@@ -3057,7 +3059,13 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
     :custom (mu4e-mu-binary (expand-file-name "build/mu/mu" (straight--repos-dir "mu")))
     :after (message fullframe selected)
     :commands (mu4e mrb/compose-mail mrb/mailfile)
-    :hook (mu4e-view-mode . turn-on-visual-line-mode)
+    :hook (mu4e-view-mode . mrb/mu4e-view-mode-hook)
+
+    :config
+    (defun mrb/mu4e-view-mode-hook ()
+      (interactive)
+      (turn-on-visual-line-mode)
+      (setq mm-fill-flowed nil))
 
     :bind (:map mu4e-search-minor-mode-map
                 ("/" . mu4e-search)
