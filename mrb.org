@@ -77,6 +77,7 @@ And edit the file obviously.
   # - adjustment to systemd invocation
   ME=$(basename $0)
   EC=`which emacsclient`
+  EM=`which emacs`
   SNAME=server
   SFILE=$XDG_RUNTIME_DIR/emacs/$SNAME
 
@@ -105,7 +106,7 @@ And edit the file obviously.
       else
           debug "...and we have no socket either."
           notify-send "Starting Emacs server, this might take a while....";
-          emacs --bg-daemon=$SFILE
+          $EM --bg-daemon=$SFILE
           #systemctl --user start emacs
       fi
   fi
