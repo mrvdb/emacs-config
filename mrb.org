@@ -36,7 +36,6 @@ Small snippet to have last modified timestamp inserted when exporting this file 
 git log -1 --pretty="format:%ci" ~/.emacs.d/mrb.org
 #+END_SRC
 
-
 * Preparing for lift-off
 The first thing I want to take care of is to make customization possible and stored in a place to my liking. I want to load this first so anything in the configuration I define explicitly overrides it.
 
@@ -237,7 +236,6 @@ As emacs lives inside the systemd environment it is not automatically the case t
 
 This makes sure that things like TeX and git and other programs run in the same context as they would in my shell. Especially for guix-installed programs this is important.
 
-
 * Personal information
 I'd like to arrange 3 things related to personal information:
 1. register the proper identification to use;
@@ -433,8 +431,8 @@ Using pdf-tools for PDF handling. This is a lot better than docview. I'm a bit a
 
     :config
     ;; TODO uncommenting the next line helps when rebuilding faild
-    ;(setq pdf-info-epdfinfo-program
-    ;      (expand-file-name "server/epdfinfo" (straight--repos-dir "pdf-tools")))
+    (setq pdf-info-epdfinfo-program
+          (expand-file-name "server/epdfinfo" (straight--repos-dir "pdf-tools")))
     (pdf-tools-install :no-query) ; :no-query auto builds epfinfo when needed
     (require 'pdf-annot)
 
@@ -944,6 +942,7 @@ $$e^{ix} = cos x + i sinx$$
 
 #+begin_src emacs-lisp
   (use-package texfrag
+    :disabled t
     :diminish
     :config
     (setq texfrag-prefix "")
@@ -1157,6 +1156,7 @@ First bring in a bunch of modes that are used regularly, but have no other confi
   (use-package php-mode              :mode "\\.php\\'")
   (use-package sass-mode             :mode "\\.sass\\'")
   (use-package markdown-mode         :mode "\\.md\\'")
+  (use-package udev-mode             :mode "\\.rules\\'")
 #+end_src
 
 Now, do the other mode related packages which require a bit of configuration.
@@ -3613,6 +3613,7 @@ An interface from emacs to tree-sitter luckily exist. Although it is not stable 
 
 #+begin_src emacs-lisp
   (use-package tree-sitter
+    :disabled t                           ; Throws invalid versionn syntax error
     :init
     (setq tsc-dyn-get-from '(:compilation)) ; dont fetch binaries, ppc64 likely is not there
     :config
@@ -4022,6 +4023,7 @@ Features I'm interested in: issue commenting, pull requests
     (use-package orgit)
 
     (use-package forge
+      :disabled
       :config
       (setq forge-add-pullreq-refspec 'ask
             forge-pull-notifications t
@@ -4061,7 +4063,10 @@ I am considering using a generic hook again to enable the method and either usin
 
 #+begin_src emacs-lisp
   (use-package git-auto-commit-mode
-    :diminish "Auto-committed")
+    :diminish "Auto-committed"
+    :after (org)
+    :hook (org-mode . git-auto-commit-mode)
+    )
 #+end_src
 *** Miscellaneous
 A collection of loosely development related things.
@@ -4120,4 +4125,5 @@ When we are all done with this, provide it.
 # Local Variables:
 # writefreely-post-id: "wf83bq5jwz"
 # writefreely-post-token: nil
+# git-auto-commit-mode: nil
 # End:
