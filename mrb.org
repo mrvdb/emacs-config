@@ -3291,10 +3291,16 @@ After selecting a message in the header view, a message view will open.
 
   :config
   (setq mu4e-view-use-old nil
-        mu4e-view-show-images t              ; This creates connections, possible privacy issue?
+        mu4e-view-show-images t           ; This creates connections, possible privacy issue?
         mu4e-view-image-max-width 800
         mu4e-view-image-max-height 600
-        mu4e-view-show-addresses t)           ; Show actual addresses instead of names
+        mu4e-view-show-addresses t        ; Show actual addresses instead of names
+
+        mu4e-view-actions '(("c - capture message" . mu4e-action-capture-message)
+                            ("v - view in browser" . mu4e-action-view-in-browser)
+                            ("s - save attachments" . mu4e-view-save-attachments)
+                            ("t - show this thread" . mu4e-action-show-thread)))
+
 #+end_src
 **** Addon packages
 There are quite a few mu4e packages out there. Let's load them in one group for now, so it will be easy to /disable plugins/ if we need to.
