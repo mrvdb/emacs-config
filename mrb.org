@@ -4132,5 +4132,5 @@ When we are all done with this, provide it.
 # Local Variables:
 # writefreely-post-id: "wf83bq5jwz"
 # writefreely-post-token: nil
-# git-auto-commit-mode: nil
+# eval: (git-auto-commit-mode -1)
 # End:
