@@ -1157,6 +1157,7 @@ First bring in a bunch of modes that are used regularly, but have no other confi
   (use-package sass-mode             :mode "\\.sass\\'")
   (use-package markdown-mode         :mode "\\.md\\'")
   (use-package udev-mode             :mode "\\.rules\\'")
+  (use-package dockerfile-mode       :mode "Dockerfile")
 #+end_src
 
 Now, do the other mode related packages which require a bit of configuration.
