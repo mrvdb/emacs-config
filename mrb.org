@@ -1855,14 +1855,15 @@ Plantuml transforms diagram specifications with a /mini programming language/ in
 ** Refiling
 A big part of organizing information and task is shuffling things around. The 'thing' to throw around is a heading and 'refiling' is the term org-mode uses for throwing.
 
-When filing, or capturing we want the items at the bottom of what we are filing it into. The main reason for this is that a large part of the sections that contain items are ordered. Should we file the item at the top, in many cases that would mean it is the most imminent thing to do, which is not the case.
+When filing, or capturing we want the items at the bottom of what we are filing it into. The main reason for this is that a large part of the sections that contain items are ordered. Should we file the item at the top, in many cases that would mean it is the most imminent thing to do, which is not the case. For some files, we *do* want the items on top though
 
 #+begin_src emacs-lisp
-  (setq org-reverse-note-order nil    ; File at the bottom of an entry
-        org-refile-allow-creating-parent-nodes 'confirm
-        org-refile-use-outline-path 'file
-        org-outline-path-complete-in-steps nil
-        org-refile-use-cache t)
+   (setq org-reverse-note-order '(("workshop.org" . t)
+                                  (".*" . nil))    ; File for others at the bottom of an entry
+         org-refile-allow-creating-parent-nodes 'confirm
+         org-refile-use-outline-path 'file
+         org-outline-path-complete-in-steps nil
+         org-refile-use-cache t)
 #+end_src
 
 The base list of files I want to be able to refile to are:
