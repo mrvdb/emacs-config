@@ -430,7 +430,7 @@ Using pdf-tools for PDF handling. This is a lot better than docview. I'm a bit a
                 ("<S-return>" .  'newline))
 
     :config
-    ;; TODO uncommenting the next line helps when rebuilding faild
+    ;; TODO uncommenting the next line helps when rebuilding fails
     (setq pdf-info-epdfinfo-program
           (expand-file-name "server/epdfinfo" (straight--repos-dir "pdf-tools")))
     (pdf-tools-install :no-query) ; :no-query auto builds epfinfo when needed
@@ -3763,6 +3763,7 @@ My personal style will be called =mrb= and basing it on the =linux= style.
 
   ;; EditorConfig support, not used much by the looks of it
   (use-package editorconfig
+    :disabled t
     :diminish
     :config
     (editorconfig-mode 1))
@@ -3944,7 +3945,7 @@ The defacto standard for a development environment in Emacs for common-lisp is e
                . lisp-font-lock-syntactic-face-function))))
 
     :config
-    (setq inferior-lisp-program "/usr/bin/sbcl"
+    (setq inferior-lisp-program "/home/mrb/.guix-profile/bin/sbcl"
           sly-lisp-implementations '((sbcl ("sbcl" "--core" "/home/mrb/.sbcl/sbcl.core-for-sly")))
           sly-net-coding-system 'utf-8-unix)
 
@@ -4071,8 +4072,8 @@ I am considering using a generic hook again to enable the method and either usin
 
 #+begin_src emacs-lisp
   (use-package git-auto-commit-mode
-    ;:diminish "Auto-committed"
-    :after (org)
+                                          ;:diminish "Auto-committed"
+    :after (org)                          ; FIXME: race condition as we use an org file to init emacs
     :hook (org-mode . git-auto-commit-mode)
     )
 #+end_src
@@ -4126,12 +4127,11 @@ For now, just the ansible package, and some access to its documentation will suf
 When we are all done with this, provide it.
 
 #+begin_src emacs-lisp
-(provide 'mrb)
-;;; mrb ends here
+  (provide 'mrb)
+  ;;; mrb ends here
 #+end_src
 
 # Local Variables:
 # writefreely-post-id: "wf83bq5jwz"
 # writefreely-post-token: nil
-# eval: (git-auto-commit-mode -1)
 # End:
