@@ -730,10 +730,6 @@ Although I think the 16 color system is a bit simplistic and, for emacs at least
             (mrb/org-todo-keyword-READING   :foreground "#bf616a" :weight bold)
             (mrb/org-todo-keyword-PLAN      :foreground "#d8dee9" :weight bold)
 
-            ;; Helm selection
-            (helm-selection                 :foreground "black" :background "goldenrod2")
-            (helm-M-x-key                   :foreground "#bf616a")
-
             ;; Mu4e
             (mu4e-header-highlight-face     :inherit hl-line :underline nil :foreground nil)
             (mu4e-context-face              :inherit mu4e-link-face)
@@ -786,8 +782,7 @@ Miscellaneous other visual settings follow.
      ;; We use the spacemacs theme, which gives us the evil state indicator
      (spaceline-spacemacs-theme 'tracking)
 
-     ;; Enable the helm mode
-     (spaceline-helm-mode))
+     )
 
   (use-package mic-paren
     :config
@@ -2337,8 +2332,6 @@ I am running the emacs daemon and sometime when I quit emacs, I want it to quit 
 
 Probably the most important key is =M-x= (as set by default). That key gives access to other commands within emacs, so it better be effective. If I wasn't already used to it, I'd certainly not consider =M-x= as a first candidate. The main objection I have is that the two keys are close to each-other, making it hard to press in a typing flow.
 
-I'm using helm which has a replacement for the =M-x= command, see the helm config for details.
-
 Set of bindings on which I would like to have cut, copy and paste and friends:
 
 #+begin_src emacs-lisp
@@ -2622,20 +2615,21 @@ Having the completion pop up automatically is annoying in most cases, so I disab
 
 #+begin_src emacs-lisp
   (use-package company
-    :commands company-mode
+    :commands (global-company-mode company-mode)
     :diminish company-mode
     :bind
     (:map company-active-map
           ("C-n" . company-select-next)
           ("C-p" . company-select-previous)
-     :map company-mode-map
+          :map company-mode-map
           ;; Remap normal indent-for-tab-command
           ([remap indent-for-tab-command] . company-indent-or-complete-common))
 
-    :config
-    (setq company-backends '(company-bbdb company-semantic company-clang company-cmake company-capf company-files
-                             (company-dabbrev-code company-gtags company-etags company-keywords)
-                             company-oddmuse)
+    :init
+    (setq company-backends
+          '(company-bbdb company-semantic company-clang company-cmake company-capf company-files
+                         (company-dabbrev-code company-gtags company-etags company-keywords)
+                         company-oddmuse)
           company-idle-delay 0.0
           company-minimum-prefix-length 1
           company-require-match 'never
@@ -2663,21 +2657,47 @@ As popwin is a dependency of which-key, we already have it.
     (popwin-mode 1))
 #+end_src
 
-For most of the completion that is needed which is not inline (for which I am using the =company= package, helm seems to be the most powerful solution. I used to use ido, but helm seems a lot easier and more broad.
+For most of the completion that is needed which is not inline (for which I am using the =company= package, helm seems to be the most powerful solution, but feels isolated. For every integration something extra seems to be needed. =Vertico= seems the completing framework that fits the integration requirement best; it clearly states so in its goal to only depending on the Emacs API and not create a new one. Integrating it with others looks a lot more orthogonal than Helm.
 
 #+begin_src emacs-lisp
-  (use-package helm
-    :diminish
-    :bind
-    (("C-c M-x" . 'execute-extended-command) ;; Save the default
-     ("M-x"     . 'helm-M-x)                 ;; Replace M-x
-     ("<menu>"  . 'helm-M-x)                 ;; ..and on the menu key as well
-     ("C-x C-f" . 'helm-find-files)          ;; Find files
-     ("C-x b" .   'helm-buffers-list))       ;; Find buffers
+  (use-package vertico
+    :straight (vertico :files (:defaults "extensions/*")
+                       :includes (vertico-reverse))
+
     :config
-    (helm-mode 1)                            ;; All commands using completing-read (and what else?)
-  )
+    (vertico-mode)
+    (vertico-reverse-mode))
 #+end_src
+
+The first thing to complement =vertico= is the =orderless= package. My main use is to have the matching for completing items match 'first second' as well as 'second first' regardless of their order.
+
+#+begin_src emacs-lisp
+  (use-package orderless
+    :custom
+    (completion-styles '(orderless basic)))
+#+end_src
+
+The default list of candidates can be nicely augmented with =marginalia= which shows extra info about the matching items in the right aligned margin.
+
+#+begin_src emacs-lisp
+  (use-package marginalia
+    :custom
+    (marginalia-align 'right)
+
+    :init
+    (marginalia-mode))
+#+end_src
+
+The =consult= package exposes a number of =consult-= commands which work with the completing framework and typically put an original command on steroids. Some of the commands support live previewing while browsing the selections.
+
+#+begin_src emacs-lisp
+  (use-package consult
+    ;; Replace some bindings with a consult command, so we get things on steroids
+    :bind (("C-x b" . consult-buffer) ; original: switch-to-buffer
+           )
+    )
+#+end_src
+
 ** Ad 6. Guaranteed response-time
 I haven't found a solution for this yet, but also have not found it to be a problem that needs solving in practice so far.
 
@@ -2687,7 +2707,6 @@ The multiple cursors package is often used for repetitive editing.
 
 #+begin_src emacs-lisp
   (use-package multiple-cursors
-    ;; Binding mc/edit-lines because I can't call it from M-x with helm
     :bind (("C-c e" . 'mc/edit-lines)))
 #+end_src
 
@@ -3114,7 +3133,7 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
      mu4e-decryption-policy 'ask
      mu4e-update-interval 120             ; we just index, no retrieve, so 2mins is fine
 
-     ;; Set completing function to standard, so helm works
+     ;; Set completing function to standard, so completing frameworks can use it
      mu4e-completing-read-function 'completing-read
      mu4e-save-multiple-attachments-without-asking t
 
@@ -3620,33 +3639,34 @@ The main advantages of the methode that tree-sitter uses are:
 An interface from emacs to tree-sitter luckily exist. Although it is not stable yet, I'm going to enable the highlighting for supported languages.
 
 #+begin_src emacs-lisp
-  (use-package tree-sitter
-    :disabled t                           ; Throws invalid versionn syntax error
-    :init
-    (setq tsc-dyn-get-from '(:compilation)) ; dont fetch binaries, ppc64 likely is not there
-    :config
-    ;; Needs to be set before tree-sitter-langs is loaded
-    (setq tree-sitter-langs-grammar-dir
-          (expand-file-name "straight/repos/tree-sitter-langs/" user-emacs-directory))
-    (use-package tree-sitter-langs :demand t)
+  ;; (use-package tree-sitter
+  ;;   :disabled t                           ; Throws invalid version syntax error
+  ;;   :init
+  ;;   (setq tsc-dyn-get-from '(:compilation)) ; dont fetch binaries, ppc64 likely is not there
+  ;;   :config
+  ;;   ;; Needs to be set before tree-sitter-langs is loaded
+  ;;   (setq tree-sitter-langs-grammar-dir
+  ;;         (expand-file-name "straight/repos/tree-sitter-langs/" user-emacs-directory))
+  ;;   (use-package tree-sitter-langs :demand t)
 
-    ;; Enable the mode globally, including highlighting
-    (global-tree-sitter-mode)
-    (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode))
+  ;;   ;; Enable the mode globally, including highlighting
+  ;;   (global-tree-sitter-mode)
+  ;;   (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode))
 #+end_src
 
-The emacs packages for tree-sitter require tree-sitter version 0.19.3 for now to work as intented and I had to patch tree-sitter-langs to omit /devDependencies/ on building some language grammars. Compilation of the included grammars went fine after that and they will be automatically active.
+The emacs packages for tree-sitter require tree-sitter version 0.19.3 for now to work as intended and I had to patch tree-sitter-langs to omit /devDependencies/ on building some language grammars. Compilation of the included grammars went fine after that and they will be automatically active.
 
 Now that we have a tree, we can take advantage of that for folding, so let's configure that as well.
 
 #+begin_src emacs-lisp
-  (use-package ts-fold
-    :after tree-sitter
-    :straight (ts-fold :type git :host github :repo "jcs090218/ts-fold")
-    :bind (("M-S-<iso-lefttab>" . ts-fold-toggle))
-    :config
-    ;; Enable folding when tree-sitter gets swtiched on
-    (add-hook 'tree-sitter-after-on-hook #'ts-fold-indicators-mode))
+  ;; (use-package ts-fold
+  ;;   :after tree-sitter
+  ;;   :straight (ts-fold :type git :host github :repo "jcs090218/ts-fold")
+  ;;   :bind (("M-S-<iso-lefttab>" . ts-fold-toggle))
+  ;;   :config
+  ;;   ;; Enable folding when tree-sitter gets swtiched on
+  ;;   (add-hook 'tree-sitter-after-on-hook #'ts-fold-indicators-mode)
+  ;;  )
 #+end_src
 
 Ideally, the folding should be spread out over the major modes and have support for tree-sitter there automatically.
@@ -4071,11 +4091,11 @@ I'm using the first method on relevant files. The disadvantage of this method is
 I am considering using a generic hook again to enable the method and either using =git commit --amend= and commit squashing if working on more structured commits. For files that I really do not want autocommit to run I can use a file local variable to disable the hook (or the minor mode)
 
 #+begin_src emacs-lisp
-  (use-package git-auto-commit-mode
-                                          ;:diminish "Auto-committed"
-    :after (org)                          ; FIXME: race condition as we use an org file to init emacs
-    :hook (org-mode . git-auto-commit-mode)
-    )
+  ;; (use-package git-auto-commit-mode
+  ;;                                         ;:diminish "Auto-committed"
+  ;;   :after (org)                          ; FIXME: race condition as we use an org file to init emacs
+  ;;   :hook (org-mode . git-auto-commit-mode)
+  ;;   )
 #+end_src
 *** Miscellaneous
 A collection of loosely development related things.
@@ -4094,21 +4114,10 @@ I use github gists sometimes, but rather have more open options as well. These a
 **** Grepping files
 Searching for terms in files is a hard problem, but the vast majority of my use-cases can just be solved by searching for terms in the current project root, almost always defined by having a .git directory in a parent directory. So, let's start there and see what else I'll need.
 
-I've chosen =ag= as the engine for /grepping/ the files because it has a helm interface and it's very fast.
+I've chosen =ag= as the engine for /grepping/ the files because it's very fast. I would like to have a better UI within Emacs though (consult maybe?)
 
 #+begin_src emacs-lisp
-  (use-package helm-ag
-    :commands mrb/search
-    :after helm
-    :bind (("C-s-s" . mrb/search))
-    :config
-    (setq helm-ag-use-agignore t)         ; Use the .agignore file if it is there
-    :init
-    (defun mrb/search ()
-      (interactive)
-      ;; but do *not* use the vcs ignore mechanism
-      (setq helm-ag-command-option "--skip-vcs-ignores")
-      (helm-do-ag-project-root)))
+  (use-package ag)
 #+end_src
 
 ** Ansible
