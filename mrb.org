@@ -2577,14 +2577,14 @@ So, tab tries to indent, which is the main expectation, and if it can't it tries
   (setq tab-always-indent 'complete)
 #+end_src
 
-In a standard emacs installation, TAB indents, depending on mode obviously. If indenting would not make sense, a TAB can be inserted or completion could start. The function =completion-at-point= is used in some situations. Ideally the =company-complete= function could take over in many cases. Here's a simplistic approach to get me started:
+In a standard emacs installation, TAB indents, depending on mode obviously. If indenting would not make sense, a TAB can be inserted or completion could start. The function =completion-at-point= is used in some situations. Ideally the =corfu-complete= function could take over in many cases. Here's a simplistic approach to get me started:
  1. if in minibuffer, do completion there like we are used to;
- 2. if cursor is at the end of a symbol, try to complete it with company;
+ 2. if cursor is at the end of a symbol, try to complete it with corfu;
  3. else, indent according to mode.
 
 This is probably incomplete or wrong even in some cases, but it's a start.
 
-This way, TAB always does completion or indent, unless company-mode is not active.
+This way, TAB always does completion or indent, unless corfu-mode is not active.
 
 ** Ad 2. Completion should always produce something
 Not sure if there is anything to do here.
@@ -2602,62 +2602,38 @@ Content that I want:
 Candidates:
 - auto-complete :: http://cx4a.org/software/auto-complete/
 - company-mode :: http://company-mode.github.io
+- corfu-mode :: https://github.com/minad/corfu
 
-I had auto-complete installed for a while and this worked fine. I am migrating to company-mode now, as it seems a lot faster and a lot easier to write back-ends for. Also, company mode gets more praise from emacs users, but I recall having problems with it. Anyway, let's enable company-mode everywhere for everything except for some modes which we know lead to problems.
-
-The capf back-end uses 'completion-at-point-functions' as source for candidates, which is what emacs by default does, so I want that in my back-end-lists. This back-end gets added automatically when emacs version is larger than 24.3.50. I'm not sure what the logic is behind that, as there is no mention of it not working before that version?  Assuming that there is a good reason, I'm not going to do anything to the backhands list for now.
-
-The default colors of =company-mode= are horrendous, but I have put some corrections by executing a snippet, based on standard color-names. The snippet is here: http://www.emacswiki.org/CompanyMode#toc7
-
-The default keybindings needs changing too; moving the selection up and down is mapped to C-p and C-n, just like moving the cursor in normal text.
-
-Having the completion pop up automatically is annoying in most cases, so I disable that and when the popup is there, don't require a match.
+All of these work fine, but corfu gets installed because it fits right in with the rest of the completion packages and does more than enough for what I need. Given the quick popup is nice to complete inline, but when still confused, press =M-m= to move the completion list to the minibuffer (or whatever vertico has been configured to) to show the list and have more info on the items in the list, while competion still continues.
 
 #+begin_src emacs-lisp
-  (use-package company
-    :commands (global-company-mode company-mode)
-    :diminish company-mode
-    :bind
-    (:map company-active-map
-          ("C-n" . company-select-next)
-          ("C-p" . company-select-previous)
-          :map company-mode-map
-          ;; Remap normal indent-for-tab-command
-          ([remap indent-for-tab-command] . company-indent-or-complete-common))
-
+  (use-package corfu
+    :custom
+    (corfu-auto t)
+    (corfu-quit-at-boundary 'separator)
+    :bind (:map corfu-map
+           ("M-m" . mrb/corfu-move-to-minibuffer))
     :init
-    (setq company-backends
-          '(company-bbdb company-semantic company-clang company-cmake company-capf company-files
-                         (company-dabbrev-code company-gtags company-etags company-keywords)
-                         company-oddmuse)
-          company-idle-delay 0.0
-          company-minimum-prefix-length 1
-          company-require-match 'never
+    (global-corfu-mode)
 
-          company-global-modes '(not
-                                 org-mode org-journal-mode
-                                 text-mode
-                                 geiser-repl-mode)) ; completion is annoying for the repl cmds, not for the scheme stuff, can we separate this?
-
-    ;; And this turns it actually on, except for the modes above
-    (add-hook 'after-init-hook 'global-company-mode))
+    :config
+    ;; In need for more info? Press M-m
+    (defun mrb/corfu-move-to-minibuffer ()
+      (interactive)
+      (let ((completion-extra-properties corfu--extra)
+            completion-cycle-threshold completion-cycling)
+        (apply #'consult-completion-in-region completion-in-region--data)))
+    (define-key corfu-map "\M-m" #'corfu-move-to-minibuffer)
+    )
 #+end_src
 
 ** Ad 4. Mode specialization
 There's always exceptions to the rule; with Emacs doubly so. Here's the relevant exceptions for my configuration.
 
 ** Ad 5. Open completion window predictably
-If there is a need to open a **Completions** window, let's at least do it predictably, so I know what and where to expect it.  The =popwin= package make this behavior a bit more predictable by showing it in the same place and making sure I can get rid of it easily.
+The configuration of the completion is handled by vertico now, so nothing needs to be done here.
 
-As popwin is a dependency of which-key, we already have it.
-
-#+begin_src emacs-lisp
-  (use-package popwin
-    :config
-    (popwin-mode 1))
-#+end_src
-
-For most of the completion that is needed which is not inline (for which I am using the =company= package, helm seems to be the most powerful solution, but feels isolated. For every integration something extra seems to be needed. =Vertico= seems the completing framework that fits the integration requirement best; it clearly states so in its goal to only depending on the Emacs API and not create a new one. Integrating it with others looks a lot more orthogonal than Helm.
+For most of the completion that is needed which is not inline (for which I am using the =corfu= package above, helm seems to be the most powerful solution, but feels isolated. For every integration something extra seems to be needed. =Vertico= seems the completing framework that fits the integration requirement best; it clearly states so in its goal to only depending on the Emacs API and not create a new one. Integrating it with others looks a lot more orthogonal than Helm.
 
 #+begin_src emacs-lisp
   (use-package vertico
@@ -2669,7 +2645,7 @@ For most of the completion that is needed which is not inline (for which I am us
     (vertico-reverse-mode))
 #+end_src
 
-The first thing to complement =vertico= is the =orderless= package. My main use is to have the matching for completing items match 'first second' as well as 'second first' regardless of their order.
+The first thing to complement =vertico= is the =orderless= package. My main use is to have the matching for completing items match 'first second' as well as 'second first' regardless of their order. Note that this works for every completion, also within =corfu= which is especially useful.
 
 #+begin_src emacs-lisp
   (use-package orderless
@@ -3510,7 +3486,7 @@ ERC seems to be the most used IRC client for emacs and included with it, so it w
             right-margin-width 7          ; [hh:mm]
             word-wrap t                   ;
             wrap-prefix "            ")   ; line this up with size of nick in `circe-format-say
-      (company-mode 0)
+      (corfu-mode 0)
       (setf (cdr (assoc 'continuation fringe-indicator-alist)) nil))
     (add-hook 'lui-mode-hook 'mrb/lui-setup)
 
