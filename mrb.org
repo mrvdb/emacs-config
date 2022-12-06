@@ -1225,7 +1225,6 @@ Also make sure we never load org from internal, this can happen when functions w
            ("s-."     . 'org-todo)
            ("s->"     . 'mrb/org-cancel-todo)
            ("C-s-."   . 'mrb/force-org-todo)
-           ("C-."     . 'org-schedule)
            ("M-p"     . 'org-set-property)
            :map org-agenda-mode-map
            ("s-."   . 'org-agenda-todo)
@@ -2669,11 +2668,41 @@ The =consult= package exposes a number of =consult-= commands which work with th
 #+begin_src emacs-lisp
   (use-package consult
     ;; Replace some bindings with a consult command, so we get things on steroids
-    :bind (("C-x b" . consult-buffer) ; original: switch-to-buffer
-           )
-    )
+    :bind (("C-x b" . consult-buffer)))
 #+end_src
 
+Embark is the last of the set, and adds a new level of interaction. The basis principle normally in Emacs is that you specify a command and then tell what to act on. Like opening a file is the `find-file` command and then specifying what file to find.
+
+Embark is the other way around. Something is active, depending on context and `embark-act` give a list of things you can do with it.
+
+#+begin_src emacs-lisp
+
+  (use-package embark
+    :straight (embark :files (:defaults "embark-org.el"))
+    :ensure t
+
+    :bind
+    (("C-." . embark-act)         ;; pick some comfortable binding
+     ("C-;" . embark-dwim)        ;; good alternative: M-.
+     ("C-h B" . embark-bindings)) ;; alternative for `describe-bindings'
+
+    :init
+    ;; Optionally replace the key help with a completing-read interface
+    (setq prefix-help-command #'embark-prefix-help-command)
+
+    :config
+    ;; Hide the mode line of the Embark live/completions buffers
+    (add-to-list 'display-buffer-alist
+                 '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
+                   nil
+                   (window-parameters (mode-line-format . none)))))
+
+  ;; Consult users will also want the embark-consult package.
+  (use-package embark-consult
+    :ensure t ; only need to install it, embark loads it after consult if found
+    :hook
+    (embark-collect-mode . consult-preview-at-point-mode))
+#+end_src
 ** Ad 6. Guaranteed response-time
 I haven't found a solution for this yet, but also have not found it to be a problem that needs solving in practice so far.
 
