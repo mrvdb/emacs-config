@@ -737,6 +737,9 @@ Although I think the 16 color system is a bit simplistic and, for emacs at least
             ;; Man pages inside emacs
             (Man-overstrike                 :foreground "#bf616a" :weight bold)
             (Man-underline                  :foreground "#a3be8c" :weight bold)
+
+            ;; Vertico and friends
+            (vertico-current                :background "DarkGoldenRod3")
             ))
 
     ;; Apply our adjustment using the theme function
@@ -3515,7 +3518,6 @@ ERC seems to be the most used IRC client for emacs and included with it, so it w
             right-margin-width 7          ; [hh:mm]
             word-wrap t                   ;
             wrap-prefix "            ")   ; line this up with size of nick in `circe-format-say
-      (corfu-mode 0)
       (setf (cdr (assoc 'continuation fringe-indicator-alist)) nil))
     (add-hook 'lui-mode-hook 'mrb/lui-setup)
 
@@ -3619,8 +3621,8 @@ Make our source look a bit more attractive by enabling =prettify-symbol-mode= in
           ("->"     . ?⟶)
           ("<-"     . ?⟵)
           ("=>"     . ?⟹)
-          ("#t"     . ?⟙)
-          ("#f"     . ?⟘)
+          ;("#t"     . ?⟙)
+          ;("#f"     . ?⟘)
           ("|>"     . ?▷)
           ("<|"     . ?◁)
           ("->>"    . ?↠)
