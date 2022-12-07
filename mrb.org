@@ -4113,7 +4113,16 @@ I use github gists sometimes, but rather have more open options as well. These a
 #+begin_src emacs-lisp
   (use-package webpaste
     :config
-    (setq webpaste-provider-priority '("dpaste.org")
+    (add-to-list 'webpaste-providers-alist
+            '("dpaste.org-custom"
+              :uri "https://dpaste.org/api/"
+              :post-data (("expires" . 86400))
+              :post-field "content"
+              :post-lang-field-name "lexer"
+              :lang-overrides ((emacs-lisp-mode . "clojure")
+                               (scheme-mode . "clojure"))
+              :success-lambda webpaste--providers-success-returned-string))
+    (setq webpaste-provider-priority '("dpaste.org-custom")
           webpaste-paste-confirmation t
           webpaste-open-in-browser t))
 #+end_src
