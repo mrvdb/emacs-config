@@ -2643,8 +2643,7 @@ For most of the completion that is needed which is not inline (for which I am us
                        :includes (vertico-reverse))
 
     :config
-    (vertico-mode)
-    (vertico-reverse-mode))
+    (vertico-mode))
 #+end_src
 
 The first thing to complement =vertico= is the =orderless= package. My main use is to have the matching for completing items match 'first second' as well as 'second first' regardless of their order. Note that this works for every completion, also within =corfu= which is especially useful.
