@@ -3901,7 +3901,7 @@ Not sure how to bind this though. I'd like it close to C-x C-e obviously
 [[https://www.nongnu.org/geiser][Geiser]] is, among other things, a repl for schemes. I try to use one, mostly for educational purposes. I chose guile because it also claims to support =emacs-lisp= and might be the future vm on which emacs-lisp will run. So, let's have it and use paredit in its REPL.
 
 #+begin_src emacs-lisp
-  ;; Specific implementations depend onn geiser
+  ;; Specific implementations depend on geiser
   (use-package geiser-guile
       :straight (:host gitlab :repo "emacs-geiser/guile")
       :ensure t
@@ -3917,7 +3917,7 @@ Not sure how to bind this though. I'd like it close to C-x C-e obviously
       )
 #+end_src
 
-While we're in the scheme section, let's configure =guix= and friend, which use scheme heavily
+While we're in the scheme section, let's configure =guix= and friends, which use scheme heavily
 
 #+begin_src emacs-lisp
   (use-package guix
@@ -3929,7 +3929,7 @@ While we're in the scheme section, let's configure =guix= and friend, which use 
     ;; guix uses debbugs, but this should probably be closer to mu4e and gnus config
     (use-package debbugs)
 
-    ;; Add yasnippett here, but probably split of later
+    ;; Add yasnippet here, but probably split of later
     (use-package yasnippet
       :config
       (setq yas-snippet-dirs
