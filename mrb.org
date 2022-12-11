@@ -746,7 +746,8 @@ Although I think the 16 color system is a bit simplistic and, for emacs at least
             (Man-underline                  :foreground "#a3be8c" :weight bold)
 
             ;; Vertico and friends
-            (vertico-current                :background "DarkGoldenRod3")
+            (vertico-current                :background "#5e81ac")
+            (orderless-match-face-0         :foreground "dark orange")
             ))
 
     ;; Apply our adjustment using the theme function
