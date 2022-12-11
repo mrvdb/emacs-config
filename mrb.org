@@ -40,7 +40,7 @@ git log -1 --pretty="format:%ci" ~/.emacs.d/mrb.org
 The first thing I want to take care of is to make customization possible and stored in a place to my liking. I want to load this first so anything in the configuration I define explicitly overrides it.
 
 #+begin_src emacs-lisp
-  (setq custom-file (concat user-emacs-directory "custom.el"))
+  (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
   (load custom-file)
 #+end_src
 
@@ -52,7 +52,14 @@ The config file =mrb.org= gets opened *a lot* because I tend to fiddle with this
     (find-file config-file))
 #+end_src
 
+Also, it helps to have a config-reload option sometimes.
 
+#+begin_src emacs-lisp
+  (defun mrb/reload-config ()
+    "Reload init file, which will effectively reload everything"
+    (interactive)
+    (load-file (expand-file-name "init.el" user-emacs-directory)))
+#+end_src
 
 Most of the time the editing process starts at the command line. Because I use emacs in server mode, this needs a little script.  The script does two things:
 1. check if we already have the emacs server, if not, start it;
