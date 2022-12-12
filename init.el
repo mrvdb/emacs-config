@@ -8,6 +8,8 @@
 
 ;;; Code:
 
+(require 'cl)                           ; for remove-if
+
 ;; Set gc really large, especially when loading the config file
 ;; These two lines prevent a stuttering cursor for me, in most cases
 ;; FIXME: gc collection in idle time is not the way to do this, but it works for me
@@ -24,17 +26,19 @@
             "*not* ")
           "available"))
 
+;; HACK: Disable Org-mode that was shipped with Emacs and add one I control
+(setq load-path (remove-if (lambda (x) (string-match-p "org$" x)) load-path))
+(add-to-list 'load-path "~/.emacs.d/straight/repos/org/lisp")
+
 ;; My org file is posted using writefreely, which uses local variables, we need them right away
 (add-to-list 'safe-local-variable-values '(writefreely-post-id . "wf83bq5jwz"))
 (add-to-list 'safe-local-variable-values '(writefreely-post-token . nil))
 
-;; Assuming file-name-concat exists, which is 28.1 emacs?
-(setq config-file (concat user-emacs-directory "mrb.org"))
+;; config-file var gets used in mrb.el as well, not sure I like that
+(setq config-file (expand-file-name "mrb.org" user-emacs-directory))
+
 ;; This produces mrb.el which is then loaded. It checks datetime before tangling.
-;; FIXME: having two different versions of org in the startup sequence sucks,
-;;        how to solve the biting of my own tail here?
-(defalias 'org-file-name-concat #'file-name-concat) ; No fbound check needed, if it goes wrong I want to know
-(org-babel-load-file config-file)                   ; Uses built-in org!
+(org-babel-load-file config-file) ; Now uses the org in the custom location
 
 ;; END init.el
 ;; This is all there should be in this file, the rest is handled in org-mode.
