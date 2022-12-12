@@ -3546,18 +3546,20 @@ ERC seems to be the most used IRC client for emacs and included with it, so it w
 Not messaging or chatting perse, but a micro blog social network. The 'capture a toot' is hot-keyed through =xbindkeys= like other capture commands.
 
 #+begin_src emacs-lisp
-  ;; Mastodon in emacs
-  (use-package mastodon
-    :config
-    (setq mastodon-instance-url "https://mastodon.nl"
-          mastodon-active-user "mrb"
-          ;; finds mastodon.nl in password-store and expects user field to be present
-          mastodon-auth-source-file 'password-store)
+    ;; Mastodon in emacs
+    (use-package mastodon
+      :straight (mastodon :host codeberg :repo "martianh/mastodon.el"
+                          :branch "develop")
+      :config
+      (setq mastodon-instance-url "https://mastodon.nl"
+            mastodon-active-user "mrb"
+            ;; finds mastodon.nl in password-store and expects user field to be present
+            mastodon-auth-source-file 'password-store)
 
-    ;; Convenience function
-    (defun mrb/capture-toot()
-      (interactive)
-      (mastodon-toot)))
+      ;; Convenience function
+      (defun mrb/capture-toot()
+        (interactive)
+        (mastodon-toot)))
 #+end_src
 
 #+begin_src sh :exports code :tangle ~/bin/capture-toot.sh :shebang #!/bin/sh
