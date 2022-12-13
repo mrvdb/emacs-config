@@ -3107,7 +3107,8 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
     (defun mrb/mu4e-view-mode-hook ()
       (interactive)
       (turn-on-visual-line-mode)
-      (setq mm-fill-flowed nil))
+      ;; Reflow messages
+      (setq mm-fill-flowed t))
 
     :bind (:map mu4e-search-minor-mode-map
                 ("/" . mu4e-search)
