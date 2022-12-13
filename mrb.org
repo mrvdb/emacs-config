@@ -27,7 +27,6 @@ Next to this main configuration file (=mrb.org=), two other files are involved i
    #+INCLUDE: init.el src emacs-lisp
 
 Ideally these files should be produced by org-babel as well, just like the main configuration, but that generates a dependency because these two files need to be available from the beginning.
-I am not entirely sure if I need the early-init.el file though.
 
 Small snippet to have last modified timestamp inserted when exporting this file (see line above which has the call to =last_modified=)
 
