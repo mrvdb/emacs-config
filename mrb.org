@@ -106,7 +106,7 @@ And edit the file obviously.
           # The systemd starting has always been a little problematic
           # with the environment, so I might have a server running another
           # way.
-          # FIXME: why not /just/ checking for the socket?
+          # TODO  why not /just/ checking for the socket?
           #
           debug "..but server socket is there, using it..."
       else
@@ -210,12 +210,12 @@ Now that we have =straight= we can use it to install =use-package=
 #+begin_src emacs-lisp
   (straight-use-package 'use-package)
   (setq use-package-always-ensure nil   ; Make sure this is nil, so we do not use package.el
-        use-package-verbose 'debug      ; FIXME: use a debug var for all of config?
+        use-package-verbose 'debug      ; TODO  use a debug var for all of config?
         )
   ;; From this point on we should be able to use `use-package
   (use-package straight
     :config
-    (setq straight-host-usernames '((github . "mrvdb"))) ; Move to personal information?
+    (setq straight-host-usernames '((github . "mrvdb"))) ; TODO Move to personal information?
     ;; Make sure packages do not pull in internal org, we pregister org from straight.el
     (straight-register-package 'org)
     (straight-register-package 'org-contrib)
@@ -341,7 +341,7 @@ Finally, I want to prevent producing files which have trailing spaces, because t
     :init
     (ws-butler-global-mode)             ; Enable by default
     ;; List exemptions here
-    ;; FIXME: why is org-capture-mode in here?
+    ;; TODO  why is org-capture-mode in here?
     (add-to-list 'ws-butler-global-exempt-modes 'org-capture-mode)
     (add-to-list 'ws-butler-global-exempt-modes 'magit-mode))
 
@@ -585,7 +585,7 @@ To make my life a bit easier, using the =all the icons= package for using specia
 
 #+begin_src emacs-lisp
   (use-package all-the-icons
-    :if (display-graphic-p))              ; FIXME: when in daemon mode, this does not get loaded
+    :if (display-graphic-p))              ; TODO  when in daemon mode, this does not get loaded
 #+end_src
 
 The above in itself does nothing. It just makes using the icons easier and consistent. Other packages. With the command =M-x all-the-icons-install-fonts= the latest version of the proper fonts will be installed automaticaly, so run that once in a while.
@@ -652,7 +652,7 @@ Although I think the 16 color system is a bit simplistic and, for emacs at least
      ;; :base0E "#a3be8c"
      ;; :base0F "#b48ead"
 
-    ;; FIXME: some of these adjustments come in too early and the package redefines it on loading
+    ;; TODO  some of these adjustments come in too early and the package redefines it on loading
     ;; the only solution for this is to move the visual adjustments in the use-package clauses of
     ;; the package itself.
     (setq base16-adjustments
@@ -781,7 +781,7 @@ Miscellaneous other visual settings follow.
     (tracking-mode 1))
 
   ;; Mode-line
-  ;; TODO: probably simplify this package, now we do not need evil support
+  ;; TODO  probably simplify this package, now we do not need evil support
   (use-package spaceline
     :straight (:includes spaceline-config))
 
@@ -933,7 +933,7 @@ Flyspell is similar to flycheck but for text languages. I'm setting some of the 
     :config
     ;; flyspell-duplicate  as warnings
     ;; Do I want this at all?, seems overkill
-    ;; FIXME: this does not seem to help
+    ;; TODO  this does not seem to help
     (setq flyspell-mark-duplications-flag nil
           flyspell-issue-message-flag nil))
 #+end_src
@@ -971,7 +971,7 @@ I have at least the following usecases in mind:
 
 1. Render my orgmode keywords as tags;
 2. Use in mu4e to render the tags
-3. perhaps some FIXME keywords in code, I use that quite a bit.
+3. perhaps some TODO keywords in code, I use that quite a bit.
 
 The first is the easiest, as the format of =org-todo-keyword-faces= is nigh perfect to transform into a list that can be used by svg-tag-mode.
 
@@ -1537,7 +1537,7 @@ I'm not sure if this works out in practice without having a confirmation (becaus
 
         ;; When a note is going to be added, postpone that Otherwise just
         ;; run the archiving question
-        ;; FIXME: org-add-note runs through post-command-hook,
+        ;; TODO  org-add-note runs through post-command-hook,
         ;;        which is kinda weird, how to i get it to run
         ;;        before the archiving question?
         (when (equal org-state "DONE")
@@ -1804,7 +1804,7 @@ I combine =ical2orgpy= with a cron job which pulls in the calendars I am interes
   CALBASE="https://calendars.hsdev.com/mrb"
 
   # Just go over each one manually
-  # FIXME make this nice with url . file pairs in a loop
+  # TODO make this nice with url . file pairs in a loop
   cd $BASEDIR
 
   # Read destination org file and the calendar id from a file .calendars
@@ -2015,7 +2015,7 @@ While the standard capture method is useful I found myself not using it very muc
           ;; Bring our config to every journal file
           org-journal-file-header (concat "#+SETUPFILE: " user-emacs-directory "org-config.org")
 
-          ;; Match the journal files (FIXME: make this independent of earlier assignments)
+          ;; Match the journal files (TODO  make this independent of earlier assignments)
           org-agenda-file-regexp "^[0-9]+\\.org"
           org-journal-file-format  "%Y%m%d.org"
 
@@ -2121,8 +2121,8 @@ Below is what was contained in the old configuration. I will slowly migrate this
       ;; both subtasks and a keyword on the container need to be present.
       (and is-a-task has-subtask)))
 
-  ;; FIXME: testing for tag presence should be easier than a re-search forward
-  ;; FIXME: are we not searching for all 'incomplete' type keywords here?,
+  ;; TODO  testing for tag presence should be easier than a re-search forward
+  ;; TODO  are we not searching for all 'incomplete' type keywords here?,
   ;;        there must be an org function for that
   (defun mrb/skip-non-stuck-projects ()
     "Skip trees that are not stuck projects"
@@ -2498,7 +2498,7 @@ During mail composition, when deleting text, this should be replace by '[...]' t
   (setq selected-mu4e-compose-mode-map (make-sparse-keymap))
 
   ;; Signal a deletion in compose
-  ;; FIXME: do something clever with the quote level?
+  ;; TODO  do something clever with the quote level?
   (defun mrb/compose-deletion ()
     (interactive)
     (delete-active-region)
@@ -2843,7 +2843,7 @@ The package as is, is already useful for searching locations and storing links t
                        :description "Map5.nl OpenLufo"
                        :url ,osm-map5-openlufo-url
                        :group "Personal"))
-          ;; set proper home location, FIXME: read this from private store
+          ;; set proper home location, TODO  read this from private store
           osm-home '(51.6441759 4.4377029 17)
           osm-copyright nil))
 #+end_src
@@ -2924,7 +2924,7 @@ The advice function extracts the annotations from the pdf file (unconditionally 
 
 #+name: extend-attach
 #+begin_src emacs-lisp :tangle no
-  ;; FIXME: return info, do not use insert directly, so we have more control
+  ;; TODO  return info, do not use insert directly, so we have more control
   (defun mrb/pdf-extract-info (file)
     "Extract and render the pdf annotations in FILE"
     (mapc
@@ -3059,7 +3059,7 @@ It's not entirely clear which package is exactly responsible for what, but there
     :config
     (setq
      ;; When citing, remove the senders signature.
-     ;; FIXME: often I want to remove a lot more, like the disclaimer
+     ;; TODO  often I want to remove a lot more, like the disclaimer
      message-cite-function 'message-cite-original-without-signature
 
      ;; Citing/Quoting when replying
@@ -3068,7 +3068,7 @@ It's not entirely clear which package is exactly responsible for what, but there
      message-yank-empty-prefix ""         ; Add nothing for empty lines
 
      ;; Always put one in the Sent folder on sending.
-     ;; FIXME: this does nothing for mu4e!!!
+     ;; TODO  this does nothing for mu4e!!!
      message-default-mail-headers (mapconcat
                                    'identity
                                    `(,(concat "Bcc: " mrb/bcc-address)
@@ -3089,7 +3089,7 @@ It's not entirely clear which package is exactly responsible for what, but there
 After a journey with many different MUAs I seem to be settling on =mu4e=.
 
 #+begin_src emacs-lisp
-  ;; FIXME: check for system packages meson, g++, pkg-config,
+  ;; TODO  check for system packages meson, g++, pkg-config,
   ;;        cmake, libglib2.0-dev, libgmime3.0-dev, libxapian-dev, texinfo
   ;; (names are debian package names)
   (use-package mu4e
@@ -3122,7 +3122,7 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
     <<mu4e-view-config>>
     <<mu4e-packages>>
 
-    ;; FIXME: move these up
+    ;; TODO  move these up
     (defun mrb/setsigfile (ctxname)
       (concat "~/Maildir/.signature-"
               (downcase ctxname)))
@@ -3160,7 +3160,7 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
 
      ;; Context definitions
      ;; Goal 1. use global config, unless private address is used
-     ;; FIXME: Can we use the one that matched?
+     ;; TODO  Can we use the one that matched?
      mu4e-context-policy 'pick-first            ; When nothing matches only!
      mu4e-compose-context-policy 'nil     ; for compose, use current if nothing matches
      mail-signature-file  mrb/default-signature-file
@@ -3520,7 +3520,7 @@ ERC seems to be the most used IRC client for emacs and included with it, so it w
     (enable-circe-color-nicks)           ; color nicks
 
     ;; Faces after enables, so the faces are there
-    ;; FIXME: do not use color names here, but functional names, which we can change centrally
+    ;; TODO  do not use color names here, but functional names, which we can change centrally
     (set-face-attribute 'circe-prompt-face   nil :foreground mrb/cursor-color :height 1.3)
     (set-face-attribute 'lui-time-stamp-face nil :height 0.8)
     (set-face-attribute 'lui-track-bar       nil :background "LawnGreen") ; fix this one!
@@ -3646,7 +3646,7 @@ Make our source look a bit more attractive by enabling =prettify-symbol-mode= in
     (prettify-symbols-mode))
 
   ;; Add hooks for all programming languages, for now
-  ;; TODO: check for conflict with haskell, which has its own system.
+  ;; TODO  check for conflict with haskell, which has its own system.
   (add-hook 'prog-mode-hook 'mrb/prettify-symbols)
   (add-hook 'lisp-interaction-mode-hook 'mrb/prettify-symbols)
 #+end_src
@@ -3856,13 +3856,13 @@ For creating web apps I use yesod, which is supported by a number of packages
 ** Go
 #+begin_src emacs-lisp
   (use-package go-mode
-    ;; FIXME: godef is fairly heavy on my little machines, make optional?
+    ;; TODO  godef is fairly heavy on my little machines, make optional?
     :ensure-system-package godef
     :config
     :init
     ;; Set up before-save hooks to format buffer and add/delete imports.
     ;; Make sure you don't have other gofmt/goimports hooks enabled.
-    ;; FIXME: would this not add hooks for all files that are saved??
+    ;; TODO  would this not add hooks for all files that are saved??
     (defun lsp-go-install-save-hooks ()
       (add-hook 'before-save-hook #'lsp-format-buffer t t)
       (add-hook 'before-save-hook #'lsp-organize-imports t t))
@@ -4115,7 +4115,7 @@ I am considering using a generic hook again to enable the method and either usin
 #+begin_src emacs-lisp
   ;; (use-package git-auto-commit-mode
   ;;                                         ;:diminish "Auto-committed"
-  ;;   :after (org)                          ; FIXME: race condition as we use an org file to init emacs
+  ;;   :after (org)                          ; TODO  race condition as we use an org file to init emacs
   ;;   :hook (org-mode . git-auto-commit-mode)
   ;;   )
 #+end_src
