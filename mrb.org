@@ -3042,7 +3042,7 @@ It's not entirely clear which package is exactly responsible for what, but there
       (visual-line-mode 1)
       (auto-fill-mode 0)                    ; Makes no sense in visual mode
 
-      (setq visual-fill-column-width nil)       ; Make sure `fill-column gets used
+      (setq visual-fill-column-width nil)   ; Make sure `fill-column gets used
       (setq fill-column 80)                 ; Not the same as encode column below!
       (visual-fill-column-mode 1)           ; Show it
 
@@ -3052,9 +3052,7 @@ It's not entirely clear which package is exactly responsible for what, but there
       (setq fill-flowed-encode-column 66)
 
       ;; This enables the f=f encoding for sending
-      (setq mml-enable-flowed t)
-      (setq mm-fill-flowed nil) ;; ??? I expected this to need the 't' valu???
-      )
+      (setq mml-enable-flowed t))
 
     :hook (message-mode . mrb/message-mode-hook)
 
