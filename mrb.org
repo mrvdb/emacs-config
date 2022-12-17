@@ -4112,11 +4112,18 @@ I'm using the first method on relevant files. The disadvantage of this method is
 I am considering using a generic hook again to enable the method and either using =git commit --amend= and commit squashing if working on more structured commits. For files that I really do not want autocommit to run I can use a file local variable to disable the hook (or the minor mode)
 
 #+begin_src emacs-lisp
-  ;; (use-package git-auto-commit-mode
-  ;;                                         ;:diminish "Auto-committed"
-  ;;   :after (org)                          ; TODO  race condition as we use an org file to init emacs
-  ;;   :hook (org-mode . git-auto-commit-mode)
-  ;;   )
+  (use-package git-auto-commit-mode
+                                          ;:diminish "Auto-committed"
+    :after (org) ; TODO  race condition as we use an org file to init emacs
+    :hook (org-mode . mrb/git-auto-commit-mode)
+
+    :config
+    (defun mrb/git-auto-commit-mode ()
+      (interactive)
+      ;; Make sure, possibly redundant, to NOT enable git autocommit in my config file
+      (unless (string= (buffer-file-name) config-file)
+        (git-auto-commit-mode))
+      ))
 #+end_src
 *** Miscellaneous
 A collection of loosely development related things.
