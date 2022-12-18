@@ -3974,7 +3974,7 @@ The defacto standard for a development environment in Emacs for common-lisp is e
                . lisp-font-lock-syntactic-face-function))))
 
     :config
-    (setq inferior-lisp-program "/home/mrb/.guix-profile/bin/sbcl"
+    (setq inferior-lisp-program "/usr/local/bin/sbcl"
           sly-lisp-implementations '((sbcl ("sbcl" "--core" "/home/mrb/.sbcl/sbcl.core-for-sly")))
           sly-net-coding-system 'utf-8-unix)
 
