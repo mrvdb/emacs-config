@@ -3915,6 +3915,7 @@ Not sure how to bind this though. I'd like it close to C-x C-e obviously
       (setq geiser-active-implementations '(guile)
             geiser-guile-binary "/home/mrb/.guix-profile/bin/guile"
             geiser-repl-send-on-return-p nil
+            geiser-mode-start-repl-p t
             geiser-default-implementation 'guile) ;chez isnt available for ppc64?
       )
 #+end_src
