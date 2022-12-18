@@ -745,6 +745,7 @@ Although I think the 16 color system is a bit simplistic and, for emacs at least
 
             ;; Mu4e
             (mu4e-header-highlight-face     :inherit hl-line :underline nil :foreground nil)
+            (mu4e-unread-face               :inherit nil :underline nil :weight bold)
             (mu4e-context-face              :inherit mu4e-link-face)
 
             ;; Man pages inside emacs
