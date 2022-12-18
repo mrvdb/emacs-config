@@ -3098,7 +3098,7 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
                      :includes (mu4e-icalendar))
 
     :custom (mu4e-mu-binary (expand-file-name "build/mu/mu" (straight--repos-dir "mu")))
-    :after (message fullframe selected)
+    :after (message selected)
     :commands (mu4e mrb/compose-mail mrb/mailfile)
     :hook (mu4e-view-mode . mrb/mu4e-view-mode-hook)
 
@@ -3231,8 +3231,6 @@ When mu4e start, it always opens in its main screen, which contains the main ope
     (defun mrb/mu4e-quit ()
       (interactive)
       (kill-buffer (current-buffer)))
-
-    (fullframe mu4e--main-view mrb/mu4e-quit)
 
     :config
     (setq mu4e-main-buffer-hide-personal-addresses t
