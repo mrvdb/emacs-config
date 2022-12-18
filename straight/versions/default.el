@@ -105,7 +105,6 @@
  ("pass" . "5651da53137db9adcb125b4897c2fe27eeb4368d")
  ("password-store" . "c4d8a1d815e79ddd89a85d3e36a41d29f0475771")
  ("password-store-otp.el" . "be3a00a981921ed1b2f78012944dc25eb5a0beca")
- ("paxedit" . "09f3d5aeb108937a801e77ef413e29eaa4ecc4be")
  ("pcache" . "507230d094cc4a5025fe09b62569ad60c71c4226")
  ("pcre2el" . "0b5b2a2c173aab3fd14aac6cf5e90ad3bf58fa7d")
  ("pdf-tools" . "b8079e4ebc2936f9772657332d50936350a65825")
