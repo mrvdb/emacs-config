@@ -204,31 +204,28 @@ As I want to have version controlled package installation that is easily reprodu
     (load bootstrap-file nil 'nomessage))
 #+end_src
 
-Now that we have =straight= we can use it to install =use-package=
+Now that we have =straight= we will use it from the =use-package= macro.
 
 #+begin_src emacs-lisp
-  (straight-use-package 'use-package)
-  (setq use-package-always-ensure nil   ; Make sure this is nil, so we do not use package.el
-        use-package-verbose 'debug      ; TODO  use a debug var for all of config?
-        )
-  ;; From this point on we should be able to use `use-package
-  (use-package straight
-    :config
-    (setq straight-host-usernames '((github . "mrvdb"))) ; TODO Move to personal information?
-    ;; Make sure packages do not pull in internal org, we pregister org from straight.el
-    (straight-register-package 'org)
-    (straight-register-package 'org-contrib)
+    (setq use-package-always-ensure nil   ; Make sure this is nil, so we do not use package.el
+          use-package-verbose 'debug      ; TODO  use a debug var for all of config?
+          )
+    ;; From this point on we should be able to use `use-package
+    (use-package straight
+      :config
+      (setq straight-host-usernames '((github . "mrvdb"))) ; TODO Move to personal information?
+      ;; Make sure packages do not pull in internal org, we pregister org from straight.el
+      (straight-register-package 'org)
+      (straight-register-package 'org-contrib)
 
-    <<straight-helperfunctions>>
+      <<straight-helperfunctions>>
 
-    :custom (straight-use-package-by-default t))
+      :custom (straight-use-package-by-default t))
 
-  ;; FROM THIS POINT use-package should work as intended, i.e. using straight.
+    ;; FROM THIS POINT use-package should work as intended, i.e. using straight.
 
-  ;; Need to install dependencies of use-package manually
-  (use-package diminish)
-  (use-package use-package-ensure-system-package)   ; because we are in use-package config
-  (use-package bind-key)                  ; Load early, but see section [[Key bindings]]
+    ;; Need to install dependencies of use-package manually, why??
+    (use-package diminish)
 #+end_src
 
 As emacs lives inside the systemd environment it is not automatically the case that my shell environment is inherited. In many cases, this is not a problem, but for those cases that expect the same environment, I'm making explicit that the enviroment needs to be from the shell. We should do this a soon as =use-package= is useable.
@@ -2305,10 +2302,6 @@ Furthermore, because I still can't remember keys, after pressing a prefix key li
 #+end_src
 
 For binding keys there are many ways it seems, with all different syntaxes and uses. I've tried to do everything with the =bind-key= package, because that is part of =use-package= so we get that for free.
-
-#+begin_src emacs-lisp
-  (use-package bind-key)
-#+end_src
 
 Bind-key can define both global keys as map-based key settings and accepts all kinds of key specifications, including strings.
 
