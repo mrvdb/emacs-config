@@ -45,6 +45,7 @@
  ("fullframe" . "81a326c83555d256c1e18b2ae39b298903e68d55")
  ("geiser" . "a60efa80cdb8c72dacb1e16729a801206a4e80bf")
  ("ggtags" . "40635a1effd3a9c2adef63c4760010c9468a7a4d")
+ ("git-auto-commit-mode" . "a7b59acea622a737d23c783ce7d212fefb29f7e6")
  ("gntp.el" . "767571135e2c0985944017dc59b0be79af222ef5")
  ("gnu-elpa-mirror" . "50abb75c66febbaaf82882585d2123bdb3126824")
  ("gnuplot-mode" . "601f6392986f0cba332c87678d31ae0d0a496ce7")
