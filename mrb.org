@@ -4094,12 +4094,11 @@ I am considering using a generic hook again to enable the method and either usin
 
 #+begin_src emacs-lisp
   (use-package git-auto-commit-mode
-                                          ;:diminish "Auto-committed"
-    :after (org org-journal) ; TODO  race condition as we use an org file to init emacs
+    :demand t
     :hook ((org-mode . mrb/git-auto-commit-mode)
            (org-journal-mode . git-auto-commit-mode))
 
-    :config
+    :init
     (defun mrb/git-auto-commit-mode ()
       (interactive)
       ;; Make sure, possibly redundant, to NOT enable git autocommit in my config file
