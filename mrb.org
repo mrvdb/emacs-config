@@ -3653,6 +3653,13 @@ The main advantages of the methode that tree-sitter uses are:
 An interface from emacs to tree-sitter luckily exist. Although it is not stable yet, I'm going to enable the highlighting for supported languages.
 
 #+begin_src emacs-lisp
+  ;; Use the built-in treesit and load all language grammars
+  (use-package treesit
+    :custom
+    ;; Load languages directly from the repository after making them
+    (treesit-extra-load-path
+     '("/home/mrb/dat/src/emacs/tree-sitter-module/dist")))
+
   ;; (use-package tree-sitter
   ;;   :disabled t                           ; Throws invalid version syntax error
   ;;   :init
