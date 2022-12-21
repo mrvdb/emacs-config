@@ -3658,7 +3658,7 @@ As of emacs 29 the treesit package is built-in, so let's use that in any case fo
     :custom
     ;; Load languages directly from the repository after making them
     (treesit-extra-load-path
-     '("/home/mrb/dat/src/emacs/tree-sitter-module/dist"))
+     '("/home/mrb/dat/src/emacs/tree-sitter-module/dist/"))
     :config
     ;; Replace relevant modes with the treesitter variant
     (dolist (mode
@@ -3670,7 +3670,6 @@ As of emacs 29 the treesit package is built-in, so let's use that in any case fo
                (go-mode         . go-ts-mode)
                (javascript-mode . js-ts-mode)
                (js-json-mode    . json-ts-mode)
-               (python-mode     . python-ts-mode)
                (typescript-mode . typescript-ts-mode)))
       (add-to-list 'major-mode-remap-alist mode)))
 #+end_src
