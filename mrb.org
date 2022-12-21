@@ -3645,12 +3645,12 @@ Make our source look a bit more attractive by enabling =prettify-symbol-mode= in
 
 In general, the syntax highlighting of emacs is sufficient, but is based on defining regular expression to match language contents to color them. There is a better way to do this; based on generating a semantic tree representation of the language in question. There is a tool called [[https://tree-sitter.github.io/][tree-sitter]] which does this.
 
-The main advantages of the methode that tree-sitter uses are:
+The main advantages of the method that tree-sitter uses are:
 - the same tree representation is used for all languages, so adding new languages is relatively easy
 - using the representation for syntax highlighting is just one application: code folding or semantic extending a region, all of which are available in emacs in other ways, is a lot better using the tree-sitter method.
 - it's super fast. fast enough to keep up with typing.
 
-An interface from emacs to tree-sitter luckily exist. Although it is not stable yet, I'm going to enable the highlighting for supported languages.
+As of emacs 29 the treesit package is built-in, so let's use that in any case for highlighting where it is possible. I think over time the mapping of the modes below will just disappear and everything will be treesitter based.
 
 #+begin_src emacs-lisp
   ;; Use the built-in treesit and load all language grammars
@@ -3658,39 +3658,22 @@ An interface from emacs to tree-sitter luckily exist. Although it is not stable 
     :custom
     ;; Load languages directly from the repository after making them
     (treesit-extra-load-path
-     '("/home/mrb/dat/src/emacs/tree-sitter-module/dist")))
-
-  ;; (use-package tree-sitter
-  ;;   :disabled t                           ; Throws invalid version syntax error
-  ;;   :init
-  ;;   (setq tsc-dyn-get-from '(:compilation)) ; dont fetch binaries, ppc64 likely is not there
-  ;;   :config
-  ;;   ;; Needs to be set before tree-sitter-langs is loaded
-  ;;   (setq tree-sitter-langs-grammar-dir
-  ;;         (expand-file-name "straight/repos/tree-sitter-langs/" user-emacs-directory))
-  ;;   (use-package tree-sitter-langs :demand t)
-
-  ;;   ;; Enable the mode globally, including highlighting
-  ;;   (global-tree-sitter-mode)
-  ;;   (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode))
+     '("/home/mrb/dat/src/emacs/tree-sitter-module/dist"))
+    :config
+    ;; Replace relevant modes with the treesitter variant
+    (dolist (mode
+             '((bash-mode       . bash-ts-mode)
+               (c-mode          . c-ts-mode)
+               (c++-mode        . c++-ts-mode)
+               (css-mode        . css-ts-mode)
+               (dockerfile-mode . dockerfile-ts-mode)
+               (go-mode         . go-ts-mode)
+               (javascript-mode . js-ts-mode)
+               (js-json-mode    . json-ts-mode)
+               (python-mode     . python-ts-mode)
+               (typescript-mode . typescript-ts-mode)))
+      (add-to-list 'major-mode-remap-alist mode)))
 #+end_src
-
-The emacs packages for tree-sitter require tree-sitter version 0.19.3 for now to work as intended and I had to patch tree-sitter-langs to omit /devDependencies/ on building some language grammars. Compilation of the included grammars went fine after that and they will be automatically active.
-
-Now that we have a tree, we can take advantage of that for folding, so let's configure that as well.
-
-#+begin_src emacs-lisp
-  ;; (use-package ts-fold
-  ;;   :after tree-sitter
-  ;;   :straight (ts-fold :type git :host github :repo "jcs090218/ts-fold")
-  ;;   :bind (("M-S-<iso-lefttab>" . ts-fold-toggle))
-  ;;   :config
-  ;;   ;; Enable folding when tree-sitter gets swtiched on
-  ;;   (add-hook 'tree-sitter-after-on-hook #'ts-fold-indicators-mode)
-  ;;  )
-#+end_src
-
-Ideally, the folding should be spread out over the major modes and have support for tree-sitter there automatically.
 
 ** Reference & documentation
 While emacs itself has a very nicely documentation system, I still don't understand why this is not interpolated into every other mode and or language.
