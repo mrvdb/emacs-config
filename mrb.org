@@ -4084,8 +4084,7 @@ I am considering using a generic hook again to enable the method and either usin
 #+begin_src emacs-lisp
   (use-package git-auto-commit-mode
     :demand t
-    :hook ((org-mode . mrb/git-auto-commit-mode)
-           (org-journal-mode . git-auto-commit-mode))
+    :hook ((org-journal-mode . git-auto-commit-mode))
 
     :init
     (defun mrb/git-auto-commit-mode ()
