@@ -2651,6 +2651,10 @@ For most of the completion that is needed which is not inline (for which I am us
     :straight (vertico :files (:defaults "extensions/*")
                        :includes (vertico-reverse))
 
+    :bind (:map vertico-map
+                ;; use / to drill down
+                ("/" . vertico-directory-enter))
+
     :config
     (vertico-mode))
 #+end_src
