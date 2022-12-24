@@ -420,17 +420,17 @@ Using pdf-tools for PDF handling. This is a lot better than docview. I'm a bit a
     :magic ("%PDF" . pdf-view-mode)
     :hook (pdf-view-mode . (lambda () (cua-mode 0)))
     :commands (pdf-info-getannots mrb/pdf-extract-info)
-    :bind (:map pdf-view-mode-map
-                ("h"   . 'pdf-annot-add-highlight-markup-annotation)
-                ("t"   . 'pdf-annot-add-text-annotation)
-                ("D"   . 'pdf-annot-delete)
-                ("C-s" . 'isearch-forward)
-                ("m"   . 'mrb/mailfile)
-                ("q"   . 'kill-this-buffer)
-                ([remap pdf-misc-print-document] . 'mrb/pdf-misc-print-pages)
+    :bind ( :map pdf-view-mode-map
+            ("h"   . 'pdf-annot-add-highlight-markup-annotation)
+            ("t"   . 'pdf-annot-add-text-annotation)
+            ("D"   . 'pdf-annot-delete)
+            ("C-s" . 'isearch-forward)
+            ("m"   . 'mrb/mailfile)
+            ("q"   . 'kill-this-buffer)
+            ([remap pdf-misc-print-document] . 'mrb/pdf-misc-print-pages)
             :map pdf-annot-edit-contents-minor-mode-map
-                ("<return>"   . 'pdf-annot-edit-contents-commit)
-                ("<S-return>" .  'newline))
+            ("<return>"   . 'pdf-annot-edit-contents-commit)
+            ("<S-return>" .  'newline))
 
     :config
     ;; TODO uncommenting the next line helps when rebuilding fails
@@ -1452,8 +1452,8 @@ By default =C-c C-c= ends the capture, but is normally the shortcut to enter tag
 
 #+name: org-capture-taghandling
 #+begin_src emacs-lisp :tangle no
-  :bind ((:map org-capture-mode-map
-           ("C-c C-t" . mrb/add-tags-in-capture)))
+  :bind ( :map org-capture-mode-map
+          ("C-c C-t" . mrb/add-tags-in-capture))
 
   :init
   (defun mrb/add-tags-in-capture()
@@ -2470,18 +2470,18 @@ Now use those bindings to configure both orgmode and org-journal-mode.
 
 #+name: org-mode-selected
 #+begin_src emacs-lisp :tangle no
-    :init
-    (setq selected-org-mode-map (make-sparse-keymap))
-    :bind  (:map selected-org-mode-map
-                 <<org-emphasis-binds>> )
+  :init
+  (setq selected-org-mode-map (make-sparse-keymap))
+  :bind  ( :map selected-org-mode-map
+           <<org-emphasis-binds>> )
 #+end_src
 
 #+name: org-journal-mode-selected
 #+begin_src emacs-lisp :tangle no
-    :init
-    (setq selected-org-journal-mode-map (make-sparse-keymap))
-    :bind  (:map selected-org-journal-mode-map
-                 <<org-emphasis-binds>> )
+  :init
+  (setq selected-org-journal-mode-map (make-sparse-keymap))
+  :bind  ( :map selected-org-journal-mode-map
+           <<org-emphasis-binds>> )
 #+end_src
 
 During mail composition, when deleting text, this should be replace by '[...]' to signal that we removed text from the original mail.
@@ -2498,8 +2498,8 @@ During mail composition, when deleting text, this should be replace by '[...]' t
     (delete-active-region)
     (insert "[...]"))
 
-  :bind (:map selected-mu4e-compose-mode-map
-              ("." . mrb/compose-deletion))
+  :bind ( :map selected-mu4e-compose-mode-map
+          ("." . mrb/compose-deletion))
 #+end_src
 ** Other key and mouse related settings
 Emacs has, like for everything else, a peculiar idea on scrolling and moving from screen to screen.
@@ -2622,8 +2622,8 @@ All of these work fine, but corfu gets installed because it fits right in with t
     :custom
     (corfu-auto t)
     (corfu-quit-at-boundary 'separator)
-    :bind (:map corfu-map
-           ("M-m" . mrb/corfu-move-to-minibuffer))
+    :bind ( :map corfu-map
+            ("M-m" . mrb/corfu-move-to-minibuffer))
     :init
     (global-corfu-mode)
 
@@ -2799,8 +2799,8 @@ The package as is, is already useful for searching locations and storing links t
   (use-package osm
     :straight (:host github :repo "minad/osm")
     :commands (osm osm-mode)
-    :bind (:map osm-mode-map
-                ("q" . (lambda() (interactive) (quit-window t))))
+    :bind ( :map osm-mode-map
+            ("q" . (lambda() (interactive) (quit-window t))))
     :init
     ;; Load Org link support
     (with-eval-after-load 'org
@@ -3108,10 +3108,10 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
       ;; Reflow messages
       (setq mm-fill-flowed t))
 
-    :bind (:map mu4e-search-minor-mode-map
-                ("/" . mu4e-search)
-                ("s" . nil)
-                ("e" . mu4e-search-edit))
+    :bind ( :map mu4e-search-minor-mode-map
+            ("/" . mu4e-search)
+            ("s" . nil)
+            ("e" . mu4e-search-edit))
 
     ;; Configuration sections
     <<mu4e-composeconfig>>
@@ -3220,53 +3220,53 @@ When mu4e start, it always opens in its main screen, which contains the main ope
 
 #+name: mu4e-main-config
 #+begin_src emacs-lisp :tangle no
-    :bind (:map mu4e-main-mode-map
-                ("q" . mrb/mu4e-quit) ; just close the menu
-                ("Q" . mu4e-quit)     ; really Quit
-                (";" . nil)           ; this was too easy to press by mistake
-                ("C-;" . mu4e-context-switch))
-    :init
-    ;; Claim the whole screen in mu4e main window
-    (defun mrb/mu4e-quit ()
-      (interactive)
-      (kill-buffer (current-buffer)))
+  :bind ( :map mu4e-main-mode-map
+          ("q" . mrb/mu4e-quit) ; just close the menu
+          ("Q" . mu4e-quit)     ; really Quit
+          (";" . nil)           ; this was too easy to press by mistake
+          ("C-;" . mu4e-context-switch))
+  :init
+  ;; Claim the whole screen in mu4e main window
+  (defun mrb/mu4e-quit ()
+    (interactive)
+    (kill-buffer (current-buffer)))
 
-    :config
-    (setq mu4e-main-buffer-hide-personal-addresses t
-          mu4e-main-hide-fully-read nil
-          mu4e-confirm-quit nil
+  :config
+  (setq mu4e-main-buffer-hide-personal-addresses t
+        mu4e-main-hide-fully-read nil
+        mu4e-confirm-quit nil
 
-          mu4e-bookmarks (list
-                          '(:name "Unread messages"
-                                  :query "flag:unread and not flag:trashed"
-                                  :key ?u)
-                          '(:name "INBOX"
-                                  :query "(flag:unread or flag:new or maildir:/INBOX) and not (flag:draft or flag:flagged or flag:deleted or maildir:/Trash or flag:trashed)"
-                                  :key ?i)
-                          '(:name "TODO list"
-                                  :query "flag:flagged and not flag:trashed"
-                                  :key ?+)
-                          '(:name "Today's messages"
-                                  :query "date:today..now"
-                                  :key ?d)
-                          '(:name "Trash"
-                                  :query "maildir:/Trash or flag:trashed"
-                                  :key ?t)
-                          '(:name "Junk"
-                                  :query "maildir:/Junk"
-                                  :key ?j)))
+        mu4e-bookmarks (list
+                        '(:name "Unread messages"
+                                :query "flag:unread and not flag:trashed"
+                                :key ?u)
+                        '(:name "INBOX"
+                                :query "(flag:unread or flag:new or maildir:/INBOX) and not (flag:draft or flag:flagged or flag:deleted or maildir:/Trash or flag:trashed)"
+                                :key ?i)
+                        '(:name "TODO list"
+                                :query "flag:flagged and not flag:trashed"
+                                :key ?+)
+                        '(:name "Today's messages"
+                                :query "date:today..now"
+                                :key ?d)
+                        '(:name "Trash"
+                                :query "maildir:/Trash or flag:trashed"
+                                :key ?t)
+                        '(:name "Junk"
+                                :query "maildir:/Junk"
+                                :key ?j)))
 #+end_src
 **** Header view
 The first view after searching is a list of mail headers. Set config vars for this view and define the visualisation of the marks. I need an extra action to mark mail as junk which, on processing, moves the marked messages to the junk folder
 
 #+name: mu4e-headers-config
 #+begin_src emacs-lisp :tangle no
-  :bind (:map mu4e-headers-mode-map
-              ("s" . mu4e-headers-mark-for-junk)
-              ("r" . mu4e-compose-reply)
-              ("R" . mu4e-headers-mark-for-refile)
-              ("SPC" . mu4e-headers-mark-for-something)
-              ("X" . (lambda () (interactive) (mu4e-mark-execute-all t))))
+  :bind ( :map mu4e-headers-mode-map
+          ("s" . mu4e-headers-mark-for-junk)
+          ("r" . mu4e-compose-reply)
+          ("R" . mu4e-headers-mark-for-refile)
+          ("SPC" . mu4e-headers-mark-for-something)
+          ("X" . (lambda () (interactive) (mu4e-mark-execute-all t))))
   :config
   (setq
    mu4e-headers-include-related nil ; Use 'W' to toggle interactively
@@ -3321,11 +3321,11 @@ After selecting a message in the header view, a message view will open.
 
 #+name: mu4e-view-config
 #+begin_src emacs-lisp :tangle no
-  :bind (:map mu4e-view-mode-map
-              ("s" . mu4e-view-mark-for-junk)
-              ("r" . mu4e-compose-reply)
-              ("R" . mu4e-view-mark-for-refile)
-              ("X" . (lambda () (interactive) (mu4e~view-in-headers-context (mu4e-mark-execute-all t)))))
+  :bind ( :map mu4e-view-mode-map
+          ("s" . mu4e-view-mark-for-junk)
+          ("r" . mu4e-compose-reply)
+          ("R" . mu4e-view-mark-for-refile)
+          ("X" . (lambda () (interactive) (mu4e~view-in-headers-context (mu4e-mark-execute-all t)))))
 
   :config
   (setq mu4e-view-use-old nil
