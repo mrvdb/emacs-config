@@ -2648,6 +2648,7 @@ For most of the completion that is needed which is not inline (for which I am us
 
 #+begin_src emacs-lisp
   (use-package vertico
+    :demand t
     :straight (vertico :files (:defaults "extensions/*")
                        :includes (vertico-reverse))
 
