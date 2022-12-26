@@ -3887,6 +3887,14 @@ Evaluating an expression with the cursor after it is often used, I'd like being 
 
 Not sure how to bind this though. I'd like it close to C-x C-e obviously
 *** Scheme
+The generic scheme support is the builtin scheme package, let's tell it that I use guile as my default scheme program.
+
+#+begin_src emacs-lisp
+  (use-package scheme
+    :custom
+    (scheme-program-name "guile"))
+#+end_src
+
 [[https://www.nongnu.org/geiser][Geiser]] is, among other things, a repl for schemes. I try to use one, mostly for educational purposes. I chose guile because it also claims to support =emacs-lisp= and might be the future vm on which emacs-lisp will run. So, let's have it and use paredit in its REPL.
 
 #+begin_src emacs-lisp
