@@ -2647,17 +2647,13 @@ The configuration of the completion is handled by vertico now, so nothing needs 
 For most of the completion that is needed which is not inline (for which I am using the =corfu= package above, helm seems to be the most powerful solution, but feels isolated. For every integration something extra seems to be needed. =Vertico= seems the completing framework that fits the integration requirement best; it clearly states so in its goal to only depending on the Emacs API and not create a new one. Integrating it with others looks a lot more orthogonal than Helm.
 
 #+begin_src emacs-lisp
-  (use-package vertico
-    :demand t
-    :straight (vertico :files (:defaults "extensions/*")
-                       :includes (vertico-reverse))
+    (use-package vertico
+      :demand t
+      :straight (vertico :files (:defaults "extensions/*")
+                         :includes (vertico-reverse))
 
-    :bind (:map vertico-map
-                ;; use / to drill down
-                ("/" . vertico-directory-enter))
-
-    :config
-    (vertico-mode))
+      :config
+      (vertico-mode))
 #+end_src
 
 The first thing to complement =vertico= is the =orderless= package. My main use is to have the matching for completing items match 'first second' as well as 'second first' regardless of their order. Note that this works for every completion, also within =corfu= which is especially useful.
