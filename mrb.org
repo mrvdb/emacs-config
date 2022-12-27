@@ -3309,7 +3309,7 @@ The first view after searching is a list of mail headers. Set config vars for th
 
   ;; Let mu4e define functions for it
   (mu4e~headers-defun-mark-for junk)
-  (mu4e~view-defun-mark-for junk)
+  (mu4e--view-defun-mark-for junk)
 
 #+end_src
 
