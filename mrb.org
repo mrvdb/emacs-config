@@ -3861,9 +3861,15 @@ For all of those languages, I want to use paredit which makes editing, longer te
 
 #+begin_src emacs-lisp
   (use-package paredit
+    :ensure t
     :hook ((lisp-interaction-mode emacs-lisp-mode
             eval-expression-mode scheme-mode
             lisp-mode) . enable-paredit-mode)
+    :config
+    ;; Do NOT let paredit have RET, it creates problems for me in geiser
+    ;; See: http://paredit.org/cgit/paredit/plain/NEWS version 25 notes about electric indent
+    (define-key paredit-mode-map (kbd "RET") nil)
+    (define-key paredit-mode-map (kbd "C-j") 'paredit-newline)
     :diminish)
 #+end_src
 
@@ -3888,7 +3894,7 @@ The generic scheme support is the builtin scheme package, let's tell it that I u
 #+begin_src emacs-lisp
   (use-package scheme
     :custom
-    (scheme-program-name "guile"))
+    (scheme-program-name "/home/mrb/.guix-profile/bin/guile"))
 #+end_src
 
 [[https://www.nongnu.org/geiser][Geiser]] is, among other things, a repl for schemes. I try to use one, mostly for educational purposes. I chose guile because it also claims to support =emacs-lisp= and might be the future vm on which emacs-lisp will run. So, let's have it and use paredit in its REPL.
@@ -3905,6 +3911,7 @@ The generic scheme support is the builtin scheme package, let's tell it that I u
       :config
       (setq geiser-active-implementations '(guile)
             geiser-guile-binary "/home/mrb/.guix-profile/bin/guile"
+            ;; Do NOT evaluate on return when inside an expression
             geiser-repl-send-on-return-p nil
             geiser-mode-start-repl-p t
             geiser-default-implementation 'guile) ;chez isnt available for ppc64?
