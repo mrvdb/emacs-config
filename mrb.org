@@ -3620,11 +3620,11 @@ Make our source look a bit more attractive by enabling =prettify-symbol-mode= in
 #+begin_src emacs-lisp
   (use-package prog-mode
     :straight (:type built-in)
-    :hook ((prog-mode
+    :hook ((prog-mode                     ; all modes that derive from prog-mode
             lisp-interaction-mode
-            org-mode
-            org-journal-mode) . mrb/prettify-symbols)
+            org-mode org-journal-mode) . mrb/prettify-symbols)
     :init
+
     (defun mrb/prettify-symbols ()
       (interactive)
       ;; set buffer local variable to map the symbols
@@ -3641,7 +3641,8 @@ Make our source look a bit more attractive by enabling =prettify-symbol-mode= in
             ("<|"     . ?◁)
             ("->>"    . ?↠)
             ("<="     . ?≤)
-            (">="     . ?≥)))))
+            (">="     . ?≥)))
+      (prettify-symbols-mode))
 #+end_src
 
 In general, the syntax highlighting of emacs is sufficient, but is based on defining regular expression to match language contents to color them. There is a better way to do this; based on generating a semantic tree representation of the language in question. There is a tool called [[https://tree-sitter.github.io/][tree-sitter]] which does this.
