@@ -3856,25 +3856,21 @@ For creating web apps I use yesod, which is supported by a number of packages
 (use-package rust-mode)
 #+end_src
 ** Lisp-like
-There are a number of languages which are lisp-like, not in the least Emacs lisp itself. It makes sense to group the configuration for these languages together. In the first part there will be configuration for all lisp-like languages (like the =paredit= configuration for example). For each specific implementation there may be augmentations to the config, or even a completely separate.
+There are a number of languages which are lisp-like, not in the least Emacs lisp itself. It makes sense to group the configuration for these languages together. In the first part there will be configuration for all lisp-like languages (like the =puni= configuration for example). For each specific implementation there may be augmentations to the config, or even a completely separate.
 
-For all of those languages, I want to use paredit which makes editing, longer term, a lot more productive.
+For all of those languages, I want to use =puni= which makes editing, longer term, a lot more productive. For autopairing, which =puni= does not do itself unlike =paredit=, I use the built-in =electric-pair-mode= Both of these support multiple modes, so are really generic packages, but lisp-like modes are the modes typically benefitting the most from them.
 
 #+begin_src emacs-lisp
-  (use-package paredit
-    :ensure t
-    :hook ((lisp-interaction-mode emacs-lisp-mode
-            eval-expression-mode scheme-mode
-            lisp-mode) . enable-paredit-mode)
-    :config
-    ;; Do NOT let paredit have RET, it creates problems for me in geiser
-    ;; See: http://paredit.org/cgit/paredit/plain/NEWS version 25 notes about electric indent
-    (define-key paredit-mode-map (kbd "RET") nil)
-    (define-key paredit-mode-map (kbd "C-j") 'paredit-newline)
-    :diminish)
-#+end_src
+  (use-package puni
+    :init
+    (puni-global-mode)
+    (electric-pair-mode)
+    :bind ( :map puni-mode-map
+            ("C-<right>" . puni-slurp-forward) ; foo (bar|) baz  ->  foo (bar| baz)
+            ("C-<left>"  . puni-barf-forward)  ; foo (bar| baz)  ->  foo (bar|) baz
+            ))
 
-When a mode wants to use paredit, it can use the same constructs as above to enable paredit on it modes.
+#+end_src
 
 Evaluating an expression with the cursor after it is often used, I'd like being able to do the same when the cursor is in front of such an expression
 
@@ -3898,16 +3894,14 @@ The generic scheme support is the builtin scheme package, let's tell it that I u
     (scheme-program-name "/home/mrb/.guix-profile/bin/guile"))
 #+end_src
 
-[[https://www.nongnu.org/geiser][Geiser]] is, among other things, a repl for schemes. I try to use one, mostly for educational purposes. I chose guile because it also claims to support =emacs-lisp= and might be the future vm on which emacs-lisp will run. So, let's have it and use paredit in its REPL.
+[[https://www.nongnu.org/geiser][Geiser]] is, among other things, a repl for schemes. I try to use one, mostly for educational purposes. I chose guile because it also claims to support =emacs-lisp= and might be the future vm on which emacs-lisp will run.
 
 #+begin_src emacs-lisp
   ;; Specific implementations depend on geiser
   (use-package geiser-guile
       :straight (:host gitlab :repo "emacs-geiser/guile")
       :ensure t
-      :after paredit
-      :hook ((geiser-repl-mode . enable-paredit-mode)
-           (geiser-repl-mode . mrb/prettify-symbols))
+      :hook ((geiser-repl-mode . mrb/prettify-symbols))
 
       :config
       (setq geiser-active-implementations '(guile)
@@ -3946,16 +3940,10 @@ The defacto standard for a development environment in Emacs for common-lisp is e
 
 #+begin_src emacs-lisp
   (use-package sly
-    :after (paredit)
-    :hook ((sly-mrepl-mode . override-sly-repl-bindings-with-paredit)
-           (sly-mrepl-mode . enable-paredit-mode)
-           (sly-mrepl-mode . sly-mrepl-font-lock-setup))
+    :hook ((sly-mrepl-mode . sly-mrepl-font-lock-setup))
     :commands (mrb/nyxt)
     :init
-    ;; In the REPL sly takes backspace, I want paredit to have it
-    (defun override-sly-repl-bindings-with-paredit ()
-      (define-key sly-mrepl-mode-map
-        (read-kbd-macro paredit-backward-delete-key) nil))
+
     ;; Copy the keywords from lisp mode
     (defvar sly-mrepl-font-lock-keywords lisp-font-lock-keywords-2)
 
