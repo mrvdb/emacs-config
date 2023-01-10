@@ -30,7 +30,8 @@
 (setq load-path (remove-if (lambda (x) (string-match-p "org$" x)) load-path))
 (add-to-list 'load-path "~/.emacs.d/straight/repos/org/lisp")
 
-;; My org file is posted using writefreely, which uses local variables, we need them right away
+;; My org file is posted using writefreely, which uses local variables
+;; we need them before the call to org-babel
 (add-to-list 'safe-local-variable-values '(writefreely-post-id . "wf83bq5jwz"))
 (add-to-list 'safe-local-variable-values '(writefreely-post-token . nil))
 
@@ -38,11 +39,9 @@
 (setq config-file (expand-file-name "mrb.org" user-emacs-directory))
 
 ;; This produces mrb.el which is then loaded. It checks datetime before tangling.
-(org-babel-load-file config-file) ; Now uses the org in the custom location
+(org-babel-load-file config-file)
 
 ;; END init.el
-;; This is all there should be in this file, the rest is handled in org-mode.
-
 ;; Exception 1:
 ;; Apparently when disabled functions get enabled, Emacs puts them here
 ;;
