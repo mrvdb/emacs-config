@@ -331,14 +331,11 @@ A the same time, I don't want to be /that spaces guy/ in every project, and I'm 
 Finally, I want to prevent producing files which have trailing spaces, because they serve no purpose at all. Removing these spaces is less trivial than it seems and I am not pretending to know what the best strategy is. For a while now, the =ws-butler= package has done a great job for me.
 
 #+begin_src emacs-lisp
-  ;; Probably move this to somewhere else ?
   (use-package ws-butler
     :diminish
     :init
     (ws-butler-global-mode)             ; Enable by default
     ;; List exemptions here
-    ;; TODO  why is org-capture-mode in here?
-    (add-to-list 'ws-butler-global-exempt-modes 'org-capture-mode)
     (add-to-list 'ws-butler-global-exempt-modes 'magit-mode))
 
   (setq
@@ -3567,12 +3564,6 @@ edit-noframe --eval '(mrb/capture-toot)'
 
 * Development settings
 Some settings which aid in development tasks.
-
-Trailing white-space can sneak into files without knowing it. I could enable the display of trailing white-space, but I find that annoying to look at. Instead I just remove it just before saving a file.  One solution is to enable a before-save-hook, which would make me the trailing-white-space police in all projects.
-
-Alternatively a package ws-butler exists on github, which solves this exact problem. It implements the removal of white-space on top of the highlight-changes-mode which, at least in theory, would remove only the trailing white-space on changes I have made.
-
-However, this is problematic. It needs a special initialization because I run in server mode (doable), but its global mode is way to global, because it just applies to all buffers, which lead to errors on non-file buffers; for example because they are read-only.
 
 ** Generic
 Let's start with some generic development related settings and packages
