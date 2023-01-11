@@ -3650,12 +3650,14 @@ Make our source look a bit more attractive by enabling =prettify-symbol-mode= in
             org-mode org-journal-mode) . mrb/prettify-symbols)
     :init
 
+    ;; TODO this is a bit messy, do this in mode packages and per mode
     (defun mrb/prettify-symbols ()
       (interactive)
       ;; set buffer local variable to map the symbols
       (setq prettify-symbols-alist
           '(("lambda" . ?λ)
-            ("lambda*" . "λ*")
+            ("lambda*" . (?λ (Br . Bl) ?*)) ; just in scheme really
+            ("-lambda" . (?- (Br . Bl) ?λ))
             ;("map"    . ?↦)     ; this one is a bit of a pain actually
             ("->"     . ?⟶)
             ("<-"     . ?⟵)
