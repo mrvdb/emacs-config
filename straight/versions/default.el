@@ -150,6 +150,5 @@
  ("ws-butler" . "e3a38d93e01014cd47bf5af4924459bd145fd7c4")
  ("xref" . "0dc81218b59e7f199265704d1af37219af86d381")
  ("yaml-mode" . "3fcb36d6039bef57e2a0f6e24c51f623c0bf5fb7")
- ("yasnippet" . "5cbdbf0d2015540c59ed8ee0fcf4788effdf75b6")
  ("zeal-at-point" . "0fc3263f44e95acd3e9d91057677621ce4d297ee"))
 :gamma

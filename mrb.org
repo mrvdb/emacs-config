@@ -2716,12 +2716,46 @@ Embark is the other way around. Something is active, depending on context and `e
 I haven't found a solution for this yet, but also have not found it to be a problem that needs solving in practice so far.
 
 * Editing control
+Editing control are generic features which make editting easier, faster, more productive etcetera
 
-The multiple cursors package is often used for repetitive editing.
+Techniques in use by me:
+- multiple cursors :: doing the same edit actions over multiple locations at once
+- templates :: using a /shortcut/ or /abbreviation/ to insert templates/forms to fill in common constructs
+
+Multiple cursors is a package which turns 1 cursor into many, depending on the active region, and enters insertions at all cursor locations.
 
 #+begin_src emacs-lisp
   (use-package multiple-cursors
     :bind (("C-c e" . 'mc/edit-lines)))
+#+end_src
+
+Tempel is a templating system, with templates being lisp data, which hooks into modes and autocompletion system. The folder =~/.emacs.d/templates= holds =*.eld= files which specify templates which get autoloaded based on the major mode of the current buffer.
+
+I set it up for relevant modes as a CAPF handler (for programming and orgmode for now)
+#+begin_src emacs-lisp
+  (use-package tempel
+    :custom
+    ;; This would start completion directly, which I do NOT want
+    (tempel-trigger-prefix nil)
+    (tempel-path (expand-file-name
+                  "templates/*.eld"
+                  user-emacs-directory))
+
+    :bind (("M-<insert>" . tempel-complete))
+
+    :after (org)
+
+    :init
+
+    (setq org-tab-before-tab-emulation-hook nil)
+    (defun mrb/tempel-setup-capf()
+      ;; Remove org structured templates, which are just tempo templates as well
+      (setq org-tab-before-tab-emulation-hook nil)
+      (setq-local completion-at-point-functions
+                  (cons #'tempel-complete ; use tempel-expand if only exact matches wanted
+                        completion-at-point-functions)))
+
+    :hook ((prog-mode text-mode org-mode) . mrb/tempel-setup-capf))
 #+end_src
 
 ** Navigation
@@ -3783,8 +3817,6 @@ My personal style will be called =mrb= and basing it on the =linux= style.
     :diminish
     :config
     (editorconfig-mode 1))
-
-
 #+end_src
 
 ** Haskell
@@ -3917,17 +3949,7 @@ While we're in the scheme section, let's configure =guix= and friends, which use
       (add-to-list 'geiser-guile-load-path "~/dat/src/guix"))
 
     ;; guix uses debbugs, but this should probably be closer to mu4e and gnus config
-    (use-package debbugs)
-
-    ;; Add yasnippet here, but probably split of later
-    (use-package yasnippet
-      :config
-      (setq yas-snippet-dirs
-            '("~/dat/src/guix/etc/snippets" ; guix project helpers
-              "~/.config/emacs/snippets"    ; sort of a default
-              ))
-      (yas-global-mode 1))
-    )
+    (use-package debbugs))
 #+end_src
 *** Common lisp
 The defacto standard for a development environment in Emacs for common-lisp is either the =slime= or =sly= package. The latter seems a bit more modern and easier to configure, so trying that one
