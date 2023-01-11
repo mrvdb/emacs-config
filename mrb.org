@@ -3863,12 +3863,15 @@ For all of those languages, I want to use =puni= which makes editing, longer ter
 #+begin_src emacs-lisp
   (use-package puni
     :init
-    (puni-global-mode)
+    (puni-global-mode)                    ; perhaps too much, we'll see
     (electric-pair-mode)
+
     :bind ( :map puni-mode-map
             ("C-<right>" . puni-slurp-forward) ; foo (bar|) baz  ->  foo (bar| baz)
             ("C-<left>"  . puni-barf-forward)  ; foo (bar| baz)  ->  foo (bar|) baz
-            ))
+            )
+
+    :hook (org-mode . puni-disable-puni-mode))
 
 #+end_src
 
