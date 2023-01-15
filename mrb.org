@@ -2033,7 +2033,9 @@ While the standard capture method is useful I found myself not using it very muc
           ;; I want to have encryption, but how do TODO items bubble up then in the agenda
           org-journal-enable-encryption nil
           org-crypt-disable-auto-save t
-          org-journal-enable-cache t))
+          org-journal-enable-cache t
+          ;; TODO workaround for https://github.com/bastibe/org-journal/issues/406
+          org-element-use-cache nil))
 #+end_src
 
 Particularly in journaling, but also in org-mode in general, I want to be able to quickly insert screenshots. Rather, images in general but 90% of my use-case is really screenshots.
