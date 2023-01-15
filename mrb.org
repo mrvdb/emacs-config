@@ -143,6 +143,9 @@ And edit the file obviously.
         "edit-frame")
             ARGS=$ARGS' --no-wait --create-frame'
             ;;
+        "edit-wait-frame")
+            ARGS=$ARGS' --create-frame'
+            ;;
         ,*)
             echo "Wrong calling name..."
             ;;
