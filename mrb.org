@@ -3689,6 +3689,7 @@ As of emacs 29 the treesit package is built-in, so let's use that in any case fo
 #+begin_src emacs-lisp
   ;; Use the built-in treesit and load all language grammars
   (use-package treesit
+    :straight (:type builtin)
     :custom
     ;; Load languages directly from the repository after making them
     (treesit-extra-load-path
