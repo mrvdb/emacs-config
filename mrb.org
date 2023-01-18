@@ -546,6 +546,10 @@ For this to work properly we have to define a whole new input-method based on a 
   (add-hook 'set-language-environment-hook 'mrb/set-default-input-method)
   ;; And now we can set it
   (set-language-environment "UTF-8")
+  ;; Make sure our timestamps within emacs are independent of system locale
+  ;; This is mostly for orgmode I guess.
+  (setq system-time-locale "nl_NL.UTF-8")
+
 
   ;; Activate it for all text modes
   (add-hook 'text-mode-hook 'mrb/set-default-input-method)
