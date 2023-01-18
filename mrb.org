@@ -2693,7 +2693,6 @@ Embark is the other way around. Something is active, depending on context and `e
 
   (use-package embark
     :straight (embark :files (:defaults "embark-org.el"))
-    :ensure t
 
     :bind
     (("C-." . embark-act)         ;; pick some comfortable binding
@@ -3689,7 +3688,7 @@ As of emacs 29 the treesit package is built-in, so let's use that in any case fo
 #+begin_src emacs-lisp
   ;; Use the built-in treesit and load all language grammars
   (use-package treesit
-    :straight (:type builtin)
+    :straight (:type built-in)
     :custom
     ;; Load languages directly from the repository after making them
     (treesit-extra-load-path
@@ -3934,7 +3933,7 @@ The generic scheme support is the builtin scheme package, let's tell it that I u
   ;; Specific implementations depend on geiser
   (use-package geiser-guile
       :straight (:host gitlab :repo "emacs-geiser/guile")
-      :ensure t
+      :demand t
       :hook ((geiser-repl-mode . mrb/prettify-symbols))
 
       :config
