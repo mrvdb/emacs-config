@@ -3158,8 +3158,9 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
 
     ;; TODO  move these up
     (defun mrb/setsigfile (ctxname)
-      (concat "~/Maildir/.signature-"
-              (downcase ctxname)))
+      (expand-file-name
+       (concat ".signature-" (downcase ctxname))
+       "~/Maildir/"))
 
     (setq
      ;; Override the default mail user agent with the mu4e specific one
