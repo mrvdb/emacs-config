@@ -749,6 +749,7 @@ Although I think the 16 color system is a bit simplistic and, for emacs at least
             (mu4e-unread-face               :inherit nil :underline nil :weight bold)
             (mu4e-context-face              :inherit mu4e-link-face)
             (mu4e-flagged-face              :foreground "#ebcb8b" )
+            (mu4e-title-face                :foreground "#5e81ac")
 
             ;; Man pages inside emacs
             (Man-overstrike                 :foreground "#bf616a" :weight bold)
@@ -3127,10 +3128,10 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
   ;;        cmake, libglib2.0-dev, libgmime3.0-dev, libxapian-dev, texinfo
   ;; (names are debian package names)
   (use-package mu4e
-    :straight (:type git :host github :repo "djcb/mu"
-                     :pre-build (("./autogen.sh") ("ninja" "-C" "build"))
-                     :files (:defaults "build/mu4e/*.el")
-                     :includes (mu4e-icalendar))
+    :straight ( :type git :host github :repo "djcb/mu"
+                :pre-build (("./autogen.sh") ("ninja" "-C" "build"))
+                :files (:defaults "build/mu4e/*.el")
+                :includes (mu4e-icalendar))
 
     :custom (mu4e-mu-binary (expand-file-name "build/mu/mu" (straight--repos-dir "mu")))
     :after (message selected)
@@ -3165,12 +3166,12 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
     (setq
      ;; Override the default mail user agent with the mu4e specific one
      mail-user-agent 'mu4e-user-agent
-     mu4e-sent-folder     "/Sent"
-     mu4e-drafts-folder   "/Drafts"
-     mu4e-trash-folder    "/Trash"
-     mu4e-attachment-dir  "~/Downloads"   ; Absolute folder here, not relative to Maildir!
-     mrb/mu4e-junk-folder "/Junk"         ; Added for my specific config
+     mu4e-sent-folder        "/Sent"
+     mu4e-drafts-folder      "/Drafts"
+     mu4e-trash-folder       "/Trash"
+     mrb/mu4e-junk-folder    "/Junk"         ; Added for my specific config
      mrb/mu4e-archive-folder "/Archives"
+     mu4e-attachment-dir     "~/Downloads"   ; Absolute folder here, not relative to Maildir!
 
      ;; Refiling to /Archives/YYYY
      mu4e-refile-folder (lambda (msg)
@@ -3196,7 +3197,7 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
      ;; Context definitions
      ;; Goal 1. use global config, unless private address is used
      ;; TODO  Can we use the one that matched?
-     mu4e-context-policy 'pick-first            ; When nothing matches only!
+     mu4e-context-policy 'pick-first      ; When nothing matches only!
      mu4e-compose-context-policy 'nil     ; for compose, use current if nothing matches
      mail-signature-file  mrb/default-signature-file
 
