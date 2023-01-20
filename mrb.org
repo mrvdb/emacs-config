@@ -3206,6 +3206,10 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
                (sigfile (mrb/setsigfile ctxname)))
           (make-mu4e-context
            :name ctxname
+           :match-func (lambda (msg)
+                         (when msg
+                           (mu4e-message-contact-field-matches
+                            msg `(:to :cc :from) mrb/default-email-address)))
            ;; Use global config, but restore what was changed in other contexts
            :vars `((user-mail-address      . ,mrb/default-email-address)
                    (mail-signature-file    . ,sigfile)
@@ -3240,7 +3244,7 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
          (let ((shr-inhibit-images nil)   ;
                (shr-width nil)            ; Use whole window width for rendering
                (shr-use-colors nil)       ; Don't use colors from html, they ugly
-               (shr-bullet "• "))               ; Original was "* "
+               (shr-bullet "• "))         ; Original was "* "
            (shr-render-region (point-min) (point-max)))) msg))
 
     (setq mu4e-html2text-command 'mrb/mu4e-shr2text))
