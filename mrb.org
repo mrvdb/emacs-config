@@ -591,7 +591,8 @@ To make my life a bit easier, using the =all the icons= package for using specia
 The above in itself does nothing. It just makes using the icons easier and consistent. Other packages. With the command =M-x all-the-icons-install-fonts= the latest version of the proper fonts will be installed automaticaly, so run that once in a while.
 
 * Visual
-Many settings have to do with how the screen looks and behaves in a visual way. Thing like colors, highlighting etc. go fall into this category.
+Many settings have to do with how the screen looks and behaves in a visual way. Things like screen layout, colors, highlighting etc. fall into this category.
+
 
 Let's set up some basics first, background dark, some default frame and cursor properties:
 
@@ -615,6 +616,82 @@ Let's set up some basics first, background dark, some default frame and cursor p
             (mouse-color . "white")))
 #+end_src
 
+** Mode-line and status info
+One thing that always bothered me is the repeated mode-line for every buffer with information that only needs to be displayed once. Like the new-mail indicator or time-display for example. This section explores a configuration to scratch that itch.
+
+*Local information*, that is per buffer or per mode, should be displayed in the =mode-line= at the bottom of each visible buffer. There will be exceptions to this for special buffers where this does not make sense. This will be handled by the =nano-modeline= package.
+
+*Global information*, typically at least what =global-mode-string= holds, needs to be displayed only once (per frame). This will be handled by =tab-bar-mode= at the top of each frame, under the menu-bar.
+
+The format of the mode-line is:
+
+   =[ status name (primary)                               secondary ]=
+
+where:
+- status :: gives status of buffer (RO/RW/**/-- etc.)
+- name   :: name or filename to identify the contents of the buffer
+- primary :: buffer specific primary information, left aligned
+- secondary :: buffer specific secondary information, right aligned
+
+Both primary and secondary are buffer and/or mode-specific and some are configured by the =nano-modeline= package. Per mode configuration of the mode-line contents is possible in the =nano-modeline= package.
+
+The format of the status-bar is:
+
+   =[ primary                                               secondary ]=
+
+where:
+- primary :: global or mode specific information, *no* buffer specific information, left aligned
+- secondary :: global or mode specific information, *no* buffer specific information, right aligned
+
+One of the elements in the status bar will be a list of buffers which need attention for some reason (irc, compilation etc.). For this the =tracking= package will be used, which is part of circe, but has its own install recipe. I only use it for irc right now.
+
+#+begin_src emacs-lisp
+  (use-package tracking
+    :custom
+    (tracking-max-mode-line-entries 1)
+    (tracking-shorten-buffer-name-p nil)
+
+    :config
+    (tracking-mode 1))
+#+end_src
+
+
+
+#+begin_src emacs-lisp
+
+    (use-package nano-modeline
+      :after tracking
+
+      :custom
+      ;; tab-bar customization
+      (tab-bar-format '(mrb/tab-bar-format-primary
+                        tab-bar-format-align-right
+                        mrb/tab-bar-format-secondary))
+      (tab-bar-position t "Position tab-bar under the menu-bar")
+      (tab-bar-mode t "Enable tab-bar-mode unconditionally")
+      (global-tab-line-mode nil "Make sure tab-line-mode is disabled")
+
+      (nano-modeline-position 'bottom "Mode line goes at the bottom")
+      (nano-modeline-mode t "Enable the nano modeline")
+
+      :custom-face
+      ;; TODO I like :custom-face, but not the scattering of all the colors, name them?
+      (mode-line ((t ( :foreground "#3b4252" :background "#a3be8c"))))
+      (tab-bar   ((t ( :background "#4c566a"
+                       :height 1.1
+                       :box (:line-width 1 :color "dim gray" :style flat-button)))))
+
+      :init
+      ; Helper functions for the tab-bar-format
+      (defun mrb/tab-bar-format-primary () "") ;not used yet
+      (defun mrb/tab-bar-format-secondary ()
+        (concat
+         (propertize " " 'display `(raise 0.2))
+         (format-mode-line tracking-mode-line-buffers) ; buffers that need attention
+         (format-mode-line global-mode-string))))
+#+end_src
+
+** Theme
 I'm using the [[https://github.com/arcticicestudio/nord][Nord color palette]]. This palette defines 16 colors.
 
 There is a base16 theme which uses exactly these colors and there are varieties which use the 16 colors and some derivatives of it.
@@ -696,8 +773,9 @@ Although I think the 16 color system is a bit simplistic and, for emacs at least
             (isearch                        :foreground "#434c5e" :background ,mrb/cursor-color)
 
             ;; Mode-line faces
-            (mode-line                      :foreground "#3b4252" :background "#ebcb8b")
+            ;(mode-line                      :foreground "#3b4252" :background "#a3be8c")
             (header-line                    :foreground "#4c566a" :background "#ebcb8b")
+            ;(tab-bar                        :background "#4c566a" )
 
             ;; Magit
             (diff-refine-added              :background "#003000")
@@ -764,7 +842,7 @@ Although I think the 16 color system is a bit simplistic and, for emacs at least
     (base16-theme-set-faces 'base16-nord base16-nord-theme-colors base16-adjustments))
 #+end_src
 
-Miscellaneous other visual settings follow.
+** Miscellaneous other visual settings follow.
 
 #+begin_src emacs-lisp
   ;; no splash screen
@@ -774,36 +852,6 @@ Miscellaneous other visual settings follow.
 
   ;; check speed consequences of this
   (setq column-number-mode t)
-
-  ;; Track changes to buffers
-  (use-package tracking
-    :config
-    (setq
-     tracking-max-mode-line-entries 1
-     tracking-shorten-buffer-names-p nil)
-    (tracking-mode 1))
-
-  ;; Mode-line
-  ;; TODO  probably simplify this package, now we do not need evil support
-  (use-package spaceline
-    :straight (:includes spaceline-config))
-
-  (use-package spaceline-config
-    :after tracking
-   ;;   :requires eyebrowse
-  ;;   :requires persp-mode
-  ;;   :requires window-numbering
-    :config
-    ;; Define a segment for the tracking package
-    (spaceline-define-segment tracking
-      "Segment to show if buffers need attention, similar to
-       erc-track, but using mcirc tracking library"
-       tracking-mode-line-buffers)
-
-     ;; We use the spacemacs theme, which gives us the evil state indicator
-     (spaceline-spacemacs-theme 'tracking)
-
-     )
 
   (use-package mic-paren
     :config
