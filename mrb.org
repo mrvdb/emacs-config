@@ -1402,7 +1402,8 @@ I guess 90% of the information I keep in the main orgmode files starts life orig
 2. BUY items;
 3. Journal entries;
 4. Logbook entries;
-5. Weblinks
+5. Weblinks;
+6. Toots.eval
 
 The =org-capture-pop-frame= package makes sure all captures are in separate frames.
 
@@ -1903,16 +1904,6 @@ I combine =ical2orgpy= with a cron job which pulls in the calendars I am interes
   done < .calendars
 #+end_src
 
-** Searching for items
-Over the years the amount of information I manage with orgmode has grown considerably, ranging from the plain TODO lists, blog posts, calendar information, project files etc. Increasingly I find myself not being able to find things in that pile of information. The solution in [[Grepping files]] helps a lot already but is a generic solution.
-
-To have a more structured solution for org type content, I'm using =org-ql=
-
-#+begin_src emacs-lisp
-  ;; (use-package org-ql)   ; Postponing, has wrong repository reference for peg.el
-#+end_src
-
-One thing I use this for is in my habits file to predefine a search for the relevant items for the habit.
 ** Babel / Literate programming
 Specific settings for babel and literate programming within org-mode
 
@@ -2730,9 +2721,7 @@ All of these work fine, but corfu gets installed because it fits right in with t
       (interactive)
       (let ((completion-extra-properties corfu--extra)
             completion-cycle-threshold completion-cycling)
-        (apply #'consult-completion-in-region completion-in-region--data)))
-    (define-key corfu-map "\M-m" #'corfu-move-to-minibuffer)
-    )
+        (apply #'consult-completion-in-region completion-in-region--data))))
 #+end_src
 
 ** Ad 4. Mode specialization
