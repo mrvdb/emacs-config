@@ -649,7 +649,7 @@ One of the elements in the status bar will be a list of buffers which need atten
   (use-package tracking
     :custom
     (tracking-max-mode-line-entries 1)
-    (tracking-shorten-buffer-name-p nil)
+    (tracking-shorten-buffer-names-p nil)
 
     :config
     (tracking-mode 1))
