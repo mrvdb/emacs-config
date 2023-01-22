@@ -215,15 +215,16 @@ Now that we have =straight= we will use it from the =use-package= macro.
           )
     ;; From this point on we should be able to use `use-package
     (use-package straight
-      :config
-      (setq straight-host-usernames '((github . "mrvdb"))) ; TODO Move to personal information?
+      :custom
+      (straight-host-usernames '((github . "mrvdb"))) ; TODO Move to personal information?
+      (straight-use-package-by-default t)
       ;; Make sure packages do not pull in internal org, we pregister org from straight.el
       (straight-register-package 'org)
       (straight-register-package 'org-contrib)
 
       <<straight-helperfunctions>>
 
-      :custom (straight-use-package-by-default t))
+      )
 
     ;; FROM THIS POINT use-package should work as intended, i.e. using straight.
 
@@ -283,10 +284,11 @@ I have a gpg-agent daemon configured which manages gpg and ssh keys, protected b
     :init
     (auth-source-pass-enable)
     :after password-store
-    :config
+    :custom
     ;; Make sure it's the only mechanism
-    (setq auth-sources '(password-store)
-          auth-source-gpg-encrypt-to (list user-mail-address)))
+    (auth-sources '(password-store))
+    (auth-source-gpg-encrypt-to (list user-mail-address)))
+
   ;; I like the pass interface, so install that too
   (use-package pass
     :after password-store)
@@ -374,9 +376,11 @@ Finally, I want to prevent producing files which have trailing spaces, because t
   (use-package autorevert
     :diminish auto-revert-mode
 
+    :custom
+    (auto-revert-interval 0.5)               ; Perhaps too often, let's see
+    (global-auto-revert-non-file-buffers t)  ; things like dired buffers
+
     :config
-    (setq auto-revert-interval 0.5               ; Perhaps too often, let's see
-          global-auto-revert-non-file-buffers t) ; things like dired buffers
     (global-auto-revert-mode t))
 
   ;; Should this be here?
@@ -701,11 +705,13 @@ Although I think the 16 color system is a bit simplistic and, for emacs at least
 #+begin_src emacs-lisp
   (setq custom--inhibit-theme-enable nil)  ; This was needed for Emacs 27, but cant recall why
   (use-package base16-theme
-    :config
+    :custom
     ;; Do config here and finally load the theme
-    (setq base16-theme-distinct-fringe-background nil
-          base16-theme-highlight-mode-line 'contrast
-          base16-theme-256-color-source "terminal")
+    (base16-theme-distinct-fringe-background nil)
+    (base16-theme-highlight-mode-line 'contrast)
+    (base16-theme-256-color-source "terminal")
+
+    :config
     (load-theme 'base16-nord t)
 
     ;; Define our adjustments to faces
@@ -854,8 +860,10 @@ Although I think the 16 color system is a bit simplistic and, for emacs at least
   (setq column-number-mode t)
 
   (use-package mic-paren
+    :custom
+    (paren-highlight-at-point nil)
+
     :config
-    (setq paren-highlight-at-point nil)
     (paren-activate))
 
   ;; Defer fontification, but only if there is input pending
@@ -915,9 +923,8 @@ Line-numbering is off by default, it tends to slow things down, but if I want it
 #+begin_src emacs-lisp
   (use-package display-line-numbers
     :straight (:type built-in)
-    :config
-    (setq
-     display-line-numbers-type 'relative)
+    :custom
+    (display-line-numbers-type 'relative)
     (display-line-numbers-mode -1))
 #+end_src
 
@@ -981,12 +988,9 @@ Flyspell is similar to flycheck but for text languages. I'm setting some of the 
 #+begin_src emacs-lisp
   (use-package flyspell
     :straight (:type built-in)
-    :config
-    ;; flyspell-duplicate  as warnings
-    ;; Do I want this at all?, seems overkill
-    ;; TODO  this does not seem to help
-    (setq flyspell-mark-duplications-flag nil
-          flyspell-issue-message-flag nil))
+    :custom
+    (flyspell-mark-duplications-flag nil "Flyspell Duplicates as warning")
+    (flyspell-issue-message-flag nil))
 #+end_src
 
 Still on the wish-list:
@@ -1008,8 +1012,11 @@ $$e^{ix} = cos x + i sinx$$
   (use-package texfrag
     :disabled t
     :diminish
+
+    :custom
+    (texfrag-prefix "")
+
     :config
-    (setq texfrag-prefix "")
     (texfrag-global-mode 1))
 #+end_src
 *** Highlighting tags and keywords
@@ -1160,10 +1167,7 @@ For file management itself, dired is the defacto standard It's builtin so =use-p
   (use-package dired
     :straight (:type built-in)
     ;; auto-revert global is only for file buffers, so explicit enable is needed
-    :hook (dired-mode-hook . auto-revert-mode)
-    :config
-      (setq dired-bind-jump nil) ; Do not bind to C-x C-j, we do jabber prefix there
-  )
+    :hook (dired-mode-hook . auto-revert-mode))
 #+end_src
 
 * Modes
@@ -1245,9 +1249,9 @@ Now, do the other mode related packages which require a bit of configuration.
     :straight (:type built-in)
     :hook ((nxml-mode . (lambda () (set-input-method nil)))
            (nxml-mode . turn-off-auto-fill))
-    :config
-    (setq nxml-heading-element-name-regexp "\\|.*"
-          nxml-section-element-name-regexp "\\|file\\|.+"))
+    :custom
+    (nxml-heading-element-name-regexp "\\|.*")
+    (nxml-section-element-name-regexp "\\|file\\|.+"))
 #+end_src
 * Org-mode
 Orgmode configuration is probably the largest part of my Emacs configuration, because most of the time I spent in Emacs, when not coding, is spent in org-mode.
@@ -1420,6 +1424,7 @@ The =org-capture-pop-frame= package makes sure all captures are in separate fram
     ;; and some shortcuts to run them
     <<org-capture-runners>>
 
+    ;; Not a :custom, we're making this up as we go.
     (setq ocpf-frame-parameters
           '((name . "*capture*")
             (width . 115) (height . 15)
@@ -1643,6 +1648,7 @@ For now, a basic config and enabling of =org-edna=
     :config
     (org-edna-mode))
 #+end_src
+
 ** Marking items as DONE
 Marking work as completed should be a smooth process to stop getting in the way of doing the actual work. A shortcut is defined to mark items done in the standard way and have an additional shortcut to mark it done should it be blocked.
 
@@ -1686,9 +1692,9 @@ I want the property to be name 'CREATED' (I don't remember what the org-expiry d
 #+begin_src emacs-lisp
   (use-package org-contrib)
   (use-package org-expiry
-    :init
-    (setq org-expiry-created-property-name "CREATED"
-          org-expiry-inactive-timestamps  t)
+    :custom
+    (org-expiry-created-property-name "CREATED")
+    (org-expiry-inactive-timestamps  t)
 
     :config
     <<org-expiry-createdtimestampfunction>>
@@ -1765,8 +1771,8 @@ There are a couple of ways within org to emphasize text inline for *bold*, /ital
   (use-package org-appear
     :after org
     :hook (org-mode . org-appear-mode)
-    :config
-    (setq org-hide-emphasis-markers t)    ; Is this used by org-appear mode?
+    :custom
+    (org-hide-emphasis-markers t)    ; Is this used by org-appear mode?
     )
 #+end_src
 
@@ -1848,8 +1854,8 @@ Settings which are just applicable for the org-mode agenda view.
 #+begin_src emacs-lisp
   ;; Show properties in agenda view
   (use-package org-agenda-property
-    :config
-    (setq org-agenda-property-list '("LOCATION" "Responsible")))
+    :custom
+    (org-agenda-property-list '("LOCATION" "Responsible")))
 
   ;; When done rendering, go to the top
   (add-hook 'org-agenda-finalize-hook #'(lambda () (goto-char (point-min))) 100)
@@ -1939,10 +1945,10 @@ Plantuml transforms diagram specifications with a /mini programming language/ in
 #+begin_src emacs-lisp
   (use-package plantuml-mode
     :after org    ; strictly not needed, but i use it mainly from org
-    :config
-    (setq plantuml-jar-path "/usr/share/java/plantuml/plantuml.jar"
-          org-plantuml-jar-path plantuml-jar-path
-          plantuml-default-exec-mode 'jar))
+    :custom
+    (plantuml-jar-path "/usr/share/java/plantuml/plantuml.jar")
+    (org-plantuml-jar-path plantuml-jar-path)
+    (plantuml-default-exec-mode 'jar))
 
   (setq org-ditaa-jar-path    "/usr/share/java/ditaa/ditaa-0.11.jar")
 #+end_src
@@ -2091,39 +2097,40 @@ While the standard capture method is useful I found myself not using it very muc
     ;; Keybindings for active regions in org-journal
     <<org-journal-mode-selected>>
 
-    :init
+    :custom
     ;; The expand-file-name is needed, which is odd, because for single
     ;; files this is not needed.
-    (setq org-journal-dir (expand-file-name (concat org-directory "journal/"))
-          ;; Bring our config to every journal file
-          org-journal-file-header (concat "#+SETUPFILE: " user-emacs-directory "org-config.org")
+    (org-journal-dir (expand-file-name (concat org-directory "journal/")))
 
-          ;; Match the journal files (TODO  make this independent of earlier assignments)
-          org-agenda-file-regexp "^[0-9]+\\.org"
-          org-journal-file-format  "%Y%m%d.org"
+    ;; Bring our config to every journal file
+    (org-journal-file-header (concat "#+SETUPFILE: " user-emacs-directory "org-config.org"))
 
-          ;; Put day on top of file, uses `org-journal-date-format`
-          org-journal-date-format "%A, %e-%m-%Y"
+    ;; Match the journal files (TODO  make this independent of earlier assignments)
+    (org-agenda-file-regexp "^[0-9]+\\.org")
+    (org-journal-file-format  "%Y%m%d.org")
 
-          ;; Put day on top of file, uses `org-journal-date-format`
-          org-journal-date-prefix "#+TITLE: "
-          ;; New entries go at the bottom, make sure we are at top level
-          org-journal-time-format "[%R] "
-          org-journal-time-prefix "* "
+    ;; Put day on top of file, uses `org-journal-date-format`
+    (org-journal-date-format "%A, %e-%m-%Y")
 
-          ;; Carry over TODO items and items explicitly marked
-          org-journal-carryover-items "+carryover|+TODO=\"TODO\""
-          ;; and for this to work, we need agenda integration
-          org-journal-enable-agenda-integration t
-          ;; Remove empty journals after carryover
-          org-journal-carryover-delete-empty-journal 'always
+    ;; Put day on top of file, uses `org-journal-date-format`
+    (org-journal-date-prefix "#+TITLE: ")
+    ;; New entries go at the bottom, make sure we are at top level
+    (org-journal-time-format "[%R] ")
+    (org-journal-time-prefix "* ")
 
-          ;; I want to have encryption, but how do TODO items bubble up then in the agenda
-          org-journal-enable-encryption nil
-          org-crypt-disable-auto-save t
-          org-journal-enable-cache t
-          ;; TODO workaround for https://github.com/bastibe/org-journal/issues/406
-          org-element-use-cache nil))
+    ;; Carry over TODO items and items explicitly marked
+    (org-journal-carryover-items "+carryover|+TODO=\"TODO\"")
+    ;; and for this to work, we need agenda integration
+    (org-journal-enable-agenda-integration t)
+    ;; Remove empty journals after carryover
+    (org-journal-carryover-delete-empty-journal 'always)
+
+    ;; I want to have encryption, but how do TODO items bubble up then in the agenda
+    (org-journal-enable-encryption nil)
+    (org-crypt-disable-auto-save t)
+    (org-journal-enable-cache t)
+    ;; TODO workaround for https://github.com/bastibe/org-journal/issues/406
+    (org-element-use-cache nil))
 #+end_src
 
 Particularly in journaling, but also in org-mode in general, I want to be able to quickly insert screenshots. Rather, images in general but 90% of my use-case is really screenshots.
@@ -2153,24 +2160,23 @@ Writefreely is a Write.as derivative and published as open source. This allows m
   ;; Make sure the variables of THIS file are loaded before THIS file is loaded
   (use-package writefreely
     :after org
-    :config
-    (setq
-     ;; Set api endpoints for my own install
-     writefreely-instance-url "https://qua.name"
-     writefreely-instance-api-endpoint "https://qua.name/api"
-     writefreely-maybe-publish-created-date t
-     writefreely-auth-token (password-store-get "Qua.name/accesstoken")))
+    :custom
+    (writefreely-instance-url "https://qua.name")
+    (writefreely-instance-api-endpoint "https://qua.name/api")
+    (writefreely-maybe-publish-created-date t)
+    (writefreely-auth-token (password-store-get "Qua.name/accesstoken")))
 #+end_src
 ** Encrypting information in org-mode
 I use the /encrypt/ tag for encrypting sections in org-mode (and sometimes my journal). The sections get encrypted and decrypted automatically on saving and opening. This uses the EasyPG library to get to my GPG key.
 
 #+begin_src emacs-lisp
   (use-package org-crypt
+    :custom
+    (org-crypt-tag-matcher "encrypt")
+    (org-crypt-key user-gpg-encrypt-key)
 
     :config
-    (org-crypt-use-before-save-magic)
-    (setq org-crypt-tag-matcher "encrypt")
-    (setq org-crypt-key user-gpg-encrypt-key))
+    (org-crypt-use-before-save-magic))
 #+end_src
 
 We do not want to inherit this tag automatically, as its behavior is already subsection inclusive. When you encrypt a section, everything below it is considered content of that section and gets encrypted. I also add the value "crypt" as that is the org default, so it won't be inherited by mistake.
@@ -2383,9 +2389,11 @@ Furthermore, because I still can't remember keys, after pressing a prefix key li
   ; which keys shows menu with completions of prefix-key
   (use-package which-key
     :diminish
+    :custom
+    (which-key-idle-delay 1.8)
+    (which-key-show-operator-state-maps t)
+
     :config
-    (setq which-key-idle-delay 1.8
-          which-key-show-operator-state-maps t)
     (which-key-mode))
 #+end_src
 
@@ -2627,8 +2635,8 @@ The basic install is easy, but does need an emacs compiled with module support.
 #+begin_src emacs-lisp
   (use-package vterm
     :if (fboundp'module-load)
-    :config
-    (setq vterm-timer-delay 0))
+    :custom
+    (vterm-timer-delay 0))
 #+end_src
 
 To benefit from some of the most useful features, there is a little bit of shell configuration involved. The package includes a shell script for that which I am sourcing in my =.zshrc= configuration file.
@@ -2710,6 +2718,7 @@ All of these work fine, but corfu gets installed because it fits right in with t
     :custom
     (corfu-auto t)
     (corfu-quit-at-boundary 'separator)
+
     :bind ( :map corfu-map
             ("M-m" . mrb/corfu-move-to-minibuffer))
     :init
@@ -2735,13 +2744,13 @@ The configuration of the completion is handled by vertico now, so nothing needs 
 For most of the completion that is needed which is not inline (for which I am using the =corfu= package above, helm seems to be the most powerful solution, but feels isolated. For every integration something extra seems to be needed. =Vertico= seems the completing framework that fits the integration requirement best; it clearly states so in its goal to only depending on the Emacs API and not create a new one. Integrating it with others looks a lot more orthogonal than Helm.
 
 #+begin_src emacs-lisp
-    (use-package vertico
-      :demand t
-      :straight (vertico :files (:defaults "extensions/*")
-                         :includes (vertico-reverse))
+  (use-package vertico
+    :demand t
+    :straight (vertico :files (:defaults "extensions/*")
+                       :includes (vertico-reverse))
 
-      :config
-      (vertico-mode))
+    :config
+    (vertico-mode))
 #+end_src
 
 The first thing to complement =vertico= is the =orderless= package. My main use is to have the matching for completing items match 'first second' as well as 'second first' regardless of their order. Note that this works for every completion, also within =corfu= which is especially useful.
@@ -2873,11 +2882,12 @@ Once that is in place files can be opened with =/ssh:/host:/path/to/file= syntax
 #+begin_src emacs-lisp
   (use-package tramp
     :straight (:type built-in)            ; tramp is closely tied to emacs, use builtin
-    :config
-    (setq default-tramp-method "ssh"
-          tramp-syntax 'simplified
-          tramp-terminal-type "tramp")
+    :custom
+    (default-tramp-method "ssh")
+    (tramp-syntax 'simplified)
+    (tramp-terminal-type "tramp")
 
+    :config
     (eval-after-load 'tramp '(setenv "SHELL" "/bin/bash"))
     (add-to-list 'tramp-connection-properties
                      (list ".*" "locale" "LC_ALL=C")))
@@ -2923,45 +2933,49 @@ The package as is, is already useful for searching locations and storing links t
     ;; Load Org link support
     (with-eval-after-load 'org
       (require 'osm-ol))
-    :config
-    (setq osm-outdoor-url (concat
-                           "https://tile.thunderforest.com/outdoors/{%z}/{%x}/{%y}.png?apikey="
-                           (password-store-get "API/tile.thunderforest.com"))
-          map5-base (concat "https://s.map5.nl/map/"
-                            (password-store-get "API/map5.nl")
-                            "/tiles/")
-          osm-map5-opentopo-url (concat map5-base
-                                        "opentopo/EPSG900913/{%z}/{%x}/{%y}.jpeg")
-          osm-map5-opensimpletopo-url (concat map5-base
-                                              "opensimpletopo/EPSG900913/{%z}/{%x}/{%y}.jpeg")
-          osm-map5-openlufo-url (concat map5-base
-                                        "openlufo/EPSG900913/{%z}/{%x}/{%y}.jpeg")
 
-          osm-server-list
-          `((default
-              :name "Mapnik"
-              :description "Standard Mapnik map provided by OpenStreetMap"
-              :url "https://%s.tile.openstreetmap.org/%z/%x/%y.png"
-              :group "Standard")
-            (outdoor :name "Outdoor"
-                     :description "Outdoor focussed maps"
-                     :url ,osm-outdoor-url
-                     :group "Personal")
-            (opentopo :name "OpenTopo NL"
-                      :description "Map5.nl OpenTopo"
-                      :url ,osm-map5-opentopo-url
-                      :group "Personal")
-            (opensimpletopo  :name "OpenSimpleTopo NL"
-                             :description "Map5.nl OpenSimpleTopo"
-                             :url ,osm-map5-opensimpletopo-url
-                             :group "Personal")
-            (openlufo  :name "OpenLufo NL"
-                       :description "Map5.nl OpenLufo"
-                       :url ,osm-map5-openlufo-url
-                       :group "Personal"))
-          ;; set proper home location, TODO  read this from private store
-          osm-home '(51.6441759 4.4377029 17)
-          osm-copyright nil))
+    :custom
+    (osm-outdoor-url
+     (concat "https://tile.thunderforest.com/outdoors/{%z}/{%x}/{%y}.png?apikey="
+             (password-store-get "API/tile.thunderforest.com")))
+    (map5-base (concat "https://s.map5.nl/map/"
+                       (password-store-get "API/map5.nl")
+                       "/tiles/"))
+    (osm-map5-opentopo-url
+     (concat map5-base "opentopo/EPSG900913/{%z}/{%x}/{%y}.jpeg"))
+
+    (osm-map5-opensimpletopo-url
+     (concat map5-base "opensimpletopo/EPSG900913/{%z}/{%x}/{%y}.jpeg"))
+
+    (osm-map5-openlufo-url
+     (concat map5-base "openlufo/EPSG900913/{%z}/{%x}/{%y}.jpeg"))
+
+    (osm-server-list
+     `((default
+        :name "Mapnik"
+        :description "Standard Mapnik map provided by OpenStreetMap"
+        :url "https://%s.tile.openstreetmap.org/%z/%x/%y.png"
+        :group "Standard")
+       (outdoor :name "Outdoor"
+                :description "Outdoor focussed maps"
+                :url ,osm-outdoor-url
+                :group "Personal")
+       (opentopo :name "OpenTopo NL"
+                 :description "Map5.nl OpenTopo"
+                 :url ,osm-map5-opentopo-url
+                 :group "Personal")
+       (opensimpletopo  :name "OpenSimpleTopo NL"
+                        :description "Map5.nl OpenSimpleTopo"
+                        :url ,osm-map5-opensimpletopo-url
+                        :group "Personal")
+       (openlufo  :name "OpenLufo NL"
+                  :description "Map5.nl OpenLufo"
+                  :url ,osm-map5-openlufo-url
+                  :group "Personal")))
+
+    ;; set proper home location, TODO  read this from private store
+    (osm-home '(51.6441759 4.4377029 17))
+    (osm-copyright nil))
 #+end_src
 * Messaging and chatting
 ** Mail
@@ -2977,17 +2991,18 @@ Composing mail is often an /out of band/ activity, like creating a tweet or a ca
 
   :bind ("C-x m" . 'mrb/compose-mail)
 
-  :config
-  (setq mu4e-compose-format-flowed t
-        mu4e-compose-in-new-frame t
-        mu4e-compose-dont-reply-to-self t
-        mu4e-compose-signature '(with-current-buffer
-                                    (find-file-noselect message-signature-file)
-                                  (buffer-string))
-        mu4e-compose-complete-only-after nil ; no limit on contact completion for now
-        mail-signature t  ; use mail-signature file (move to message section?)
-        )
+  :custom
+  (mu4e-compose-format-flowed t)
+  (mu4e-compose-in-new-frame t)
+  (mu4e-compose-dont-reply-to-self t)
+  (mu4e-compose-signature
+   '(with-current-buffer
+        (find-file-noselect message-signature-file)
+      (buffer-string)))
+  (mu4e-compose-complete-only-after nil) ; no limit on contact completion for now
+  (mail-signature t)  ; use mail-signature file (move to message section?)
 
+  :config
   (defun mrb/compose-mail (&optional mailto-url)
     "Run mail-compose, use mailto URI if it is given."
     (interactive)
@@ -3093,20 +3108,18 @@ Sending mail through smtp, using the smtpmail package
 
 #+begin_src emacs-lisp
   (use-package smtpmail
-     :init
-     (setq smtpmail-default-smtp-server "localhost"
-           smtpmail-service 25)
-     :config
-     (setq
-      smtpmail-local-domain user-domain
-      smtpmail-sendto-domain user-domain
-      ;; User agent style is message mode by default, specific mail packages may override this
-      mail-user-agent 'message-user-agent
-      send-mail-function 'smtpmail-send-it ;This is for mail-mode
-      message-send-mail-function 'message-smtpmail-send-it) ; This is for message-mode
+    :custom
+    (smtpmail-default-smtp-server "localhost")
+    (smtpmail-service 25)
+    (smtpmail-local-domain user-domain)
+    (smtpmail-sendto-domain user-domain)
+    ;; User agent style is message mode by default, specific mail packages may override this
+    (mail-user-agent 'message-user-agent)
+    (send-mail-function 'smtpmail-send-it) ;This is for mail-mode
+    (message-send-mail-function 'message-smtpmail-send-it) ; This is for message-mode
 
-     (setq password-cache t)            ; default is true, so no need to set this actually
-     (setq password-cache-expiry 28800)) ; default is 16 seconds, which is ridiculously low
+    (password-cache t)            ; default is true, so no need to set this actually
+    (password-cache-expiry 28800)) ; default is 16 seconds, which is ridiculously low
 #+end_src
 
 At times we want to send signed and/or encrypted mail
@@ -3205,131 +3218,133 @@ It's not entirely clear which package is exactly responsible for what, but there
 After a journey with many different MUAs I seem to be settling on =mu4e=.
 
 #+begin_src emacs-lisp
-  ;; TODO  check for system packages meson, g++, pkg-config,
-  ;;        cmake, libglib2.0-dev, libgmime3.0-dev, libxapian-dev, texinfo
-  ;; (names are debian package names)
-  (use-package mu4e
-    :straight ( :type git :host github :repo "djcb/mu"
-                :pre-build (("./autogen.sh") ("ninja" "-C" "build"))
-                :files (:defaults "build/mu4e/*.el")
-                :includes (mu4e-icalendar))
+      ;; TODO  check for system packages meson, g++, pkg-config,
+      ;;        cmake, libglib2.0-dev, libgmime3.0-dev, libxapian-dev, texinfo
+      ;; (names are debian package names)
+      (use-package mu4e
+        :straight ( :type git :host github :repo "djcb/mu"
+                    :pre-build (("./autogen.sh") ("ninja" "-C" "build"))
+                    :files (:defaults "build/mu4e/*.el")
+                    :includes (mu4e-icalendar))
 
-    :custom (mu4e-mu-binary (expand-file-name "build/mu/mu" (straight--repos-dir "mu")))
-    :after (message selected)
-    :commands (mu4e mrb/compose-mail mrb/mailfile)
-    :hook (mu4e-view-mode . mrb/mu4e-view-mode-hook)
+        :custom
+        (mu4e-mu-binary (expand-file-name "build/mu/mu" (straight--repos-dir "mu")))
 
-    :config
-    (defun mrb/mu4e-view-mode-hook ()
-      (interactive)
-      (turn-on-visual-line-mode)
-      ;; Reflow messages
-      (setq mm-fill-flowed t))
+        :after (message selected)
+        :commands (mu4e mrb/compose-mail mrb/mailfile)
+        :hook (mu4e-view-mode . mrb/mu4e-view-mode-hook)
 
-    :bind ( :map mu4e-search-minor-mode-map
-            ("/" . mu4e-search)
-            ("s" . nil)
-            ("e" . mu4e-search-edit))
+        :config
+        (defun mrb/mu4e-view-mode-hook ()
+          (interactive)
+          (turn-on-visual-line-mode)
+          ;; Reflow messages
+          (setq mm-fill-flowed t))
 
-    ;; Configuration sections
-    <<mu4e-composeconfig>>
-    <<mu4e-main-config>>
-    <<mu4e-headers-config>>
-    <<mu4e-view-config>>
-    <<mu4e-packages>>
+        :bind ( :map mu4e-search-minor-mode-map
+                ("/" . mu4e-search)
+                ("s" . nil)
+                ("e" . mu4e-search-edit))
 
-    ;; TODO  move these up
-    (defun mrb/setsigfile (ctxname)
-      (expand-file-name
-       (concat ".signature-" (downcase ctxname))
-       "~/Maildir/"))
+        ;; Configuration sections
+        <<mu4e-composeconfig>>
+        <<mu4e-main-config>>
+        <<mu4e-headers-config>>
+        <<mu4e-view-config>>
+        <<mu4e-packages>>
 
-    (setq
-     ;; Override the default mail user agent with the mu4e specific one
-     mail-user-agent 'mu4e-user-agent
-     mu4e-sent-folder        "/Sent"
-     mu4e-drafts-folder      "/Drafts"
-     mu4e-trash-folder       "/Trash"
-     mrb/mu4e-junk-folder    "/Junk"         ; Added for my specific config
-     mrb/mu4e-archive-folder "/Archives"
-     mu4e-attachment-dir     "~/Downloads"   ; Absolute folder here, not relative to Maildir!
+        ;; TODO  move these up
+        (defun mrb/setsigfile (ctxname)
+          (expand-file-name
+           (concat ".signature-" (downcase ctxname))
+           "~/Maildir/"))
 
-     ;; Refiling to /Archives/YYYY
-     mu4e-refile-folder (lambda (msg)
-                          (let ((archive_base (concat mrb/mu4e-archive-folder "/"))
-                                (msgyear (format-time-string "%Y" (mu4e-message-field msg :date))))
-                            (cond
-                             ;; Order: most specific to general, end with the 't' case
-                             ;; Archive messages per year if it has a date field (basically, always)
-                             (msgyear   (concat archive_base msgyear))
-                             ;; The default refile location
-                             (t  archive_base))))
+        (setq
+         ;; Override the default mail user agent with the mu4e specific one
+         mail-user-agent 'mu4e-user-agent
+         mu4e-sent-folder        "/Sent"
+         mu4e-drafts-folder      "/Drafts"
+         mu4e-trash-folder       "/Trash"
+         mrb/mu4e-junk-folder    "/Junk"         ; Added for my specific config
+         mrb/mu4e-archive-folder "/Archives"
+         mu4e-attachment-dir     "~/Downloads"   ; Absolute folder here, not relative to Maildir!
 
-
-     mu4e-use-fancy-chars t
-     mu4e-get-mail-command "mbsync quick" ; Just get inbox and important stuff, not everything
-     mu4e-decryption-policy 'ask
-     mu4e-update-interval 120             ; we just index, no retrieve, so 2mins is fine
-
-     ;; Set completing function to standard, so completing frameworks can use it
-     mu4e-completing-read-function 'completing-read
-     mu4e-save-multiple-attachments-without-asking t
-
-     ;; Context definitions
-     ;; Goal 1. use global config, unless private address is used
-     ;; TODO  Can we use the one that matched?
-     mu4e-context-policy 'pick-first      ; When nothing matches only!
-     mu4e-compose-context-policy 'nil     ; for compose, use current if nothing matches
-     mail-signature-file  mrb/default-signature-file
+         ;; Refiling to /Archives/YYYY
+         mu4e-refile-folder (lambda (msg)
+                              (let ((archive_base (concat mrb/mu4e-archive-folder "/"))
+                                    (msgyear (format-time-string "%Y" (mu4e-message-field msg :date))))
+                                (cond
+                                 ;; Order: most specific to general, end with the 't' case
+                                 ;; Archive messages per year if it has a date field (basically, always)
+                                 (msgyear   (concat archive_base msgyear))
+                                 ;; The default refile location
+                                 (t  archive_base))))
 
 
-     mu4e-contexts
-     `(,(let* ((ctxname "Default")
-               (sigfile (mrb/setsigfile ctxname)))
-          (make-mu4e-context
-           :name ctxname
-           :match-func (lambda (msg)
-                         (when msg
-                           (mu4e-message-contact-field-matches
-                            msg `(:to :cc :from) mrb/default-email-address)))
-           ;; Use global config, but restore what was changed in other contexts
-           :vars `((user-mail-address      . ,mrb/default-email-address)
-                   (mail-signature-file    . ,sigfile)
-                   (mu4e-compose-signature . (with-current-buffer
-                                                 (find-file-noselect mail-signature-file)
-                                               (buffer-string))))))
-       ,(let* ((ctxname "Private")
-               (sigfile (mrb/setsigfile ctxname)))
-          (make-mu4e-context
-           :name "Private"
-           :match-func (lambda (msg)
-                         (when msg
-                           (mu4e-message-contact-field-matches
-                            msg `(:to :cc :from) mrb/private-addresses)))
-           :vars `((user-mail-address     . ,mrb/default-private-address)
-                   (mail-signature-file   . ,sigfile)
-                   (mu4e-compose-signature . (with-current-buffer
-                                                 (find-file-noselect mail-signature-file)
-                                               (buffer-string))))))
-       )
-     )
+         mu4e-use-fancy-chars t
+         mu4e-get-mail-command "mbsync quick" ; Just get inbox and important stuff, not everything
+         mu4e-decryption-policy 'ask
+         mu4e-update-interval 120             ; we just index, no retrieve, so 2mins is fine
 
-    ;; Rendering of html mail is done with shr, but I prefer not to show it at all
-    (with-eval-after-load "mm-decode"
-      (add-to-list 'mm-discouraged-alternatives "text/html")
-      (add-to-list 'mm-discouraged-alternatives "text/richtext"))
+         ;; Set completing function to standard, so completing frameworks can use it
+         mu4e-completing-read-function 'completing-read
+         mu4e-save-multiple-attachments-without-asking t
 
-    (defun mrb/mu4e-shr2text (msg)
-      "Overridden mu4e-shr2text"
-      (mu4e~html2text-wrapper
-       (lambda ()
-         (let ((shr-inhibit-images nil)   ;
-               (shr-width nil)            ; Use whole window width for rendering
-               (shr-use-colors nil)       ; Don't use colors from html, they ugly
-               (shr-bullet "• "))         ; Original was "* "
-           (shr-render-region (point-min) (point-max)))) msg))
+         ;; Context definitions
+         ;; Goal 1. use global config, unless private address is used
+         ;; TODO  Can we use the one that matched?
+         mu4e-context-policy 'pick-first      ; When nothing matches only!
+         mu4e-compose-context-policy 'nil     ; for compose, use current if nothing matches
+         mail-signature-file  mrb/default-signature-file
 
-    (setq mu4e-html2text-command 'mrb/mu4e-shr2text))
+
+         mu4e-contexts
+         `(,(let* ((ctxname "Default")
+                   (sigfile (mrb/setsigfile ctxname)))
+              (make-mu4e-context
+               :name ctxname
+               :match-func (lambda (msg)
+                             (when msg
+                               (mu4e-message-contact-field-matches
+                                msg `(:to :cc :from) mrb/default-email-address)))
+               ;; Use global config, but restore what was changed in other contexts
+               :vars `((user-mail-address      . ,mrb/default-email-address)
+                       (mail-signature-file    . ,sigfile)
+                       (mu4e-compose-signature . (with-current-buffer
+                                                     (find-file-noselect mail-signature-file)
+                                                   (buffer-string))))))
+           ,(let* ((ctxname "Private")
+                   (sigfile (mrb/setsigfile ctxname)))
+              (make-mu4e-context
+               :name "Private"
+               :match-func (lambda (msg)
+                             (when msg
+                               (mu4e-message-contact-field-matches
+                                msg `(:to :cc :from) mrb/private-addresses)))
+               :vars `((user-mail-address     . ,mrb/default-private-address)
+                       (mail-signature-file   . ,sigfile)
+                       (mu4e-compose-signature . (with-current-buffer
+                                                     (find-file-noselect mail-signature-file)
+                                                   (buffer-string))))))
+           )
+         )
+
+        ;; Rendering of html mail is done with shr, but I prefer not to show it at all
+        (with-eval-after-load "mm-decode"
+          (add-to-list 'mm-discouraged-alternatives "text/html")
+          (add-to-list 'mm-discouraged-alternatives "text/richtext"))
+
+        (defun mrb/mu4e-shr2text (msg)
+          "Overridden mu4e-shr2text"
+          (mu4e~html2text-wrapper
+           (lambda ()
+             (let ((shr-inhibit-images nil)   ;
+                   (shr-width nil)            ; Use whole window width for rendering
+                   (shr-use-colors nil)       ; Don't use colors from html, they ugly
+                   (shr-bullet "• "))         ; Original was "* "
+               (shr-render-region (point-min) (point-max)))) msg))
+
+        (setq mu4e-html2text-command 'mrb/mu4e-shr2text))
 #+end_src
 
 Regardless, I always want mu4e, so start it in the background
@@ -3354,30 +3369,30 @@ When mu4e start, it always opens in its main screen, which contains the main ope
     (interactive)
     (kill-buffer (current-buffer)))
 
-  :config
-  (setq mu4e-main-buffer-hide-personal-addresses t
-        mu4e-main-hide-fully-read nil
-        mu4e-confirm-quit nil
+  :custom
+  (mu4e-main-buffer-hide-personal-addresses t)
+  (mu4e-main-hide-fully-read nil)
+  (mu4e-confirm-quit nil)
 
-        mu4e-bookmarks (list
-                        '(:name "Unread messages"
-                                :query "flag:unread and not flag:trashed"
-                                :key ?u)
-                        '(:name "INBOX"
-                                :query "(flag:unread or flag:new or maildir:/INBOX) and not (flag:draft or flag:flagged or flag:deleted or maildir:/Trash or flag:trashed)"
-                                :key ?i)
-                        '(:name "TODO list"
-                                :query "flag:flagged and not flag:trashed"
-                                :key ?+)
-                        '(:name "Today's messages"
-                                :query "date:today..now"
-                                :key ?d)
-                        '(:name "Trash"
-                                :query "maildir:/Trash or flag:trashed"
-                                :key ?t)
-                        '(:name "Junk"
-                                :query "maildir:/Junk"
-                                :key ?j)))
+  (mu4e-bookmarks (list
+                    '( :name "Unread messages"
+                       :query "flag:unread and not flag:trashed"
+                       :key ?u)
+                    '( :name "INBOX"
+                       :query "(flag:unread or flag:new or maildir:/INBOX) and not (flag:draft or flag:flagged or flag:deleted or maildir:/Trash or flag:trashed)"
+                       :key ?i)
+                    '( :name "TODO list"
+                       :query "flag:flagged and not flag:trashed"
+                       :key ?+)
+                    '( :name "Today's messages"
+                       :query "date:today..now"
+                       :key ?d)
+                    '( :name "Trash"
+                       :query "maildir:/Trash or flag:trashed"
+                       :key ?t)
+                    '( :name "Junk"
+                       :query "maildir:/Junk"
+                       :key ?j)))
 #+end_src
 **** Header view
 The first view after searching is a list of mail headers. Set config vars for this view and define the visualisation of the marks. I need an extra action to mark mail as junk which, on processing, moves the marked messages to the junk folder
@@ -3390,38 +3405,40 @@ The first view after searching is a list of mail headers. Set config vars for th
           ("R" . mu4e-headers-mark-for-refile)
           ("SPC" . mu4e-headers-mark-for-something)
           ("X" . (lambda () (interactive) (mu4e-mark-execute-all t))))
-  :config
-  (setq
-   mu4e-headers-include-related nil ; Use 'W' to toggle interactively
-   mu4e-headers-date-format "%F"  ; ISO format yyyy-mm-dd
-   mu4e-headers-results-limit -1  ; For now, needed to have related search results
-   mu4e-headers-visible-lines 20  ; Default of 10 is a bit small
-   mu4e-headers-auto-update nil   ; Prevent confusion
 
-   ;; Make header configuration explicit
-   mu4e-headers-fields '((:flags . 6)
+  :custom
+  (mu4e-headers-include-related nil)
+
+  (mu4e-headers-date-format "%F" "ISO format yyyy-mm-dd")
+  (mu4e-headers-results-limit -1)  ; For now, needed to have related search results
+  (mu4e-headers-visible-lines 20)  ; Default of 10 is a bit small
+  (mu4e-headers-auto-update nil)   ; Prevent confusion
+
+  ;; Make header configuration explicit
+  (mu4e-headers-fields '((:flags . 6)
                          (:human-date . 12)
                          (:mailing-list . 10)
                          (:from . 22)
-                         (:subject . nil))
+                         (:subject . nil)))
 
-   ;; Define marks, possibly redundant, but I'd like to see them here.
-   mu4e-use-fancy-chars t
-   mu4e-headers-attach-mark    '("a" . "📎 ")
-   mu4e-headers-calendar-mark  '("c" . "📅")
-   mu4e-headers-draft-mark     '("D" . "🚧 ")
-   mu4e-headers-encrypted-mark '("x" . "🔑 ")
-   mu4e-headers-flagged-mark   '("F" . "🚩 ")
-   mu4e-headers-list-mark      '("s" . "🔈")
-   mu4e-headers-new-mark       '("N" . "✨ ")
-   mu4e-headers-passed-mark    '("P" . "↪ ")
-   mu4e-headers-personal-mark  '("p" . "👨")
-   mu4e-headers-replied-mark   '("R" . "↩ ")
-   mu4e-headers-seen-mark      '("S" . " ")
-   mu4e-headers-signed-mark    '("s" . "🖊 ")
-   mu4e-headers-trashed-mark   '("T" . "🗑️")
-   mu4e-headers-unread-mark    '("u" . "📩 ")
-   )
+  ;; Define marks, possibly redundant, but I'd like to see them here.
+  (mu4e-use-fancy-chars t)
+  (mu4e-headers-attach-mark    '("a" . "📎 "))
+  (mu4e-headers-calendar-mark  '("c" . "📅"))
+  (mu4e-headers-draft-mark     '("D" . "🚧 "))
+  (mu4e-headers-encrypted-mark '("x" . "🔑 "))
+  (mu4e-headers-flagged-mark   '("F" . "🚩 "))
+  (mu4e-headers-list-mark      '("s" . "🔈"))
+  (mu4e-headers-new-mark       '("N" . "✨ "))
+  (mu4e-headers-passed-mark    '("P" . "↪ "))
+  (mu4e-headers-personal-mark  '("p" . "👨"))
+  (mu4e-headers-replied-mark   '("R" . "↩ "))
+  (mu4e-headers-seen-mark      '("S" . " "))
+  (mu4e-headers-signed-mark    '("s" . "🖊 "))
+  (mu4e-headers-trashed-mark   '("T" . "🗑️"))
+  (mu4e-headers-unread-mark    '("u" . "📩 "))
+
+  :config
   ;; Add one specifically for marking as junk
   (add-to-list 'mu4e-marks
                '(junk
@@ -3450,17 +3467,17 @@ After selecting a message in the header view, a message view will open.
           ("R" . mu4e-view-mark-for-refile)
           ("X" . (lambda () (interactive) (mu4e~view-in-headers-context (mu4e-mark-execute-all t)))))
 
-  :config
-  (setq mu4e-view-use-old nil
-        mu4e-view-show-images t           ; This creates connections, possible privacy issue?
-        mu4e-view-image-max-width 800
-        mu4e-view-image-max-height 600
-        mu4e-view-show-addresses t        ; Show actual addresses instead of names
+  :custom
+  (mu4e-view-use-old nil)
+  (mu4e-view-show-images t)           ; This creates connections, possible privacy issue?
+  (mu4e-view-image-max-width 800)
+  (mu4e-view-image-max-height 600)
+  (mu4e-view-show-addresses t)        ; Show actual addresses instead of names
 
-        mu4e-view-actions '(("c - capture message" . mu4e-action-capture-message)
-                            ("v - view in browser" . mu4e-action-view-in-browser)
-                            ("s - save attachments" . mu4e-view-save-attachments)
-                            ("t - show this thread" . mu4e-action-show-thread)))
+  (mu4e-view-actions '(("c - capture message" . mu4e-action-capture-message)
+                       ("v - view in browser" . mu4e-action-view-in-browser)
+                       ("s - save attachments" . mu4e-view-save-attachments)
+                       ("t - show this thread" . mu4e-action-show-thread)))
 
 #+end_src
 **** Addon packages
@@ -3505,8 +3522,8 @@ Sieve is used on the server to filter our mail and this is accessed by the sieve
       (while (search-forward "\r" nil t) (replace-match "")))
     :commands sieve-manage
     :hook (sieve-mode . dos2unix)
-    :config
-    (setq sieve-manage-authenticators '(plain digest-md5 cram-md5 scram-md5 ntlm login)))
+    :custom
+    (sieve-manage-authenticators '(plain digest-md5 cram-md5 scram-md5 ntlm login)))
 #+end_src
 
 which basically goes over the whole sieve script and removes the '^M' characters from the buffer
@@ -3602,9 +3619,9 @@ ERC seems to be the most used IRC client for emacs and included with it, so it w
 #+begin_src emacs-lisp
   (use-package circe
     :commands (circe mrb/chat)
-    :config
-    (setq circe-default-nick "mrvdb"
-          circe-network-options
+    :custom
+    (circe-default-nick "mrvdb")
+    (circe-network-options
           `(("libera"
              :host "chat.hsdev.com" :port 6667
              :pass ,(concat "mrb@emacs/libera:"
@@ -3616,24 +3633,23 @@ ERC seems to be the most used IRC client for emacs and included with it, so it w
              :host "chat.hsdev.com" :port 6667
              :pass ,(concat "mrb@emacs/oftc:"
                             (password-store-get "chat.hsdev.com"))
-             :channels ("#osm")))
+             :channels ("#osm"))))
 
-          ;; Simplify and improve formatting, remove some details
-          circe-format-say "{nick:10s}: {body}" ; right align nicks at 10th pos
-          circe-format-self-say "{nick:10s}: {body}"
-          circe-format-server-part "*** Part: {nick} left {channel}"
-          circe-format-server-quit-channel "*** Quit: {nick} left {channel}"
-          circe-format-server-quit "*** Quit: {nick}"
-          circe-format-server-join "*** Join: {nick}"
-          circe-format-server-rejoin "*** Re-joined: {nick}"
+    ;; Simplify and improve formatting, remove some details
+    (circe-format-say "{nick:10s}: {body}" "right align nicks at 10th pos")
+    (circe-format-self-say "{nick:10s}: {body}")
+    (circe-format-server-part "*** Part: {nick} left {channel}")
+    (circe-format-server-quit-channel "*** Quit: {nick} left {channel}")
+    (circe-format-server-quit "*** Quit: {nick}")
+    (circe-format-server-join "*** Join: {nick}")
+    (circe-format-server-rejoin "*** Re-joined: {nick}")
+    (lui-time-stamp-position 'right-margin)
+    (lui-fill-type nil)
+    (circe-reduce-lurker-spam t "dont show notices for non talkers")
+    (circe-default-part-message "" "no parting reason")
+    (circe-default-quit-message "" "no quitting reason")
 
-          lui-time-stamp-position 'right-margin
-          lui-fill-type nil
-          circe-reduce-lurker-spam t           ; dont show notices for non talkers
-          circe-default-part-message ""        ; no parting reason
-          circe-default-quit-message "")       ; no quitting reason
-
-
+    :config
     (enable-lui-track)                   ; show indicator to where has been read
     (enable-circe-display-images)        ; turn links to images into images
     (enable-circe-color-nicks)           ; color nicks
@@ -3670,20 +3686,21 @@ ERC seems to be the most used IRC client for emacs and included with it, so it w
 Not messaging or chatting perse, but a micro blog social network. The 'capture a toot' is hot-keyed through =xbindkeys= like other capture commands.
 
 #+begin_src emacs-lisp
-    ;; Mastodon in emacs
-    (use-package mastodon
-      :straight (mastodon :host codeberg :repo "martianh/mastodon.el"
-                          :branch "develop")
-      :config
-      (setq mastodon-instance-url "https://mastodon.nl"
-            mastodon-active-user "mrb"
-            ;; finds mastodon.nl in password-store and expects user field to be present
-            mastodon-auth-source-file 'password-store)
+  ;; Mastodon in emacs
+  (use-package mastodon
+    :straight (mastodon :host codeberg :repo "martianh/mastodon.el"
+                        :branch "develop")
+    :custom
+    (mastodon-instance-url "https://mastodon.nl")
+    (mastodon-active-user "mrb")
+    ;; finds mastodon.nl in password-store and expects user field to be present
+    (mastodon-auth-source-file 'password-store)
 
-      ;; Convenience function
-      (defun mrb/capture-toot()
-        (interactive)
-        (mastodon-toot)))
+    :config
+    ;; Convenience function
+    (defun mrb/capture-toot()
+      (interactive)
+      (mastodon-toot)))
 #+end_src
 
 #+begin_src sh :exports code :tangle ~/bin/capture-toot.sh :shebang #!/bin/sh
@@ -3723,15 +3740,14 @@ For most of the languages I use (Bash, python, C, Go, HTML Haskell, Lua), the La
                       go-mode)  . lsp-deferred)
            (lsp-mode . lsp-enable-which-key-integration))
 
-    :config
-    (setq lsp-enable-snippet nil
-          lsp-prefer-flymake nil
-          lsp-ui-doc-position 'bottom
-          read-process-output-max (* 1024 1024) ; As per https://emacs-lsp.github.io/lsp-mode/page/performance/
-          lsp-prefer-capf t
-          lsp-idle-delay 0.5              ; Tuning for frustration
-          )
-    )
+    :custom
+    (lsp-enable-snippet nil)
+    (lsp-prefer-flymake nil)
+    (lsp-ui-doc-position 'bottom)
+    (read-process-output-max (* 1024 1024))
+    ;; As per https://emacs-lsp.github.io/lsp-mode/page/performance/
+    (lsp-prefer-capf t)
+    (lsp-idle-delay 0.5 "lsp idle tuning for frustration"))
 #+end_src
 
 Make our source look a bit more attractive by enabling =prettify-symbol-mode= in all programming modes
@@ -3847,10 +3863,10 @@ The closest thing I found is =zeal= or =dash= which allow docsets to be searched
     :config
     ;; Make sure docset directory exists
     (make-directory helm-dash-docsets-path t)
-    (setq dash-docs-enable-debugging nil
-          helm-dash-browser-func 'eww             ; Within dash, keep browser links within emacs
-          ;; Use all installed docsets
-          helm-dash-common-docsets (helm-dash-installed-docsets)))
+    :custom
+    (dash-docs-enable-debugging nil)
+    (helm-dash-browser-func 'eww "Within dash, keep browser links within emacs")
+    (helm-dash-common-docsets (helm-dash-installed-docsets)))
 #+end_src
 
 Dash show documentation inside emacs, which is my preferred method. There are times however I need the desktop GUI Zeal. For one, it's a lot easier to see which docsets are installed and manage them.
@@ -3869,9 +3885,9 @@ I often need to consult RFC documents, so not having to leave emacs for that and
 #+begin_src emacs-lisp
   ;; Special mode to read rfc documents locally
   (use-package rfc-mode
-  :init
-  (setq rfc-mode-directory (expand-file-name "~/dat/doc/rfc/")
-          rfc-mode-index-path (concat rfc-mode-directory"rfc-index.txt")))
+  :custom
+  (rfc-mode-directory (expand-file-name "~/dat/doc/rfc/"))
+  (rfc-mode-index-path (concat rfc-mode-directory"rfc-index.txt")))
 #+end_src
 
 *** Man pages
@@ -3926,13 +3942,14 @@ I am just starting out with haskell, but the two things that are probably needed
            (haskell-mode . haskell-indentation-mode))
 
     :mode "\‌\.hs\\'"
+    :custom
+    (haskell-font-lock-symbols t)
+    (haskell-interactive-popup-errors nil)
+    (haskell-process-type 'stack-ghci)
     :config
     ;; Replace ⇒ with ⇉
     (delete '("=>" . "⇒") haskell-font-lock-symbols-alist)
-    (add-to-list 'haskell-font-lock-symbols-alist '("=>" . "⇉"))
-    (setq haskell-font-lock-symbols t
-          haskell-interactive-popup-errors nil
-          haskell-process-type 'stack-ghci))
+    (add-to-list 'haskell-font-lock-symbols-alist '("=>" . "⇉")))
 #+end_src
 
 Enable the language server for haskell
@@ -3961,7 +3978,7 @@ For creating web apps I use yesod, which is supported by a number of packages
   (use-package go-mode
     ;; TODO  godef is fairly heavy on my little machines, make optional?
     :ensure-system-package godef
-    :config
+
     :init
     ;; Set up before-save hooks to format buffer and add/delete imports.
     ;; Make sure you don't have other gofmt/goimports hooks enabled.
@@ -4026,14 +4043,13 @@ The generic scheme support is the builtin scheme package, let's tell it that I u
       :demand t
       :hook ((geiser-repl-mode . mrb/prettify-symbols))
 
-      :config
-      (setq geiser-active-implementations '(guile)
-            geiser-guile-binary "/home/mrb/.guix-profile/bin/guile"
-            ;; Do NOT evaluate on return when inside an expression
-            geiser-repl-send-on-return-p nil
-            geiser-mode-start-repl-p t
-            geiser-default-implementation 'guile) ;chez isnt available for ppc64?
-      )
+      :custom
+      (geiser-active-implementations '(guile))
+      (geiser-guile-binary "/home/mrb/.guix-profile/bin/guile")
+      ;; Do NOT evaluate on return when inside an expression
+      (geiser-repl-send-on-return-p nil)
+      (geiser-mode-start-repl-p t)
+      (geiser-default-implementation 'guile))
 #+end_src
 
 While we're in the scheme section, let's configure =guix= and friends, which use scheme heavily
@@ -4073,11 +4089,13 @@ The defacto standard for a development environment in Emacs for common-lisp is e
               (font-lock-syntactic-face-function
                . lisp-font-lock-syntactic-face-function))))
 
-    :config
-    (setq inferior-lisp-program "/usr/local/bin/sbcl"
-          sly-lisp-implementations '((sbcl ("sbcl" "--core" "/home/mrb/.sbcl/sbcl.core-for-sly")))
-          sly-net-coding-system 'utf-8-unix)
+    :custom
+    (inferior-lisp-program "/usr/local/bin/sbcl")
+    (sly-lisp-implementations
+     '((sbcl ("sbcl" "--core" "/home/mrb/.sbcl/sbcl.core-for-sly"))))
+    (sly-net-coding-system 'utf-8-unix)
 
+    :config
     ;; Nyxt exposes a repl we can use
     <<nyxt-sly-config>>
 
@@ -4122,15 +4140,19 @@ Openscad is a script based 3d parametric drawing program. Obviously I'm editing 
 
 #+begin_src emacs-lisp
   (use-package scad-mode
-    :config
-    (setq scad-keywords '("return" "true" "false" "include")))
+    :custom
+    (scad-keywords '("return" "true" "false" "include")))
 #+end_src
 ** SQL
 SQL has a number of different dialects I use, depending on the database software in use.
 
 #+begin_src emacs-lisp
-  (setq sql-server "dbserver.hsdev.com"
-        sql-postgres-options '("-P" "pager=off" "-p 5434"))
+  (use-package sql
+    :straight (:type built-in)
+
+    :custom
+    (sql-server "dbserver.hsdev.com")
+    (sql-postgres-options '("-P" "pager=off" "-p 5434")))
 #+end_src
 ** GIT integration
 A common factor in all my development is the use of git. For emacs this automatically means Magit. I've used eshell in the past but that config didn't work out.
@@ -4153,20 +4175,22 @@ Features I'm interested in: issue commenting, pull requests
     :init
     (fullframe magit-status magit-mode-quit-window)
 
-    :config
-    (setq magit-last-seen-setup-instructions "1.4.0"
-          magit-diff-refine-hunk 'all)
+    :custom
+    (magit-last-seen-setup-instructions "1.4.0")
+    (magit-diff-refine-hunk 'all)
 
+    :config
     ;; Enable links to magit fromm org
     (use-package orgit)
 
     (use-package forge
       :disabled
-      :config
-      (setq forge-add-pullreq-refspec 'ask
-            forge-pull-notifications t
-            forge-topic-list-limit '(60 . 0))
+      :custom
+      (forge-add-pullreq-refspec 'ask)
+      (forge-pull-notifications t)
+      (forge-topic-list-limit '(60 . 0))
 
+      :config
       ;; Only show assigned stuff
       (magit-add-section-hook
        'magit-status-sections-hook
@@ -4230,9 +4254,10 @@ I use github gists sometimes, but rather have more open options as well. These a
               :lang-overrides ((emacs-lisp-mode . "clojure")
                                (scheme-mode . "clojure"))
               :success-lambda webpaste--providers-success-returned-string))
-    (setq webpaste-provider-priority '("dpaste.org-custom")
-          webpaste-paste-confirmation t
-          webpaste-open-in-browser t))
+    :custom
+    (webpaste-provider-priority '("dpaste.org-custom"))
+    (webpaste-paste-confirmation t)
+    (webpaste-open-in-browser t))
 #+end_src
 
 **** Grepping files
