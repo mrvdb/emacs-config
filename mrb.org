@@ -1406,6 +1406,11 @@ The =org-capture-pop-frame= package makes sure all captures are in separate fram
   (use-package org-capture
     :diminish
 
+    :custom
+    ;; Do not do the automatic bookmarking when capturing
+    (org-capture-bookmark nil)
+    (bookmark-set-fringe-mark nil)
+
     ;; Special config for handling tags while capturing
     <<org-capture-taghandling>>
 
@@ -1415,17 +1420,44 @@ The =org-capture-pop-frame= package makes sure all captures are in separate fram
     ;; and some shortcuts to run them
     <<org-capture-runners>>
 
-    (setq org-capture-bookmark nil
-          bookmark-set-fringe-mark nil))
-
-  (use-package org-capture-pop-frame
-    :after org-capture
-    :init
     (setq ocpf-frame-parameters
           '((name . "*capture*")
             (width . 115) (height . 15)
             (tool-bar-lines . 0) (menu-bar-lines . 0)
-            (internal-border-width . 5))))
+            (internal-border-width . 5)))
+
+    (defun ocpf--delete (func &rest args)
+      (if (equal (cdr (assoc 'name ocpf-frame-parameters))
+                 (frame-parameter nil 'name))
+          (funcall func args)))
+
+    (defun ocpf--delete-frame (&rest args)
+      "Close capture frame"
+      (ocpf--delete delete-frame))
+
+    (defun ocpf--delete-other-windows (&rest args)
+      "Delete the extra window if we're in a capture frame"
+      (ocpf--delete delete-other-windows))
+
+    (defun ocpf--org-capture (orig-fun &optional goto keys)
+      "Create a new frame and run org-capture."
+      (interactive)
+      (let ((frame-window-system
+             (cond ((eq system-type 'darwin) 'ns)
+                   ((eq system-type 'gnu/linux) 'x)
+                   ((eq system-type 'windows-nt) 'w32)))
+            (after-make-frame-functions
+             #'(lambda (frame)
+                 (progn
+                   (select-frame frame)
+                   (funcall orig-fun goto keys)))))
+        (make-frame
+         `((window-system . ,frame-window-system)
+           ,@ocpf-frame-parameters))))
+
+    (advice-add 'org-capture :around #'ocpf--org-capture)
+    (advice-add 'org-capture-finalize :after #'ocpf--delete-frame)
+    (advice-add 'org-switch-to-buffer-other-window :after #'ocpf--delete-other-windows))
 #+end_src
 
 Here are the templates used by org-capture. The /todo/ template is the most used, it is the same as the /link/ template, but does not include a reference to the current context, which is, in most cases, just annoying.
