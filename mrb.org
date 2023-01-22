@@ -2551,6 +2551,7 @@ Within orgmode I'd like to have the emphasis markers react when a region is acti
   ("*" . (lambda () (interactive) (org-emphasize ?*)))
   ("+" . (lambda () (interactive) (org-emphasize ?+)))
   ("=" . (lambda () (interactive) (org-emphasize ?=)))
+  ("/" . (lambda () (interactive) (org-emphasize ?/)))
 #+end_src
 
 Now use those bindings to configure both orgmode and org-journal-mode.
