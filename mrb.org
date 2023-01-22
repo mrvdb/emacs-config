@@ -3654,8 +3654,7 @@ ERC seems to be the most used IRC client for emacs and included with it, so it w
 
     ;; Set the prompt properly on entering the chat mode
     (defun mrb/set-circe-prompt ()
-      (lui-set-prompt (propertize (concat "[" circe-chat-target "]➜ ")
-                                  'face 'circe-prompt-face)))
+      (lui-set-prompt (propertize "➜ " 'face 'circe-prompt-face)))
     (add-hook 'circe-chat-mode-hook 'mrb/set-circe-prompt)
 
     ;; Make a convenient connect function
