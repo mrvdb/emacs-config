@@ -1433,11 +1433,11 @@ The =org-capture-pop-frame= package makes sure all captures are in separate fram
 
     (defun ocpf--delete-frame (&rest args)
       "Close capture frame"
-      (ocpf--delete delete-frame))
+      (ocpf--delete 'delete-frame))
 
     (defun ocpf--delete-other-windows (&rest args)
       "Delete the extra window if we're in a capture frame"
-      (ocpf--delete delete-other-windows))
+      (ocpf--delete 'delete-other-windows))
 
     (defun ocpf--org-capture (orig-fun &optional goto keys)
       "Create a new frame and run org-capture."
