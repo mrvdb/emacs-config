@@ -4155,6 +4155,8 @@ Features I'm interested in: issue commenting, pull requests
 
 #+begin_src emacs-lisp
   (use-package magit
+    :straight (:host github :reo "magit/magit")
+
     :demand t
     :after (org fullframe)
     :commands magit-status
