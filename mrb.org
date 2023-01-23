@@ -718,22 +718,22 @@ Although I think the 16 color system is a bit simplistic and, for emacs at least
     ;; This should be the only place where we adjust our faces
     ;; For reference, these are the theme colors
 
-     ;; :base00 "#2e3440"
-     ;; :base01 "#3b4252"
-     ;; :base02 "#434c5e"
-     ;; :base03 "#4c566a"
-     ;; :base04 "#d8dee9"
-     ;; :base05 "#e5e9f0"
-     ;; :base06 "#eceff4"
-     ;; :base07 "#8fbcbb"
-     ;; :base08 "#88c0d0"
-     ;; :base09 "#81a1c1"
-     ;; :base0A "#5e81ac"
-     ;; :base0B "#bf616a"
-     ;; :base0C "#d08770"
-     ;; :base0D "#ebcb8b"
-     ;; :base0E "#a3be8c"
-     ;; :base0F "#b48ead"
+    ;; :base00 "#2e3440"
+    ;; :base01 "#3b4252"
+    ;; :base02 "#434c5e"
+    ;; :base03 "#4c566a"
+    ;; :base04 "#d8dee9"
+    ;; :base05 "#e5e9f0"
+    ;; :base06 "#eceff4"
+    ;; :base07 "#8fbcbb"
+    ;; :base08 "#88c0d0"
+    ;; :base09 "#81a1c1"
+    ;; :base0A "#5e81ac"
+    ;; :base0B "#bf616a"
+    ;; :base0C "#d08770"
+    ;; :base0D "#ebcb8b"
+    ;; :base0E "#a3be8c"
+    ;; :base0F "#b48ead"
 
     ;; TODO  some of these adjustments come in too early and the package redefines it on loading
     ;; the only solution for this is to move the visual adjustments in the use-package clauses of
@@ -781,9 +781,9 @@ Although I think the 16 color system is a bit simplistic and, for emacs at least
             (isearch                        :foreground "#434c5e" :background ,mrb/cursor-color)
 
             ;; Mode-line faces
-            ;(mode-line                      :foreground "#3b4252" :background "#a3be8c")
+            ;;(mode-line                      :foreground "#3b4252" :background "#a3be8c")
             (header-line                    :foreground "#4c566a" :background "#ebcb8b")
-            ;(tab-bar                        :background "#4c566a" )
+            ;;(tab-bar                        :background "#4c566a" )
 
             ;; Magit
             (diff-refine-added              :background "#003000")
@@ -1364,7 +1364,7 @@ Gather generic config variables for orgmode in one section
         org-support-shift-select 'always
 
 
-        ;; Auto detect blank line need, this is the default, but I explicitly set thi
+        ;; Auto detect blank line need, this is the default, but I explicitly set this
         ;; because it needs to be this or my capturing breaks due to org-capture popup
         org-blank-before-new-entry '((heading . auto) (plain-list-item . auto))
         org-export-htmlize-output-type 'css
@@ -1405,9 +1405,7 @@ I guess 90% of the information I keep in the main orgmode files starts life orig
 3. Journal entries;
 4. Logbook entries;
 5. Weblinks;
-6. Toots.eval
-
-The =org-capture-pop-frame= package makes sure all captures are in separate frames.
+6. Toots.
 
 #+begin_src emacs-lisp
   (use-package org-capture
@@ -1444,7 +1442,7 @@ The =org-capture-pop-frame= package makes sure all captures are in separate fram
       (ocpf--delete 'delete-frame))
 
     (defun ocpf--delete-other-windows (&rest args)
-      "Delete the extra window if we're in a capture frame"
+      "Make sure we have the capture frame to ourselves"
       (ocpf--delete 'delete-other-windows))
 
     (defun ocpf--org-capture (orig-fun &optional goto keys)
