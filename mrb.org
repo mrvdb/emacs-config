@@ -1432,18 +1432,19 @@ I guess 90% of the information I keep in the main orgmode files starts life orig
             (tool-bar-lines . 0) (menu-bar-lines . 0)
             (internal-border-width . 5)))
 
-    (defun ocpf--delete (func &rest args)
+    (defun ocpf--funcall (func &rest args)
+      "Call FUNC in our capture frame only."
       (if (equal (cdr (assoc 'name ocpf-frame-parameters))
                  (frame-parameter nil 'name))
           (funcall func args)))
 
     (defun ocpf--delete-frame (&rest args)
       "Close capture frame"
-      (ocpf--delete 'delete-frame))
+      (ocpf--funcall 'delete-frame))
 
     (defun ocpf--delete-other-windows (&rest args)
       "Make sure we have the capture frame to ourselves"
-      (ocpf--delete 'delete-other-windows))
+      (ocpf--funcall 'delete-other-windows))
 
     (defun ocpf--org-capture (orig-fun &optional goto keys)
       "Create a new frame and run org-capture."
@@ -1461,6 +1462,7 @@ I guess 90% of the information I keep in the main orgmode files starts life orig
          `((window-system . ,frame-window-system)
            ,@ocpf-frame-parameters))))
 
+    ;; When running org-capture wrap our additions
     (advice-add 'org-capture :around #'ocpf--org-capture)
     (advice-add 'org-capture-finalize :after #'ocpf--delete-frame)
     (advice-add 'org-switch-to-buffer-other-window :after #'ocpf--delete-other-windows))
