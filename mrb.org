@@ -3411,25 +3411,27 @@ The first view after searching is a list of mail headers. Set config vars for th
                          (:mailing-list . 10)
                          (:from . 22)
                          (:subject . nil)))
-
-  ;; Define marks, possibly redundant, but I'd like to see them here.
   (mu4e-use-fancy-chars t)
-  (mu4e-headers-attach-mark    '("a" . "📎 "))
-  (mu4e-headers-calendar-mark  '("c" . "📅"))
-  (mu4e-headers-draft-mark     '("D" . "🚧 "))
-  (mu4e-headers-encrypted-mark '("x" . "🔑 "))
-  (mu4e-headers-flagged-mark   '("F" . "🚩 "))
-  (mu4e-headers-list-mark      '("s" . "🔈"))
-  (mu4e-headers-new-mark       '("N" . "✨ "))
-  (mu4e-headers-passed-mark    '("P" . "↪ "))
-  (mu4e-headers-personal-mark  '("p" . "👨"))
-  (mu4e-headers-replied-mark   '("R" . "↩ "))
-  (mu4e-headers-seen-mark      '("S" . " "))
-  (mu4e-headers-signed-mark    '("s" . "🖊 "))
-  (mu4e-headers-trashed-mark   '("T" . "🗑️"))
-  (mu4e-headers-unread-mark    '("u" . "📩 "))
 
+
+  ;; Define marks, possibly redundant, but I'd like to see them here explicitly
+  ;; Note that these are not custom vars, why not?? (they wont work as :custom entries)
   :config
+  (setq mu4e-headers-attach-mark    '("a" . "📎 "))
+  (setq mu4e-headers-calendar-mark  '("c" . "📅"))
+  (setq mu4e-headers-draft-mark     '("D" . "🚧 "))
+  (setq mu4e-headers-encrypted-mark '("x" . "🔑 "))
+  (setq mu4e-headers-flagged-mark   '("F" . "🚩 "))
+  (setq mu4e-headers-list-mark      '("s" . "🔈"))
+  (setq mu4e-headers-new-mark       '("N" . "✨ "))
+  (setq mu4e-headers-passed-mark    '("P" . "↪ "))
+  (setq mu4e-headers-personal-mark  '("p" . "👨"))
+  (setq mu4e-headers-replied-mark   '("R" . "↩ "))
+  (setq mu4e-headers-seen-mark      '("S" . " "))
+  (setq mu4e-headers-signed-mark    '("s" . "🖊 "))
+  (setq mu4e-headers-trashed-mark   '("T" . "🗑️"))
+  (setq mu4e-headers-unread-mark    '("u" . "📩 "))
+
   ;; Add one specifically for marking as junk
   (add-to-list 'mu4e-marks
                '(junk
