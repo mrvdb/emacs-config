@@ -601,7 +601,7 @@ Many settings have to do with how the screen looks and behaves in a visual way. 
 Let's set up some basics first, background dark, some default frame and cursor properties:
 
 #+begin_src emacs-lisp
-    (setq mrb/cursor-type '(bar . 3))             ; Slightly wide bar
+    (setq mrb/cursor-type 'box)
     (setq mrb/cursor-color "DarkOrange")  ; in fat orange color
 
 
