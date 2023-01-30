@@ -1274,9 +1274,9 @@ Also make sure we never load org from internal, this can happen when functions w
 
 #+COMMENT: This duplicates the one in init.el, problems?
 #+begin_src emacs-lisp
-  (use-package org
-    :after selected
+  (require 'org-agenda)
 
+  (use-package org
     :straight (org
                :includes (org-agenda org-capture org-crypt org-datetree org-protocol))
     :hook ((org-mode . turn-on-visual-line-mode)
@@ -1285,10 +1285,8 @@ Also make sure we never load org from internal, this can happen when functions w
            (org-agenda-mode . (lambda () (hl-line-mode 1))))
 
     :init
-    <<gtd-starter>>
 
-    ;; Keybindings specifically for actived regions in orgmode
-    <<org-mode-selected>>
+    <<gtd-starter>>
 
     :mode ("\\.txt\\'" "\\.org\'")
     :bind (("C-c g"   . 'mrb/gtd)
@@ -2080,15 +2078,12 @@ While the standard capture method is useful I found myself not using it very muc
 
 #+begin_src emacs-lisp
   (use-package org-journal
-    :after (org selected)
+    :after (org)
     :commands (org-journal-new-entry)
     :hook ((org-journal-mode . turn-on-visual-line-mode)
            (org-journal-mode . turn-on-visual-fill-column-mode))
     :bind (("C-c j"   . org-journal-new-entry)
            ("C-s-j"   . (lambda () (interactive) (org-journal-new-entry 1))))
-
-    ;; Keybindings for active regions in org-journal
-    <<org-journal-mode-selected>>
 
     :custom
     ;; The expand-file-name is needed, which is odd, because for single
@@ -2527,69 +2522,51 @@ Treading cautiously here as ideally frames sizing is the responsibility of the w
 *** For active regions
 In quite a few situations I would like to use keybindings which are only valid when a selection/region is active.
 
+We can bind keys into the selected-keymap if we want keys to be active on every region. When only needed for a certain major mode, define a keymap named =selected-<major-mode>-map= and bind keys into that.
+
+Within orgmode I'd like to have the emphasis markers react when a region is active, so let's create the necessary fragment for those bindings. These should in theory also work in org-journal mode, but they don't.
+
+During mail composition, when deleting text, this should be replace by '[...]' to signal that we removed text from the original mail.
+
 #+begin_src emacs-lisp
   (use-package selected
     :diminish selected-minor-mode
+    :after (org org-journal mu4e)                        ; all modes we supply binding for
     :demand t                             ; So we can use global mode enable in :config
     :commands (selected-global-mode selected-minor-mode) ; redundant?
+    :init
+    (setq selected-org-mode-map         (make-sparse-keymap)
+          selected-org-journal-mode-map (make-sparse-keymap)
+          selected-mu4e-compose-mode-map (make-sparse-keymap))
+
+    ;; Signal a deletion in compose
+    ;; TODO  do something clever with the quote level?
+    (defun mrb/compose-deletion ()
+      (interactive)
+      (delete-active-region)
+      (insert "[...]"))
+
     :bind ( :map selected-keymap           ; bindings for all active regions
-            ("q" . selected-off)
-            ("u" . upcase-region)
-            ("d" . downcase-region))
+            ("C-q" . selected-off)
+            ("C-u" . upcase-region)
+            ("C-d" . downcase-region)
+            :map selected-org-mode-map
+            ; TODO why do these not work in org-journal mode?
+            ("~" . (lambda () (interactive) (org-emphasize ?~)))
+            ("_" . (lambda () (interactive) (org-emphasize ?_)))
+            ("*" . (lambda () (interactive) (org-emphasize ?*)))
+            ("C-b" . (lambda () (interactive) (org-emphasize ?*)))
+            ("+" . (lambda () (interactive) (org-emphasize ?+)))
+            ("=" . (lambda () (interactive) (org-emphasize ?=)))
+            ("/" . (lambda () (interactive) (org-emphasize ?/)))
+            :map selected-mu4e-compose-mode-map
+            ("." . mrb/compose-deletion))
 
     :config
     (selected-global-mode))
 #+end_src
 
-From now on we can bind keys into the selected-keymap if we want keys to be active on every regions. When only needed for a certain major mode, define a keymap named =selected-<major-mode>-map= and bind keys into that.
 
-Within orgmode I'd like to have the emphasis markers react when a region is active, so let's create the necessary fragment for those bindings.
-
-#+name: org-emphasis-binds
-#+begin_src emacs-lisp :tangle no
-  ("~" . (lambda () (interactive) (org-emphasize ?~)))
-  ("_" . (lambda () (interactive) (org-emphasize ?_)))
-  ("*" . (lambda () (interactive) (org-emphasize ?*)))
-  ("+" . (lambda () (interactive) (org-emphasize ?+)))
-  ("=" . (lambda () (interactive) (org-emphasize ?=)))
-  ("/" . (lambda () (interactive) (org-emphasize ?/)))
-#+end_src
-
-Now use those bindings to configure both orgmode and org-journal-mode.
-
-#+name: org-mode-selected
-#+begin_src emacs-lisp :tangle no
-  :init
-  (setq selected-org-mode-map (make-sparse-keymap))
-  :bind  ( :map selected-org-mode-map
-           <<org-emphasis-binds>> )
-#+end_src
-
-#+name: org-journal-mode-selected
-#+begin_src emacs-lisp :tangle no
-  :init
-  (setq selected-org-journal-mode-map (make-sparse-keymap))
-  :bind  ( :map selected-org-journal-mode-map
-           <<org-emphasis-binds>> )
-#+end_src
-
-During mail composition, when deleting text, this should be replace by '[...]' to signal that we removed text from the original mail.
-
-#+name: mu4e-compose-mode-selected
-#+begin_src emacs-lisp :tangle no
-  :init
-  (setq selected-mu4e-compose-mode-map (make-sparse-keymap))
-
-  ;; Signal a deletion in compose
-  ;; TODO  do something clever with the quote level?
-  (defun mrb/compose-deletion ()
-    (interactive)
-    (delete-active-region)
-    (insert "[...]"))
-
-  :bind ( :map selected-mu4e-compose-mode-map
-          ("." . mrb/compose-deletion))
-#+end_src
 ** Other key and mouse related settings
 Emacs has, like for everything else, a peculiar idea on scrolling and moving from screen to screen.
 
@@ -2977,9 +2954,6 @@ Composing mail is often an /out of band/ activity, like creating a tweet or a ca
 
 #+name: mu4e-composeconfig
 #+begin_src emacs-lisp :tangle no
-  ;; Keybindings for active regions
-  <<mu4e-compose-mode-selected>>
-
   :bind ("C-x m" . 'mrb/compose-mail)
 
   :custom
@@ -3221,7 +3195,7 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
         :custom
         (mu4e-mu-binary (expand-file-name "build/mu/mu" (straight--repos-dir "mu")))
 
-        :after (message selected)
+        :after (message)
         :commands (mu4e mrb/compose-mail mrb/mailfile)
         :hook (mu4e-view-mode . mrb/mu4e-view-mode-hook)
 
