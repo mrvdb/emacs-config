@@ -2851,12 +2851,12 @@ Once that is in place files can be opened with =/ssh:/host:/path/to/file= syntax
   (use-package tramp
     :straight (:type built-in)            ; tramp is closely tied to emacs, use builtin
     :custom
-    (default-tramp-method "ssh")
-    (tramp-syntax 'simplified)
-    (tramp-terminal-type "tramp")
+    (default-tramp-method "sshx")
+    (tramp-syntax 'default)
+    (tramp-terminal-type "dumb")
 
     :config
-    (eval-after-load 'tramp '(setenv "SHELL" "/bin/bash"))
+    (eval-after-load 'tramp '(setenv "SHELL" "/bin/sh"))
     (add-to-list 'tramp-connection-properties
                      (list ".*" "locale" "LC_ALL=C")))
 
