@@ -3205,7 +3205,8 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
 
         :after (message)
         :commands (mu4e mrb/compose-mail mrb/mailfile)
-        :hook (mu4e-view-mode . mrb/mu4e-view-mode-hook)
+    :hook ((mu4e-view-mode . mrb/mu4e-view-mode-hook)
+           (mu4e-headers-mode . (lambda () (eldoc-mode -1))))
 
         :config
         (defun mrb/mu4e-view-mode-hook ()
