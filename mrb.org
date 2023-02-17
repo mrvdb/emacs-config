@@ -3354,6 +3354,7 @@ When mu4e start, it always opens in its main screen, which contains the main ope
                        :key ?u)
                     '( :name "INBOX"
                        :query "(flag:unread or flag:new or maildir:/INBOX) and not (flag:draft or flag:flagged or flag:deleted or maildir:/Trash or flag:trashed)"
+                       :favorite t
                        :key ?i)
                     '( :name "TODO list"
                        :query "flag:flagged and not flag:trashed"
