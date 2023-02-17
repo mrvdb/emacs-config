@@ -2559,6 +2559,14 @@ During mail composition, when deleting text, this should be replace by '[...]' t
             ("+" . (lambda () (interactive) (org-emphasize ?+)))
             ("=" . (lambda () (interactive) (org-emphasize ?=)))
             ("/" . (lambda () (interactive) (org-emphasize ?/)))
+            :map selected-org-journal-mode-map
+            ("~" . (lambda () (interactive) (org-emphasize ?~)))
+            ("_" . (lambda () (interactive) (org-emphasize ?_)))
+            ("*" . (lambda () (interactive) (org-emphasize ?*)))
+            ("C-b" . (lambda () (interactive) (org-emphasize ?*)))
+            ("+" . (lambda () (interactive) (org-emphasize ?+)))
+            ("=" . (lambda () (interactive) (org-emphasize ?=)))
+            ("/" . (lambda () (interactive) (org-emphasize ?/)))
             :map selected-mu4e-compose-mode-map
             ("." . mrb/compose-deletion))
 
