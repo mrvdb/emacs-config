@@ -2536,7 +2536,6 @@ During mail composition, when deleting text, this should be replace by '[...]' t
     :commands (selected-global-mode selected-minor-mode) ; redundant?
     :init
     (setq selected-org-mode-map         (make-sparse-keymap)
-          selected-org-journal-mode-map (make-sparse-keymap)
           selected-mu4e-compose-mode-map (make-sparse-keymap))
 
     ;; Signal a deletion in compose
@@ -2551,15 +2550,6 @@ During mail composition, when deleting text, this should be replace by '[...]' t
             ("C-u" . upcase-region)
             ("C-d" . downcase-region)
             :map selected-org-mode-map
-            ; TODO why do these not work in org-journal mode?
-            ("~" . (lambda () (interactive) (org-emphasize ?~)))
-            ("_" . (lambda () (interactive) (org-emphasize ?_)))
-            ("*" . (lambda () (interactive) (org-emphasize ?*)))
-            ("C-b" . (lambda () (interactive) (org-emphasize ?*)))
-            ("+" . (lambda () (interactive) (org-emphasize ?+)))
-            ("=" . (lambda () (interactive) (org-emphasize ?=)))
-            ("/" . (lambda () (interactive) (org-emphasize ?/)))
-            :map selected-org-journal-mode-map
             ("~" . (lambda () (interactive) (org-emphasize ?~)))
             ("_" . (lambda () (interactive) (org-emphasize ?_)))
             ("*" . (lambda () (interactive) (org-emphasize ?*)))

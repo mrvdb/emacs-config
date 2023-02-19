@@ -127,7 +127,7 @@
  ("s.el" . "e957dcb0677da18b2bb60ad867db5df5c35b5616")
  ("sass-mode" . "247a0d4b509f10b28e4687cd8763492bca03599b")
  ("scratch" . "f000648c9663833a76a8de9b1e78c99a9d698e48")
- ("selected.el" . "81cb32521a05ff2a9125e001b83608e108e480f6")
+ ("selected.el" . "1ca6e12f456caa1dc97c3d68597598662eb5de9a")
  ("sly" . "992e3f3c1a599a8a10af12323d547b35ce70362c")
  ("soap-client" . "1535a04b9dd202fcbc49a655cc5dafd1b3bff59e")
  ("spinner" . "634529bb3173e09b37499f636de70abf29d9fa8a")
