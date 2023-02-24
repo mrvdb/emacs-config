@@ -3181,134 +3181,134 @@ It's not entirely clear which package is exactly responsible for what, but there
 After a journey with many different MUAs I seem to be settling on =mu4e=.
 
 #+begin_src emacs-lisp
-      ;; TODO  check for system packages meson, g++, pkg-config,
-      ;;        cmake, libglib2.0-dev, libgmime3.0-dev, libxapian-dev, texinfo
-      ;; (names are debian package names)
-      (use-package mu4e
-        :straight ( :type git :host github :repo "djcb/mu"
-                    :pre-build (("./autogen.sh") ("ninja" "-C" "build"))
-                    :files (:defaults "build/mu4e/*.el")
-                    :includes (mu4e-icalendar))
+  ;; TODO  check for system packages meson, g++, pkg-config,
+  ;;        cmake, libglib2.0-dev, libgmime3.0-dev, libxapian-dev, texinfo
+  ;; (names are debian package names)
+  (use-package mu4e
+    :straight ( :type git :host github :repo "djcb/mu"
+                :pre-build (("./autogen.sh") ("ninja" "-C" "build"))
+                :files (:defaults "build/mu4e/*.el")
+                :includes (mu4e-icalendar))
 
-        :custom
-        (mu4e-mu-binary (expand-file-name "build/mu/mu" (straight--repos-dir "mu")))
+    :custom
+    (mu4e-mu-binary (expand-file-name "build/mu/mu" (straight--repos-dir "mu")))
 
-        :after (message)
-        :commands (mu4e mrb/compose-mail mrb/mailfile)
+    :after (message)
+    :commands (mu4e mrb/compose-mail mrb/mailfile)
     :hook ((mu4e-view-mode . mrb/mu4e-view-mode-hook)
            (mu4e-headers-mode . (lambda () (eldoc-mode -1))))
 
-        :config
-        (defun mrb/mu4e-view-mode-hook ()
-          (interactive)
-          (turn-on-visual-line-mode)
-          ;; Reflow messages
-          (setq mm-fill-flowed t))
+    :config
+    (defun mrb/mu4e-view-mode-hook ()
+      (interactive)
+      (turn-on-visual-line-mode)
+      ;; Reflow messages
+      (setq mm-fill-flowed t))
 
-        :bind ( :map mu4e-search-minor-mode-map
-                ("/" . mu4e-search)
-                ("s" . nil)
-                ("e" . mu4e-search-edit))
+    :bind ( :map mu4e-search-minor-mode-map
+            ("/" . mu4e-search)
+            ("s" . nil)
+            ("e" . mu4e-search-edit))
 
-        ;; Configuration sections
-        <<mu4e-composeconfig>>
-        <<mu4e-main-config>>
-        <<mu4e-headers-config>>
-        <<mu4e-view-config>>
-        <<mu4e-packages>>
+    ;; Configuration sections
+    <<mu4e-composeconfig>>
+    <<mu4e-main-config>>
+    <<mu4e-headers-config>>
+    <<mu4e-view-config>>
+    <<mu4e-packages>>
 
-        ;; TODO  move these up
-        (defun mrb/setsigfile (ctxname)
-          (expand-file-name
-           (concat ".signature-" (downcase ctxname))
-           "~/Maildir/"))
+    ;; TODO  move these up
+    (defun mrb/setsigfile (ctxname)
+      (expand-file-name
+       (concat ".signature-" (downcase ctxname))
+       "~/Maildir/"))
 
-        (setq
-         ;; Override the default mail user agent with the mu4e specific one
-         mail-user-agent 'mu4e-user-agent
-         mu4e-sent-folder        "/Sent"
-         mu4e-drafts-folder      "/Drafts"
-         mu4e-trash-folder       "/Trash"
-         mrb/mu4e-junk-folder    "/Junk"         ; Added for my specific config
-         mrb/mu4e-archive-folder "/Archives"
-         mu4e-attachment-dir     "~/Downloads"   ; Absolute folder here, not relative to Maildir!
+    (setq
+     ;; Override the default mail user agent with the mu4e specific one
+     mail-user-agent 'mu4e-user-agent
+     mu4e-sent-folder        "/Sent"
+     mu4e-drafts-folder      "/Drafts"
+     mu4e-trash-folder       "/Trash"
+     mrb/mu4e-junk-folder    "/Junk"         ; Added for my specific config
+     mrb/mu4e-archive-folder "/Archives"
+     mu4e-attachment-dir     "~/Downloads"   ; Absolute folder here, not relative to Maildir!
 
-         ;; Refiling to /Archives/YYYY
-         mu4e-refile-folder (lambda (msg)
-                              (let ((archive_base (concat mrb/mu4e-archive-folder "/"))
-                                    (msgyear (format-time-string "%Y" (mu4e-message-field msg :date))))
-                                (cond
-                                 ;; Order: most specific to general, end with the 't' case
-                                 ;; Archive messages per year if it has a date field (basically, always)
-                                 (msgyear   (concat archive_base msgyear))
-                                 ;; The default refile location
-                                 (t  archive_base))))
-
-
-         mu4e-use-fancy-chars t
-         mu4e-get-mail-command "mbsync quick" ; Just get inbox and important stuff, not everything
-         mu4e-decryption-policy 'ask
-         mu4e-update-interval 120             ; we just index, no retrieve, so 2mins is fine
-
-         ;; Set completing function to standard, so completing frameworks can use it
-         mu4e-completing-read-function 'completing-read
-         mu4e-save-multiple-attachments-without-asking t
-
-         ;; Context definitions
-         ;; Goal 1. use global config, unless private address is used
-         ;; TODO  Can we use the one that matched?
-         mu4e-context-policy 'pick-first      ; When nothing matches only!
-         mu4e-compose-context-policy 'nil     ; for compose, use current if nothing matches
-         mail-signature-file  mrb/default-signature-file
+     ;; Refiling to /Archives/YYYY
+     mu4e-refile-folder (lambda (msg)
+                          (let ((archive_base (concat mrb/mu4e-archive-folder "/"))
+                                (msgyear (format-time-string "%Y" (mu4e-message-field msg :date))))
+                            (cond
+                             ;; Order: most specific to general, end with the 't' case
+                             ;; Archive messages per year if it has a date field (basically, always)
+                             (msgyear   (concat archive_base msgyear))
+                             ;; The default refile location
+                             (t  archive_base))))
 
 
-         mu4e-contexts
-         `(,(let* ((ctxname "Default")
-                   (sigfile (mrb/setsigfile ctxname)))
-              (make-mu4e-context
-               :name ctxname
-               :match-func (lambda (msg)
-                             (when msg
-                               (mu4e-message-contact-field-matches
-                                msg `(:to :cc :from) mrb/default-email-address)))
-               ;; Use global config, but restore what was changed in other contexts
-               :vars `((user-mail-address      . ,mrb/default-email-address)
-                       (mail-signature-file    . ,sigfile)
-                       (mu4e-compose-signature . (with-current-buffer
-                                                     (find-file-noselect mail-signature-file)
-                                                   (buffer-string))))))
-           ,(let* ((ctxname "Private")
-                   (sigfile (mrb/setsigfile ctxname)))
-              (make-mu4e-context
-               :name "Private"
-               :match-func (lambda (msg)
-                             (when msg
-                               (mu4e-message-contact-field-matches
-                                msg `(:to :cc :from) mrb/private-addresses)))
-               :vars `((user-mail-address     . ,mrb/default-private-address)
-                       (mail-signature-file   . ,sigfile)
-                       (mu4e-compose-signature . (with-current-buffer
-                                                     (find-file-noselect mail-signature-file)
-                                                   (buffer-string))))))
-           )
-         )
+     mu4e-use-fancy-chars t
+     mu4e-get-mail-command "mbsync quick" ; Just get inbox and important stuff, not everything
+     mu4e-decryption-policy 'ask
+     mu4e-update-interval 120             ; we just index, no retrieve, so 2mins is fine
 
-        ;; Rendering of html mail is done with shr, but I prefer not to show it at all
-        (with-eval-after-load "mm-decode"
-          (add-to-list 'mm-discouraged-alternatives "text/html")
-          (add-to-list 'mm-discouraged-alternatives "text/richtext"))
+     ;; Set completing function to standard, so completing frameworks can use it
+     mu4e-completing-read-function 'completing-read
+     mu4e-save-multiple-attachments-without-asking t
 
-        (defun mrb/mu4e-shr2text (msg)
-          "Overridden mu4e-shr2text"
-          (mu4e~html2text-wrapper
-           (lambda ()
-             (let ((shr-inhibit-images nil)   ;
-                   (shr-width nil)            ; Use whole window width for rendering
-                   (shr-use-colors nil)       ; Don't use colors from html, they ugly
-                   (shr-bullet "• "))         ; Original was "* "
-               (shr-render-region (point-min) (point-max)))) msg))
+     ;; Context definitions
+     ;; Goal 1. use global config, unless private address is used
+     ;; TODO  Can we use the one that matched?
+     mu4e-context-policy 'pick-first      ; When nothing matches only!
+     mu4e-compose-context-policy 'nil     ; for compose, use current if nothing matches
+     mail-signature-file  mrb/default-signature-file
 
-        (setq mu4e-html2text-command 'mrb/mu4e-shr2text))
+
+     mu4e-contexts
+     `(,(let* ((ctxname "Default")
+               (sigfile (mrb/setsigfile ctxname)))
+          (make-mu4e-context
+           :name ctxname
+           :match-func (lambda (msg)
+                         (when msg
+                           (mu4e-message-contact-field-matches
+                            msg `(:to :cc :from) mrb/default-email-address)))
+           ;; Use global config, but restore what was changed in other contexts
+           :vars `((user-mail-address      . ,mrb/default-email-address)
+                   (mail-signature-file    . ,sigfile)
+                   (mu4e-compose-signature . (with-current-buffer
+                                                 (find-file-noselect mail-signature-file)
+                                               (buffer-string))))))
+       ,(let* ((ctxname "Private")
+               (sigfile (mrb/setsigfile ctxname)))
+          (make-mu4e-context
+           :name "Private"
+           :match-func (lambda (msg)
+                         (when msg
+                           (mu4e-message-contact-field-matches
+                            msg `(:to :cc :from) mrb/private-addresses)))
+           :vars `((user-mail-address     . ,mrb/default-private-address)
+                   (mail-signature-file   . ,sigfile)
+                   (mu4e-compose-signature . (with-current-buffer
+                                                 (find-file-noselect mail-signature-file)
+                                               (buffer-string))))))
+       )
+     )
+
+    ;; Rendering of html mail is done with shr, but I prefer not to show it at all
+    (with-eval-after-load "mm-decode"
+      (add-to-list 'mm-discouraged-alternatives "text/html")
+      (add-to-list 'mm-discouraged-alternatives "text/richtext"))
+
+    (defun mrb/mu4e-shr2text (msg)
+      "Overridden mu4e-shr2text"
+      (mu4e~html2text-wrapper
+       (lambda ()
+         (let ((shr-inhibit-images nil)   ;
+               (shr-width nil)            ; Use whole window width for rendering
+               (shr-use-colors nil)       ; Don't use colors from html, they ugly
+               (shr-bullet "• "))         ; Original was "* "
+           (shr-render-region (point-min) (point-max)))) msg))
+
+    (setq mu4e-html2text-command 'mrb/mu4e-shr2text))
 #+end_src
 
 Regardless, I always want mu4e, so start it in the background
