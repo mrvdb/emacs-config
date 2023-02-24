@@ -3624,6 +3624,7 @@ ERC seems to be the most used IRC client for emacs and included with it, so it w
     ;; Faces after enables, so the faces are there
     ;; TODO  do not use color names here, but functional names, which we can change centrally
     (set-face-attribute 'circe-prompt-face   nil :foreground mrb/cursor-color :height 1.3)
+    (set-face-atttibute 'circe-originator-face nil :height 0.8)
     (set-face-attribute 'lui-time-stamp-face nil :height 0.8)
     (set-face-attribute 'lui-track-bar       nil :background "LawnGreen") ; fix this one!
 
