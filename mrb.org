@@ -1472,16 +1472,17 @@ Here are the templates used by org-capture. The /todo/ template is the most used
 #+begin_src emacs-lisp :tangle no
   (setq
    org-capture-templates
-   '(("b" "Buy"
+       `(("b" "Buy"
       entry (function mrb/capture-location) "* BUY %? :buy:\n%(mrb/prop-or-nothing :annotation)\n" :prepend t :empty-lines 1)
      ("l" "Link"
       entry (function mrb/capture-location) "* TODO %?\n%(mrb/prop-or-nothing :annotation)\n" :prepend t :empty-lines 1)
      ("t" "Todo"
       entry (function mrb/capture-location) "* TODO %?\n" :prepend t :empty-lines 1)
      ("z" "Ziggo Log Entry"
-      item  (file+olp+datetree "/home/mrb/dat/org/GTD.org" "Partners" "Leveranciers" "Ziggo")
-      "- %u %?"
-      :tree-type month)))
+          item  (file+olp
+                 "/home/mrb/dat/org/GTD.org"
+                 "Partners" "Leveranciers" "Ziggo" "Logbook" ,(format-time-string "%Y"))
+          "- %u %?")))
 
   (defun mrb/prop-or-nothing(prop)
     "Insert `[:type]: [:property]` when :property has a value, otherwise nothing.
