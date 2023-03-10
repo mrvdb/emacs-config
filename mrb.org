@@ -1336,6 +1336,7 @@ Gather generic config variables for orgmode in one section
 
         org-use-fast-todo-selection t
         org-use-fast-tag-selection t
+        org-use-speed-commands t
         org-fast-tag-selection-single-key 'expert
         org-enforce-todo-dependencies t       ; we do want task dependencies
         org-enforce-todo-checkbox-dependencies nil ; but relax checkbox constraints for it
