@@ -108,7 +108,6 @@
  ("password-store-otp.el" . "be3a00a981921ed1b2f78012944dc25eb5a0beca")
  ("pcache" . "507230d094cc4a5025fe09b62569ad60c71c4226")
  ("pcre2el" . "38c6f80c787da547287db96b495e5b695ca0b4b8")
- ("pdf-tools" . "7ff6293a25baaae65651b3e1c54b61208279a7ef")
  ("pdf-tools-org" . "c243fa21e2dd1bd138f6216263d440e03e8af84a")
  ("persist" . "c10835478d9f916534a07fad0174d497adf85729")
  ("persistent-scratch" . "f9c1361ad69073af8133174f9e37b594df9be361")
