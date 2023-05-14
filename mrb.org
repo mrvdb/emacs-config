@@ -438,6 +438,7 @@ Using pdf-tools for PDF handling. This is a lot better than docview. I'm a bit a
             ("t"   . 'pdf-annot-add-text-annotation)
             ("D"   . 'pdf-annot-delete)
             ("C-s" . 'isearch-forward)
+            ("s-c". 'pdf-view-kill-ring-save)
             ("m"   . 'mrb/mailfile)
             ("q"   . 'kill-this-buffer)
             ([remap pdf-misc-print-document] . 'mrb/pdf-misc-print-pages)
