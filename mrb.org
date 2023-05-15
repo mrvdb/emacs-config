@@ -3264,6 +3264,7 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
      mu4e-update-interval 120             ; we just index, no retrieve, so 2mins is fine
 
      ;; Set completing function to standard, so completing frameworks can use it
+     mu4e-read-option-use-builtin nil
      mu4e-completing-read-function 'completing-read
      mu4e-save-multiple-attachments-without-asking t
 
