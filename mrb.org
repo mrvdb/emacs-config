@@ -1482,7 +1482,7 @@ Here are the templates used by org-capture. The /todo/ template is the most used
       (setq
        org-capture-templates
        `(("b" "Buy"
-          entry (function mrb/capture-location) "* BUY %? :buy:\n%(mrb/prop-or-nothing :annotation)\n" :prepend t :empty-lines 1)
+          entry (function mrb/capture-location) "* BUY %?\n%(mrb/prop-or-nothing :annotation)\n" :prepend t :empty-lines 1)
          ("l" "Link"
           entry (function mrb/capture-location) "* TODO %?\n%(mrb/prop-or-nothing :annotation)\n" :prepend t :empty-lines 1)
          ("t" "Todo"
