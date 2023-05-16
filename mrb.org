@@ -3340,6 +3340,7 @@ When mu4e start, it always opens in its main screen, which contains the main ope
           ("q" . mrb/mu4e-quit) ; just close the menu
           ("Q" . mu4e-quit)     ; really Quit
           (";" . nil)           ; this was too easy to press by mistake
+          ("G" . (lambda () (interactive) (mu4e-update-mail-and-index 1)))
           ("C-;" . mu4e-context-switch))
   :init
   ;; Claim the whole screen in mu4e main window
