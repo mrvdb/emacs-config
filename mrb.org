@@ -1265,6 +1265,7 @@ Now, do the other mode related packages which require a bit of configuration.
 #+end_src
 * Org-mode
 Orgmode configuration is probably the largest part of my Emacs configuration, because most of the time I spent in Emacs, when not coding, is spent in org-mode.
+
 ** Initialization of Orgmode
 I loosely follow the GTD method for organizing things and I want a quick shortcut to start my main file.
 
@@ -3703,34 +3704,11 @@ Let's start with some generic development related settings and packages
   (use-package yaml-mode)                 ; used by ansible, magit(?)
 #+end_src
 
-For most of the languages I use (Bash, python, C, Go, HTML Haskell, Lua), the Language Server Protocol seems to be supported by =lsp-mode=, so I'm setting this up generally here and enable it for each language I'm using if it is supported.
+For most of the languages I use (Bash, python, C, Go, HTML Haskell, Lua), the Language Server Protocol seems to be supported by =eglot=, which is now a built-in package, so I'm setting this up generally here and enable it for each language I'm using if it is supported.
 
 #+begin_src emacs-lisp
-  (use-package lsp-mode
-    :commands (lsp-deferred lsp)
-
-    :init
-    (use-package lsp-ui
-      :commands lsp-ui-mode)
-
-    ;; Enable lsp for languages I use
-    ;; TODO move these to their own blocks?
-    :hook (((c++-mode c-mode
-                      css-mode html-mode js2-mode
-                      python-mode
-                      sh-mode
-                      yaml-mode
-                      go-mode)  . lsp-deferred)
-           (lsp-mode . lsp-enable-which-key-integration))
-
-    :custom
-    (lsp-enable-snippet nil)
-    (lsp-prefer-flymake nil)
-    (lsp-ui-doc-position 'bottom)
-    (read-process-output-max (* 1024 1024))
-    ;; As per https://emacs-lsp.github.io/lsp-mode/page/performance/
-    (lsp-prefer-capf t)
-    (lsp-idle-delay 0.5 "lsp idle tuning for frustration"))
+  (use-package eglot
+    :straight (:type built-in))
 #+end_src
 
 Make our source look a bit more attractive by enabling =prettify-symbol-mode= in all programming modes
@@ -3914,8 +3892,16 @@ My personal style will be called =mrb= and basing it on the =linux= style.
     :config
     (editorconfig-mode 1))
 #+end_src
+** Language support
+*** Python
+Just enabling eglot for now.
 
-** Haskell
+#+begin_src emacs-lisp
+  (use-package python
+    :straight (:type built-in)
+    :hook (python-mode . eglot-ensure))
+#+end_src
+*** Haskell
 I am just starting out with haskell, but the two things that are probably needed in any case are a mode to use when editing Haskell source (*.hs files) and the ghc-mod package to help with completion and showing syntax errors.
 
 #+begin_src emacs-lisp
@@ -3956,7 +3942,7 @@ For creating web apps I use yesod, which is supported by a number of packages
   ;; Yesod's html like files
   (use-package hamlet-mode)
 #+end_src
-** Go
+*** Go
 #+begin_src emacs-lisp
   (use-package go-mode
     ;; TODO  godef is fairly heavy on my little machines, make optional?
@@ -3971,11 +3957,11 @@ For creating web apps I use yesod, which is supported by a number of packages
       (add-hook 'before-save-hook #'lsp-organize-imports t t))
     (add-hook 'go-mode-hook #'lsp-go-install-save-hooks))
 #+end_src
-** Rust
+*** Rust
 #+begin_src emacs-lisp
 (use-package rust-mode)
 #+end_src
-** Lisp-like
+*** Lisp-like
 There are a number of languages which are lisp-like, not in the least Emacs lisp itself. It makes sense to group the configuration for these languages together. In the first part there will be configuration for all lisp-like languages (like the =puni= configuration for example). For each specific implementation there may be augmentations to the config, or even a completely separate.
 
 For all of those languages, I want to use =puni= which makes editing, longer term, a lot more productive. For autopairing, which =puni= does not do itself unlike =paredit=, I use the built-in =electric-pair-mode= Both of these support multiple modes, so are really generic packages, but lisp-like modes are the modes typically benefitting the most from them.
@@ -4008,7 +3994,7 @@ Evaluating an expression with the cursor after it is often used, I'd like being 
 #+end_src
 
 Not sure how to bind this though. I'd like it close to C-x C-e obviously
-*** Scheme
+**** Scheme
 The generic scheme support is the builtin scheme package, let's tell it that I use guile as my default scheme program.
 
 #+begin_src emacs-lisp
@@ -4047,7 +4033,7 @@ While we're in the scheme section, let's configure =guix= and friends, which use
     ;; guix uses debbugs, but this should probably be closer to mu4e and gnus config
     (use-package debbugs))
 #+end_src
-*** Common lisp
+**** Common lisp
 The defacto standard for a development environment in Emacs for common-lisp is either the =slime= or =sly= package. The latter seems a bit more modern and easier to configure, so trying that one
 
 #+begin_src emacs-lisp
@@ -4095,7 +4081,6 @@ The defacto standard for a development environment in Emacs for common-lisp is e
           (set-match-data (list beg end))
           t))))
 #+end_src
-
 ** Gcode
 I'm not in the habit of editing gcode, but every now and then I need to look at it and I want it reasonably decent. My use-case is just sending gcode to my 3D-printer which runs Marlin firmware.
 
