@@ -767,7 +767,7 @@ Although I think the 16 color system is a bit simplistic and, for emacs at least
 
             ;; Adjustment for non-package faces
             ;; Comments should not be that dark as base03
-            (font-lock-comment-face         :foreground "#666666")
+            (font-lock-comment-face         :foreground "#777777")
             (font-lock-doc-face             :inherit font-lock-comment-face)
 
             (button                         :foreground "#d08770" :weight semi-bold)
