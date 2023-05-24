@@ -4033,6 +4033,11 @@ While we're in the scheme section, let's configure =guix= and friends, which use
     (with-eval-after-load 'geiser-guile
       (add-to-list 'geiser-guile-load-path "~/dat/src/guix"))
 
+    ;; Use tempel templates
+    (with-eval-after-load 'tempel
+      ;; Ensure tempel-path is a list -- it may also be a string.
+      (add-to-list 'tempel-path "~/dat/src/guix/etc/snippets/tempel/*"))
+
     ;; guix uses debbugs, but this should probably be closer to mu4e and gnus config
     (use-package debbugs))
 #+end_src
