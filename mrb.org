@@ -1369,7 +1369,10 @@ Gather generic config variables for orgmode in one section
 
         ;; Pressing enter on a link should activate it
         org-return-follows-link t
-        org-support-shift-select 'always
+
+        ;; S-left and friends should work in context
+        ;; TODO if 'always, the whole command does not work, even if using the other binding
+        org-support-shift-select t
 
 
         ;; Auto detect blank line need, this is the default, but I explicitly set this
