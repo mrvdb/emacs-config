@@ -2820,9 +2820,7 @@ I set it up for relevant modes as a CAPF handler (for programming and orgmode fo
     :custom
     ;; This would start completion directly, which I do NOT want
     (tempel-trigger-prefix nil)
-    (tempel-path (expand-file-name
-                  "templates/*.eld"
-                  user-emacs-directory))
+    (tempel-path `(,(expand-file-name "templates/*.eld" user-emacs-directory)))
 
     :bind (("M-<insert>" . tempel-complete))
 
