@@ -1954,10 +1954,10 @@ Plantuml transforms diagram specifications with a /mini programming language/ in
 #+begin_src emacs-lisp
   (use-package plantuml-mode
     :after org    ; strictly not needed, but i use it mainly from org
-    :custom
-    (plantuml-jar-path "/usr/share/java/plantuml/plantuml.jar")
-    (org-plantuml-jar-path plantuml-jar-path)
-    (plantuml-default-exec-mode 'jar))
+    :init
+    (setq plantuml-jar-path "/usr/share/java/plantuml/plantuml.jar")
+    (setq org-plantuml-jar-path plantuml-jar-path)
+    (setq plantuml-default-exec-mode 'jar))
 
   (setq org-ditaa-jar-path    "/usr/share/java/ditaa/ditaa-0.11.jar")
 #+end_src
