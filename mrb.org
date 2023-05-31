@@ -777,11 +777,11 @@ Although I think the 16 color system is a bit simplistic and, for emacs at least
             (show-paren-mismatch            :foreground "#2e3440" :background "#bf616a"
                                             :inherit nil :weight normal)
 
-            (region                         :foreground nil :background "#3b4252"
+              (region                         :foreground unspecified :background "#3b4252"
                                             :inherit nil :weight normal)
             (fringe                         :foreground "#a3be8c")
 
-            (hl-line                        :foreground nil :background "#5e81ac" )
+              (hl-line                        :foreground unspecified :background "#5e81ac" )
 
             (line-number-current-line       :background "#4c566a")
 
@@ -839,7 +839,8 @@ Although I think the 16 color system is a bit simplistic and, for emacs at least
             (mrb/org-todo-keyword-PLAN      :foreground "#d8dee9" :weight bold)
 
             ;; Mu4e
-            (mu4e-header-highlight-face     :inherit hl-line :underline nil :foreground nil)
+              (mu4e-header-highlight-face     :inherit hl-line :underline nil
+                                              :foreground unspecified)
             (mu4e-unread-face               :inherit nil :underline nil :weight bold)
             (mu4e-context-face              :inherit mu4e-link-face)
             (mu4e-flagged-face              :foreground "#ebcb8b" )
