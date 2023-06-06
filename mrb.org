@@ -234,7 +234,7 @@ Now that we have =straight= we will use it from the =use-package= macro.
 
 Sometimes it is comfortable to use GUIX packages, for example when autobuilding fails. My usecase was pdf-tools failing frequently, so using the builtin from GUIX was an easy way out.
 
-This is the only thing needed, after installing an emacs package with GUIX, it is available for requir-ing and can be treated by /straight/ as a /built-in/ type package.
+This is the only thing needed, after installing an emacs package with GUIX, it is available for /require/ and can be treated by /straight/ as a /built-in/ type package.
 
 #+begin_src emacs-lisp
   (add-to-list 'load-path "/home/mrb/.guix-profile/share/emacs/site-lisp")
@@ -456,12 +456,13 @@ Using pdf-tools for PDF handling. This is a lot better than docview. I'm a bit a
     (setq-default pdf-view-display-size 'fit-page) ;scale to fit page by default
     (setq pdf-annot-activate-created-annotations t ; automatically annotate highlights
           pdf-view-resize-factor 1.1              ; more fine-grained zooming
-          pdf-misc-print-program-executable "/usr/bin/lp"
           pdf-view-midnight-colors '("#DCDCCC" . "#383838")) ; Not sure what this is
 
-    (add-to-list 'revert-without-query ".+\\.pdf")
+    (add-to-list 'revert-without-query ".+\\.pdf") ; pdf is always a reflection of disk file
+    ;; FIXME does this work out ok with annotations?
 
-    ;; NOTE: assumes lp as printer program!
+    ;; NOTE: assume lp as printer program!
+    (setq pdf-misc-print-program-executable "/usr/bin/lp")
     (defun mrb/pdf-misc-print-pages(filename pages &optional interactive-p)
       "Wrapper for `pdf-misc-print-document` to add page selection support"
       (interactive (list (pdf-view-buffer-file-name)
@@ -2830,11 +2831,14 @@ I set it up for relevant modes as a CAPF handler (for programming and orgmode fo
     (setq org-tab-before-tab-emulation-hook nil)
     (defun mrb/tempel-setup-capf()
       ;; Remove org structured templates, which are just tempo templates as well
+      ;; TODO make this smarter? (there might be other things in there which I *do* need)
       (setq org-tab-before-tab-emulation-hook nil)
       (setq-local completion-at-point-functions
                   (cons #'tempel-complete ; use tempel-expand if only exact matches wanted
                         completion-at-point-functions)))
 
+    ;; Do template name completion in programming, textmodes and orgmode
+    ;; TODO why not global?
     :hook ((prog-mode text-mode org-mode) . mrb/tempel-setup-capf))
 #+end_src
 
@@ -3717,11 +3721,13 @@ Make our source look a bit more attractive by enabling =prettify-symbol-mode= in
 #+begin_src emacs-lisp
   (use-package prog-mode
     :straight (:type built-in)
+    ;; TODO move hooks to their defining packages?
     :hook ((prog-mode                     ; all modes that derive from prog-mode
             lisp-interaction-mode
             org-mode org-journal-mode) . mrb/prettify-symbols)
     :init
 
+    ;; TODO Move this to visual?
     ;; TODO this is a bit messy, do this in mode packages and per mode
     (defun mrb/prettify-symbols ()
       (interactive)
