@@ -2081,12 +2081,11 @@ Orgmode can export to a variety of formats, I mainly use LaTeX (PDF) and HTML as
                   ("\\subsubsection{%s}" . "\\subsubsection*{%s}"))
                  ("beamer" "\\documentclass{beamer}" org-beamer-sectioning))
 
-
+        ;; No tags, todo keywords or time-stamp
          org-export-with-tags nil
          org-export-with-todo-keywords nil
+        org-export-time-stamp-file nil
          org-export-backends '(ascii html icalendar latex md odt org texinfo)
-
-
          )
    ;; {% endraw %}
 #+end_src
