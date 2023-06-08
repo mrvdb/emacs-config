@@ -675,7 +675,27 @@ One of the elements in the status bar will be a list of buffers which need atten
     (use-package nano-modeline
       :after tracking
 
+    :config
+    ;; Take control of the mode-line, mostly leaving out what goes into the tab-bar
+    ;; - tracking is global, so move to tab bar
+    ;; - misc info has globabl mode string, moved to tab bar, but may have more?? TODO
+
+    (setq-default mode-line-format
+          (list
+           "%e" mode-line-front-space
+           '(:propertize ("" mode-line-mule-info mode-line-client mode-line-modified mode-line-remote)
+            display (min-width (5.0)))
+           mode-line-frame-identification
+           mode-line-buffer-identification
+           "   "
+           mode-line-position
+           '(vc-mode vc-mode)
+           "  "
+           mode-line-modes
+           ;mode-line-misc-info
+           mode-line-end-spaces))
       :custom
+
       ;; tab-bar customization
       (tab-bar-format '(mrb/tab-bar-format-primary
                         tab-bar-format-align-right
@@ -689,7 +709,7 @@ One of the elements in the status bar will be a list of buffers which need atten
 
       :custom-face
       ;; TODO I like :custom-face, but not the scattering of all the colors, name them?
-      (mode-line ((t ( :foreground "#3b4252" :background "#a3be8c"))))
+    (mode-line ((t ( :height 1.1 :foreground "#3b4252" :background "#a3be8c"))))
       (tab-bar   ((t ( :background "#4c566a"
                        :height 1.1
                        :box (:line-width 1 :color "dim gray" :style flat-button)))))
