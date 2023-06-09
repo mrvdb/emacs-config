@@ -2121,7 +2121,17 @@ While the standard capture method is useful I found myself not using it very muc
     :hook ((org-journal-mode . turn-on-visual-line-mode)
            (org-journal-mode . turn-on-visual-fill-column-mode))
     :bind (("C-c j"   . org-journal-new-entry)
-           ("C-s-j"   . (lambda () (interactive) (org-journal-new-entry 1))))
+           ("C-s-j"   . mrb/open-current-journal))
+
+    :init
+    (defun mrb/open-current-journal()
+      (interactive)
+      (let* ((org-journal-file (org-journal--get-entry-path))
+             (buf-exists (find-buffer-visiting org-journal-file)))
+        (if buf-exists
+            (switch-to-buffer buf-exists) ;; or use org-journal-open-current-journal-file?
+          (org-journal-new-entry 1))))
+
 
     :custom
     ;; The expand-file-name is needed, which is odd, because for single
