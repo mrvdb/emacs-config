@@ -669,9 +669,7 @@ One of the elements in the status bar will be a list of buffers which need atten
 #+end_src
 
 
-
 #+begin_src emacs-lisp
-
     (use-package nano-modeline
       :after tracking
 
@@ -694,8 +692,8 @@ One of the elements in the status bar will be a list of buffers which need atten
            mode-line-modes
            ;mode-line-misc-info
            mode-line-end-spaces))
-      :custom
 
+    :custom
       ;; tab-bar customization
       (tab-bar-format '(mrb/tab-bar-format-primary
                         tab-bar-format-align-right
@@ -2123,7 +2121,7 @@ While the standard capture method is useful I found myself not using it very muc
     :bind (("C-c j"   . org-journal-new-entry)
            ("C-s-j"   . mrb/open-current-journal))
 
-    :init
+    :config
     (defun mrb/open-current-journal()
       (interactive)
       (let* ((org-journal-file (org-journal--get-entry-path))
