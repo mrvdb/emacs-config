@@ -534,7 +534,6 @@ For this to work properly we have to define a whole new input-method based on a 
   ;; it needs to be active we need to activate it (by a hook for example)
   (defun mrb/set-default-input-method()
     (interactive)
-    (with-temp-buffer
       (activate-input-method "TeX")
 
       ;; Define a few omissions which I use regularly
@@ -551,7 +550,7 @@ For this to work properly we have to define a whole new input-method based on a 
                             ("\\delete" ?⌦)
                             ("\\plusminus" ?±)
                             ("\\_1" ?₁)
-                            ("\\_2" ?₂)))))
+                          ("\\_2" ?₂))))
 
 
   ;; Set the default language environment and make sure the default
