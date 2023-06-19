@@ -701,7 +701,7 @@ One of the elements in the status bar will be a list of buffers which need atten
       (tab-bar-mode t "Enable tab-bar-mode unconditionally")
       (global-tab-line-mode nil "Make sure tab-line-mode is disabled")
 
-      (nano-modeline-position 'bottom "Mode line goes at the bottom")
+    (nano-modeline-position 'nano-modeline-footer "Mode line goes at the bottom")
       (nano-modeline-mode t "Enable the nano modeline")
 
       :custom-face
@@ -3308,6 +3308,9 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
      mu4e-compose-context-policy 'nil     ; for compose, use current if nothing matches
      mail-signature-file  mrb/default-signature-file
 
+     mu4e-search-results-limit -1         ; until we run into performance problems
+     mu4e-search-include-related nil      ; do not included related by default
+
 
      mu4e-contexts
      `(,(let* ((ctxname "Default")
@@ -3381,12 +3384,12 @@ When mu4e start, it always opens in its main screen, which contains the main ope
     (interactive)
     (kill-buffer (current-buffer)))
 
-  :custom
-  (mu4e-main-buffer-hide-personal-addresses t)
-  (mu4e-main-hide-fully-read nil)
-  (mu4e-confirm-quit nil)
+  :config
+  (setq mu4e-main-buffer-hide-personal-addresses t ; no need to see my own addresses
+        mu4e-main-hide-fully-read nil
+        mu4e-confirm-quit nil
 
-  (mu4e-bookmarks (list
+        mu4e-bookmarks (list
                     '( :name "Unread messages"
                        :query "flag:unread and not flag:trashed"
                        :key ?u)
