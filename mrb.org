@@ -274,7 +274,7 @@ Seems like a good idea to start configuration with some details about me. The id
         user-mail-address    mrb/default-email-address
         user-domain          "hsdev.com"
         user-organisation    "HS-Development BV"
-        user-gpg-encrypt-key "77DDA1B68D04792A8F85D855235E5C8CF5E8DFFB"
+        user-gpg-key "77DDA1B68D04792A8F85D855235E5C8CF5E8DFFB"
         )
 #+end_src
 
@@ -2206,7 +2206,7 @@ I use the /encrypt/ tag for encrypting sections in org-mode (and sometimes my jo
   (use-package org-crypt
     :custom
     (org-crypt-tag-matcher "encrypt")
-    (org-crypt-key user-gpg-encrypt-key)
+    (org-crypt-key user-gpg-key)
 
     :config
     (org-crypt-use-before-save-magic))
@@ -3138,12 +3138,12 @@ At times we want to send signed and/or encrypted mail
     :straight (:type built-in)
     :config
     ;; Use my key to sign messages and make it safe if other keys exist
-    (add-to-list 'mml-secure-openpgp-signers user-gpg-encrypt-key)
+    (add-to-list 'mml-secure-openpgp-signers user-gpg-key)
     (setq mml-secure-key-preferences
           '((OpenPGP
              (sign)
              (encrypt
-              (user-mail-address user-gpg-encrypt-key)))
+              (user-mail-address user-gpg-key)))
             (CMS
              (sign)
              (encrypt))))
@@ -3152,7 +3152,7 @@ At times we want to send signed and/or encrypted mail
           (add-to-list 'mml-secure-safe-bcc-list mrb/bcc-address)
 
           ;; Always encrypt to self, so I can read my own messages
-          (setq mml-secure-openpgp-encrypt-to-self `(,user-gpg-encrypt-key)))
+          (setq mml-secure-openpgp-encrypt-to-self `(,user-gpg-key)))
 #+end_src
 
 *** Generic mail message settings
