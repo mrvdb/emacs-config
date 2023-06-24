@@ -429,9 +429,10 @@ Using pdf-tools for PDF handling. This is a lot better than docview. I'm a bit a
   (use-package pdf-tools
     :straight (:type built-in)            ; i.e GUIX in this case
     :demand t                             ; prevent configuring while opening pdf files
-    :after (fullframe)
+    :after (fullframe nano-modeline)
     :magic ("%PDF" . pdf-view-mode)
-    :hook (pdf-view-mode . (lambda () (cua-mode 0)))
+    :hook ((pdf-view-mode . (lambda () (cua-mode 0)))
+           (pdf-view-mode . nano-modeline-pdf-mode))
     :commands (pdf-info-getannots mrb/pdf-extract-info)
     :bind ( :map pdf-view-mode-map
             ("h"   . 'pdf-annot-add-highlight-markup-annotation)
