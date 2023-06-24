@@ -705,9 +705,14 @@ One of the elements in the status bar will be a list of buffers which need atten
     (nano-modeline-position 'nano-modeline-footer "Mode line goes at the bottom")
       (nano-modeline-mode t "Enable the nano modeline")
 
+    :config
+    (nano-modeline-text-mode t)            ; Make this the default
+
       :custom-face
       ;; TODO I like :custom-face, but not the scattering of all the colors, name them?
-    (mode-line ((t ( :height 1.1 :foreground "#3b4252" :background "#a3be8c"))))
+    (nano-modeline-active ((t ( :height 1.1 :))))
+    (nano-modeline-status ((t ( :background "#5e81ac"))))
+
       (tab-bar   ((t ( :background "#4c566a"
                        :height 1.1
                        :box (:line-width 1 :color "dim gray" :style flat-button)))))
