@@ -1496,12 +1496,15 @@ I guess 90% of the information I keep in the main orgmode files starts life orig
                    (funcall orig-fun goto keys)))))
         (make-frame
          `((window-system . ,frame-window-system)
-           ,@ocpf-frame-parameters))))
+           ,@ocpf-frame-parameters))
+        (setq header-line-format nil)     ; this works, is it the right way to do this?
+        ))
 
     ;; When running org-capture wrap our additions
     (advice-add 'org-capture :around #'ocpf--org-capture)
     (advice-add 'org-capture-finalize :after #'ocpf--delete-frame)
     (advice-add 'org-switch-to-buffer-other-window :after #'ocpf--delete-other-windows))
+
 #+end_src
 
 Here are the templates used by org-capture. The /todo/ template is the most used, it is the same as the /link/ template, but does not include a reference to the current context, which is, in most cases, just annoying.
