@@ -3391,7 +3391,7 @@ When mu4e start, it always opens in its main screen, which contains the main ope
   ;; Claim the whole screen in mu4e main window
   (defun mrb/mu4e-quit ()
     (interactive)
-    (kill-buffer (current-buffer)))
+    (bury-buffer))
 
   :config
   (setq mu4e-main-buffer-hide-personal-addresses t ; no need to see my own addresses
