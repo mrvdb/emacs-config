@@ -4017,15 +4017,14 @@ For all of those languages, I want to use =puni= which makes editing, longer ter
   (use-package puni
     :init
     (puni-global-mode)                    ; perhaps too much, we'll see
-    (electric-pair-mode)
 
     :bind ( :map puni-mode-map
             ("C-<right>" . puni-slurp-forward) ; foo (bar|) baz  ->  foo (bar| baz)
             ("C-<left>"  . puni-barf-forward)  ; foo (bar| baz)  ->  foo (bar|) baz
             )
 
-    :hook (org-mode . puni-disable-puni-mode))
-
+    :hook ((org-mode . puni-disable-puni-mode)
+           (prog-mode . electric-pair-local-mode)))
 #+end_src
 
 Evaluating an expression with the cursor after it is often used, I'd like being able to do the same when the cursor is in front of such an expression
