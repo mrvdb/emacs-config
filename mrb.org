@@ -703,7 +703,6 @@ One of the elements in the status bar will be a list of buffers which need atten
       (global-tab-line-mode nil "Make sure tab-line-mode is disabled")
 
     (nano-modeline-position 'nano-modeline-footer "Mode line goes at the bottom")
-      (nano-modeline-mode t "Enable the nano modeline")
 
     :config
     (nano-modeline-text-mode t)            ; Make this the default
