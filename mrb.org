@@ -3630,6 +3630,23 @@ Elfeed allows to interactively subscribe to a feed (defaulting to what is in the
     (setq rmh-elfeed-org-files (list (concat elfeed-db-directory "feeds.org")))
     (elfeed-org))
 #+end_src
+
+Quite a few of my feeds are youtube channels, the =elfeed-tube= package has some extra features for reading those feeds
+
+#+begin_src elisp
+  (use-package elfeed-tube
+    :after elfeed
+    :config
+    (elfeed-tube-setup)
+
+    :bind (:map elfeed-show-mode-map
+                ("F" . elfeed-tube-fetch)
+                ([remap save-buffer] . elfeed-tube-save)
+                :map elfeed-search-mode-map
+                ("F" . elfeed-tube-fetch)
+                ([remap save-buffer] . elfeed-tube-save)))
+#+end_src
+
 ** IRC
 
 I used to run a weechat relay on a vps for IRC. The main reason for this was that the relay allowed multiple clients to be active at the same time an have at least an attempt at saving the state betwee multiple devices.
