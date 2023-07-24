@@ -929,6 +929,8 @@ To help me see the difference between visual lines and logical lines I let emacs
                 fill-column 100
                 truncate-lines nil)
 
+  (setq sentence-end-double-space nil)    ; A period ends a sentence, period. relevant for fill
+
   (use-package visual-fill-column
     :commands (turn-on-visual-fill-column-mode))
 
