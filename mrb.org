@@ -4042,6 +4042,17 @@ Evaluating an expression with the cursor after it is often used, I'd like being 
 #+end_src
 
 Not sure how to bind this though. I'd like it close to C-x C-e obviously
+
+When evaluating expressions, the result is way down in the status area. I would like to have it inline in the buffer in an overlay. The package =cider= does this, but I have no need for the complete clojure environment. There is a specific package for emacs-lisp though, called =eros=
+
+#+begin_src emacs-lisp
+  (use-package eros
+    :config
+    (eros-mode 1) ;; ok for global active, just puts advices around the eval
+    ;; TODO set the face
+    )
+#+end_src
+
 **** Scheme
 The generic scheme support is the builtin scheme package, let's tell it that I use guile as my default scheme program.
 
@@ -4061,14 +4072,33 @@ The generic scheme support is the builtin scheme package, let's tell it that I u
       :hook ((geiser-repl-mode . mrb/prettify-symbols))
 
       :custom
-      (geiser-active-implementations '(guile))
       (geiser-guile-binary "/home/mrb/.guix-profile/bin/guile")
+      (geiser-active-implementations '(guile))
+      (geiser-default-implementation 'guile)
+
       ;; Do NOT evaluate on return when inside an expression
       (geiser-repl-send-on-return-p nil)
+
+      ;; start repl and eval results inline in buffer
+      ;; TODO I do want this eval result to be transient, not inserted!
       (geiser-mode-start-repl-p t)
-      (geiser-default-implementation 'guile))
+      (geiser-mode-eval-last-sexp-to-buffer t)
+      (geiser-mode-eval-to-buffer-prefix " ;;=> ")
+
+      )
 #+end_src
 
+Similar to using eros for emacs-lisp, I use geiser-eros for languages that geiser supports.
+
+#+begin_src emacs-lisp
+  (use-package geiser-eros
+    :after (eros geiser)
+    :straight '(:type git :host sourcehut :repo "sokolov/geiser-eros")
+    :config
+    ;; Make sure geiser does not insert eval into buffer
+    (setq geiser-mode-eval-last-sexp-to-buffer nil)
+    (geiser-eros-mode 1))
+#+end_src
 While we're in the scheme section, let's configure =guix= and friends, which use scheme heavily
 
 #+begin_src emacs-lisp
