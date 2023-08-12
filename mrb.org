@@ -8,8 +8,6 @@ Last update: call_last_modified()
 
 This is my emacs configuration file that is loaded with =org-babel-load-file= in the Emacs init file. The intent is to have as much of my Emacs configuration in here as possible. The system works as a literal programming system where with a tangle the elisp code that actually makes up my configuration is extracted automatically and loaded.
 
-This file was created from many separate elisp files and has not been fully sanitized yet. Following the history of that may be interesting to some as well.
-
 This document is irregularly published and lives in different locations:
 
 - [[https://github.com/mrvdb/emacs-config][config sources are available on github]]
