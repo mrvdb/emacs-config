@@ -1173,27 +1173,11 @@ Also, save the location in files between sessions.
     (setq-default save-place-mode t))
 #+end_src
 
-The C-x-w shortcut write a file to a new location (and adjusts the buffer), but leaves the old file lingering. The next defun moves a file in a neater way.
+
+Bind renaming the visiting file to a new location to =C-x-w= now that we have =rename-visited-file=
 
 #+begin_src emacs-lisp
-  (defun mrb/move-file (new-location)
-    "Write this file to NEW-LOCATION, and delete the old one."
-    (interactive (list (if buffer-file-name
-                           (read-file-name "Move file to: ")
-                         (read-file-name "Move file to: "
-                                         default-directory
-                                         (expand-file-name (file-name-nondirectory (buffer-name))
-                                                           default-directory)))))
-    (when (file-exists-p new-location)
-      (delete-file new-location))
-    (let ((old-location (buffer-file-name)))
-      (write-file new-location t)
-      (when (and old-location
-                 (file-exists-p new-location))
-        (delete-file old-location))))
-
-  ;; Bind it to the usual shortcut
-  (bind-key "C-x C-w" 'mrb/move-file)
+  (bind-key "C-x C-w" 'rename-visited-file)
   (bind-key "C-S-s" 'write-file)
 #+end_src
 
