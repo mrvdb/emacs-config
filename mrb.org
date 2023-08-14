@@ -2061,10 +2061,7 @@ Orgmode can export to a variety of formats, I mainly use LaTeX (PDF) and HTML as
          org-export-htmlize-output-type 'css
          org-org-htmlized-css-url "orgmode.css"
 
-         org-latex-listings 'minted
-         ;; Define a default background color name, this needs to be set through
-         ;; a latex header
-         org-latex-minted-options '(("bgcolor" "codebg"))
+        org-latex-listings 'engraved
 
          org-export-copy-to-kill-ring 'if-interactive
 
