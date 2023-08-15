@@ -2046,9 +2046,10 @@ The latter is the most important one and will prevent creating 'gathering' items
   (setq org-refile-target-verify-function 'mrb/verify-refile-target)
 #+end_src
 ** Exporting to other formats
-Orgmode can export to a variety of formats, I mainly use LaTeX (PDF) and HTML as destination format
+Orgmode can export to a variety of formats, I mainly use LaTeX (PDF) and HTML as destination format.
 
 #+begin_src emacs-lisp
+  (use-package htmlize)                   ; for html export source highlighting
    ;; {% raw %}
    (setq org-export-latex-hyperref-format "\\ref{%s}:{%s}"
          ;; old system

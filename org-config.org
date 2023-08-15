@@ -260,6 +260,8 @@ For keyboard symbols:
 For math:
 #+LATEX_HEADER: \usepackage{amsmath}
 
+For outline:
+#+LATEX_HEADER: \usepackage{bookmark}
 
 * Links
 Autolinks which can be entered like [[keyword:parameter]] This is mostly here as an example, I don’t think I’ve ever used these in my org files
