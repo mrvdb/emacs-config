@@ -3820,6 +3820,14 @@ As of emacs 29 the treesit package is built-in, so let's use that in any case fo
       (add-to-list 'major-mode-remap-alist mode)))
 #+end_src
 
+To have some control over the environment for specific projects I use [[http://direnv.net][direnv]], so let's install emacs support for it as well.
+
+#+begin_src emacs-lisp
+  (use-package envrc
+    :config
+    (envrc-global-mode))
+
+#+end_src
 ** Reference & documentation
 While emacs itself has a very nicely documentation system, I still don't understand why this is not interpolated into every other mode and or language.
 
