@@ -1502,6 +1502,8 @@ Here are the templates used by org-capture. The /todo/ template is the most used
           entry (function mrb/capture-location) "* TODO %?\n%(mrb/prop-or-nothing :annotation)\n" :prepend t :empty-lines 1)
          ("t" "Todo"
           entry (function mrb/capture-location) "* TODO %?\n" :prepend t :empty-lines 1)
+     ("g" "Generic Log Entry"
+      item  (here) "- %u %?")
          ("z" "Ziggo Log Entry"
           item  (file+olp
                  "/home/mrb/dat/org/GTD.org"
