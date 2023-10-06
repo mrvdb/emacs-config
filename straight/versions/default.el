@@ -82,7 +82,6 @@
  ("melpa" . "5b7f066af55d8d6869b855cb04bcc004519b8223")
  ("message-view-patch" . "40bc2e554fc1d0b6f0c403192c0a3ceaa019a78d")
  ("mic-paren" . "d0410c7d805c9aaf51a1bcefaaef092bed5824c4")
- ("mu" . "31f0c40893c05e01e829769eb29715809cffaa8a")
  ("mu4e-alert" . "3c9af8c7994df0a1a4f0703552ea3beffb485ace")
  ("mu4e-jump-to-list.el" . "cf19684d2333cb0cda7f6b62c7607144baa49310")
  ("mu4e-query-fragments.el" . "8d93ede3772353e2dbc307de03e06e37ea6a0b6c")
