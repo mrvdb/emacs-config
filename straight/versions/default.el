@@ -130,7 +130,7 @@
  ("sly" . "992e3f3c1a599a8a10af12323d547b35ce70362c")
  ("soap-client" . "1535a04b9dd202fcbc49a655cc5dafd1b3bff59e")
  ("spinner" . "634529bb3173e09b37499f636de70abf29d9fa8a")
- ("straight.el" . "3fa415c44b2e5ba2bd8bb033f06a87b78b415808")
+ ("straight.el" . "ff63b154bef1ef8d92c141bd189001bff74f6982")
  ("sudo-save" . "b82a37da41185f89133bf5b45574f58d275f0653")
  ("svg-lib" . "da72b81d8589d045731140a836cfbc2891e4ebf3")
  ("svg-tag-mode" . "9f5c2cb862fcba96f247b85fdd1b7dffff7af93a")
