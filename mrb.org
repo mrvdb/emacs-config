@@ -3223,13 +3223,18 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
   ;;        cmake, libglib2.0-dev, libgmime3.0-dev, libxapian-dev, texinfo
   ;; (names are debian package names)
   (use-package mu4e
-    :straight ( :type git :host github :repo "djcb/mu"
-                :pre-build (("./autogen.sh") ("ninja" "-C" "build"))
-                :files (:defaults "build/mu4e/*.el")
-                :includes (mu4e-icalendar))
+    ;; For guix
+    :straight ( :type built-in :includes (mu4e-icalendar))
+
+    ;; Straight needs some tweaking
+    ;; :straight ( :type git :host github :repo "djcb/mu"
+    ;;             :pre-build (("./autogen.sh") ("ninja" "-C" "build"))
+    ;;             :files (:defaults "build/mu4e/*.el")
+    ;;             :includes (mu4e-icalendar))
 
     :custom
-    (mu4e-mu-binary (expand-file-name "build/mu/mu" (straight--repos-dir "mu")))
+    (mu4e-mu-binary (expand-file-name "/home/mrb/.guix-profile/bin/mu" ))
+    ;(mu4e-mu-binary (expand-file-name "/home/mrb/dat/src/emacs/packages/mu/build/mu/mu" ))
 
     :after (message)
     :commands (mu4e mrb/compose-mail mrb/mailfile)
@@ -3386,7 +3391,7 @@ When mu4e start, it always opens in its main screen, which contains the main ope
                        :query "flag:unread and not flag:trashed"
                        :key ?u)
                     '( :name "INBOX"
-                       :query "(flag:unread or flag:new or maildir:/INBOX) and not (flag:draft or flag:flagged or flag:deleted or maildir:/Trash or flag:trashed)"
+                     :query "(flag:unread or flag:new or maildir:/INBOX) and not (flag:draft or flag:flagged or maildir:/Trash or flag:trashed)"
                        :favorite t
                        :key ?i)
                     '( :name "TODO list"
