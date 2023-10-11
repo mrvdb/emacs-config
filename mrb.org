@@ -1236,6 +1236,7 @@ First bring in a bunch of modes that are used regularly, but have no other confi
   (use-package css-mode   :mode ("\\.css\\'" "\\.mss\\'"))
   (use-package csv-mode              :mode "\\.csv\\'")
   (use-package diff-mode  :mode "\\.patch\\'")
+  (use-package gnuplot)
   (use-package gnuplot-mode          :mode "\\.gp\\'")
   (use-package js2-mode              :mode "\\.js\\'")
   (use-package lua-mode              :mode "\\.lua\\'")
