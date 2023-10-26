@@ -261,10 +261,11 @@ So, identification, authorization and encryption.
 Seems like a good idea to start configuration with some details about me. The idea being that anything personal goes here and nowhere else. For one, this means my name only appears in this section in this document. Most of the variables I just made up, but some are used in other places too.
 
 #+begin_src emacs-lisp
-  (setq mrb/default-email-address "marcel@hsdev.com"
-        mrb/default-signature-file "~/Maildir/.signature"
+  (setq mrb/maildir "~/Maildir/"
+        mrb/default-email-address "marcel@hsdev.com"
+        mrb/default-signature-file (concat mrb/maildir ".signature")
         mrb/private-addresses '("marcel@van-der-boom.nl" "m@rcel.van-der-boom.nl")
-        mrb/private-signature-file "~/Maildir/.signature-private"
+        mrb/private-signature-file (concat mrb/maildir ".signature-private")
         mrb/default-private-address (car mrb/private-addresses)
 
         mrb/bcc-address      "mrb+Sent@hsdev.com"
@@ -3265,7 +3266,7 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
     (defun mrb/setsigfile (ctxname)
       (expand-file-name
        (concat ".signature-" (downcase ctxname))
-       "~/Maildir/"))
+       mrb/maildir))
 
     (setq
      ;; Override the default mail user agent with the mu4e specific one
