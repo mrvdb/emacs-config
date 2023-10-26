@@ -3190,6 +3190,13 @@ It's not entirely clear which package is exactly responsible for what, but there
 
     :config
     (setq
+     message-signature-directory mrb/maildir
+     message-signature-file mrb/default-signature-file
+
+     ;; Register my alternative email-adresses, other than the default
+     ;; This steers From header when replying and as such has some overlap with mu4e contexts
+     message-alternative-emails (regexp-opt mrb/private-addresses)
+
      ;; When citing, remove the senders signature.
      ;; TODO  often I want to remove a lot more, like the disclaimer
      message-cite-function 'message-cite-original-without-signature
@@ -3305,7 +3312,6 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
      ;; TODO  Can we use the one that matched?
      mu4e-context-policy 'pick-first      ; When nothing matches only!
      mu4e-compose-context-policy 'nil     ; for compose, use current if nothing matches
-     mail-signature-file  mrb/default-signature-file
 
      mu4e-search-results-limit -1         ; until we run into performance problems
      mu4e-search-include-related nil      ; do not included related by default
@@ -3322,9 +3328,9 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
                             msg `(:to :cc :from) mrb/default-email-address)))
            ;; Use global config, but restore what was changed in other contexts
            :vars `((user-mail-address      . ,mrb/default-email-address)
-                   (mail-signature-file    . ,sigfile)
+                   (message-signature-file    . ,sigfile)
                    (mu4e-compose-signature . (with-current-buffer
-                                                 (find-file-noselect mail-signature-file)
+                                                 (find-file-noselect message-signature-file)
                                                (buffer-string))))))
        ,(let* ((ctxname "Private")
                (sigfile (mrb/setsigfile ctxname)))
@@ -3335,9 +3341,9 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
                            (mu4e-message-contact-field-matches
                             msg `(:to :cc :from) mrb/private-addresses)))
            :vars `((user-mail-address     . ,mrb/default-private-address)
-                   (mail-signature-file   . ,sigfile)
+                   (message-signature-file   . ,sigfile)
                    (mu4e-compose-signature . (with-current-buffer
-                                                 (find-file-noselect mail-signature-file)
+                                                 (find-file-noselect message-signature-file)
                                                (buffer-string))))))
        )
      )
