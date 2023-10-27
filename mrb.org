@@ -3226,7 +3226,8 @@ It's not entirely clear which package is exactly responsible for what, but there
                                    "\n")
 
           ;; but only show these
-          ;; NOTE: message-hidden-headers is automatically set by mu4e-compose-hidden-headers
+          ;; NOTE: mu4e sets message-hidden-headers to a local value based on by mu4e-compose-hidden-headers
+          message-hidden-headers '(not "To:" "From:" "Cc:" "Subject:")
 
      ;; How to attribute
      message-citation-line-format "[%N]:"
@@ -3318,10 +3319,9 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
      mu4e-completing-read-function 'completing-read
      mu4e-save-multiple-attachments-without-asking t
 
+     ;; Use same hidden setting as message mode
+     mu4e-compose-hidden-headers message-hidden-headers
 
-
-
-       mu4e-compose-hidden-headers '(not "To:" "From:" "Cc:" "Subject:")
      ;; Context definitions
      ;; Goal 1. use global config, unless private address is used
      ;; TODO  Can we use the one that matched?
