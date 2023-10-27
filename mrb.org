@@ -3004,7 +3004,6 @@ Composing mail is often an /out of band/ activity, like creating a tweet or a ca
         (find-file-noselect message-signature-file)
       (buffer-string)))
   (mu4e-compose-complete-only-after nil) ; no limit on contact completion for now
-  (mail-signature t)  ; use mail-signature file (move to message section?)
 
   :config
   (defun mrb/compose-mail (&optional mailto-url)
