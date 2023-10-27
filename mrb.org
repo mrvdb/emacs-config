@@ -3232,7 +3232,7 @@ It's not entirely clear which package is exactly responsible for what, but there
      message-citation-line-format "[%N]:"
      message-citation-line-function 'message-insert-formatted-citation-line
 
-          message-kill-buffer-on-exit t)
+          message-kill-buffer-on-exit t))
 #+end_src
 
 *** Mu4e specific settings
