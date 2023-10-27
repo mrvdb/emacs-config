@@ -2997,12 +2997,8 @@ Composing mail is often an /out of band/ activity, like creating a tweet or a ca
 
   :custom
   (mu4e-compose-format-flowed t)
-  (mu4e-compose-in-new-frame t)
+  (mu4e-compose-switch nil)
   (mu4e-compose-dont-reply-to-self t)
-  (mu4e-compose-signature
-   '(with-current-buffer
-        (find-file-noselect message-signature-file)
-      (buffer-string)))
   (mu4e-compose-complete-only-after nil) ; no limit on contact completion for now
 
   :config
