@@ -3380,13 +3380,6 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
 
     (setq mu4e-html2text-command 'mrb/mu4e-shr2text))
 #+end_src
-
-Regardless, I always want mu4e, so start it in the background
-
-#+begin_src emacs-lisp
-  (mu4e 'background)
-#+end_src
-
 **** Main screen
 When mu4e start, it always opens in its main screen, which contains the main operations, visible bookmarks.
 
