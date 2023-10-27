@@ -264,7 +264,8 @@ Seems like a good idea to start configuration with some details about me. The id
   (setq mrb/maildir "~/Maildir/"
         mrb/default-email-address "marcel@hsdev.com"
         mrb/default-signature-file (concat mrb/maildir ".signature")
-        mrb/private-addresses '("marcel@van-der-boom.nl" "m@rcel.van-der-boom.nl")
+          mrb/private-addresses '(                       "marcel@van-der-boom.nl"
+                                                         "m@rcel.van-der-boom.nl")
         mrb/private-signature-file (concat mrb/maildir ".signature-private")
         mrb/default-private-address (car mrb/private-addresses)
 
@@ -3205,23 +3206,33 @@ It's not entirely clear which package is exactly responsible for what, but there
      message-yank-prefix "> "             ; Add '> ' when quoting lines
      message-yank-cited-prefix ">"        ; Add '>' for cited lines
      message-yank-empty-prefix ""         ; Add nothing for empty lines
+     )
+    ;; Define the headers that will be sent
 
-     ;; Always put one in the Sent folder on sending.
-     ;; TODO  this does nothing for mu4e!!!
-     message-default-mail-headers (mapconcat
+    ;; Add openpg preferences
+    (setq message-openpgp-header
+          '("235E5C8CF5E8DFFB"
+            "https://keys.openpgp.org/vks/v1/by-fingerprint/77DDA1B68D04792A8F85D855235E5C8CF5E8DFFB"
+            "signencrypt"))
+    (add-hook 'message-header-setup-hook 'message-add-openpgp-header)
+    ;; but do not show it in the compose window
+
+
+
+    ;; This will have an effect in mu4e starting from 1.11.23
+    (setq message-default-mail-headers (mapconcat
                                    'identity
-                                   `(,(concat "Bcc: " mrb/bcc-address)
-                                     "OpenPGP: id=235E5C8CF5E8DFFB"
-                                     "OpenPGP: url=https://keys.openpgp.org/vks/v1/by-fingerprint/77DDA1B68D04792A8F85D855235E5C8CF5E8DFFB"
-                                     "OpenPGP: preference=signencrypt")
+                                        `(,(concat "Bcc: " mrb/bcc-address))
                                    "\n")
 
+          ;; but only show these
+          ;; NOTE: message-hidden-headers is automatically set by mu4e-compose-hidden-headers
 
      ;; How to attribute
      message-citation-line-format "[%N]:"
      message-citation-line-function 'message-insert-formatted-citation-line
 
-     message-kill-buffer-on-exit t))
+          message-kill-buffer-on-exit t)
 #+end_src
 
 *** Mu4e specific settings
@@ -3307,6 +3318,10 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
      mu4e-completing-read-function 'completing-read
      mu4e-save-multiple-attachments-without-asking t
 
+
+
+
+       mu4e-compose-hidden-headers '(not "To:" "From:" "Cc:" "Subject:")
      ;; Context definitions
      ;; Goal 1. use global config, unless private address is used
      ;; TODO  Can we use the one that matched?
