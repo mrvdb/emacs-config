@@ -3423,7 +3423,7 @@ The first view after searching is a list of mail headers. Set config vars for th
   :bind ( :map mu4e-headers-mode-map
           ("s" . mu4e-headers-mark-for-junk)
           ("r" . mu4e-compose-reply)
-          ("R" . mu4e-headers-mark-for-refile)
+          ("A" . mu4e-headers-mark-for-refile)
           ("SPC" . mu4e-headers-mark-for-something)
           ("X" . (lambda () (interactive) (mu4e-mark-execute-all t))))
 
@@ -3487,7 +3487,7 @@ After selecting a message in the header view, a message view will open.
   :bind ( :map mu4e-view-mode-map
           ("s" . mu4e-view-mark-for-junk)
           ("r" . mu4e-compose-reply)
-          ("R" . mu4e-view-mark-for-refile)
+          ("A" . mu4e-view-mark-for-refile)
           ("X" . (lambda () (interactive) (mu4e~view-in-headers-context (mu4e-mark-execute-all t)))))
 
   :custom
