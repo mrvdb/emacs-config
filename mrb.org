@@ -3210,17 +3210,9 @@ It's not entirely clear which package is exactly responsible for what, but there
             "https://keys.openpgp.org/vks/v1/by-fingerprint/77DDA1B68D04792A8F85D855235E5C8CF5E8DFFB"
             "signencrypt"))
     (add-hook 'message-header-setup-hook 'message-add-openpgp-header)
-    ;; but do not show it in the compose window
-
-
 
     ;; This will have an effect in mu4e starting from 1.11.23
-    (setq message-default-mail-headers (mapconcat
-                                   'identity
-                                        `(,(concat "Bcc: " mrb/bcc-address))
-                                   "\n")
-
-          ;; but only show these
+    (setq
           ;; NOTE: mu4e sets message-hidden-headers to a local value based on by mu4e-compose-hidden-headers
           message-hidden-headers '(not "To:" "From:" "Cc:" "Subject:")
 
