@@ -3559,6 +3559,7 @@ Elfeed handles my RSS feeds, which I specify using an orgmode file =feeds.org=
            ("w" . 'mrb/elfeed-show-toggle-watchlater)
            ("v" . 'mrb/elfeed-play-with-mpv)
            :map elfeed-search-mode-map
+             ("v" . 'mrb/elfeed-play-with-mpv)
            ("w" . 'mrb/elfeed-search-toggle-watchlater))
     :init
     (setf url-queue-timeout 30
@@ -3599,7 +3600,7 @@ Elfeed handles my RSS feeds, which I specify using an orgmode file =feeds.org=
 
       (start-process "elfeed-mpv" nil
                      "~/bin/umpv"
-                     (elfeed-entry-link elfeed-show-entry)))
+                       (elfeed-entry-link (elfeed-search-selected t))))
 
 
     ;; New entry hook allows meta information manipulation
