@@ -2194,6 +2194,20 @@ Writefreely is a Write.as derivative and published as open source. This allows m
     (writefreely-maybe-publish-created-date t)
     (writefreely-auth-token (password-store-get "Qua.name/accesstoken")))
 #+end_src
+
+*** Hugo
+I use hugo to sporadically publish some content to my blog. Not sure if this is what I want, I post too little to spend much time on it. But here is a small config for the main posts:
+
+#+begin_src emacs-lisp
+  (use-package easy-hugo
+  :init
+  (setq easy-hugo-basedir "~/dat/blogs/mrblog/" ;all my subblogs live below this
+        easy-hugo-postdir "content/post/main"
+        easy-hugo-url "https://mrblog.nl"
+        easy-hugo-default-ext ".org"
+        easy-hugo-org-header t))
+#+end_src
+
 ** Encrypting information in org-mode
 I use the /encrypt/ tag for encrypting sections in org-mode (and sometimes my journal). The sections get encrypted and decrypted automatically on saving and opening. This uses the EasyPG library to get to my GPG key.
 
