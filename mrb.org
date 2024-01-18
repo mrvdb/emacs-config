@@ -2706,6 +2706,13 @@ So, tab tries to indent, which is the main expectation, and if it can't it tries
   (setq tab-always-indent 'complete)
 #+end_src
 
+There are some situations where tab does completion (which is good), but the type of completion is not what I want (which is bad). Currently this includes only =quail-completion= of which I don't even know what it is for. This code prevents having a quail completion window when pressing tab inline.
+
+#+begin_src elisp
+  ; Bit of a kludge, but when quail loads, get rid of the completion
+  (with-eval-after-load 'quail (defun quail-completion ()))
+#+end_src
+
 In a standard emacs installation, TAB indents, depending on mode obviously. If indenting would not make sense, a TAB can be inserted or completion could start. The function =completion-at-point= is used in some situations. Ideally the =corfu-complete= function could take over in many cases. Here's a simplistic approach to get me started:
  1. if in minibuffer, do completion there like we are used to;
  2. if cursor is at the end of a symbol, try to complete it with corfu;
