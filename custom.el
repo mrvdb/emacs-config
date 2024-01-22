@@ -39,13 +39,9 @@
       ((org-agenda-group-by-property "Group")
        (org-agenda-dim-blocked-tasks 'invisible)))
      ("r" "To Review"
-      ((tags-todo
-        #("SCHEDULED=\"\"+DEADLINE=\"\"-{.}/TODO" 25 28
-          (regexp t))
+      ((tags-todo "SCHEDULED=\"\"+DEADLINE=\"\"-{.}/TODO"
         ((org-agenda-overriding-header "Untagged items")))
-       (tags-todo
-        #("-inactive+SCHEDULED=\"\"+DEADLINE=\"\"+TODO=\"TODO\"+{.}" 47 50
-          (regexp t))
+       (tags-todo "-inactive+SCHEDULED=\"\"+DEADLINE=\"\"+TODO=\"TODO\"+{.}"
         ((org-agenda-overriding-header "Unscheduled active items"))))
       ((org-agenda-dim-blocked-tasks 'invisible)))
      ("c" "Scheduled overview" tags-todo "SCHEDULED<>\"\"|DEADLINE<>\"\"/TODO"
