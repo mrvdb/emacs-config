@@ -3068,6 +3068,7 @@ On top of that, I want a manual capture script which is basically the same as th
 edit -e '(mrb/compose-mail)'
 #+end_src
 
+**** Attachments
 When attaching files, it is sometimes useful to extract some info from the attached file and include it in the message. My main usecase is extracting PDF annotations (mostly for people who cannot process the annotations in their PDF viewer directly.
 
 The way I have implemented this is by advicing the function =mml-insert-empty-tag= which is used by the =mml-attach-file= function. At that point in the code the file and point in the active buffer are known, and we just have to process the extra actions.
@@ -3122,6 +3123,43 @@ The advice function extracts the annotations from the pdf file (unconditionally 
    :before
    'mrb/extended-attach-file
    '((name . "extended-attach")))
+#+end_src
+
+**** Footnotes
+While composing mail referring to external resources through links is done very often. While creating links in HTML mail, which I do not use, gives the option to name a link, there's no such thing in plain text. This usually works out fine, but when there are many links I fall back to creating 'footnotes' which actuall hold the links while in the text there is just an identifier to point the reader to the proper footnote.
+
+Of course these footnotes can be used for other things as well.
+
+Here's what I would like:
+
+- easy shortcut to start adding a footnote
+- easy shortcut to return to the main text
+- insert the proper numbers automatically, optionally renumber when I put an extra in later on.
+- insert superscript like \sup1 or \sup2 into the text
+- insert captured content at bottom of current text (but not below quotes)
+
+Footnote mode seems to do exactly that, configured properly. Its prefix key is a bit awkward, so I have changed it and having the unicode parentheses for start and end tag is not ideal, but the package requires there to be /something/; I'd prefer there to be /nothing/ but that messes up renumbering and other operations.
+
+- Key shortcuts are a bit awkward, as ! is awkward
+  A: changed the prefix to ="C-c n"= which makes more sense
+
+- auto enable in message mode, mu4e compose
+
+  #+begin_src emacs-lisp
+    (use-package footnote
+      :straight (:type built-in)
+
+      ;; Use a better prefix than the default 'C-c !'
+      :bind-keymap ("C-c n" . footnote-mode-map)
+
+      :hook (message-mode . footnote-mode)  ; I use it in mu4e
+      :config
+      (setq footnote-section-tag "" ; No introduction needed?
+            footnote-start-tag "⁽"  ; doc says not to use empty string
+            footnote-end-tag "⁾"
+            footnote-style 'unicode         ; this makes footnotes use superscript numbering
+            footnote-body-tag-spacing 1     ; between the \sup1 and the footnote text
+            ))
 #+end_src
 *** Sending mail
 Sending mail through smtp, using the smtpmail package
