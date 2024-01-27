@@ -3042,8 +3042,13 @@ Composing mail is often an /out of band/ activity, like creating a tweet or a ca
       (mu4e-compose-new)
       (mml-attach-file file mimetype (concat mimetype " attachment") "attachment")))
 
+  ;; Context switching in compose
+  <<mu4e-context-switch-in compose>>
+
   ;; Extend attaching files with extra info insertion
   <<extend-attach>>
+
+
 #+end_src
 
 To be able to use the =mrb/compose-mail= function as a mailto handler we need to be able to call it from outside of emacs. Let's define a small shell script that does exactly this. The SRC attributes tangle it into my =bin= directory where is will be in the path. In the OS, this script will need to be set as the default mail handler.
@@ -3076,6 +3081,7 @@ The advice function extracts the annotations from the pdf file (unconditionally 
 
 #+name: extend-attach
 #+begin_src emacs-lisp :tangle no
+  :config
   ;; TODO  return info, do not use insert directly, so we have more control
   (defun mrb/pdf-extract-info (file)
     "Extract and render the pdf annotations in FILE"
@@ -3160,6 +3166,47 @@ Footnote mode seems to do exactly that, configured properly. Its prefix key is a
             footnote-style 'unicode         ; this makes footnotes use superscript numbering
             footnote-body-tag-spacing 1     ; between the \sup1 and the footnote text
             ))
+#+end_src
+**** Context switching in compose
+There used to be a mu4e function to switch contexts while composing mail, but this was removed because it was somewhat fragile. I used it a lot, so I rewrote a copy of it to have it back and bind it to the same key as in the main mu4e map
+
+#+name: mu4e-context-switch-in compose
+#+begin_src emacs-lisp :tangle no
+  :bind ( :map mu4e-compose-mode-map
+          ("C-;" . mrb/mu4e-compose-context-switch))
+
+  :config
+  (defun mrb/mu4e-compose-context-switch (&optional force name)
+    "Change the context for the current draft message.
+
+    With NAME, switch to the context with NAME, and with FORCE non-nil,
+    switch even if the switch is to the same context.
+
+    Like `mu4e-context-switch' but with some changes after switching:
+    1. Update the From and Organization headers as per the new context
+    2. Update the message-signature as per the new context."
+    (interactive "P")
+
+    (unless (derived-mode-p 'mu4e-compose-mode)
+      (mu4e-error "Only available in mu4e compose buffers"))
+
+    (let ((old-context (mu4e-context-current)))
+      (unless (and name (not force) (eq old-context name))
+        (unless (and (not force)
+                     (eq old-context (mu4e-context-switch nil name)))
+          (save-excursion
+            ;; Change From / Organization if needed.
+            (message-replace-header "Organization"
+                                    (or (message-make-organization) "")
+                                    '("Subject")) ;; keep in same place
+            (message-replace-header "From"
+                                    (or (message-make-from) "")
+                                    ;; Update signature.
+                                    (when (message-goto-signature) ;; delete old signature.
+                                      (if message-signature-insert-empty-line
+                                          (forward-line -2) (forward-line -1))
+                                      (delete-region (point) (point-max))) ;; This assumes sig is the last in buffer?
+                                    (save-excursion (message-insert-signature))))))))
 #+end_src
 *** Sending mail
 Sending mail through smtp, using the smtpmail package
@@ -3261,6 +3308,7 @@ It's not entirely clear which package is exactly responsible for what, but there
      message-yank-cited-prefix ">"        ; Add '>' for cited lines
      message-yank-empty-prefix ""         ; Add nothing for empty lines
      )
+
     ;; Define the headers that will be sent
 
     ;; Add openpg preferences
