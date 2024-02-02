@@ -2762,11 +2762,32 @@ For most of the completion that is needed which is not inline (for which I am us
   (use-package vertico
     :demand t
     :straight (vertico :files (:defaults "extensions/*")
-                       :includes (vertico-reverse))
+                       :includes (vertico-reverse vertico-multiform))
 
     :config
     (vertico-mode))
 #+end_src
+
+As =M-x= or =execute-extended-command= is probably the most used command in Emacs, I want to give it a bit more prominent place on the scree than just the tiney minibuffer at the bottom. The =vertico-posframe= package turns the minibuffer into a floating popup sort of screen by using posframe. This puts the minibuffer more in my face and gives some better options to present the command information.
+
+#+begin_src emacs-lisp
+  (use-package vertico-posframe
+    ;; Customize border face to same color as cursor
+    :custom-face
+    (vertico-posframe-border ((t (:background ,mrb/cursor-color))))
+    :config
+    (setq vertico-posframe-parameters
+          '((left-fringe . 8)
+            (right-fringe . 8)))
+
+    (setq vertico-multiform-commands
+          '((consult-line
+             posframe
+             (vertico-posframe-fallback-mode . vertico-buffer-mode))
+            (t posframe)))
+
+    (vertico-multiform-mode 1))
+      #+end_src
 
 The first thing to complement =vertico= is the =orderless= package. My main use is to have the matching for completing items match 'first second' as well as 'second first' regardless of their order. Note that this works for every completion, also within =corfu= which is especially useful.
 
