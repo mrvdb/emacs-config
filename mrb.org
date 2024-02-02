@@ -330,18 +330,6 @@ I'm of the /spaces-no-tabs religion/:
   (setq tab-width 4)                      ; 4 spaces by default
 #+end_src
 
-A the same time, I don't want to be /that spaces guy/ in every project, and I'm willing to use tabs if that is the overwhelming consensus in a file. [[https://www.emacswiki.org/emacs/NoTabs]] has a snippet which guess the style in a file. Call this at the appropriate time.
-
-#+begin_src emacs-lisp
-  (defun mrb/infer-indentation-style ()
-    ;; if our source file uses tabs, we use tabs, if spaces spaces, and if
-    ;; neither, we use the current indent-tabs-mode
-    (let ((space-count (how-many "^  " (point-min) (point-max)))
-          (tab-count (how-many "^\t" (point-min) (point-max))))
-      (if (> space-count tab-count) (setq indent-tabs-mode nil))
-      (if (> tab-count space-count) (setq indent-tabs-mode t))))
-#+end_src
-
 Finally, I want to prevent producing files which have trailing spaces, because they serve no purpose at all. Removing these spaces is less trivial than it seems and I am not pretending to know what the best strategy is. For a while now, the =ws-butler= package has done a great job for me.
 
 #+begin_src emacs-lisp
