@@ -10,7 +10,7 @@
    '(("marcel@hsdev.com" "BC19C9D32D968224572D74A84EF46170ABE2ACDE" none)) nil nil "Set by autocrypt.el")
  '(compilation-scroll-output t)
  '(custom-safe-themes t)
- '(epg-gpg-program "/usr/bin/gpg2")
+ '(epg-gpg-program "/home/mrb/.guix-profile/bin/gpg")
  '(explicit-shell-file-name "/bin/bash")
  '(font-lock-maximum-size nil)
  '(gud-gdb-command-name "gdb --annotate=1")
