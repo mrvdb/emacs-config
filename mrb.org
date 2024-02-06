@@ -2774,11 +2774,14 @@ As =M-x= or =execute-extended-command= is probably the most used command in Emac
   (use-package vertico-posframe
     ;; Customize border face to same color as cursor
     :custom-face
-    (vertico-posframe-border ((t (:background ,mrb/cursor-color))))
+          (vertico-posframe-border ((t (:background nil :inherit default))))
     :config
     (setq vertico-posframe-parameters
-          '((left-fringe . 8)
-            (right-fringe . 8)))
+                `((left-fringe . 18)
+                  (right-fringe . 18)
+                  (border-width . 2)
+                  (border-color . ,mrb/cursor-color)
+                  (child-frame-border-width . 18)))
 
     (setq vertico-multiform-commands
           '((consult-line
