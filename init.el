@@ -13,8 +13,24 @@
 ;; Set gc really large, especially when loading the config file
 ;; These two lines prevent a stuttering cursor for me, in most cases
 ;; FIXME: gc collection in idle time is not the way to do this, but it works for me
-(setq gc-cons-threshold (* 200 1024 1024))
-(run-with-idle-timer 5 t #'garbage-collect)
+;; although: https://akrl.sdf.org/#orgc15a10d has the same as I had for years
+
+;; Set threshold to 1GB
+(setq gc-cons-threshold (* 1024 1024 1024))
+
+(defmacro k-time (&rest body)
+  "Measure and return the time it takes evaluating BODY."
+  `(let ((time (current-time)))
+     ,@body
+     (float-time (time-since time))))
+
+;; When idle for 15sec run the GC no matter what.
+(defvar k-gc-timer
+  (run-with-idle-timer 15 t
+                       (lambda ()
+                         (message "Garbage Collector has run for %.06fsec"
+                                  (k-time (garbage-collect))))))
+
 
 ;; If we have the native compiler, use it
 (message (concat
