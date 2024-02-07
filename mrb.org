@@ -970,6 +970,7 @@ Note that if this code is evaluated any call to =emacsclient= (be that from exte
 
     (mrb/unicode-font-corrections))
 
+
   ;; Run our client settings after we make a frame This is probably
   ;; overkill to do on every frame, but it covers the situation where
   ;; `server-visit-hook` won't work because we started emacs without a
@@ -2529,10 +2530,6 @@ For some special keys I have defined some commands. Special keys are those keys 
   (bind-key "<f1>" 'help-command)
   (bind-key "<f2>" 'save-buffer)
   (bind-key "<f4>" 'find-file)
-
-  ;; Not sure what this is? It is not the menu key.
-  (bind-key [XF86MenuKB] 'accelerate-menu)
-  (bind-key [XF86Battery] 'display-battery-mode)
 #+end_src
 
 **** Resizing and switching windows and frames
@@ -3631,6 +3628,7 @@ There are quite a few mu4e packages out there. Let's load them in one group for 
     (mu4e-alert-set-default-style 'libnotify))
 
   ;; Support icalendar Yes/No/Maybe reactions to calendar invites
+  ;; TODO not needed anymore now?
   (use-package mu4e-icalendar
     :config
     (mu4e-icalendar-setup))
