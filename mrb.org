@@ -1730,40 +1730,29 @@ I want the property to be name 'CREATED' (I don't remember what the org-expiry d
     :config
     <<org-expiry-createdtimestampfunction>>
 
-    <<org-expiry-createdtimestampusage>>
     )
 #+end_src
 
 So, to create the timestamp I need a little helper function which actually inserts it, using org-expiry. There is some additional cursor munging to make sure it is used comfortably during editing.
+To actually make this active we advice the operations that insert headers: =org-insert-todo-heading= and =org-capture= when we are actually capturing a TODO item.
 
 #+name: org-expiry-createdtimestampfunction
 #+begin_src emacs-lisp :tangle no
-  (defun mrb/insert-created-timestamp()
+  (defun mrb/insert-created-timestamp(&rest args)
     "Insert a CREATED property using org-expiry.el for TODO entries"
     (org-expiry-insert-created)
     (org-back-to-heading)
     (org-end-of-line))
-#+end_src
 
-Now that function is used to insert the property when:
-1. creating a TODO heading, using an advice to =insert-todo-heading=
-2. capturing an item, but only when it is a TODO item (i.e. has a
-   defined keyword)
+  ;; for insert todo heading, always add the CREATED property
+  (advice-add 'org-insert-todo-heading
+              :after #'mrb/insert-created-timestamp)
 
-#+name: org-expiry-createdtimestampusage
-#+begin_src emacs-lisp :tangle no
-  (defadvice org-insert-todo-heading (after mrb/created-timestamp-advice activate)
-    "Insert a CREATED property using org-expiry.el for TODO entries"
-    (mrb/insert-created-timestamp))
-
-  (ad-activate 'org-insert-todo-heading)
-
-  (defadvice org-capture (after mrb/created-timestamp-advice activate)
-    "Insert a CREATED property using org-expiry.el for TODO entries"
+  ;; for capturing, only when state is in the TODO keywords list active in buffer
+  (advice-add 'org-capture
+              :after (lambda (&rest r)
     (when (member (org-get-todo-state) org-todo-keywords-1)
-      (mrb/insert-created-timestamp)))
-  (ad-activate 'org-capture)
-  ;;(ad-deactivate 'org-capture)
+                         (mrb/insert-created-timestamp))))
 #+end_src
 
 Related to the above, with some regularity I want to record timestamps, for example for documenting longer during tasks and recording incremental progress or information on them. Orgmode provides the binding '=C-c !=' for this which inserts an inactive date-stamp, optionally including the time as well.
