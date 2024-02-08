@@ -10,37 +10,12 @@
 
 (require 'cl)                           ; for remove-if
 
-;; Set gc really large, especially when loading the config file
-;; These two lines prevent a stuttering cursor for me, in most cases
-;; FIXME: gc collection in idle time is not the way to do this, but it works for me
-;; although: https://akrl.sdf.org/#orgc15a10d has the same as I had for years
+;; Set gc really large, during load, after that we are going to use gcmh
+;; See: https://akrl.sdf.org/#orgc15a10d has the same as I had for years
+(setq gc-cons-threshold (* 1 1024 1024 1024))
 
-;; Set threshold to 1GB
-(setq gc-cons-threshold (* 1024 1024 1024))
-
-(defmacro k-time (&rest body)
-  "Measure and return the time it takes evaluating BODY."
-  `(let ((time (current-time)))
-     ,@body
-     (float-time (time-since time))))
-
-;; When idle for 15sec run the GC no matter what.
-(defvar k-gc-timer
-  (run-with-idle-timer 15 t
-                       (lambda ()
-                         (message "Garbage Collector has run for %.06fsec"
-                                  (k-time (garbage-collect))))))
-
-
-;; If we have the native compiler, use it
-(message (concat
-          "Native compilation is "
-          (if (and (fboundp 'native-comp-available-p) (native-comp-available-p))
-              (progn
-                (setq comp-deferred-compilation t)
-                "")
-            "*not* ")
-          "available"))
+;; Assert native compilation is there
+(setq comp-deferred-compilation t)
 
 ;; HACK: Disable Org-mode that was shipped with Emacs and add one I control
 (setq load-path (remove-if (lambda (x) (string-match-p "org$" x)) load-path))

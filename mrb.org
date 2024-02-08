@@ -230,11 +230,19 @@ Now that we have =straight= we will use it from the =use-package= macro.
     (use-package diminish)
 #+end_src
 
-Sometimes it is comfortable to use GUIX packages, for example when autobuilding fails. My usecase was pdf-tools failing frequently, so using the builtin from GUIX was an easy way out.
-
-This is the only thing needed, after installing an emacs package with GUIX, it is available for /require/ and can be treated by /straight/ as a /built-in/ type package.
+I want to delegate garbage collection to someone who knows more than I do and made a package for it. The idea is still similar to what I had for years, i.e. large threshold on an idle-timer to do garbage collection. The package just adds some convenience, so I dont have to think about it other than making the threshold large on startup.
 
 #+begin_src emacs-lisp
+  (use-package gcmh
+    :config
+    (gcmh-mode 1))
+#+end_src
+
+  Sometimes it is comfortable to use GUIX packages, for example when autobuilding fails. My usecase was pdf-tools failing frequently, so using the builtin from GUIX was an easy way out.
+
+  This is the only thing needed, after installing an emacs package with GUIX, it is available for /require/ and can be treated by /straight/ as a /built-in/ type package.
+
+  ,#+begin_src emacs-lisp
   (add-to-list 'load-path "/home/mrb/.guix-profile/share/emacs/site-lisp")
   (guix-emacs-autoload-packages)
 #+end_src
