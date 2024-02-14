@@ -833,10 +833,6 @@ Although I think the 16 color system is a bit simplistic and, for emacs at least
             ;; Man pages inside emacs
             (Man-overstrike                 :foreground "#bf616a" :weight bold)
             (Man-underline                  :foreground "#a3be8c" :weight bold)
-
-            ;; Vertico and friends
-            (vertico-current                :background "#5e81ac")
-            (orderless-match-face-0         :foreground "dark orange")
             ))
 
     ;; Apply our adjustment using the theme function
@@ -2734,6 +2730,8 @@ For most of the completion that is needed which is not inline (for which I am us
     :straight (vertico :files (:defaults "extensions/*")
                        :includes (vertico-reverse vertico-multiform))
 
+    :custom-face
+    (vertico-current ((t (:background "#5e81ac"))))
     :config
     (vertico-mode))
 #+end_src
@@ -2766,6 +2764,8 @@ The first thing to complement =vertico= is the =orderless= package. My main use 
 
 #+begin_src emacs-lisp
   (use-package orderless
+    :custom-face
+    (orderless-match-face-0 ((t (:foreground "dark orange"))))
     :custom
     (completion-styles '(orderless basic)))
 #+end_src
