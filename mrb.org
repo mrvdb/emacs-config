@@ -381,11 +381,11 @@ Finally, I want to prevent producing files which have trailing spaces, because t
   (use-package autorevert
     :diminish auto-revert-mode
 
-    :custom
-    (auto-revert-interval 0.5)               ; Perhaps too often, let's see
-    (global-auto-revert-non-file-buffers t)  ; things like dired buffers
-
     :config
+    (setq auto-revert-interval 5)               ; Perhaps too often, let's see
+    (setq global-auto-revert-non-file-buffers t)  ; things like dired buffers
+
+
     (global-auto-revert-mode t))
 
   ;; Should this be here?
