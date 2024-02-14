@@ -806,19 +806,7 @@ Although I think the 16 color system is a bit simplistic and, for emacs at least
             ;;(tab-bar                        :background "#4c566a" )
 
             ;; Magit
-            (diff-refine-added              :background "#003000")
-            (diff-refine-removed            :background "#300000")
-            (magit-diff-added-highlight     :foreground "#a3be8c")
-            (magit-diff-removed-highlight   :foreground "#bf616a")
-            (magit-diff-added               :foreground "#a3be8c")
-            (magit-diff-removed             :foreground "#bf616a")
-            (magit-diff-hunk-heading-highlight :background "#5e81ac")
-            (magit-diff-hunk-heading           :background "#5e81ac")
 
-            ;; Flyspell
-            ;; flyspell errors/dupes look the same as flycheck-errors/warnings
-            (flyspell-incorrect                                   :inherit flycheck-error)
-            (flyspell-duplicate             :foreground "#2e3440" :inherit flycheck-warning)
 
             ;; Orgmode
             (org-headline-done              :foreground "#4c566a")
@@ -4356,6 +4344,16 @@ Features I'm interested in: issue commenting, pull requests
 
     :init
     (fullframe magit-status magit-mode-quit-window)
+
+      :custom-face
+      (diff-refine-added                 ((t (:background "#003000"))))
+      (diff-refine-removed               ((t (:background "#300000"))))
+      (magit-diff-added-highlight        ((t (:foreground "#a3be8c"))))
+      (magit-diff-removed-highlight      ((t (:foreground "#bf616a"))))
+      (magit-diff-added                  ((t (:foreground "#a3be8c"))))
+      (magit-diff-removed                ((t (:foreground "#bf616a"))))
+      (magit-diff-hunk-heading-highlight ((t (:background "#5e81ac"))))
+      (magit-diff-hunk-heading           ((t (:background "#5e81ac"))))
 
     :custom
     (magit-last-seen-setup-instructions "1.4.0")
