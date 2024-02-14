@@ -766,14 +766,7 @@ Although I think the 16 color system is a bit simplistic and, for emacs at least
     ;; the only solution for this is to move the visual adjustments in the use-package clauses of
     ;; the package itself.
     (setq base16-adjustments
-          `((vterm-color-black :foreground "#2e3440")
-            (vterm-color-red :foreground "#bf616a")
-            (vterm-color-green :foreground "#a3be8c")
-            (vterm-color-yellow :foreground "#ebcb8b")
-            (vterm-color-blue :foreground "#81a1c1")
-            (vterm-color-cyan :foreground "#88c0c0")
-            (vterm-color-magenta :foreground "#b48ead")
-
+          `(
             ;; Explicitly define the outline colors
             (outline-1 :foreground "#5e81ac")
             (outline-2 :foreground "#a3be8c")
@@ -2634,6 +2627,14 @@ The basic install is easy, but does need an emacs compiled with module support.
 #+begin_src emacs-lisp
   (use-package vterm
     :if (fboundp'module-load)
+    :custom-face
+    (vterm-color-black   ((t (:foreground "#2e3440"))))
+    (vterm-color-red     ((t (:foreground "#bf616a"))))
+    (vterm-color-green   ((t (:foreground "#a3be8c"))))
+    (vterm-color-yellow  ((t (:foreground "#ebcb8b"))))
+    (vterm-color-blue    ((t (:foreground "#81a1c1"))))
+    (vterm-color-cyan    ((t (:foreground "#88c0c0"))))
+    (vterm-color-magenta ((t (:foreground "#b48ead"))))
     :custom
     (vterm-timer-delay 0))
 #+end_src
