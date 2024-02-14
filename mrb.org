@@ -822,11 +822,6 @@ Although I think the 16 color system is a bit simplistic and, for emacs at least
             (magit-diff-hunk-heading-highlight :background "#5e81ac")
             (magit-diff-hunk-heading           :background "#5e81ac")
 
-            ;; Elfeed
-            (elfeed-search-tag-face         :foreground "#a3be8c")
-            (elfeed-search-feed-face        :foreground "#ebcb8b")
-            (elfeed-search-date-face        :foreground "#88c0d0")
-
             ;; Flyspell
             ;; flyspell errors/dupes look the same as flycheck-errors/warnings
             (flyspell-incorrect                                   :inherit flycheck-error)
@@ -3679,6 +3674,10 @@ Elfeed handles my RSS feeds, which I specify using an orgmode file =feeds.org=
     (setf url-queue-timeout 30
           elfeed-db-directory "~/.elfeed/")
 
+    :custom-face
+    (elfeed-search-tag-face ((t (:foreground "#a3be8c"))))
+    (elfeed-search-feed-face ((t (:foreground "#ebcb8b"))))
+    (elfeed-search-date-face ((t (:foreground "#88c0d0"))))
     :config
     (defun mrb/elfeed-search-toggle-tag(tag)
       (let ((entries (elfeed-search-selected)))
