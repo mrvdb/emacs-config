@@ -997,6 +997,9 @@ Flyspell is similar to flycheck but for text languages. I'm setting some of the 
 #+begin_src emacs-lisp
   (use-package flyspell
     :straight (:type built-in)
+    :custom-face
+    (flyspell-incorrect ((t (:inherit flycheck-error))))
+    (flyspell-duplicate ((t (:foreground "#2e3440" :inherit flycheck-warning))))
     :custom
     (flyspell-mark-duplications-flag nil "Flyspell Duplicates as warning")
     (flyspell-issue-message-flag nil))
