@@ -801,11 +801,8 @@ Although I think the 16 color system is a bit simplistic and, for emacs at least
             (isearch                        :foreground "#434c5e" :background ,mrb/cursor-color)
 
             ;; Mode-line faces
-            ;;(mode-line                      :foreground "#3b4252" :background "#a3be8c")
             (header-line                    :foreground "#4c566a" :background "#ebcb8b")
-            ;;(tab-bar                        :background "#4c566a" )
 
-            ;; Magit
 
 
             ;; Orgmode
@@ -832,14 +829,6 @@ Although I think the 16 color system is a bit simplistic and, for emacs at least
             (mrb/org-todo-keyword-READ      :foreground "#b48ead" :weight bold)
             (mrb/org-todo-keyword-READING   :foreground "#bf616a" :weight bold)
             (mrb/org-todo-keyword-PLAN      :foreground "#d8dee9" :weight bold)
-
-            ;; Mu4e
-              (mu4e-header-highlight-face     :inherit hl-line :underline nil
-                                              :foreground unspecified)
-            (mu4e-unread-face               :inherit nil :underline nil :weight bold)
-            (mu4e-context-face              :inherit mu4e-link-face)
-            (mu4e-flagged-face              :foreground "#ebcb8b" )
-            (mu4e-title-face                :foreground "#5e81ac")
 
             ;; Man pages inside emacs
             (Man-overstrike                 :foreground "#bf616a" :weight bold)
@@ -3339,6 +3328,13 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
     ;;             :pre-build (("./autogen.sh") ("ninja" "-C" "build"))
     ;;             :files (:defaults "build/mu4e/*.el")
     ;;             :includes (mu4e-icalendar))
+
+    :custom-face
+    (mu4e-header-highlight-face ((t (:inherit hl-line :underline nil :foreground unspecified))))
+    (mu4e-unread-face           ((t (:inherit nil :underline nil :weight bold))))
+    (mu4e-context-face          ((t (:inherit mu4e-link-face))))
+    (mu4e-flagged-face          ((t (:foreground "#ebcb8b" ))))
+    (mu4e-title-face            ((t (:foreground "#5e81ac"))))
 
     :custom
     (mu4e-mu-binary (expand-file-name "/home/mrb/.guix-profile/bin/mu" ))
