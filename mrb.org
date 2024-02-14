@@ -706,7 +706,7 @@ One of the elements in the status bar will be a list of buffers which need atten
       :custom-face
       ;; TODO I like :custom-face, but not the scattering of all the colors, name them?
     (nano-modeline-active ((t ( :height 1.1 :))))
-    (nano-modeline-status ((t ( :background "#5e81ac"))))
+    (nano-modeline-status ((t ( :background "#bf616a"))))
 
       (tab-bar   ((t ( :background "#4c566a"
                        :height 1.1
