@@ -804,32 +804,6 @@ Although I think the 16 color system is a bit simplistic and, for emacs at least
             (header-line                    :foreground "#4c566a" :background "#ebcb8b")
 
 
-
-            ;; Orgmode
-            (org-headline-done              :foreground "#4c566a")
-            (org-date                       :foreground "#8fbcbb" :underline nil)
-
-            (org-verbatim                   :foreground "#8fbcbb")
-            (org-list-dt                    :foreground "#b48ead")
-            (org-drawer                     :height 0.8 :inherit font-lock-comment-face)
-            (org-code                       :foreground "Purple" :weight bold)
-            (org-block                      :background "#313745")
-            (org-block-begin-line           :foreground "dark gray")
-
-            ;; User defined faces for org-mode
-            (mrb/org-todo-keyword-TODO      :foreground "#88c0d0" :weight bold)
-            (mrb/org-todo-keyword-DONE      :foreground "#a3be8c" :weight bold)
-            (mrb/org-todo-keyword-WAITING   :foreground "#bf616a" :weight bold)
-            (mrb/org-todo-keyword-CANCELLED :foreground "#3b4252" :weight bold)
-            (mrb/org-todo-keyword-BUY       :foreground "#d08770" :weight bold)
-            (mrb/org-todo-keyword-HOWTO     :foreground "#5e81ac" :weight bold)
-            (mrb/org-todo-keyword-INFO      :foreground "#ebcb8b" :weight bold)
-            (mrb/org-todo-keyword-COLLECT   :foreground "#a3be8c" :weight bold)
-            (mrb/org-todo-keyword-SOLVE     :foreground "#8fbcbb" :weight bold)
-            (mrb/org-todo-keyword-READ      :foreground "#b48ead" :weight bold)
-            (mrb/org-todo-keyword-READING   :foreground "#bf616a" :weight bold)
-            (mrb/org-todo-keyword-PLAN      :foreground "#d8dee9" :weight bold)
-
             ;; Man pages inside emacs
             (Man-overstrike                 :foreground "#bf616a" :weight bold)
             (Man-underline                  :foreground "#a3be8c" :weight bold)
@@ -1266,7 +1240,7 @@ Also make sure we never load org from internal, this can happen when functions w
            (org-agenda-mode . (lambda () (hl-line-mode 1))))
 
     :init
-
+     <<orgmode-keywords>>
     <<gtd-starter>>
 
     :mode ("\\.txt\\'" "\\.org\'")
@@ -1288,10 +1262,33 @@ Also make sure we never load org from internal, this can happen when functions w
            ("M-p"   . 'org-set-property)
            ("C-x m" . 'mrb/construct-mail))
 
+    :custom-face
+    ; Orgmode
+    (org-headline-done              ((t (:foreground "#4c566a"))))
+    (org-date                       ((t (:foreground "#8fbcbb" :underline nil))))
+    (org-verbatim                   ((t (:foreground "#8fbcbb"))))
+    (org-list-dt                    ((t (:foreground "#b48ead"))))
+    (org-drawer                     ((t (:height 0.8 :inherit font-lock-comment-face))))
+    (org-code                       ((t (:foreground "dodger blue" :weight bold))))
+    (org-block                      ((t (:background "#313745"))))
+    (org-block-begin-line           ((t (:foreground "dark gray"))))
+
+    ;; User defined faces for org-mode
+    (mrb/org-todo-keyword-TODO     ((t ( :foreground "#88c0d0" :weight bold))))
+    (mrb/org-todo-keyword-DONE     ((t ( :foreground "#a3be8c" :weight bold))))
+    (mrb/org-todo-keyword-WAITING  ((t ( :foreground "#bf616a" :weight bold))))
+    (mrb/org-todo-keyword-CANCELLED((t ( :foreground "#3b4252" :weight bold))))
+    (mrb/org-todo-keyword-BUY      ((t ( :foreground "#d08770" :weight bold))))
+    (mrb/org-todo-keyword-HOWTO    ((t ( :foreground "#5e81ac" :weight bold))))
+    (mrb/org-todo-keyword-INFO     ((t ( :foreground "#ebcb8b" :weight bold))))
+    (mrb/org-todo-keyword-COLLECT  ((t ( :foreground "#a3be8c" :weight bold))))
+    (mrb/org-todo-keyword-SOLVE    ((t ( :foreground "#8fbcbb" :weight bold))))
+    (mrb/org-todo-keyword-READ     ((t ( :foreground "#b48ead" :weight bold))))
+    (mrb/org-todo-keyword-READING  ((t ( :foreground "#bf616a" :weight bold))))
+    (mrb/org-todo-keyword-PLAN     ((t ( :foreground "#d8dee9" :weight bold))))
+
+
     :config
-
-    <<orgmode-keywords>>
-
     <<orgmode-generalconfig>>
     ;; Category icons I have configured elsewhere.
     <<org-agenda-visuals>>
