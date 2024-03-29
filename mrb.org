@@ -3327,7 +3327,8 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
     ;;             :includes (mu4e-icalendar))
 
     :custom-face
-    (mu4e-header-highlight-face ((t (:inherit hl-line :underline nil :foreground unspecified))))
+    (mu4e-header-highlight-face ((t (:inherit hl-line :underline nil
+                                              :weight normal :foreground unspecified))))
     (mu4e-unread-face           ((t (:inherit nil :underline nil :weight bold))))
     (mu4e-context-face          ((t (:inherit mu4e-link-face))))
     (mu4e-flagged-face          ((t (:foreground "#ebcb8b" ))))
