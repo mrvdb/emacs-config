@@ -78,9 +78,11 @@ And edit the file obviously.
   # - stdin editing
   # - force tty
   # - adjustment to systemd invocation
+  # FIXME: why does which not work here?
+  BASE=/home/mrb/.guix-profile/bin/
   ME=$(basename $0)
-  EC=`which emacsclient`
-  EM=`which emacs`
+  EC=$BASE/emacsclient
+  EM=$BASE/emacs
   SNAME=server
   SFILE=$XDG_RUNTIME_DIR/emacs/$SNAME
 
