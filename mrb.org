@@ -1615,7 +1615,7 @@ I'm not sure if this works out in practice without having a confirmation (becaus
       ;; No habit, so we have a candidate
       (progn
         ;; Try to use a dialog box to ask for confirmation
-        (setq last-nonmenu-event nil)
+        (setq use-dialog-box-override t)
 
         ;; When a note is going to be added, postpone that Otherwise just
         ;; run the archiving question
