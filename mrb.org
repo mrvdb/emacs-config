@@ -3873,8 +3873,7 @@ Make our source look a bit more attractive by enabling =prettify-symbol-mode= in
     :straight (:type built-in)
     ;; TODO move hooks to their defining packages?
     :hook ((prog-mode                     ; all modes that derive from prog-mode
-            lisp-interaction-mode
-            org-mode org-journal-mode) . mrb/prettify-symbols)
+            lisp-interaction-mode) . mrb/prettify-symbols)
     :init
 
     ;; TODO Move this to visual?
