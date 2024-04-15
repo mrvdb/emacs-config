@@ -3514,6 +3514,7 @@ The first view after searching is a list of mail headers. Set config vars for th
   :bind ( :map mu4e-headers-mode-map
           ("s" . mu4e-headers-mark-for-junk)
           ("r" . mu4e-compose-reply)
+          ("R" . mu4e-compose-wide-reply)
           ("A" . mu4e-headers-mark-for-refile)
           ("SPC" . mu4e-headers-mark-for-something)
           ("X" . (lambda () (interactive) (mu4e-mark-execute-all t))))
