@@ -236,6 +236,7 @@ I want to delegate garbage collection to someone who knows more than I do and ma
 
 #+begin_src emacs-lisp
   (use-package gcmh
+    :disabled
     :config
     (gcmh-mode 1))
 #+end_src
