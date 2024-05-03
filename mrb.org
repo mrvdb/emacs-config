@@ -271,6 +271,7 @@ So, identification, authorization and encryption.
 
 Seems like a good idea to start configuration with some details about me. The idea being that anything personal goes here and nowhere else. For one, this means my name only appears in this section in this document. Most of the variables I just made up, but some are used in other places too.
 
+#+COMMENT TODO read this from a file, as I publish this file and there's no need for casual readers to know this.
 #+begin_src emacs-lisp
   (setq mrb/maildir "~/Maildir/"
         mrb/default-email-address "marcel@hsdev.com"
