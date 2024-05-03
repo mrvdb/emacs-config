@@ -836,8 +836,18 @@ Although I think the 16 color system is a bit simplistic and, for emacs at least
     :config
     (paren-activate))
 
-  ;; Defer fontification, but only if there is input pending
-  (setq jit-lock-defer-time 0)
+  ;; Font locking has always been the major performance hog for me, so here's the current
+  ;; state of variables trying to minimize typing delays. The 3 position indication in
+  ;; comments is the  experience playing with it:
+  ;;   ? unknown effect
+  ;;   ! needed can't change
+  ;;   + minor effect, but noticeable
+  ;;  ++ major effect, very noticeable
+  ;; +++ very high effect on performance (mostly subjective, but supported by some light profiling)
+  (setq font-lock-support-mode 'jit-lock-mode)
+  (setq jit-lock-defer-time 0)   ;   ?  defer only when input pending
+  (setq jit-lock-stealth-time 10) ;  ++ stealth fontification after 5 seconds, nil is slower
+
 
   ;; Make underlining nicer
   (setq  underline-minimum-offset 3)
