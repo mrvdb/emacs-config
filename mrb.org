@@ -348,7 +348,9 @@ Finally, I want to prevent producing files which have trailing spaces, because t
     :init
     (ws-butler-global-mode)             ; Enable by default
     ;; List exemptions here
-    (add-to-list 'ws-butler-global-exempt-modes 'magit-mode))
+    (add-to-list 'ws-butler-global-exempt-modes 'magit-mode)
+    (add-to-list 'ws-butler-global-exempt-modes 'message-mode) ; might interfere with format-flowed?
+    (add-to-list 'ws-butler-global-exempt-modes 'mu4e-compose-mode))
 
   (setq
    delete-by-moving-to-trash t          ; move files to the trash instead of rm
@@ -3256,6 +3258,8 @@ It's not entirely clear which package is exactly responsible for what, but there
       ;; is the same as the email encoding on send (see below)
       (visual-line-mode 1)
       (auto-fill-mode 0)                    ; Makes no sense in visual mode
+      (setq adaptive-fill-mode nil)         ; This messes up fill-flowed-encode
+      ;; FIXME: adaptive-fill-mode is global, is just want it off here, and not touch global
 
       (setq visual-fill-column-width nil)   ; Make sure `fill-column gets used
       (setq fill-column 80)                 ; Not the same as encode column below!
@@ -3263,7 +3267,8 @@ It's not entirely clear which package is exactly responsible for what, but there
 
       ;; Next, do the encoding and sending part
       ;; Set the fill column on encoding (send)
-      ;; Q: where does the 66 come from, surely it could be a little bit more?
+      ;; 66 would be the proper value, but to help rendering
+      ;; on the other end 998 is the max which helps a bit
       (setq fill-flowed-encode-column 66)
 
       ;; This enables the f=f encoding for sending
