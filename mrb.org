@@ -246,8 +246,8 @@ I want to delegate garbage collection to someone who knows more than I do and ma
   This is the only thing needed, after installing an emacs package with GUIX, it is available for /require/ and can be treated by /straight/ as a /built-in/ type package.
 
   ,#+begin_src emacs-lisp
-  (add-to-list 'load-path "/home/mrb/.guix-profile/share/emacs/site-lisp")
-  (guix-emacs-autoload-packages)
+    (add-to-list 'load-path "/home/mrb/.guix-profile/share/emacs/site-lisp")
+    (guix-emacs-autoload-packages)
 #+end_src
 
 As emacs lives inside the systemd environment it is not automatically the case that my shell environment is inherited. In many cases, this is not a problem, but for those cases that expect the same environment, I'm making explicit that the enviroment needs to be from the shell. We should do this a soon as =use-package= is useable.
@@ -273,21 +273,21 @@ Seems like a good idea to start configuration with some details about me. The id
 
 #+COMMENT TODO read this from a file, as I publish this file and there's no need for casual readers to know this.
 #+begin_src emacs-lisp
-  (setq mrb/maildir "~/Maildir/"
-        mrb/default-email-address "marcel@hsdev.com"
-        mrb/default-signature-file (concat mrb/maildir ".signature")
+    (setq mrb/maildir                                    "~/Maildir/"
+          mrb/default-email-address                      "marcel@hsdev.com"
+          mrb/default-signature-file (concat mrb/maildir ".signature")
           mrb/private-addresses '(                       "marcel@van-der-boom.nl"
                                                          "m@rcel.van-der-boom.nl")
-        mrb/private-signature-file (concat mrb/maildir ".signature-private")
-        mrb/default-private-address (car mrb/private-addresses)
+          mrb/private-signature-file (concat mrb/maildir ".signature-private")
+          mrb/default-private-address (car mrb/private-addresses)
 
-        mrb/bcc-address      "mrb+Sent@hsdev.com"
-        user-full-name       "Marcel van der Boom"
-        user-mail-address    mrb/default-email-address
-        user-domain          "hsdev.com"
-        user-organisation    "HS-Development BV"
-        user-gpg-key "77DDA1B68D04792A8F85D855235E5C8CF5E8DFFB"
-        )
+          mrb/bcc-address                                "mrb+Sent@hsdev.com"
+          user-full-name                                 "Marcel van der Boom"
+          user-mail-address                              mrb/default-email-address
+          user-domain                                    "hsdev.com"
+          user-organisation                              "HS-Development BV"
+          user-gpg-key                                  "77DDA1B68D04792A8F85D855235E5C8CF5E8DFFB"
+          )
 #+end_src
 
 ** Authorization
@@ -537,22 +537,22 @@ For this to work properly we have to define a whole new input-method based on a 
   ;; it needs to be active we need to activate it (by a hook for example)
   (defun mrb/set-default-input-method()
     (interactive)
-      (activate-input-method "TeX")
+    (activate-input-method "TeX")
 
-      ;; Define a few omissions which I use regularly
-      (let ((quail-current-package (assoc "TeX" quail-package-alist)))
-        (quail-define-rules ((append . t))
-                            ("\\bitcoin" ?฿)
-                            ("\\cmd" ?⌘)
-                            ("\\shift" ?⇧)
-                            ("\\alt" ?⎇)
-                            ("\\option" ?⌥)
-                            ("\\return" ?⏎)
-                            ("\\tab" ?↹)
-                            ("\\backspace" ?⌫)
-                            ("\\delete" ?⌦)
-                            ("\\plusminus" ?±)
-                            ("\\_1" ?₁)
+    ;; Define a few omissions which I use regularly
+    (let ((quail-current-package (assoc "TeX" quail-package-alist)))
+      (quail-define-rules ((append . t))
+                          ("\\bitcoin" ?฿)
+                          ("\\cmd" ?⌘)
+                          ("\\shift" ?⇧)
+                          ("\\alt" ?⎇)
+                          ("\\option" ?⌥)
+                          ("\\return" ?⏎)
+                          ("\\tab" ?↹)
+                          ("\\backspace" ?⌫)
+                          ("\\delete" ?⌦)
+                          ("\\plusminus" ?±)
+                          ("\\_1" ?₁)
                           ("\\_2" ?₂))))
 
 
@@ -672,8 +672,8 @@ One of the elements in the status bar will be a list of buffers which need atten
 
 
 #+begin_src emacs-lisp
-    (use-package nano-modeline
-      :after tracking
+  (use-package nano-modeline
+    :after tracking
 
     :config
     ;; Take control of the mode-line, mostly leaving out what goes into the tab-bar
@@ -696,10 +696,10 @@ One of the elements in the status bar will be a list of buffers which need atten
            mode-line-end-spaces))
 
     :custom
-      ;; tab-bar customization
+    ;; tab-bar customization
       (tab-bar-format '(mrb/tab-bar-format-primary
-                        tab-bar-format-align-right
-                        mrb/tab-bar-format-secondary))
+                      tab-bar-format-align-right
+                      mrb/tab-bar-format-secondary))
       (tab-bar-position t "Position tab-bar under the menu-bar")
       (tab-bar-mode t "Enable tab-bar-mode unconditionally")
       (global-tab-line-mode nil "Make sure tab-line-mode is disabled")
@@ -709,23 +709,23 @@ One of the elements in the status bar will be a list of buffers which need atten
     :config
     (nano-modeline-text-mode t)            ; Make this the default
 
-      :custom-face
-      ;; TODO I like :custom-face, but not the scattering of all the colors, name them?
+    :custom-face
+    ;; TODO I like :custom-face, but not the scattering of all the colors, name them?
     (nano-modeline-active ((t ( :height 1.1 :))))
     (nano-modeline-status ((t ( :background "#bf616a"))))
 
-      (tab-bar   ((t ( :background "#4c566a"
-                       :height 1.1
-                       :box (:line-width 1 :color "dim gray" :style flat-button)))))
+    (tab-bar   ((t ( :background "#4c566a"
+                     :height 1.1
+                     :box (:line-width 1 :color "dim gray" :style flat-button)))))
 
-      :init
-      ; Helper functions for the tab-bar-format
-      (defun mrb/tab-bar-format-primary () "") ;not used yet
-      (defun mrb/tab-bar-format-secondary ()
-        (concat
-         (propertize " " 'display `(raise 0.2))
-         (format-mode-line tracking-mode-line-buffers) ; buffers that need attention
-         (format-mode-line global-mode-string))))
+    :init
+    ; Helper functions for the tab-bar-format
+    (defun mrb/tab-bar-format-primary () "") ;not used yet
+    (defun mrb/tab-bar-format-secondary ()
+      (concat
+       (propertize " " 'display `(raise 0.2))
+       (format-mode-line tracking-mode-line-buffers) ; buffers that need attention
+       (format-mode-line global-mode-string))))
 #+end_src
 
 ** Theme
@@ -738,13 +738,13 @@ Although I think the 16 color system is a bit simplistic and, for emacs at least
 #+begin_src emacs-lisp
   (setq custom--inhibit-theme-enable nil)  ; This was needed for Emacs 27, but cant recall why
   (use-package base16-theme
-    :custom
+  :custom
     ;; Do config here and finally load the theme
-    (base16-theme-distinct-fringe-background nil)
-    (base16-theme-highlight-mode-line 'contrast)
-    (base16-theme-256-color-source "terminal")
+  (base16-theme-distinct-fringe-background nil)
+  (base16-theme-highlight-mode-line 'contrast)
+  (base16-theme-256-color-source "terminal")
 
-    :config
+  :config
     (load-theme 'base16-nord t)
 
     ;; Define our adjustments to faces
@@ -795,11 +795,11 @@ Although I think the 16 color system is a bit simplistic and, for emacs at least
             (show-paren-mismatch            :foreground "#2e3440" :background "#bf616a"
                                             :inherit nil :weight normal)
 
-              (region                         :foreground unspecified :background "#3b4252"
+            (region                         :foreground unspecified :background "#3b4252"
                                             :inherit nil :weight normal)
             (fringe                         :foreground "#a3be8c")
 
-              (hl-line                        :foreground unspecified :background "#5e81ac" )
+            (hl-line                        :foreground unspecified :background "#5e81ac" )
 
             (line-number-current-line       :background "#4c566a")
 
@@ -881,8 +881,8 @@ To help me see the difference between visual lines and logical lines I let emacs
   (use-package visual-fill-column
     :commands (turn-on-visual-fill-column-mode))
 
-  ;; Similar to mail messages, use vertical bar for wrapped paragraphs
-  (setq visual-line-fringe-indicators
+    ;; Similar to mail messages, use vertical bar for wrapped paragraphs
+    (setq visual-line-fringe-indicators
         '(vertical-bar nil))
 
   ;; For all text modes use visual-line-mode
@@ -1471,48 +1471,48 @@ Here are the templates used by org-capture. The /todo/ template is the most used
 
 #+name: org-capture-templates
 #+begin_src emacs-lisp :tangle no
-      (setq
-       org-capture-templates
-       `(("b" "Buy"
-          entry (function mrb/capture-location) "* BUY %?\n%(mrb/prop-or-nothing :annotation)\n" :prepend t :empty-lines 1)
-         ("l" "Link"
-          entry (function mrb/capture-location) "* TODO %?\n%(mrb/prop-or-nothing :annotation)\n" :prepend t :empty-lines 1)
-         ("t" "Todo"
-          entry (function mrb/capture-location) "* TODO %?\n" :prepend t :empty-lines 1)
+  (setq
+   org-capture-templates
+   `(("b" "Buy"
+      entry (function mrb/capture-location) "* BUY %?\n%(mrb/prop-or-nothing :annotation)\n" :prepend t :empty-lines 1)
+     ("l" "Link"
+      entry (function mrb/capture-location) "* TODO %?\n%(mrb/prop-or-nothing :annotation)\n" :prepend t :empty-lines 1)
+     ("t" "Todo"
+      entry (function mrb/capture-location) "* TODO %?\n" :prepend t :empty-lines 1)
      ("g" "Generic Log Entry"
       item  (here) "- %u %?")
-         ("z" "Ziggo Log Entry"
-          item  (file+olp
-                 "/home/mrb/dat/org/GTD.org"
-                 "Partners" "Leveranciers" "Ziggo" "Logbook" ,(format-time-string "%Y"))
-          "- %u %?")))
+     ("z" "Ziggo Log Entry"
+      item  (file+olp
+             "/home/mrb/dat/org/GTD.org"
+             "Partners" "Leveranciers" "Ziggo" "Logbook" ,(format-time-string "%Y"))
+      "- %u %?")))
 
-      (defun mrb/prop-or-nothing(prop)
-        "Insert `[:type]: [:property]` when :property has a value, otherwise nothing.
-      Meant to be used inside org-capture-templates
+  (defun mrb/prop-or-nothing(prop)
+    "Insert `[:type]: [:property]` when :property has a value, otherwise nothing.
+  Meant to be used inside org-capture-templates
 
-      Example: `%(mrb/prop-or-nothing :annotation)`"
+  Example: `%(mrb/prop-or-nothing :annotation)`"
 
-        (let ((prop-value (plist-get org-store-link-plist prop))
-              (type (plist-get org-store-link-plist :type)))
-          (if (equal prop-value "")
-              ""
-            (concat (when type (concat type ": ")) prop-value))))
+    (let ((prop-value (plist-get org-store-link-plist prop))
+          (type (plist-get org-store-link-plist :type)))
+      (if (equal prop-value "")
+          ""
+        (concat (when type (concat type ": ")) prop-value))))
 
-      (defun mrb/capture-location()
-        "This function is meant to be used inside org-capture-templates
-      to find a file and location where a captured ITEM should
-      be stored."
+  (defun mrb/capture-location()
+    "This function is meant to be used inside org-capture-templates
+  to find a file and location where a captured ITEM should
+  be stored."
 
-        ;; Open journal file without creating a journal entry This has the
-        ;; side effect that it creates the file and moves TODO items over
-        ;; on first call and leaves the cursor at the end of the file.
-        (org-journal-new-entry 1)
+    ;; Open journal file without creating a journal entry This has the
+    ;; side effect that it creates the file and moves TODO items over
+    ;; on first call and leaves the cursor at the end of the file.
+    (org-journal-new-entry 1)
 
-        ;; Find the id in this file and go there for the capture
-        (setq loc (org-find-entry-with-id "new-todo-receiver"))
-        (when loc
-          (goto-char loc)))
+    ;; Find the id in this file and go there for the capture
+    (setq loc (org-find-entry-with-id "new-todo-receiver"))
+    (when loc
+      (goto-char loc)))
 #+end_src
 
 Define functions for each piece of information captured, so they can be easily bound to keys.
@@ -1728,7 +1728,7 @@ To actually make this active we advice the operations that insert headers: =org-
   ;; for capturing, only when state is in the TODO keywords list active in buffer
   (advice-add 'org-capture
               :after (lambda (&rest r)
-    (when (member (org-get-todo-state) org-todo-keywords-1)
+                       (when (member (org-get-todo-state) org-todo-keywords-1)
                          (mrb/insert-created-timestamp))))
 #+end_src
 
@@ -2018,52 +2018,52 @@ Orgmode can export to a variety of formats, I mainly use LaTeX (PDF) and HTML as
 
 #+begin_src emacs-lisp
   (use-package htmlize)                   ; for html export source highlighting
-   ;; {% raw %}
-   (setq org-export-latex-hyperref-format "\\ref{%s}:{%s}"
-         ;; old system
-         org-export-latex-title-command " "
-         ;; new system > 8.0
-         org-latex-title-command " "
+  ;; {% raw %}
+  (setq org-export-latex-hyperref-format "\\ref{%s}:{%s}"
+        ;; old system
+        org-export-latex-title-command " "
+        ;; new system > 8.0
+        org-latex-title-command " "
 
-         org-export-docbook-xsl-fo-proc-command "fop %i %o"
-         org-export-docbook-xslt-proc-command "xsltproc --output %o %s %i"
-         org-export-htmlize-output-type 'css
-         org-org-htmlized-css-url "orgmode.css"
+        org-export-docbook-xsl-fo-proc-command "fop %i %o"
+        org-export-docbook-xslt-proc-command "xsltproc --output %o %s %i"
+        org-export-htmlize-output-type 'css
+        org-org-htmlized-css-url "orgmode.css"
 
         org-latex-listings 'engraved
 
-         org-export-copy-to-kill-ring 'if-interactive
+        org-export-copy-to-kill-ring 'if-interactive
 
-         org-export-htmlized-org-css-url "orgmode.css"
-         org-export-latex-classes
-         '(
-                 ("article" "\\documentclass[11pt,a4paper,twoside]{article}"
-                  ("\\section{%s}" . "\\section*{%s}")
-                  ("\\subsection{%s}" . "\\subsection*{%s}")
-                  ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
-                  ("\\paragraph{%s}" . "\\paragraph*{%s}")
-                  ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))
-                 ("report" "\\documentclass[11pt]{report}"
-                  ("\\part{%s}" . "\\part*{%s}")
-                  ("\\chapter{%s}" . "\\chapter*{%s}")
-                  ("\\section{%s}" . "\\section*{%s}")
-                  ("\\subsection{%s}" . "\\subsection*{%s}")
-                  ("\\subsubsection{%s}" . "\\subsubsection*{%s}"))
-                 ("book" "\\documentclass[11pt]{book}"
-                  ("\\part{%s}" . "\\part*{%s}")
-                  ("\\chapter{%s}" . "\\chapter*{%s}")
-                  ("\\section{%s}" . "\\section*{%s}")
-                  ("\\subsection{%s}" . "\\subsection*{%s}")
-                  ("\\subsubsection{%s}" . "\\subsubsection*{%s}"))
-                 ("beamer" "\\documentclass{beamer}" org-beamer-sectioning))
+        org-export-htmlized-org-css-url "orgmode.css"
+        org-export-latex-classes
+        '(
+          ("article" "\\documentclass[11pt,a4paper,twoside]{article}"
+           ("\\section{%s}" . "\\section*{%s}")
+           ("\\subsection{%s}" . "\\subsection*{%s}")
+           ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+           ("\\paragraph{%s}" . "\\paragraph*{%s}")
+           ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))
+          ("report" "\\documentclass[11pt]{report}"
+           ("\\part{%s}" . "\\part*{%s}")
+           ("\\chapter{%s}" . "\\chapter*{%s}")
+           ("\\section{%s}" . "\\section*{%s}")
+           ("\\subsection{%s}" . "\\subsection*{%s}")
+           ("\\subsubsection{%s}" . "\\subsubsection*{%s}"))
+          ("book" "\\documentclass[11pt]{book}"
+           ("\\part{%s}" . "\\part*{%s}")
+           ("\\chapter{%s}" . "\\chapter*{%s}")
+           ("\\section{%s}" . "\\section*{%s}")
+           ("\\subsection{%s}" . "\\subsection*{%s}")
+           ("\\subsubsection{%s}" . "\\subsubsection*{%s}"))
+          ("beamer" "\\documentclass{beamer}" org-beamer-sectioning))
 
         ;; No tags, todo keywords or time-stamp
-         org-export-with-tags nil
-         org-export-with-todo-keywords nil
+        org-export-with-tags nil
+        org-export-with-todo-keywords nil
         org-export-time-stamp-file nil
-         org-export-backends '(ascii html icalendar latex md odt org texinfo)
-         )
-   ;; {% endraw %}
+        org-export-backends '(ascii html icalendar latex md odt org texinfo)
+        )
+  ;; {% endraw %}
 #+end_src
 
 ** Journaling
@@ -2758,10 +2758,10 @@ As =M-x= or =execute-extended-command= is probably the most used command in Emac
     (vertico-posframe-border ((t (:background "DarkOrange" :inherit default))))
     :config
     (setq vertico-posframe-parameters
-                `((left-fringe . 18)
-                  (right-fringe . 18)
+          `((left-fringe . 18)
+            (right-fringe . 18)
             (border-width . 4)
-                  (border-color . ,mrb/cursor-color)
+            (border-color . ,mrb/cursor-color)
             (child-frame-border-width . 4)))
 
     (setq vertico-multiform-commands
@@ -3009,39 +3009,39 @@ Composing mail is often an /out of band/ activity, like creating a tweet or a ca
 
 #+name: mu4e-composeconfig
 #+begin_src emacs-lisp :tangle no
-  :bind ("C-x m" . 'mrb/compose-mail)
+    :bind ("C-x m" . 'mrb/compose-mail)
 
-  :custom
-  (mu4e-compose-format-flowed t)
-  (mu4e-compose-switch nil)
-  (mu4e-compose-dont-reply-to-self t)
-  (mu4e-compose-complete-only-after nil) ; no limit on contact completion for now
+    :custom
+    (mu4e-compose-format-flowed t)
+    (mu4e-compose-switch nil)
+    (mu4e-compose-dont-reply-to-self t)
+    (mu4e-compose-complete-only-after nil) ; no limit on contact completion for now
 
-  :config
-  (defun mrb/compose-mail (&optional mailto-url)
-    "Run mail-compose, use mailto URI if it is given."
-    (interactive)
+    :config
+    (defun mrb/compose-mail (&optional mailto-url)
+      "Run mail-compose, use mailto URI if it is given."
+      (interactive)
 
-    ;; If we have a mailto argument, parse and use it
-    (if (and (stringp mailto-url)
-             (string-match "\\`mailto:" mailto-url))
-        (browse-url-mail mailto-url)
-      ;; No mailto, argument, just run the mua
-      (mu4e-compose-new)))
+      ;; If we have a mailto argument, parse and use it
+      (if (and (stringp mailto-url)
+               (string-match "\\`mailto:" mailto-url))
+          (browse-url-mail mailto-url)
+        ;; No mailto, argument, just run the mua
+        (mu4e-compose-new)))
 
-  (defun mrb/mailfile()
-    "Compose mail message from current buffer file, typically a pdf is viewed for my use-case"
-    (interactive)
-    (let* ((file (buffer-file-name))
-           (mimetype (mm-default-file-type file)))
-      (mu4e-compose-new)
-      (mml-attach-file file mimetype (concat mimetype " attachment") "attachment")))
+    (defun mrb/mailfile()
+      "Compose mail message from current buffer file, typically a pdf is viewed for my use-case"
+      (interactive)
+      (let* ((file (buffer-file-name))
+             (mimetype (mm-default-file-type file)))
+        (mu4e-compose-new)
+        (mml-attach-file file mimetype (concat mimetype " attachment") "attachment")))
 
   ;; Context switching in compose
   <<mu4e-context-switch-in compose>>
 
   ;; Extend attaching files with extra info insertion
-  <<extend-attach>>
+    <<extend-attach>>
 
 
 #+end_src
@@ -3321,9 +3321,9 @@ It's not entirely clear which package is exactly responsible for what, but there
           ;; NOTE: mu4e sets message-hidden-headers to a local value based on by mu4e-compose-hidden-headers
           message-hidden-headers '(not "To:" "From:" "Cc:" "Subject:")
 
-     ;; How to attribute
-     message-citation-line-format "[%N]:"
-     message-citation-line-function 'message-insert-formatted-citation-line
+          ;; How to attribute
+          message-citation-line-format "[%N]:"
+          message-citation-line-function 'message-insert-formatted-citation-line
 
           message-kill-buffer-on-exit t))
 #+end_src
@@ -3503,25 +3503,25 @@ When mu4e start, it always opens in its main screen, which contains the main ope
         mu4e-confirm-quit nil
 
         mu4e-bookmarks (list
-                    '( :name "Unread messages"
-                       :query "flag:unread and not flag:trashed"
-                       :key ?u)
-                    '( :name "INBOX"
+                  '( :name "Unread messages"
+                     :query "flag:unread and not flag:trashed"
+                     :key ?u)
+                  '( :name "INBOX"
                      :query "(flag:unread or flag:new or maildir:/INBOX) and not (flag:draft or flag:flagged or maildir:/Trash or flag:trashed)"
-                       :favorite t
-                       :key ?i)
-                    '( :name "TODO list"
-                       :query "flag:flagged and not flag:trashed"
-                       :key ?+)
-                    '( :name "Today's messages"
-                       :query "date:today..now"
-                       :key ?d)
-                    '( :name "Trash"
-                       :query "maildir:/Trash or flag:trashed"
-                       :key ?t)
-                    '( :name "Junk"
-                       :query "maildir:/Junk"
-                       :key ?j)))
+                     :favorite t
+                     :key ?i)
+                  '( :name "TODO list"
+                     :query "flag:flagged and not flag:trashed"
+                     :key ?+)
+                  '( :name "Today's messages"
+                     :query "date:today..now"
+                     :key ?d)
+                  '( :name "Trash"
+                     :query "maildir:/Trash or flag:trashed"
+                     :key ?t)
+                  '( :name "Junk"
+                     :query "maildir:/Junk"
+                     :key ?j)))
 #+end_src
 **** Header view
 The first view after searching is a list of mail headers. Set config vars for this view and define the visualisation of the marks. I need an extra action to mark mail as junk which, on processing, moves the marked messages to the junk folder
@@ -3607,9 +3607,9 @@ After selecting a message in the header view, a message view will open.
   (mu4e-view-show-addresses t)        ; Show actual addresses instead of names
 
   (mu4e-view-actions '(("c - capture message" . mu4e-action-capture-message)
-                       ("v - view in browser" . mu4e-action-view-in-browser)
-                       ("s - save attachments" . mu4e-view-save-attachments)
-                       ("t - show this thread" . mu4e-action-show-thread)))
+                            ("v - view in browser" . mu4e-action-view-in-browser)
+                            ("s - save attachments" . mu4e-view-save-attachments)
+                            ("t - show this thread" . mu4e-action-show-thread)))
 
 #+end_src
 **** Addon packages
@@ -3674,7 +3674,7 @@ Elfeed handles my RSS feeds, which I specify using an orgmode file =feeds.org=
            ("w" . 'mrb/elfeed-show-toggle-watchlater)
            ("v" . 'mrb/elfeed-play-with-mpv)
            :map elfeed-search-mode-map
-             ("v" . 'mrb/elfeed-play-with-mpv)
+           ("v" . 'mrb/elfeed-play-with-mpv)
            ("w" . 'mrb/elfeed-search-toggle-watchlater))
     :init
     (setf url-queue-timeout 30
@@ -3719,7 +3719,7 @@ Elfeed handles my RSS feeds, which I specify using an orgmode file =feeds.org=
 
       (start-process "elfeed-mpv" nil
                      "~/bin/umpv"
-                       (elfeed-entry-link (elfeed-search-selected t))))
+                     (elfeed-entry-link (elfeed-search-selected t))))
 
 
     ;; New entry hook allows meta information manipulation
@@ -4351,17 +4351,17 @@ Magit forge is a sub-module for magit which helps in managing repositories in fo
 Features I'm interested in: issue commenting, pull requests
 
 #+begin_src emacs-lisp
-  (use-package magit
-    :straight (:host github :reo "magit/magit")
+    (use-package magit
+      :straight (:host github :reo "magit/magit")
 
-    :demand t
-    :after (org fullframe)
-    :commands magit-status
-    :bind
-    ("C-c m" . magit-status)
+      :demand t
+      :after (org fullframe)
+      :commands magit-status
+      :bind
+      ("C-c m" . magit-status)
 
-    :init
-    (fullframe magit-status magit-mode-quit-window)
+      :init
+      (fullframe magit-status magit-mode-quit-window)
 
       :custom-face
       (diff-refine-added                 ((t (:background "#003000"))))
@@ -4373,29 +4373,29 @@ Features I'm interested in: issue commenting, pull requests
       (magit-diff-hunk-heading-highlight ((t (:background "#5e81ac"))))
       (magit-diff-hunk-heading           ((t (:background "#5e81ac"))))
 
-    :custom
-    (magit-last-seen-setup-instructions "1.4.0")
-    (magit-diff-refine-hunk 'all)
-
-    :config
-    ;; Enable links to magit fromm org
-    (use-package orgit)
-
-    (use-package forge
-      :disabled
       :custom
-      (forge-add-pullreq-refspec 'ask)
-      (forge-pull-notifications t)
-      (forge-topic-list-limit '(60 . 0))
+      (magit-last-seen-setup-instructions "1.4.0")
+      (magit-diff-refine-hunk 'all)
 
       :config
-      ;; Only show assigned stuff
-      (magit-add-section-hook
-       'magit-status-sections-hook
-       'forge-insert-assigned-issues   nil t)
-      (magit-add-section-hook
-       'magit-status-sections-hook
-       'forge-insert-assigned-pullreqs   nil t)))
+      ;; Enable links to magit fromm org
+      (use-package orgit)
+
+      (use-package forge
+        :disabled
+        :custom
+        (forge-add-pullreq-refspec 'ask)
+        (forge-pull-notifications t)
+        (forge-topic-list-limit '(60 . 0))
+
+        :config
+        ;; Only show assigned stuff
+        (magit-add-section-hook
+         'magit-status-sections-hook
+         'forge-insert-assigned-issues   nil t)
+        (magit-add-section-hook
+         'magit-status-sections-hook
+         'forge-insert-assigned-pullreqs   nil t)))
 #+end_src
 
 Most of the magit work is done through its status screen and I would like to see issues and todo's and fixme's and other work that needs to be done in that screen. The forge package does that from a remote forge, like github, but many tasks are hiddenn in the sources already by myself. The magit-todos package scans for those things and show them in the magit screen
@@ -4444,14 +4444,14 @@ I use github gists sometimes, but rather have more open options as well. These a
   (use-package webpaste
     :config
     (add-to-list 'webpaste-providers-alist
-            '("dpaste.org-custom"
-              :uri "https://dpaste.org/api/"
-              :post-data (("expires" . 86400))
-              :post-field "content"
-              :post-lang-field-name "lexer"
-              :lang-overrides ((emacs-lisp-mode . "clojure")
-                               (scheme-mode . "clojure"))
-              :success-lambda webpaste--providers-success-returned-string))
+                 '("dpaste.org-custom"
+                   :uri "https://dpaste.org/api/"
+                   :post-data (("expires" . 86400))
+                   :post-field "content"
+                   :post-lang-field-name "lexer"
+                   :lang-overrides ((emacs-lisp-mode . "clojure")
+                                    (scheme-mode . "clojure"))
+                   :success-lambda webpaste--providers-success-returned-string))
     :custom
     (webpaste-provider-priority '("dpaste.org-custom"))
     (webpaste-paste-confirmation t)
