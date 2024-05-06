@@ -2714,19 +2714,19 @@ All of these work fine, but corfu gets installed because it fits right in with t
     :custom
     (corfu-auto t)
     (corfu-quit-at-boundary 'separator)
+    (corfu-cycle t)
+
 
     :bind ( :map corfu-map
             ("M-m" . mrb/corfu-move-to-minibuffer))
     :init
+    ;; Enable it globally
     (global-corfu-mode)
 
-    :config
-    ;; In need for more info? Press M-m
-    (defun mrb/corfu-move-to-minibuffer ()
-      (interactive)
-      (let ((completion-extra-properties corfu--extra)
-            completion-cycle-threshold completion-cycling)
-        (apply #'consult-completion-in-region completion-in-region--data))))
+    ;; But not for some
+    (setq global-corfu-modes
+          '((not text-mode) t)))
+
 #+end_src
 
 ** Ad 4. Mode specialization
