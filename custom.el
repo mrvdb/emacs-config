@@ -54,25 +54,23 @@
                   ((org-agenda-overriding-header "Blocked projects")
                    (org-agenda-dim-blocked-tasks t)))
        (tags-todo "+BLOCKED=\"t\"/TODO"
-                  ((org-agenda-overriding-header "Blocked tasks")
-                   (org-agenda-dim-blocked-tasks t)
+                  ((org-agenda-overriding-header "Blocked tasks") (org-agenda-dim-blocked-tasks t)
                    (org-agenda-group-by-property "Group"))))
       nil nil)
-     ("n" "Next Action List [hides blocked/inactive/waiting/INBOX-ed]" tags-todo "+SCHEDULED=\"\"+DEADLINE=\"\"-BLOCKED=\"t\"-inactive-habit-ARCHIVE/-WAITING-INFO-HOWTO"
-      ((org-agenda-overriding-header "Next Action List")
-       (org-agenda-dim-blocked-tasks 'invisible)
+     ("n" "Next Action List [hides blocked/inactive/waiting/INBOX-ed]" tags-todo
+      "+SCHEDULED=\"\"+DEADLINE=\"\"-BLOCKED=\"t\"-inactive-habit-ARCHIVE/-WAITING-INFO-HOWTO"
+      ((org-agenda-overriding-header "Next Action List") (org-agenda-dim-blocked-tasks 'invisible)
        (org-agenda-group-by-property "CREATED")))
      ("D" "Items ready for archiving" todo "DONE"
       ((org-agenda-overriding-header "Items ready for archiving")
        (org-agenda-group-by-property "CREATED")))
      ("g" "AGENDA"
       ((agenda ""
-               ((org-agenda-filter-preset
-                 '("-inactive"))
-                (org-agenda-span 'day)
+               ((org-agenda-filter-preset '("-inactive")) (org-agenda-span 'day)
                 (org-agenda-overriding-header "Day agenda")))
-       (tags-todo "carryover"
-                  ((org-agenda-overriding-header "Carry along list"))))
+       (tags-todo "carryover/-INFO-WAITING"
+                  ((org-agenda-overriding-header "Carry along list")
+                   (org-agenda-files `(,(org-journal--get-entry-path))))))
       nil)))
  '(org-blocker-ignore-ancestor-siblings t)
  '(org-clock-x11idle-program-name "xprintidle")
