@@ -1460,10 +1460,16 @@ I guess 90% of the information I keep in the main orgmode files starts life orig
         (setq header-line-format nil)     ; this works, is it the right way to do this?
         ))
 
-    ;; When running org-capture wrap our additions
+    ;; All capture frames should have one window
+    (add-hook 'org-capture-mode-hook 'delete-other-windows)
+
+    ;; Wrap org-capture in our org-capture
     (advice-add 'org-capture :around #'ocpf--org-capture)
-    (advice-add 'org-capture-finalize :after #'ocpf--delete-frame)
-    (advice-add 'org-switch-to-buffer-other-window :after #'ocpf--delete-other-windows))
+
+    ;; Proper clean up
+    (advice-add 'org-capture-finalize :after #'ocpf--delete-frame))
+
+
 
 #+end_src
 
