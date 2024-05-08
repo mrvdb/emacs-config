@@ -12,7 +12,7 @@
 
 ;; Set gc really large, during load, after that we are going to use gcmh
 ;; See: https://akrl.sdf.org/#orgc15a10d has the same as I had for years
-(setq gc-cons-threshold (* 1 1024 1024 1024))
+(setq gc-cons-threshold (* 16 1024 1024 1024))
 
 ;; Assert native compilation is there
 (setq comp-deferred-compilation t)

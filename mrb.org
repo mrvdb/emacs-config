@@ -210,34 +210,35 @@ As I want to have version controlled package installation that is easily reprodu
 Now that we have =straight= we will use it from the =use-package= macro.
 
 #+begin_src emacs-lisp
-    (setq use-package-always-ensure nil   ; Make sure this is nil, so we do not use package.el
-          use-package-verbose 'debug      ; TODO  use a debug var for all of config?
-          )
-    ;; From this point on we should be able to use `use-package
-    (use-package straight
-      :custom
-      (straight-host-usernames '((github . "mrvdb"))) ; TODO Move to personal information?
-      (straight-use-package-by-default t)
-      ;; Make sure packages do not pull in internal org, we pregister org from straight.el
-      (straight-register-package 'org)
-      (straight-register-package 'org-contrib)
+  (setq use-package-always-ensure nil   ; Make sure this is nil, so we do not use package.el
+        use-package-verbose 'debug      ; TODO  use a debug var for all of config?
+        )
+  ;; From this point on we should be able to use `use-package
+  (use-package straight
+    :custom
+    (straight-host-usernames '((github . "mrvdb"))) ; TODO Move to personal information?
+    (straight-use-package-by-default t)
+    ;; Make sure packages do not pull in internal org, we pregister org from straight.el
+    (straight-register-package 'org)
+    (straight-register-package 'org-contrib)
 
-      <<straight-helperfunctions>>
+    <<straight-helperfunctions>>
 
-      )
+    )
 
-    ;; FROM THIS POINT use-package should work as intended, i.e. using straight.
+  ;; FROM THIS POINT use-package should work as intended, i.e. using straight.
 
-    ;; Need to install dependencies of use-package manually, why??
-    (use-package diminish)
+  ;; Need to install dependencies of use-package manually, why??
+  (use-package diminish)
 #+end_src
 
 I want to delegate garbage collection to someone who knows more than I do and made a package for it. The idea is still similar to what I had for years, i.e. large threshold on an idle-timer to do garbage collection. The package just adds some convenience, so I dont have to think about it other than making the threshold large on startup.
 
 #+begin_src emacs-lisp
   (use-package gcmh
-    :disabled
     :config
+    (setq gcmh-verbose 1)
+    (setq gcmh-high-cons-threshold (* 16 1024 1024 1024))
     (gcmh-mode 1))
 #+end_src
 
