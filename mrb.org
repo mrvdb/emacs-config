@@ -2365,7 +2365,7 @@ Below is what was contained in the old configuration. I will slowly migrate this
   (defalias 'archive-done-tasks 'mrb/org-my-archive-done-tasks)
 #+end_src
 
-* Key and mouse bindings
+* Key and mouseu bindings
 Keyboard bindings are the primary way to interact for me. I have been struggling with consistent keyboard shortcuts and how to integrate them with the other systems on my machine which capture shortcut keys. At this time the following applications capture shortcut keys:
 
 1. the awesome window manager captures keys;
