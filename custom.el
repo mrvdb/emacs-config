@@ -19,34 +19,27 @@
  '(org-M-RET-may-split-line '((default . t) (headline)))
  '(org-agenda-custom-commands
    '(("w" "Waiting For list" tags-todo "-inactive/WAITING"
-      ((org-agenda-overriding-header "WAITING FOR-list")
-       (org-agenda-dim-blocked-tasks t)
+      ((org-agenda-overriding-header "WAITING FOR-list") (org-agenda-dim-blocked-tasks t)
        (org-agenda-group-by-property "Responsible")))
      ("b" "Buying list"
-      ((tags-todo "-inactive+buy/-BUY"
-                  ((org-agenda-overriding-header "Buying list (tagged)")))
-       (tags-todo "-inactive/BUY"
-                  ((org-agenda-overriding-header "Buying list (keyword)"))))
+      ((tags-todo "-inactive+buy/-BUY" ((org-agenda-overriding-header "Buying list (tagged)")))
+       (tags-todo "-inactive/BUY" ((org-agenda-overriding-header "Buying list (keyword)"))))
       nil)
-     ("p" "Active project list" tags-todo "-ignore-inactive+LEVEL>1-TODO=\"DONE\"-TODO=\"CANCELLED\"-TODO=\"INFO\""
+     ("p" "Active project list" tags-todo
+      "-ignore-inactive+LEVEL>1-TODO=\"DONE\"-TODO=\"CANCELLED\"-TODO=\"INFO\""
       ((org-agenda-overriding-header "Active project list")
-       (org-agenda-skip-function 'mrb/skip-non-projects)
-       (org-agenda-dim-blocked-tasks nil)
-       (org-agenda-group-by-property "Group")
-       (org-agenda-sorting-strategy
-        '(alpha-up))))
+       (org-agenda-skip-function 'mrb/skip-non-projects) (org-agenda-dim-blocked-tasks nil)
+       (org-agenda-group-by-property "Group") (org-agenda-sorting-strategy '(alpha-up))))
      ("A" "Active task list" tags-todo "+SCHEDULED=\"\"-inactive/TODO"
-      ((org-agenda-group-by-property "Group")
-       (org-agenda-dim-blocked-tasks 'invisible)))
+      ((org-agenda-group-by-property "Group") (org-agenda-dim-blocked-tasks 'invisible)))
      ("r" "To Review"
       ((tags-todo "SCHEDULED=\"\"+DEADLINE=\"\"-{.}/TODO"
-        ((org-agenda-overriding-header "Untagged items")))
+                  ((org-agenda-overriding-header "Untagged items")))
        (tags-todo "-inactive+SCHEDULED=\"\"+DEADLINE=\"\"+TODO=\"TODO\"+{.}"
-        ((org-agenda-overriding-header "Unscheduled active items"))))
+                  ((org-agenda-overriding-header "Unscheduled active items"))))
       ((org-agenda-dim-blocked-tasks 'invisible)))
      ("c" "Scheduled overview" tags-todo "SCHEDULED<>\"\"|DEADLINE<>\"\"/TODO"
-      ((org-agenda-overriding-header "SCHEDULED")
-       (org-agenda-view-columns-initially t)
+      ((org-agenda-overriding-header "SCHEDULED") (org-agenda-view-columns-initially t)
        (org-agenda-overriding-columns-format "%65ITEM %25Responsible %SCHEDULED %DEADLINE %TAGS")
        (org-agenda-dim-blocked-tasks t)))
      ("l" "Blocked projects and tasks"
@@ -84,38 +77,21 @@
  '(org-tags-exclude-from-inheritance '("area" "encrypt"))
  '(org-timestamp-custom-formats '("<%m/%d/%y %a>" . "<%H:%M>"))
  '(org-todo-state-tags-triggers
-   '(("TODO"
-      ("inactive"))
-     ("DONE"
-      ("inactive")
-      ("fork"))
-     ("BUY"
-      ("buy" . t))))
+   '(("TODO" ("inactive")) ("DONE" ("inactive") ("fork")) ("BUY" ("buy" . t))))
  '(reb-re-syntax 'string)
  '(request-log-level 'verbose)
  '(safe-local-variable-values
    '((magit-todos-exclude-globs "_minted-mrb/*" "*.texi" "org-config.org")
-     (eval visual-fill-column-mode t)
-     (eval visual-line-mode t)
-     (eval setq visual-fill-column-width: nil)
-     (writefreely-post-id . "jnzt62gruo")
-     (writefreely-post-id . "dbv92wvpfi")
-     (writefreely-post-id . "j9nqdr0edr")
-     (writefreely-post-id . "3pn4uygr08")
-     (writefreely-post-id . "gg3pfn4cb2")
-     (writefreely-post-id . "t34o6ptyty")
-     (writefreely-post-id . "jl860566j7")
-     (writefreely-post-id . "xpuz7k4vf7")
-     (writefreely-post-id . "m52wflcl7q")
-     (writefreely-post-id . "wf83bq5jwz")
-     (writefreely-post-id)
-     (writefreely-post-token)
-     (TeX-master . t)
-     (hamlet/basic-offset . 4)
-     (haskell-process-use-ghci . t)
-     (haskell-indent-spaces . 4)
-     (encoding . utf-8)
-     (buffer-auto-save-file-name)))
+     (magit-todos-exclude-globs "*.org") (magit-todos-exclude-globs "*.texi" "org-config.org")
+     (eval visual-fill-column-mode t) (eval visual-line-mode t)
+     (eval setq visual-fill-column-width: nil) (writefreely-post-id . "jnzt62gruo")
+     (writefreely-post-id . "dbv92wvpfi") (writefreely-post-id . "j9nqdr0edr")
+     (writefreely-post-id . "3pn4uygr08") (writefreely-post-id . "gg3pfn4cb2")
+     (writefreely-post-id . "t34o6ptyty") (writefreely-post-id . "jl860566j7")
+     (writefreely-post-id . "xpuz7k4vf7") (writefreely-post-id . "m52wflcl7q")
+     (writefreely-post-id . "wf83bq5jwz") (writefreely-post-id) (writefreely-post-token)
+     (TeX-master . t) (hamlet/basic-offset . 4) (haskell-process-use-ghci . t)
+     (haskell-indent-spaces . 4) (encoding . utf-8) (buffer-auto-save-file-name)))
  '(sgml-xml-mode t)
  '(warning-suppress-types '((comp) (undo)))
  '(x-select-enable-clipboard-manager nil))
