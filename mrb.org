@@ -246,7 +246,7 @@ I want to delegate garbage collection to someone who knows more than I do and ma
 
   This is the only thing needed, after installing an emacs package with GUIX, it is available for /require/ and can be treated by /straight/ as a /built-in/ type package.
 
-  ,#+begin_src emacs-lisp
+#+begin_src emacs-lisp
     (add-to-list 'load-path "/home/mrb/.guix-profile/share/emacs/site-lisp")
     (guix-emacs-autoload-packages)
 #+end_src
