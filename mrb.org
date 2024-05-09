@@ -220,11 +220,7 @@ Now that we have =straight= we will use it from the =use-package= macro.
     (straight-use-package-by-default t)
     ;; Make sure packages do not pull in internal org, we pregister org from straight.el
     (straight-register-package 'org)
-    (straight-register-package 'org-contrib)
-
-    <<straight-helperfunctions>>
-
-    )
+    (straight-register-package 'org-contrib))
 
   ;; FROM THIS POINT use-package should work as intended, i.e. using straight.
 
