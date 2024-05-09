@@ -1129,13 +1129,17 @@ Bind renaming the visiting file to a new location to =C-x-w= now that we have =r
   (bind-key "C-S-s" 'write-file)
 #+end_src
 
-For file management itself, dired is the defacto standard It's builtin so =use-package= isn't actually needed but it's nice for consistency.
+For file management itself, dired is the defacto standard, but I do not use it much really. To help me out with keys and commands, I'm adding the =casual-dired= package.
 
 #+begin_src emacs-lisp
   (use-package dired
     :straight (:type built-in)
     ;; auto-revert global is only for file buffers, so explicit enable is needed
-    :hook (dired-mode-hook . auto-revert-mode))
+    :hook (dired-mode-hook . auto-revert-mode)
+    :config
+    (use-package casual-dired
+      :ensure t
+      :bind (:map dired-mode-map ("C-o" . 'casual-dired-tmenu))))
 #+end_src
 
 * Modes
