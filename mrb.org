@@ -1341,11 +1341,14 @@ Gather generic config variables for orgmode in one section
         org-enable-priority-commands nil
 
         ;; Agenda settings
+        org-agenda-inhibit-startup t
+        org-agenda-dim-blocked-tasks nil
+        org-agenda-use-tag-inheritance nil
         org-agenda-files (concat org-directory ".agenda_files")
         org-agenda-include-diary t
         org-agenda-start-with-log-mode t
         org-agenda-todo-ignore-scheduled "future"
-        org-agenda-ignore-properties '(effort appt category)
+        org-agenda-ignore-properties '(effort stats appt category)
         org-agenda-todo-ignore-scheduled 'future
         org-agenda-log-mode-items '(closed clock state)
         org-agenda-skip-deadline-prewarning-if-scheduled t
