@@ -3938,28 +3938,26 @@ The main advantages of the method that tree-sitter uses are:
 As of emacs 29 the treesit package is built-in, so let's use that in any case for highlighting where it is possible. I think over time the mapping of the modes below will just disappear and everything will be treesitter based.
 
 #+begin_src emacs-lisp
-  ;; Use the built-in treesit and load all language grammars
-  (use-package treesit
-    :straight (:type built-in)
-    :custom
-    ;; Load languages
-    (treesit-extra-load-path
-     (expand-file-name "var/tree-sitter/langs" user-emacs-directory))
-    :config
-    ;; Replace relevant modes with the treesitter variant
-    (dolist (mode
-             '((bash-mode       . bash-ts-mode)
-               (c-mode          . c-ts-mode)
-               (c++-mode        . c++-ts-mode)
-               (css-mode        . css-ts-mode)
-               (dockerfile-mode . dockerfile-ts-mode)
-               (go-mode         . go-ts-mode)
-               (javascript-mode . js-ts-mode)
-               (js-json-mode    . json-ts-mode)
-               (python-mode     . python-ts-mode)
-               (typescript-mode . typescript-ts-mode)
-               (yaml-mode       . yaml-ts-mode)))
-      (add-to-list 'major-mode-remap-alist mode)))
+    ;; Use the built-in treesit and load all language grammars
+    (use-package treesit
+      :straight (:type built-in)
+      :config
+      (setq treesit-extra-load-path
+            `(,(expand-file-name "var/tree-sitter/langs" user-emacs-directory)))
+      ;; Replace relevant modes with the treesitter variant
+      (dolist (mode
+               '((bash-mode       . bash-ts-mode)
+                 (c-mode          . c-ts-mode)
+                 (c++-mode        . c++-ts-mode)
+                 (css-mode        . css-ts-mode)
+                 (dockerfile-mode . dockerfile-ts-mode)
+                 (go-mode         . go-ts-mode)
+                 (javascript-mode . js-ts-mode)
+                 (js-json-mode    . json-ts-mode)
+                 (python-mode     . python-ts-mode)
+                 (typescript-mode . typescript-ts-mode)
+                 (yaml-mode       . yaml-ts-mode)))
+        (add-to-list 'major-mode-remap-alist mode)))
 #+end_src
 
 To have some control over the environment for specific projects I use [[http://direnv.net][direnv]], so let's install emacs support for it as well.
