@@ -73,6 +73,8 @@
  '(org-insert-heading-respect-content nil)
  '(org-list-allow-alphabetical t)
  '(org-mime-use-property-inheritance t)
+ '(org-reverse-note-order
+   '(("VerhuiIng van Zijlweg 1.org" . t) ("workshop.org" . t) (".*")))
  '(org-stuck-projects '("-inactive/+TODO" ("TODO" "WAITING") nil ""))
  '(org-tags-exclude-from-inheritance '("area" "encrypt"))
  '(org-timestamp-custom-formats '("<%m/%d/%y %a>" . "<%H:%M>"))
