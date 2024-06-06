@@ -2736,8 +2736,9 @@ All of these work fine, but corfu gets installed because it fits right in with t
 
     ;; But not for some
     (setq global-corfu-modes
-          '((not text-mode) t)))
-
+          '(message-mode
+            (not text-mode)
+            t)))
 #+end_src
 
 ** Ad 4. Mode specialization
