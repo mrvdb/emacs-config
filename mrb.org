@@ -2111,8 +2111,8 @@ While the standard capture method is useful I found myself not using it very muc
     (org-agenda-file-regexp "^[0-9]+\\.org")
     (org-journal-file-format  "%Y%m%d.org")
 
-    ;; Put day on top of file, uses `org-journal-date-format`
-    (org-journal-date-format "%A, %e-%m-%Y")
+    ;; Put day on top of file, uses `format-time-string`
+    (org-journal-date-format "%A, %-e-%m-%Y")
 
     ;; Put day on top of file, uses `org-journal-date-format`
     (org-journal-date-prefix "#+TITLE: ")
