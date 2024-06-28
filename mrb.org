@@ -4012,6 +4012,17 @@ There's a builtin package to read man pages, let's make it explicit.
 (use-package man)
 #+end_src
 
+Not really man pages as such, but meant as their /advanced/ cousin for GNU programs is the info format. As I tend to forget all the key shortcuts, install =casual-info= as well to help with that. =C-o= seems to be the defacto standord to summon the transient menu in a mode.
+
+#+begin_src emacs-lisp
+  (use-package info
+    :straight (:type built-in)
+    :config
+    (use-package casual-info
+      :bind (:map Info-mode-map ("C-o" . 'casual-info-tmenu))))
+#+end_src
+
+
 *** Epub documents
 Not often, but increasingly so, reference books are in epub format. So, for that we need a reader package. =nov= seems to be the best option
 
