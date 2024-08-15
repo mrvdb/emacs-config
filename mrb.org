@@ -440,7 +440,7 @@ Using pdf-tools for PDF handling. This is a lot better than docview. I'm a bit a
             ("C-s" . 'isearch-forward)
             ("s-c". 'pdf-view-kill-ring-save)
             ("m"   . 'mrb/mailfile)
-            ("q"   . 'kill-this-buffer)
+            ("q"   . 'kill-current-buffer)
             ([remap pdf-misc-print-document] . 'mrb/pdf-misc-print-pages)
             :map pdf-annot-edit-contents-minor-mode-map
             ("<return>"   . 'pdf-annot-edit-contents-commit)
