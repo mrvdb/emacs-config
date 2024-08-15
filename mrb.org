@@ -2625,6 +2625,7 @@ The basic install is easy, but does need an emacs compiled with module support.
 
 #+begin_src emacs-lisp
   (use-package vterm
+    :straight (:type built-in)
     :if (fboundp'module-load)
     :custom-face
     (vterm-color-black   ((t (:foreground "#2e3440"))))
