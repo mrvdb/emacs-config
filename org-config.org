@@ -265,6 +265,12 @@ For outline:
 
 For adding pdf pages:
 #+LATEX_HEADER: \usepackage{pdfpages}
+
+Add =H= specifier for floats
+#+LATEX_HEADER: \usepackage{float}
+
+
+
 * Links
 Autolinks which can be entered like [[keyword:parameter]] This is mostly here as an example, I don’t think I’ve ever used these in my org files
 #+LINK: wiki   http://en.wikipedia.org/wiki/Search?search=
