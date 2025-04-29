@@ -339,17 +339,19 @@ I'm of the /spaces-no-tabs religion/:
   (setq tab-width 4)                      ; 4 spaces by default
 #+end_src
 
-Finally, I want to prevent producing files which have trailing spaces, because they serve no purpose at all. Removing these spaces is less trivial than it seems and I am not pretending to know what the best strategy is. For a while now, the =ws-butler= package has done a great job for me.
+
+I want to prevent producing files which have trailing spaces, because they serve no purpose at all. Removing these spaces is less trivial than it seems and I am not pretending to know what the best strategy is. The [[https://github.com/jamescherti/stripspace.el][stripspace]] package seems to be exactly made for this.
 
 #+begin_src emacs-lisp
-  (use-package ws-butler
-    :diminish
-    :init
-    (ws-butler-global-mode)             ; Enable by default
-    ;; List exemptions here
-    (add-to-list 'ws-butler-global-exempt-modes 'magit-mode)
-    (add-to-list 'ws-butler-global-exempt-modes 'message-mode) ; might interfere with format-flowed?
-    (add-to-list 'ws-butler-global-exempt-modes 'mu4e-compose-mode))
+  (use-package stripspace
+    :hook ((prog-mode . stripspace-local-mode)
+           (text-mode . stripspace-local-mode)
+           (conf-mode . stripspace-local-mode))
+    :custom
+    ;; We do now want diffs that are to verbose on unclean files
+    (stripspace-only-if-initially-clean t)
+    ;; make sure we keep in the right position after stripping
+    (stripspace-restore-column t))
 
   (setq
    delete-by-moving-to-trash t          ; move files to the trash instead of rm
