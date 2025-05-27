@@ -1131,17 +1131,14 @@ Bind renaming the visiting file to a new location to =C-x-w= now that we have =r
   (bind-key "C-S-s" 'write-file)
 #+end_src
 
-For file management itself, dired is the defacto standard, but I do not use it much really. To help me out with keys and commands, I'm adding the =casual-dired= package.
+For file management itself, dired is the defacto standard, but I do not use it much really. The =casual= package is helpfule showing the keyboard bindings.
 
 #+begin_src emacs-lisp
   (use-package dired
     :straight (:type built-in)
     ;; auto-revert global is only for file buffers, so explicit enable is needed
     :hook (dired-mode-hook . auto-revert-mode)
-    :config
-    (use-package casual-dired
-      :ensure t
-      :bind (:map dired-mode-map ("C-o" . 'casual-dired-tmenu))))
+    :bind (:map dired-mode-map ("C-o" . 'casual-dired-tmenu)))
 #+end_src
 
 * Modes
@@ -2370,7 +2367,7 @@ Below is what was contained in the old configuration. I will slowly migrate this
   (defalias 'archive-done-tasks 'mrb/org-my-archive-done-tasks)
 #+end_src
 
-* Key and mouseu bindings
+* Key and mouse bindings
 Keyboard bindings are the primary way to interact for me. I have been struggling with consistent keyboard shortcuts and how to integrate them with the other systems on my machine which capture shortcut keys. At this time the following applications capture shortcut keys:
 
 1. the awesome window manager captures keys;
@@ -2397,6 +2394,7 @@ To help me out with this when writing about key bindings, the lisp function =key
     (interactive)
     (insert (key-description (read-key-sequence "Type a key sequence:"))))
 #+end_src
+
 I like the explicit notation where the name of the key is spelled out better, and I'll move all configured keybindings to that eventually.
 
 The right alt and the right <menu> key should be the same as the left alt and the super key, but I haven't gotten around to configuring that yet.
@@ -2413,6 +2411,13 @@ Furthermore, because I still can't remember keys, after pressing a prefix key li
 
     :config
     (which-key-mode))
+#+end_src
+
+Similarly, the =casual= package shows menu completions, when summoned, for several modes
+
+#+begin_src elisp
+  (use-package casual
+    :straight (:type git :host github :repo "kickingvegas/casual"))
 #+end_src
 
 For binding keys there are many ways it seems, with all different syntaxes and uses. I've tried to do everything with the =bind-key= package, because that is part of =use-package= so we get that for free.
@@ -2616,6 +2621,7 @@ Make sure that the scroll wheel scrolls the window that the mouse pointer is ove
   (setq mouse-wheel-scroll-amount '(1 ((shift) . 1)))
   (setq focus-follows-mouse t) ;; i3wm changes focus automatically
 #+end_src
+
 * Terminals, Character encodings and emulation
 My policy is to use Emacs for as many things and use as little other programs as necessary. All this within reason obviously.
 
@@ -4016,14 +4022,12 @@ There's a builtin package to read man pages, let's make it explicit.
 (use-package man)
 #+end_src
 
-Not really man pages as such, but meant as their /advanced/ cousin for GNU programs is the info format. As I tend to forget all the key shortcuts, install =casual-info= as well to help with that. =C-o= seems to be the defacto standord to summon the transient menu in a mode.
+Not really man pages as such, but meant as their /advanced/ cousin for GNU programs is the info format.
 
 #+begin_src emacs-lisp
   (use-package info
     :straight (:type built-in)
-    :config
-    (use-package casual-info
-      :bind (:map Info-mode-map ("C-o" . 'casual-info-tmenu))))
+    :bind (:map Info-mode-map ("C-o" . 'casual-info-tmenu)))
 #+end_src
 
 
