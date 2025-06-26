@@ -3827,13 +3827,12 @@ Not messaging or chatting perse, but a micro blog social network. The 'capture a
 #+begin_src emacs-lisp
   ;; Mastodon in emacs
   (use-package mastodon
+    :disabled t
     :straight (mastodon :host codeberg :repo "martianh/mastodon.el"
                         :branch "develop")
     :custom
-    (mastodon-instance-url "https://mastodon.nl")
-    (mastodon-active-user "mrb")
-    ;; finds mastodon.nl in password-store and expects user field to be present
-    (mastodon-auth-source-file 'password-store)
+    (mastodon-instance-url "https://van-der-boom.nl")
+    (mastodon-active-user "marcel")
 
     :config
     ;; Convenience function
