@@ -784,7 +784,7 @@ Although I think the 16 color system is a bit simplistic and, for emacs at least
 
             ;; Adjustment for non-package faces
             ;; Comments should not be that dark as base03
-            (font-lock-comment-face         :foreground "#777777")
+            (font-lock-comment-face         :foreground "bisque4")
             (font-lock-doc-face             :inherit font-lock-comment-face)
 
             (button                         :foreground "#d08770" :weight semi-bold)
@@ -1295,7 +1295,7 @@ Also make sure we never load org from internal, this can happen when functions w
     (mrb/org-todo-keyword-TODO     ((t ( :foreground "#88c0d0" :weight bold))))
     (mrb/org-todo-keyword-DONE     ((t ( :foreground "#a3be8c" :weight bold))))
     (mrb/org-todo-keyword-WAITING  ((t ( :foreground "#bf616a" :weight bold))))
-    (mrb/org-todo-keyword-CANCELLED((t ( :foreground "#3b4252" :weight bold))))
+    (mrb/org-todo-keyword-CANCELLED((t ( :foreground "bisque4" :weight bold))))
     (mrb/org-todo-keyword-BUY      ((t ( :foreground "#d08770" :weight bold))))
     (mrb/org-todo-keyword-HOWTO    ((t ( :foreground "#5e81ac" :weight bold))))
     (mrb/org-todo-keyword-INFO     ((t ( :foreground "#ebcb8b" :weight bold))))
