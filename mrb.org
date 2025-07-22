@@ -92,6 +92,17 @@ And edit the file obviously.
   # Set to false when done
   debug() { false $@; }
 
+  # Ensure availability of commands
+  ensure() {
+      if ! command -v $1 >/dev/null 2>&1; then
+          echo "ERROR: command '$1' is needed"
+          exit 1
+      fi
+
+  }
+  ensure notify-send
+  ensure cat
+  ensure rm
   # Do we already have an emacs?
   # I could let emacsclient do this automatically, but it
   # is hard-coded to exec emacs --daemon (without socket name)
@@ -134,21 +145,21 @@ And edit the file obviously.
   if [ $DISPLAY ]; then
       debug "X-display value seen, using GUI"
       case $ME in
-        "edit")
-            ARGS=$ARGS' --no-wait'
-            ;;
-        "edit-wait")
-            ARGS=$ARGS' '
-            ;;
-        "edit-frame")
-            ARGS=$ARGS' --no-wait --create-frame'
-            ;;
-        "edit-wait-frame")
-            ARGS=$ARGS' --create-frame'
-            ;;
-        ,*)
-            echo "Wrong calling name..."
-            ;;
+          "edit")
+              ARGS=$ARGS' --no-wait'
+              ;;
+          "edit-wait")
+              ARGS=$ARGS' '
+              ;;
+          "edit-frame")
+              ARGS=$ARGS' --no-wait --create-frame'
+              ;;
+          "edit-wait-frame")
+              ARGS=$ARGS' --create-frame'
+              ;;
+          ,*)
+              echo "Wrong calling name..."
+              ;;
       esac
   else
       # tty always waits, as it is in the terminal, create-frame has no meaning
