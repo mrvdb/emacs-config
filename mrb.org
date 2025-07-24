@@ -866,7 +866,10 @@ Although I think the 16 color system is a bit simplistic and, for emacs at least
 
   ;; Show color of '#RRBBGG texts
   (use-package rainbow-mode
-    :diminish)
+    :diminish
+    :custom
+    ;; Enable color name globally
+    rainbow-r-colors t)
 
   ;; Give commands the option to display full-screen
   (use-package fullframe)
