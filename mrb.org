@@ -797,6 +797,7 @@ Although I think the 16 color system is a bit simplistic and, for emacs at least
             ;; Comments should not be that dark as base03
             (font-lock-comment-face         :foreground "bisque4")
             (font-lock-doc-face             :inherit font-lock-comment-face)
+            (org-headline-done              :inherit font-lock-comment-face)
 
             (button                         :foreground "#d08770" :weight semi-bold)
 
