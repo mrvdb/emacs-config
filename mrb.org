@@ -243,9 +243,10 @@ I want to delegate garbage collection to someone who knows more than I do and ma
 
 #+begin_src emacs-lisp
   (use-package gcmh
+    :custom
+    (gcmh-verbose 1)
+    (gcmh-high-cons-threshold (* 16 1024 1024 1024))
     :config
-    (setq gcmh-verbose 1)
-    (setq gcmh-high-cons-threshold (* 16 1024 1024 1024))
     (gcmh-mode 1))
 #+end_src
 
@@ -397,11 +398,11 @@ I want to prevent producing files which have trailing spaces, because they serve
   (use-package autorevert
     :diminish auto-revert-mode
 
+    :custom
+    (auto-revert-interval 5)               ; Perhaps too often, let's see
+    (global-auto-revert-non-file-buffers t)  ; things like dired buffers
+
     :config
-    (setq auto-revert-interval 5)               ; Perhaps too often, let's see
-    (setq global-auto-revert-non-file-buffers t)  ; things like dired buffers
-
-
     (global-auto-revert-mode t))
 
   ;; Should this be here?
@@ -459,23 +460,24 @@ Using pdf-tools for PDF handling. This is a lot better than docview. I'm a bit a
             ("<return>"   . 'pdf-annot-edit-contents-commit)
             ("<S-return>" .  'newline))
 
+    :custom
+    (pdf-info-epdfinfo-program "/home/mrb/.guix-profile/bin/epdfinfo")
+    (pdf-annot-activate-created-annotations t) ; automatically annotate highlights
+    (pdf-view-resize-factor 1.1)              ; more fine-grained zooming
+    (pdf-view-midnight-colors '("#DCDCCC" . "#383838")) ; Not sure what this is
+    (pdf-misc-print-program-executable "/usr/bin/lp")
+
     :config
-    (setq pdf-info-epdfinfo-program "/home/mrb/.guix-profile/bin/epdfinfo")
     (pdf-tools-install) ; autobuild should not happen now, so enable the question if it does
     (require 'pdf-annot)
 
     ;; Some settings from http://pragmaticemacs.com/emacs/even-more-pdf-tools-tweaks/
     (fullframe pdf-view-mode kill-this-buffer)
     (setq-default pdf-view-display-size 'fit-page) ;scale to fit page by default
-    (setq pdf-annot-activate-created-annotations t ; automatically annotate highlights
-          pdf-view-resize-factor 1.1              ; more fine-grained zooming
-          pdf-view-midnight-colors '("#DCDCCC" . "#383838")) ; Not sure what this is
 
     (add-to-list 'revert-without-query ".+\\.pdf") ; pdf is always a reflection of disk file
     ;; FIXME does this work out ok with annotations?
 
-    ;; NOTE: assume lp as printer program!
-    (setq pdf-misc-print-program-executable "/usr/bin/lp")
     (defun mrb/pdf-misc-print-pages(filename pages &optional interactive-p)
       "Wrapper for `pdf-misc-print-document` to add page selection support"
       (interactive (list (pdf-view-buffer-file-name)
@@ -707,12 +709,12 @@ One of the elements in the status bar will be a list of buffers which need atten
 
     :custom
     ;; tab-bar customization
-      (tab-bar-format '(mrb/tab-bar-format-primary
+    (tab-bar-format '(mrb/tab-bar-format-primary
                       tab-bar-format-align-right
                       mrb/tab-bar-format-secondary))
-      (tab-bar-position t "Position tab-bar under the menu-bar")
-      (tab-bar-mode t "Enable tab-bar-mode unconditionally")
-      (global-tab-line-mode nil "Make sure tab-line-mode is disabled")
+    (tab-bar-position t "Position tab-bar under the menu-bar")
+    (tab-bar-mode t "Enable tab-bar-mode unconditionally")
+    (global-tab-line-mode nil "Make sure tab-line-mode is disabled")
 
     (nano-modeline-position 'nano-modeline-footer "Mode line goes at the bottom")
 
@@ -4237,9 +4239,7 @@ When evaluating expressions, the result is way down in the status area. I would 
 #+begin_src emacs-lisp
   (use-package eros
     :config
-    (eros-mode 1) ;; ok for global active, just puts advices around the eval
-    ;; TODO set the face
-    )
+    (eros-mode 1))
 #+end_src
 
 **** Scheme
@@ -4353,7 +4353,7 @@ The defacto standard for a development environment in Emacs for common-lisp is e
           (set-match-data (list beg end))
           t))))
 #+end_src
-** Gcode
+*** Gcode
 I'm not in the habit of editing gcode, but every now and then I need to look at it and I want it reasonably decent. My use-case is just sending gcode to my 3D-printer which runs Marlin firmware.
 
 Using =define-generic-mode= is more than enough to define something useful for me.
@@ -4375,7 +4375,7 @@ Using =define-generic-mode= is more than enough to define something useful for m
       nil
       "Mode for marlin g-code files.")
 #+end_src
-** Openscad
+*** Openscad
 Openscad is a script based 3d parametric drawing program. Obviously I'm editing those scripts in emacs.
 
 #+begin_src emacs-lisp
@@ -4383,7 +4383,7 @@ Openscad is a script based 3d parametric drawing program. Obviously I'm editing 
     :custom
     (scad-keywords '("return" "true" "false" "include")))
 #+end_src
-** SQL
+*** SQL
 SQL has a number of different dialects I use, depending on the database software in use.
 
 #+begin_src emacs-lisp
