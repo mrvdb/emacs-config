@@ -1359,6 +1359,8 @@ Gather generic config variables for orgmode in one section
         org-agenda-inhibit-startup t
         org-agenda-dim-blocked-tasks nil
         org-agenda-use-tag-inheritance nil
+
+        ;; NOTE: this will get overridden later on by org-mem
         org-agenda-files (concat org-directory ".agenda_files")
         org-agenda-include-diary t
         org-agenda-start-with-log-mode t
@@ -2224,6 +2226,45 @@ We do not want to inherit this tag automatically, as its behavior is already sub
 #+begin_src emacs-lisp
   (add-to-list 'org-tags-exclude-from-inheritance '"encrypt")
   (add-to-list 'org-tags-exclude-from-inheritance '"crypt")
+#+end_src
+
+** Dynamic behaviour
+Not sure where to put this configuration in general. The problem I'm trying to solve is to keep only relevant files in org-agenda. Too much and the performance collapses, too little and nothing can be found. I'm trying =org-mem= for this, and perhaps add =org-node= later on.
+
+=org-mem= creates a cache of metadata about org-mode files. =org-node= uses this as a library and is similar to =org-roam=, which many people tout as a game changer in todo management, so I think it is worth to dedicate some time to it.
+
+First step is to have org-agenda-files managed automatically based on the cache, filtered for relevance. It does not add much to my current setup, but has the advantage to have this cache available for other purposes (finding things much/much faster is the main thing).
+
+#+begin_src emacs-lisp
+  (use-package org-mem
+    :after org
+    :custom
+    ;; Basically list all folders which have org files in them.
+    (org-mem-watch-dirs `(,org-directory "~/dat/blogs"))
+    (org-mem-do-sync-with-org-id t) ;; not sure what this does exactly
+    :config
+    ;; Include in agenda-files:
+    ;; - non archive named files
+    ;; - not my org config file
+    ;; - files with active timestamps
+    ;; - having entries in /todo/ states
+    ;; - having entries scheduled/deadlined
+    (defun mrb/set-agenda-files(&rest _)
+      (setq org-agenda-files
+            (cl-loop
+             for file in (org-mem-all-files)
+             unless (or (string-search "archive" file)
+                        (string-search "org-config.org" file))
+             when (seq-find (lambda (entry)
+                              (or (org-mem-entry-active-timestamps entry)
+                                  (org-mem-entry-todo-state entry)
+                                  (org-mem-entry-closed entry)
+                                  (org-mem-entry-scheduled entry)
+                                  (org-mem-entry-deadline entry)))
+                            (org-mem-entries-in file))
+             collect file)))
+    (add-hook 'org-mem-post-full-scan-functions #'mrb/set-agenda-files)
+    (org-mem-updater-mode))
 #+end_src
 
 ** Old configuration
