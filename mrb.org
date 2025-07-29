@@ -1780,20 +1780,10 @@ I had /schedule-for-today/ functions earlier, but those really just save me from
 ** Visual settings
 Having an attractive screen to look at becomes more important if you use the system all day long. /Attractive/ is rather subjective here. For me it mainly consists of functional things. Anyways, this section groups settings for the visual characteristics of orgmode.
 
-While the /properties/ drawer has an important function while using org, for most of the time when I am entering text, they're mostly in the way. There's a package for that. =org-tidy= hides drawers from view. A marker can be used, but I'm going with invisible.
-
-#+begin_src emacs-lisp
-  (use-package org-tidy
-    :custom
-    org-tidy-properties-style 'invisible
-    :hook
-    (org-mode . org-tidy-mode))
-#+end_src
-
 I want to hide the leading stars in the out-liner, and do it *exactly* in the background color. This is redundant actually in my case, as it is also specified in the org config file that I include. Or rather, it is redundant there, because I want it always to be the case.
 
 #+begin_src emacs-lisp
-    (setq org-hide-leading-stars t)
+  (setq org-hide-leading-stars t)
 #+end_src
 
 For the collapsed items in the outline orgmode uses the variable =org-ellipsis= to determine what character-sequence should be used to show that the item can be expanded. The variable can contain a string, which will then be used instead of the standard 3 dots, or a face which will then be used to render the standard 3 dots.
