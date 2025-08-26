@@ -1902,7 +1902,7 @@ Traditionally somewhat related to mail, although mostly through orgmode these da
 
 I have used =org-caldav= but even in just a read only setup it does not work properly. I'm using =ical2orgpy= which is a python script that takes =.ics= input and creates an org-mode file.
 
-I combine =ical2orgpy= with a cron job which pulls in the calendars I am interested into. Adding the produced org-mode files to the =org-agenda-files= variable is enough to get the information into the org-mode agenda.
+I combine =ical2orgpy= with a cron job which pulls in the calendars I am interested into. information into the org-mode agenda.
 
 #+begin_src sh :exports code :tangle ~/bin/ical2org :shebang #!/bin/sh
   # <<tangle-header>>
