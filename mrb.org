@@ -30,7 +30,7 @@ Small snippet to have last modified timestamp inserted when exporting this file 
 
 #+NAME: last_modified
 #+BEGIN_SRC sh
-git log -1 --pretty="format:%ci" ~/.emacs.d/mrb.org
+  git log -1 --pretty="format:%ci" ~/.emacs.d/mrb.org
 #+END_SRC
 
 * Preparing for lift-off
@@ -66,7 +66,7 @@ While we are here, define a snippet which should go in shell scripts. We will re
 
 #+name: tangle-header
 #+begin_src sh :tangle no
-[ Org-mode generated this file from a code block, changes will be overwritten ]
+  [ Org-mode generated this file from a code block, changes will be overwritten ]
 #+end_src
 
 And edit the file obviously.
@@ -250,22 +250,22 @@ I want to delegate garbage collection to someone who knows more than I do and ma
     (gcmh-mode 1))
 #+end_src
 
-  Sometimes it is comfortable to use GUIX packages, for example when autobuilding fails. My usecase was pdf-tools failing frequently, so using the builtin from GUIX was an easy way out.
+Sometimes it is comfortable to use GUIX packages, for example when autobuilding fails. My usecase was pdf-tools failing frequently, so using the builtin from GUIX was an easy way out.
 
-  This is the only thing needed, after installing an emacs package with GUIX, it is available for /require/ and can be treated by /straight/ as a /built-in/ type package.
+This is the only thing needed, after installing an emacs package with GUIX, it is available for /require/ and can be treated by /straight/ as a /built-in/ type package.
 
 #+begin_src emacs-lisp
-    (add-to-list 'load-path "/home/mrb/.guix-profile/share/emacs/site-lisp")
-    (guix-emacs-autoload-packages)
+  (add-to-list 'load-path "/home/mrb/.guix-profile/share/emacs/site-lisp")
+  (guix-emacs-autoload-packages)
 #+end_src
 
 As emacs lives inside the systemd environment it is not automatically the case that my shell environment is inherited. In many cases, this is not a problem, but for those cases that expect the same environment, I'm making explicit that the enviroment needs to be from the shell. We should do this a soon as =use-package= is useable.
 
 #+begin_src emacs-lisp
-   (use-package exec-path-from-shell
-     :demand t
-     :config
-     (exec-path-from-shell-initialize))
+  (use-package exec-path-from-shell
+    :demand t
+    :config
+    (exec-path-from-shell-initialize))
 #+end_src
 
 This makes sure that things like TeX and git and other programs run in the same context as they would in my shell. Especially for guix-installed programs this is important.
@@ -282,21 +282,21 @@ Seems like a good idea to start configuration with some details about me. The id
 
 #+COMMENT TODO read this from a file, as I publish this file and there's no need for casual readers to know this.
 #+begin_src emacs-lisp
-    (setq mrb/maildir                                    "~/Maildir/"
-          mrb/default-email-address                      "marcel@hsdev.com"
-          mrb/default-signature-file (concat mrb/maildir ".signature")
-          mrb/private-addresses '(                       "marcel@van-der-boom.nl"
-                                                         "m@rcel.van-der-boom.nl")
-          mrb/private-signature-file (concat mrb/maildir ".signature-private")
-          mrb/default-private-address (car mrb/private-addresses)
+  (setq mrb/maildir                                    "~/Maildir/"
+        mrb/default-email-address                      "marcel@hsdev.com"
+        mrb/default-signature-file (concat mrb/maildir ".signature")
+        mrb/private-addresses '(                       "marcel@van-der-boom.nl"
+                                                       "m@rcel.van-der-boom.nl")
+        mrb/private-signature-file (concat mrb/maildir ".signature-private")
+        mrb/default-private-address (car mrb/private-addresses)
 
-          mrb/bcc-address                                "mrb+Sent@hsdev.com"
-          user-full-name                                 "Marcel van der Boom"
-          user-mail-address                              mrb/default-email-address
-          user-domain                                    "hsdev.com"
-          user-organisation                              "HS-Development BV"
-          user-gpg-key                                  "77DDA1B68D04792A8F85D855235E5C8CF5E8DFFB"
-          )
+        mrb/bcc-address                                "mrb+Sent@hsdev.com"
+        user-full-name                                 "Marcel van der Boom"
+        user-mail-address                              mrb/default-email-address
+        user-domain                                    "hsdev.com"
+        user-organisation                              "HS-Development BV"
+        user-gpg-key                                  "77DDA1B68D04792A8F85D855235E5C8CF5E8DFFB"
+        )
 #+end_src
 
 ** Authorization
@@ -421,7 +421,7 @@ I want to prevent producing files which have trailing spaces, because they serve
           (bounds (bounds-of-thing-at-point 'url)))
       (kill-region (car bounds) (cdr bounds))
 
-      ; Leave url as is, unless mode has specific link syntax
+                                          ; Leave url as is, unless mode has specific link syntax
       (insert (format (cond ((eq major-mode 'org-mode)      "[[%1s][%2s]]")
                             ((eq major-mode 'markdown-mode) "[[%2s][%1s]]")
                             (t "%1s"))
@@ -507,8 +507,8 @@ Integrate this with orgmode as well. =org-pdftools= provides a link type, so we 
 I tend to compile Emacs with ImageMagick support, let's make sure we use it too.
 
 #+begin_src emacs-lisp
-(when (fboundp 'imagemagick-register-types)
-  (imagemagick-register-types))
+  (when (fboundp 'imagemagick-register-types)
+    (imagemagick-register-types))
 #+end_src
 
 Quick install of package that exports =qrencode-region= function. I use this mainly to send links or package tracking codes to my mobile.
@@ -600,7 +600,7 @@ The problem with applying this function is that we need to be 'done' with our vi
 
     ;; mu4e uses Ⓟ,Ⓛ and Ⓣ, let's correct all letters
     (set-fontset-font t '(?Ⓐ . ?Ⓩ) "Symbola") ; noto line-height too high
-  )
+    )
 #+end_src
 
 So, when characters do not show properly, the steps to take now are:
@@ -624,23 +624,23 @@ Many settings have to do with how the screen looks and behaves in a visual way. 
 Let's set up some basics first, background dark, some default frame and cursor properties:
 
 #+begin_src emacs-lisp
-    (setq mrb/cursor-type 'box)
-    (setq mrb/cursor-color "DarkOrange")  ; in fat orange color
+  (setq mrb/cursor-type 'box)
+  (setq mrb/cursor-color "DarkOrange")  ; in fat orange color
 
 
-    (setq-default frame-background-mode 'dark)
-    (set-mouse-color "white")
+  (setq-default frame-background-mode 'dark)
+  (set-mouse-color "white")
 
-    ;; Only show cursor in the active window.
-    (setq-default cursor-in-non-selected-windows nil)
+  ;; Only show cursor in the active window.
+  (setq-default cursor-in-non-selected-windows nil)
 
-    ;;Default frame properties frame position, color, etc
-    (setq default-frame-alist
-          `((cursor-type . ,mrb/cursor-type )
-            (height . 60) (width . 100)
-            (cursor-color . ,mrb/cursor-color)
-            (internal-border-width . 24)
-            (mouse-color . "white")))
+  ;;Default frame properties frame position, color, etc
+  (setq default-frame-alist
+        `((cursor-type . ,mrb/cursor-type )
+          (height . 60) (width . 100)
+          (cursor-color . ,mrb/cursor-color)
+          (internal-border-width . 24)
+          (mouse-color . "white")))
 #+end_src
 
 ** Mode-line and status info
@@ -652,7 +652,7 @@ One thing that always bothered me is the repeated mode-line for every buffer wit
 
 The format of the mode-line is:
 
-   =[ status name (primary)                               secondary ]=
+=[ status name (primary)                               secondary ]=
 
 where:
 - status :: gives status of buffer (RO/RW/**/-- etc.)
@@ -664,7 +664,7 @@ Both primary and secondary are buffer and/or mode-specific and some are configur
 
 The format of the status-bar is:
 
-   =[ primary                                               secondary ]=
+=[ primary                                               secondary ]=
 
 where:
 - primary :: global or mode specific information, *no* buffer specific information, left aligned
@@ -693,19 +693,19 @@ One of the elements in the status bar will be a list of buffers which need atten
     ;; - misc info has globabl mode string, moved to tab bar, but may have more?? TODO
 
     (setq-default mode-line-format
-          (list
-           "%e" mode-line-front-space
-           '(:propertize ("" mode-line-mule-info mode-line-client mode-line-modified mode-line-remote)
-            display (min-width (5.0)))
-           mode-line-frame-identification
-           mode-line-buffer-identification
-           "   "
-           mode-line-position
-           '(vc-mode vc-mode)
-           "  "
-           mode-line-modes
-           ;mode-line-misc-info
-           mode-line-end-spaces))
+                  (list
+                   "%e" mode-line-front-space
+                   '(:propertize ("" mode-line-mule-info mode-line-client mode-line-modified mode-line-remote)
+                                 display (min-width (5.0)))
+                   mode-line-frame-identification
+                   mode-line-buffer-identification
+                   "   "
+                   mode-line-position
+                   '(vc-mode vc-mode)
+                   "  "
+                   mode-line-modes
+                                          ;mode-line-misc-info
+                   mode-line-end-spaces))
 
     :custom
     ;; tab-bar customization
@@ -731,7 +731,7 @@ One of the elements in the status bar will be a list of buffers which need atten
                      :box (:line-width 1 :color "dim gray" :style flat-button)))))
 
     :init
-    ; Helper functions for the tab-bar-format
+                                          ; Helper functions for the tab-bar-format
     (defun mrb/tab-bar-format-primary () "") ;not used yet
     (defun mrb/tab-bar-format-secondary ()
       (concat
@@ -750,13 +750,13 @@ Although I think the 16 color system is a bit simplistic and, for emacs at least
 #+begin_src emacs-lisp
   (setq custom--inhibit-theme-enable nil)  ; This was needed for Emacs 27, but cant recall why
   (use-package base16-theme
-  :custom
+    :custom
     ;; Do config here and finally load the theme
-  (base16-theme-distinct-fringe-background nil)
-  (base16-theme-highlight-mode-line 'contrast)
-  (base16-theme-256-color-source "terminal")
+    (base16-theme-distinct-fringe-background nil)
+    (base16-theme-highlight-mode-line 'contrast)
+    (base16-theme-256-color-source "terminal")
 
-  :config
+    :config
     (load-theme 'base16-nord t)
 
     ;; Define our adjustments to faces
@@ -897,8 +897,8 @@ To help me see the difference between visual lines and logical lines I let emacs
   (use-package visual-fill-column
     :commands (turn-on-visual-fill-column-mode))
 
-    ;; Similar to mail messages, use vertical bar for wrapped paragraphs
-    (setq visual-line-fringe-indicators
+  ;; Similar to mail messages, use vertical bar for wrapped paragraphs
+  (setq visual-line-fringe-indicators
         '(vertical-bar nil))
 
   ;; For all text modes use visual-line-mode
@@ -913,7 +913,7 @@ To help me see the difference between visual lines and logical lines I let emacs
           (emacs-lisp-docstring-fill-column t))
       (fill-paragraph nil region)))
 
-   ;; Similar to M-q for fill, define M-Q for unfill
+  ;; Similar to M-q for fill, define M-Q for unfill
   (bind-key "M-Q" 'unfill-paragraph)
 #+end_src
 
@@ -1058,17 +1058,17 @@ The first is the easiest, as the format of =org-todo-keyword-faces= is nigh perf
     ;; See: https://github.com/rougier/svg-tag-mode/issues/27
     ;; Org agenda does not use font-lock, so needs separate overlay to render
     (defun mrb/org-agenda-show-svg ()
-    (let* ((case-fold-search nil)
-           (keywords (mapcar #'svg-tag--build-keywords svg-tag--active-tags))
-           (keyword (car keywords)))
-      (while keyword
-        (save-excursion
-          (while (re-search-forward (nth 0 keyword) nil t)
-            (overlay-put (make-overlay
-                          (match-beginning 0) (match-end 0))
-                         'display  (nth 3 (eval (nth 2 keyword)))) ))
-        (pop keywords)
-        (setq keyword (car keywords)))))
+      (let* ((case-fold-search nil)
+             (keywords (mapcar #'svg-tag--build-keywords svg-tag--active-tags))
+             (keyword (car keywords)))
+        (while keyword
+          (save-excursion
+            (while (re-search-forward (nth 0 keyword) nil t)
+              (overlay-put (make-overlay
+                            (match-beginning 0) (match-end 0))
+                           'display  (nth 3 (eval (nth 2 keyword)))) ))
+          (pop keywords)
+          (setq keyword (car keywords)))))
     (add-hook 'org-agenda-finalize-hook #'mrb/org-agenda-show-svg))
 #+end_src
 * Buffers and files
@@ -1083,12 +1083,12 @@ For starters, make sure that they have unique buffer names so I don't get confus
 For every file-based buffer, I want auto-save to be on, but not in the same location as the file, as that clutters up everything. For that, I add to the list of file-name transforms to have (local) files auto saved in a designated folder)
 
 #+begin_src emacs-lisp
-   (setq auto-save-default t
-         mrb/auto-save-folder (concat user-emacs-directory "auto-save-list/"))
+  (setq auto-save-default t
+        mrb/auto-save-folder (concat user-emacs-directory "auto-save-list/"))
 
-   (add-to-list 'auto-save-file-name-transforms
-                (list "\\(.+/\\)*\\(.*?\\)" (expand-file-name "\\2" mrb/auto-save-folder))
-                t)
+  (add-to-list 'auto-save-file-name-transforms
+               (list "\\(.+/\\)*\\(.*?\\)" (expand-file-name "\\2" mrb/auto-save-folder))
+               t)
 #+end_src
 
 Auto save helps to automatically recover to the latest save point, but I need a bit more. This is done through versioned backup file. The recovery process is then manual though.
@@ -1275,7 +1275,7 @@ Also make sure we never load org from internal, this can happen when functions w
            (org-agenda-mode . (lambda () (hl-line-mode 1))))
 
     :init
-     <<orgmode-keywords>>
+    <<orgmode-keywords>>
     <<gtd-starter>>
 
     :mode ("\\.txt\\'" "\\.org\'")
@@ -1298,7 +1298,7 @@ Also make sure we never load org from internal, this can happen when functions w
            ("C-x m" . 'mrb/construct-mail))
 
     :custom-face
-    ; Orgmode
+                                          ; Orgmode
     (org-headline-done              ((t (:foreground "#4c566a"))))
     (org-date                       ((t (:foreground "#8fbcbb" :underline nil))))
     (org-verbatim                   ((t (:foreground "#8fbcbb"))))
@@ -1569,11 +1569,11 @@ Define functions for each piece of information captured, so they can be easily b
 These capture functions are called from shell scripts in the operating system and have a shortcut key assigned to them. The scripts are produced directly from this document, in a similar way as the main edit script was produced in [[Preparing for lift-off]]
 
 #+begin_src sh :exports code :tangle ~/bin/capture-todo.sh :shebang #!/bin/sh
-edit-noframe --eval '(mrb/capture-todo)'
+  edit-noframe --eval '(mrb/capture-todo)'
 #+end_src
 
 #+begin_src sh :exports code :tangle ~/bin/capture-buy.sh :shebang #!/bin/sh
-edit-noframe --eval '(mrb/capture-buy)'
+  edit-noframe --eval '(mrb/capture-buy)'
 #+end_src
 
 By default =C-c C-c= ends the capture, but is normally the shortcut to enter tags, so I define a shortcut to define tags while capturing.
@@ -1616,18 +1616,18 @@ Adapt the colors of the states I use a bit:
 
 
   (setq org-todo-keyword-faces `(
-    ("TODO"      . mrb/org-todo-keyword-TODO)
-    ("DONE"      . mrb/org-todo-keyword-DONE)
-    ("WAITING"   . mrb/org-todo-keyword-WAITING)
-    ("CANCELLED" . mrb/org-todo-keyword-CANCELLED)
-    ("BUY"       . mrb/org-todo-keyword-BUY)
-    ("HOWTO"     . mrb/org-todo-keyword-HOWTO)
-    ("INFO"      . mrb/org-todo-keyword-INFO)
-    ("COLLECT"   . mrb/org-todo-keyword-COLLECT)
-    ("SOLVE"     . mrb/org-todo-keyword-SOLVE)
-    ("READ"      . mrb/org-todo-keyword-READ)
-    ("READING"   . mrb/org-todo-keyword-READING)
-    ("PLAN"      . mrb/org-todo-keyword-PLAN)))
+                                 ("TODO"      . mrb/org-todo-keyword-TODO)
+                                 ("DONE"      . mrb/org-todo-keyword-DONE)
+                                 ("WAITING"   . mrb/org-todo-keyword-WAITING)
+                                 ("CANCELLED" . mrb/org-todo-keyword-CANCELLED)
+                                 ("BUY"       . mrb/org-todo-keyword-BUY)
+                                 ("HOWTO"     . mrb/org-todo-keyword-HOWTO)
+                                 ("INFO"      . mrb/org-todo-keyword-INFO)
+                                 ("COLLECT"   . mrb/org-todo-keyword-COLLECT)
+                                 ("SOLVE"     . mrb/org-todo-keyword-SOLVE)
+                                 ("READ"      . mrb/org-todo-keyword-READ)
+                                 ("READING"   . mrb/org-todo-keyword-READING)
+                                 ("PLAN"      . mrb/org-todo-keyword-PLAN)))
 #+end_src
 
 Make sure we keep a clean tag slate when changing tag state. This means that when I move to an active state, remove inactive tags; if something is DONE, remove tags from it and automatically adding a 'buy' tag when a BUY item is created.  Note: capturing does not honor this, i.e. when creating a new item.
@@ -1767,7 +1767,7 @@ Related to the above, with some regularity I want to record timestamps, for exam
 Lastly, there's a mechanism in emacs which can automatically insert time-stamps, based on a placeholder in the file and a format variable. I sometimes use that, so I add it to my before save hook. Typically, the format string is file specific and will be held in a file local variable.
 
 #+begin_src emacs-lisp
-(add-hook 'before-save-hook 'time-stamp)
+  (add-hook 'before-save-hook 'time-stamp)
 #+end_src
 
 ** Scheduling items
@@ -1858,11 +1858,11 @@ Showing items in the agenda views reacts to a number of settings. In my setup I 
 
 #+begin_src emacs-lisp
   (setq
-      org-agenda-dim-blocked-tasks t
-      org-agenda-skip-deadline-if-done t
-      org-agenda-skip-scheduled-if-done t
-      org-agenda-skip-archived-trees nil
-  )
+   org-agenda-dim-blocked-tasks t
+   org-agenda-skip-deadline-if-done t
+   org-agenda-skip-scheduled-if-done t
+   org-agenda-skip-archived-trees nil
+   )
 #+end_src
 
 After experimenting with automatic aligning of tags I've come to the conclusion I want to have it manual. For now, I set the tags to align flush right with column 110 but ideally I'd want something more dynamic (in the sense that visual-line mode is also dynamic)
@@ -1989,27 +1989,27 @@ The base list of files I want to be able to refile to are:
 2. All open orgmode based files which, surprisingly, I need to generate myself?
 
 #+begin_src emacs-lisp
-    (setq org-refile-targets '((org-agenda-files :maxlevel . 10)))
+  (setq org-refile-targets '((org-agenda-files :maxlevel . 10)))
 
   ;; Borrows from https://yiming.dev/blog/2018/03/02/my-org-refile-workflow/
-    (defun mrb/org-opened-buffers ()
-      "Return the list of org files opened in emacs"
+  (defun mrb/org-opened-buffers ()
+    "Return the list of org files opened in emacs"
 
-      (defun buffer-mode (buf)
-        (buffer-local-value 'major-mode (get-buffer buf)))
+    (defun buffer-mode (buf)
+      (buffer-local-value 'major-mode (get-buffer buf)))
 
-      (delq nil
-            (mapcar (lambda (x)
-                      (if (and (buffer-file-name x) ;-buffer has a file?
-                               (provided-mode-derived-p
-                                (buffer-mode x) 'org-mode))
-                          (buffer-file-name x)))
-                    (buffer-list))))
+    (delq nil
+          (mapcar (lambda (x)
+                    (if (and (buffer-file-name x) ;-buffer has a file?
+                             (provided-mode-derived-p
+                              (buffer-mode x) 'org-mode))
+                        (buffer-file-name x)))
+                  (buffer-list))))
 
-    ;; Adjust refile target to include all opened org files
-    ;; Is it bad that we have duplicates here?
-    (add-to-list 'org-refile-targets
-                 '(mrb/org-opened-buffers :maxlevel . 10))
+  ;; Adjust refile target to include all opened org files
+  ;; Is it bad that we have duplicates here?
+  (add-to-list 'org-refile-targets
+               '(mrb/org-opened-buffers :maxlevel . 10))
 
 
 #+end_src
@@ -2035,9 +2035,9 @@ The latter is the most important one and will prevent creating 'gathering' items
     (interactive)
 
     (and
-     ; exclude done keyword headers
+                                          ; exclude done keyword headers
      (not (mrb/has-DONE-keyword))
-     ; must have a child
+                                          ; must have a child
      (save-excursion (org-goto-first-child))))
 
 
@@ -2192,12 +2192,12 @@ I use hugo to sporadically publish some content to my blog. Not sure if this is 
 
 #+begin_src emacs-lisp
   (use-package easy-hugo
-  :init
-  (setq easy-hugo-basedir "~/dat/blogs/mrblog/" ;all my subblogs live below this
-        easy-hugo-postdir "content/post/main"
-        easy-hugo-url "https://mrblog.nl"
-        easy-hugo-default-ext ".org"
-        easy-hugo-org-header t))
+    :init
+    (setq easy-hugo-basedir "~/dat/blogs/mrblog/" ;all my subblogs live below this
+          easy-hugo-postdir "content/post/main"
+          easy-hugo-url "https://mrblog.nl"
+          easy-hugo-default-ext ".org"
+          easy-hugo-org-header t))
 #+end_src
 
 ** Encrypting information in org-mode
@@ -2460,7 +2460,7 @@ The right alt and the right <menu> key should be the same as the left alt and th
 Furthermore, because I still can't remember keys, after pressing a prefix key like =C-c= the package =which-keys= can show me a formatted menu with the combinations of keys that can follow it.
 
 #+begin_src emacs-lisp
-  ; which keys shows menu with completions of prefix-key
+                                          ; which keys shows menu with completions of prefix-key
   (use-package which-key
     :diminish
     :custom
@@ -2543,7 +2543,7 @@ Some operations on buffers:
 And the rest, for now uncategorized:
 
 #+begin_src emacs-lisp
-    ;; Open my emacs config; I wanted something with '~'
+  ;; Open my emacs config; I wanted something with '~'
   (bind-key "C-~" 'mrb/open-config)
 
   ;; Font scaling, like in firefox
@@ -2568,7 +2568,7 @@ Sometimes there are /logical gaps/ in emacs' keybinding. I put them here
 
 #+begin_src emacs-lisp
   (bind-keys :map help-map
-            ("A" . describe-face))
+             ("A" . describe-face))
 #+end_src
 
 **** Special keys
@@ -2723,7 +2723,7 @@ Sometimes processes get stuck and i want a way to delete those processes easily.
     "Based on an auto-completed list of process, choose one process to kill"
     (interactive)
     (let ((pname (completing-read "Process Name: "
-                                      (mapcar 'process-name (process-list)))))
+                                  (mapcar 'process-name (process-list)))))
       (delete-process (get-process pname))))
 #+end_src
 * Completion
@@ -2754,14 +2754,14 @@ So, tab tries to indent, which is the main expectation, and if it can't it tries
 There are some situations where tab does completion (which is good), but the type of completion is not what I want (which is bad). Currently this includes only =quail-completion= of which I don't even know what it is for. This code prevents having a quail completion window when pressing tab inline.
 
 #+begin_src elisp
-  ; Bit of a kludge, but when quail loads, get rid of the completion
+                                          ; Bit of a kludge, but when quail loads, get rid of the completion
   (with-eval-after-load 'quail (defun quail-completion ()))
 #+end_src
 
 In a standard emacs installation, TAB indents, depending on mode obviously. If indenting would not make sense, a TAB can be inserted or completion could start. The function =completion-at-point= is used in some situations. Ideally the =corfu-complete= function could take over in many cases. Here's a simplistic approach to get me started:
- 1. if in minibuffer, do completion there like we are used to;
- 2. if cursor is at the end of a symbol, try to complete it with corfu;
- 3. else, indent according to mode.
+1. if in minibuffer, do completion there like we are used to;
+2. if cursor is at the end of a symbol, try to complete it with corfu;
+3. else, indent according to mode.
 
 This is probably incomplete or wrong even in some cases, but it's a start.
 
@@ -2850,7 +2850,7 @@ As =M-x= or =execute-extended-command= is probably the most used command in Emac
             (t posframe)))
 
     (vertico-multiform-mode 1))
-      #+end_src
+#+end_src
 
 The first thing to complement =vertico= is the =orderless= package. My main use is to have the matching for completing items match 'first second' as well as 'second first' regardless of their order. Note that this works for every completion, also within =corfu= which is especially useful.
 
@@ -2974,9 +2974,9 @@ In a more general sense, =evil-mode=, the VI emulation layer on top of emacs, is
 As my default shell is =zsh= tramp does not work out of the box for me. It gets confused by my prompt, so on top of my =.zshrc= file I have the following line:
 
 #+begin_src sh
-# Immediately bail out if we are coming in with a dumb terminal
-# which, in my case, mostly means TRAMP is asking for something.
-[[ $TERM == "dumb" ]] && unsetopt zle && PS1='$ ' && return
+  # Immediately bail out if we are coming in with a dumb terminal
+  # which, in my case, mostly means TRAMP is asking for something.
+  [[ $TERM == "dumb" ]] && unsetopt zle && PS1='$ ' && return
 #+end_src
 
 Once that is in place files can be opened with =/ssh:/host:/path/to/file= syntax. Surprisingly, the syntax I got used to in the past (i.e. =/host:/path/to/file=) does not work for me anymore.
@@ -2992,7 +2992,7 @@ Once that is in place files can be opened with =/ssh:/host:/path/to/file= syntax
     :config
     (eval-after-load 'tramp '(setenv "SHELL" "/bin/sh"))
     (add-to-list 'tramp-connection-properties
-                     (list ".*" "locale" "LC_ALL=C")))
+                 (list ".*" "locale" "LC_ALL=C")))
 
 #+end_src
 * Browser integration
@@ -3088,41 +3088,41 @@ Composing mail is often an /out of band/ activity, like creating a tweet or a ca
 
 #+name: mu4e-composeconfig
 #+begin_src emacs-lisp :tangle no
-    :bind (("C-x m" . 'mrb/compose-mail)
-           ( :map mu4e-compose-mode-map
-             ("C-;" . mu4e-compose-context-switch)))
+  :bind (("C-x m" . 'mrb/compose-mail)
+         ( :map mu4e-compose-mode-map
+           ("C-;" . mu4e-compose-context-switch)))
 
-    :custom
-    (mu4e-compose-format-flowed t)
-    (mu4e-compose-switch nil)
-    (mu4e-compose-dont-reply-to-self t)
-    (mu4e-compose-complete-only-after nil) ; no limit on contact completion for now
+  :custom
+  (mu4e-compose-format-flowed t)
+  (mu4e-compose-switch nil)
+  (mu4e-compose-dont-reply-to-self t)
+  (mu4e-compose-complete-only-after nil) ; no limit on contact completion for now
 
-    :config
-    (defun mrb/compose-mail (&optional mailto-url)
-      "Run mail-compose, use mailto URI if it is given."
-      (interactive)
+  :config
+  (defun mrb/compose-mail (&optional mailto-url)
+    "Run mail-compose, use mailto URI if it is given."
+    (interactive)
 
-      ;; If we have a mailto argument, parse and use it
-      (if (and (stringp mailto-url)
-               (string-match "\\`mailto:" mailto-url))
-          (browse-url-mail mailto-url)
-        ;; No mailto, argument, just run the mua
-        (mu4e-compose-new)))
+    ;; If we have a mailto argument, parse and use it
+    (if (and (stringp mailto-url)
+             (string-match "\\`mailto:" mailto-url))
+        (browse-url-mail mailto-url)
+      ;; No mailto, argument, just run the mua
+      (mu4e-compose-new)))
 
-    (defun mrb/mailfile()
-      "Compose mail message from current buffer file, typically a pdf is viewed for my use-case"
-      (interactive)
-      (let* ((file (buffer-file-name))
-             (mimetype (mm-default-file-type file)))
-        (mu4e-compose-new)
-        (mml-attach-file file mimetype (concat mimetype " attachment") "attachment")))
+  (defun mrb/mailfile()
+    "Compose mail message from current buffer file, typically a pdf is viewed for my use-case"
+    (interactive)
+    (let* ((file (buffer-file-name))
+           (mimetype (mm-default-file-type file)))
+      (mu4e-compose-new)
+      (mml-attach-file file mimetype (concat mimetype " attachment") "attachment")))
 
   ;; Context switching in compose
   <<mu4e-context-switch-in compose>>
 
   ;; Extend attaching files with extra info insertion
-    <<extend-attach>>
+  <<extend-attach>>
 
 
 #+end_src
@@ -3146,7 +3146,7 @@ To be able to use the =mrb/compose-mail= function as a mailto handler we need to
 
 On top of that, I want a manual capture script which is basically the same as the mailto handler.
 #+begin_src sh :exports code :tangle ~/bin/capture-mail.sh :shebang #!/bin/sh
-edit -e '(mrb/compose-mail)'
+  edit -e '(mrb/compose-mail)'
 #+end_src
 
 **** Attachments
@@ -3242,7 +3242,7 @@ Footnote mode seems to do exactly that, configured properly. Its prefix key is a
             footnote-style 'unicode         ; this makes footnotes use superscript numbering
             footnote-body-tag-spacing 1     ; between the \sup1 and the footnote text
             ))
-#+end_src
+  #+end_src
 *** Sending mail
 Sending mail through smtp, using the smtpmail package
 
@@ -3279,11 +3279,11 @@ At times we want to send signed and/or encrypted mail
              (sign)
              (encrypt))))
 
-          ;; Add my bcc address to list of safe addresses in bcc for secure message
-          (add-to-list 'mml-secure-safe-bcc-list mrb/bcc-address)
+    ;; Add my bcc address to list of safe addresses in bcc for secure message
+    (add-to-list 'mml-secure-safe-bcc-list mrb/bcc-address)
 
-          ;; Always encrypt to self, so I can read my own messages
-          (setq mml-secure-openpgp-encrypt-to-self `(,user-gpg-key)))
+    ;; Always encrypt to self, so I can read my own messages
+    (setq mml-secure-openpgp-encrypt-to-self `(,user-gpg-key)))
 #+end_src
 
 *** Generic mail message settings
@@ -3358,14 +3358,14 @@ It's not entirely clear which package is exactly responsible for what, but there
 
     ;; This will have an effect in mu4e starting from 1.11.23
     (setq
-          ;; NOTE: mu4e sets message-hidden-headers to a local value based on by mu4e-compose-hidden-headers
-          message-hidden-headers '(not "To:" "From:" "Cc:" "Subject:")
+     ;; NOTE: mu4e sets message-hidden-headers to a local value based on by mu4e-compose-hidden-headers
+     message-hidden-headers '(not "To:" "From:" "Cc:" "Subject:")
 
-          ;; How to attribute
-          message-citation-line-format "[%N]:"
-          message-citation-line-function 'message-insert-formatted-citation-line
+     ;; How to attribute
+     message-citation-line-format "[%N]:"
+     message-citation-line-function 'message-insert-formatted-citation-line
 
-          message-kill-buffer-on-exit t))
+     message-kill-buffer-on-exit t))
 #+end_src
 
 *** Mu4e specific settings
@@ -3395,7 +3395,7 @@ After a journey with many different MUAs I seem to be settling on =mu4e=.
 
     :custom
     (mu4e-mu-binary (expand-file-name "/home/mrb/.guix-profile/bin/mu" ))
-    ;(mu4e-mu-binary (expand-file-name "/home/mrb/dat/src/emacs/packages/mu/build/mu/mu" ))
+                                          ;(mu4e-mu-binary (expand-file-name "/home/mrb/dat/src/emacs/packages/mu/build/mu/mu" ))
 
     :after (message)
     :commands (mu4e mrb/compose-mail mrb/mailfile)
@@ -3647,9 +3647,9 @@ After selecting a message in the header view, a message view will open.
   (mu4e-view-show-addresses t)        ; Show actual addresses instead of names
 
   (mu4e-view-actions '(("c - capture message" . mu4e-action-capture-message)
-                            ("v - view in browser" . mu4e-action-view-in-browser)
-                            ("s - save attachments" . mu4e-view-save-attachments)
-                            ("t - show this thread" . mu4e-action-show-thread)))
+                       ("v - view in browser" . mu4e-action-view-in-browser)
+                       ("s - save attachments" . mu4e-view-save-attachments)
+                       ("t - show this thread" . mu4e-action-show-thread)))
 
 #+end_src
 **** Addon packages
@@ -3679,7 +3679,7 @@ There are quite a few mu4e packages out there. Let's load them in one group for 
     :after (magit)
     :hook (gnus-part-display . message-view-patch-highlight))
 
-  ;(use-package org-mu4e :after org)
+                                          ;(use-package org-mu4e :after org)
 #+end_src
 
 *** Sieve
@@ -3817,18 +3817,18 @@ ERC seems to be the most used IRC client for emacs and included with it, so it w
     :custom
     (circe-default-nick "mrvdb")
     (circe-network-options
-          `(("libera"
-             :host "chat.hsdev.com" :port 6667
-             :pass ,(concat "mrb@emacs/libera:"
-                            (password-store-get "chat.hsdev.com"))
-             :channels ("#emacs"
-                        "#talos-workstation"
-                        "#vikings"))
-            ("oftc"
-             :host "chat.hsdev.com" :port 6667
-             :pass ,(concat "mrb@emacs/oftc:"
-                            (password-store-get "chat.hsdev.com"))
-             :channels ("#osm"))))
+     `(("libera"
+        :host "chat.hsdev.com" :port 6667
+        :pass ,(concat "mrb@emacs/libera:"
+                       (password-store-get "chat.hsdev.com"))
+        :channels ("#emacs"
+                   "#talos-workstation"
+                   "#vikings"))
+       ("oftc"
+        :host "chat.hsdev.com" :port 6667
+        :pass ,(concat "mrb@emacs/oftc:"
+                       (password-store-get "chat.hsdev.com"))
+        :channels ("#osm"))))
 
     ;; Simplify and improve formatting, remove some details
     (circe-format-say "{nick:10s}: {body}" "right align nicks at 10th pos")
@@ -3900,7 +3900,7 @@ Not messaging or chatting perse, but a micro blog social network. The 'capture a
 #+end_src
 
 #+begin_src sh :exports code :tangle ~/bin/capture-toot.sh :shebang #!/bin/sh
-edit-noframe --eval '(mrb/capture-toot)'
+  edit-noframe --eval '(mrb/capture-toot)'
 #+end_src
 
 * Development settings
@@ -3939,20 +3939,20 @@ Make our source look a bit more attractive by enabling =prettify-symbol-mode= in
       (interactive)
       ;; set buffer local variable to map the symbols
       (setq prettify-symbols-alist
-          '(("lambda" . ?λ)
-            ;("lambda*" . (?λ (Br . Bl) ?*)) ; just in scheme really
-            ;("-lambda" . (?- (Br . Bl) ?λ))
-            ;("map"    . ?↦)     ; this one is a bit of a pain actually
-            ("->"     . ?⟶)
-            ("<-"     . ?⟵)
-            ("=>"     . ?⟹)
-            ;("#t"     . ?⟙)     ; bad idea
-            ;("#f"     . ?⟘)     ; bad idea
-            ("|>"     . ?▷)
-            ("<|"     . ?◁)
-            ("->>"    . ?↠)
-            ("<="     . ?≤)
-            (">="     . ?≥)))
+            '(("lambda" . ?λ)
+                                          ;("lambda*" . (?λ (Br . Bl) ?*)) ; just in scheme really
+                                          ;("-lambda" . (?- (Br . Bl) ?λ))
+                                          ;("map"    . ?↦)     ; this one is a bit of a pain actually
+              ("->"     . ?⟶)
+              ("<-"     . ?⟵)
+              ("=>"     . ?⟹)
+                                          ;("#t"     . ?⟙)     ; bad idea
+                                          ;("#f"     . ?⟘)     ; bad idea
+              ("|>"     . ?▷)
+              ("<|"     . ?◁)
+              ("->>"    . ?↠)
+              ("<="     . ?≤)
+              (">="     . ?≥)))
       (prettify-symbols-mode)))
 #+end_src
 
@@ -3966,26 +3966,26 @@ The main advantages of the method that tree-sitter uses are:
 As of emacs 29 the treesit package is built-in, so let's use that in any case for highlighting where it is possible. I think over time the mapping of the modes below will just disappear and everything will be treesitter based.
 
 #+begin_src emacs-lisp
-    ;; Use the built-in treesit and load all language grammars
-    (use-package treesit
-      :straight (:type built-in)
-      :config
-      (setq treesit-extra-load-path
-            `(,(expand-file-name "var/tree-sitter/langs" user-emacs-directory)))
-      ;; Replace relevant modes with the treesitter variant
-      (dolist (mode
-               '((bash-mode       . bash-ts-mode)
-                 (c-mode          . c-ts-mode)
-                 (c++-mode        . c++-ts-mode)
-                 (css-mode        . css-ts-mode)
-                 (dockerfile-mode . dockerfile-ts-mode)
-                 (go-mode         . go-ts-mode)
-                 (javascript-mode . js-ts-mode)
-                 (js-json-mode    . json-ts-mode)
-                 (python-mode     . python-ts-mode)
-                 (typescript-mode . typescript-ts-mode)
-                 (yaml-mode       . yaml-ts-mode)))
-        (add-to-list 'major-mode-remap-alist mode)))
+  ;; Use the built-in treesit and load all language grammars
+  (use-package treesit
+    :straight (:type built-in)
+    :config
+    (setq treesit-extra-load-path
+          `(,(expand-file-name "var/tree-sitter/langs" user-emacs-directory)))
+    ;; Replace relevant modes with the treesitter variant
+    (dolist (mode
+             '((bash-mode       . bash-ts-mode)
+               (c-mode          . c-ts-mode)
+               (c++-mode        . c++-ts-mode)
+               (css-mode        . css-ts-mode)
+               (dockerfile-mode . dockerfile-ts-mode)
+               (go-mode         . go-ts-mode)
+               (javascript-mode . js-ts-mode)
+               (js-json-mode    . json-ts-mode)
+               (python-mode     . python-ts-mode)
+               (typescript-mode . typescript-ts-mode)
+               (yaml-mode       . yaml-ts-mode)))
+      (add-to-list 'major-mode-remap-alist mode)))
 #+end_src
 
 To have some control over the environment for specific projects I use [[http://direnv.net][direnv]], so let's install emacs support for it as well.
@@ -4054,11 +4054,11 @@ The closest thing I found is =zeal= or =dash= which allow docsets to be searched
 Dash show documentation inside emacs, which is my preferred method. There are times however I need the desktop GUI Zeal. For one, it's a lot easier to see which docsets are installed and manage them.
 
 #+begin_src emacs-lisp
-;; Global keybinding ot open documentation
+  ;; Global keybinding ot open documentation
   ;; This should probably be somewhere else
   (use-package zeal-at-point
-     :bind
-     ("s-d" . zeal-at-point))
+    :bind
+    ("s-d" . zeal-at-point))
 #+end_src
 
 *** RFC document reader
@@ -4067,16 +4067,16 @@ I often need to consult RFC documents, so not having to leave emacs for that and
 #+begin_src emacs-lisp
   ;; Special mode to read rfc documents locally
   (use-package rfc-mode
-  :custom
-  (rfc-mode-directory (expand-file-name "~/dat/doc/rfc/"))
-  (rfc-mode-index-path (concat rfc-mode-directory"rfc-index.txt")))
+    :custom
+    (rfc-mode-directory (expand-file-name "~/dat/doc/rfc/"))
+    (rfc-mode-index-path (concat rfc-mode-directory"rfc-index.txt")))
 #+end_src
 
 *** Man pages
 There's a builtin package to read man pages, let's make it explicit.
 
 #+begin_src emacs-lisp
-(use-package man)
+  (use-package man)
 #+end_src
 
 Not really man pages as such, but meant as their /advanced/ cousin for GNU programs is the info format.
@@ -4189,7 +4189,7 @@ For creating web apps I use yesod, which is supported by a number of packages
 #+end_src
 *** Rust
 #+begin_src emacs-lisp
-(use-package rust-mode)
+  (use-package rust-mode)
 #+end_src
 *** Lisp-like
 There are a number of languages which are lisp-like, not in the least Emacs lisp itself. It makes sense to group the configuration for these languages together. In the first part there will be configuration for all lisp-like languages (like the =puni= configuration for example). For each specific implementation there may be augmentations to the config, or even a completely separate.
@@ -4246,25 +4246,25 @@ The generic scheme support is the builtin scheme package, let's tell it that I u
 #+begin_src emacs-lisp
   ;; Specific implementations depend on geiser
   (use-package geiser-guile
-      :straight (:host gitlab :repo "emacs-geiser/guile")
-      :demand t
-      :hook ((geiser-repl-mode . mrb/prettify-symbols))
+    :straight (:host gitlab :repo "emacs-geiser/guile")
+    :demand t
+    :hook ((geiser-repl-mode . mrb/prettify-symbols))
 
-      :custom
-      (geiser-guile-binary "/home/mrb/.guix-profile/bin/guile")
-      (geiser-active-implementations '(guile))
-      (geiser-default-implementation 'guile)
+    :custom
+    (geiser-guile-binary "/home/mrb/.guix-profile/bin/guile")
+    (geiser-active-implementations '(guile))
+    (geiser-default-implementation 'guile)
 
-      ;; Do NOT evaluate on return when inside an expression
-      (geiser-repl-send-on-return-p nil)
+    ;; Do NOT evaluate on return when inside an expression
+    (geiser-repl-send-on-return-p nil)
 
-      ;; start repl and eval results inline in buffer
-      ;; TODO I do want this eval result to be transient, not inserted!
-      (geiser-mode-start-repl-p t)
-      (geiser-mode-eval-last-sexp-to-buffer t)
-      (geiser-mode-eval-to-buffer-prefix " ;;=> ")
+    ;; start repl and eval results inline in buffer
+    ;; TODO I do want this eval result to be transient, not inserted!
+    (geiser-mode-start-repl-p t)
+    (geiser-mode-eval-last-sexp-to-buffer t)
+    (geiser-mode-eval-to-buffer-prefix " ;;=> ")
 
-      )
+    )
 #+end_src
 
 Similar to using eros for emacs-lisp, I use geiser-eros for languages that geiser supports.
@@ -4349,21 +4349,21 @@ I'm not in the habit of editing gcode, but every now and then I need to look at 
 Using =define-generic-mode= is more than enough to define something useful for me.
 
 #+begin_src emacs-lisp
-    (use-package generic-x
-      :straight (:type built-in))
+  (use-package generic-x
+    :straight (:type built-in))
 
-    (define-generic-mode marlin-gcode-mode
-      '((";"))   ;; ; starts a comment
-      (apply 'append
-             (mapcar #'(lambda (s) (list (upcase s) (downcase s) (capitalize s)))
-                     '("keywords?" "exist?")))
-      '(("\\([GM]\\)[0-9]+" (1 font-lock-function-name-face))    ; code letters
-        ("\\([ABCDEFHIJKLNOPQRSTUVWXYZ]\\)[-]?[0-9]+" (1 font-lock-string-face)) ; parameter letters
-        ("\\([\-+]?[0-9]*\\.[0-9]+\\)" (1 font-lock-constant-face)) ; 9.9 type numbers
-        ("\\([\-+]?[0-9]+\\)" (1 font-lock-constant-face)))         ; 999 type numbers
-      '("\\.gcode\\'")
-      nil
-      "Mode for marlin g-code files.")
+  (define-generic-mode marlin-gcode-mode
+    '((";"))   ;; ; starts a comment
+    (apply 'append
+           (mapcar #'(lambda (s) (list (upcase s) (downcase s) (capitalize s)))
+                   '("keywords?" "exist?")))
+    '(("\\([GM]\\)[0-9]+" (1 font-lock-function-name-face))    ; code letters
+      ("\\([ABCDEFHIJKLNOPQRSTUVWXYZ]\\)[-]?[0-9]+" (1 font-lock-string-face)) ; parameter letters
+      ("\\([\-+]?[0-9]*\\.[0-9]+\\)" (1 font-lock-constant-face)) ; 9.9 type numbers
+      ("\\([\-+]?[0-9]+\\)" (1 font-lock-constant-face)))         ; 999 type numbers
+    '("\\.gcode\\'")
+    nil
+    "Mode for marlin g-code files.")
 #+end_src
 *** Openscad
 Openscad is a script based 3d parametric drawing program. Obviously I'm editing those scripts in emacs.
@@ -4395,51 +4395,51 @@ Magit forge is a sub-module for magit which helps in managing repositories in fo
 Features I'm interested in: issue commenting, pull requests
 
 #+begin_src emacs-lisp
-    (use-package magit
-      :straight (:host github :reo "magit/magit")
+  (use-package magit
+    :straight (:host github :reo "magit/magit")
 
-      :demand t
-      :after (org fullframe)
-      :commands magit-status
-      :bind
-      ("C-c m" . magit-status)
+    :demand t
+    :after (org fullframe)
+    :commands magit-status
+    :bind
+    ("C-c m" . magit-status)
 
-      :init
-      (fullframe magit-status magit-mode-quit-window)
+    :init
+    (fullframe magit-status magit-mode-quit-window)
 
-      :custom-face
-      (diff-refine-added                 ((t (:background "#003000"))))
-      (diff-refine-removed               ((t (:background "#300000"))))
-      (magit-diff-added-highlight        ((t (:foreground "#a3be8c"))))
-      (magit-diff-removed-highlight      ((t (:foreground "#bf616a"))))
-      (magit-diff-added                  ((t (:foreground "#a3be8c"))))
-      (magit-diff-removed                ((t (:foreground "#bf616a"))))
-      (magit-diff-hunk-heading-highlight ((t (:background "#5e81ac"))))
-      (magit-diff-hunk-heading           ((t (:background "#5e81ac"))))
+    :custom-face
+    (diff-refine-added                 ((t (:background "#003000"))))
+    (diff-refine-removed               ((t (:background "#300000"))))
+    (magit-diff-added-highlight        ((t (:foreground "#a3be8c"))))
+    (magit-diff-removed-highlight      ((t (:foreground "#bf616a"))))
+    (magit-diff-added                  ((t (:foreground "#a3be8c"))))
+    (magit-diff-removed                ((t (:foreground "#bf616a"))))
+    (magit-diff-hunk-heading-highlight ((t (:background "#5e81ac"))))
+    (magit-diff-hunk-heading           ((t (:background "#5e81ac"))))
 
+    :custom
+    (magit-last-seen-setup-instructions "1.4.0")
+    (magit-diff-refine-hunk 'all)
+
+    :config
+    ;; Enable links to magit fromm org
+    (use-package orgit)
+
+    (use-package forge
+      :disabled
       :custom
-      (magit-last-seen-setup-instructions "1.4.0")
-      (magit-diff-refine-hunk 'all)
+      (forge-add-pullreq-refspec 'ask)
+      (forge-pull-notifications t)
+      (forge-topic-list-limit '(60 . 0))
 
       :config
-      ;; Enable links to magit fromm org
-      (use-package orgit)
-
-      (use-package forge
-        :disabled
-        :custom
-        (forge-add-pullreq-refspec 'ask)
-        (forge-pull-notifications t)
-        (forge-topic-list-limit '(60 . 0))
-
-        :config
-        ;; Only show assigned stuff
-        (magit-add-section-hook
-         'magit-status-sections-hook
-         'forge-insert-assigned-issues   nil t)
-        (magit-add-section-hook
-         'magit-status-sections-hook
-         'forge-insert-assigned-pullreqs   nil t)))
+      ;; Only show assigned stuff
+      (magit-add-section-hook
+       'magit-status-sections-hook
+       'forge-insert-assigned-issues   nil t)
+      (magit-add-section-hook
+       'magit-status-sections-hook
+       'forge-insert-assigned-pullreqs   nil t)))
 #+end_src
 
 Most of the magit work is done through its status screen and I would like to see issues and todo's and fixme's and other work that needs to be done in that screen. The forge package does that from a remote forge, like github, but many tasks are hiddenn in the sources already by myself. The magit-todos package scans for those things and show them in the magit screen
