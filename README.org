@@ -1,1 +1,1 @@
-mrb.org
+Moved to https://codeberg.org/mrb/emacs-config
