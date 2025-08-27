@@ -2959,6 +2959,18 @@ I set it up for relevant modes as a CAPF handler (for programming and orgmode fo
     :hook ((prog-mode text-mode org-mode) . mrb/tempel-setup-capf))
 #+end_src
 
+Formatting a file properly is trusted by indent rules, this one indents the whole buffer at once, making formatting completely proper  🫠
+
+#+begin_src elisp
+  (defun mrb/indent-whole-buffer ()
+    "Indent the entire buffer without affecting point or mark."
+    (interactive)
+    (save-excursion
+      (save-restriction
+        (indent-region (point-min) (point-max)))))
+
+  (global-set-key (kbd "C-c TAB") 'mrb/indent-whole-buffer)
+#+end_src
 ** Navigation
 Navigating pieces of text effectively is probably the best optimization to make in the emacs configuration.
 
