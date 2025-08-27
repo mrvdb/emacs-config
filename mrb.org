@@ -10,7 +10,7 @@ This is my emacs configuration file that is loaded with =org-babel-load-file= in
 
 This document is irregularly published and lives in different locations:
 
-- [[https://github.com/mrvdb/emacs-config][config sources are available on github]]
+- [[https://codeberg.org/mrb/emacs-config][config sources are available on codeberg]]
 - [[https://qua.name/mrb/an-org-babel-based-emacs-configuration][published on my writefreely instance qua.name]]
 
 #+TOC: headlines 4
