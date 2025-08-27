@@ -3897,7 +3897,6 @@ Not messaging or chatting perse, but a micro blog social network. The 'capture a
 #+begin_src emacs-lisp
   ;; Mastodon in emacs
   (use-package mastodon
-    :disabled t
     :straight (mastodon :host codeberg :repo "martianh/mastodon.el"
                         :branch "develop")
     :custom
